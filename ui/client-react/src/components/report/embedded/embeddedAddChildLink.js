@@ -63,7 +63,6 @@ export const EmbeddedAddChildLink = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        //http://localhost.localhost:9000/qbase/app/0duiiaaaaab/table/0duiiaaaaad/report/2/record/22?editRec=new
         addChildRecord: (context, childAppId, childTableId, childReportId, detailFid, parentValue) => {
             dispatch(addChildRecord(context, childAppId, childTableId, childReportId, detailFid, parentValue));
         }
@@ -71,7 +70,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const ConnectedEmbeddedAddChildLink = connect(
-    //mapStateToProps,
     null,
     mapDispatchToProps
 )(EmbeddedAddChildLink);

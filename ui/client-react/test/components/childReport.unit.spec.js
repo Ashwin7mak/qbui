@@ -1,6 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
+import Consts from '../../../common/src/constants';
 
 import {ChildReport, __RewireAPI__ as ChildReportRewireAPI} from '../../src/components/QBForm/childReport';
 
@@ -18,7 +19,7 @@ const childReportId = 3;
 const childTableName = 'child table';
 const detailKeyFid = 4;
 const detailKeyValue = 5;
-const type = 'CHILD_REPORT';
+const type = Consts.REPORT_FORM_TYPE.CHILD_REPORT;
 const childReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
 const MockChildReport = (props) => {
@@ -168,7 +169,7 @@ describe('ChildReport', () => {
                 childTableName:testChildTableName,
                 loadReportRecordsCount: () => null,
             };
-            const testPropsReportLink = Object.assign({}, {type:'REPORTLINK'}, testProps);
+            const testPropsReportLink = Object.assign({}, {type:Consts.REPORT_FORM_TYPE.REPORT_LINK}, testProps);
 
             it(`displays child table's name when showing report link buttons'`, () => {
                 component = shallow(MockChildReport(testPropsReportLink));

@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {loadReportRecordsCount} from '../../actions/reportActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 
+import * as Consts from '../../../../common/src/constants';
 import EmbeddedReportToolsAndContent from '../report/embedded/embeddedReportToolsAndContent';
 import EmbeddedReportLink from '../report/embedded/embeddedReportLink';
 import EmbeddedAddChildLink from '../report/embedded/embeddedAddChildLink';
@@ -21,11 +22,11 @@ class ChildReport extends React.Component {
     }
 
     renderChildReportOrLink(childTableId, childReportId) {
-        if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
+        if (Breakpoints.isSmallBreakpoint() || this.props.type === Consts.REPORT_FORM_TYPE.REPORT_LINK) {
             return (
                 <EmbeddedReportLink {...this.props}/>
             );
-        } else if (this.props.type === 'CHILD_REPORT') {
+        } else if (this.props.type === Consts.REPORT_FORM_TYPE.CHILD_REPORT) {
             return (
                 <EmbeddedReportToolsAndContent
                     tblId={childTableId}
@@ -86,7 +87,7 @@ class ChildReport extends React.Component {
             return null;
         } else {
             let item1, item2;
-            if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
+            if (Breakpoints.isSmallBreakpoint() || this.props.type === Consts.REPORT_FORM_TYPE.REPORT_LINK) {
                 rowOfButtons = true;
                 item1 = this.renderChildReportOrLink(childTableId, childReportId);
                 item2 =  this.renderAddChildLink();
@@ -120,7 +121,7 @@ ChildReport.propTypes = {
     detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /** The value entered in the foreignkey field. */
     detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    type: PropTypes.oneOf(['CHILD_REPORT', 'REPORTLINK'])
+    type: PropTypes.oneOf([Consts.REPORT_FORM_TYPE.CHILD_REPORT, Consts.REPORT_FORM_TYPE.REPORT_LINK])
 };
 
 export {ChildReport};

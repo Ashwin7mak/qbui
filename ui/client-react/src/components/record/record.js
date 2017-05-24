@@ -69,6 +69,7 @@ export const Record = React.createClass({
                     let value = null;
                     //if there is a parent value for this child auto fill it in
                     let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
+                    // fieldId is a numeric and params from url are strings so +parentFid for type equality test
                     if (parentFid && +parentFid === fieldId) {
                         value =  _.get(queryParams, 'detailKeyValue', '');
                     } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
