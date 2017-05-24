@@ -703,8 +703,9 @@ export default {
         },
         settings: {
             header: "Paramètres",
+            appHeader: "App",
+            automationSettings: "Paramètres d'automatisation",
             tablesHeader: "Table",
-            appsHeader: "App",
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
             configureFormBuilder: 'Modifiez ce formulaire',
@@ -724,6 +725,12 @@ export default {
                 prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
             },
             YES: "OUI"
+        },
+        automationList: {
+            nameHeader: "Prénom",
+            activeHeader: "Actif",
+            activeYes: "Oui",
+            activeNo: "Non"
         }
     }
 };

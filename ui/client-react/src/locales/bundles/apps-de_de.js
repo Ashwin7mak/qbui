@@ -704,8 +704,9 @@ export default {
         },
         settings: {
             header: "Einstellungen",
+            appHeader: "App",
+            automationSettings: "Automatisierungseinstellungen",
             tablesHeader: "Tabelle",
-            appsHeader: "Table",
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
@@ -726,6 +727,12 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
+        },
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Aktiv",
+            activeYes: "Ja",
+            activeNo: "Nein"
         }
     }
 };

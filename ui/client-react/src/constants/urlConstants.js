@@ -21,7 +21,7 @@ export const BUILDER_ROUTE = `${BASE_CLIENT_ROUTE}/builder`;
 
 // This is a special route that determines whether or not the settings button with routes to form and table builder is shown
 // It helps correctly pass props from the URL to that menu component
-export const BUILDER_MENU_ROUTE = `${APP_ROUTE}/:appId/table/:tblId/(report)?/:rptId?/(record)?/:recordId?`;
+export const BUILDER_MENU_ROUTE = `${APP_ROUTE}/:appId/(table)?/:tblId?/(report)?/:rptId?/(record)?/:recordId?`;
 
 export const ADMIN_ROUTE = `${BASE_CLIENT_ROUTE}/admin`;
 export const USERS_ROUTE = `${APP_ROUTE}/{0}/users`;
@@ -52,3 +52,5 @@ export const DRAWER = Object.assign(drawer, {
     RECORD_SEGMENT_PATH: `/sr_app_${drawer.MATCHER.APP_ID}_table_${drawer.MATCHER.TABLE_ID}_report_${drawer.MATCHER.REPORT_ID}_record_${drawer.MATCHER.RECORD_ID}`,
     REPORT_SEGMENT_PATH: `/sr_report_app_${drawer.MATCHER.APP_ID}_table_${drawer.MATCHER.TABLE_ID}_report_${drawer.MATCHER.REPORT_ID}_dtFid_${drawer.MATCHER.DETAIL_KEY_FID}_dtVal_${drawer.MATCHER.DETAIL_KEY_VALUE}`
 });
+
+export const AUTOMATION_PATH = 'automation';
