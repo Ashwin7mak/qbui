@@ -54,14 +54,14 @@
          */
         it('Should select remove a single user and check for the success message', function() {
 
-            // Step 1: Select the checkbox and click on delete icon
+            // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.userRemoveIcon.click();
 
-            // Step 2: Click on delete button from the dialogue box
+            // Click on remove button from the dialogue box
             UsersTablePage.clickUserRemoveButton();
 
-            // Step 3: Check for the deleted record
+            // Check that the user was removed
             ReportTableActionsPO.selectAllRecordsCheckbox();
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
@@ -71,14 +71,14 @@
          */
         it('Should select remove a single user and cancel ', function() {
 
-            // Step 1: Select the checkbox and click on delete icon
+            // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.userRemoveIcon.click();
 
-            // Step 2: Click on cancel button from the dialogue box
+            // Click on cancel button from the dialogue box
             UsersTablePage.clickUserCancelRemoveButton();
 
-            // Step 3: Check for the deleted record
+            // Check for the user not removed
             ReportTableActionsPO.selectAllRecordsCheckbox();
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });

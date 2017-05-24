@@ -16,7 +16,7 @@
         let realmName;
         let realmId;
         let testApp;
-        let RECORD_COUNT = 20;
+        let RECORD_COUNT = 5;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -66,13 +66,13 @@
          */
         it('Should load all the table report actions', function() {
             // Assert search box is visible
-            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(true);
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBeTruthy();
 
             // Assert sort by / group by button is visible
-            expect(ReportTableActionsPO.reportSortAndGroupButton.isVisible()).toBe(true);
+            expect(ReportTableActionsPO.reportSortAndGroupButton.isVisible()).toBeTruthy();
 
             // Assert records count total
-            expect(ReportTableActionsPO.getReportRecordsCount()).toBe("20 records");
+            expect(ReportTableActionsPO.getReportRecordsCount()).toBe("5 records");
         });
 
         /**
@@ -84,10 +84,10 @@
             ReportTableActionsPO.selectAllRecordsCheckbox();
 
             // Assert Search Box is invisible
-            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(false);
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBeFalsy();
 
             // Assert records selected count
-            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("20");
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
@@ -99,7 +99,7 @@
             ReportTableActionsPO.selectRecordRowCheckbox(1);
 
             // Assert Search Box is invisible
-            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(false);
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBeFalsy();
 
             // Assert records selected count
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("1");
