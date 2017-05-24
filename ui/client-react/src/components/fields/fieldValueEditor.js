@@ -7,8 +7,6 @@ import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 
-import {DefaultFieldValueEditor} from './fieldValueEditors';
-
 import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
@@ -23,6 +21,7 @@ import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 import ErrorWrapper from '../fields/errorWrapper';
 import PhoneFieldValueEditor from './phoneFieldValueEditor';
+import LinkToRecordFieldValueEditor from './linkToRecordFieldValueEditor';
 
 /**
  * # FieldValueEditor
@@ -256,6 +255,7 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
+
             return <MultiLineTextFieldValueEditor {...commonProps}
                                                   isFormView={this.props.isFormView}
                                                   showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
@@ -267,6 +267,10 @@ const FieldValueEditor = React.createClass({
 
         case FieldFormats.EMAIL_ADDRESS: {
             return <EmailFieldValueEditor {...commonProps} classes="cellEdit" />;
+        }
+
+        case FieldFormats.LINK_TO_RECORD: {
+            return <LinkToRecordFieldValueEditor {...commonProps} appId={this.props.app.id} tblId={this.props.tblId} tables={this.props.app ? this.props.app.tables : []} removeFieldFromForm={this.props.removeFieldFromForm} classes="cellEdit" />;
         }
 
         case FieldFormats.TEXT_FORMAT:

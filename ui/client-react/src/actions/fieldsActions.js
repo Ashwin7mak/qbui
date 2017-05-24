@@ -157,6 +157,13 @@ export const updateAllFieldsWithEdits = (appId, tableId) => {
     };
 };
 
+export const deleteField = (appId, tableId, fieldId) => {
+    return (dispatch, getState) => {
+        let fieldService = new FieldsService();
+        return fieldService.deleteField(appId, tableId, fieldId);
+    };
+};
+
 export const saveAllNewFields = (appId, tableId, formId = null) => {
     return (dispatch, getState) => {
         let fields = getFields(getState(), appId, tableId);
