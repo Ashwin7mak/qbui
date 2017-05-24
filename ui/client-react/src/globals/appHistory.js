@@ -343,8 +343,9 @@ class AppHistory {
             const state = self.store.getState();
             //fetch stores that have pendEdits
             let {reportBuilderStore} = self.getStores(state);
+            self._continueToDestination();
             if (reportBuilderStore.isPendingEdit) {
-                self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV);
+                self.store.dispatch(self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV));
             }
 
             // save is not currently implemented
@@ -373,7 +374,7 @@ class AppHistory {
 
     _discardChangesForReportBuilder(reportBuilderStoreIsPendingEdit) {
         if (reportBuilderStoreIsPendingEdit) {
-            self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV);
+            self.store.dispatch(self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV));
         }
         self._continueToDestination();
     }
