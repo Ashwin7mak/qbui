@@ -59,6 +59,7 @@ const forms = (
         });
 
         action.formData.fields = allFields;
+        //this is needed to only show the delete icon on a field in formBuilder when there are more than one field on the form
         action.formData.formMeta.formBuilderFieldLength = action.formData.formMeta.fields.length;
 
         newState[id] = ({
