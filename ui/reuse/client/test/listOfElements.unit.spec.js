@@ -1,6 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
+import FlipMove from 'react-flip-move';
 
 import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from 'REUSE/components/sideNavs/listOfElements';
 
@@ -107,6 +108,7 @@ describe('ListOfElements', () => {
             component.setState({activeFieldFilter: 'elementa'});
 
             expect(component.find('.listOfElementsItem').length).toEqual(2);
+            expect(component.find('.animatedListOfElementsItemList').length).toEqual(0);
             expect(component.find('.emptySearchResult')).not.toBePresent();
         });
 
@@ -116,11 +118,19 @@ describe('ListOfElements', () => {
             component.setState({activeFieldFilter: 'pizza'});
 
             expect(component.find('.listOfElementsItem').length).toEqual(1);
+            expect(component.find('.animatedListOfElementsItemList').length).toEqual(0);
             expect(component.find('.emptySearchResult')).not.toBePresent();
         });
 
+        it('will animate children if animateChildren is set to true', () => {
+            component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock} elements={testElementsWithName} />);
+
+            expect(component.find('.listOfElementsItemList').length).toEqual(0);
+            expect(component.find('.animatedListOfElementsItemList').length).toEqual(1);
+        });
+
         it('shows a message if no fields match the filter text', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElementsWithName} />);
 
             component.setState({activeFieldFilter: 'zzz'});
 

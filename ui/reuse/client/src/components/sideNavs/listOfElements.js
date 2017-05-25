@@ -123,7 +123,7 @@ class ListOfElements extends Component {
                             {this.props.hideTitle ? null :
                                 <h6 className="listOfElementsItemHeader">{element.title}</h6>}
                             {this.props.animateChildren ?
-                                <FlipMove typeName="ul" className="listOfElementsItemList">
+                                <FlipMove typeName="ul" className="animatedListOfElementsItemList">
                                     {this.renderElements(element.children)}
                                 </FlipMove> :
                                 <ul className="listOfElementsItemList">
