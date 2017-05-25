@@ -169,7 +169,7 @@
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
-            
+
             //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
 
