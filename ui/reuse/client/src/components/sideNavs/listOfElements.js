@@ -93,6 +93,7 @@ class ListOfElements extends Component {
     renderElements = (fieldTypes) => {
         //Tokens are being passed in as a renderer to reduce dependency on client-react
         let TokenInMenu = this.props.renderer;
+        console.log('fieldTypes: ', fieldTypes);
         if (fieldTypes) {
             return fieldTypes.map((fieldType, index) => (
                 <li key={fieldType.key || index} className="listOfElementsItem">
@@ -122,10 +123,14 @@ class ListOfElements extends Component {
                         <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
                             {this.props.hideTitle ? null :
                                 <h6 className="listOfElementsItemHeader">{element.title}</h6>}
-
-                            <ul className="listOfElementsItemList">
-                                {this.renderElements(element.children)}
-                            </ul>
+                            {this.props.animateChildren ?
+                                <FlipMove typeName="ul" className="listOfElementsItemList">
+                                    {this.renderElements(element.children)}
+                                </FlipMove> :
+                                <ul className="listOfElementsItemList">
+                                    {this.renderElements(element.children)}
+                                </ul>
+                            }
                         </li>
                     );
                 }
@@ -168,10 +173,17 @@ class ListOfElements extends Component {
     }
 }
 
+ListOfElements.defaultProps = {
+    animateChildren: false
+};
+
 ListOfElements.propTypes = {
     /**
      * Show the list of elements in a collapsed state */
     isCollapsed: PropTypes.bool,
+    /**
+     * Wraps children in flipmove it is true */
+    animateChildren: PropTypes.bool,
 
     /**
      * Show the list of elements in an open state */
@@ -219,8 +231,12 @@ ListOfElements.propTypes = {
         key: PropTypes.string,
 
         /**
-         * The text to display for the field type. This property will be used for filtering. It should be localized. */
-        title: PropTypes.string.isRequired,
+         * The localized text to display for the field type. This property will be used for filtering. */
+        title: PropTypes.string,
+
+        /**
+         * The user's text to display for the field type. This property will be used for filtering. */
+        name: PropTypes.string,
 
         /**
          * Optional: Any child elements that should be displayed in a group.
