@@ -85,7 +85,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             //Verify if the search box is open
-            expect(browser.isVisible('.open')).toBe(true);
+            expect(browser.isVisible('.search.open')).toBe(true);
 
             //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText1);
@@ -143,7 +143,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             //Verify if the search box is open
-            expect(browser.isVisible('.open')).toBe(true);
+            expect(browser.isVisible('.search.open')).toBe(true);
 
             //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText2);

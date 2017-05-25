@@ -310,7 +310,7 @@
             //Verify create button is disabled
             expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
             //verify close button enabled
-            expect(browser.isEnabled('.rightIcons .iconUISturdy-close')).toBe(true);
+            expect(browser.isEnabled('.modal-dialog .iconUISturdy-close')).toBe(true);
         }},
 
         /**
