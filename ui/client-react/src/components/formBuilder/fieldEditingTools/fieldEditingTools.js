@@ -67,7 +67,7 @@ export class FieldEditingTools extends Component {
         } else {
             tabIndex = '-1';
         }
-
+        //Hide deleteFieldIcon if it is the last field on the form
         return (<div>
             {this.props.formBuilderFieldLength > 1 ?
                 <div className="actionIcons">
