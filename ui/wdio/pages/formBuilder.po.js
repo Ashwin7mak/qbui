@@ -139,6 +139,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
+        browser.element('.field').waitForVisible();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
@@ -156,6 +157,7 @@ class formBuilderPage {
 
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
+        browser.element('.rc-tabs-tabpane-active .listOfElementsItem').waitForVisible();
         let labelEls = browser.elements('.rc-tabs-tabpane-active .listOfElementsItem');
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
