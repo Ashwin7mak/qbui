@@ -70,6 +70,8 @@
         eeHost: eeHost,
         eeHostEnable: true,
 
+        automationHost: 'https://automation.int1.newstack.quickbaserocks.com:443',
+
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
         DOMAIN: nodeHost,
