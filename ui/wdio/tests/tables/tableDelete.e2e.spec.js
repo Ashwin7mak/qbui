@@ -57,8 +57,7 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+            return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
         });
 
 
@@ -143,16 +142,6 @@
 
                 //Make sure delete table button is disabled
                 expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
-
-                //Go to apps page
-                // Load the requestAppsPage (shows a list of all the apps in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
-                //Select an App
-                RequestAppsPage.selectApp(testApp.name);
-
-                //Make sure table is not deleted and you can still select it
-                tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             });
         });
 
@@ -181,9 +170,6 @@
             //Delete table
             tableCreatePO.clickDeleteTableButton();
 
-            //Need small wait here for the success container to slide away
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
             //Wait until new table button visible
             tableCreatePO.newTableBtn.waitForVisible();
 
@@ -194,17 +180,22 @@
         });
 
         it('Verify that only ADMIN can delete a Table', function() {
-            //get the user authentication
-            RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            browser.call(function() {
+                //get the user authentication
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            });
 
-            // Load the app in the realm
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            browser.call(function() {
+                // Load the app in the realm
+                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            });
 
-            //wait until you see tableLists got loaded
-            browser.element('.tablesList').waitForVisible();
+            //Select table to delete ('Table 1' here) and make sure it lands in reports page
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
 
-
-            //Step 5 - Verify settings icon not available for user other than ADMIN
+            //Verify settings icon not available for user other than ADMIN
             expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();
         });
 

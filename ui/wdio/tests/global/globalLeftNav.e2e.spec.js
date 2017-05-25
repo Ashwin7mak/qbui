@@ -58,14 +58,14 @@
             reportContentPO.waitForLeftNavLoaded();
 
             //Verify if the leftNav is expanded
-            expect(browser.isVisible('.expanded')).toBeTruthy();
+            expect(browser.isVisible('.expanded')).toBe(true);
 
             //Verify if the hamburger menu is clickable
             topNavPO.topNavToggleHamburgerEl.waitForVisible();
             topNavPO.topNavToggleHamburgerEl.click();
 
             //Verify if the leftNav is collapsed
-            expect(browser.isVisible('.collapsed')).toBeTruthy();
+            expect(browser.isVisible('.collapsed')).toBe(true);
 
         });
 
@@ -78,14 +78,14 @@
             leftNavPO.leftNavCaretUpEl.click();
 
             //Verify if apps list is open
-            expect((browser.element('.leftNav .appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+            expect((browser.element('.leftNav .appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBe(true);
 
             //Verify if the left nav search element is visible and clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
             leftNavPO.leftNavSearchEl.click();
 
             //Verify if the search box is open
-            expect(browser.isVisible('.open')).toBeTruthy();
+            expect(browser.isVisible('.search.open')).toBe(true);
 
             //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText1);
@@ -104,13 +104,13 @@
             leftNavPO.leftNavSearchEl.click();
 
             //Verify if the search input box is closed
-            expect(browser.isVisible('.appsList .search.open')).toBeFalsy();
+            expect(browser.isVisible('.appsList .search.open')).toBe(false);
 
             //Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
 
             //Verify if the tables list is open
-            expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+            expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBe(true);
 
         });
 
@@ -143,7 +143,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             //Verify if the search box is open
-            expect(browser.isVisible('.open')).toBeTruthy();
+            expect(browser.isVisible('.search.open')).toBe(true);
 
             //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText2);
@@ -158,10 +158,17 @@
             leftNavPO.leftNavSearchEl.click();
 
             //Verify if the search input box is closed
-            expect(browser.isVisible('.tablesHeading .search.open ')).toBeFalsy();
+            expect(browser.isVisible('.tablesHeading .search.open ')).toBe(false);
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
+
+            //Go to app page
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+
+            //select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            reportContentPO.waitForLeftNavLoaded();
 
             //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
@@ -178,21 +185,6 @@
             //Verify if the table name is correctly displayed
             expect(innerHTML[1]).toEqual(tableName);
             expect(innerHTML[5]).toEqual('Reports');
-        });
-
-        it('Verify leftNav New Table button and cancel button', function() {
-
-            //Verify if the new table element is visible and verify the length
-            leftNavPO.leftNavNewTableEl.waitForVisible();
-
-            //Verify if the new table element is clickable and open new modal page
-            leftNavPO.leftNavNewTableEl.click();
-
-            //Verify for the cancel button to be visible
-            leftNavPO.leftNavNewTableCancelBu.waitForVisible();
-
-            //Verify if the cancel button is clickable
-            leftNavPO.leftNavNewTableCancelBu.click();
         });
 
         //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav

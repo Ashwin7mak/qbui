@@ -108,14 +108,14 @@
             //Make sure tableHomePage is visible
             ReportContentPO.addRecordButton.waitForVisible();
             //Verify 'Add a Record' button is enabled
-            expect(browser.isEnabled('.tableHomePageInitial .addRecordButton')).toBeTruthy();
+            expect(browser.isEnabled('.tableHomePageInitial .addRecordButton')).toBe(true);
             //Verify text on the addRecord button
             expect(ReportContentPO.addRecordButton.getAttribute('textContent')).toBe('Add a record');
             //Verify a few other elements on tableHomePage
             browser.element('.iconTableSturdy-Spreadsheet').waitForVisible();
             expect(browser.element('.tableHomePageInitial .h1').getAttribute('textContent')).toBe('Start using your table');
             expect(browser.element('.tableHomePageInitial .createTableLink').getAttribute('textContent')).toBe('Create another table');
-            expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBeTruthy();
+            expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBe(true);
 
             //Load a report for the table and verify report elements
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
@@ -198,7 +198,7 @@
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify create table button is not enabled since there is error in field values
-                    expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
+                    expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
                 });
 
                 //Cancel table dialogue
@@ -249,17 +249,23 @@
 
         it('Verify that only ADMIN can add a new table', function() {
 
-            //get the user authentication
-            RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            browser.call(function() {
+                //get the user authentication
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            });
 
-            // Load the app in the realm
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            browser.call(function() {
+                // Load the app in the realm
+                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            });
 
-            //wait until you see tableLists got loaded
-            browser.element('.tablesList').waitForVisible();
+            //Select table to delete ('Table 1' here) and make sure it lands in reports page
+            tableCreatePO.selectTable('Table 1');
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
 
             //Verify New Table button not available for user other than ADMIN
-            expect(browser.isVisible('.newTable')).toBeFalsy();
+            expect(browser.isVisible('.newTable')).toBe(false);
         });
     });
 }());
