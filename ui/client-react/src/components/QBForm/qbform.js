@@ -368,7 +368,7 @@ export const QBForm = React.createClass({
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
-        const relation = this.getRelationshipIfReferenceFieldToParent(relatedField.id);
+        const relation = relatedField !== null ? this.getRelationshipIfReferenceFieldToParent(relatedField.id) : {};
         if (relation) {
             handleDrillIntoParent = this.props.handleDrillIntoParent;
             masterTableId = relation.masterTableId;
