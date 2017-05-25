@@ -48,7 +48,7 @@ const mapStateToProps = state => {
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
         isOpen: state.builderNav.isNavOpen,
-        isCollapsed: state.builderNav.isNavCollapsed,
+        isCollapsed: state.builderNav.isNavCollapsed
     };
 };
 
