@@ -67,6 +67,22 @@ export const updateField = (field, appId, tableId) => {
     };
 };
 
+function createRelationship(appId, fieldId, detailTableId, parentTableId, parentFieldId) {
+    const relationship = {
+        appId,
+        masterAppId: appId,
+        masterTableId: parentTableId,
+        masterFieldId: parentFieldId,
+        detailAppId: appId,
+        detailTableId: detailTableId,
+        detailFieldId: fieldId,
+        description: "Referential integrity relationship between Master / Child Tables",
+        referentialIntegrity: false,
+        cascadeDelete: false
+    };
+    const appService = new AppService();
+    return appService.createRelationship(appId, relationship);
+}
 
 export const saveNewField = (appId, tblId, field, formId = null) => {
     return (dispatch) => {
@@ -86,24 +102,15 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
 
                         dispatch(updateFieldId(oldFieldId, fieldId, formId, appId, tblId));
 
-                        if (_.get(field, "datatypeAttributes.type", null) === "LINK_TO_RECORD") {
-                            const appService = new AppService();
-                            const relationship = {
-                                appId,
-                                masterAppId: appId,
-                                masterTableId: field.parentTableId,
-                                masterFieldId: field.parentFieldId,
-                                detailAppId: appId,
-                                detailTableId: tblId,
-                                detailFieldId: fieldId,
-                                description: "Referential integrity relationship between Master / Child Tables",
-                                referentialIntegrity: false,
-                                cascadeDelete: false
-                            };
-                            resolve(appService.createRelationship(appId, relationship));
-                        } else {
-                            resolve();
-                        }
+                        createRelationship(appId, fieldId, tblId, field.parentTableId, field.parentFieldId).then(
+                            () => resolve()
+                        ).catch(error => {
+                            // unable to create a relationship, delete the field since it is not useful
+                            logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createRelationship:');
+                            fieldsService.deleteField(appId, tblId, fieldId);
+                            reject();
+                        });
+
                     },
                     (errorResponse) => {
                         //  axios upgraded to an error.response object in 0.13.x
