@@ -58,7 +58,7 @@ export const QBForm = React.createClass({
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
         hasAnimation: PropTypes.bool,
-        handleDrillIntoParent: React.PropTypes.func, //handles drill down to parent
+        goToParent: React.PropTypes.func, //handles drill down to parent
 
         masterTableId: React.PropTypes.string,
 
@@ -342,14 +342,7 @@ export const QBForm = React.createClass({
      * @param fieldId
      */
     getRelationshipIfReferenceFieldToParent(fieldId) {
-        let rel;
-        _.each(this.props.relationships, function (relationship) {
-            //if it is a reference field to parent, return the relationship
-            if (relationship.detailFieldId === fieldId) {
-                rel = relationship;
-            }
-        });
-        return rel;
+        return this.props.relationships.find((relationship) => relationship.detailFieldId === fieldId);
     },
 
     /**
@@ -363,14 +356,14 @@ export const QBForm = React.createClass({
      */
     createFieldElement(FormFieldElement, validationStatus, containingElement, location) {
         let formId = this.props.formId || CONTEXT.FORM.VIEW;
-        let handleDrillIntoParent, masterTableId, masterAppId, masterFieldId;
+        let goToParent, masterTableId, masterAppId, masterFieldId;
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
         const relation = relatedField !== null ? this.getRelationshipIfReferenceFieldToParent(relatedField.id) : {};
         if (relation) {
-            handleDrillIntoParent = this.props.handleDrillIntoParent;
+            goToParent = this.props.goToParent;
             masterTableId = relation.masterTableId;
             masterAppId = relation.masterAppId;
             masterFieldId = relation.masterFieldId;
@@ -423,7 +416,7 @@ export const QBForm = React.createClass({
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
                   removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, location);}}
-                  handleDrillIntoParent={handleDrillIntoParent}
+                  goToParent={goToParent}
                   masterTableId={masterTableId}
                   masterAppId={masterAppId}
                   masterFieldId={masterFieldId}

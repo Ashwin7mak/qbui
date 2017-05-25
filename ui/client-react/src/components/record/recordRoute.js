@@ -516,7 +516,7 @@ export const RecordRoute = React.createClass({
      * @param fieldId master table field id to specify the column in the master table
      * @param value record in the particular column specified by the field id
      */
-    handleDrillIntoParent(appId, tblId, fieldId, value) {
+    goToParent(appId, tblId, fieldId, value) {
         const defaultReportId = '0';
         const recordService = new RecordService();
         const queryParams = {
@@ -589,7 +589,7 @@ export const RecordRoute = React.createClass({
                                     formData={viewData ? viewData.formData : null}
                                     appUsers={this.props.appUsers}
                                     handleDrillIntoChild={this.handleDrillIntoChild}
-                                    handleDrillIntoParent={this.handleDrillIntoParent}
+                                    goToParent={this.goToParent}
                                     uniqueId={this.props.uniqueId}/>
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}

@@ -28,7 +28,7 @@ const TextFieldValueRenderer = React.createClass({
          */
         attributes: React.PropTypes.object,
 
-        handleDrillIntoParent: React.PropTypes.func, //handles drill down to parent
+        goToParent: React.PropTypes.func, //handles drill down to parent
 
         masterTableId: React.PropTypes.string,
 
@@ -50,7 +50,7 @@ const TextFieldValueRenderer = React.createClass({
      * call the method to open a drawer
      */
     handleClick() {
-        this.props.handleDrillIntoParent(this.props.masterAppId, this.props.masterTableId, this.props.masterFieldId, this.props.value);
+        this.props.goToParent(this.props.masterAppId, this.props.masterTableId, this.props.masterFieldId, this.props.value);
     },
 
     /**
@@ -92,13 +92,13 @@ const TextFieldValueRenderer = React.createClass({
         }
 
         if (this.props.attributes && this.props.attributes.htmlAllowed) {
-            if (this.props.handleDrillIntoParent) {
+            if (this.props.goToParent) {
                 return this.getParentLink(classes, true);
             }
             return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.value}} />;
         } else {
             //react will encode
-            if (this.props.handleDrillIntoParent) {
+            if (this.props.goToParent) {
                 return this.getParentLink(classes, false);
             }
             return <div className={classes}>{_.unescape(this.props.value)}</div>;

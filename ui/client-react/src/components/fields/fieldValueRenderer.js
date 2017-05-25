@@ -76,7 +76,7 @@ const FieldValueRenderer = React.createClass({
          * identifier suffix for key */
         idKey: React.PropTypes.any,
 
-        handleDrillIntoParent: React.PropTypes.func, //handles drill down to parent
+        goToParent: React.PropTypes.func, //handles drill down to parent
 
         masterTableId: React.PropTypes.string,
 
@@ -220,7 +220,7 @@ const FieldValueRenderer = React.createClass({
                                             value={this.props.display ? this.props.display : this.props.value}
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
-                                            handleDrillIntoParent={this.props.handleDrillIntoParent}
+                                            goToParent={this.props.goToParent}
                                             masterTableId={this.props.masterTableId}
                                             masterAppId={this.props.masterAppId}
                                             masterFieldId={this.props.masterFieldId}
