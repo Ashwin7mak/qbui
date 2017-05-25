@@ -50,18 +50,13 @@ describe('Report Builder actions', () => {
             .toEqual(expectedAction);
     });
 
-    it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', () => {
+    it('insertPlaceholderColumn action dispatches type.INSERT_PLACEHOLDER_COLUMN with open parameter', () => {
         const params = {
             clickedColumnId: 6,
             addBeforeColumn: true
         };
-        const expectedAction = event(context, types.OPEN_FIELD_SELECT_MENU, params);
-        expect(reportBuilderActions.openFieldSelectMenu(context, 6, true)).toEqual(expectedAction);
-    });
-
-    it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', () => {
-        const expectedAction = event(context, types.CLOSE_FIELD_SELECT_MENU, {});
-        expect(reportBuilderActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
+        const expectedAction = event(context, types.INSERT_PLACEHOLDER_COLUMN, params);
+        expect(reportBuilderActions.insertPlaceholderColumn(context, 6, true)).toEqual(expectedAction);
     });
 
     it('should create an action to enter builder mode', () => {
