@@ -190,9 +190,12 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             });
 
-            ReportContentPO.waitForLeftNavLoaded();
+            //Select table to delete ('Table 1' here) and make sure it lands in reports page
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
 
-            //Step 5 - Verify settings icon not available for user other than ADMIN
+            //Verify settings icon not available for user other than ADMIN
             expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();
         });
 
