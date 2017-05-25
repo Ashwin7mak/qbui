@@ -119,7 +119,7 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns correct appId and tableId if they are missing', () => {
-            let formData = {formMeta: {appId: null, tableId: null}};
+            let formData = {formMeta: {fields: [], appId: null, tableId: null}};
             let backUpAppId = 'banana';
             let backUpTblId = 'apple';
             let loadingFormState = {
@@ -134,7 +134,7 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {fields: [], formMeta: {appId: backUpAppId, tableId: backUpTblId}},
+                    formData: {fields: [], formMeta: {fields: [], formBuilderFieldLength: 0, appId: backUpAppId, tableId: backUpTblId}},
                     errorStatus: null
                 }
             });
