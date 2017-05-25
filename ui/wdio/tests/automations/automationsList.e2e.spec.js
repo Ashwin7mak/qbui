@@ -20,7 +20,8 @@
             }
         }
 
-        let flowNames = [flowNameGenerator().next().value, flowNameGenerator().next().value, flowNameGenerator().next().value];
+        let emailFlowNames = [flowNameGenerator().next().value, flowNameGenerator().next().value, flowNameGenerator().next().value];
+        let notEmailFlowNames = [flowNameGenerator().next().value, flowNameGenerator().next().value, flowNameGenerator().next().value];
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -36,10 +37,19 @@
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
 
-                for (let flowName of flowNames) {
+                for (let flowName of emailFlowNames) {
                     let automation = {
                         name: flowName,
-                        active: true
+                        active: true,
+                        type: 'EMAIL'
+                    };
+                    e2eBase.automationsService.createAutomation(app.id, automation);
+                }
+
+                for (let flowName of notEmailFlowNames) {
+                    let automation = {
+                        name: flowName,
+                        active: true,
                     };
                     e2eBase.automationsService.createAutomation(app.id, automation);
                 }
@@ -51,7 +61,7 @@
             });
         });
 
-        it('should contain a list of automations for application', function() {
+        it('should contain a list of only EMAIL automations for application', function() {
             e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
             appToolbar.appSettingsBtn.click();
             appSettingsList.automationSettingsBtn.click();
@@ -65,11 +75,11 @@
                 counter++;
             }
 
-            let isFlowsListEqual = (flowNames.length === actualFlows.length) && flowNames.every(function(element) {
+            let isFlowsListEqual = (emailFlowNames.length === actualFlows.length) && emailFlowNames.every(function(element) {
                 return actualFlows.includes(element);
             });
 
-            assert.ok(isFlowsListEqual, 'Lists of automation expected to be equal. Expected list: ' + flowNames.toString() + ' List from UI: ' + actualFlows.toString());
+            assert.ok(isFlowsListEqual, 'Lists of automation expected to be equal. Expected list: ' + emailFlowNames.toString() + ' List from UI: ' + actualFlows.toString());
         });
     });
 }());

@@ -28,6 +28,7 @@ module.exports = class TableControlWrapper {
     }
 
     get isVisible() {
-        return browser.element(this.selector).isVisible;
+        let control = browser.element(this.selector);
+        return control.isVisible();
     }
 };
