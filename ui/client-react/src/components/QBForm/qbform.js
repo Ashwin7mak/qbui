@@ -395,7 +395,7 @@ export const QBForm = React.createClass({
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, location);}}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
               />
             </div>
         );
