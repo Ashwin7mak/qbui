@@ -1,7 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import FlipMove from 'react-flip-move';
 
 import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from 'REUSE/components/sideNavs/listOfElements';
 
