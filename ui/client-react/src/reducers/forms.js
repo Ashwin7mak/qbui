@@ -3,6 +3,8 @@ import * as tabIndexConstants from '../../../client-react/src/components/formBui
 import * as constants from '../../../common/src/constants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
+import fieldFormats from '../utils/fieldFormats';
+import {getFields} from '../reducers/fields';
 
 const forms = (
 
@@ -512,16 +514,24 @@ export const getSelectedFormElement = (state, id) => {
  * @param id
  * @returns {Array}
  */
-export const getExistingFields = (state, id) => {
+export const getExistingFields = (state, id, appId, tblId) => {
     const currentForm = state.forms[id];
 
     if (!currentForm) {
         return null;
     }
 
+    let allFields = _.differenceBy(getFields(state, appId, tblId), constants.BUILTIN_FIELD_ID.BUILTIN_FIELDS_ARRAY, (field) => {
+        if (typeof field === 'number') {
+            return field;
+        } else {
+            return field.id;
+        }
+    });
+
     if (_.has(currentForm, 'formData.fields') &&
         _.has(currentForm, 'formData.formMeta.fields')) {
-        let result = _.differenceBy(currentForm.formData.fields, currentForm.formData.formMeta.fields, (field) => {
+        let result = _.differenceBy(allFields, currentForm.formData.formMeta.fields, (field) => {
             if (typeof field === 'number') {
                 return field;
             } else {
@@ -529,7 +539,15 @@ export const getExistingFields = (state, id) => {
             }
         });
         result = _.sortBy(result, "name");
-        result = _.map(result, (field) => _.merge(field, {key: `existing_${field.id}`}));
+        result = _.map(result, (field) => ({
+            containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
+            location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+            key: `existingField_${field.id}`, // Key for react to use to identify it in the array
+            type: fieldFormats.getFormatType(field),
+            relatedField: field,
+            title: field.name,
+            isNewField: true
+        }));
         return result;
     }
 };

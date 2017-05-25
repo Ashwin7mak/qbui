@@ -18,7 +18,7 @@ export class ExistingFieldsMenu extends Component {
                 renderer={FieldTokenInExistingMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={existingFields}
+                elements={[{children: existingFields, key: 'existingFields', title: 'Existing Fields'}]}
                 isOpen={isOpen}
                 isFilterable={true}
                 hideTitle={true}
@@ -27,11 +27,11 @@ export class ExistingFieldsMenu extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [];
     return {
-        existingFields: getExistingFields(state, currentFormId)
+        existingFields: getExistingFields(state, currentFormId, ownProps.appId, ownProps.tblId)
     };
 };
 
@@ -42,7 +42,10 @@ ExistingFieldsMenu.propTypes = {
 
     /**
      * Displays the menu in an open state */
-    isOpen: PropTypes.bool
+    isOpen: PropTypes.bool,
+
+    appId: PropTypes.string,
+    tblId: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(ExistingFieldsMenu);

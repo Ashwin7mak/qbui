@@ -13,9 +13,6 @@ import _ from "lodash";
  */
 const fieldDragSource = {
     beginDrag(props, monitor, component) {
-        let containingElement = props.containingElement;
-        let relatedField = props.relatedField;
-
         if (props.cacheDragElement) {
             props.cacheDragElement(component);
         }
@@ -28,17 +25,10 @@ const fieldDragSource = {
             props.isInDraggingState(props.formId);
         }
 
-        if (props.datatypeAttributes) {
-            containingElement = {
-                FormFieldElement: _.merge(props.datatypeAttributes, {positionSameRow: false})
-            };
-            relatedField = {datatypeAttributes: props.datatypeAttributes, name: props.name, multipleChoice: props.multipleChoice};
-        }
-
         return {
-            containingElement: containingElement,
-            location: props.location || {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
-            relatedField: relatedField,
+            containingElement: props.containingElement,
+            location: props.location,
+            relatedField: props.relatedField,
 
             // If there is an onHover callback, we need to pass it through here so it is available
             // when the dropTarget initiates this event

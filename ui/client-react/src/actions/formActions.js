@@ -196,15 +196,13 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
  * */
 const buildField = (field, id) => {
     id = id || _.uniqueId('newField_');
-    let displayText = 'New Text Field';
     //FormFieldElement is needed for both existing fields and new fields for experience engine
     return _.merge({}, {
         id: id,
         edit: true,
         FormFieldElement: {
             positionSameRow: false,
-            fieldId: id,
-            displayText
+            fieldId: id
         }
     }, field);
 };
@@ -215,19 +213,10 @@ const buildField = (field, id) => {
  * @param appId
  * @param tblId
  * @param newLocation
- * @param newField
- * @param existingField
- * @param id
+ * @param field
  * @returns {{id, type, content}|*}
  */
-export const addFieldToForm = (formId, appId, tblId, newLocation, newField, existingField, id) => {
-    let field;
-    if (newField) {
-        field = buildField(newField);
-    } else {
-        field = buildField(existingField, id);
-    }
-
+export const addFieldToForm = (formId, appId, tblId, newLocation, field) => {
     return {
         type: types.ADD_FIELD,
         id: formId,
@@ -235,7 +224,7 @@ export const addFieldToForm = (formId, appId, tblId, newLocation, newField, exis
         tblId,
         content: {
             newLocation,
-            field,
+            field: buildField(field, field.id)
         }
     };
 };

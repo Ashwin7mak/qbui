@@ -40,14 +40,8 @@ export class FieldTokenInMenu extends Component {
  */
 export class FieldTokenInExistingMenu extends Component {
     render = () => {
-        let type = fieldFormats.getFormatType({datatypeAttributes: this.props.datatypeAttributes, multipleChoice: this.props.multipleChoice});
-        let title = Locale.getMessage(`fieldsDefaultLabels.${type}`);
-
         const fieldToken = <FieldToken {...this.props}
-                                       isDragging={false}
-                                       type={type}
-                                       title={title}
-                                       name={this.props.name} />;
+                                       isDragging={false} />;
 
         if (this.props.tooltipText) {
             return (
@@ -62,6 +56,8 @@ export class FieldTokenInExistingMenu extends Component {
         return fieldToken;
     }
 }
+
+const Element = DraggableField(FieldTokenInMenu, false);
 
 /**
  * A component which allows the field token to be clicked and dragged. The click and drag cannot be on the same element because drag
@@ -126,9 +122,6 @@ export class DraggableFieldToken extends Component {
     };
 
     render = () => {
-        let fieldToken = this.props.isNewField ? FieldTokenInMenu : FieldTokenInExistingMenu;
-        const Element = DraggableField(fieldToken, false);
-
         return (
             <div className="fieldTokenInMenuWrapper"
                  onClick={this.clickToAddToForm}
