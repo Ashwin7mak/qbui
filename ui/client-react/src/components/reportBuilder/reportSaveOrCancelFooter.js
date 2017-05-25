@@ -14,7 +14,6 @@ export class ReportSaveOrCancelFooter extends Component {
     }
 
     onSave = () => {
-        //HideAppModal();
         let reportDef = {
             name: this.props.reportData.data.name,
             fids: this.props.reportData.data.fids

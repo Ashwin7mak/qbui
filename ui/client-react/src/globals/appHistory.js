@@ -48,6 +48,7 @@ class AppHistory {
             this.updateRecord = null;
             this.showErrorMsgDialog = null;
             this.updateForm = null;
+            this.saveReport = null;
             this.saveFormComplete = null;
             this.hideTrowser = null;
             this.getNavReport = null;
@@ -78,6 +79,7 @@ class AppHistory {
             self.updateRecord = storeFunc.updateRecord;
             self.showErrorMsgDialog = storeFunc.showErrorMsgDialog;
             self.updateForm = storeFunc.updateForm;
+            self.saveReport = storeFunc.saveReport;
             self.saveFormComplete = storeFunc.saveFormComplete;
             self.hideTrowser = storeFunc.hideTrowser;
             self.getNavReport = storeFunc.getNavReport;
@@ -343,12 +345,22 @@ class AppHistory {
             const state = self.store.getState();
             //fetch stores that have pendEdits
             let {reportBuilderStore} = self.getStores(state);
-            self._continueToDestination();
-            if (reportBuilderStore.isPendingEdit) {
-                self.store.dispatch(self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV));
-            }
+            let reportData = (_.find(state.report, {'id': CONTEXT.REPORT.NAV}));
+            let {appId, tblId, rptId} = reportData;
+            let {name, fids} = reportData.data;
+            let reportDef = {
+                name,
+                fids
+            };
 
-            // save is not currently implemented
+            self.store.dispatch(self.saveReport(appId, tblId, rptId, reportDef)).then(
+                () => {
+                    self._continueToDestination();
+                    if (reportBuilderStore.isPendingEdit) {
+                        self.setReportBuilderPendingEditToFalse();
+                    }
+                }
+            );
         }
     }
 
