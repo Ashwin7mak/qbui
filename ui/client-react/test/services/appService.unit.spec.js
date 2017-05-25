@@ -71,6 +71,6 @@ describe('AppService functions', () => {
         let url = StringUtils.format(appService.API.GET_APP_RELATIONSHIPS, [appId]);
 
         appService.createRelationship(appId, relationship);
-        expect(BaseService.prototype.post).toHaveBeenCalledWith(url);
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, relationship);
     });
 });
