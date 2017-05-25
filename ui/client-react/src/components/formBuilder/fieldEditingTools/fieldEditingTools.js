@@ -29,7 +29,6 @@ export class FieldEditingTools extends Component {
     }
 
     onClickDelete(e) {
-        console.log('this.props.relatedField: ', this.props.relatedField);
         if (this.props.removeFieldFromForm) {
             return this.props.removeFieldFromForm(this.props.formId, this.props.relatedField, this.props.location);
         }
@@ -70,7 +69,7 @@ export class FieldEditingTools extends Component {
         }
 
         return (<div>
-            {this.props.formFieldLength > 1 ?
+            {this.props.formBuilderFieldLength > 1 ?
                 <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
@@ -220,7 +219,7 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = _.get(state, `forms[${formId}]`, {});
     let formBuilderChildrenTabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
-    let formFieldLength = (_.has(currentForm, "formData.formMeta.fields") ? currentForm.formData.formMeta.fields.length : [])
+    let formBuilderFieldLength = (_.has(currentForm, "formData.formMeta.formBuilderFieldLength") ? currentForm.formData.formMeta.formBuilderFieldLength : 1);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
     //If a new field is added to form builder we use the state isDragging to indicate whether or not it is in a dragon state,
     //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragon state
@@ -229,12 +228,14 @@ const mapStateToProps = (state, ownProps) => {
         isDragging = currentForm.isDragging;
     }
 
+    console.log('currentForm: ', currentForm);
+    console.log('formBuilderFieldLength: ', formBuilderFieldLength);
     return {
         selectedFields,
         previouslySelectedField,
         formBuilderChildrenTabIndex,
         isDragging,
-        formFieldLength
+        formBuilderFieldLength
     };
 };
 

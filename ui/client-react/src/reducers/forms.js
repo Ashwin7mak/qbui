@@ -59,6 +59,7 @@ const forms = (
         });
 
         action.formData.fields = allFields;
+        action.formData.formMeta.formBuilderFieldLength = action.formData.formMeta.fields.length;
 
         newState[id] = ({
             id,
@@ -217,6 +218,7 @@ const forms = (
         }
 
         updatedForm.selectedFields[0] = newLocation;
+        updatedForm.formData.formMeta.formBuilderFieldLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
 
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
@@ -245,12 +247,14 @@ const forms = (
             }
         }
 
-        if (updatedForm.formData.formMeta.fields.length > 1) {
+        if (updatedForm.formData.formMeta.formBuilderFieldLength > 1) {
             updatedForm.formData.formMeta = MoveFieldHelper.removeField(
                 formMetaCopy,
                 location
             );
         }
+
+        updatedForm.formData.formMeta.formBuilderFieldLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
