@@ -9,8 +9,7 @@ import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/f
 import {ExistingFieldsMenu, __RewireAPI__ as ExistingFieldsRewireAPI} from '../../../src/components/formBuilder/menus/existingFieldsMenu';
 import {__RewireAPI__ as ToolPaletteRewireAPI} from '../../../src/components/builder/builderMenus/toolPalette';
 import {ENTER_KEY, SPACE_KEY} from '../.././../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
-
-import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
+import {FieldTokenInMenu, FieldTokenInExistingMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import Loader from 'react-loader';
 
 const appId = "1";
@@ -57,9 +56,9 @@ describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
-        ToolPaletteRewireAPI.__Rewire__('ExistingFieldsMenu', ExistingFieldsMenu);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
-        ExistingFieldsRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
+        ExistingFieldsRewireAPI.__Rewire__('FieldTokenInExistingMenu', FieldTokenInExistingMenu);
+        ToolPaletteRewireAPI.__Rewire__('ExistingFieldsMenu', ExistingFieldsMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
 
@@ -79,6 +78,7 @@ describe('FormBuilderContainer', () => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
         ToolPaletteRewireAPI.__ResetDependency__('ExistingFieldsMenu');
         NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
+        ExistingFieldsRewireAPI.__ResetDependency__('FieldTokenInExistingMenu');
         FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         FormBuilderRewireAPI.__ResetDependency__('FormBuilderCustomDragLayer');
         FormBuilderRewireAPI.__ResetDependency__('AppHistory');
