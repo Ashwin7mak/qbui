@@ -5,6 +5,7 @@ import Fluxxor from 'fluxxor';
 import * as ShellActions from '../../src/actions/shellActions';
 import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 import {mount, shallow} from 'enzyme';
+import _ from 'lodash';
 
 let smallBreakpoint = false;
 class BreakpointsMock {
@@ -85,6 +86,13 @@ describe('Nav Unit tests', () => {
         loadForm: (app, tbl, rpt, type, edit, show) => {},
         loadReports: (ctx, app, tbl) => {},
         enterBuilderMode: (context) => {},
+        loadApps: () => {},
+        getApp: (appId) => {},
+        getApps: () => {},
+        getSelectedTableId: () => {},
+        getSelectedAppUsers: () => {},
+        getSelectedAppUnfilteredUsers: () => {},
+        getSelectedAppId: () => {},
         fields: [],
         record: [],
         report: [],
@@ -95,6 +103,7 @@ describe('Nav Unit tests', () => {
                 recordId: '3'
             }
         },
+        isAppsLoading: false,
         forms: [{id: 'view'}],
         shell: {
             leftNavVisible: true,
@@ -104,6 +113,12 @@ describe('Nav Unit tests', () => {
                 addBefore: null,
                 availableColumns: []
             }
+        },
+        app: {
+            app: null,
+            apps: [],
+            loading: false,
+            error: false
         },
         reports: [],
         history: [],
@@ -121,6 +136,7 @@ describe('Nav Unit tests', () => {
         spyOn(props, 'loadForm').and.callThrough();
         spyOn(props, 'loadReports').and.callThrough();
         spyOn(props, 'enterBuilderMode').and.callThrough();
+        spyOn(props, 'loadApps').and.callThrough();
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
@@ -138,6 +154,7 @@ describe('Nav Unit tests', () => {
         props.loadForm.calls.reset();
         props.loadReports.calls.reset();
         props.enterBuilderMode.calls.reset();
+        props.loadApps.calls.reset();
         NavRewireAPI.__ResetDependency__('LeftNav');
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
@@ -166,8 +183,11 @@ describe('Nav Unit tests', () => {
             AppsStore: new appsStoreWithNoApps()
         };
 
+        let cloneProps = _.clone(props);
+        cloneProps.isAppsLoading = true;
+
         let fluxWithoutApps = new Fluxxor.Flux(storesWithoutApps);
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithoutApps} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...cloneProps} flux={fluxWithoutApps} />);
         let domComponent = ReactDOM.findDOMNode(component);
 
         let loadingScreen = domComponent.querySelector('.loadingScreen');

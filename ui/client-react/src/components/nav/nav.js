@@ -188,10 +188,6 @@ export const Nav = React.createClass({
     getSelectedApp() {
         const selectedAppId = this.props.getSelectedAppId();
         return this.props.getApp(selectedAppId);
-        //if (this.state.apps.selectedAppId) {
-        //    //return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
-        //}
-        //return null;
     },
 
     /**
@@ -327,7 +323,7 @@ export const Nav = React.createClass({
 */
 
     render() {
-        const appsList = this.props.getApps();
+        const appsList = this.props.getApps() || [];
 
         if (appsList.length === 0 && this.props.isAppsLoading) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -409,10 +405,8 @@ export const Nav = React.createClass({
                 expanded={this.props.shell.leftNavExpanded}
                 appsListOpen={this.props.shell.appsListOpen}
                 apps={appsList}
-                //appsLoading={this.state.apps.loading}
                 appsLoading={this.props.isAppsLoading}
                 selectedAppId={selectedAppId}
-                //selectedTableId={this.state.apps.selectedTableId}
                 selectedTableId={selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 onToggleAppsList={this.toggleAppsList}
@@ -438,7 +432,6 @@ export const Nav = React.createClass({
                                 // with additional props
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
-
                             let routeProps = {
                                 key : this.props.match ? this.props.match.url : "",
                                 apps: appsList,
@@ -578,16 +571,5 @@ const mapDispatchToProps = (dispatch) => {
         loadApps: () => dispatch(AppActions.loadApps())
     };
 };
-
-//export const NavWithRouter = withRouter(Nav);
-//export const ConnectedNavRoute = withRouter(connect(
-//    mapStateToProps,
-//    mapDispatchToProps
-//)(Nav));
-
-//export default withRouter(connect(
-//    mapStateToProps,
-//    mapDispatchToProps
-//)(NavWithRouter));
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nav);
