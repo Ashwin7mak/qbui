@@ -6,8 +6,9 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 
 const sampleApp = {id: 'app1', tables: []};
-const sampleAuto1 = {id: 'auto1', name: 'Auto 1', active: true};
-const sampleAuto2 = {id: 'auto2', name: 'Auto 2', active: false};
+const sampleAuto1 = {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL"};
+const sampleAuto2 = {id: 'auto2', name: 'Auto 2', active: false, type: "EMAIL"};
+const sampleAuto3 = {id: 'auto3', name: 'Auto 3', active: false, type: "CUSTOM"};
 
 const props = {
     app: sampleApp,
@@ -17,7 +18,7 @@ const props = {
 
 const propsWithAutos = {
     ...props,
-    automations: [sampleAuto1, sampleAuto2]
+    automations: [sampleAuto1, sampleAuto2, sampleAuto3]
 };
 
 describe('AutomationListRoute', () => {
