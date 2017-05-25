@@ -30,7 +30,7 @@ describe('FieldTokenInMenu', () => {
         spyOn(mockActions, 'updateFormAnimationState');
     });
 
-    fit('renders a field token for display in an EXISTING menu', () => {
+    it('renders a field token for display in an EXISTING menu', () => {
         component = shallow(<FieldTokenInExistingMenu type={type} title={title} name={name}/>);
 
         let fieldToken = component.find(FieldToken);
@@ -41,7 +41,7 @@ describe('FieldTokenInMenu', () => {
         expect(fieldToken).toHaveProp('name', name);
     });
 
-    fit('renders a field token for display in a NEW menu', () => {
+    it('renders a field token for display in a NEW menu', () => {
         component = shallow(<FieldTokenInMenu type={type} title={title} />);
 
         let fieldToken = component.find(FieldToken);
