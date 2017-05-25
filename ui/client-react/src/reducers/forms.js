@@ -529,8 +529,7 @@ export const getExistingFields = (state, id, appId, tblId) => {
         }
     });
 
-    if (_.has(currentForm, 'formData.fields') &&
-        _.has(currentForm, 'formData.formMeta.fields')) {
+    if (allFields && _.has(currentForm, 'formData.formMeta.fields')) {
         let result = _.differenceBy(allFields, currentForm.formData.formMeta.fields, (field) => {
             if (typeof field === 'number') {
                 return field;

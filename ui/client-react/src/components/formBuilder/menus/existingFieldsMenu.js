@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
-import FieldTokenInExistingMenu from '../fieldToken/fieldTokenInMenu';
+import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 import {getFormByContext, getExistingFields} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
@@ -15,7 +15,7 @@ export class ExistingFieldsMenu extends Component {
                 childrenTabIndex={toolPaletteChildrenTabIndex}
                 toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
                 hasKeyBoardFocus={toolPaletteFocus}
-                renderer={FieldTokenInExistingMenu}
+                renderer={FieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
                 elements={[{children: existingFields, key: 'existingFields', title: 'Existing Fields'}]}
