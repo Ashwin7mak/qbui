@@ -122,8 +122,7 @@
 
             //select report
             browser.call(function() {
-                e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-                return reportContentPO.waitForLeftNavLoaded();
+                return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             });
 
             //Verify if the no.of topLinks are equal to 2 (Home, Users)
