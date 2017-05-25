@@ -42,15 +42,16 @@
         });
 
         beforeEach(function() {
-            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         /**
          * Test methods to verify all elements present / hidden in leftNav
          */
-        it('Verify leftNav collapses by clicking on hamburger menu on tables page', function() {
+        it('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
+
+            //Go to app page
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
 
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
@@ -69,11 +70,6 @@
         });
 
         it('Verify if leftNav caretUp element opens appsList and searches on reports page', function() {
-            //select report
-            browser.call(function() {
-                e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-                return reportContentPO.waitForLeftNavLoaded();
-            });
 
             //Verify if the left nav caret up element is visible
             leftNavPO.leftNavCaretUpEl.waitForVisible();
@@ -120,11 +116,6 @@
 
         it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav on reports page', function() {
 
-            //select report
-            browser.call(function() {
-                return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            });
-
             //Verify if the no.of topLinks are equal to 2 (Home, Users)
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
 
@@ -144,10 +135,6 @@
         });
 
         it('Verify if leftNav table search box opens and closes in tableLists', function() {
-
-            //select table
-            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
-            reportContentPO.waitForLeftNavLoaded();
 
             //Verify if the left nav table search is visible
             leftNavPO.leftNavSearchEl.waitForVisible();
@@ -175,10 +162,6 @@
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
-
-            //select table
-            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
-            reportContentPO.waitForLeftNavLoaded();
 
             //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
