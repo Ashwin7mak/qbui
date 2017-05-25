@@ -3,10 +3,10 @@ import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/
 import {changeLocale} from '../../actions/shellActions';
 import {connect} from 'react-redux';
 
-const GlobalActions = React.createClass({
+export const GlobalActions = React.createClass({
 
     changeLocale: function(locale) {
-        this.props.dispatch(changeLocale(locale));
+        this.props.changeLocale(locale);
     },
 
     render() {
@@ -18,4 +18,10 @@ const GlobalActions = React.createClass({
     }
 });
 
-export default connect()(GlobalActions);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeLocale: (locale) => dispatch(changeLocale(locale))
+    };
+};
+
+export default connect(null, mapDispatchToProps)(GlobalActions);

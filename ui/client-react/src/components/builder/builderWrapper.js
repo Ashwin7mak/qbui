@@ -28,12 +28,13 @@ export const BuilderWrapper = React.createClass({
 
     getTopGlobalActions() {
         const actions = [];
+        const selectedApp = this.getSelectedApp();
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={tabIndexConstants.USER_MENU_TAB_INDEX}
-                               app={this.getSelectedApp()}/>);
+                               app={selectedApp}/>);
     },
 
     render() {
