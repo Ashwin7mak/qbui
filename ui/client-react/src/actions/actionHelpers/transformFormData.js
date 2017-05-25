@@ -214,6 +214,12 @@ function convertSectionsToObjectStructure(tab) {
 }
 
 
+/**
+ * convert link-to-record fields created in the form builder as TEXT fields,
+ * the parent-child relationship is determined dynamically from the app relationships
+ * @param field
+ * @returns {*}
+ */
 export function transformFieldBeforeSave(field) {
 
     const transformedField = _.cloneDeep(field);
@@ -225,7 +231,13 @@ export function transformFieldBeforeSave(field) {
     return transformedField;
 }
 
-
+/**
+ * add parentTableId/parentFieldId props to fields based on the app relationships
+ * @param appId
+ * @param tblId
+ * @param formMeta
+ * @param fields
+ */
 export function addRelationshipFieldProps(appId, tblId, formMeta, fields)  {
 
     const relationships = formMeta.relationships;

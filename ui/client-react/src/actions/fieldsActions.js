@@ -67,6 +67,15 @@ export const updateField = (field, appId, tableId) => {
     };
 };
 
+/**
+ * save a parent/child field relationship on an app
+ * @param appId
+ * @param fieldId
+ * @param detailTableId
+ * @param parentTableId
+ * @param parentFieldId
+ * @returns {promise}
+ */
 function createRelationship(appId, fieldId, detailTableId, parentTableId, parentFieldId) {
     const relationship = {
         appId,
