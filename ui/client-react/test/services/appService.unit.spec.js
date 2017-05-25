@@ -55,6 +55,7 @@ describe('AppService functions', () => {
     });
 
     it('test createRelationship function', () => {
+        let appId = "0duiiaaaaab";
         let relationship = {
             masterAppId: "0duiiaaaaab",
             masterTableId: "0duiiaaaaaj",
@@ -62,7 +63,7 @@ describe('AppService functions', () => {
             detailAppId: "0duiiaaaaab",
             detailTableId: "0duiiaaaaak",
             detailFieldId: 7,
-            appId: "0duiiaaaaab",
+            appId,
             description: "Referential integrity relationship between Master / Child Tables",
             referentialIntegrity: false,
             cascadeDelete: false
