@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {ReportNameEditor} from '../../../src/components/report/reportNameEditor';
+import {ReportNameEditor} from '../../../src/components/reportBuilder/reportNameEditor';
 
 const testPropsNotInBuilderMode = {
     name: 'Test',
