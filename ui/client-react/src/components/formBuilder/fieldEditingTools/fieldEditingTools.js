@@ -228,8 +228,6 @@ const mapStateToProps = (state, ownProps) => {
         isDragging = currentForm.isDragging;
     }
 
-    console.log('currentForm: ', currentForm);
-    console.log('formBuilderFieldLength: ', formBuilderFieldLength);
     return {
         selectedFields,
         previouslySelectedField,
