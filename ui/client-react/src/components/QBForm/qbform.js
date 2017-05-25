@@ -57,7 +57,16 @@ export const QBForm = React.createClass({
 
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
-        hasAnimation: PropTypes.bool
+        hasAnimation: PropTypes.bool,
+        handleDrillIntoParent: React.PropTypes.func, //handles drill down to parent
+
+        masterTableId: React.PropTypes.string,
+
+        masterAppId: React.PropTypes.string,
+
+        masterFieldId: React.PropTypes.string,
+
+        uniqueId: React.PropTypes.string
     },
 
     getDefaultProps() {

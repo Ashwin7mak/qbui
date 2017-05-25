@@ -74,7 +74,15 @@ const FieldValueRenderer = React.createClass({
 
         /**
          * identifier suffix for key */
-        idKey : React.PropTypes.any
+        idKey: React.PropTypes.any,
+
+        handleDrillIntoParent: React.PropTypes.func, //handles drill down to parent
+
+        masterTableId: React.PropTypes.string,
+
+        masterAppId: React.PropTypes.string,
+
+        masterFieldId: React.PropTypes.string
     },
 
     getDefaultProps() {

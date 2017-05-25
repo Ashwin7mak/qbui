@@ -26,7 +26,15 @@ const TextFieldValueRenderer = React.createClass({
         /**
          * text field attributes
          */
-        attributes: React.PropTypes.object
+        attributes: React.PropTypes.object,
+
+        handleDrillIntoParent: React.PropTypes.func, //handles drill down to parent
+
+        masterTableId: React.PropTypes.string,
+
+        masterAppId: React.PropTypes.string,
+
+        masterFieldId: React.PropTypes.string
 
     },
 

@@ -24,7 +24,11 @@ export const FieldElement = React.createClass({
         fieldRecord: React.PropTypes.object, // the record data
         includeLabel: React.PropTypes.bool, // render label above field (otherwise ignore it)
         appUsers: React.PropTypes.array.isRequired, // app users,
-        removeFieldFromForm: React.PropTypes.func
+        removeFieldFromForm: React.PropTypes.func,
+        handleDrillIntoParent: React.PropTypes.func, //handles drill down to parent
+        masterTableId: React.PropTypes.string,
+        masterAppId: React.PropTypes.string,
+        masterFieldId: React.PropTypes.string
     },
 
     getChanges(theVals) {
