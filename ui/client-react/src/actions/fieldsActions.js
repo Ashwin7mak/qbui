@@ -102,15 +102,18 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
 
                         dispatch(updateFieldId(oldFieldId, fieldId, formId, appId, tblId));
 
-                        createRelationship(appId, fieldId, tblId, field.parentTableId, field.parentFieldId).then(
-                            () => resolve()
-                        ).catch(error => {
-                            // unable to create a relationship, delete the field since it is not useful
-                            logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createRelationship:');
-                            fieldsService.deleteField(appId, tblId, fieldId);
-                            reject();
-                        });
-
+                        if (field.parentTableId) {
+                            createRelationship(appId, fieldId, tblId, field.parentTableId, field.parentFieldId).then(
+                                () => resolve()
+                            ).catch(error => {
+                                // unable to create a relationship, delete the field since it is not useful
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createRelationship:');
+                                fieldsService.deleteField(appId, tblId, fieldId);
+                                reject();
+                            });
+                        } else {
+                            resolve();
+                        }
                     },
                     (errorResponse) => {
                         //  axios upgraded to an error.response object in 0.13.x
