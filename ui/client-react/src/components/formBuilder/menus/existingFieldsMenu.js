@@ -17,7 +17,8 @@ export class ExistingFieldsMenu extends Component {
                 hasKeyBoardFocus={toolPaletteFocus}
                 renderer={FieldTokenInExistingMenu}
                 isCollapsed={isCollapsed}
-                elements={existingFields}
+                animateChildren={true}
+                elements={[{children: existingFields, title: 'title', key: 'existingFields'}]}
                 isOpen={isOpen}
                 isFilterable={true}
                 hideTitle={true}
