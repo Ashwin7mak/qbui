@@ -43,9 +43,13 @@ export class AutomationListRoute extends Component {
 
     renderAutomations() {
         if (this.props.automations && this.props.automations.length > 0) {
-            return this.props.automations.map((automation, index) => (
-                <tr><td>{automation.name}</td><td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td></tr>
-            ));
+            return this.props.automations
+                .filter((automation) => {
+                    return "EMAIL" === automation.type;
+                })
+                .map((automation, index) => (
+                    <tr><td>{automation.name}</td><td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td></tr>
+                ));
         }
         return [];
     }
