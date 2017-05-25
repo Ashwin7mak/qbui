@@ -101,13 +101,17 @@ describe('Form Actions', () => {
             formId: 1,
             tableId: "table1",
             appId: "app1",
-            recordId: "newRecordId"
+            recordId: "newRecordId",
+            formMeta: {},
+            fields: []
         };
 
         let formAndRecordResponseData = {
             formId: 2,
             tableId: "table2",
-            appId: "app2"
+            appId: "app2",
+            formMeta: {},
+            fields: []
         };
 
         class mockFormService {
@@ -147,7 +151,9 @@ describe('Form Actions', () => {
                         formId: formAndRecordResponseData.formId,
                         tableId: formAndRecordResponseData.tableId,
                         appId: formAndRecordResponseData.appId,
-                        recordId: '123'
+                        recordId: '123',
+                        formMeta: {},
+                        fields: []
                     },
                     appId: 'appId',
                     tblId: 'tblId'
@@ -177,7 +183,9 @@ describe('Form Actions', () => {
                         tableId: formResponseData.tableId,
                         appId: formResponseData.appId,
                         recordId: formResponseData.recordId,
-                        record: null
+                        record: null,
+                        formMeta: {},
+                        fields: []
                     },
                     appId: 'appId',
                     tblId: 'tblId'

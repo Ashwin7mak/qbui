@@ -212,3 +212,38 @@ function convertSectionsToObjectStructure(tab) {
 
     return sections;
 }
+
+
+export function transformFieldBeforeSave(field) {
+
+    const transformedField = _.cloneDeep(field);
+    if (_.get(transformedField, "datatypeAttributes.type", null) === "LINK_TO_RECORD") {
+        transformedField.datatypeAttributes.type = "TEXT";
+        delete transformedField.parentTableId;
+        delete transformedField.parentFieldId;
+    }
+    return transformedField;
+}
+
+
+export function addRelationshipFieldProps(appId, tblId, formMeta, fields)  {
+
+    const relationships = formMeta.relationships;
+
+    if (formMeta.fields && formMeta.relationships) {
+        formMeta.fields.map(id => {
+            const field = _.find(fields, {id});
+
+            const relationship = _.find(relationships, {
+                detailAppId: appId,
+                detailTableId: tblId,
+                detailFieldId: id
+            });
+
+            if (relationship) {
+                field.parentTableId = relationship.masterTableId;
+                field.parentFieldId = relationship.masterFieldId;
+            }
+        });
+    }
+}

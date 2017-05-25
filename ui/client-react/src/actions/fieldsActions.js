@@ -1,11 +1,13 @@
 // action creators
 import _ from 'lodash';
 import FieldsService from '../services/fieldsService';
+import AppService from '../services/appService';
 import Promise from 'bluebird';
 import * as types from '../actions/types';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import {getFields} from '../reducers/fields';
+import {transformFieldBeforeSave} from './actionHelpers/transformFormData';
 
 let logger = new Logger();
 
@@ -65,6 +67,7 @@ export const updateField = (field, appId, tableId) => {
     };
 };
 
+
 export const saveNewField = (appId, tblId, field, formId = null) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -72,14 +75,35 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                 let fieldsService = new FieldsService();
 
                 const oldFieldId = field.id;
-                const fieldCopy = _.cloneDeep(field);
+                const fieldCopy = transformFieldBeforeSave(field);
                 delete fieldCopy.id;
                 delete fieldCopy.isPendingEdit;
 
                 fieldsService.createField(appId, tblId, fieldCopy).then(
                     (response) => {
-                        dispatch(updateFieldId(oldFieldId, response.data.id, formId, appId, tblId));
-                        resolve();
+
+                        const fieldId = response.data.id;
+
+                        dispatch(updateFieldId(oldFieldId, fieldId, formId, appId, tblId));
+
+                        if (_.get(field, "datatypeAttributes.type", null) === "LINK_TO_RECORD") {
+                            const appService = new AppService();
+                            const relationship = {
+                                appId,
+                                masterAppId: appId,
+                                masterTableId: field.parentTableId,
+                                masterFieldId: field.parentFieldId,
+                                detailAppId: appId,
+                                detailTableId: tblId,
+                                detailFieldId: fieldId,
+                                description: "Referential integrity relationship between Master / Child Tables",
+                                referentialIntegrity: false,
+                                cascadeDelete: false
+                            };
+                            resolve(appService.createRelationship(appId, relationship));
+                        } else {
+                            resolve();
+                        }
                     },
                     (errorResponse) => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -106,14 +130,16 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
 };
 
 export const updateFieldProperties = (appId, tblId, field) => {
+
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId && field) {
                 let fieldsService = new FieldsService();
 
-                delete field.isPendingEdit;
+                const fieldCopy = transformFieldBeforeSave(field);
+                delete fieldCopy.isPendingEdit;
 
-                fieldsService.updateField(appId, tblId, field).then(
+                fieldsService.updateField(appId, tblId, fieldCopy).then(
                     (response) => {
                         //TODO: some action needs to get emitted
                         resolve();
@@ -193,7 +219,8 @@ export const loadFields = (appId, tblId) => {
 
                 fieldsService.getFields(appId, tblId).then(
                     (response) => {
-                        dispatch(event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:response.data}));
+                        const fields = response.data;
+                        dispatch(event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields}));
                         resolve();
                     },
                     (errorResponse) => {
