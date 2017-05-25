@@ -163,6 +163,13 @@
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
 
+            //Go to app page
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+
+            //select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            reportContentPO.waitForLeftNavLoaded();
+            
             //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
 
