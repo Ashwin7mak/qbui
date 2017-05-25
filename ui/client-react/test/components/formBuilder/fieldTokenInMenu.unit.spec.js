@@ -12,8 +12,6 @@ let selectedField = 1;
 let appId = 1;
 let tblId = 1;
 let relatedField = {};
-let datatypeAttributes = {};
-let id = 1;
 let mockActions = {
     addFieldToForm(_formId, _location, _field) {},
     updateFormAnimationState(_state) {}
@@ -22,7 +20,6 @@ let mockActions = {
 describe('FieldTokenInMenu', () => {
     const type = 'textbox';
     const title = 'New Textbox';
-    const name = 'New Textbox';
 
     beforeEach(() => {
         jasmineEnzyme();
@@ -52,18 +49,11 @@ describe('FieldTokenInMenu', () => {
 
     it('will invoke addFieldToForm when FieldToken node is clicked', () => {
         component = shallow(<DraggableFieldToken addFieldToForm={mockActions.addFieldToForm}
-                                                 relatedField={relatedField}
-                                                 datatypeAttributes={datatypeAttributes}
-                                                 id={id}
-                                                 type={type}
-                                                 title={title}
-                                                 formId={formId}
-                                                 selectedField={selectedField}
-                                                 appId={appId}
-                                                 tblId={tblId}/>);
+                                                 relatedField={relatedField} type={type} title={title} formId={formId}
+                                                 selectedField={selectedField} appId={appId} tblId={tblId}/>);
         component.simulate('click');
 
-        expect(mockActions.addFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField, datatypeAttributes, id);
+        expect(mockActions.addFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
     });
 
     it('will invoke addFieldToForm when FieldToken enter is pressed', () => {
@@ -75,19 +65,12 @@ describe('FieldTokenInMenu', () => {
         };
 
         component = shallow(<DraggableFieldToken addFieldToForm={mockActions.addFieldToForm}
-                                                 relatedField={relatedField}
-                                                 datatypeAttributes={datatypeAttributes}
-                                                 id={id}
-                                                 type={type}
-                                                 title={title}
-                                                 formId={formId}
-                                                 selectedField={selectedField}
-                                                 appId={appId}
-                                                 tblId={tblId}/>);
+                                                 relatedField={relatedField} type={type} title={title} formId={formId}
+                                                 selectedField={selectedField} appId={appId} tblId={tblId}/>);
         instance = component.instance();
         instance.onEnterClickToAdd(e);
 
-        expect(mockActions.addFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField, datatypeAttributes, id);
+        expect(mockActions.addFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
     });
 
     it('will invoke addFieldToForm when space is pressed', () => {
@@ -99,18 +82,12 @@ describe('FieldTokenInMenu', () => {
         };
 
         component = shallow(<DraggableFieldToken addFieldToForm={mockActions.addFieldToForm}
-                                                 relatedField={relatedField}
-                                                 datatypeAttributes={datatypeAttributes}
-                                                 id={id}
-                                                 type={type} title={title}
-                                                 formId={formId}
-                                                 selectedField={selectedField}
-                                                 appId={appId}
-                                                 tblId={tblId}/>);
+                                              relatedField={relatedField} type={type} title={title} formId={formId}
+                                              selectedField={selectedField} appId={appId} tblId={tblId}/>);
         instance = component.instance();
         instance.onEnterClickToAdd(e);
 
-        expect(mockActions.addFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField, datatypeAttributes, id);
+        expect(mockActions.addFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
     });
 
     it('will not invoke addFieldToForm when keys space or enter are pressed', () => {
