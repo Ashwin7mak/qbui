@@ -1,17 +1,17 @@
 (function() {
     'use strict';
     //Bluebird Promise library
-    var Promise = require('bluebird');
+    let Promise = require('bluebird');
     // Lodash utility library
-    var _ = require('lodash');
+    let _ = require('lodash');
 
     // Import the base page object
-    var e2ePageBase = requirePO('e2ePageBase');
-    var formsPO = requirePO('formsPage');
-    var reportContentPO = requirePO('reportContent');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let formsPO = requirePO('formsPage');
+    let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitle = "Table name";
 
-    var tablesPage = Object.create(e2ePageBase, {
+    let tablesPage = Object.create(e2ePageBase, {
         //new table button
         newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
         //New table Icon
@@ -85,11 +85,11 @@
             //search for tasks
             this.searchIconFromChooser('tasks');
             //get all icons to a list
-            var icons = this.getAllIconsFromIconChooser;
+            let icons = this.getAllIconsFromIconChooser;
             //Get random Icon from the list of Icons
-            var randomIcon = _.sample(icons.value);
+            let randomIcon = _.sample(icons.value);
             //Get the className of Icon
-            var randomIconClassName = randomIcon.getAttribute('className').split(' ').splice(-1)[0];
+            let randomIconClassName = randomIcon.getAttribute('className').split(' ').splice(-1)[0];
             //Select the Icon
             randomIcon.waitForVisible();
             randomIcon.click();
@@ -163,7 +163,7 @@
          */
         selectTable: {value: function(tableName) {
             //filter table names from leftNav links
-            var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
+            let results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;
             });
 
@@ -181,7 +181,7 @@
          */
         getAllTablesFromLeftNav: {value: function() {
             //filter table names from leftNav links
-            var results = [];
+            let results = [];
             this.getAllTableLeftNavLinksList.value.map(function(table) {
                 results.push(table.getAttribute('textContent'));
             });
@@ -219,7 +219,7 @@
          */
         clickBtnOnTableDlgFooter : {value: function(btnName) {
             //get all save buttons on the form
-            var buttonToClick = this.tableFooterButtons.value.filter(function(button) {
+            let buttonToClick = this.tableFooterButtons.value.filter(function(button) {
                 return button.getAttribute('textContent') === btnName;
             });
 
@@ -304,13 +304,13 @@
             //Verify table title
             expect(this.tableTitle.getAttribute('textContent')).toContain('Name your table');
             //Verify Icon choose is enabled
-            expect(browser.isEnabled('.iconChooser.closed')).toBeTruthy();
+            expect(browser.isEnabled('.iconChooser.closed')).toBe(true);
             //Verify cancel button is enabled
-            expect(browser.isEnabled('.modal-footer .cancelButton')).toBeTruthy();
+            expect(browser.isEnabled('.modal-footer .cancelButton')).toBe(true);
             //Verify create button is disabled
-            expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
+            expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
             //verify close button enabled
-            expect(browser.isEnabled('.rightIcons .iconUISturdy-close')).toBeTruthy();
+            expect(browser.isEnabled('.rightIcons .iconUISturdy-close')).toBe(true);
         }},
 
         /**
@@ -330,7 +330,7 @@
          */
         enterTableFieldValue : {value: function(tableField, fieldValue) {
             //Filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
@@ -363,7 +363,7 @@
          */
         verifyTableFieldValues : {value: function(tableField, expectedFieldValue) {
             //Filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
@@ -385,7 +385,7 @@
         }},
 
         getAllTableFieldValues : {value: function() {
-            var allTableFieldValues = [];
+            let allTableFieldValues = [];
 
             //Get all textField input values tableName, A record in the table is called
             browser.element('.tableFieldInput input').waitForVisible();
@@ -407,7 +407,7 @@
          */
         verifyTableFieldPlaceHolders : {value: function(tableField, expectedPlaceHolder) {
             //Filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.getAttribute('textContent') === tableField;
             });
 
@@ -438,7 +438,7 @@
          */
         verifyTableFieldValidation : {value: function(tableField, errorMsg) {
             //filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.getAttribute('textContent') === tableField;
             });
 
@@ -460,7 +460,7 @@
          * Method to verify table settings drop down
          */
         verifyTableSettingsDropDown : {value: function() {
-            var liElements = [];
+            let liElements = [];
             this.settingsBtn.waitForVisible();
             //Click on settings gear Icon on table global actions
             this.settingsBtn.click();
@@ -473,7 +473,7 @@
                 liElements.push(elm.getAttribute('textContent'));
             });
 
-            var i = 0;
+            let i = 0;
             expect(liElements[i++]).toContain('App');
             expect(liElements[i++]).toContain('Automation');
             expect(liElements[i++]).toContain('Table');
@@ -541,7 +541,7 @@
             //wait for deletetable button to be visible
             browser.element('.modal-dialog .modal-footer .primaryButton').waitForVisible();
             //use the predefined deleteTableButton here
-            expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeTruthy();
+            expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(true);
             //Click on delete table button
             browser.element('.modal-footer .buttons .primaryButton').click();
             //Need this to wait for model dialogue to slide away

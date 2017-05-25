@@ -120,9 +120,9 @@
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify Apply button is enabled
-                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBeTruthy();
+                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBe(true);
                     //Verify Reset button is enabled
-                    expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBeTruthy();
+                    expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
                 });
 
                 //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
@@ -132,7 +132,7 @@
                 expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toContain('Back to app');
 
                 //Verify bck to app link is enabled
-                expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBeTruthy();
+                expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBe(true);
             });
         });
 
@@ -333,7 +333,7 @@
             ReportContentPO.waitForReportContent();
 
             //Verify settings icon not available for user other than ADMIN
-            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();
+            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBe(false);
         });
     });
 }());
