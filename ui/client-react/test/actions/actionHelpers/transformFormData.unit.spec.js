@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {buildTestFormData, buildTestArrayBasedFormData} from '../../testHelpers/testFormData';
-import {convertFormToArrayForClient, convertFormToObjectForServer} from '../../../src/actions/actionHelpers/transformFormData';
+import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from '../../../src/actions/actionHelpers/transformFormData';
 
 const testFormData = buildTestFormData();
 const testArrayBasedFormData = buildTestArrayBasedFormData();
@@ -129,6 +129,36 @@ describe('TransformFormData', () => {
             expect(section.rows).toBeUndefined();
             expect(element.id).toBeUndefined();
             expect(element.orderIndex).toBeUndefined();
+        });
+    });
+
+    describe('addRelationshipFieldProps', () => {
+
+        it('adds parentTableId and parentFieldId props to fields when needed', () => {
+
+            let formMeta = {
+                relationships: [
+                    {
+                        detailAppId: 'app1',
+                        detailTableId: 'childTable1',
+                        detailFieldId: 1,
+                        masterTableId: 'masterTable1',
+                        masterFieldId: 2
+                    }
+                ]
+            };
+
+            let fieldsWithRelationshipProps = [
+                {id: 1, parentTableId: 'masterTable1', parentFieldId: 2},
+                {id: 2},
+                {id: 3}
+            ];
+
+            let detailFields = [{id: 1}, {id: 2}, {id: 3}];
+
+            addRelationshipFieldProps('app1', 'childTable1', formMeta, detailFields);
+
+            expect(detailFields).toEqual(fieldsWithRelationshipProps);
         });
     });
 });

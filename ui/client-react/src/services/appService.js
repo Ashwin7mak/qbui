@@ -68,22 +68,21 @@ class AppService extends BaseService {
 
     /**
      * create a new relationship in an app
-
      * @param appId
      * @param relationship relationship object, for example:
      *          {
-     *              "masterAppId": "0duiiaaaaab",
-     *              "masterTableId": "0duiiaaaaaj",
-     *              "masterFieldId": 3,
-     *              "detailAppId": "0duiiaaaaab",
-     *              "detailTableId": "0duiiaaaaak",
-     *              "detailFieldId": 7,
-     *              "appId": "0duiiaaaaab",
-     *              "description": "Referential integrity relationship between Master / Child Tables",
-     *              "referentialIntegrity": false,
-     *              "cascadeDelete": false
+     *              masterAppId: "0duiiaaaaab",
+     *              masterTableId: "0duiiaaaaaj",
+     *              masterFieldId: 3,
+     *              detailAppId: "0duiiaaaaab",
+     *              detailTableId: "0duiiaaaaak",
+     *              detailFieldId: 7,
+     *              appId: "0duiiaaaaab",
+     *              description: "Referential integrity relationship between Master / Child Tables",
+     *              referentialIntegrity: false,
+     *              cascadeDelete: false
      *          }
-     * @returns {*}
+     * @returns promise
      */
     createRelationship(appId, relationship) {
         let url = super.constructUrl(this.API.GET_APP_RELATIONSHIPS, [appId]);
