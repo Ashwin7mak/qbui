@@ -160,6 +160,10 @@ export const DELETING_TABLE_FAILED = 'DELETING_TABLE_FAILED';
 export const TABLE_DELETED = 'TABLE_DELETED';
 export const NOTIFY_TABLE_DELETED = 'NOTIFY_TABLE_DELETED';
 
+// ************ Used for the Add User Dialog *************
+export const SHOW_ADD_USER_TO_APP_DIALOG = 'SHOW_ADD_USER_TO_APP_DIALOG';
+export const HIDE_ADD_USER_TO_DIALOG = 'HIDE_ADD_USER_TO_DIALOG';
+
 //  ******** automation actions ********
 export const LOAD_AUTOMATIONS = 'LOAD_AUTOMATIONS';
 export const LOAD_AUTOMATIONS_SUCCESS = 'LOAD_AUTOMATIONS_SUCCESS';

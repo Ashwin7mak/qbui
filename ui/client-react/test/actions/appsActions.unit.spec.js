@@ -8,11 +8,13 @@ describe('Apps Actions functions with Tables', () => {
     'use strict';
 
     let responseData = [{id: 'tableId', link: `${APP_ROUTE}/tableId`}];
+    let responseAppUserData = [{id: 123}];
     let appRoleResponeData = [4, 5, 6];
     let responseComponentData = {
         users: [],
         app: [{id: 'tableId'}]
     };
+    let realmUsersResponeData = [{userId: '123445'}];
 
     class mockAppService {
         constructor() { }
@@ -22,8 +24,8 @@ describe('Apps Actions functions with Tables', () => {
         getApp(id) {
             return Promise.resolve({data: {id:'tableId'}});
         }
-        getAppUsers(id) {
-            return Promise.resolve({data: responseData});
+        getAppUsers(id, test) {
+            return Promise.resolve({data: responseAppUserData[0].id ? responseAppUserData : responseData});
         }
         getAppComponents(id) {
             return Promise.resolve({data: responseComponentData});
@@ -37,6 +39,12 @@ describe('Apps Actions functions with Tables', () => {
         }
         unassignUsersFromRole(appId, roleId, userIds) {
             return Promise.resolve({data: appRoleResponeData});
+        }
+        searchRealmUsers(searchTerm) {
+            return Promise.resolve({data: realmUsersResponeData});
+        }
+        assignUserToApp(appId, roleId, userIds) {
+            return Promise.resolve({});
         }
     }
 
@@ -77,6 +85,8 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
         spyOn(mockRoleService.prototype, 'unassignUsersFromRole').and.callThrough();
         spyOn(mockUserService.prototype, 'getUser').and.callThrough();
+        spyOn(mockRoleService.prototype, 'searchRealmUsers').and.callThrough();
+        spyOn(mockRoleService.prototype, 'assignUserToApp').and.callThrough();
         appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
         appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
@@ -248,6 +258,73 @@ describe('Apps Actions functions with Tables', () => {
         appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
         var result = flux.actions.selectUsersRows(test.selectedDetails);
         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.SELECT_USERS_DETAILS);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
+    });
+
+    const searchRealmUsers = [{name:'search for Realm users based on search term', searchTerm: 'la'}];
+    searchRealmUsers.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.searchRealmUsers(test.searchTerm).then(() => {
+                expect(mockRoleService.prototype.searchRealmUsers).toHaveBeenCalledWith(test.searchTerm);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SEARCH_ALL_USERS_SUCCESS, realmUsersResponeData]);
+                done();
+            }, () => {
+                expect(false).toBe(true);
+                done();
+            }
+			);
+        });
+    });
+
+    const getAppUsers = [{name:'gets App Users', appId: 123}];
+    getAppUsers.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.getAppUsers(test.appId, true).then(() => {
+                expect(mockAppService.prototype.getAppUsers).toHaveBeenCalledWith(test.appId);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.GET_APP_USERS_SUCCESS, {appUsers: responseAppUserData}]);
+                done();
+            }, () => {
+                expect(false).toBe(true);
+                done();
+            }
+			);
+        });
+    });
+
+    const assignUserToApp = [{name:'get App User', appId: 123, userId: 1, roleId: 123}];
+    assignUserToApp.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.assignUserToApp(test.appId, test.userId, test.roleId).then(() => {
+                expect(mockRoleService.prototype.assignUserToApp).toHaveBeenCalledWith(test.appId, test.userId, test.roleId);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                let {userId, roleId} = test;
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ASSIGN_USERS_TO_APP_SUCCESS, {userId, roleId}]);
+                done();
+            }, () => {
+                expect(false).toBe(true);
+                done();
+            }
+			);
+        });
+    });
+
+    it("Test setUserRoleToAdd", function(done) {
+        var test = {roleId: 123};
+        appsActionsRewireAPI.__Rewire__('RoleService', mockUserServiceFailure);
+        var result = flux.actions.setUserRoleToAdd(test.roleId);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.SET_USER_ROLE_TO_ADD_TO_APP, test.roleId);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
+    });
+
+    it("Test openAddUserDialog", function(done) {
+        var test = {status: true};
+        appsActionsRewireAPI.__Rewire__('RoleService', mockUserServiceFailure);
+        var result = flux.actions.openAddUserDialog(test.status);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.TOGGLE_ADD_USER_TO_APP_DIALOG, test.status);
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
         done();
     });

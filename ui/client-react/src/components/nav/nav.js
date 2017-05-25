@@ -500,8 +500,11 @@ export const Nav = React.createClass({
                                 selectedApp: this.getSelectedApp(),
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 selectedUserRows: this.state.apps.selectedUserRows,
+                                realmUsers: this.state.apps.realmUsers,
+                                addUserToAppDialogOpen: this.state.apps.addUserToAppDialogOpen,
                                 scrollingReport: this.state.nav.scrollingReport,
-                                flux: flux
+                                flux: flux,
+                                userRoleIdToAdd: this.state.apps.userRoleIdToAdd,
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
                         }
