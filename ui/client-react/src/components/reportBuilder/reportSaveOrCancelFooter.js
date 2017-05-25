@@ -79,12 +79,9 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
-
-        saveReport: (appId, tblId, rptId, reportDef) => dispatch(saveReport(appId, tblId, rptId, reportDef))
-    };
+const mapDispatchToProps = {
+    exitBuilderMode,
+    saveReport
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportSaveOrCancelFooter);

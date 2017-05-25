@@ -29,11 +29,6 @@ describe('Report Builder Save and Cancel Footer', () => {
         }
     };
 
-    // we mock the Redux store when testing async action creators
-    const middlewares = [thunk];
-    const mockStore = configureMockStore(middlewares);
-
-
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(props, 'exitBuilderMode').and.callThrough();

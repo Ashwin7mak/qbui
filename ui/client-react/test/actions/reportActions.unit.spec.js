@@ -199,29 +199,6 @@ describe('Test ReportsActions function success workflow', () => {
             });
     });
 
-    it('save report', (done) => {
-        const store = mockReportsStore({});
-
-        let rptDef = {
-            data : {
-                name: 'Sample Report',
-                fids: [2, 3]
-            }
-        };
-
-        return store.dispatch(reportActions.saveReport(appId, tblId, rptId, rptDef)).then(
-            () => {
-                expect(mockReportService.prototype.updateReport).toHaveBeenCalled();
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            }
-        );
-
-    });
-
 });
 
 describe('Test ReportsActions function failure workflow', () => {
