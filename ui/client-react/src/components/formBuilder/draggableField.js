@@ -32,7 +32,7 @@ const fieldDragSource = {
             containingElement = {
                 FormFieldElement: _.merge(props.datatypeAttributes, {positionSameRow: false})
             };
-            relatedField = {datatypeAttributes: props.datatypeAttributes, name: props.name};
+            relatedField = {datatypeAttributes: props.datatypeAttributes, name: props.name, multipleChoice: props.multipleChoice};
         }
 
         return {
