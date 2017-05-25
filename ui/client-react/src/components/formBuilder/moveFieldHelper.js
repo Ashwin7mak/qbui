@@ -116,6 +116,10 @@ function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
     removeElementFromCurrentLocation(formMetaData, updatedElementLocation);
 }
 
+/**
+ * I needed to create a separate function just to remove the id from the fieldMeta data
+ * This prevents fields from being removed elsewhere
+ * */
 function removeFieldIdFromFormMetaData(formMetaData, location) {
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = location;
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
