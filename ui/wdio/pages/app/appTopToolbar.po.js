@@ -5,7 +5,9 @@
  */
 class appTopToolbar {
     get appSettingsBtn() {
-        let appSettingsWindow = browser.element('li.link.globalAction.withDropdown.builder');
+        let selector = 'li.link.globalAction.withDropdown.builder';
+        browser.waitForVisible(selector);
+        let appSettingsWindow = browser.element(selector);
         return appSettingsWindow;
     }
 }

@@ -9,7 +9,9 @@ class appSettings {
     }
 
     get automationSettingsBtn() {
-        return this.settingsWindow.element('.modifyAutomationSettings');
+        let selector = '.modifyAutomationSettings';
+        browser.waitForVisible(selector);
+        return this.settingsWindow.element(selector);
     }
 }
 
