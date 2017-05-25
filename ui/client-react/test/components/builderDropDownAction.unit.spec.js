@@ -81,7 +81,7 @@ describe('Build drop down action functions', () => {
 
     it('test report builder link', () => {
         spyOn(callbacks, "navigateToReportBuilder").and.callThrough();
-        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} rptId="0" navigateToReportBuilder={callbacks.navigateToReportBuilder}/>);
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} rptId="2" navigateToReportBuilder={callbacks.navigateToReportBuilder}/>);
 
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
