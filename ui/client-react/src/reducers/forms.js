@@ -229,26 +229,27 @@ const forms = (
             return state;
         }
 
-        if (updatedForm.formData.formMeta.fields.length > 1) {
-            let {location, field} = action;
-            let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
-            let relatedRelationship = false;
+        let {location, field} = action;
+        let relatedRelationship = false;
+        let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
 
-            if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
-                relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
+        if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
+            relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
+        }
+
+        if (relatedRelationship) {
+            if (formMetaCopy.fieldsToDelete) {
+                formMetaCopy.fieldsToDelete.push(field.id);
+            } else {
+                formMetaCopy.fieldsToDelete = [field.id];
             }
-            if (relatedRelationship) {
-                if (formMetaCopy.fieldsToDelete) {
-                    formMetaCopy.fieldsToDelete.push(field.id);
-                } else {
-                    formMetaCopy.fieldsToDelete = [field.id];
-                }
-            }
+        }
+
+        if (updatedForm.formData.formMeta.fields.length > 1) {
             updatedForm.formData.formMeta = MoveFieldHelper.removeField(
                 formMetaCopy,
                 location
             );
-
         }
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;

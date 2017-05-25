@@ -217,10 +217,8 @@ describe('Forms reducer functions', () => {
         const actionPayload = {
             id: 'view',
             type: types.REMOVE_FIELD,
-            content: {
-                location: 1,
-                field: {id: 6},
-            }
+            field: {id: 6},
+            location: 1,
         };
 
         beforeEach(() => {
