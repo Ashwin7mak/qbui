@@ -35,7 +35,7 @@ describe('Forms reducer functions', () => {
         }
     };
 
-    const updatedFormMeta = 'updated form meta';
+    const updatedFormMeta = {updated: 'updated form meta'};
 
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
@@ -231,7 +231,7 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with a single field removed', () => {
-            let removeStateWithViewForm = {'view': {id: 'view', formData: {formMeta: {fields: [1, 2, 3, 4, 5]}}}};
+            let removeStateWithViewForm = {'view': {id: 'view', formData: {formMeta: {formBuilderFieldLength: 2, fields: [1, 2, 3, 4, 5]}}}};
             expect(reducer(removeStateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],

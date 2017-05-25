@@ -219,7 +219,7 @@ const forms = (
         }
 
         updatedForm.selectedFields[0] = newLocation;
-        updatedForm.formData.formMeta.formBuilderFieldLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
+        updatedForm.formData.formMeta.formBuilderFieldLength = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
 
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
@@ -255,7 +255,7 @@ const forms = (
             );
         }
 
-        updatedForm.formData.formMeta.formBuilderFieldLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
+        updatedForm.formData.formMeta.formBuilderFieldLength = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
@@ -530,7 +530,7 @@ export const getExistingFields = (state, id) => {
         });
         result = _.sortBy(result, "name");
         result = _.map(result, (field) => _.merge(field, {key: field.id}));
-
+        console.log('RESULT: ', result);
         return result;
     }
 };
