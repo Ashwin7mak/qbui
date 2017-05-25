@@ -7,33 +7,28 @@ let fiveSeconds = 5 * oneSecond;
 class reportBuilderPage {
 
     get cancelBtn() {
-        // CANCEL (form) button in footer bar
+        // CANCEL (report) button in footer bar
         return browser.element('.alternativeTrowserFooterButton');
     }
 
-    get saveBtn() {
-        // SAVE (form) button in footer bar
-        return browser.element('.mainTrowserFooterButton');
-    }
     get saveOrCancelFooter() {
         // footer bar (container for SAVE & CANCEL buttons)
         return browser.element('.saveOrCancelFooter');
     }
     //
     cancel() {
-        // Clicks on CANCEL in the form builder and waits for the next page to render
+        // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelBtn.click();
-        // do we have a method to wait for spinner?
         browser.pause(fiveSeconds);
         return this;
     }
     get reportBuilderContainer() { 
-        // the whole form builder page (all 3 panels) 
+        // the whole report builder page
         return browser.element('.reportBuilderContainer'); 
          }
 
     open() {
-        // Invokes the form builder from the VIEW RECORD page
+        // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
         browser.pause(fiveSeconds);
         reportContentPO.settingsIcon.click();
@@ -44,9 +39,8 @@ class reportBuilderPage {
         return this;
     }
     save() {
-        // Clicks on the SAVE button in the form builder and waits for the next page to appear
+        // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveBtn.click();
-        // wait for spinner?
         browser.pause(fiveSeconds);
         return this;
     }

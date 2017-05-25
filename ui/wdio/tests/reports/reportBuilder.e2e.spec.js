@@ -3,9 +3,7 @@
 
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let reportContentPO = requirePO('reportContent');
     let reportBuilderPO = requirePO('reportBuilder');
-    let topNavPO = requirePO('topNav');
 
     let realmName;
     let realmId;
@@ -38,17 +36,12 @@
         beforeEach(function() {
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            browser.logger.info('opening report builder page');
-            // invoke form builder
+            // invoke report builder
             return reportBuilderPO.open();
         });
 
         it('verify CANCEL', function() {
             reportBuilderPO.cancel();
-        });
-
-        it('verify SAVE', function() {
-            reportBuilderPO.save();
         });
     });
 
