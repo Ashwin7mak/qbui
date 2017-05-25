@@ -565,14 +565,25 @@ describe('Forms reducer functions', () => {
     });
 
     describe('getExistingFields selector', () => {
+        let mockGetFields = {
+            getFields: () => {}
+        };
+
+        beforeEach(() => {
+            spyOn(mockGetFields, 'getFields').and.returnValue([{id: 6}, {id: 7}, {id: 8}, {id: 9}]);
+            ReducerRewireAPI.__Rewire__('getFields', mockGetFields.getFields);
+        });
+
+        afterEach(() => {
+            mockGetFields.getFields.calls.reset();
+        });
         const id = 'view';
         const state = {
             forms: {
                 view: {
                     formData: {
-                        fields: [{id: 1}, {id: 2}, {id: 3}, {id: 4}],
                         formMeta: {
-                            fields: [1, 2, 3]
+                            fields: [6, 7, 8]
                         }
                     }
                 }
@@ -580,18 +591,50 @@ describe('Forms reducer functions', () => {
         };
 
         it('returns an array of fields that are not on a form', () => {
-            let expectedResult = [{id: 4, key: 'existing_4'}];
+
             let result = getExistingFields(state, id);
+            let expectedResult = [{
+                containingElement: {
+                    id: 'view',
+                    FormFieldElement:{
+                        positionSameRow: false,
+                        id: 9
+                    }
+                },
+                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+                key: 'existingField_9',
+                type: 1,
+                relatedField: {id: 9},
+                title: undefined
+            }];
+
             expect(result).toEqual(expectedResult);
         });
 
         it('returns an empty array of existing fields if all fields are on a form', () => {
+
             let newState = Object.assign({}, state);
-            newState.forms.view.formData.fields = [{id: 1}, {id: 2}, {id: 3}];
-            let expectedResult = [];
+            newState.forms.view.formData.formMeta.fields = [6, 7, 8, 9];
             let result = getExistingFields(state, id);
-            expect(result).toEqual(expectedResult);
+
+            expect(result).toEqual([]);
         });
 
     });
 });
+
+let expectedResult = {
+    containingElement: {
+        id: 'view',
+        FormFieldElement:{
+            positionSameRow: false,
+            id: 9
+        }
+    },
+    location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+    key: 'existingField_9',
+    type: 1,
+    relatedField: {id: 9},
+    title: undefined,
+    isNewField: true
+};

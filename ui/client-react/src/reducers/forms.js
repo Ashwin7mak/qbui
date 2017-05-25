@@ -512,6 +512,8 @@ export const getSelectedFormElement = (state, id) => {
  * retrieve all existing fields that are not on a form
  * @param state
  * @param id
+ * @param appId
+ * @param tblId
  * @returns {Array}
  */
 export const getExistingFields = (state, id, appId, tblId) => {
@@ -537,6 +539,7 @@ export const getExistingFields = (state, id, appId, tblId) => {
                 return field.id;
             }
         });
+
         result = _.sortBy(result, "name");
         result = _.map(result, (field) => ({
             containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
@@ -544,8 +547,7 @@ export const getExistingFields = (state, id, appId, tblId) => {
             key: `existingField_${field.id}`, // Key for react to use to identify it in the array
             type: fieldFormats.getFormatType(field),
             relatedField: field,
-            title: field.name,
-            isNewField: true
+            title: field.name
         }));
         return result;
     }
