@@ -181,9 +181,6 @@
             //Delete table
             tableCreatePO.clickDeleteTableButton();
 
-            //Need small wait here for the success container to slide away
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
             //Wait until new table button visible
             tableCreatePO.newTableBtn.waitForVisible();
 
