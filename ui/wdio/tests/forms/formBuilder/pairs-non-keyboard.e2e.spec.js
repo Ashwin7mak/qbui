@@ -47,11 +47,11 @@
 
             beforeEach(function() {
                 // invoke form builder
-                formBuilderPO.open();
+                return formBuilderPO.open();
             });
 
             afterEach(function() {
-                formBuilderPO.cancel();
+                return formBuilderPO.cancel();
             });
 
             // pos/neg pairs
