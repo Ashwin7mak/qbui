@@ -214,6 +214,7 @@ class formBuilderPage {
         deleteIcon.waitForVisible();
         // click to remove the field from the form
         deleteIcon.click();
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return deletedFieldName;
     }
 
