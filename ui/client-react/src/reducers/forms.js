@@ -529,8 +529,7 @@ export const getExistingFields = (state, id) => {
             }
         });
         result = _.sortBy(result, "name");
-        result = _.map(result, (field) => _.merge(field, {key: field.id}));
-        console.log('RESULT: ', result);
+        result = _.map(result, (field) => _.merge(field, {key: `existing_${field.id}`}));
         return result;
     }
 };
