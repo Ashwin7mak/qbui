@@ -342,7 +342,7 @@ export const QBForm = React.createClass({
      * @param fieldId
      */
     getRelationshipIfReferenceFieldToParent(fieldId) {
-        return this.props.relationships.find((relationship) => relationship.detailFieldId === fieldId);
+        return _.get(this.props, 'relationships') && this.props.relationships.find((relationship) => relationship.detailFieldId === fieldId);
     },
 
     /**
