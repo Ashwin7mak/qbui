@@ -193,7 +193,7 @@ class formBuilderPage {
         topNavPO.settingsBtn.waitForExist();
         try {
             topNavPO.settingsBtn.click();
-            this.firstField.waitForExist();
+            browser.pause(e2eConsts.shortWaitTimeMs);
         } catch (err) {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
