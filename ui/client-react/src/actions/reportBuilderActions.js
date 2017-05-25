@@ -1,6 +1,8 @@
 import FieldsService from '../services/fieldsService';
+import ReportService from '../services/reportService';
 import Promise from 'bluebird';
-
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
@@ -127,4 +129,36 @@ export const moveColumn = (context, params) => {
  */
 export const changeReportName = (context, newName) => {
     return event(context, types.CHANGE_REPORT_NAME, {newName});
+};
+
+/**
+ * Save and updates the report with new data
+ * @param appId
+ * @param tableId
+ * @param reportId
+ * @param reportDef
+ * @returns {function(*=)}
+ */
+export const saveReport = (appId, tableId, reportId, reportDef) => {
+    return () => {
+        return new Promise((resolve, reject) => {
+            if (appId && tableId && reportId) {
+                let reportService = new ReportService();
+                reportService.updateReport(appId, tableId, reportId, reportDef)
+                    .then(() => {
+                        logger.debug('ReportService saveReport success');
+                        NotificationManager.success(Locale.getMessage('report.notification.save.success'), Locale.getMessage('success'));
+                        resolve();
+                    })
+                    .catch((ex) => {
+                        logger.logException(ex);
+                        NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                        reject();
+                    });
+            } else {
+                logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tableId: ${tableId}`);
+                reject();
+            }
+        });
+    };
 };

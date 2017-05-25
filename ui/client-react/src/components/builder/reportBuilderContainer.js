@@ -24,12 +24,14 @@ const RECORD_SHOW_LIMIT = 50;
 export class ReportBuilderContainer extends Component {
 
     getSaveOrCancelFooter = () => {
-        let {appId, tblId} = this.props.match.params;
+        let {appId, tblId, rptId} = this.props.match.params;
         return (
             <ReportSaveOrCancelFooter
                 className="reportBuilderSaveOrCancelFooter"
                 appId={appId}
                 tblId={tblId}
+                rptId={rptId}
+                reportData={this.props.reportData}
             />
         );
     };

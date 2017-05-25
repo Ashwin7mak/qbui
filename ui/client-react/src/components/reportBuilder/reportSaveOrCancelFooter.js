@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {exitBuilderMode} from '../../../src/actions/reportBuilderActions';
+import {exitBuilderMode, saveReport} from '../../../src/actions/reportBuilderActions';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import Button from 'react-bootstrap/lib/Button';
@@ -14,7 +14,15 @@ export class ReportSaveOrCancelFooter extends Component {
     }
 
     onSave = () => {
+        //HideAppModal();
+        let reportDef = {
+            name: this.props.reportData.data.name,
+            fids: this.props.reportData.data.fids
+        };
 
+        this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef);
+        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
+        this.closeReportBuilder();
     };
 
     closeReportBuilder = () => {
@@ -53,7 +61,9 @@ export class ReportSaveOrCancelFooter extends Component {
 
 ReportSaveOrCancelFooter.propTypes = {
     appId: PropTypes.string.isRequired,
-    tblId: PropTypes.string.isRequired
+    tblId: PropTypes.string.isRequired,
+    rptId: PropTypes.string.isRequired,
+    reportData: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -63,7 +73,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    exitBuilderMode
+    exitBuilderMode,
+    saveReport
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportSaveOrCancelFooter);
