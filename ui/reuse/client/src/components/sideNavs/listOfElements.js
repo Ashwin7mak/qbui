@@ -66,11 +66,11 @@ class ListOfElements extends Component {
     renderFilteredFieldsList = () => {
         let elements = this.flattenedElements().filter(element => {
             // Filter out anything that isn't a string
-            if (!_.isString(element.title)) {
+            let title = element.title || element.name;
+            if (!_.isString(title)) {
                 return false;
             }
-
-            return element.title.toLowerCase().indexOf(this.state.activeFieldFilter.toLowerCase()) >= 0;
+            return title.toLowerCase().indexOf(this.state.activeFieldFilter.toLowerCase()) >= 0;
         });
 
         if (elements.length === 0) {
