@@ -139,7 +139,7 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
+            browser.waitForVisible('.tablesList .leftNavLabel');
             //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
             while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
                 browser.pause(e2eConsts.shortWaitTimeMs);
