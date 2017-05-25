@@ -65,13 +65,14 @@
         baseUrl = config === undefined ? '' : config.DOMAIN;
 
         function resolveFullUrl(realmSubdomain, path) {
-            log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain);
+            log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain + ' for base url: ' + baseUrl);
 
             if (realmSubdomain === '') {
                 realmSubdomain = ADMIN_REALM;
             }
 
             let url = baseUrl.replace('://', '://' + realmSubdomain + '.') + path;
+            log.info('Full URL: ' + url);
             log.debug('resulting fullpath: ' + url);
 
             return url;
