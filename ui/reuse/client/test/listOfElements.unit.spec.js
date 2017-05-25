@@ -31,17 +31,6 @@ const testElements = [
     {key: 'ungroupedElement', title: 'ungroupedElement'},
 ];
 
-const testElementsWithName = [
-    {
-        key: 'group1',
-        title: 'group1',
-        children: [
-            {key: 'element1', name: 'burger'},
-            {key: 'element2', name: 'pizza'}
-        ]
-    }
-];
-
 // Mock this out so that no animations occur during a unit test.
 const mockFlipMove = ({children, className}) => <ul className={className}>{children}</ul>;
 
@@ -101,7 +90,7 @@ describe('ListOfElements', () => {
     });
 
     describe('filtering elements', () => {
-        it('filters elements based on the filter TITLE text', () => {
+        it('filters elements based on the filter text', () => {
             component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 
             component.setState({activeFieldFilter: 'elementa'});
@@ -111,25 +100,16 @@ describe('ListOfElements', () => {
             expect(component.find('.emptySearchResult')).not.toBePresent();
         });
 
-        it('filters elements based on the filter NAME text', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElementsWithName} />);
-
-            component.setState({activeFieldFilter: 'pizza'});
-
-            expect(component.find('.listOfElementsItem').length).toEqual(1);
-            expect(component.find('.animatedListOfElementsItemList').length).toEqual(0);
-            expect(component.find('.emptySearchResult')).not.toBePresent();
-        });
 
         it('will animate children if animateChildren is set to true', () => {
-            component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock} elements={testElementsWithName} />);
+            component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock} elements={testElements} />);
 
             expect(component.find('.listOfElementsItemList').length).toEqual(0);
-            expect(component.find('.animatedListOfElementsItemList').length).toEqual(1);
+            expect(component.find('.animatedListOfElementsItemList').length).toEqual(2);
         });
 
         it('shows a message if no fields match the filter text', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElementsWithName} />);
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 
             component.setState({activeFieldFilter: 'zzz'});
 
