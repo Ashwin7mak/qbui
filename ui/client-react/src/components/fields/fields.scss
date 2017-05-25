@@ -284,3 +284,23 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
         display: block;
     }
 }
+
+.parentLink {
+    text-decoration: underline;
+    color: $link-normal-color;
+
+    &:hover {
+        cursor: pointer;
+        color: $link-hover-color;
+    }
+}
+
+.parentLink {
+    text-decoration: underline;
+    color: $link-normal-color;
+
+    &:hover {
+        cursor: pointer;
+        color: $link-hover-color;
+    }
+}

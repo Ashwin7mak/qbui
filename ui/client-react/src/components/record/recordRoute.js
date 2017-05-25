@@ -33,11 +33,11 @@ import {CONTEXT} from '../../actions/context';
 import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
-
+import RecordService from '../../services/recordService';
 import RecordInDrawer from '../drawer/recordInDrawer';
 import ReportInDrawer from '../drawer/reportInDrawer';
 import {getRecordTitle} from '../../utils/formUtils';
-
+import QueryUtils from '../../utils/queryUtils';
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -509,6 +509,34 @@ export const RecordRoute = React.createClass({
         }
     },
 
+    /***
+     * handles clicking on parent from a record
+     * @param appId master app id
+     * @param tblId master table id
+     * @param fieldId master table field id to specify the column in the master table
+     * @param value record in the particular column specified by the field id
+     */
+    handleDrillIntoParent(appId, tblId, fieldId, value) {
+        const defaultReportId = '0';
+        const recordService = new RecordService();
+        const queryParams = {
+            query: QueryUtils.parseStringIntoExactMatchExpression(fieldId, value)
+        };
+        let promise = recordService.getRecords(appId, tblId, queryParams);
+        promise.then((data) => {
+            //retrieve the rec id from response data
+            const recId = data.data.records[0][0].value;
+            const existingPath = this.props.location.pathname;
+            const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, defaultReportId, recId);
+            const link = existingPath + recordDrawerSegment;
+            if (this.props.history) {
+                this.props.history.push(link);
+            }
+        }).catch((recordResponseError) => {
+            logger.parseAndLogError(LogLevel.ERROR, recordResponseError.response, 'recordService.getRecords:');
+        });
+    },
+
     /**
      * render the stage, actions, and form
      *
@@ -561,7 +589,8 @@ export const RecordRoute = React.createClass({
                                     formData={viewData ? viewData.formData : null}
                                     appUsers={this.props.appUsers}
                                     handleDrillIntoChild={this.handleDrillIntoChild}
-                                    />
+                                    handleDrillIntoParent={this.handleDrillIntoParent}
+                                    uniqueId={this.props.uniqueId}/>
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}

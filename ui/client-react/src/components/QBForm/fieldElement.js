@@ -135,6 +135,10 @@ export const FieldElement = React.createClass({
                                                includeUnits={true}
                                                fieldDef={this.props.relatedField}
                                                label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                                               handleDrillIntoParent={this.props.handleDrillIntoParent}
+                                               masterTableId={this.props.masterTableId}
+                                               masterAppId={this.props.masterAppId}
+                                               masterFieldId={this.props.masterFieldId}
             />;
         }
 

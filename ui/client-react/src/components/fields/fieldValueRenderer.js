@@ -212,6 +212,10 @@ const FieldValueRenderer = React.createClass({
                                             value={this.props.display ? this.props.display : this.props.value}
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
+                                            handleDrillIntoParent={this.props.handleDrillIntoParent}
+                                            masterTableId={this.props.masterTableId}
+                                            masterAppId={this.props.masterAppId}
+                                            masterFieldId={this.props.masterFieldId}
                                             />
             );
         }
