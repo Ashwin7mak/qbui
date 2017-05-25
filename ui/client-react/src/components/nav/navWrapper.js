@@ -15,7 +15,7 @@ import {getApp, getSelectedAppId, getSelectedTableId} from '../../reducers/app';
 const walkMeScript = document.createElement("script");
 walkMeScript.src = Configuration.walkmeJSSnippet;
 
-let NavWrapper = React.createClass({
+export const NavWrapper = React.createClass({
 
     /* touch detection */
     isTouchDevice() {
@@ -57,7 +57,6 @@ let NavWrapper = React.createClass({
             // see if the app is already loaded in state
             let app = this.getAppFromState(paramVals.appId);
             if (!app) {
-                //this.props.flux.actions.loadApps();
                 this.props.loadApps();
             }
 
@@ -74,7 +73,6 @@ let NavWrapper = React.createClass({
                 }
             }
         } else {
-            //this.props.flux.actions.loadApps();
             this.props.loadApps();
         }
     },
@@ -106,8 +104,9 @@ let NavWrapper = React.createClass({
 
         if (incomingProps.match.params.tblId) {
             if (this.props.match.params.tblId !== incomingProps.match.params.tblId) {
-                this.props.selectTable(incomingProps.match.params.appId, incomingProps.match.params.tblId);
-                this.props.loadReports(CONTEXT.REPORT.NAV_LIST, incomingProps.match.params.appId, incomingProps.match.params.tblId);
+                const appId = incomingProps.match.params.appId || this.props.match.params.appId;
+                this.props.selectTable(appId, incomingProps.match.params.tblId);
+                this.props.loadReports(CONTEXT.REPORT.NAV_LIST, appId, incomingProps.match.params.tblId);
             }
         } else {
             if (this.props.getSelectedTableId() !== null) {
