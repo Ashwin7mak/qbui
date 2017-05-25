@@ -60,7 +60,7 @@ const TextFieldValueRenderer = React.createClass({
      * @return {XML}
      */
     getParentLink(classes, htmlAllowed) {
-        classes += ' parentLink';
+        classes += ' textLink';
         if (htmlAllowed) {
             return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.value}}
                          onClick={this.handleClick}/>;
