@@ -200,22 +200,6 @@
             expect(innerHTML[5]).toEqual('Reports');
         });
 
-        it('Verify leftNav New Table button and cancel button', function() {
-
-            reportContentPO.waitForLeftNavLoaded();
-            //Verify if the new table element is visible and verify the length
-            leftNavPO.leftNavNewTableEl.waitForVisible();
-
-            //Verify if the new table element is clickable and open new modal page
-            leftNavPO.leftNavNewTableEl.click();
-
-            //Verify for the cancel button to be visible
-            leftNavPO.leftNavNewTableCancelBu.waitForVisible();
-
-            //Verify if the cancel button is clickable
-            leftNavPO.leftNavNewTableCancelBu.click();
-        });
-
         //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav
 
         xit('Verify the mouse hover function on apps page collapsed leftNav', function() {
