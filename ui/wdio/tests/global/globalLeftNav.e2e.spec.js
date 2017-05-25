@@ -50,7 +50,7 @@
         /**
          * Test methods to verify all elements present / hidden in leftNav
          */
-        it('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
+        it('Verify leftNav collapses by clicking on hamburger menu on tables page', function() {
 
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
@@ -70,8 +70,10 @@
 
         it('Verify if leftNav caretUp element opens appsList and searches on reports page', function() {
             //select report
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPO.waitForLeftNavLoaded();
+            browser.call(function() {
+                e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                return reportContentPO.waitForLeftNavLoaded();
+            });
 
             //Verify if the left nav caret up element is visible
             leftNavPO.leftNavCaretUpEl.waitForVisible();
@@ -119,8 +121,10 @@
         it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav on reports page', function() {
 
             //select report
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPO.waitForLeftNavLoaded();
+            browser.call(function() {
+                e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                return reportContentPO.waitForLeftNavLoaded();
+            });
 
             //Verify if the no.of topLinks are equal to 2 (Home, Users)
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
@@ -174,8 +178,10 @@
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
 
             //select report
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPO.waitForLeftNavLoaded();
+            browser.call(function() {
+                e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                return reportContentPO.waitForLeftNavLoaded();
+            });
 
             //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
