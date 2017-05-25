@@ -100,6 +100,7 @@ describe('AppHistory', () => {
         createRecord: () => {},
         updateRecord: () => {},
         updateForm: () => {},
+        saveReport: () => {},
         saveFormComplete: () => {},
         hideTrowser: () => {},
         showErrorMsgDialog: () => {},
@@ -276,6 +277,7 @@ describe('AppHistory', () => {
             spyOn(AppHistory, '_saveChangesForFormBuilder').and.callThrough();
             spyOn(AppHistory, '_saveChangesForReportBuilder').and.callThrough();
             spyOn(mockStoreFunc, 'updateForm');
+            spyOn(mockStoreFunc, 'saveReport');
             spyOn(mockStoreFunc, 'createRecord');
             spyOn(mockStoreFunc, 'updateRecord');
             spyOn(mockStoreFunc, 'saveFormComplete');
@@ -359,11 +361,15 @@ describe('AppHistory', () => {
             expect(AppHistory._saveChangesForReportBuilder).toHaveBeenCalled();
         });
 
-        xit('will save invoke save', (done) => {
+        it('will save invoke saveReport', (done) => {
+            mockState.reportBuilderStore.isPendingEdit = true;
             AppHistory.setup(mockStore, mockStoreFunc);
 
             AppHistory._saveChangesForReportBuilder();
 
+            expect(mockStoreFunc.saveReport).toHaveBeenCalled();
+            expect(mockStore.dispatch).toHaveBeenCalled();
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
             done();
         });
 
