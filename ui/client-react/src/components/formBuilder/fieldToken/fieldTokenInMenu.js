@@ -40,7 +40,7 @@ export class FieldTokenInMenu extends Component {
  */
 export class FieldTokenInExistingMenu extends Component {
     render = () => {
-        let type = fieldFormats.getFormatType({datatypeAttributes: this.props.datatypeAttributes});
+        let type = fieldFormats.getFormatType({datatypeAttributes: this.props.datatypeAttributes, multipleChoice: this.props.multipleChoice});
         let title = Locale.getMessage(`fieldsDefaultLabels.${type}`);
 
         const fieldToken = <FieldToken {...this.props}
