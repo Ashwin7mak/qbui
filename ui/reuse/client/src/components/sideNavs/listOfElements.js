@@ -66,11 +66,10 @@ class ListOfElements extends Component {
     renderFilteredFieldsList = () => {
         let elements = this.flattenedElements().filter(element => {
             // Filter out anything that isn't a string
-            let title = element.title || element.name;
-            if (!_.isString(title)) {
+            if (!_.isString(element.title)) {
                 return false;
             }
-            return title.toLowerCase().indexOf(this.state.activeFieldFilter.toLowerCase()) >= 0;
+            return element.title.toLowerCase().indexOf(this.state.activeFieldFilter.toLowerCase()) >= 0;
         });
 
         if (elements.length === 0) {
@@ -230,12 +229,8 @@ ListOfElements.propTypes = {
         key: PropTypes.string,
 
         /**
-         * The localized text to display for the field type. This property will be used for filtering. */
-        title: PropTypes.string,
-
-        /**
-         * The user's text to display for the field type. This property will be used for filtering. */
-        name: PropTypes.string,
+         * The text to display for the field type. This property will be used for filtering. It should be localized. */
+        title: PropTypes.string.isRequired,
 
         /**
          * Optional: Any child elements that should be displayed in a group.
