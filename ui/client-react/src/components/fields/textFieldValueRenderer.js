@@ -54,10 +54,10 @@ const TextFieldValueRenderer = React.createClass({
     getParentLink(classes, htmlAllowed) {
         classes += ' parentLink';
         if (htmlAllowed) {
-            return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.value}}
-                        onClick={this.handleClick}/>;
+            return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.value}}
+                         onClick={this.handleClick}/>;
         } else {
-            return <div className={classes} onClick={this.handleClick}>{_.unescape(this.props.value)}</div>;
+            return <span className={classes} onClick={this.handleClick}>{_.unescape(this.props.value)}</span>;
         }
     },
 
@@ -85,13 +85,13 @@ const TextFieldValueRenderer = React.createClass({
 
         if (this.props.attributes && this.props.attributes.htmlAllowed) {
             if (this.props.handleDrillIntoParent) {
-                getParentLink(classes, true);
+                return this.getParentLink(classes, true);
             }
             return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.value}} />;
         } else {
             //react will encode
             if (this.props.handleDrillIntoParent) {
-                getParentLink(classes, false);
+                return this.getParentLink(classes, false);
             }
             return <div className={classes}>{_.unescape(this.props.value)}</div>;
         }
