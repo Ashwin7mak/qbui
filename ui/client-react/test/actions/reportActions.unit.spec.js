@@ -53,13 +53,6 @@ describe('Report actions', () => {
 
 describe('Test ReportsActions function success workflow', () => {
 
-    let mockSaveReportDefResponse = {
-        data : {
-            name: 'Sample Report',
-            fids: [2, 3]
-        }
-    };
-
     let mockReportsResponse = {
         data: [
             {id: 1, name: 'report1', type:'type1'}
@@ -97,16 +90,12 @@ describe('Test ReportsActions function success workflow', () => {
         getReportRecordsCount() {
             return Promise.resolve(mockCountResult);
         }
-        updateReport() {
-            return Promise.resolve(mockSaveReportDefResponse);
-        }
     }
 
     beforeEach(() => {
         spyOn(mockReportService.prototype, 'getReports').and.callThrough();
         spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
         spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
-        spyOn(mockReportService.prototype, 'updateReport').and.callThrough();
         ReportsActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
@@ -227,9 +216,6 @@ describe('Test ReportsActions function failure workflow', () => {
         getReportRecordsCount() {
             return Promise.reject(mockErrorResponse);
         }
-        updateReport() {
-            return Promise.reject(mockErrorResponse);
-        }
     }
 
     class mockFieldService {
@@ -242,7 +228,7 @@ describe('Test ReportsActions function failure workflow', () => {
         spyOn(mockReportService.prototype, 'getReports').and.callThrough();
         spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
         spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
-        spyOn(mockReportService.prototype, 'updateReport').and.callThrough();
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
         ReportsActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         ReportsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
     });
@@ -252,7 +238,6 @@ describe('Test ReportsActions function failure workflow', () => {
         mockReportService.prototype.getReportResults.calls.reset();
         mockReportService.prototype.getDynamicReportResults.calls.reset();
         mockFieldService.prototype.getFields.calls.reset();
-        mockReportService.prototype.updateReport.calls.reset();
         ReportsActionsRewireAPI.__ResetDependency__('ReportService');
         ReportsActionsRewireAPI.__ResetDependency__('FieldsService');
     });

@@ -20,7 +20,7 @@ describe('Report Builder Save and Cancel Footer', () => {
         rptId: rptId,
         redirectRoute: previousLocation,
         exitBuilderMode: (context) => {},
-        saveReport: (appId, tblId, rptId, rptDef) => {},
+        saveReport: () => {},
         reportData: {
             data: {
                 name: 'test report',
@@ -64,6 +64,5 @@ describe('Report Builder Save and Cancel Footer', () => {
 
         expect(props.saveReport).toHaveBeenCalled();
         expect(props.exitBuilderMode).toHaveBeenCalled();
-        expect(props.closeFieldSelectMenu).toHaveBeenCalled();
     });
 });

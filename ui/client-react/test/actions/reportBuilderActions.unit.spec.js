@@ -94,19 +94,36 @@ describe('Test ReportBuilderActions function success workflow', () => {
         ]
     };
 
+    let mockResponseUpdateReport = {
+        data: {
+            name: 'sample report',
+            fids: [1, 2, 3]
+        }
+    };
+
     class mockFieldService {
         getFields() {
             return Promise.resolve(mockResponseGetFields);
         }
     }
 
+    class mockReportService {
+        updateReport() {
+            return Promise.resolve(mockResponseUpdateReport);
+        }
+    }
+
     beforeEach(() => {
         spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
+        spyOn(mockReportService.prototype, 'updateReport').and.callThrough();
         ReportsBuilderActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
+        ReportsBuilderActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
+        mockFieldService.prototype.getFields.calls.reset();
         ReportsBuilderActionsRewireAPI.__ResetDependency__('FieldsService');
+        ReportsBuilderActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     it('refreshFieldSelectMenu action dispatches type:REFRESH_FIELD_SELECT_MENU', (done) => {
@@ -136,7 +153,7 @@ describe('Test ReportBuilderActions function success workflow', () => {
             }
         };
 
-        return store.dispatch(reportActions.saveReport(appId, tblId, rptId, rptDef)).then(
+        return store.dispatch(reportBuilderActions.saveReport(appId, tblId, rptId, rptDef)).then(
             () => {
                 expect(mockReportService.prototype.updateReport).toHaveBeenCalled();
                 done();
