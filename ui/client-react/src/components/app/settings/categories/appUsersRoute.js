@@ -10,8 +10,10 @@ import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import UserActions from '../../../actions/userActions';
 import {connect} from 'react-redux';
+import {loadAppOwner} from '../../../../actions/userActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
+import {getSelectedAppId, getApp, getAppOwner} from '../../../../reducers/app';
 import './appUsersRoute.scss';
 
 export const AppUsersRoute = React.createClass({
@@ -21,25 +23,8 @@ export const AppUsersRoute = React.createClass({
         };
     },
     componentDidMount() {
-        this.props.loadAppRoles(this.props.match.params.appId);
-        this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
-    },
-
-    componentWillReceiveProps(props) {
-        if (props.match.params.appId && props.selectedApp.ownerId) {
-            if (this.props.match.params.appId !== props.match.params.appId) {
-                this.props.loadAppRoles(this.props.match.params.appId);
-                this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
-            }
-        } else {
-            this.props.loadAppRoles(null);
-            this.props.flux.actions.loadAppOwner(null);
-        }
-
-        if (this.props.match.params.appId !== props.match.params.appId && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
-            this.props.loadAppRoles(this.props.match.params.appId);
-            this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
-        }
+        this.props.loadAppRoles(this.props.appId);
+        this.props.loadAppOwner(this.props.appId, this.props.selectedApp.ownerId);
     },
 
     componentWillUnmount() {
@@ -71,7 +56,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     getSelectionActions() {
-        return (<UserActions selection={this.props.selectedUserRows} actions={this.props.flux.actions} appId={this.props.match.params.appId} roleId={this.state.roleId}/>);
+        return (<UserActions selection={this.props.selectedUserRows} actions={this.props.flux.actions} appId={this.props.appId} roleId={this.state.roleId}/>);
     },
 
     getTableActions() {
@@ -115,17 +100,14 @@ export const AppUsersRoute = React.createClass({
 
     selectAllRows() {
         let roleId = this.state.roleId;
-        let appUsers = this.props.appUsersUnfiltered;
+        let appUsers = this.props.selectedApp.unfilteredUsers;
         let selected = [];
         // Transform the records first so that subHeaders (grouped records) can be handled appropriately
         this.props.appRoles.map(role => {
-
             if (appUsers[role.id]) {
-
-                selected = appUsers[role.id].map(user => {
+                appUsers[role.id].map(user => {
                     roleId = user.roleId;
-                    return user.userId;
-
+                    selected.push(user.userId);
                 });
             }
         });
@@ -137,31 +119,31 @@ export const AppUsersRoute = React.createClass({
     },
 
     toggleSelectAllRows() {
-        if (this.props.selectedUserRows.length === this.props.appUsers.length) {
+        if (this.props.selectedUserRows.length === this.props.selectedApp.users) {
             this.deselectAllRows();
         } else {
             this.selectAllRows();
         }
     },
     areAllRowsSelected() {
-        return this.props.selectedUserRows.length === this.props.appUsers.length;
+        return this.props.selectedUserRows.length === this.props.selectedApp.users;
     },
 
     render() {
-        if (this.props.appRoles) {
+        if (this.props.appRoles && this.props.selectedApp) {
             return (
                 <div>
                     <Stage stageHeadline={this.getStageHeadline()}
                            pageActions={this.getPageActions()}>
 
-                        <AppSettingsStage appUsers={this.props.appUsersUnfiltered}
+                        <AppSettingsStage appUsers={this.props.selectedApp.unfilteredUsers}
                                           appRoles={this.props.appRoles}
                                           appOwner={this.props.appOwner}/>
                     </Stage>
                     {this.getTableActions()}
                     <div className="userManagementContainer">
-                        <UserManagement appId={this.props.match.params.appId}
-                                        appUsers={this.props.appUsersUnfiltered}
+                        <UserManagement appId={this.props.appId}
+                                        appUsers={this.props.selectedApp.unfilteredUsers}
                                         appRoles={this.props.appRoles}
                                         onClickToggleSelectedRow={this.toggleSelectedRow}
                                         onClickToggleSelectAllRows={this.toggleSelectAllRows}
@@ -180,14 +162,19 @@ export const AppUsersRoute = React.createClass({
 });
 
 const mapStateToProps = (state, ownProps) => {
+    let selectedAppId = getSelectedAppId(state.app);
     return {
-        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId)
+        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
+        appId: selectedAppId,
+        selectedApp: getApp(state.app, selectedAppId),
+        appOwner: getAppOwner(state.app)
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));}
+        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));},
+        loadAppOwner: (appId, userId) => {dispatch(loadAppOwner(appId, userId));}
     };
 };
 
