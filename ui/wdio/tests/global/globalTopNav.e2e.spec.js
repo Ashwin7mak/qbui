@@ -40,36 +40,43 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         /**
          * Test Method - checking for usability of topNav on Table homepage
          */
         it('Visibility and usability of topNav on Table homepage', function() {
+            //Go to app page
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
-            //Step1: Verify if the global icons are displayed
+
+            //Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
             reportContentPO.settingsIcon.waitForVisible();
-            //Step2: Verify the no.of global action icons
+
+            //Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
-            //Step3: Verify the presence of Feedback and Report issue buttons
+
+            //Verify the presence of Feedback and Report issue buttons
             TopNavPO.feedbackBtn.click();
             expect(TopNavPO.feedbackMenuButton.isExisting()).toBeTruthy();
             expect(TopNavPO.reportFeedBackButton.isExisting()).toBeTruthy();
-            //Step4: Verify the Settings option in the gear
+
+            //Verify the Settings option in the gear
             reportContentPO.clickSettingsIcon();
             expect(TopNavPO.settingsDropdownHeader.getText()).toEqual("Settings");
-            //Step5: Verify that Users button displays the correct app name and has sign out button
+
+            //Verify that Users button displays the correct app name and has sign out button
             TopNavPO.usersButton.click();
             expect(TopNavPO.userDropdownAppName.getAttribute('textContent')).toEqual(testApp.name);
             expect(TopNavPO.signOutButton.isExisting()).toBeTruthy();
-            //Step6: Verify the help button is clickable
+
+            //Verify the help button is clickable
             TopNavPO.helpButton.click();
         });
 
@@ -77,14 +84,13 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
-            //select report
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
-            //Step1: Verify if the global icons are displayed
+
+            //\Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
             reportContentPO.settingsIcon.waitForVisible();
-            //Step2: Verify the no.of global action icons
+
+            //Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
 
