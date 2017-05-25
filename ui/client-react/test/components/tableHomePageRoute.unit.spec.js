@@ -25,6 +25,7 @@ describe('TableHomePageRoute functions', () => {
         clearSearchInput: () => {},
         loadFields: (app, tbl) => {},
         loadTableHomePage: () => {},
+        selectTable: () => {},
         reportBuilder: {
             isInBuilderMode: true,
             isCollapsed: true,
@@ -65,7 +66,6 @@ describe('TableHomePageRoute functions', () => {
     };
     let flux = new Fluxxor.Flux(stores);
     flux.actions = {
-        selectTableId() {return;},
         hideTopNav() {return;}
     };
 
@@ -83,20 +83,20 @@ describe('TableHomePageRoute functions', () => {
 
     beforeEach(() => {
         spyOn(flux.actions, 'hideTopNav');
-        spyOn(flux.actions, 'selectTableId');
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadTableHomePage');
+        spyOn(props, 'selectTable');
         TableHomePageRewireAPI.__Rewire__('ReportToolsAndContent', mockReportToolsAndContent);
         TableHomePageRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
     });
 
     afterEach(() => {
         flux.actions.hideTopNav.calls.reset();
-        flux.actions.selectTableId.calls.reset();
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();
         props.loadTableHomePage.calls.reset();
+        props.selectTable.calls.reset();
         TableHomePageRewireAPI.__ResetDependency__('ReportToolsAndContent');
         TableHomePageRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
     });
@@ -142,6 +142,7 @@ describe('TableHomePageRoute functions', () => {
         let wrapper = mount(<Provider store={store}><TableHomePageRoute {...props} reportData={reportDataParams.reportData} flux={flux} /></Provider>);
         expect(props.clearSearchInput).toHaveBeenCalled();
         expect(props.loadFields).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
+        expect(props.selectTable).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
         expect(props.loadTableHomePage).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, props.match.params.appId, props.match.params.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
     });
 

@@ -54,8 +54,6 @@ export const TableHomePageRoute = React.createClass({
     },
 
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
-        //const flux = this.getFlux();
-        //flux.actions.selectTableId(tblId);
         this.props.selectTable(appId, tblId);
 
         //  redux actions..
