@@ -1,0 +1,117 @@
+@import '../../../../assets/css/_qbVariables';
+
+.addUserPanel {
+
+    .title {
+        color: $add-user-dialog-modal;
+        font-size: $font-size-h3;
+        padding-top: $spacing-small;
+        padding-bottom: $spacing-x-small;
+    }
+    .description {
+        color: $ghost-text-color;
+        font-size: $font-size-p;
+    }
+    .hidden {
+        display: none;
+    }
+}
+
+.panelContainer {
+    margin-top: 5%;
+    display: flex;
+    flex-direction: row;
+
+    .panel-items {
+        width: 100%;
+        padding: 5px;
+    }
+}
+
+
+.multiStepModal.addUserDialog {
+    .bodyContainer {
+        margin-right: $spacing-medium1;
+    }
+}
+
+
+@include not-small-breakpoint {
+
+    .multiStepModal.addUserDialog .modal-dialog {
+
+        .modal-content {
+            height: 320px;
+            width: 550px;
+            .bodyContainer {
+                height: 0;
+            }
+        }
+
+        .modal-body > *:first-child {
+            height: 405px;
+        }
+        width: 550px;
+
+        .finishedButton, .cancelButton {
+            padding: 8px 34px;
+            z-index: 1000000;
+            border: 1px solid $add-user-dialog-focus-border-color;
+
+            &:focus {
+                outline: none;
+                border: 1px solid $add-user-dialog-focus-border-color;
+                box-shadow: 0 0 2px 1.5px rgba($inline-edit-shadow-color, 0.25);
+
+            }
+        }
+        .cancelButton {
+            color: $add-user-button;
+            border: 1px solid $add-user-dialog-border-button-color;
+
+            &:focus {
+                background-color: $add-user-dialog-border-button-color;
+            }
+            &:hover {
+                background-color: $add-user-dialog-border-button-color;
+                color: $add-user-button-hover-color;
+            }
+        }
+        .finishedButton:disabled, .finishedButton:disabled:hover {
+            background-color: $input-text-normal-border-color !important;
+            color: $add-user-dialog-border-button-color !important;
+            border: none;
+        }
+
+        .finishedButton {
+            background-color: $add-user-button-color;
+            border: 1px solid $add-user-button-color;
+            color: $add-user-dialog-border-button-color;
+
+            &:hover {
+                color: $add-user-dialog-border-button-color;
+                background-color: $add-user-button-hover-color;
+            }
+            &:focus {
+                background-color: $color-cyan-600;
+            }
+        }
+
+        .Select-menu-outer {
+            width: 97%;
+        }
+
+        .assignRole {
+            z-index: 10000000;
+        }
+
+        .modal-footer {
+            padding-right: 70px;
+            margin-top: 250px;
+        }
+    }
+
+    .multiStepModal.addUserDialog.allowOverflow .loadedContent {
+        overflow: visible;
+    }
+}

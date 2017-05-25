@@ -22,7 +22,7 @@
         appRolesPodCount: {get: function() {return browser.elements('.appRolesPod .appRolesPodCount');}},
 
         // Add new user button
-        newUserBtn: {get: function() {return browser.element('.iconActionButton.disabled.addRecord');}},
+        newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
