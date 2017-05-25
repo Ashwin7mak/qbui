@@ -1,0 +1,37 @@
+$topnav-icon-color: #ffffff;
+$topnav-header-background-color: #74489d;
+$leftnav-background-stroke-color: #74489d;
+$topnav-hover-background-color: #40caf8;
+
+.standardLeftNav > .contextHeader {
+  border-right: 1px solid $leftnav-background-stroke-color;
+}
+
+.topNav {
+    background-color: $topnav-header-background-color;
+        .top {
+            border-left: 1px solid $leftnav-background-stroke-color;
+                .iconLink {
+                    color: $topnav-icon-color;
+                }
+            }
+
+        .globalActions {
+            .link {
+                > a, > div > a {
+                  display: inline-block;
+                  color: $topnav-icon-color;
+                  padding: 0 8px;
+
+                    .qbIcon {
+                      vertical-align: middle;
+                    }
+
+                  .dropdownToggle:hover {
+                    background-color: $topnav-hover-background-color;
+                  }
+
+                }
+            }
+        }
+}
