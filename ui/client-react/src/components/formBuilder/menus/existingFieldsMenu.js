@@ -18,7 +18,7 @@ export class ExistingFieldsMenu extends Component {
                 renderer={FieldTokenInExistingMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={[{children: existingFields, title: 'title', key: 'existingFields'}]}
+                elements={existingFields}
                 isOpen={isOpen}
                 isFilterable={true}
                 hideTitle={true}

@@ -93,7 +93,7 @@ class ListOfElements extends Component {
     renderElements = (fieldTypes) => {
         //Tokens are being passed in as a renderer to reduce dependency on client-react
         let TokenInMenu = this.props.renderer;
-        if (fieldTypes.children) {
+        if (fieldTypes) {
             return fieldTypes.map((fieldType, index) => (
                 <li key={fieldType.key || index} className="listOfElementsItem">
                     <TokenInMenu {...fieldType}
