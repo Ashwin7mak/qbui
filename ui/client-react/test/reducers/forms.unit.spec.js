@@ -1,4 +1,4 @@
-import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/forms';
+import reducer, {__RewireAPI__ as ReducerRewireAPI, getExistingFields} from '../../src/reducers/forms';
 import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
@@ -560,6 +560,37 @@ describe('Forms reducer functions', () => {
 
         it('returns existing state if there is no current form', () => {
             expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('getExistingFields selector', () => {
+        const id = 'view';
+        const state = {
+            forms: {
+                view: {
+                    formData: {
+                        fields: [{id: 1}, {id: 2}, {id: 3}, {id: 4}],
+                        formMeta: {
+                            fields: [1, 2, 3]
+                        }
+                    }
+                }
+            }
+        };
+
+        it('returns an array of fields that are not on a form', () => {
+            let expectedResult = [{id: 4, key: 'existing_4'}];
+            let result = getExistingFields(state, id);
+            expect(result).toEqual(expectedResult);
+        });
+
+        it('returns an empty array of existing fields if all fields are on a form', () => {
+            let newState = Object.assign({}, state);
+            newState.forms.view.formData.fields = [{id: 1}, {id: 2}, {id: 3}];
+            let expectedResult = [];
+            let result = getExistingFields(state, id);
+            expect(result).toEqual(expectedResult);
         });
 
     });
