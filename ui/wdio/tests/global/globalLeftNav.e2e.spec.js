@@ -177,11 +177,9 @@
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
 
-            //select report
-            browser.call(function() {
-                e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-                return reportContentPO.waitForLeftNavLoaded();
-            });
+            //select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            reportContentPO.waitForLeftNavLoaded();
 
             //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
