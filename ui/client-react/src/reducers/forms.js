@@ -52,7 +52,7 @@ const forms = (
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
         //Removes all built in fields for formBuilder
-        let allFields = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID.BUILTIN_FIELDS_ARRAY, (field) => {
+        let allFields = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID_ARRAY.FOR_FORM_BUILDER, (field) => {
             if (typeof field === 'number') {
                 return field;
             } else {
