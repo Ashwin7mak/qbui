@@ -527,8 +527,8 @@
          */
         clickDropdownToggleActionButtonSB: {
             value: function() {
-                expect(this.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
-                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBeTruthy();
+                expect(this.dropdownToggleActionButtonSB.isVisible()).toBe(true);
+                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBe(true);
                 return browser.element('.qbIcon.iconUISturdy-fries').click();
             }
         },
@@ -537,8 +537,8 @@
          */
         clickCardExpanderButtonSB: {
             value: function() {
-                expect(this.cardExpanderButtonSB.isVisible()).toBeTruthy();
-                expect(this.cardExpanderButtonSB.isEnabled()).toBeTruthy();
+                expect(this.cardExpanderButtonSB.isVisible()).toBe(true);
+                expect(this.cardExpanderButtonSB.isEnabled()).toBe(true);
                 return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
             }
         },
