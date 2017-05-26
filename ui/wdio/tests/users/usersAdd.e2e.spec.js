@@ -20,6 +20,7 @@
         let user2 = e2eConsts.user2;
         let user3 = e2eConsts.user3;
         let user4 = e2eConsts.user4;
+        let searchText = "spiderman";
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -81,10 +82,13 @@
             //Click on add a new user button
             UsersTablePage.newUserBtn.click();
 
-            //Click on select user search
-            UsersTablePage.selectUserSearch.click();
 
-            UsersTablePage.selectUserSearch.setValue(sampleText1);
+
+            //Click on select user search
+            UsersTablePage.userAddSearchBoxSelect.click();
+
+            UsersTablePage.userAddSearchBox.setValue(searchText);
+
 
             // // Click on remove button from the dialogue box
             // UsersTablePage.clickUserRemoveButton();

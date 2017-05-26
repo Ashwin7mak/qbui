@@ -24,8 +24,17 @@
         // Add new user button
         newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
-        // Select user search
-        selectUserSearch: {function() {return browser.element('.Select-placeholder');}},
+        // Add new user search container
+        userAddNewSearch: {get: function() {return browser.element('.Select.Select--single.is-searchable');}},
+
+        // Add new user searchbox
+        userAddSearchBox: {get: function() {return browser.element('.Select-control .Select-input');}},
+
+        // Add new user search select arrow
+        userAddSearchBoxSelect: {get: function() {return browser.element('.Select-arrow-zone .Select-arrow');}},
+
+        // Add new user clear searchbox entry
+        userAddSearchBoxClear: {get: function() {return browser.element('.Select-clear');}},
 
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
@@ -33,15 +42,6 @@
         userStageArea: {get: function() {return browser.element('.collapsedContent');}},
         userStageContentEl: {get: function() {return browser.element('.stage-showHide-content');}},
         userStageContent: {get: function() {return browser.element('.appUsersManagementContent');}},
-
-        /**
-         * Helper function that will get all of the field column headers from the user management report. Returns an array of strings.
-         */
-        getUserColumnHeaders: {value: function() {
-            var colHeaders = [];
-            for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
-            return colHeaders;
-        }},
 
         // Send invite email button
         userSendInviteEmail: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-mail');}},
@@ -74,6 +74,15 @@
         userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
 
         /**
+         * Helper function that will get all of the field column headers from the user management report. Returns an array of strings.
+         */
+        getUserColumnHeaders: {value: function() {
+            var colHeaders = [];
+            for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
+            return colHeaders;
+        }},
+
+        /**
          * Method to click on user remove button.
          */
         clickUserRemoveButton : {value: function() {
@@ -95,6 +104,30 @@
             this.userCancelButton.click();
             //Need this to wait for container to slide away
             return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /**
+         * Method to select user search
+         */
+        selectUserSearch: {value: function() {
+            //Wait until you see closed User search
+            this.userAddNewSearch.waitForVisible();
+            //Click on User search select to open
+            return this.userAddSearchBoxSelect.click();
+        }},
+
+        /**
+         * Method to search for an user from the user search
+         *@param searchUser name
+         */
+        searchUserFromSearch: {value: function(searchUser) {
+            this.selectUserChooser();
+            //Wait until you see open User search
+            this.iconChooserSearch.waitForVisible();
+            //Click in search
+            this.iconChooserSearch.click();
+            //Enter search value
+            return this.iconChooserSearch.setValue(searchUser);
         }},
     });
 
