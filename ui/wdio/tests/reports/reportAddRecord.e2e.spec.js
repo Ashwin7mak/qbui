@@ -76,9 +76,9 @@
 
             // Step 4 - Save the new added row
             ReportInLineEditPO.clickSaveChangesButton();
-            expect(browser.isVisible('.qb.editing .saveRecord')).toBeFalsy();
-            expect(browser.isVisible('.qb.editing .cancelSelection')).toBeFalsy();
-            expect(browser.isVisible('.qb.editing .addRecord')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .saveRecord')).toBe(false);
+            expect(browser.isVisible('.qb.editing .cancelSelection')).toBe(false);
+            expect(browser.isVisible('.qb.editing .addRecord')).toBe(false);
 
             // Step 5 - Check for the success message 'Record added'
             //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion

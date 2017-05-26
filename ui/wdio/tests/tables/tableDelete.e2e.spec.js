@@ -141,7 +141,7 @@
                 tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
                 //Make sure delete table button is disabled
-                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
+                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(false);
             });
         });
 
@@ -196,7 +196,7 @@
             ReportContentPO.waitForReportContent();
 
             //Verify settings icon not available for user other than ADMIN
-            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();
+            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBe(false);
         });
 
     });
