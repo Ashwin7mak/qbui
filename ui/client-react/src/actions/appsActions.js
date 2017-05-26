@@ -6,12 +6,10 @@ import UserService from '../services/userService';
 import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-<<<<<<< HEAD
+
 //import appsModel from '../models/appsModel';
-=======
-import appsModel from '../models/appsModel';
+
 import Locale from '../../../reuse/client/src/locales/locale';
->>>>>>> master
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
