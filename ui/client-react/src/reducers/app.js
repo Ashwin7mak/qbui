@@ -71,6 +71,15 @@ const app = (
         return selected;
     }
 
+    function setAppOwner(appOwner) {
+        let selected = _.cloneDeep(state.selected);
+        if (!selected) {
+            selected = {};
+        }
+        selected.appOwner = appOwner;
+        return selected;
+    }
+
     // reducer - no mutations!
     switch (action.type) {
     case types.CLEAR_SELECTED_APP:
@@ -162,6 +171,25 @@ const app = (
             apps: [],
             selected: clearSelected()
         };
+    case types.LOAD_APP_OWNER:
+        return {
+            ...state,
+            loading: true,
+            error: false
+        };
+    case types.LOAD_APP_OWNER_SUCCESS:
+        return {
+            ...state,
+            loading: false,
+            error: false,
+            selected: setAppOwner(action.content)
+        };
+    case types.LOAD_APP_OWNER_ERROR:
+        return {
+            ...state,
+            loading: false,
+            error: true
+        };
     default:
         return state;
     }
@@ -194,6 +222,10 @@ export const getSelectedAppUsers = (state) => {
 
 export const getSelectedAppUnfilteredUsers = (state) => {
     return state.app ? state.app.unfilteredUsers : {};
+};
+
+export const getAppOwner = (state) => {
+    return state.selected ? state.selected.appOwner : null;
 };
 
 
