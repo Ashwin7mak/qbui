@@ -182,7 +182,11 @@
             expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
         });
 
-        it('Verify left nav in reports page', function() {
+        it('Verify going to reports via left nav and verify left Nav in reports page', function() {
+            //select report
+            tableCreatePO.selectReport('Table 1', 1);
+            reportContentPO.waitForReportContent();
+
             //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
             let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
             expect(innerHTML[0]).toEqual('Home');
@@ -194,21 +198,13 @@
             //Verify tables search is enabled
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
-            //Verify the name of the first table in the leftNav
-            let tableName = leftNavPO.leftNavTableName.getText();
+            //Verify if the left nav search element is visible and clickable
+            leftNavPO.leftNavSearchEl.waitForVisible();
+            leftNavPO.leftNavSearchEl.click();
 
-            //Verify if the leftNav mini report icon is visible
-            leftNavPO.leftNavMiniReportIcon.waitForVisible();
+            //Verify if the search box is open
+            expect(browser.isVisible('.search.open')).toBe(true);
 
-            //Verify if the leftNav mini report icon is clickable and opens new page
-            leftNavPO.leftNavMiniReportIcon.click();
-
-            // Used HTML to get text as getText() returns empty string for <span> elements
-            let innerReportHTML = browser.getHTML('.trowserHeader .breadcrumbsContent span', false);
-
-            //Verify if the table name is correctly displayed
-            expect(innerReportHTML[1]).toEqual(tableName);
-            expect(innerReportHTML[5]).toEqual('Reports');
         });
 
         //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav
