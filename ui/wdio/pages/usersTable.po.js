@@ -24,6 +24,9 @@
         // Add new user button
         newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
+        // Select user search
+        selectUserSearch: {function() {return browser.element('.Select-placeholder');}},
+
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
         userStageBtn: {get: function() {return browser.element('.toggleStage');}},
