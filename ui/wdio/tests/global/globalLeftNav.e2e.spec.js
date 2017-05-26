@@ -51,8 +51,8 @@
             RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
             //Verify topLinks (Home, user) dosen't show up
-            expect(browser.element('.topLinks .iconUISturdy-home').isVisible()).toBe(false);
-            expect(browser.element('.topLinks .iconUISturdy-users').isVisible()).toBe(false);
+            expect(browser.element('.topLinks .iconUISturdy-home').isExisting()).toBe(false);
+            expect(browser.element('.topLinks .iconUISturdy-users').isExisting()).toBe(false);
 
             //verify apps heading
             expect(browser.element('.appsList .heading').getAttribute('textContent')).toBe('Apps');
