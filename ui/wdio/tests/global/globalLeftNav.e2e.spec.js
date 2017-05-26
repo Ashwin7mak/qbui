@@ -42,34 +42,47 @@
         });
 
         beforeEach(function() {
-            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+        });
+
+        it('Verify leftNav in apps page', function() {
+            //Navigate to apps page
+            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+
+            //Verify topLinks (Home, user) dosen't show up
+            expect(browser.element('.topLinks .iconUISturdy-home').isVisible()).toBe(false);
+            expect(browser.element('.topLinks .iconUISturdy-users').isVisible()).toBe(false);
+
+            //verify apps heading
+            expect(browser.element('.appsList .heading').getAttribute('textContent')).toBe('Apps');
+
+            //Verify if the search element is clickable and opens search box
+            leftNavPO.leftNavSearchEl.click();
+
+            //Verify if the search box is open
+            expect(browser.isVisible('.search.open')).toBe(true);
+
         });
 
         /**
          * Test methods to verify all elements present / hidden in leftNav
          */
-        it('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
-
-            //Go to app page
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-
-            //select table
-            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
-            reportContentPO.waitForLeftNavLoaded();
+        it('Verify if leftNav collapses by clicking on hamburger menu', function() {
 
             //Verify if the leftNav is expanded
-            expect(browser.isVisible('.expanded')).toBe(true);
+            expect(browser.isVisible('.leftNav.expanded')).toBe(true);
 
             //Verify if the hamburger menu is clickable
             topNavPO.topNavToggleHamburgerEl.waitForVisible();
             topNavPO.topNavToggleHamburgerEl.click();
 
             //Verify if the leftNav is collapsed
-            expect(browser.isVisible('.collapsed')).toBe(true);
+            expect(browser.isVisible('.leftNav.collapsed')).toBe(true);
 
         });
 
-        it('Verify if leftNav caretUp element opens appsList and searches on reports page', function() {
+        it('Verify if leftNav appsToggleIcon caretUp element opens appsList and clicking again caretDown opens up tables list', function() {
 
             //Verify if the left nav caret up element is visible
             leftNavPO.leftNavCaretUpEl.waitForVisible();
@@ -80,6 +93,15 @@
             //Verify if apps list is open
             expect((browser.element('.leftNav .appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBe(true);
 
+            //Verify if the left nav caret up clicking again opens up tables List
+            leftNavPO.leftNavCaretUpEl.click();
+
+            //Verify if the tables list is open
+            expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBe(true);
+
+        });
+
+        it('Verify search functionality in leftNav', function() {
             //Verify if the left nav search element is visible and clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
             leftNavPO.leftNavSearchEl.click();
@@ -88,16 +110,22 @@
             expect(browser.isVisible('.search.open')).toBe(true);
 
             //Verify if the search box is user editable
-            leftNavPO.leftNavSearchInputBox.setValue(sampleText1);
+            leftNavPO.leftNavSearchInputBox.setValue('Table 1');
 
             //Verify text got entered
-            expect(leftNavPO.leftNavSearchInputBox.getAttribute('value')).toBe(sampleText1);
+            expect(leftNavPO.leftNavSearchInputBox.getAttribute('value')).toBe('Table 1');
+
+            //Verify it returned just 1 result
+            expect(browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent')).toBe('Table 1');
 
             //Verify if the clear search button is clickable
             leftNavPO.leftNavClearSearchEl.click();
 
             //Verify if the search box is empty after clearing
             expect(leftNavPO.leftNavSearchInputBox.getText()).toBe('');
+
+            //Verify it returned all tables after clearing search
+            expect(browser.elements('.leftNav .tablesList .leftNavLabel').length).toBe(4);
 
             //Verify if the left nav search element is clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
@@ -106,15 +134,9 @@
             //Verify if the search input box is closed
             expect(browser.isVisible('.appsList .search.open')).toBe(false);
 
-            //Verify if the left nav caret up element is clickable
-            leftNavPO.leftNavCaretUpEl.click();
-
-            //Verify if the tables list is open
-            expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBe(true);
-
         });
 
-        it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav on reports page', function() {
+        it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav', function() {
 
             //Verify if the no.of topLinks are equal to 2 (Home, Users)
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
@@ -134,41 +156,43 @@
             // browser.moveToObject('.transitionGroup .tablesList .link');
         });
 
-        it('Verify if leftNav table search box opens and closes in tableLists', function() {
+        it('Verify leftNav in tables page', function() {
+            //select table
+            tableCreatePO.selectTable('Table 1');
 
-            //Verify if the left nav table search is visible
+            //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
+            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
+            expect(innerHTML[0]).toEqual('Home');
+            expect(innerHTML[1]).toEqual('Users');
+
+            //verify tables heading
+            expect(browser.element('.tablesHeading .heading').getAttribute('textContent')).toBe('Tables');
+
+            //Verify tables search is enabled
+            expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
+
+            //Verify if the left nav search element is visible and clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
-
-            //Verify if the search element is clickable and opens search box
             leftNavPO.leftNavSearchEl.click();
 
             //Verify if the search box is open
             expect(browser.isVisible('.search.open')).toBe(true);
 
-            //Verify if the search box is user editable
-            leftNavPO.leftNavSearchInputBox.setValue(sampleText2);
-
-            //Verify if the clear button is clickable
-            leftNavPO.leftNavClearSearchEl.click();
-
-            //Verify if the search box is empty after clearing
-            expect(leftNavPO.leftNavSearchInputBox.getText()).toBe('');
-
-            //Verify if the search element is clickable and closes the search box
-            leftNavPO.leftNavSearchEl.click();
-
-            //Verify if the search input box is closed
-            expect(browser.isVisible('.tablesHeading .search.open ')).toBe(false);
+            //Verify new Table button displays in leftNav
+            expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
         });
 
-        it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
+        it('Verify left nav in reports page', function() {
+            //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
+            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
+            expect(innerHTML[0]).toEqual('Home');
+            expect(innerHTML[1]).toEqual('Users');
 
-            //Go to app page
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            //verify tables heading
+            expect(browser.element('.tablesHeading .heading').getAttribute('textContent')).toBe('Tables');
 
-            //select table
-            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
-            reportContentPO.waitForLeftNavLoaded();
+            //Verify tables search is enabled
+            expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
             //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
@@ -180,11 +204,11 @@
             leftNavPO.leftNavMiniReportIcon.click();
 
             // Used HTML to get text as getText() returns empty string for <span> elements
-            let innerHTML = browser.getHTML('.trowserHeader .breadcrumbsContent span', false);
+            let innerReportHTML = browser.getHTML('.trowserHeader .breadcrumbsContent span', false);
 
             //Verify if the table name is correctly displayed
-            expect(innerHTML[1]).toEqual(tableName);
-            expect(innerHTML[5]).toEqual('Reports');
+            expect(innerReportHTML[1]).toEqual(tableName);
+            expect(innerReportHTML[5]).toEqual('Reports');
         });
 
         //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav
