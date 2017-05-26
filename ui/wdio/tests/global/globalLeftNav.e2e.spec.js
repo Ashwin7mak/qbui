@@ -205,6 +205,9 @@
             //Verify if the search box is open
             expect(browser.isVisible('.search.open')).toBe(true);
 
+            //Verify new Table button displays in leftNav
+            expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
+
         });
 
         //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav
