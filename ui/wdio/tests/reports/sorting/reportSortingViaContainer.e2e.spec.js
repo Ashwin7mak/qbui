@@ -53,9 +53,9 @@
             //Step 4 - Verify the title of the container
             expect(browser.element('.settingsDialog .overlayCenter').getAttribute('textContent')).toBe('Sort & Group');
             //Step 5 - verify close button is enabled
-            expect(browser.isEnabled('.settingsDialog .btn-default')).toBe(true);
+            expect(browser.isEnabled('.settingsDialog .overlayRight .btn-default ')).toBe(true);
             //Step 6 - verify reset button is enabled
-            expect(browser.isEnabled('.settingsDialog .reset')).toBe(true);
+            expect(browser.isEnabled('.settingsDialog .dialogButtons .reset')).toBe(true);
             //Step 7 - verify apply button is enabled
             expect(browser.isEnabled('.settingsDialog .apply')).toBe(true);
             //Step 8 - Verify title of GroupBy Container
