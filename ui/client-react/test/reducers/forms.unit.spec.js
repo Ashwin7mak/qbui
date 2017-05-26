@@ -64,6 +64,9 @@ describe('Forms reducer functions', () => {
 
 
     describe('Loading form functions', () => {
+        let currentAppId = 'appId';
+        let currentblId = 'tblId';
+        let formData = {fields: [], formMeta: {fields: [], appId: currentAppId, tableId: currentblId}};
         it('returns correct state when loading view form', () => {
             expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual({
                 'view': {
@@ -92,9 +95,6 @@ describe('Forms reducer functions', () => {
             });
         });
         it('returns correct state when load succeeds', () => {
-            let currentAppId = 'appId';
-            let currentblId = 'tblId';
-            let formData = {fields: [], formMeta: {fields: [], appId: currentAppId, tableId: currentblId}};
             /**
              * This test checks to be sure the actual appId and tblId from the response are
              * the ones being used. So here I made the backup id's different for testing purposes.
@@ -112,14 +112,14 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {fields: [], formMeta: {fields: [], formBuilderFieldLength: 0, appId: currentAppId, tableId: currentblId}},
+                    formData: formData,
                     errorStatus: null
                 }
             });
         });
 
         it('returns correct appId and tableId if they are missing', () => {
-            let formData = {formMeta: {fields: [], appId: null, tableId: null}};
+            let missingAppIdandtableIdformData = {formMeta: {fields: [], appId: null, tableId: null}};
             let backUpAppId = 'banana';
             let backUpTblId = 'apple';
             let loadingFormState = {
@@ -130,7 +130,7 @@ describe('Forms reducer functions', () => {
                 }
             };
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual({
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: missingAppIdandtableIdformData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual({
                 'view': {
                     id: 'view',
                     loading: false,
