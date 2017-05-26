@@ -215,11 +215,10 @@ describe('Forms reducer functions', () => {
         };
 
         const actionPayload = {
-            id: VIEW,
+            id: 'view',
             type: types.REMOVE_FIELD,
-            content: {
-                location: 1,
-            }
+            field: {id: 6},
+            location: 1
         };
 
         beforeEach(() => {
@@ -287,8 +286,9 @@ describe('Forms reducer functions', () => {
                     selectedFields: [1],
                     previouslySelectedField: [],
                     formData: {formMeta: updatedFormMeta},
-                    isPendingEdit: true,
-                }
+                    isPendingEdit: true
+
+                },
             });
             expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
                 stateForAddingField[VIEW].formData.formMeta, 1, {}

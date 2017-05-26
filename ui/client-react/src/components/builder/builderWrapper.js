@@ -9,7 +9,10 @@ import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import TableReadyDialog from '../table/tableReadyDialog';
 import Locale from '../../locales/locales';
-import {getApp, getSelectedAppId} from '../../reducers/app';
+
+import {loadApp, loadApps} from '../../actions/appActions';
+import {getApp, getApps, getSelectedAppId} from '../../reducers/app';
+import _ from 'lodash';
 
 import './builderWrapper.scss';
 
@@ -26,6 +29,23 @@ export const BuilderWrapper = React.createClass({
         }
     },
 
+    componentDidMount() {
+        //  see if the app is already loaded
+        const appId = _.get(this.props, "match.params.appId");
+        if (appId) {
+            const app = this.props.getApp(appId);
+            if (!app) {
+                this.props.loadApps();
+                this.props.loadApp(appId);
+            } else {
+                const selectedAppId = this.props.getSelectedAppId();
+                if (selectedAppId !== app.id) {
+                    this.props.loadApp(appId);
+                }
+            }
+        }
+    },
+
     getTopGlobalActions() {
         const actions = [];
         const selectedApp = this.getSelectedApp();
@@ -38,7 +58,14 @@ export const BuilderWrapper = React.createClass({
     },
 
     render() {
-        let title = `${Locale.getMessage('builder.modify')}`;
+        let title = '';
+        if (this.props.location.pathname.includes('form')) {
+            title = `${Locale.getMessage('builder.formBuilder.modify')}`;
+        } else if (this.props.location.pathname.includes('report')) {
+            title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
+        }
+
+        const app = this.getSelectedApp();
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
@@ -54,7 +81,7 @@ export const BuilderWrapper = React.createClass({
                         <Switch>
                             {
                                 this.props.routes.map((route, i) => {
-                                    return RouteWithSubRoutes(route, i);
+                                    return RouteWithSubRoutes(route, i, {app});
                                 })
                             }
                         </Switch>
@@ -66,8 +93,16 @@ export const BuilderWrapper = React.createClass({
     }
 });
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
+        loadApps: () => dispatch(AppActions.loadApps())
+    };
+};
+
 const mapStateToProps = (state) => ({
     getApp: (appId) => getApp(state.app, appId),
+    getApps: () => getApps(state.app),
     getSelectedAppId: () => getSelectedAppId(state.app)
 });
 

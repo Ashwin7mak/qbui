@@ -49,6 +49,12 @@
         TEXT_FORMULA    : 'TEXT_FORMULA',
         URL_FORMULA     : 'URL_FORMULA',
         NUMERIC_FORMULA : 'NUMERIC_FORMULA',
+		//default app roles
+        DEFAULT_ROLE    : 'Participant',
+        FIRST_THEN_LAST : 'FIRST_THEN_LAST',
+
+        LINK_TO_RECORD  : 'LINK_TO_RECORD',
+        LIST_OF_RECORDS : 'LIST_OF_RECORDS',
 
         SYNTHETIC_TABLE_REPORT: {
             ID: '0',
@@ -221,6 +227,10 @@
         SORT_ORDER: {
             ASC: 'asc',
             DESC: 'desc'
+        },
+        REPORT_FORM_TYPE:{
+            CHILD_REPORT : 'CHILD_REPORT',
+            REPORT_LINK : 'REPORTLINK'
         },
         RECORD_TYPE: {
             GROUP: 'GROUP',

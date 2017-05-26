@@ -203,6 +203,7 @@ class FieldUtils {
         case FieldFormats.NUMERIC_FORMULA_FORMAT: return "formulaNumericFormat";
         case FieldFormats.URL_FORMULA_FORMAT:     return "formulaUrlFormat";
         case FieldFormats.CHECKBOX_FORMAT:        return 'checkboxFormat';
+        case FieldFormats.LINK_TO_RECORD:         return 'linkToRecordFormat';
         default:                                  return "textFormat";
         }
     }
@@ -307,6 +308,8 @@ class FieldUtils {
         case FieldFormats.TEXT_FORMULA_FORMAT:         return 'formula';
         case FieldFormats.NUMERIC_FORMULA_FORMAT:      return 'formula';
         case FieldFormats.URL_FORMULA_FORMAT:          return 'formula';
+        case FieldFormats.LIST_OF_RECORDS:             return 'report-table';
+        case FieldFormats.LINK_TO_RECORD:              return 'url';
         default:                                       return 'text';
         }
     }

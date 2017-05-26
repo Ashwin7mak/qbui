@@ -1,6 +1,6 @@
 version: 0.2
-environment_variables:
- plaintext:
+env:
+ variables:
   NODE_ENV: container
 phases:
   install:
@@ -14,9 +14,11 @@ phases:
       - add-apt-repository -y ppa:openjdk-r/ppa # Add JDK repo
       - apt-get -qqy update # Update list of available software (due to the previous step)
       - apt-get -qqy install openjdk-8-jdk jq build-essential libssl-dev # JDK for gradle; not sure about the other deps
-      - bin/nvminstall.sh
-      - bin/envwrap.sh npm install -g grunt
-      - bin/envwrap.sh npm install -g grunt-cli
+      - curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+      - export NVM_DIR="$HOME/.nvm"
+      - source "$NVM_DIR/nvm.sh" && nvm install v6.9.5 # Must be on same line while inside a CodeBuild environment
+      - npm install -g grunt
+      - npm install -g grunt-cli
       - curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
   pre_build:
     commands:
@@ -24,7 +26,8 @@ phases:
       - bin/opensg.sh "${NEXUS_SG}"
   build:
     commands:
-      - bin/envwrap.sh ./gradlew -p ui npmPrune npmInstallLean clean npmRunLint npmListConfig test build -Pdocker
+      # CUSTOMIZE the following line to build the service and run all the tests (unit/functional/integration)
+      - ./gradlew -p ui npmPrune npmInstallLean clean npmRunLint npmListConfig test build -Pdocker
       - docker build -t "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}" -t "${REPOSITORY_URI}:latest" .
       - docker push "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}"
       - test "${BRANCH}" = "master" && docker push "${REPOSITORY_URI}:latest" || true

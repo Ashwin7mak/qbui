@@ -38,7 +38,7 @@ export default {
             },
             settings: "Einstellungen",
             users: {
-                addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
+                addUser: "Hinzufügen ein neu Benutzer",
                 users: "Benutzer",
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
@@ -51,7 +51,8 @@ export default {
                 singular: "Benutzer",
                 plural: "Benutzer",
                 usersRemoved: " Benutzer wurden entfernt",
-                userRemoved: " Benutzer wurde entfernt"
+                userRemoved: " Benutzer wurde entfernt",
+                userAdded: "Sie hinzugefügt"
 
             }
         },
@@ -93,6 +94,7 @@ export default {
             deleteTheseOverrides: "Löschen sie diesen Überschreibt?",
             more: "Mehr...",
             placeholder: 'Wählen...',
+            tablesPlaceholder: "Wählen Sie eine Tabelle aus...",
             notFound: "Nicht gefunden"
         },
         footer: {
@@ -129,7 +131,8 @@ export default {
         },
         field: {
             search: "Suche",
-            searchNoMatch: "Keiner stimmt mit"
+            searchNoMatch: "Keiner stimmt mit",
+            searchNoMatchAddUser: "Keine Benutzer passen zu dem, was du suchst"
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen.",
@@ -232,7 +235,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Kind Tisch"
+            childTable: "Kind Tisch",
+            addChildRecord: "{tableNoun} hinzufügen"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",
@@ -283,6 +287,12 @@ export default {
                 clearFacet: "Filter {facet} zurücksetzen",
                 clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
                 filter: "Filter"
+            },
+            notification: {
+                save: {
+                    success: "Bericht gespeichert",
+                    error: "Fehler beim Speichern des Berichts"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
@@ -558,6 +568,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Bewertung",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formel",
+            [FieldFormats.LINK_TO_RECORD]: "Erhalten Sie einen anderen Rekord",
+            LINK_TO_RECORD_FROM: "Erhalten Sie einen anderen Rekord von {parentTable}",
             FORMULA: "Formel",
             SCALAR: "Skalar",
             CONCRETE: "Beton",
@@ -570,14 +582,19 @@ export default {
             title: "Felderigenschaften",
             name: "Name",
             required: "Muss ausgefüllt werden",
-            multiChoice: "Wahlen"
+            multiChoice: "Wahlen",
+            linkToRecord: "Link zu einem Datensatz in der Tabelle"
         },
         builder: {
             tabs: {
                 existingFields: 'Fügen Sie ein vorhandenes Feld hinzu',
                 newFields: 'Erstellen Sie ein neues Feld',
             },
+            reportBuilder: {
+                modify: 'Bericht ändern'
+            },
             formBuilder: {
+                modify: 'Formular ändern',
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
                 newFieldsMenuTitle: 'Neu',
@@ -608,6 +625,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Erstellen Sie eine numerische Auswahlliste und fügen Sie sie dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Erstellen Sie numerische Optionsfelder und fügen Sie sie dem Formular hinzu",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Radio-Optionsfeld erstellen und sie dem Formular hinzufügen",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
             fieldGroups: {
@@ -615,14 +633,20 @@ export default {
                 numeric: "Nummer",
                 date: "Datum",
                 other: "Andere",
-                relationships: "Beziehungen"
+                relationships: "Beziehungen",
+                tableDataConnections: "Tabellendatenverbindungen"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
             },
-            modify: 'Formular ändern'
+            linkToRecord: {
+                dialogTitle: "Erhalten Sie einen anderen Rekord",
+                addToForm: "Fügen Sie hinzu",
+                tableChooserDescription: "Wenn Sie ein {tableNoun} erstellen oder aktualisieren, können Sie nachschlagen und Informationen aus einem Datensatz in einer anderen Tabelle erhalten.",
+                tableChooserHeading: "Wo ist die Platte, die du bekommen willst?"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -703,8 +727,9 @@ export default {
         },
         settings: {
             header: "Einstellungen",
+            appHeader: "App",
+            automationSettings: "Automatisierungseinstellungen",
             tablesHeader: "Tabelle",
-            appsHeader: "Table",
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
@@ -725,6 +750,17 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
+        },
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Aktiv",
+            activeYes: "Ja",
+            activeNo: "Nein"
+        },
+        addUserToApp: {
+            title: "Benutzer hinzufügen",
+            description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
+            searching: "Suchen..."
         }
     }
 };

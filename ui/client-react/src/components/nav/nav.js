@@ -7,7 +7,7 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
-import {enterBuilderMode} from '../../../src/actions/reportActions';
+import {enterBuilderMode, updateReportRedirectRoute} from '../../../src/actions/reportBuilderActions';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -80,7 +80,7 @@ export const Nav = React.createClass({
         };
     },
 
-    navigateToBuilder() {
+    navigateToFormBuilder() {
         /**
          *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
          * a new unit test will need to be added to recordRoute.unit.spec.js
@@ -110,9 +110,17 @@ export const Nav = React.createClass({
         this.props.history.push(link);
     },
 
-    navigateToBuilderReport() {
+    navigateToReportBuilder() {
+        const {appId, tblId} = this.props.match.params;
+        const {rptId} = this.getReportsData();
+
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/report/${rptId}`;
+
+        this.props.updateReportRedirectRoute(CONTEXT.REPORT.NAV, _.get(this.props, 'location.pathname'));
+
         this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
 
+        this.props.history.push(link);
     },
 
     getTopGlobalActions() {
@@ -140,8 +148,8 @@ export const Nav = React.createClass({
                             actions={actions}
                             position={"top"}
                             icon="settings"
-                            navigateToBuilder={this.navigateToBuilder}
-                            navigateToBuilderReport={this.navigateToBuilderReport}
+                            navigateToFormBuilder={this.navigateToFormBuilder}
+                            navigateToReportBuilder={this.navigateToReportBuilder}
                             startTabIndex={4}
                             rptId={this.getReportsData().rptId} /> : null}
                 </GlobalActions>
@@ -189,6 +197,31 @@ export const Nav = React.createClass({
         const selectedAppId = this.props.getSelectedAppId();
         return this.props.getApp(selectedAppId);
     },
+
+    getEditingApp() {
+        if (this.props.location.query[UrlConsts.DETAIL_APPID]) {
+            let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
+            return _.find(this.state.apps.apps, (a) => a.id === childAppId);
+        } else if (this.state.apps.selectedAppId) {
+            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+        }
+        return null;
+    },
+
+    /**
+     * get table object for currently editing table (or null if no table being edited)
+     *
+     */
+    getEditingTable(tableId) {
+        if (tableId) {
+            const app = this.getEditingApp();
+            if (app) {
+                return _.find(app.tables, (t) => t.id === tableId);
+            }
+        }
+        return null;
+    },
+
 
     /**
      * get table object for currently selected table (or null if no table selected)
@@ -257,7 +290,16 @@ export const Nav = React.createClass({
             // load the edit form and in a trowser
             const showTrowser = true;
             const formType = "edit";
-            this.props.loadForm(appId, tblId, rptId, formType, editRec, showTrowser);
+            // maybe a child create check
+            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID] && this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+                let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
+                let childTableId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
+                let childReportId = this.props.location.query[UrlConsts.DETAIL_REPORTID];
+                //`/qbase/app/${appId}/table/{1}/report/{2}?${EDIT_RECORD_KEY}=new&${DETAIL_APPID}={3}${DETAIL_TABLEID}={4}${DETAIL_KEY_FID}={5}&${DETAIL_KEY_VALUE}={6}`;
+                this.props.loadForm(childAppId, childTableId, childReportId, formType, editRec, showTrowser);
+            } else {
+                this.props.loadForm(appId, tblId, rptId, formType, editRec, showTrowser);
+            }
         }
     },
 
@@ -356,6 +398,16 @@ export const Nav = React.createClass({
         const selectedApp = this.getSelectedApp();
         const selectedTableId = this.props.getSelectedTableId();
 
+        let editingAppId = this.props.match.params.appId;
+        let editingTblId = this.props.match.params.tblId;
+        let editingRecId = editRecordId;
+        if (this.props.location.query[UrlConsts.DETAIL_APPID] &&
+            this.props.location.query[UrlConsts.DETAIL_TABLEID] &&
+            this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+            editingAppId  = this.props.location.query[UrlConsts.DETAIL_APPID];
+            editingTblId  = this.props.location.query[UrlConsts.DETAIL_TABLEID];
+        }
+
         return (<div className={classes}>
             <NavPageTitle
                 app={selectedApp}
@@ -380,12 +432,17 @@ export const Nav = React.createClass({
                            editForm={this.getEditFormFromProps()}
                            appId={this.props.match.params.appId}
                            tblId={this.props.match.params.tblId}
+                           editingAppId={editingAppId}
+                           editingTblId={editingTblId}
+                           editingRecId={editingRecId}
                            recId={editRecordId}
                            viewingRecordId={viewingRecordId}
                            pendEdits={pendEdits}
                            appUsers={this.props.getSelectedAppUsers()}
                            selectedApp={selectedApp}
                            selectedTable={this.getSelectedTable(this.props.match.params.tblId)}
+                           editingApp={this.getEditingApp()}
+                           editingTable={this.getEditingTable(editingTblId)}
                            reportData={reportsData}
                            errorPopupHidden={this.props.shell.errorPopupHidden}
                            onHideTrowser={this.hideTrowser}/>
@@ -447,8 +504,11 @@ export const Nav = React.createClass({
                                 selectedApp: selectedApp,
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 selectedUserRows: this.state.apps.selectedUserRows,
+                                realmUsers: this.state.apps.realmUsers,
+                                addUserToAppDialogOpen: this.state.apps.addUserToAppDialogOpen,
                                 scrollingReport: this.state.nav.scrollingReport,
-                                flux: flux
+                                flux: flux,
+                                userRoleIdToAdd: this.state.apps.userRoleIdToAdd,
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
                         }
@@ -538,8 +598,7 @@ const mapStateToProps = (state) => {
         forms: state.forms,
         shell: state.shell,
         record: state.record,
-        report: state.report,
-        reportBuilder: state.reportBuilder
+        report: state.report
     };
 };
 
@@ -547,29 +606,25 @@ const mapDispatchToProps = (dispatch) => {
     return {
         toggleAppsList: (toggleState) => dispatch(ShellActions.toggleAppsList(toggleState)),
         toggleLeftNav: (navState) => dispatch(ShellActions.toggleLeftNav(navState)),
-
         hideTrowser: () => dispatch(ShellActions.hideTrowser()),
         showTrowser: (content) => dispatch(ShellActions.showTrowser(content)),
-
         loadForm: (appId, tblId, rptId, formType, editRec, showTrowser) => {
             if (showTrowser) {
                 dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
             }
-            dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec));
+            return dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec));
         },
-
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
-
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
-
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
-
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
-
         enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
-
-        loadApps: () => dispatch(AppActions.loadApps())
+        loadApps: () => dispatch(AppActions.loadApps()),
+        updateReportRedirectRoute: (context, route) => dispatch(updateReportRedirectRoute(context, route))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Nav);
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Nav));

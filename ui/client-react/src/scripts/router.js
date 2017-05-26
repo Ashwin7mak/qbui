@@ -12,6 +12,7 @@ import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
+import ReportBuilderContainer from '../components/builder/reportBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
 import FeatureSwitchOverridesRoute from "../components/featureSwitches/featureSwitchOverridesRoute";
@@ -20,11 +21,12 @@ import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
 import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
 import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
 import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
+import AutomationListRoute from "../components/automation/settings/automationListRoute";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
 import Logger from "../utils/logger";
-import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
+import {APPS_ROUTE, APP_ROUTE, AUTOMATION_PATH, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
@@ -178,21 +180,35 @@ const routes = [
             {
                 path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
                 component: FormBuilderContainer
+            },
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/report/:rptId`,
+                component: ReportBuilderContainer
             }
         ]
     },
     {
-        path: `${SETTINGS_ROUTE}/app/:appId/(table)?/:tblId?`,
+        path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId`,
         component: ConnectedSettingsNav,
         routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
                 exact: true,
                 component: withFlux(TablePropertiesRoute)
-            },
+            }
+        ]
+    },
+    {
+        path: `${SETTINGS_ROUTE}/app/:appId/`,
+        component: ConnectedSettingsNav,
+        routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/properties`,
                 component: AppPropertiesRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION_PATH}`,
+                component: AutomationListRoute
             },
             {
                 path: `${SETTINGS_ROUTE}/app/:appId`,

@@ -6,7 +6,12 @@ import UserService from '../services/userService';
 import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+<<<<<<< HEAD
 //import appsModel from '../models/appsModel';
+=======
+import appsModel from '../models/appsModel';
+import Locale from '../../../reuse/client/src/locales/locale';
+>>>>>>> master
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -130,7 +135,83 @@ let appsActions = {
             });
 
         });
-    }
+    },
+
+	/**
+     * Gets a list of Realm users based on search query
+	 * @param searchTerm
+     * @returns [] an array of users
+	 */
+    searchRealmUsers(searchTerm) {
+        return new Promise((resolve, reject) => {
+            let roleService = new RoleService();
+            roleService.searchRealmUsers(searchTerm).then(response => {
+                this.dispatch(actions.SEARCH_ALL_USERS_SUCCESS, response.data);
+                resolve();
+            }, () => {
+                this.dispatch(actions.SEARCH_ALL_USERS_FAILED);
+                reject();
+            });
+        });
+    },
+
+	/**
+     * this function should be utilized to dispatch actions for updates made to App users
+	 * (such as remove user from app) to ensure integrity of backend and frontend data at eveny instance
+	 * @param appId
+     * @returns []
+	 */
+    getAppUsers(appId) {
+        return new Promise((resolve, reject) => {
+            let appService = new AppService();
+            appService.getAppUsers(appId).then(response2 => {
+                this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: response2.data});
+                resolve();
+            }, () => {
+                this.dispatch(actions.GET_APP_USERS_FAILED);
+                reject();
+            });
+        });
+    },
+
+	/**
+     * Assigns a user with a role to an app
+	 * @param appId
+	 * @param userId
+	 * @param roleId
+     * @returns []
+	 */
+    assignUserToApp(appId, userId, roleId) {
+        return new Promise((resolve, reject) => {
+            let roleService = new RoleService();
+            roleService.assignUserToApp(appId, userId, roleId).then(response => {
+                this.dispatch(actions.ASSIGN_USERS_TO_APP_SUCCESS, {userId, roleId});
+                // would prefer to use the abstracted appsActions.getAppUsers function but calling
+                // it doesnt dispatch the action GET_APP_USERS_SUCCESS
+                let appService = new AppService();
+                appService.getAppUsers(appId).then(payload => {
+                    const msg = `${Locale.getMessage('app.users.userAdded')} 1 ${Locale.getMessage('app.users.singular')}`;
+                    this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: payload.data, userId: userId, msg});
+                    resolve();
+                }, () => {
+                    this.dispatch(actions.GET_APP_USERS_FAILED);
+                    reject();
+                });
+                resolve();
+            }, () => {
+                this.dispatch(actions.ADD_USER_FAILED);
+                reject();
+            });
+        });
+    },
+
+    setUserRoleToAdd(roleId) {
+        this.dispatch(actions.SET_USER_ROLE_TO_ADD_TO_APP, roleId);
+    },
+
+    openAddUserDialog(status) {
+        this.dispatch(actions.TOGGLE_ADD_USER_TO_APP_DIALOG, status);
+    },
 };
 
 export default appsActions;

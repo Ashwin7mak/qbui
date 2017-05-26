@@ -13,6 +13,7 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         //this.apps = null;
         this.appUsers = [];
+        this.realmUsers = [];
         this.appUsersUnfiltered = {};
         this.appOwner = {};
         // Default is true because the apps must load before the website is usable
@@ -22,6 +23,9 @@ let AppsStore = Fluxxor.createStore({
 
         //this.selectedAppId = null;
         //this.selectedTableId = null;
+
+        this.userRoleIdToAdd = null;
+        this.addUserToAppDialogOpen = false;
 
         this.bindActions(
             //actions.LOAD_APPS, this.onLoadApps,
@@ -43,7 +47,19 @@ let AppsStore = Fluxxor.createStore({
 
             actions.UNASSIGN_USERS, this.onUnasssignUsers,
             actions.UNASSIGN_USERS_FAILED, this.onUnasssignUsersFail,
-            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess
+            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess,
+
+            actions.LOAD_ALL_USERS, this.onLoadAllUsers,
+            actions.SEARCH_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
+
+            actions.ADD_USER, this.onAddUser,
+            actions.SET_USER_ROLE_TO_ADD_TO_APP, this.onSetUserRoleToAdd,
+
+            actions.GET_APP_USERS_SUCCESS, this.onGetAppUsersSuccess,
+            actions.GET_APP_USERS_FAILED, this.onGetAppUserFailed,
+
+            actions.ASSIGN_USERS_TO_APP_SUCCESS, this.assignUsersToAppSuccess,
+            actions.TOGGLE_ADD_USER_TO_APP_DIALOG, this.addUserToAppDialog
         );
 
         this.logger = new Logger();
@@ -182,31 +198,74 @@ let AppsStore = Fluxxor.createStore({
     onUnasssignUsersFail() {
         this.emit('change');
     },
+    onLoadAllUsers() {
+        this.emit('change');
+    },
+    onLoadAllUsersSuccess(data) {
+        this.realmUsers = data;
+        this.emit('change');
+    },
+
+    onAddUser() {
+        this.loading = true;
+        this.emit('change');
+    },
+
+    onSetUserRoleToAdd(roleId) {
+        this.userRoleIdToAdd = roleId;
+        this.emit('change');
+    },
+
     /**
      * A table's props were updated. Find the table in the selected app and replace its details with those passed in.
      * An example of who updated the table might be user updated table name from settings pages.
      * @param tblId
      * @param tableInfo
      */
-    //onUpdateTableProps(payload) {
-    //    let tblId = payload.tableId;
-    //    let tableInfo = payload.tableInfo;
-    //    let newAppsList = this.apps.map((app) => {
-    //        if (app.id === this.selectedAppId) {
-    //            let newAppTables = app.tables.map((table) => {
-    //                if (table.id === tblId) {
-    //                    return tableInfo;
-    //                } else {
-    //                    return table;
-    //                }
-    //            });
-    //            app.tables = newAppTables;
-    //        }
-    //        return app;
-    //    });
-    //    this.apps = newAppsList;
-    //    this.emit('change');
-    //},
+    onUpdateTableProps(payload) {
+        let tblId = payload.tableId;
+        let tableInfo = payload.tableInfo;
+        let newAppsList = this.apps.map((app) => {
+            if (app.id === this.selectedAppId) {
+                let newAppTables = app.tables.map((table) => {
+                    if (table.id === tblId) {
+                        return tableInfo;
+                    } else {
+                        return table;
+                    }
+                });
+                app.tables = newAppTables;
+            }
+            return app;
+        });
+        this.apps = newAppsList;
+        this.emit('change');
+    },
+    /**
+     * Get an array of users of an app
+     * @param userArray
+     */
+    onGetAppUsersSuccess(data) {
+        this.appUsers = data.appUsers[0];
+        this.appUsersUnfiltered = data.appUsers[1];
+        this.emit('change');
+
+        NotificationManager.success(data.msg);
+    },
+
+    onGetAppUserFailed() {
+        this.emit('change');
+    },
+
+    assignUsersToAppSuccess() {
+        this.emit('change');
+    },
+
+    addUserToAppDialog(status) {
+        this.addUserToAppDialogOpen = status;
+        this.emit('change');
+    },
+
     getState() {
         return {
             //apps: this.apps,
@@ -217,7 +276,10 @@ let AppsStore = Fluxxor.createStore({
             //selectedTableId: this.selectedTableId,
             //loading: this.loading,
             //error: this.error,
-            selectedUserRows:this.selectedUserRows
+            selectedUserRows:this.selectedUserRows,
+            realmUsers: this.realmUsers,
+            addUserToAppDialogOpen: this.addUserToAppDialogOpen,
+            userRoleIdToAdd: this.userRoleIdToAdd
         };
     },
 });
