@@ -125,7 +125,7 @@
             expect(leftNavPO.leftNavSearchInputBox.getText()).toBe('');
 
             //Verify it returned all tables after clearing search
-            expect(browser.elements('.leftNav .tablesList .leftNavLabel').length).toBe(4);
+            expect(browser.elements('.leftNav .tablesList .leftNavLabel').value.length).toBe(4);
 
             //Verify if the left nav search element is clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
@@ -184,7 +184,7 @@
 
         it('Verify going to reports via left nav and verify left Nav in reports page', function() {
             //select report
-            tableCreatePO.selectReport('Table 1', 1);
+            reportContentPO.selectReport('Table 1', 1);
             reportContentPO.waitForReportContent();
 
             //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
