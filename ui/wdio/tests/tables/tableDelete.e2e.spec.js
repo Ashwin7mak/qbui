@@ -142,6 +142,9 @@
 
                 //Make sure delete table button is disabled
                 expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
+
+                //Click on don't Delete finally to make the dialogue to dissapear
+                tableCreatePO.clickDontDeleteTableButton();
             });
         });
 
