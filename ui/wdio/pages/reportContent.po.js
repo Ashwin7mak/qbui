@@ -437,6 +437,7 @@
             //Select the tabe
             tablesPO.selectTable(tableName);
             //Click on reports menu
+            browser.element('.selected .iconUISturdy-report-menu-3').waitForVisible();
             browser.element('.selected .iconUISturdy-report-menu-3').click();
             browser.element('.reportGroups').waitForVisible();
             //Filter the reports
