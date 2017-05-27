@@ -103,8 +103,7 @@
 
         it('Verify search functionality in leftNav', function() {
             //Verify if the left nav search element is visible and clickable
-            leftNavPO.leftNavSearchEl.waitForVisible();
-            leftNavPO.leftNavSearchEl.click();
+            leftNavPO.clickLeftNavSearch();
 
             //Verify if the search box is open
             expect(browser.isVisible('.search.open')).toBe(true);
@@ -128,8 +127,7 @@
             expect(browser.elements('.leftNav .tablesList .leftNavLabel').value.length).toBe(5);
 
             //Verify if the left nav search element is clickable
-            leftNavPO.leftNavSearchEl.waitForVisible();
-            leftNavPO.leftNavSearchEl.click();
+            leftNavPO.clickLeftNavSearch();
 
             //Verify if the search input box is closed
             expect(browser.isVisible('.appsList .search.open')).toBe(false);
@@ -172,8 +170,7 @@
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
             //Verify if the left nav search element is visible and clickable
-            leftNavPO.leftNavSearchEl.waitForVisible();
-            leftNavPO.leftNavSearchEl.click();
+            leftNavPO.clickLeftNavSearch();
 
             //Verify if the search box is open
             expect(browser.isVisible('.search.open')).toBe(true);
@@ -199,8 +196,7 @@
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
             //Verify if the left nav search element is visible and clickable
-            leftNavPO.leftNavSearchEl.waitForVisible();
-            leftNavPO.leftNavSearchEl.click();
+            leftNavPO.clickLeftNavSearch();
 
             //Verify if the search box is open
             expect(browser.isVisible('.search.open')).toBe(true);

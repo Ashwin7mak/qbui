@@ -85,5 +85,13 @@
             }
         },
 
+        /**
+         * Method to click on leftNav search
+         */
+        clickLeftNavSearch : {value: function() {
+            this.leftNavSearchEl.waitForVisible();
+            return this.leftNavSearchEl.click();
+        }}
+
     });
 }());
