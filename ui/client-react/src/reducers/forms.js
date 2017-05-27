@@ -523,7 +523,7 @@ export const getExistingFields = (state, id, appId, tblId) => {
         return null;
     }
 
-    return getFields(state, appId, tblId).reduce((formFields, field) => {
+    let fields = getFields(state, appId, tblId).reduce((formFields, field) => {
         // Skip any built in fields
         if (constants.BUILTIN_FIELD_ID_ARRAY.FOR_FORM_BUILDER.includes(field.id)) {
             return formFields;
@@ -547,6 +547,8 @@ export const getExistingFields = (state, id, appId, tblId) => {
             }
         ];
     }, []);
+
+    return _.sortBy(fields, (field) => field.title);
 };
 
 /***
