@@ -445,14 +445,14 @@
             browser.element('.reportGroups .reportGroup .open').waitForVisible();
             //Filter the reports
             var allReports = this.getReportListUlEl.value.filter(function(report) {
-                console.log("the report is: "+report);
                 return report.index === reportIndex;
             });
 
             if (allReports !== []) {
-                console.log("the report to click is: "+JSON.stringify(allReports[0]));
                 //Click on the report
-                return allReports[0].click();
+                allReports[0].click();
+                //wait for container to slide away
+                return browser.pause(e2eConsts.mediumWaitTimeMs);
             }
         }},
 
