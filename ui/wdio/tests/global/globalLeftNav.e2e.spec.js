@@ -51,7 +51,6 @@
             RequestAppsPage.selectApp(testApp.name);
 
             //Verify topLinks (Home, user) dosen't show up
-            browser.element('.appsList .leftNavLabel').waitForVisible();
             expect(browser.element('.topLinks .iconUISturdy-home').isExisting()).toBe(false);
             expect(browser.element('.topLinks .iconUISturdy-users').isExisting()).toBe(false);
 
@@ -62,7 +61,7 @@
             leftNavPO.clickLeftNavSearch();
 
             //Verify if the search box is open
-            expect(browser.element('.search.open .searchInputBox').getAttribute('placeholder')).toBe('Search apps...');
+            expect(browser.element('.search.open .searchInput').getAttribute('placeholder')).toBe('Search apps...');
 
         });
 
@@ -114,7 +113,7 @@
             leftNavPO.clickLeftNavSearch();
 
             //Verify if the search box is open
-            expect(browser.element('.search.open .searchInputBox').getAttribute('placeholder')).toBe('Search tables...');
+            expect(browser.element('.search.open .searchInput').getAttribute('placeholder')).toBe('Search tables...');
 
             //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue('Table 1');
