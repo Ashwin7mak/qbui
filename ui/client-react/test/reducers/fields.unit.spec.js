@@ -100,6 +100,36 @@ describe('Test fields reducer', () => {
         expect(currentField.fields).toEqual(fieldsWithNewFieldAddedOn);
     });
 
+    it('will not add a newField if the field has a new field Id', () => {
+        const newState = [{
+            appId: appId,
+            tblId: tblId,
+            fields: [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}]
+        }];
+        const actionPayload = {
+            type: types.ADD_FIELD,
+            appId: appId,
+            tblId: tblId,
+            content: {
+                //A field with a newFieldId will not be added by the reducer
+                //New fields are only added when a user saves the form on formBuilder
+                field: {id: 'newFieldID'}
+            }
+        };
+        //Since a new field will not be added, the expectation is that it will not equal fieldsWithNewFieldAddedOn
+        const fieldsWithNewFieldAddedOn = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {
+            builtIn: false,
+            keyField: true,
+            id: 10
+        }, {}];
+        const state = reducer(newState, actionPayload, {type: types.ADD_FIELD});
+        const currentField = tableFieldsObj(state, appId, tblId);
+
+        expect(currentField.fields).not.toEqual(fieldsWithNewFieldAddedOn);
+        expect(currentField.appId).toEqual(appId);
+        expect(currentField.tblId).toEqual(tblId);
+    });
+
     it('updates a field', () => {
         //load some fields so we can update them!
         const fields = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}];
