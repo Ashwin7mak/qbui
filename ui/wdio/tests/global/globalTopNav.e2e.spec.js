@@ -40,15 +40,13 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
         });
 
         /**
          * Test Method - checking for usability of topNav on Table homepage
          */
         it('Visibility and usability of topNav on Table homepage', function() {
-            //Go to app page
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
 
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
@@ -84,6 +82,11 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
+            //Go to reports page directly
+            browser.call(function() {
+                return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            });
+
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
 
             //Verify if the global icons are displayed
