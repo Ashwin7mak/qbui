@@ -175,7 +175,7 @@
 
         it('Verify going to reports via left nav and verify left Nav in reports page', function() {
             //select report
-            reportContentPO.selectReport('Table 1', 0);
+            reportContentPO.selectReport('Table 1', 'List All Report');
             reportContentPO.waitForReportContent();
 
             //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements

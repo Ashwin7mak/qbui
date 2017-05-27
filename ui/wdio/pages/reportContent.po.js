@@ -432,7 +432,7 @@
         }},
 
         //Select a report from tables page with reportID being the index of the report
-        selectReport: {value: function(tableName, reportID) {
+        selectReport: {value: function(tableName, reportName) {
             //wait unti leftNav is loaded
             this.waitForLeftNavLoaded();
             //Select the tabe
@@ -445,7 +445,7 @@
             browser.element('.reportGroups .reportGroup .open').waitForVisible();
             //Filter the reports
             var allReports = this.getReportListUlEl.value.filter(function(report) {
-                return report.index === reportID;
+                return report.getAttribute('textContent') === reportName;
             });
 
             if (allReports !== []) {
