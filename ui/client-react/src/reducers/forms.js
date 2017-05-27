@@ -52,7 +52,7 @@ const forms = (
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
         //Removes all built in fields for formBuilder
-        let allFields = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID_ARRAY.FOR_FORM_BUILDER, (field) => {
+        let allFields = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID_ARRAY, (field) => {
             if (typeof field === 'number') {
                 return field;
             } else {
@@ -523,7 +523,7 @@ export const getExistingFields = (state, id, appId, tblId) => {
 
     let fields = getFields(state, appId, tblId).reduce((formFields, field) => {
         // Skip any built in fields
-        if (_.includes(constants.BUILTIN_FIELD_ID_ARRAY.FOR_FORM_BUILDER, field.id)) {
+        if (_.includes(constants.BUILTIN_FIELD_ID_ARRAY, field.id)) {
             return formFields;
         }
 
