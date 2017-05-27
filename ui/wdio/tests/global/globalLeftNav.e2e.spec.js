@@ -60,11 +60,9 @@
             //verify apps heading
             expect(browser.element('.appsList .heading').getAttribute('textContent')).toBe('Apps');
 
-            //Verify if the search element is clickable and opens search box
-            leftNavPO.clickLeftNavSearch();
-
-            //Verify if the search box is open
-            expect(browser.isVisible('.search.open')).toBe(true);
+            //Verify the search is enabled
+            expect(browser.isVisible('.transitionGroup .appsList .iconUISturdy-search')).toBe(true);
+            expect(browser.isEnabled('.transitionGroup .appsList .iconUISturdy-search')).toBe(true);
 
         });
 
