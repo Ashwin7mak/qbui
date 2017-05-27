@@ -69,7 +69,7 @@ export class FieldEditingTools extends Component {
         }
         //Hide deleteFieldIcon if it is the last field on the form
         return (<div>
-            {this.props.formBuilderFieldLength > 1 ?
+            {this.props.formBuilderFieldLength > 1 &&
                 <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
@@ -77,7 +77,7 @@ export class FieldEditingTools extends Component {
                             </button>
                         </QbToolTip>
                     </div>
-                </div> : null}
+                </div>}
             </div>
         );
     }
