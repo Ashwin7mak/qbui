@@ -197,6 +197,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
 const buildField = (field, id) => {
     id = id || _.uniqueId('newField_');
     //FormFieldElement is needed for both existing fields and new fields for experience engine
+    // debugger;
     return _.merge({}, {
         id: id,
         edit: true,
