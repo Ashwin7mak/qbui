@@ -42,15 +42,12 @@
         });
 
         beforeEach(function() {
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+            return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
         });
 
         it('Verify leftNav in apps page', function() {
-            //Navigate to apps page
-            browser.call(function() {
-                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            });
+            //select App
+            RequestAppsPage.selectApp(testApp.name);
 
             //Verify topLinks (Home, user) dosen't show up
             browser.element('.appsList .leftNavLabel').waitForVisible();
@@ -73,6 +70,9 @@
          */
         it('Verify if leftNav collapses by clicking on hamburger menu', function() {
 
+            //select App
+            RequestAppsPage.selectApp(testApp.name);
+
             //Verify if the leftNav is expanded
             expect(browser.isVisible('.leftNav.expanded')).toBe(true);
 
@@ -86,6 +86,9 @@
         });
 
         it('Verify if leftNav appsToggleIcon caretUp element opens appsList and clicking again caretDown opens up tables list', function() {
+
+            //select App
+            RequestAppsPage.selectApp(testApp.name);
 
             //Click on appLists carat
             leftNavPO.clickLeftNavAppListCarat();
@@ -102,6 +105,10 @@
         });
 
         it('Verify search functionality in leftNav', function() {
+
+            //select App
+            RequestAppsPage.selectApp(testApp.name);
+
             //Verify if the left nav search element is visible and clickable
             leftNavPO.clickLeftNavSearch();
 
@@ -136,6 +143,9 @@
 
         it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav', function() {
 
+            //select App
+            RequestAppsPage.selectApp(testApp.name);
+
             //Verify if the no.of topLinks are equal to 2 (Home, Users)
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
 
@@ -153,6 +163,9 @@
         });
 
         it('Verify leftNav in tables page', function() {
+            //select App
+            RequestAppsPage.selectApp(testApp.name);
+
             //select table
             tableCreatePO.selectTable('Table 1');
 
@@ -170,6 +183,9 @@
         });
 
         it('Verify going to reports via left nav and verify left Nav in reports page', function() {
+            //select App
+            RequestAppsPage.selectApp(testApp.name);
+            
             //select report
             reportContentPO.selectReport('Table 1', 'List All Report');
             reportContentPO.waitForReportContent();
