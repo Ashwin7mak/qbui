@@ -523,34 +523,30 @@ export const getExistingFields = (state, id, appId, tblId) => {
         return null;
     }
 
-    let allFields = _.differenceBy(getFields(state, appId, tblId), constants.BUILTIN_FIELD_ID.BUILTIN_FIELDS_ARRAY, (field) => {
-        if (typeof field === 'number') {
-            return field;
-        } else {
-            return field.id;
+    return getFields(state, appId, tblId).reduce((formFields, field) => {
+        // Skip any built in fields
+        if (constants.BUILTIN_FIELD_ID_ARRAY.FOR_FORM_BUILDER.includes(field.id)) {
+            return formFields;
         }
-    });
 
-    if (allFields && _.has(currentForm, 'formData.formMeta.fields')) {
-        let result = _.differenceBy(allFields, currentForm.formData.formMeta.fields, (field) => {
-            if (typeof field === 'number') {
-                return field;
-            } else {
-                return field.id;
+        // Skip fields that are already on the form
+        if (currentForm.formData.formMeta.fields.includes(field.id)) {
+            return formFields;
+        }
+
+        // Otherwise, create a form friendly version of the field and append it to the list of fields in the  existing fields menu.
+        return [
+            ...formFields,
+            {
+                containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
+                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+                key: `existingField_${field.id}`, // Key for react to use to identify it in the array
+                type: fieldFormats.getFormatType(field),
+                relatedField: field,
+                title: field.name
             }
-        });
-
-        result = _.sortBy(result, "name");
-        result = _.map(result, (field) => ({
-            containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
-            location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
-            key: `existingField_${field.id}`, // Key for react to use to identify it in the array
-            type: fieldFormats.getFormatType(field),
-            relatedField: field,
-            title: field.name
-        }));
-        return result;
-    }
+        ];
+    }, []);
 };
 
 /***
