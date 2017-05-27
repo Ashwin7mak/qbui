@@ -452,7 +452,9 @@
                 //Click on the report
                 allReports[0].click();
                 //wait for container to slide away
-                return browser.pause(e2eConsts.mediumWaitTimeMs);
+                browser.pause(e2eConsts.mediumWaitTimeMs);
+                //wait for reportContent to load
+                return this.waitForReportContent();
             }
         }},
 
