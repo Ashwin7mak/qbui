@@ -42,7 +42,8 @@
         });
 
         beforeEach(function() {
-            return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
+            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            return browser.element('.appsList .leftNavLabel').waitForVisible();
         });
 
         it('Verify leftNav in apps page', function() {
