@@ -84,17 +84,14 @@
 
         it('Verify if leftNav appsToggleIcon caretUp element opens appsList and clicking again caretDown opens up tables list', function() {
 
-            //Verify if the left nav caret up element is visible
-            leftNavPO.leftNavCaretUpEl.waitForVisible();
-
-            //Verify if the left nav caret up element is clickable
-            leftNavPO.leftNavCaretUpEl.click();
+            //Click on appLists carat
+            leftNavPO.clickLeftNavAppListCarat();
 
             //Verify if apps list is open
             expect((browser.element('.leftNav .appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBe(true);
 
-            //Verify if the left nav caret up clicking again opens up tables List
-            leftNavPO.leftNavCaretUpEl.click();
+            //Click on appLists carat
+            leftNavPO.clickLeftNavAppListCarat();
 
             //Verify if the tables list is open
             expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBe(true);
@@ -140,9 +137,7 @@
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
 
             //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
-            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
-            expect(innerHTML[0]).toEqual('Home');
-            expect(innerHTML[1]).toEqual('Users');
+            leftNavPO.verifyTopLinksInLeftNav();
 
             //Verify if the Brand Logo is visible at the bottom of leftNav
             leftNavPO.leftNavBrandLogo.waitForVisible();
@@ -159,9 +154,7 @@
             tableCreatePO.selectTable('Table 1');
 
             //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
-            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
-            expect(innerHTML[0]).toEqual('Home');
-            expect(innerHTML[1]).toEqual('Users');
+            leftNavPO.verifyTopLinksInLeftNav();
 
             //verify tables heading
             expect(browser.element('.tablesHeading .heading').getAttribute('textContent')).toBe('Tables');
@@ -185,9 +178,7 @@
             reportContentPO.waitForReportContent();
 
             //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
-            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
-            expect(innerHTML[0]).toEqual('Home');
-            expect(innerHTML[1]).toEqual('Users');
+            leftNavPO.verifyTopLinksInLeftNav();
 
             //verify tables heading
             expect(browser.element('.tablesHeading .heading').getAttribute('textContent')).toBe('Tables');

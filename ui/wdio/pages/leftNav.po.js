@@ -91,6 +91,26 @@
         clickLeftNavSearch : {value: function() {
             this.leftNavSearchEl.waitForVisible();
             return this.leftNavSearchEl.click();
+        }},
+
+        /**
+         * Method to click on leftNav appLists Carat
+         */
+        clickLeftNavAppListCarat : {value: function() {
+            //Verify if the left nav caret up element is visible
+            this.leftNavCaretUpEl.waitForVisible();
+            //Verify if the left nav caret up element is clickable
+            return this.leftNavCaretUpEl.click();
+        }},
+
+        /**
+         * Verify topLinks in leftNav
+         */
+        verifyTopLinksInLeftNav : {value: function() {
+            browser.element('.topLinks').waitForVisible();
+            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
+            expect(innerHTML[0]).toEqual('Home');
+            expect(innerHTML[1]).toEqual('Users');
         }}
 
     });
