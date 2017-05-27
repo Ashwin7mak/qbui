@@ -48,9 +48,12 @@
 
         it('Verify leftNav in apps page', function() {
             //Navigate to apps page
-            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            browser.call(function() {
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            });
 
             //Verify topLinks (Home, user) dosen't show up
+            browser.element('.topLinks').waitForVisible();
             expect(browser.element('.topLinks .iconUISturdy-home').isExisting()).toBe(false);
             expect(browser.element('.topLinks .iconUISturdy-users').isExisting()).toBe(false);
 
