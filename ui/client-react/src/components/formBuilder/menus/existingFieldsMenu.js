@@ -44,8 +44,11 @@ ExistingFieldsMenu.propTypes = {
      * Displays the menu in an open state */
     isOpen: PropTypes.bool,
 
-    appId: PropTypes.string,
-    tblId: PropTypes.string,
+    /**
+     * appId and tblId are required to get existing fields
+     * */
+    appId: PropTypes.string.isRequired,
+    tblId: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps)(ExistingFieldsMenu);
