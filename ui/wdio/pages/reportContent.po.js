@@ -138,7 +138,7 @@
         }},
         getReportListUlEl: {
             get: function() {
-                return browser.elements('.reportLink');
+                return browser.elements('.reportItems .reportLink');
             }
         },
         /**
@@ -439,7 +439,9 @@
             //Click on reports menu
             browser.element('.selected .iconUISturdy-report-menu-3').waitForVisible();
             browser.element('.selected .iconUISturdy-report-menu-3').click();
-            browser.element('.reportGroups').waitForVisible();
+            //wait for container to slide down
+            browser.pause(e2eConsts.mediumWaitTimeMs);
+            browser.element('.reportGroups .reportGroup .open').waitForVisible();
             //Filter the reports
             var allReports = this.getReportListUlEl.value.filter(function(report) {
                 return report.index === reportID;
