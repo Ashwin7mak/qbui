@@ -185,7 +185,7 @@
         it('Verify going to reports via left nav and verify left Nav in reports page', function() {
             //select App
             RequestAppsPage.selectApp(testApp.name);
-            
+
             //select report
             reportContentPO.selectReport('Table 1', 'List All Report');
             reportContentPO.waitForReportContent();
