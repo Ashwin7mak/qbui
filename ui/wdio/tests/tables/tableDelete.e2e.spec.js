@@ -190,25 +190,5 @@
             expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
         });
 
-        it('Verify that only ADMIN can delete a Table', function() {
-            browser.call(function() {
-                //get the user authentication
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-            });
-
-            browser.call(function() {
-                // Load the app in the realm
-                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            });
-
-            //Select table to delete ('Table 1' here) and make sure it lands in reports page
-            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
-
-            //Verify settings icon not available for user other than ADMIN
-            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();
-        });
-
     });
 }());
