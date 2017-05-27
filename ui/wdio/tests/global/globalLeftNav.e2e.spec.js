@@ -61,7 +61,7 @@
             expect(browser.element('.appsList .heading').getAttribute('textContent')).toBe('Apps');
 
             //Verify if the search element is clickable and opens search box
-            leftNavPO.leftNavSearchEl.click();
+            leftNavPO.clickLeftNavSearch();
 
             //Verify if the search box is open
             expect(browser.isVisible('.search.open')).toBe(true);
