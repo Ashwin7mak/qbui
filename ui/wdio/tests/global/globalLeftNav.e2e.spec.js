@@ -53,7 +53,7 @@
             });
 
             //Verify topLinks (Home, user) dosen't show up
-            browser.element('.topLinks').waitForVisible();
+            browser.element('.appsList .leftNavLabel').waitForVisible();
             expect(browser.element('.topLinks .iconUISturdy-home').isExisting()).toBe(false);
             expect(browser.element('.topLinks .iconUISturdy-users').isExisting()).toBe(false);
 
