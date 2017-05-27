@@ -433,7 +433,7 @@ describe('Form Actions', () => {
         });
     });
     describe('addFieldToForm', () => {
-        it('creates an action that will add a new field', () => {
+        it('creates an action that will add a new field when no field id is passed in', () => {
             const testNewField = {field: 'mockFieldData'};
             expect(formActions.addFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
                 id: 'view',
@@ -455,7 +455,7 @@ describe('Form Actions', () => {
             });
         });
 
-        it('will build an existing field with passed in id', () => {
+        it('will build an existing field with the existing field id passed in', () => {
             const testNewField = {id: 'existingField_Id', field: 'mockFieldData'};
             expect(formActions.addFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
                 id: 'view',
