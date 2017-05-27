@@ -47,8 +47,6 @@
         });
 
         it('Verify leftNav in apps page', function() {
-            //select App
-            RequestAppsPage.selectApp(testApp.name);
 
             //Verify topLinks (Home, user) dosen't show up
             expect(browser.element('.topLinks .iconUISturdy-home').isExisting()).toBe(false);
