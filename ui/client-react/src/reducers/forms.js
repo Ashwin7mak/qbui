@@ -523,12 +523,12 @@ export const getExistingFields = (state, id, appId, tblId) => {
 
     let fields = getFields(state, appId, tblId).reduce((formFields, field) => {
         // Skip any built in fields
-        if (constants.BUILTIN_FIELD_ID_ARRAY.FOR_FORM_BUILDER.includes(field.id)) {
+        if (_.includes(constants.BUILTIN_FIELD_ID_ARRAY.FOR_FORM_BUILDER, field.id)) {
             return formFields;
         }
 
         // Skip fields that are already on the form
-        if (currentForm.formData.formMeta.fields.includes(field.id)) {
+        if (_.includes(currentForm.formData.formMeta.fields, field.id)) {
             return formFields;
         }
 
