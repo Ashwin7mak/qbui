@@ -138,6 +138,7 @@
         }},
         getReportListUlEl: {
             get: function() {
+                browser.element('.reportItems .reportLink').waitForVisible();
                 return browser.elements('.reportItems .reportLink');
             }
         },
