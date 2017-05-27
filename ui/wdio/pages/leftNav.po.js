@@ -15,7 +15,7 @@
         // Left nav search element
         leftNavSearchEl: {
             get: function() {
-                return browser.element('.transitionGroup .iconUISturdy-search');
+                return browser.element('.transitionGroup .heading .iconUISturdy-search');
             }
         },
         // Left nav search input box

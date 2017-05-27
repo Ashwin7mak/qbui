@@ -60,9 +60,11 @@
             //verify apps heading
             expect(browser.element('.appsList .heading').getAttribute('textContent')).toBe('Apps');
 
-            //Verify the search is enabled
-            expect(browser.isVisible('.appsList .heading .iconUISturdy-search')).toBe(true);
-            expect(browser.isEnabled('.appsList .heading .iconUISturdy-search')).toBe(true);
+            //Verify if the left nav search element is visible and clickable
+            leftNavPO.clickLeftNavSearch();
+
+            //Verify if the search box is open
+            expect(browser.element('.search.open .searchInputBox').getAttribute('placeholder')).toBe('Search apps...');
 
         });
 
@@ -104,7 +106,7 @@
             leftNavPO.clickLeftNavSearch();
 
             //Verify if the search box is open
-            expect(browser.isVisible('.search.open')).toBe(true);
+            expect(browser.element('.search.open .searchInputBox').getAttribute('placeholder')).toBe('Search tables...');
 
             //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue('Table 1');
@@ -128,7 +130,7 @@
             leftNavPO.clickLeftNavSearch();
 
             //Verify if the search input box is closed
-            expect(browser.isVisible('.appsList .search.open')).toBe(false);
+            expect(browser.isVisible('.search.open .searchInputBox')).toBe(false);
 
         });
 
@@ -163,12 +165,6 @@
             //Verify tables search is enabled
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
-            //Verify if the left nav search element is visible and clickable
-            leftNavPO.clickLeftNavSearch();
-
-            //Verify if the search box is open
-            expect(browser.isVisible('.search.open')).toBe(true);
-
             //Verify new Table button displays in leftNav
             expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
         });
@@ -186,12 +182,6 @@
 
             //Verify tables search is enabled
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
-
-            //Verify if the left nav search element is visible and clickable
-            leftNavPO.clickLeftNavSearch();
-
-            //Verify if the search box is open
-            expect(browser.isVisible('.search.open')).toBe(true);
 
             //Verify new Table button displays in leftNav
             expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
