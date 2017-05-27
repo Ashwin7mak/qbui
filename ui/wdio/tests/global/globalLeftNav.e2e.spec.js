@@ -61,8 +61,8 @@
             expect(browser.element('.appsList .heading').getAttribute('textContent')).toBe('Apps');
 
             //Verify the search is enabled
-            expect(browser.isVisible('.transitionGroup .appsList .iconUISturdy-search')).toBe(true);
-            expect(browser.isEnabled('.transitionGroup .appsList .iconUISturdy-search')).toBe(true);
+            expect(browser.isVisible('.appsList .heading .iconUISturdy-search')).toBe(true);
+            expect(browser.isEnabled('.appsList .heading .iconUISturdy-search')).toBe(true);
 
         });
 
