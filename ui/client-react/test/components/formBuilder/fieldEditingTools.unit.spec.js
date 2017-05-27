@@ -27,7 +27,7 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'removeFieldFromForm');
 
         component = shallow(<FieldEditingTools
-            formBuilderFieldLength={2}
+            numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
@@ -48,7 +48,7 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'removeFieldFromForm');
 
         component = shallow(<FieldEditingTools
-            formBuilderFieldLength={1}
+            numberOfFieldsOnForm={1}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}

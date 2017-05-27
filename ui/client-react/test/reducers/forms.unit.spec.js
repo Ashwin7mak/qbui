@@ -134,7 +134,7 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {fields: [], formMeta: {fields: [], formBuilderFieldLength: 0, appId: backUpAppId, tableId: backUpTblId}},
+                    formData: {fields: [], formMeta: {fields: [], numberOfFieldsOnForm: 0, appId: backUpAppId, tableId: backUpTblId}},
                     errorStatus: null
                 }
             });
@@ -231,7 +231,7 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with a single field removed', () => {
-            let removeStateWithViewForm = {'view': {id: 'view', formData: {formMeta: {formBuilderFieldLength: 2, fields: [1, 2, 3, 4, 5]}}}};
+            let removeStateWithViewForm = {'view': {id: 'view', formData: {formMeta: {numberOfFieldsOnForm: 2, fields: [1, 2, 3, 4, 5]}}}};
             expect(reducer(removeStateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],

@@ -62,7 +62,7 @@ const forms = (
 
         action.formData.fields = allFields;
         //this is needed to only show the delete icon on a field in formBuilder when there are more than one field on the form
-        action.formData.formMeta.formBuilderFieldLength = action.formData.formMeta.fields.length;
+        action.formData.formMeta.numberOfFieldsOnForm = action.formData.formMeta.fields.length;
 
         newState[id] = ({
             id,
@@ -221,7 +221,7 @@ const forms = (
         }
 
         updatedForm.selectedFields[0] = newLocation;
-        updatedForm.formData.formMeta.formBuilderFieldLength = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
+        updatedForm.formData.formMeta.numberOfFieldsOnForm = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
 
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
@@ -250,14 +250,14 @@ const forms = (
             }
         }
 
-        if (updatedForm.formData.formMeta.formBuilderFieldLength > 1) {
+        if (updatedForm.formData.formMeta.numberOfFieldsOnForm > 1) {
             updatedForm.formData.formMeta = MoveFieldHelper.removeField(
                 formMetaCopy,
                 location
             );
         }
 
-        updatedForm.formData.formMeta.formBuilderFieldLength = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
+        updatedForm.formData.formMeta.numberOfFieldsOnForm = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
