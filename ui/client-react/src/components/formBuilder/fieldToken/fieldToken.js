@@ -20,6 +20,7 @@ const FieldToken = (props) => {
     }
 
     if (props.isDragging) {
+
         classes.push('fieldTokenDragging');
     }
 
@@ -35,7 +36,7 @@ const FieldToken = (props) => {
                 </div>
             </div>
             <div className="fieldTokenTitle">
-                {props.name || props.title}
+                {props.title}
             </div>
         </div>
     );
