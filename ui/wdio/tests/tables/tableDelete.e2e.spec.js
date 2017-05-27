@@ -128,6 +128,8 @@
         deletePromtTextFieldTestCases().forEach(function(testCase) {
 
             it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
+                //Load the app
+                RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
 
                 //Select table to delete ('Table 1' here) and make sure it lands in reports page
                 tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
