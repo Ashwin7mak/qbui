@@ -83,9 +83,9 @@
          */
         it('Visibility of topNav on Report homepage', function() {
             //Go to reports page directly
-            browser.call(function() {
-                return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            });
+            //select report
+            reportContentPO.selectReport('Table 1', 'List All Report');
+            reportContentPO.waitForReportContent();
 
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
 
