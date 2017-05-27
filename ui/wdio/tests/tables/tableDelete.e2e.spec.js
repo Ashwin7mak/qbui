@@ -36,14 +36,6 @@
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
-            }).then(function() {
-                // Create a user
-                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
-                    userId = JSON.parse(userResponse.body).id;
-                });
-            }).then(function() {
-                // Add user to participant appRole
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
