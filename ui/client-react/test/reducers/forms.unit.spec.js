@@ -622,19 +622,3 @@ describe('Forms reducer functions', () => {
 
     });
 });
-
-let expectedResult = {
-    containingElement: {
-        id: 'view',
-        FormFieldElement:{
-            positionSameRow: false,
-            id: 9
-        }
-    },
-    location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
-    key: 'existingField_9',
-    type: 1,
-    relatedField: {id: 9},
-    title: undefined,
-    isNewField: true
-};
