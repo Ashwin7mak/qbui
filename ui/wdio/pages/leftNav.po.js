@@ -5,6 +5,15 @@
 (function() {
     'use strict';
     module.exports = Object.create(e2ePageBase, {
+        /**
+         * Method for spinner to dissaper in leftNav
+         */
+        waitUntilSpinnerGoesAwayInLeftNav : {value: function(btnName) {
+            //wait until loading screen disappear
+            browser.waitForVisible('.leftNav .loader .spinner', e2eConsts.mediumWaitTimeMs, true);
+            //Need this to wait for container to slide away
+            return browser.waitForVisible('leftNavLabel');
+        }},
 
         // Left Nav caret element
         leftNavCaretUpEl: {

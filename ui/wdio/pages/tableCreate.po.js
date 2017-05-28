@@ -7,6 +7,7 @@
 
     // Import the base page object
     let e2ePageBase = requirePO('e2ePageBase');
+    let leftNavPO = requirePO('leftNav');
     let formsPO = requirePO('formsPage');
     let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitle = "Table name";
@@ -139,7 +140,8 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
+            //browser.waitForExist('.tablesList .leftNavLabel');
+            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
             //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
             while (browser.element('.tablesList .leftNavLabel').getAttribute('textContent').length === 0) {
                 browser.pause(e2eConsts.shortWaitTimeMs);
