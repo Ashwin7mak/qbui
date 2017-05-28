@@ -546,7 +546,7 @@
             //use the predefined deleteTableButton here
             expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(true);
             //Click on delete table button
-            browser.element('.modal-footer .buttons .primaryButton').click();
+            browser.element('.modal-dialog .modal-footer .primaryButton').click();
             //Need this to wait for model dialogue to slide away
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
