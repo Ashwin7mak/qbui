@@ -49,7 +49,7 @@
          */
         beforeEach(function() {
             //Close the table create dialogue if present leftOver before starting new test
-            if (browser.element('.modal-dialog').isVisible()) {
+            if (browser.isVisible('.modal-dialog') === true) {
                 //Click on don't delete button on the dialogue to dissapear
                 tableCreatePO.clickDontDeleteTableButton();
             }

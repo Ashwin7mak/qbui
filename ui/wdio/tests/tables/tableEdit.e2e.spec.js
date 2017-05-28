@@ -57,7 +57,7 @@
          */
         beforeEach(function() {
             //Close the table create dialogue if present leftOver before starting new test
-            if (browser.element('.modal-dialog').isVisible()) {
+            if (browser.isVisible('.modal-dialog') === true) {
                 //Click on close button on the dialogue
                 tableCreatePO.clickCloseBtn();
             }
