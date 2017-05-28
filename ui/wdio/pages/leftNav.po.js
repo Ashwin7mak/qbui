@@ -108,9 +108,9 @@
          */
         verifyTopLinksInLeftNav : {value: function() {
             browser.element('.topLinks').waitForVisible();
-            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
-            expect(innerHTML[0]).toEqual('Home');
-            expect(innerHTML[1]).toEqual('Users');
+            let topLinks = browser.elements('.topLinks .leftNavLabel span');
+            expect(topLinks[0].getAttribute('textContent')).toEqual('Home');
+            expect(topLinks[1].getAttribute('textContent')).toEqual('Users');
         }}
 
     });
