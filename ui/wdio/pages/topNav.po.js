@@ -6,7 +6,7 @@
     'use strict';
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
-    
+
     module.exports = Object.create(e2ePageBase, {
         center: {
             get: function() {
