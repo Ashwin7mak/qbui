@@ -142,12 +142,12 @@
         getAllTableLeftNavLinksList: {get: function() {
             //wait until loading screen disappear in leftnav
             browser.waitForVisible('.leftNav .loader .spinner', e2eConsts.mediumWaitTimeMs, true);
-            browser.waitForVisible('.tablesList .leftNavLabel');
+            browser.waitForVisible('.tablesList .withSecondary .leftNavLabel');
             //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
-            while (browser.element('.tablesList .leftNavLabel').getAttribute('textContent').length === 0) {
+            while (browser.element('.tablesList .withSecondary .leftNavLabel').getAttribute('textContent').length === 0) {
                 browser.pause(e2eConsts.shortWaitTimeMs);
             }
-            return browser.elements('.tablesList .leftNavLabel');
+            return browser.elements('.tablesList .withSecondary .leftNavLabel');
         }},
 
 
