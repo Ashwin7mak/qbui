@@ -450,7 +450,7 @@
 
             if (allReports !== []) {
                 //Click on the report
-                allReports[0].click();
+                allReports[0].element('.iconUISturdy-report-table').click();
                 //wait for container to slide away
                 browser.pause(e2eConsts.mediumWaitTimeMs);
                 //wait for reportContent to load
