@@ -18,8 +18,8 @@
          */
         getAllAppLeftNavLinksList: {get: function() {
             browser.element('.appsList').waitForVisible();
-            browser.element('.leftNavLabel').waitForVisible();
-            return browser.elements('.leftNavLabel');
+            browser.element('.leftNavLink').waitForVisible();
+            return browser.elements('.leftNavLink');
         }},
 
         /**
@@ -28,15 +28,15 @@
          */
         selectApp: {value: function(appName) {
             //wait until you see tableLists got loaded
-            browser.waitForExist('.appsList .leftNavLabel');
+            browser.waitForExist('.appsList .leftNavLink');
             //filter table names from leftNav links
             var results = this.getAllAppLeftNavLinksList.value.filter(function(app) {
-                return app.getAttribute('textContent') === appName;
+                return app.element('.leftNavLabel').getAttribute('textContent') === appName;
             });
 
             if (results !== []) {
                 //Click on filtered table name
-                results[0].click();
+                results[0].element('.iconTableSturdy-Spreadsheet').click();
                 //wait until you see tableLists got loaded
                 return browser.waitForText('.tablesList .leftNavLabel', e2eConsts.mediumWaitTimeMs);
             }
