@@ -141,8 +141,7 @@
          */
         getAllTableLeftNavLinksList: {get: function() {
             //wait until loading screen disappear in leftnav
-            browser.waitForVisible('.leftNav .loader .spinner', e2eConsts.mediumWaitTimeMs, true);
-            browser.waitForVisible('.tablesList .withSecondary .leftNavLabel');
+            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
             //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
             while (browser.element('.tablesList .withSecondary .leftNavLabel').getAttribute('textContent').length === 0) {
                 browser.pause(e2eConsts.shortWaitTimeMs);
