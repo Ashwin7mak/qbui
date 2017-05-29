@@ -193,35 +193,31 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
 };
 
 /**
- * Private function for addNewFieldToForm, not exported
+ * Private function for addFieldToForm, not exported
  * */
-const buildNewField = (newField) => {
-    let newId = _.uniqueId('newField_');
-    let displayText = 'New Text Field';
-
+const buildField = (field, id) => {
+    id = id || _.uniqueId('newField_');
+    //FormFieldElement is needed for both existing fields and new fields for experience engine
     return _.merge({}, {
-        id: newId,
+        id: id,
         edit: true,
         FormFieldElement: {
             positionSameRow: false,
-            fieldId: newId,
-            displayText
+            fieldId: id
         }
-    }, newField);
+    }, field);
 };
 
 /**
- * Move a field from one position on a form to a different position
+ * Adds a field to the form
  * @param formId
  * @param appId
  * @param tblId
  * @param newLocation
- * @param newField
+ * @param field
  * @returns {{id, type, content}|*}
  */
-export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) => {
-    newField = buildNewField(newField);
-
+export const addFieldToForm = (formId, appId, tblId, newLocation, field) => {
     return {
         type: types.ADD_FIELD,
         id: formId,
@@ -229,7 +225,7 @@ export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) =
         tblId,
         content: {
             newLocation,
-            newField,
+            field: buildField(field, field.id)
         }
     };
 };

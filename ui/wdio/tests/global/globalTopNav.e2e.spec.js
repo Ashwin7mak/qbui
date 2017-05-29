@@ -64,8 +64,8 @@
 
             //Verify the presence of Feedback and Report issue buttons
             TopNavPO.feedbackBtn.click();
-            expect(TopNavPO.feedbackMenuButton.isExisting()).toBeTruthy();
-            expect(TopNavPO.reportFeedBackButton.isExisting()).toBeTruthy();
+            expect(TopNavPO.feedbackMenuButton.isExisting()).toBe(true);
+            expect(TopNavPO.reportFeedBackButton.isExisting()).toBe(true);
 
             //Verify the Settings option in the gear
             reportContentPO.clickSettingsIcon();
@@ -74,7 +74,7 @@
             //Verify that Users button displays the correct app name and has sign out button
             TopNavPO.usersButton.click();
             expect(TopNavPO.userDropdownAppName.getAttribute('textContent')).toEqual(testApp.name);
-            expect(TopNavPO.signOutButton.isExisting()).toBeTruthy();
+            expect(TopNavPO.signOutButton.isExisting()).toBe(true);
 
             //Verify the help button is clickable
             TopNavPO.helpButton.click();
