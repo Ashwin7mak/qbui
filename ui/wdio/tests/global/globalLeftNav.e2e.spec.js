@@ -41,7 +41,8 @@
 
         beforeEach(function() {
             e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
-            return browser.element('.appsList .leftNavLabel').waitForVisible();
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
         it('Verify leftNav in apps page', function() {
