@@ -42,16 +42,16 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                e2ePageBase.viewFirstRecordInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                return e2ePageBase.viewFirstRecordInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             });
 
             beforeEach(function() {
                 // invoke form builder
-                formBuilderPO.open();
+                return formBuilderPO.open();
             });
 
             afterEach(function() {
-                formBuilderPO.cancel();
+                return formBuilderPO.cancel();
             });
 
             // pos/neg pairs
