@@ -9,6 +9,7 @@
     var formsPO = requirePO('formsPage');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
+    let leftNavPO = requirePO('leftNav');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
