@@ -108,8 +108,6 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         this.dirtyForm_Dismiss();
-        browser.waitForExist('.leftNavLabel');
-        browser.waitForText('.leftNavLabel');
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
@@ -221,8 +219,6 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        browser.waitForExist('.leftNavLabel');
-        browser.waitForText('.leftNavLabel');
         return this;
     }
 
