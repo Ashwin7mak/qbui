@@ -14,7 +14,7 @@
 
     let tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
+        newTableBtn : {get: function() {return browser.element('.tablesList .newTableItem .newTable');}},
         //New table Icon
         newTableIconBtn : {get: function() {return browser.element('.newTableItem .newTable .iconUISturdy-add-new-stroke');}},
         //new table container
@@ -194,7 +194,6 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button

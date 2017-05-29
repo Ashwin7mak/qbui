@@ -8,6 +8,7 @@
     let tableCreatePO = requirePO('tableCreate');
     let formsPO = requirePO('formsPage');
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
+    let leftNavPO = requirePO('leftNav');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
@@ -55,14 +56,10 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //Close the table create dialogue if present leftOver before starting new test
-            if (browser.isVisible('.modal-dialog') === true) {
-                //Click on close button on the dialogue
-                tableCreatePO.clickCloseBtn();
-            }
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
             RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            return browser.element('.tablesList .leftNavLabel').waitForVisible();
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
         it('Create new table', function() {
@@ -141,6 +138,12 @@
             //Verify it returns just one
             expect(searchReturnedIcons.value.length).toBe(1);
             expect(searchReturnedIcons.getAttribute('className')).toContain('iconTableSturdy-bicycle');
+
+            //close the table dialogue
+            if (browser.isVisible('.modal-dialog .modal-body') === true) {
+                //Click on close button on the dialogue
+                tableCreatePO.clickCloseBtn();
+            }
 
         });
 
