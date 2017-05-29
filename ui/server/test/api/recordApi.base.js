@@ -39,8 +39,8 @@
             setBaseUrl: function(baseUrlConfig) {
                 apiBase.setBaseUrl(baseUrlConfig);
             },
-            //Helper method to create an app, can be used by multiple test cases
-            createApp: function(appToCreate, skipProperties) {
+            //Temporary helper method to create an app without table properties
+            createAppWithoutTableProps: function(appToCreate, skipProperties) {
                 var self = this;
                 return init.then(function() {
                     return apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
@@ -65,7 +65,28 @@
                     });
                 });
             },
-
+            //Helper method to create an app, can be used by multiple test cases
+            createApp         : function(appToCreate) {
+                var self = this;
+                return init.then(function() {
+                    return apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
+                        let createdApp = JSON.parse(appResponse.body);
+                        log.debug('App create response: ' + JSON.stringify(createdApp));
+                        var initTablePropsPromises = [];
+                        createdApp.tables.forEach(function(table, index) {
+                            initTablePropsPromises.push(self.initTableProperties(createdApp.id, table.id, table.name));
+                        });
+                        // Set the tableProperties for each table
+                        return promise.all(initTablePropsPromises).then(function(results) {
+                            // if all promises successful return the createApp response or code will error to catch block below
+                            return appResponse;
+                        });
+                    }).catch(function(error) {
+                        log.error('Error in createApp');
+                        return promise.reject(error);
+                    });
+                });
+            },
             initTableProperties: function(appId, tableId, tableNoun) {
                 let propsJson = {tableNoun: tableNoun};
                 const tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appId, tableId);

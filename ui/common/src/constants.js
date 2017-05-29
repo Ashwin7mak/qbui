@@ -242,6 +242,8 @@
             DATE_CREATED: "Date Created",
             RECORD_OWNER: "Record Owner"
         },
+        //used to remove builtin fields from existing menu in form builder
+        BUILTIN_FIELD_ID_ARRAY: [1, 2, 3, 4, 5],
         BUILTIN_FIELD_ID: {
             DATE_CREATED: 1,
             DATE_MODIFIED: 2,
