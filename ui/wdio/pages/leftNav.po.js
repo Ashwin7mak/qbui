@@ -15,8 +15,8 @@
         waitUntilSpinnerGoesAwayInLeftNav : {value: function() {
             //wait until loading screen disappear
             browser.waitForVisible('.leftNav .loader .spinner', e2eConsts.longWaitTimeMs, true);
-            //Need this to wait for container to slide away
-            return browser.waitForVisible('.leftNavLabel');
+            //Need this to wait for leftNav labels to load
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         // Left Nav caret element

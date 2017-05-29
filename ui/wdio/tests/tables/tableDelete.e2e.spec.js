@@ -13,6 +13,7 @@
     let tableCreatePO = requirePO('tableCreate');
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
+    let leftNavPO = requirePO('leftNav');
 
     describe('Tables - delete table tests: ', function() {
         let realmName;
@@ -48,14 +49,10 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //Close the table create dialogue if present leftOver before starting new test
-            if (browser.isVisible('.modal-dialog') === true) {
-                //Click on don't delete button on the dialogue to dissapear
-                tableCreatePO.clickDontDeleteTableButton();
-            }
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
             RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            return browser.element('.tablesList .leftNavLabel').waitForVisible();
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
 
