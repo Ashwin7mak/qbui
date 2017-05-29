@@ -56,13 +56,10 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //Close the table create dialogue if present leftOver before starting new test
-            if (browser.isVisible('.modal-dialog') === true) {
-                //Click on close button on the dialogue
-                tableCreatePO.clickCloseBtn();
-            }
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
         /**
@@ -138,6 +135,7 @@
 
                 //Verify bck to app link is enabled
                 expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBe(true);
+
             });
         });
 
