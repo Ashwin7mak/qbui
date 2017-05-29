@@ -4,10 +4,8 @@
     //Load the page Objects
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
-    var RequestAppsPage = requirePO('requestApps');
     var tableCreatePO = requirePO('tableCreate');
     var formsPO = requirePO('formsPage');
-    var RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
     let leftNavPO = requirePO('leftNav');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
@@ -58,7 +56,7 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             //wait until loading screen disappear in leftnav
             return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
@@ -323,12 +321,12 @@
         it('Verify that only ADMIN can edit a new table', function() {
             browser.call(function() {
                 //get the user authentication
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
 
             browser.call(function() {
                 // Load the app in the realm
-                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             });
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page

@@ -17,8 +17,6 @@
         let realmName;
         let realmId;
         let testApp;
-        let sampleText1 = 'reportA';
-        let sampleText2 = 'New Table';
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -42,7 +40,7 @@
         });
 
         beforeEach(function() {
-            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
             return browser.element('.appsList .leftNavLabel').waitForVisible();
         });
 
@@ -206,7 +204,7 @@
         xit('Verify the mouse hover function on apps page collapsed leftNav', function() {
 
             //Open apps home page
-            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
 
             //Verify if the topNav hamburger menu is visible
             topNavPO.topNavToggleHamburgerEl.waitForVisible();

@@ -9,9 +9,7 @@
     //Load the page Objects
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let RequestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
-    let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
     let leftNavPO = requirePO('leftNav');
 
@@ -50,7 +48,7 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             //wait until loading screen disappear in leftnav
             return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
@@ -119,7 +117,7 @@
             it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
                 //Load the app
                 browser.call(function() {
-                    return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                    return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
                 });
 
                 //Select table to delete ('Table 1' here) and make sure it lands in reports page
