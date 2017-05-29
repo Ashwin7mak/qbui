@@ -57,7 +57,7 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             //wait until loading screen disappear in leftnav
             return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
@@ -120,7 +120,7 @@
             expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBe(true);
 
             //Load a report for the table and verify report elements
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
             ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
@@ -259,12 +259,12 @@
 
             browser.call(function() {
                 //get the user authentication
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
 
             browser.call(function() {
                 // Load the app in the realm
-                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             });
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page
