@@ -337,17 +337,17 @@
                 if (tableField.includes(tableNameFieldTitle)) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
+                    return this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
