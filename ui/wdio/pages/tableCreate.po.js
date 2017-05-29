@@ -318,7 +318,7 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
-            return filteredElement.element(filteredElementInputClassName).setValue([fieldValue]);
+            return filteredElement.element(filteredElementInputClassName).setValue(fieldValue);
         }},
 
         /**
