@@ -6,6 +6,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
+    let leftNavPO = requirePO('leftNav');
     let reportContentPO = requirePO('reportContent');
     let tableCreatePO = requirePO('tableCreate');
 
