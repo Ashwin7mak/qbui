@@ -4,6 +4,7 @@
 (function() {
     'use strict';
     var e2ePageBase = require('./e2ePageBase.po');
+    let leftNavPO = requirePO('leftNav');
 
     var RequestAppsPage = Object.create(e2ePageBase, {
         // Page Elements using Locators
@@ -37,8 +38,10 @@
             if (results !== []) {
                 //Click on filtered table name
                 results[0].click();
+                //wait until loading screen disappear in leftnav
+                leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
                 //wait until you see tableLists got loaded
-                return browser.waitForText('.tablesList .leftNavLabel', e2eConsts.mediumWaitTimeMs);
+                return browser.waitForText('.tablesList .withSecondary .leftNavLabel', e2eConsts.mediumWaitTimeMs);
             }
         }},
 
