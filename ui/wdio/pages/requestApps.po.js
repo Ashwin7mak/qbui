@@ -39,9 +39,7 @@
                 //Click on filtered table name
                 results[0].click();
                 //wait until loading screen disappear in leftnav
-                leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
-                //wait until you see tableLists got loaded
-                return browser.waitForText('.tablesList .withSecondary .leftNavLabel', e2eConsts.mediumWaitTimeMs);
+                return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
             }
         }},
 
