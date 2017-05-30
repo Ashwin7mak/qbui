@@ -232,7 +232,7 @@ class formBuilderPage {
             this.clearSearch.click();
         }
         // wait for groups to appear or disappear depending on whether we searched or cleared
-        this.listOfElementsItemGroup.waitForExist(null, (text !== null));
+        this.listOfElementsItemGroup.waitForVisible(null, (text !== null));
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getNewFieldLabels();
     }
