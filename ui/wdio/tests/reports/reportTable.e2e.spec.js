@@ -66,10 +66,10 @@
          */
         it('Should load all the table report actions', function() {
             // Assert search box is visible
-            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBeTruthy();
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(true);
 
             // Assert sort by / group by button is visible
-            expect(ReportTableActionsPO.reportSortAndGroupButton.isVisible()).toBeTruthy();
+            expect(ReportTableActionsPO.reportSortAndGroupButton.isVisible()).toBe(true);
 
             // Assert records count total
             expect(ReportTableActionsPO.getReportRecordsCount()).toBe("5 records");
@@ -84,7 +84,7 @@
             ReportTableActionsPO.selectAllRecordsCheckbox();
 
             // Assert Search Box is invisible
-            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBeFalsy();
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(false);
 
             // Assert records selected count
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
@@ -99,7 +99,7 @@
             ReportTableActionsPO.selectRecordRowCheckbox(1);
 
             // Assert Search Box is invisible
-            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBeFalsy();
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(false);
 
             // Assert records selected count
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("1");
