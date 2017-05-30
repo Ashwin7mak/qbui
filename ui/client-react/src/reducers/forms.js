@@ -556,8 +556,8 @@ export const getExistingFields = (state, id, appId, tblId) => {
  * @returns {Array}
  */
 export const getParentRelationshipsForSelectedFormElement = (state, id) => {
-    const currentForm = state.forms[id];
-    const formMeta = _.get(currentForm, 'formData.formMeta', {});
+    const currentForm = _.has(state, 'forms') ? state.forms[id] : null;
+    const formMeta = currentForm !== null ? _.get(currentForm, 'formData.formMeta', {}) : {};
     const relationships = !_.isEmpty(formMeta) && _.get(formMeta, 'relationships') ? formMeta.relationships : [];
 
     const tableId = formMeta.tableId;
