@@ -42,7 +42,10 @@ export class AutomationListRoute extends Component {
     }
 
     getAppId() {
-        return this.props.app || this.props.match.params.appId;
+        if (this.props.app) {
+            return this.props.app.id;
+        }
+        return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
     }
 
     renderAutomations() {
