@@ -195,21 +195,21 @@ describe('Apps Actions functions with Tables', () => {
         });
     });
 
-    const getAppUsers = [{name:'gets App Users', appId: 123}];
-    getAppUsers.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.getAppUsers(test.appId, true).then(() => {
-                expect(mockAppService.prototype.getAppUsers).toHaveBeenCalledWith(test.appId);
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.GET_APP_USERS_SUCCESS, {appUsers: responseAppUserData}]);
-                done();
-            }, () => {
-                expect(false).toBe(true);
-                done();
-            }
-			);
-        });
-    });
+    //const getAppUsers = [{name:'gets App Users', appId: 123}];
+    //getAppUsers.forEach(function(test) {
+    //    it(test.name, function(done) {
+    //        flux.actions.getAppUsers(test.appId, true).then(() => {
+    //            expect(mockAppService.prototype.getAppUsers).toHaveBeenCalledWith(test.appId);
+    //            expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+    //            expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.GET_APP_USERS_SUCCESS, {appUsers: responseAppUserData}]);
+    //            done();
+    //        }, () => {
+    //            expect(false).toBe(true);
+    //            done();
+    //        }
+		//	);
+    //    });
+    //});
 
     const assignUserToApp = [{name:'get App User', appId: 123, userId: 1, roleId: 123}];
     assignUserToApp.forEach(function(test) {
