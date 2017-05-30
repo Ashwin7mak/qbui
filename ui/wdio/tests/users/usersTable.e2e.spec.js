@@ -7,7 +7,6 @@
     //Load the page Objects
     let NewStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let RequestAppsPage = requirePO('requestApps');
     let UsersTablePage = requirePO('usersTable');
     let ReportContentPO = requirePO('reportContent');
     let ReportTableActionsPO = requirePO('reportTableActions');
@@ -42,7 +41,7 @@
          */
         beforeEach(function() {
             //load the users page
-            RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             //Wait until user table rows are loaded
             ReportContentPO.waitForReportContent();
             //Wait until you see new User button

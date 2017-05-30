@@ -8,6 +8,7 @@
     let tableCreatePO = requirePO('tableCreate');
     let formsPO = requirePO('formsPage');
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
+    let leftNavPO = requirePO('leftNav');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
@@ -56,8 +57,9 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
         it('Create new table', function() {
@@ -118,7 +120,7 @@
             expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBe(true);
 
             //Load a report for the table and verify report elements
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
             ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
@@ -137,80 +139,12 @@
             expect(searchReturnedIcons.value.length).toBe(1);
             expect(searchReturnedIcons.getAttribute('className')).toContain('iconTableSturdy-bicycle');
 
-        });
+            //close the table dialogue
+            if (browser.isVisible('.modal-dialog .modal-body') === true) {
+                //Click on close button on the dialogue
+                tableCreatePO.clickCloseBtn();
+            }
 
-        /**
-         * Data provider for table field validation testCases.
-         */
-        function tableFieldValidationTestCases() {
-            return [
-                {
-                    message: 'with empty table name',
-                    tableFields: [
-                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
-                    ]
-                },
-                {
-                    message: 'with empty required fields',
-                    tableFields: [
-                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
-                        {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
-                    ]
-                },
-                {
-                    message: 'with duplicate table name',
-                    tableFields: [
-                        {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
-                    ]
-                }
-            ];
-        }
-
-        tableFieldValidationTestCases().forEach(function(testCase) {
-            it('Create new table ' + testCase.message, function() {
-
-                //Get the original count of table links in the left nav
-                let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-                //Click on new table button
-                tableCreatePO.clickCreateNewTable();
-
-                //Enter table field values
-                testCase.tableFields.forEach(function(tableField) {
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-                });
-
-                //Verify validation
-                testCase.tableFieldError.forEach(function(tableField) {
-                    tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify create table button is not enabled since there is error in field values
-                    expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
-                });
-
-                //Cancel table dialogue
-                tableCreatePO.clickCancelBtn();
-
-                //Get the new count of table links in the left nav
-                let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-                //Verify the table links NOT increased(ie table not saved)
-                expect(newTableLinksCount).toBe(originalTableLinksCount);
-
-            });
         });
 
         it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
@@ -251,12 +185,12 @@
 
             browser.call(function() {
                 //get the user authentication
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
 
             browser.call(function() {
                 // Load the app in the realm
-                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             });
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page

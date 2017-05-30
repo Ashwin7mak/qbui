@@ -4,7 +4,22 @@
  */
 (function() {
     'use strict';
+    // Import the base page object
+    var e2ePageBase = requirePO('./e2ePageBase');
+
     module.exports = Object.create(e2ePageBase, {
+
+        /**
+         * Method for spinner to dissaper in leftNav
+         */
+        waitUntilSpinnerGoesAwayInLeftNav : {value: function() {
+            //wait until loading screen disappear
+            browser.waitForVisible('.leftNav .loader .spinner', e2eConsts.longWaitTimeMs, true);
+            //wait until report loading screen disappear
+            browser.waitForVisible('.reportContent .loader .spinner', e2eConsts.longWaitTimeMs, true);
+            //Need this to wait for leftNav labels to load
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
 
         // Left Nav caret element
         leftNavCaretUpEl: {
@@ -15,7 +30,7 @@
         // Left nav search element
         leftNavSearchEl: {
             get: function() {
-                return browser.element('.transitionGroup .iconUISturdy-search');
+                return browser.element('.transitionGroup .heading .iconUISturdy-search');
             }
         },
         // Left nav search input box
@@ -84,6 +99,37 @@
                 return browser.element('.leftNav .tablesList .leftNavLabel');
             }
         },
+
+        /**
+         * Method to click on leftNav search
+         */
+        clickLeftNavSearch : {value: function() {
+            this.leftNavSearchEl.waitForVisible();
+            return this.leftNavSearchEl.click();
+        }},
+
+        /**
+         * Method to click on leftNav appLists Carat
+         */
+        clickLeftNavAppListCarat : {value: function() {
+            //Verify if the left nav caret up element is visible
+            this.leftNavCaretUpEl.waitForVisible();
+            //Verify if the left nav caret up element is clickable
+            return this.leftNavCaretUpEl.click();
+        }},
+
+        /**
+         * Verify topLinks in leftNav
+         */
+        verifyTopLinksInLeftNav : {value: function() {
+            browser.element('.topLinks').waitForVisible();
+            //filter table names from leftNav links
+            let results = [];
+            browser.elements('.topLinks .leftNavLabel span').value.map(function(topLink) {
+                results.push(topLink.getAttribute('textContent'));
+            });
+            expect(results).toEqual(['Home', 'Users']);
+        }}
 
     });
 }());
