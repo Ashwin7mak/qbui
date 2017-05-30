@@ -9,7 +9,7 @@ const relationshipBuilder = (state = [], action) => {
     case types.ADD_FIELD: {
         return {
             ...state,
-            newFormFieldId: action.content.newField.FormFieldElement.fieldId
+            newFormFieldId: action.content.field.FormFieldElement.fieldId
         };
     }
 

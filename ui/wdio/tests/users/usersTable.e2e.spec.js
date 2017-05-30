@@ -67,7 +67,7 @@
             UsersTablePage.userStageContent.waitForVisible();
             browser.pause(e2eConsts.shortWaitTimeMs);
             // Verify the app owner name is linked
-            expect(browser.isEnabled('.appOwnerName')).toBeTruthy();
+            expect(browser.isEnabled('.appOwnerName')).toBe(true);
             // Click on the user Stage button to collapse the stage
             UsersTablePage.userStageBtn.click();
             browser.pause(e2eConsts.shortWaitTimeMs);
@@ -109,7 +109,7 @@
          */
         it('Should verify all the users emails are linked', function() {
             // Verify the user emails are linked
-            expect(UsersTablePage.userEmailUlEl.isExisting()).toBeTruthy();
+            expect(UsersTablePage.userEmailUlEl.isExisting()).toBe(true);
         });
     });
 }());

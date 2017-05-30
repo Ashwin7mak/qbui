@@ -8,6 +8,7 @@
     var tableCreatePO = requirePO('tableCreate');
     var formsPO = requirePO('formsPage');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
+    let ReportContentPO = requirePO('reportContent');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
@@ -119,9 +120,9 @@
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify Apply button is enabled
-                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBeTruthy();
+                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBe(true);
                     //Verify Reset button is enabled
-                    expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBeTruthy();
+                    expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
                 });
 
                 //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
@@ -131,7 +132,7 @@
                 expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toContain('Back to app');
 
                 //Verify bck to app link is enabled
-                expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBeTruthy();
+                expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBe(true);
             });
         });
 
@@ -316,17 +317,23 @@
         });
 
         it('Verify that only ADMIN can edit a new table', function() {
-            //get the user authentication
-            RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            browser.call(function() {
+                //get the user authentication
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            });
 
-            // Load the app in the realm
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            browser.call(function() {
+                // Load the app in the realm
+                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            });
 
-            //wait until you see tableLists got loaded
-            browser.element('.tablesList').waitForVisible();
+            //Select table to delete ('Table 1' here) and make sure it lands in reports page
+            tableCreatePO.selectTable('Table 1');
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
 
-            //Verify edit settings button not available for user other than ADMIN
-            expect(browser.isVisible('.iconUISturdy-settings')).toBeFalsy();
+            //Verify settings icon not available for user other than ADMIN
+            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBe(false);
         });
     });
 }());

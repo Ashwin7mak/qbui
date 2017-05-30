@@ -626,7 +626,7 @@ module.exports = function(grunt) {
                     ],
                     users: [
                         './wdio/tests/users/usersTable.e2e.spec.js',
-                        './wdio/tests/users/removeUsers.e2e.spec.js'
+                        './wdio/tests/users/usersRemove.e2e.spec.js'
                     ],
                     global: [
                         './wdio/tests/global/globalTopNav.e2e.spec.js',

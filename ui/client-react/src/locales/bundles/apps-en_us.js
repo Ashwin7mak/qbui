@@ -41,7 +41,7 @@ export default {
             },
             settings: "Settings",
             users: {
-                addUser: "Adding a new user is not available yet",
+                addUser: "Add a new user",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
                 manager: "Application Manager",
@@ -54,8 +54,8 @@ export default {
                 singular: "user",
                 plural: "users",
                 usersRemoved: " users have been removed",
-                userRemoved: " user has been removed"
-
+                userRemoved: " user has been removed",
+                userAdded: "You added"
             }
         },
         appMenu: {
@@ -134,7 +134,8 @@ export default {
         },
         field: {
             search: "Search",
-            searchNoMatch: "Nobody matches"
+            searchNoMatch: "Nobody matches",
+            searchNoMatchAddUser: "No users match what you're looking for"
         },
         grid: {
             no_data: "There is no data to display.",
@@ -291,6 +292,12 @@ export default {
                 clearFacet: "Clear {facet} filter",
                 clearFacetSelection: "Click to clear this filter",
                 filter: "Filter"
+            },
+            notification: {
+                save: {
+                    success: "Report saved",
+                    error: "Error saving report"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -590,7 +597,11 @@ export default {
                 existingFields: 'Add an existing field',
                 newFields:  'Create a new field',
             },
+            reportBuilder: {
+                modify: 'Modify report'
+            },
             formBuilder: {
+                modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
                 newFieldsMenuTitle: 'New',
@@ -643,8 +654,7 @@ export default {
                 addToForm: "Add to form",
                 tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
                 tableChooserHeading: "Where is the record you want to get?"
-            },
-            modify: 'Modify form'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -754,6 +764,11 @@ export default {
             activeHeader: "Active",
             activeYes: "Yes",
             activeNo: "No"
+        },
+        addUserToApp: {
+            title: "Add users to",
+            description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
+            searching: "Searching..."
         }
     }
 };

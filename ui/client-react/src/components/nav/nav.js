@@ -7,7 +7,7 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
-import {enterBuilderMode} from '../../../src/actions/reportActions';
+import {enterBuilderMode, updateReportRedirectRoute} from '../../../src/actions/reportBuilderActions';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -77,7 +77,7 @@ export const Nav = React.createClass({
         };
     },
 
-    navigateToBuilder() {
+    navigateToFormBuilder() {
         /**
          *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
          * a new unit test will need to be added to recordRoute.unit.spec.js
@@ -107,9 +107,17 @@ export const Nav = React.createClass({
         this.props.history.push(link);
     },
 
-    navigateToBuilderReport() {
+    navigateToReportBuilder() {
+        const {appId, tblId} = this.props.match.params;
+        const {rptId} = this.getReportsData();
+
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/report/${rptId}`;
+
+        this.props.updateReportRedirectRoute(CONTEXT.REPORT.NAV, _.get(this.props, 'location.pathname'));
+
         this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
 
+        this.props.history.push(link);
     },
 
     getTopGlobalActions() {
@@ -138,8 +146,8 @@ export const Nav = React.createClass({
                             actions={actions}
                             position={"top"}
                             icon="settings"
-                            navigateToBuilder={this.navigateToBuilder}
-                            navigateToBuilderReport={this.navigateToBuilderReport}
+                            navigateToFormBuilder={this.navigateToFormBuilder}
+                            navigateToReportBuilder={this.navigateToReportBuilder}
                             startTabIndex={4}
                             rptId={this.getReportsData().rptId} /> : null}
                 </GlobalActions>
@@ -492,8 +500,11 @@ export const Nav = React.createClass({
                                 selectedApp: this.getSelectedApp(),
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 selectedUserRows: this.state.apps.selectedUserRows,
+                                realmUsers: this.state.apps.realmUsers,
+                                addUserToAppDialogOpen: this.state.apps.addUserToAppDialogOpen,
                                 scrollingReport: this.state.nav.scrollingReport,
-                                flux: flux
+                                flux: flux,
+                                userRoleIdToAdd: this.state.apps.userRoleIdToAdd,
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
                         }
@@ -574,8 +585,7 @@ const mapStateToProps = (state) => {
         forms: state.forms,
         shell: state.shell,
         record: state.record,
-        report: state.report,
-        reportBuilder: state.reportBuilder
+        report: state.report
     };
 };
 
@@ -602,7 +612,9 @@ const mapDispatchToProps = (dispatch) => {
 
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
 
-        enterBuilderMode: (context) => dispatch(enterBuilderMode(context))
+        enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
+
+        updateReportRedirectRoute: (context, route) => dispatch(updateReportRedirectRoute(context, route))
     };
 };
 

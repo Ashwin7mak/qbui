@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addFieldToForm} from '../../actions/formActions';
 import {draggingLinkToRecord} from '../../actions/relationshipBuilderActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
@@ -19,7 +19,6 @@ import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
 import {getFormByContext, getFormRedirectRoute, getSelectedFormElement} from '../../reducers/forms';
-import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
@@ -29,6 +28,7 @@ import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import AppQbModal from '../qbModal/appQbModal';
+import {CONTEXT} from '../../actions/context';
 
 import './formBuilderContainer.scss';
 
@@ -37,7 +37,6 @@ let formBuilderContainerContent = null;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
-    let fields = state.fields[0];
 
     return {
         currentForm,
@@ -65,7 +64,7 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    addNewFieldToForm,
+    addFieldToForm,
     draggingLinkToRecord
 };
 
@@ -319,7 +318,7 @@ export const FormBuilderContainer = React.createClass({
                                             moveFieldOnForm={this.props.moveFieldOnForm}
                                             updateAnimationState={this.props.updateFormAnimationState}
                                             selectedFormElement={this.props.selectedFormElement}
-                                            addNewFieldToForm={this.props.addNewFieldToForm}
+                                            addFieldToForm={this.props.addFieldToForm}
                                             selectFieldOnForm={this.props.selectFieldOnForm}
                                         />
                                     </Loader>

@@ -12,7 +12,7 @@ import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 import TouchBackend from 'react-dnd-touch-backend';
-import {moveColumn} from '../../../actions/reportActions';
+import {moveColumn} from '../../../actions/reportBuilderActions';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
 
@@ -383,13 +383,15 @@ export const QbGrid = React.createClass({
             // move the sticky cells (1st col) right to their original positions
             let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
-            stickyCells[0].style.left = currentLeftScroll + 'px';
-            stickyCells[0].style.right = 0;
-            stickyCells[0].style.bottom = 0;
+            if (stickyCells.length !== 0) {
+                stickyCells[0].style.left = currentLeftScroll + 'px';
+                stickyCells[0].style.right = 0;
+                stickyCells[0].style.bottom = 0;
 
-            for (let i = 1; i < stickyCells.length; i++) {
-                let translate = "translate(" + currentLeftScroll + "px,0)";
-                stickyCells[i].style.transform = translate;
+                for (let i = 1; i < stickyCells.length; i++) {
+                    let translate = "translate(" + currentLeftScroll + "px,0)";
+                    stickyCells[i].style.transform = translate;
+                }
             }
         }
     },

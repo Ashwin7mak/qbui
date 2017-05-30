@@ -141,5 +141,18 @@
                 return browser.element('.smallHeader .cancelButton');
             }
         },
+        /**
+         * Function to click on topNavToggleHamburgerEl
+         */
+        clickTopNavToggleHamburgerEl: {
+            value: function() {
+                //wait for hamburger in the topNav
+                this.topNavToggleHamburgerEl.waitForVisible();
+
+                //click on the hamburger in the topNav
+                return this.topNavToggleHamburgerEl.click();
+            }
+        },
+
     });
 }());
