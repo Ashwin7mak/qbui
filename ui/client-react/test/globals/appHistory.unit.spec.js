@@ -309,7 +309,7 @@ describe('AppHistory', () => {
             expect(AppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
 
-        it('will save new record pending edits before navigating', () => {
+        it('_saveChanges will save new record pending edits before navigating', () => {
             mockState.recordStore.isPendingEdit = true;
             store.record.records[0].pendEdits.currentEditingRecordId = UNSAVED_RECORD_ID;
             AppHistory.setup(mockStore);
@@ -320,7 +320,7 @@ describe('AppHistory', () => {
             expect(AppHistory._saveChangesForRecord).toHaveBeenCalled();
         });
 
-        it('will save existing record pending edits before navigating', () => {
+        it('_saveChanges will save existing record pending edits before navigating', () => {
             mockState.recordStore.isPendingEdit = true;
             store.record.records[0].pendEdits.currentEditingRecordId = 1;
             AppHistory.setup(mockStore);
@@ -331,7 +331,7 @@ describe('AppHistory', () => {
             expect(AppHistory._saveChangesForRecord).toHaveBeenCalled();
         });
 
-        it('will save form builder if there is a pending edit in the forms store', () => {
+        it('_saveChanges will save form builder if there is a pending edit in the forms store', () => {
             mockState.formsStore.isPendingEdit = true;
 
             goToNewPage();
@@ -340,7 +340,7 @@ describe('AppHistory', () => {
             expect(AppHistory._saveChangesForFormBuilder).toHaveBeenCalled();
         });
 
-        it('will save form builder if there is a pending edit in the fields store', () => {
+        it('_saveChanges will save form builder if there is a pending edit in the fields store', () => {
             mockState.fieldsStore.isPendingEdit = true;
 
             goToNewPage();
@@ -349,7 +349,7 @@ describe('AppHistory', () => {
             expect(AppHistory._saveChangesForFormBuilder).toHaveBeenCalled();
         });
 
-        it('will save report builder if there is a pending edit in the reportBuilder store', () => {
+        it('_saveChanges will save report builder if there is a pending edit in the reportBuilder store', () => {
             mockState.fieldsStore.isPendingEdit = false;
             mockState.formsStore.isPendingEdit = false;
             mockState.recordStore.isPendingEdit = false;
@@ -361,7 +361,7 @@ describe('AppHistory', () => {
             expect(AppHistory._saveChangesForReportBuilder).toHaveBeenCalled();
         });
 
-        it('will save invoke saveReport', (done) => {
+        it('_saveChangesForReportBuilder will save invoke saveReport', (done) => {
             mockState.reportBuilderStore.isPendingEdit = true;
             AppHistory.setup(mockStore, mockStoreFunc);
 
