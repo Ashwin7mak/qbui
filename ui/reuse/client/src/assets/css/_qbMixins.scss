@@ -78,3 +78,18 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+// =============================================================================
+// link text
+// =============================================================================
+// for styling link text
+
+@mixin text-link($text-decoration, $link-normal-color, $link-hover-color, $cursor) {
+    text-decoration: $text-decoration;
+    color: $link-normal-color;
+
+    &:hover {
+        cursor: $cursor;
+        color: $link-hover-color;
+    }
+}
