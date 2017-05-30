@@ -9,10 +9,9 @@
     //Load the page Objects
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let RequestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
-    let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
+    let leftNavPO = requirePO('leftNav');
 
     describe('Tables - delete table tests: ', function() {
         let realmName;
@@ -36,14 +35,6 @@
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
-            }).then(function() {
-                // Create a user
-                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
-                    userId = JSON.parse(userResponse.body).id;
-                });
-            }).then(function() {
-                // Add user to participant appRole
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -57,7 +48,9 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
 
@@ -122,6 +115,10 @@
         deletePromtTextFieldTestCases().forEach(function(testCase) {
 
             it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
+                //Load the app
+                browser.call(function() {
+                    return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                });
 
                 //Select table to delete ('Table 1' here) and make sure it lands in reports page
                 tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
@@ -141,7 +138,10 @@
                 tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
                 //Make sure delete table button is disabled
-                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(false);
+                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
+
+                //Click on don't Delete finally to make the dialogue to dissapear
+                tableCreatePO.clickDontDeleteTableButton();
             });
         });
 
@@ -177,26 +177,6 @@
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
             //Verify the table links count decreased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
-        });
-
-        it('Verify that only ADMIN can delete a Table', function() {
-            browser.call(function() {
-                //get the user authentication
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-            });
-
-            browser.call(function() {
-                // Load the app in the realm
-                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            });
-
-            //Select table to delete ('Table 1' here) and make sure it lands in reports page
-            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
-
-            //Verify settings icon not available for user other than ADMIN
-            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBe(false);
         });
 
     });

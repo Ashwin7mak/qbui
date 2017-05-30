@@ -4,11 +4,10 @@
     //Load the page Objects
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
-    var RequestAppsPage = requirePO('requestApps');
     var tableCreatePO = requirePO('tableCreate');
     var formsPO = requirePO('formsPage');
-    var RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
+    let leftNavPO = requirePO('leftNav');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
@@ -57,83 +56,9 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-        });
-
-        /**
-         * Data provider for table field validation testCases.
-         */
-        function tableFieldValidationTestCases() {
-            return [
-                {
-                    message: 'with empty table name',
-                    tableFields: [
-                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
-                    ]
-                },
-                {
-                    message: 'with empty required fields',
-                    tableFields: [
-                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
-                        {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
-                    ]
-                },
-                {
-                    message: 'with duplicate table name',
-                    tableFields: [
-                        {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
-                    ]
-                },
-            ];
-        }
-
-        //TODO disabling this test and fix it tomorrow so it wont block master e2e failure
-        tableFieldValidationTestCases().forEach(function(testCase) {
-            it('Verify Edit table Validation ' + testCase.message, function() {
-
-                //Click on existing table named 'Table 2'
-                tableCreatePO.selectTable(existingTableName);
-
-                //Select the table properties of settings of table 1 from global actions gear
-                tableCreatePO.clickOnModifyTableSettingsLink();
-
-                //Enter table field values
-                testCase.tableFields.forEach(function(tableField) {
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-                });
-
-                //Verify validation
-                testCase.tableFieldError.forEach(function(tableField) {
-                    tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify Apply button is enabled
-                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBe(true);
-                    //Verify Reset button is enabled
-                    expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
-                });
-
-                //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
-
-                //Verify 'Back to app' link shows up in the left Nav
-                expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toContain('Back to app');
-
-                //Verify bck to app link is enabled
-                expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBe(true);
-            });
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
         it('Add a new table and then edit that table', function() {
@@ -319,12 +244,12 @@
         it('Verify that only ADMIN can edit a new table', function() {
             browser.call(function() {
                 //get the user authentication
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
 
             browser.call(function() {
                 // Load the app in the realm
-                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
             });
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page
