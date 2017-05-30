@@ -249,7 +249,7 @@ let AppsStore = Fluxxor.createStore({
         this.appUsersUnfiltered = data.appUsers[1];
         this.emit('change');
 
-        NotificationManager.success(data.msg);
+        // NotificationManager.success(data.msg);
     },
 
     onGetAppUserFailed() {

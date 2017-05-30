@@ -77,6 +77,7 @@ class MultiStepDialog extends React.Component {
         const showPrevious = this.props.pageIndex > 0;
         const showNext = this.props.pageIndex < numPages - 1;
         const showFinished = this.props.pageIndex === numPages - 1;
+        const showFinishedText = this.props.showFinishedText;
         return (
             <Modal.Footer>
                 <div className="buttons">
@@ -91,13 +92,20 @@ class MultiStepDialog extends React.Component {
                         <Button className="previousButton" onClick={this.previousClicked}><I18nMessage message="nav.previous"/></Button>}
                     {showNext &&
                         <Button className="nextButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}><I18nMessage message="nav.next"/></Button>}
-                    {showFinished &&
+                    {showFinished && !showFinishedText &&
                         <Button className="finishedButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}>
                             {(this.props.finishedTooltip && !this.props.canProceed) ?
                             <Tooltip plainMessage={this.props.finishedTooltip} placement="top">
                                 {this.props.finishedButtonLabel}
                             </Tooltip> : this.props.finishedButtonLabel}
                         </Button>}
+                    {showFinishedText &&
+                        <span className="finishedText" onClick={this.finishClicked}>
+                            {(this.props.finishedTooltip && !this.props.canProceed) ?
+                            <Tooltip plainMessage={this.props.finishedTooltip} placement="top">
+                                {this.props.finishedButtonLabel}
+                            </Tooltip> : this.props.finishedButtonLabel}
+                        </span>}
                 </div>
             </Modal.Footer>
         );

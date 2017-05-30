@@ -8,6 +8,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import appsModel from '../models/appsModel';
 import Locale from '../../../reuse/client/src/locales/locale';
+import * as types from '../actions/types';
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -208,4 +209,11 @@ let appsActions = {
     },
 };
 
+// using redux
+export const toggleAddToAppSuccessDialog = (status, email) => ({
+    type: types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, status, email
+});
+
 export default appsActions;
+
+
