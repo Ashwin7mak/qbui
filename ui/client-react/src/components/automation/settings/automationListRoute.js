@@ -36,9 +36,13 @@ export class AutomationListRoute extends Component {
     }
 
     componentDidMount() {
-        if (this.props.app) {
-            this.props.loadAutomations(CONTEXT.AUTOMATION.GRID, this.props.app.id);
+        if (this.getAppId()) {
+            this.props.loadAutomations(CONTEXT.AUTOMATION.GRID, this.getAppId());
         }
+    }
+
+    getAppId() {
+        return this.props.app || this.props.match.params.appId;
     }
 
     renderAutomations() {
