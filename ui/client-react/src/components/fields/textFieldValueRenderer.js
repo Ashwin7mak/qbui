@@ -54,7 +54,7 @@ const TextFieldValueRenderer = React.createClass({
     },
 
     /**
-     * return the div displaying the link to a parent
+     * return the element with link to a parent
      * @param classes
      * @param htmlAllowed
      * @return {XML}
