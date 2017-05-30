@@ -14,13 +14,19 @@ const params = {
 };
 const defaultProps = {
     getApp: () => {},
+    getApps: () => {},
     getSelectedAppId: () => {return params.appId;},
-    toggleNav: () => {},
+    loadApp: (appId) => {},
+    loadApps: () => {},
     match: {
         params: params
     },
     isNavCollapsed: false,
-    isOpen: true
+    isOpen: true,
+    flux: {},
+    location: {
+        pathname: '/some/report/path'
+    }
 };
 let props = {};
 
@@ -39,26 +45,64 @@ var MockTableReadyDialog = React.createClass({
     }
 });
 
+function setSpyOn() {
+    spyOn(props, 'getApp').and.callThrough();
+    spyOn(props, 'loadApp').and.callThrough();
+    spyOn(props, 'loadApps').and.callThrough();
+    spyOn(props, 'getSelectedAppId').and.callThrough();
+}
+
+function resetSpyOn() {
+    props.getApp.calls.reset();
+    props.getSelectedAppId.calls.reset();
+    props.loadApp.calls.reset();
+    props.loadApps.calls.reset();
+}
+
 describe('BuilderWrapper tests', () => {
     'use strict';
     let component;
 
     beforeEach(() => {
-        props = _.clone(defaultProps);
-        spyOn(props, 'getApp').and.callThrough();
-        spyOn(props, 'getSelectedAppId').and.callThrough();
         BuilderWrapperRewireAPI.__Rewire__('GlobalActions', MockGlobalActions);
         BuilderWrapperRewireAPI.__Rewire__('TableReadyDialog', MockTableReadyDialog);
     });
 
     afterEach(() => {
-        props.getApp.calls.reset();
-        props.getSelectedAppId.calls.reset();
+        resetSpyOn();
         BuilderWrapperRewireAPI.__ResetDependency__('GlobalActions');
         BuilderWrapperRewireAPI.__ResetDependency__('TableReadyDialog');
     });
 
-    it('test render of component with selected app', () => {
+    it('test render of report component with selected app', () => {
+        props = _.clone(defaultProps);
+        setSpyOn();
+
+        component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
+        expect(component).toBeDefined();
+        expect(props.getSelectedAppId).toHaveBeenCalled();
+        expect(props.getApp).toHaveBeenCalled();
+        expect(props.loadApps).toHaveBeenCalled();
+    });
+
+    it('test render of report component with app to get loaded', () => {
+        defaultProps.getApp = () => {return params.appId;};
+        defaultProps.getSelectedAppId = () => {return null;};
+        props = _.clone(defaultProps);
+        setSpyOn();
+
+        component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
+        expect(component).toBeDefined();
+        expect(props.getSelectedAppId).toHaveBeenCalled();
+        expect(props.loadApp).toHaveBeenCalled();
+        expect(props.loadApps).not.toHaveBeenCalled();
+    });
+
+    it('test render of form component with selected app', () => {
+        props.location.pathname = '/some/form/path';
+        props = _.clone(defaultProps);
+        setSpyOn();
+
         component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
         expect(component).toBeDefined();
         expect(props.getSelectedAppId).toHaveBeenCalled();
@@ -66,6 +110,9 @@ describe('BuilderWrapper tests', () => {
     });
 
     it('test render of child routes', () => {
+        props = _.clone(defaultProps);
+        setSpyOn();
+
         const ChildComponent = React.createClass({
             render() {
                 return <div className="childComponentClass" />;
