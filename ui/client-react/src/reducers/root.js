@@ -19,6 +19,7 @@ import commonNavReducer from '../../../reuse/client/src/components/sideNavs/comm
 import facets from '../../../reuse/client/src/components/facets/facetMenuReducer';
 import automation from './automation';
 import appRoles from './appRoles';
+import users from './users';
 
 // combine individual reducers into a single root reducer (qbui)
 export default combineReducers({
@@ -40,5 +41,6 @@ export default combineReducers({
     embeddedReports,
     tableProperties,
     builderNav: commonNavReducer('builder'),
-    facets
+    facets,
+    users
 });

@@ -504,11 +504,10 @@ export const Nav = React.createClass({
                                 selectedApp: selectedApp,
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 selectedUserRows: this.state.apps.selectedUserRows,
-                                realmUsers: this.state.apps.realmUsers,
                                 addUserToAppDialogOpen: this.state.apps.addUserToAppDialogOpen,
                                 scrollingReport: this.state.nav.scrollingReport,
                                 flux: flux,
-                                userRoleIdToAdd: this.state.apps.userRoleIdToAdd,
+                                userRoleIdToAdd: this.state.apps.userRoleIdToAdd
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
                         }
@@ -532,10 +531,6 @@ export const Nav = React.createClass({
      * new table was created, ensure it is displayed available in the UI
      */
     tableCreated(tblId) {
-        //const flux = this.getFlux();
-
-        //flux.actions.loadApps();
-
         // TODO: ideally, we're  just adding the new table to the app
         this.props.loadApps();
 
@@ -548,7 +543,6 @@ export const Nav = React.createClass({
 
             window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
         }
-
 
         this.props.showTableReadyDialog();
     },

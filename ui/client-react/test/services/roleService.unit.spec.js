@@ -45,13 +45,6 @@ describe('Role Service functions', () => {
         expect(BaseService.prototype.delete).toHaveBeenCalledWith(url, Object({data: userId}));
     });
 
-    it('test searchRealmUsers function', () => {
-        let searchTerm = 'la';
-        let url = StringUtils.format(roleService.API.GET_REALM_USERS, [searchTerm]);
-        roleService.searchRealmUsers(searchTerm);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
-    });
-
     it('test assignUserToApp function', () => {
         let appId = '123';
         let roleId = 10;

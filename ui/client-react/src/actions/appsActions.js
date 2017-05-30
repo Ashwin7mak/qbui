@@ -88,19 +88,19 @@ let appsActions = {
     //    });
     //},
 
-    loadAppOwner(userId) {
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            let userService = new UserService();
-            userService.getUser(userId).then(response => {
-                this.dispatch(actions.LOAD_APP_OWNER_SUCCESS, response.data);
-                resolve();
-            }, () => {
-                this.dispatch(actions.LOAD_APP_OWNER_FAILED);
-                reject();
-            });
-        });
-    },
+    //loadAppOwner(userId) {
+    //    //  promise is returned in support of unit testing only
+    //    return new Promise((resolve, reject) => {
+    //        let userService = new UserService();
+    //        userService.getUser(userId).then(response => {
+    //            this.dispatch(actions.LOAD_APP_OWNER_SUCCESS, response.data);
+    //            resolve();
+    //        }, () => {
+    //            this.dispatch(actions.LOAD_APP_OWNER_FAILED);
+    //            reject();
+    //        });
+    //    });
+    //},
 
     //selectTableId(tblId) {
     //    this.dispatch(actions.SELECT_TABLE, tblId);
@@ -140,18 +140,18 @@ let appsActions = {
 	 * @param searchTerm
      * @returns [] an array of users
 	 */
-    searchRealmUsers(searchTerm) {
-        return new Promise((resolve, reject) => {
-            let roleService = new RoleService();
-            roleService.searchRealmUsers(searchTerm).then(response => {
-                this.dispatch(actions.SEARCH_ALL_USERS_SUCCESS, response.data);
-                resolve();
-            }, () => {
-                this.dispatch(actions.SEARCH_ALL_USERS_FAILED);
-                reject();
-            });
-        });
-    },
+    //searchRealmUsers(searchTerm) {
+    //    return new Promise((resolve, reject) => {
+    //        let roleService = new RoleService();
+    //        roleService.searchRealmUsers(searchTerm).then(response => {
+    //            this.dispatch(actions.SEARCH_ALL_USERS_SUCCESS, response.data);
+    //            resolve();
+    //        }, () => {
+    //            this.dispatch(actions.SEARCH_ALL_USERS_FAILED);
+    //            reject();
+    //        });
+    //    });
+    //},
 
 	/**
      * this function should be utilized to dispatch actions for updates made to App users

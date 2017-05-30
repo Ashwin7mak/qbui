@@ -37,9 +37,6 @@ describe('Apps Actions functions with Tables', () => {
         unassignUsersFromRole(appId, roleId, userIds) {
             return Promise.resolve({data: appRoleResponeData});
         }
-        searchRealmUsers(searchTerm) {
-            return Promise.resolve({data: realmUsersResponeData});
-        }
         assignUserToApp(appId, roleId, userIds) {
             return Promise.resolve({});
         }
@@ -52,13 +49,13 @@ describe('Apps Actions functions with Tables', () => {
         }
     }
 
-    class mockUserService {
-        constructor() { }
-        getUser(id) {
-            return Promise.resolve({data: responseData});
-        }
-    }
-
+    //class mockUserService {
+    //    constructor() { }
+    //    getUser(id) {
+    //        return Promise.resolve({data: responseData});
+    //    }
+    //}
+    //
     class mockUserServiceFailure {
         constructor() { }
         getUser(id) {
@@ -73,17 +70,16 @@ describe('Apps Actions functions with Tables', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockRoleService.prototype, 'unassignUsersFromRole').and.callThrough();
-        spyOn(mockUserService.prototype, 'getUser').and.callThrough();
-        spyOn(mockRoleService.prototype, 'searchRealmUsers').and.callThrough();
+        //spyOn(mockUserService.prototype, 'getUser').and.callThrough();
         spyOn(mockRoleService.prototype, 'assignUserToApp').and.callThrough();
         appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
-        appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
+        //appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
     });
 
     afterEach(() => {
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
-        appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
+        //appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
     });
 
     var unassignUsersTests = [
@@ -126,49 +122,49 @@ describe('Apps Actions functions with Tables', () => {
         });
     });
 
-    var loadAppOwnerTests = [
-        {name:'load app owner', userId: 187, cached: false}
-    ];
-    loadAppOwnerTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.loadAppOwner(test.userId).then(
-                () => {
-                    if (test.cached === true) {
-                        expect(mockUserService.prototype.getUser).not.toHaveBeenCalled();
-                    } else {
-                        expect(mockUserService.prototype.getUser).toHaveBeenCalledWith(test.userId);
-                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_SUCCESS, responseData]);
-                    }
-                    done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
-        });
-    });
+    //var loadAppOwnerTests = [
+    //    {name:'load app owner', userId: 187, cached: false}
+    //];
+    //loadAppOwnerTests.forEach(function(test) {
+    //    it(test.name, function(done) {
+    //        flux.actions.loadAppOwner(test.userId).then(
+    //            () => {
+    //                if (test.cached === true) {
+    //                    expect(mockUserService.prototype.getUser).not.toHaveBeenCalled();
+    //                } else {
+    //                    expect(mockUserService.prototype.getUser).toHaveBeenCalledWith(test.userId);
+    //                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+    //                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_SUCCESS, responseData]);
+    //                }
+    //                done();
+    //            },
+    //            () => {
+    //                expect(false).toBe(true);
+    //                done();
+    //            }
+    //        );
+    //    });
+    //});
 
-    var loadAppOwnerNegativeTests = [
-        {name:'fail load app owner', userId: 187, cached: false}
-    ];
-    loadAppOwnerNegativeTests.forEach(function(test) {
-        it(test.name, function(done) {
-            appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
-            flux.actions.loadAppOwner(test.userId).then(
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                },
-                () => {
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_FAILED]);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    done();
-                }
-            );
-        });
-    });
+    //var loadAppOwnerNegativeTests = [
+    //    {name:'fail load app owner', userId: 187, cached: false}
+    //];
+    //loadAppOwnerNegativeTests.forEach(function(test) {
+    //    it(test.name, function(done) {
+    //        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+    //        flux.actions.loadAppOwner(test.userId).then(
+    //            () => {
+    //                expect(false).toBe(true);
+    //                done();
+    //            },
+    //            () => {
+    //                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_FAILED]);
+    //                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+    //                done();
+    //            }
+    //        );
+    //    });
+    //});
 
     it("Test selectUsersRows", function(done) {
         var test = {selectedDetails: 1};
@@ -179,21 +175,21 @@ describe('Apps Actions functions with Tables', () => {
         done();
     });
 
-    const searchRealmUsers = [{name:'search for Realm users based on search term', searchTerm: 'la'}];
-    searchRealmUsers.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.searchRealmUsers(test.searchTerm).then(() => {
-                expect(mockRoleService.prototype.searchRealmUsers).toHaveBeenCalledWith(test.searchTerm);
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SEARCH_ALL_USERS_SUCCESS, realmUsersResponeData]);
-                done();
-            }, () => {
-                expect(false).toBe(true);
-                done();
-            }
-			);
-        });
-    });
+    //const searchRealmUsers = [{name:'search for Realm users based on search term', searchTerm: 'la'}];
+    //searchRealmUsers.forEach(function(test) {
+    //    it(test.name, function(done) {
+    //        flux.actions.searchRealmUsers(test.searchTerm).then(() => {
+    //            expect(mockRoleService.prototype.searchRealmUsers).toHaveBeenCalledWith(test.searchTerm);
+    //            expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+    //            expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SEARCH_ALL_USERS_SUCCESS, realmUsersResponeData]);
+    //            done();
+    //        }, () => {
+    //            expect(false).toBe(true);
+    //            done();
+    //        }
+		//	);
+    //    });
+    //});
 
     //const getAppUsers = [{name:'gets App Users', appId: 123}];
     //getAppUsers.forEach(function(test) {

@@ -25,7 +25,7 @@ describe('AppUsersRoute functions', () => {
             searchRealmUsers: function() {return;},
             openAddUserDialog: function() {return;},
             setUserRoleToAdd: function() {return;},
-            assignUserToApp: function() {return;},
+            assignUserToApp: function() {return;}
         }
     };
 

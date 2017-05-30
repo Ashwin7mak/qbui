@@ -13,7 +13,7 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         //this.apps = null;
         this.appUsers = [];
-        this.realmUsers = [];
+        //this.realmUsers = [];
         this.appUsersUnfiltered = {};
         this.appOwner = {};
         // Default is true because the apps must load before the website is usable
@@ -50,7 +50,7 @@ let AppsStore = Fluxxor.createStore({
             actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess,
 
             actions.LOAD_ALL_USERS, this.onLoadAllUsers,
-            actions.SEARCH_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
+            //actions.SEARCH_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
 
             actions.ADD_USER, this.onAddUser,
             actions.SET_USER_ROLE_TO_ADD_TO_APP, this.onSetUserRoleToAdd,
@@ -201,10 +201,10 @@ let AppsStore = Fluxxor.createStore({
     onLoadAllUsers() {
         this.emit('change');
     },
-    onLoadAllUsersSuccess(data) {
-        this.realmUsers = data;
-        this.emit('change');
-    },
+    //onLoadAllUsersSuccess(data) {
+    //    this.realmUsers = data;
+    //    this.emit('change');
+    //},
 
     onAddUser() {
         this.loading = true;
@@ -277,7 +277,7 @@ let AppsStore = Fluxxor.createStore({
             //loading: this.loading,
             //error: this.error,
             selectedUserRows:this.selectedUserRows,
-            realmUsers: this.realmUsers,
+            //realmUsers: this.realmUsers,
             addUserToAppDialogOpen: this.addUserToAppDialogOpen,
             userRoleIdToAdd: this.userRoleIdToAdd
         };

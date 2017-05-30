@@ -125,6 +125,10 @@ export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
 //  ******** search actions ********
 export const SEARCH_INPUT = 'SEARCH_INPUT';
 
+//  ******** user actions **********
+export const SEARCH_USERS_SUCCESS = 'SEARCH_USERS_SUCCESS';
+export const SEARCH_USERS_FAIL = 'SEARCH_USERS_FAIL';
+
 // **** feature switches ****
 export const SET_FEATURE_SWITCH_STATES = 'SET_FEATURE_SWITCH_STATES';
 

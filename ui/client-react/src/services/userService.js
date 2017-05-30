@@ -9,7 +9,8 @@ class UserService extends BaseService {
         //  User api endpoints
         this.API = {
             GET_REQ_USER : `${constants.BASE_URL.QBUI}/${constants.USERS}/${constants.REQUSER}`,
-            GET_USER : `${constants.BASE_URL.PROXY}/${constants.USERS}/{0}`
+            GET_USER : `${constants.BASE_URL.PROXY}/${constants.USERS}/{0}`,
+            SEARCH_USERS : `${constants.BASE_URL.PROXY}/${constants.USERS}/${constants.SEARCH}/?value={0}`
         };
     }
 
@@ -26,6 +27,17 @@ class UserService extends BaseService {
      */
     getUser(userId) {
         let url = super.constructUrl(this.API.GET_USER, [userId]);
+        return super.get(url);
+    }
+
+    /**
+     * Return list of users based on the search term
+     * =
+     * @param searchTerm
+     * @returns {*}
+     */
+    searchUsers(searchTerm) {
+        let url = super.constructUrl(this.API.SEARCH_USERS, [searchTerm]);
         return super.get(url);
     }
 }

@@ -11,10 +11,11 @@ import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import UserActions from '../../../actions/userActions';
 import {connect} from 'react-redux';
-import {loadAppOwner} from '../../../../actions/userActions';
+import {loadAppOwner, searchUsers} from '../../../../actions/userActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
 import {getSelectedAppId, getApp, getAppOwner} from '../../../../reducers/app';
+import {getSearchedUsers} from '../../../../reducers/users';
 import './appUsersRoute.scss';
 
 export const AppUsersRoute = React.createClass({
@@ -26,7 +27,7 @@ export const AppUsersRoute = React.createClass({
     componentDidMount() {
         this.props.loadAppRoles(this.props.match.params.appId);
         this.props.loadAppOwner(this.props.appId, this.props.selectedApp.ownerId);
-        this.props.flux.actions.searchRealmUsers();
+        this.props.searchUsers();
     },
 
     componentWillReceiveProps(props) {
@@ -171,7 +172,7 @@ export const AppUsersRoute = React.createClass({
                                           appOwner={this.props.appOwner}/>
                     </Stage>
                 <AddUserDialog realmUsers={this.props.realmUsers}
-                               searchUsers={this.props.flux.actions.searchRealmUsers}
+                               searchUsers={this.props.searchUsers}
                                appRoles={this.props.appRoles}
                                assignUserToApp={this.assignUserToApp}
                                setUserRoleToAdd={this.setUserRoleToAdd}
@@ -208,14 +209,16 @@ const mapStateToProps = (state, ownProps) => {
         appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
         appId: selectedAppId,
         selectedApp: getApp(state.app, selectedAppId),
-        appOwner: getAppOwner(state.app)
+        appOwner: getAppOwner(state.app),
+        realmUsers: getSearchedUsers(state.users)
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));},
-        loadAppOwner: (appId, userId) => {dispatch(loadAppOwner(appId, userId));}
+        loadAppOwner: (appId, userId) => {dispatch(loadAppOwner(appId, userId));},
+        searchUsers: (searchTerm) => {dispatch(searchUsers(searchTerm));}
     };
 };
 
