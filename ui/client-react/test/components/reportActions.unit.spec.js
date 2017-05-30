@@ -10,7 +10,7 @@ const mockReportData = {
     data: {
         keyField: {name: 'Record ID#'},
         records: [
-            {'Record ID#': {id: testRecordId, value: testRecordId}}
+            {'Record ID#': {value: testRecordId}}
         ]
     },
     selectedRows: [testRecordId]
