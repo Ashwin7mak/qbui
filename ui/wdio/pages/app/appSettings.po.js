@@ -5,7 +5,9 @@
  */
 class appSettings {
     get settingsWindow() {
-        return browser.element('.configMenu');
+        let selector = '.configMenu';
+        browser.waitForVisible(selector);
+        return browser.element(selector);
     }
 
     get automationSettingsBtn() {
