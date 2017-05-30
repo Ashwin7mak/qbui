@@ -34,15 +34,20 @@
         });
 
         it('should contains menu item that leads to automations settings', function() {
+            //navigate to Application main page
             e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
 
+            //validate the 'Settings' button is visible
             expect(appToolbar.appSettingsBtn.isVisible()).toBe(true);
 
+            //click 'Settings' button and validate that the 'Automation' item is available on the setting list
             appToolbar.appSettingsBtn.click();
             expect(appSettingsList.automationSettingsBtn.isVisible()).toBe(true);
 
+            //click 'Automations' button on settings list
             appSettingsList.automationSettingsBtn.click();
 
+            //verify that 'Automations button leads to table of automations 
             expect(automationSettings.pageTitle.getText()).toBe('Automations');
             expect(automationSettings.automationsTable.isVisible).toBe(true);
         });

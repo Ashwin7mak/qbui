@@ -62,12 +62,15 @@
         });
 
         it('should contain a list of only EMAIL automations for application', function() {
+            //navigate to Automations list in Application setting through 'Application Settings -> Automations' menu
             e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
             appToolbar.appSettingsBtn.click();
             appSettingsList.automationSettingsBtn.click();
 
+            //validate header text
             expect(automationSettings.automationsTable.header.cells[0]).toBe('Name');
 
+            //get the list of automations from table
             let counter = 0;
             let actualFlows = [];
             for (let row of automationSettings.automationsTable.rows) {
@@ -75,6 +78,8 @@
                 counter++;
             }
 
+            //verify that the list of automation in table is equal to the list of EMAIL automations that were created.
+            //currently it's only EMAIL automations that will be showed to user
             let isFlowsListEqual = (emailFlowNames.length === actualFlows.length) && emailFlowNames.every(function(element) {
                 return actualFlows.includes(element);
             });
