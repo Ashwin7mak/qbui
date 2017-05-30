@@ -25,23 +25,27 @@ describe('GetLeftNavLinks', () => {
 
     it("should retrieve the correct links for Account Admin for either AccountURL or Enterprise Realm", ()=> {
         // AccountURL Realm
-        assertCorrectLink(GetLeftNavLinks(true, false, true), AccountAdminLinkNames);
+        assertCorrectLink(GetLeftNavLinks(true, false, true, false), AccountAdminLinkNames);
         // Enterprise Realm
-        assertCorrectLink(GetLeftNavLinks(true, false, false), AccountAdminLinkNames);
+        assertCorrectLink(GetLeftNavLinks(true, false, false, false), AccountAdminLinkNames);
     });
 
     it("should retrieve the correct links for Realm Admin in an Enterprise Realm", ()=> {
-        assertCorrectLink(GetLeftNavLinks(false, true, false), RealmAdminLinkNames);
+        assertCorrectLink(GetLeftNavLinks(false, true, false, false), RealmAdminLinkNames);
     });
 
-    it("should retrieve the all links for Account Admin and Realm Admin in Enterprise Realm", ()=> {
-        assertCorrectLink(GetLeftNavLinks(true, true, false), AllLinkNames);
+    it("should retrieve all links for Account Admin and Realm Admin in Enterprise Realm", ()=> {
+        assertCorrectLink(GetLeftNavLinks(true, true, false, false), AllLinkNames);
+    });
+
+    it("should retrieve links for a CSR", () => {
+        assertCorrectLink(GetLeftNavLinks(false, false, false, true), AllLinkNames);
     });
 
     // Weird Edge case: If you downgrade from an Enterprise Realm to a
     // AccountURL realm, user may still be a Realm Admin
     it("should retrieve the correct links for Account Admin and Realm Admin in AccountURL Realm", ()=> {
-        assertCorrectLink(GetLeftNavLinks(true, true, true), AccountAdminLinkNames);
+        assertCorrectLink(GetLeftNavLinks(true, true, true, false), AccountAdminLinkNames);
     });
 
     // As of right now all links except 'Manage Users' should be disabled
