@@ -1,7 +1,9 @@
+@import "../../../../reuse/client/src/assets/css/qbVariables";
+
 //Keeps the height of the account users page to 100% so that
 // the internal grid scrolls and the grid headers are sticky
 .accountUsersMain {
-    height: 100%;
+    height: calc(100% - #{$top-nav-height} - 1px);
 
     > .loadedContent {
         height: 100%;

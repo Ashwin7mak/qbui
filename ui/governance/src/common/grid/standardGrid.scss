@@ -1,11 +1,9 @@
-@import '../../../../reuse/client/src/assets/css/qbVariables';
-
 .gridWrapper {
     display: flex;
     flex:1 1 auto;
     flex-direction: column;
     position: relative;
-    height: 100%;
+    height: calc(100% - 195px);
     min-height: 0;
     margin-left: 10px;
     margin-right:10px;
