@@ -85,7 +85,7 @@
 // =============================================================================
 // for styling link text
 
-@mixin text-link($text-decoration: $link-hover-decoration, $link: $link-color, $link_hover: $link-hover-color, $cursor: $cursor-pointer) {
+@mixin text-link($link: $link-color, $link_hover: $link-hover-color,$text-decoration: $link-hover-decoration, $cursor: $cursor-pointer) {
   color: $link;
 
     &:hover {
