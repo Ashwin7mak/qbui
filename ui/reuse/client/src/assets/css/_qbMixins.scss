@@ -1,3 +1,4 @@
+@import 'customVariables';
 //from https://gist.github.com/jonathantneal/d0460e5c2d5d7f9bc5e6
 // =============================================================================
 // String Replace
@@ -84,11 +85,11 @@
 // =============================================================================
 // for styling link text
 
-@mixin text-link($text-decoration, $link-normal-color, $link-hover-color, $cursor) {
-    text-decoration: $text-decoration;
-    color: $link-normal-color;
+@mixin text-link($text-decoration: $link-hover-decoration, $link: $link-color, $link_hover: $link-hover-color, $cursor: $cursor-pointer) {
+  color: $link;
 
     &:hover {
+      text-decoration: $text-decoration;
         cursor: $cursor;
         color: $link-hover-color;
     }
