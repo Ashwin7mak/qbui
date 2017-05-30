@@ -154,15 +154,15 @@
 
         it('should update a table with no table properties successfully after first creating table properties', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-            recordBase.createApp(appWithNoFlags, false).then(function(appResponse) {
-                let appWithTablesWithoutProps = JSON.parse(appResponse.body);
-                let tableId = appWithTablesWithoutProps.tables[0].id;
-                let tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(appWithTablesWithoutProps.id, tableId, true);
+            recordBase.createAppWithoutTableProps(appWithNoFlags, true).then(function(appResponse) {
+                let appWithoutTableProps = JSON.parse(appResponse.body);
+                let tableId = appWithoutTableProps.tables[0].id;
+                let tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(appWithoutTableProps.id, tableId, true);
                 const payload = {tableNoun: "update test table noun"};
                 recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
                     (response) => {
                         assert.equal(response.statusCode, 200, "Unexpected HTTP response code received during update table call to EE");
-                        let tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appWithTablesWithoutProps.id, tableId);
+                        let tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appWithoutTableProps.id, tableId);
                         recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET).then(
                             (eeResponse) => {
                                 let tableProps = JSON.parse(eeResponse.body);
