@@ -53,13 +53,24 @@ describe('FieldToken', () => {
     });
 
     it('displays the icon in a dragging state', () => {
-        component = shallow(<FieldToken isDragging={true} />);
+        component = shallow(<FieldToken isDragging={true}
+                                        selectedFormElement={{id: 13}}
+                                        containingElement={{FormFieldElement: {id: 13}}}/>);
 
         expect(component.find('.fieldTokenDragging')).toBePresent();
     });
 
     it('displays the token in a non-dragging state for use in menus (default)', () => {
         component = shallow(<FieldToken isDragging={false} />);
+
+        expect(component.find('.fieldTokenDragging')).not.toBePresent();
+        expect(component.find('.fieldTokenCollapsed')).not.toBePresent();
+    });
+
+    it('displays the token in a non-dragging state when ids do not match', () => {
+        component = shallow(<FieldToken isDragging={true}
+                                        selectedFormElement={{id: 14}}
+                                        containingElement={{FormFieldElement: {id: 13}}}/>);
 
         expect(component.find('.fieldTokenDragging')).not.toBePresent();
         expect(component.find('.fieldTokenCollapsed')).not.toBePresent();

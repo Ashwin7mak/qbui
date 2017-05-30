@@ -26,7 +26,15 @@ const TextFieldValueRenderer = React.createClass({
         /**
          * text field attributes
          */
-        attributes: React.PropTypes.object
+        attributes: React.PropTypes.object,
+
+        goToParent: React.PropTypes.func, //handles drill down to parent
+
+        masterTableId: React.PropTypes.string,
+
+        masterAppId: React.PropTypes.string,
+
+        masterFieldId: React.PropTypes.number
 
     },
 
@@ -36,6 +44,29 @@ const TextFieldValueRenderer = React.createClass({
             classes: null,
             attributes: null
         };
+    },
+
+    /**
+     * call the method to open a drawer
+     */
+    handleClick() {
+        this.props.goToParent(this.props.masterAppId, this.props.masterTableId, this.props.masterFieldId, this.props.value);
+    },
+
+    /**
+     * return the div displaying the link to a parent
+     * @param classes
+     * @param htmlAllowed
+     * @return {XML}
+     */
+    getParentLink(classes, htmlAllowed) {
+        classes += ' textLink';
+        if (htmlAllowed) {
+            return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.value}}
+                         onClick={this.handleClick}/>;
+        } else {
+            return <span className={classes} onClick={this.handleClick}>{_.unescape(this.props.value)}</span>;
+        }
     },
 
     /**
@@ -61,9 +92,15 @@ const TextFieldValueRenderer = React.createClass({
         }
 
         if (this.props.attributes && this.props.attributes.htmlAllowed) {
+            if (this.props.goToParent) {
+                return this.getParentLink(classes, true);
+            }
             return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.value}} />;
         } else {
-             //react will encode
+            //react will encode
+            if (this.props.goToParent) {
+                return this.getParentLink(classes, false);
+            }
             return <div className={classes}>{_.unescape(this.props.value)}</div>;
         }
     }

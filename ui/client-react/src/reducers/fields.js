@@ -63,9 +63,15 @@ const fieldsStore = (state = [], action) => {
     }
 
     case types.ADD_FIELD: {
-        let newField = _.cloneDeep(action.content.newField);
+        // New fields have a string id so we can detect a new vs existing field by checking if the id is a number or string.
+        // If a number, it is existing and we don't want to add it again.
+        if (Number.isInteger(action.content.field.id)) {
+            return state;
+        }
+
+        let field = _.cloneDeep(action.content.field);
         // Removes the FormFieldElement key which is not applicable to fields store, only matters on forms.
-        delete newField.FormFieldElement;
+        delete field.FormFieldElement;
 
         let {appId, tblId} = action;
 
@@ -75,10 +81,10 @@ const fieldsStore = (state = [], action) => {
             currentState = {
                 appId: appId,
                 tblId: tblId,
-                fields: [newField]
+                fields: [field]
             };
         } else {
-            currentState.fields.push(newField);
+            currentState.fields.push(field);
         }
 
         newState.push(currentState);
