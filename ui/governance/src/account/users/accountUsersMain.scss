@@ -3,7 +3,10 @@
 //Keeps the height of the account users page to 100% so that
 // the internal grid scrolls and the grid headers are sticky
 .accountUsersMain {
-    height: calc(100% - #{$top-nav-height} - 1px);
+    // The new height is calculated as the total height minus the topNav height minus a value
+    // 1 is not enough for Windows, and we have no idea on where the extra 2px comes from
+    // So its going to be a 3px to remove scrollbars in Windows
+    height: calc(100% - #{$top-nav-height} - 3px);
 
     > .loadedContent {
         height: 100%;
