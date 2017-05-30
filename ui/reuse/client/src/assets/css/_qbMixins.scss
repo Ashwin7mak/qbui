@@ -1,4 +1,5 @@
 @import 'customVariables';
+@import 'qbColorVariables';
 //from https://gist.github.com/jonathantneal/d0460e5c2d5d7f9bc5e6
 // =============================================================================
 // String Replace
@@ -85,7 +86,7 @@
 // =============================================================================
 // for styling link text
 
-@mixin text-link($link: $link-color, $link_hover: $link-hover-color,$text-decoration: $link-hover-decoration, $cursor: $cursor-pointer) {
+@mixin text-link($link: $link-normal-color, $link_hover: $link-hover-color,$text-decoration: $link-hover-decoration, $cursor: $cursor-pointer) {
   color: $link;
 
     &:hover {
