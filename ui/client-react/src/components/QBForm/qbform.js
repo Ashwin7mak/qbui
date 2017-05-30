@@ -354,12 +354,12 @@ export const QBForm = React.createClass({
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
-        const relation = relatedField !== null ? this.getRelationshipIfReferenceFieldToParent(relatedField.id) : {};
-        if (relation) {
+        const relationship = relatedField !== null ? this.getRelationshipIfReferenceFieldToParent(relatedField.id) : {};
+        if (relationship) {
             goToParent = this.props.goToParent;
-            masterTableId = relation.masterTableId;
-            masterAppId = relation.masterAppId;
-            masterFieldId = relation.masterFieldId;
+            masterTableId = relationship.masterTableId;
+            masterAppId = relationship.masterAppId;
+            masterFieldId = relationship.masterFieldId;
         }
 
         /* if the form prop calls for element to be required update fieldDef accordingly
