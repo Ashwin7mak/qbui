@@ -1,6 +1,8 @@
 @import "../../../../../reuse/client/src/assets/css/qbVariables";
 
 .accountUsersContainer {
+  display: flex;
+  flex-direction: column;
   width: 100%;
 
   .qbCell {
