@@ -43,6 +43,40 @@
         it('verify CANCEL', function() {
             reportBuilderPO.cancel();
         });
+
+        it('verify add column and click cancel', function() {
+            let columnsListInitial = reportBuilderPO.getColumnLabels();
+            reportBuilderPO.addRecord();
+            let columnsListUpdated = reportBuilderPO.getColumnLabels();
+            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+            reportBuilderPO.cancel();
+            reportBuilderPO.open();
+            let columnsAfterReopen = reportBuilderPO.getColumnLabels();
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
+        });
+
+        it('verify add column by add before', function() {
+            let columnsListInitial = reportBuilderPO.getColumnLabels();
+            reportBuilderPO.headerMenu();
+            reportBuilderPO.addColumnBefore();
+            reportBuilderPO.addRecord();
+
+            let columnsListUpdated = reportBuilderPO.getColumnLabels();
+
+            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+            reportBuilderPO.cancel();
+            reportBuilderPO.open();
+
+
+            let columnsAfterReopen = reportBuilderPO.getColumnLabels();
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
+        });
+
+        it('verify add column by add after', function() {
+            reportBuilderPO.headerMenu();
+            reportBuilderPO.addColumnAfter();
+            reportBuilderPO.addRecord();
+        });
     });
 
 }());

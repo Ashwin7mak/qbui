@@ -27,6 +27,24 @@ class reportBuilderPage {
         return browser.element('.reportBuilderContainer'); 
          }
 
+    get fieldToken() {
+        // the field token from hidden fields
+        return browser.element('.fieldToken');
+    }
+
+    get qbGidHeaderMenu() {
+        // the field token from hidden fields
+        return browser.element('.headerMenu');
+    }
+
+    get addColumnBeforeText() {
+        return browser.element('.addColumnBeforeText');
+    }
+
+    get addColumnAfterText() {
+        return browser.element('.addColumnAfterText');
+    }
+
     open() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
@@ -43,6 +61,40 @@ class reportBuilderPage {
         this.saveBtn.click();
         browser.pause(fiveSeconds);
         return this;
+    }
+
+    addRecord() {
+        // Clicks on one of the hidden fields after entering builder mode, which adds column at the first index
+        this.fieldToken.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    headerMenu() {
+        this.qbGidHeaderMenu.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    addColumnBefore() {
+        this.addColumnBeforeText.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    addColumnAfter() {
+        this.addColumnAfterText.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    getColumnLabels() {
+        // Gets the list of field labels from the form builder
+        let labelEls = browser.elements('.qbHeaderCell');
+        return labelEls.value.map(function(labelEl) {
+            let label = labelEl.element('.gridHeaderLabel').getText();
+            return label;
+        });
     }
 
 }
