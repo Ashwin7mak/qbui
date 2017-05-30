@@ -85,9 +85,11 @@
 
 
             //Click on select user search
-            UsersTablePage.userAddSearchBoxSelect.click();
+            // UsersTablePage.userAddSearchBoxSelect.click();
 
-            UsersTablePage.userAddSearchBox.setValue(searchText);
+            // UsersTablePage.searchUserFromSearch(searchText);
+
+            // UsersTablePage.userAddSearchBox.setValue(searchText);
 
 
             // // Click on remove button from the dialogue box

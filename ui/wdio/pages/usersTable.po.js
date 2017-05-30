@@ -121,13 +121,13 @@
          *@param searchUser name
          */
         searchUserFromSearch: {value: function(searchUser) {
-            this.selectUserChooser();
+            this.selectUserSearch();
             //Wait until you see open User search
-            this.iconChooserSearch.waitForVisible();
+            this.userAddNewSearch.waitForVisible();
             //Click in search
-            this.iconChooserSearch.click();
+            this.userAddSearchBox.click();
             //Enter search value
-            return this.iconChooserSearch.setValue(searchUser);
+            return this.userAddSearchBox.setValue(searchUser);
         }},
     });
 
