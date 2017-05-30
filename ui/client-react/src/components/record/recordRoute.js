@@ -308,7 +308,7 @@ export const RecordRoute = React.createClass({
             const showBack = _.get(record, 'previousRecordId') && _.get(reportData, 'data.keyField.name');
             const showNext = _.get(record, 'nextRecordId') && _.get(reportData, 'data.keyField.name');
             if (this.props.isDrawerContext) {
-                recordIdTitle = this.props.match.params.drawerRecId;
+                recordIdTitle = this.props.match.params.recordId;
             }
             const selectedTable = this.getSelectedTable(this.props.match.params.tblId);
             const tableName = _.get(selectedTable, 'name') || '';

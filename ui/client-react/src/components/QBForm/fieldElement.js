@@ -28,7 +28,7 @@ export const FieldElement = React.createClass({
         goToParent: React.PropTypes.func, //handles drill down to parent
         masterTableId: React.PropTypes.string,
         masterAppId: React.PropTypes.string,
-        masterFieldId: React.PropTypes.string
+        masterFieldId: React.PropTypes.number
     },
 
     getChanges(theVals) {

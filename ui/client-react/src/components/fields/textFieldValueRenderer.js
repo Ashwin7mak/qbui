@@ -34,7 +34,7 @@ const TextFieldValueRenderer = React.createClass({
 
         masterAppId: React.PropTypes.string,
 
-        masterFieldId: React.PropTypes.string
+        masterFieldId: React.PropTypes.number
 
     },
 

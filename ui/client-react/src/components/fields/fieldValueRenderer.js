@@ -82,7 +82,7 @@ const FieldValueRenderer = React.createClass({
 
         masterAppId: React.PropTypes.string,
 
-        masterFieldId: React.PropTypes.string
+        masterFieldId: React.PropTypes.number
     },
 
     getDefaultProps() {
