@@ -226,13 +226,12 @@ class formBuilderPage {
 
     search(text) {
         // Types the specified text into the SEARCH textfield (or clicks on CLEAR if text is not specified) and waits for search results
-        if (text) {
+        if (text !== null) {
             this.searchInput.setValue(text);
         } else {
             this.clearSearch.click();
         }
-        // wait for groups to appear or disappear
-        // depending on whether we searched or cleared
+        // wait for groups to appear or disappear depending on whether we searched or cleared
         this.listOfElementsItemGroup.waitForExist(null, (text !== null));
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getNewFieldLabels();

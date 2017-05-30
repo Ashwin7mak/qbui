@@ -147,10 +147,8 @@
                 let newFields = formBuilderPO.getNewFieldLabels();
                 let label = formBuilderPO.fieldTokenTitle.getText();
                 // verify expected initial state (presence of groups)
-                // because we're about to verify that it changes
                 formBuilderPO.listOfElementsItemGroup.waitForExist();
-                // search for label of first new field token &
-                // expect a single match in search results
+                // search for label of first new field token & expect a single match in search results
                 expect(formBuilderPO.search(label).length).toBe(1);
                 // expect that label to match the search term
                 expect(formBuilderPO.fieldTokenTitle.getText()).toBe(label);
