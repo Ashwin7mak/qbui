@@ -58,6 +58,22 @@ const app = (
         };
     }
 
+    function setSelectedApp(appId) {
+        let selected = _.cloneDeep(state.selected);
+        if (!selected) {
+            selected = {};
+        }
+
+        //  only update if appId does not match currently selected as want to
+        //  preserve the table selection if one is set
+        if (selected.appId !== appId) {
+            selected.appId = appId;
+            selected.tblId = null;
+        }
+
+        return selected;
+    }
+
     function setSelected(appId = null, tblId = null) {
         // reducer - no mutations against current state!
         let selected = _.cloneDeep(state.selected);
@@ -125,10 +141,11 @@ const app = (
             loading: true,
             error: false,
             app: null,
-            selected: setSelected(appId)
+            selected: setSelectedApp(appId)
         };
     case types.LOAD_APP_SUCCESS:
         let appModel = new AppModel(action.content);
+
         return {
             ...state,
             loading: false,
@@ -136,7 +153,7 @@ const app = (
             app: appModel.get(),
             //  update app in apps list
             apps: setAppInApps(appModel.getApp()),
-            selected: setSelected(appModel.getApp().id)
+            selected: setSelectedApp(appModel.getApp().id)
         };
     case types.LOAD_APP_ERROR:
         return {
