@@ -7,13 +7,14 @@
 
     // Import the base page object
     let e2ePageBase = requirePO('e2ePageBase');
+    let leftNavPO = requirePO('leftNav');
     let formsPO = requirePO('formsPage');
     let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitle = "Table name";
 
     let tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
+        newTableBtn : {get: function() {return browser.element('.tablesList .newTableItem .newTable');}},
         //New table Icon
         newTableIconBtn : {get: function() {return browser.element('.newTableItem .newTable .iconUISturdy-add-new-stroke');}},
         //new table container
@@ -139,12 +140,10 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
-            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
-            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
-                browser.pause(e2eConsts.shortWaitTimeMs);
-            }
-            return browser.elements('.tablesList .leftNavLabel');
+            //wait until loading screen disappear in leftnav
+            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
+            return browser.elements('.tablesList .withSecondary .leftNavLabel');
         }},
 
 
@@ -192,7 +191,6 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button
@@ -320,7 +318,7 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
-            return filteredElement.element(filteredElementInputClassName).setValue([fieldValue]);
+            return filteredElement.element(filteredElementInputClassName).setValue(fieldValue);
         }},
 
         /**
@@ -543,7 +541,7 @@
             //use the predefined deleteTableButton here
             expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(true);
             //Click on delete table button
-            browser.element('.modal-footer .buttons .primaryButton').click();
+            browser.element('.modal-dialog .modal-footer .primaryButton').click();
             //Need this to wait for model dialogue to slide away
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},

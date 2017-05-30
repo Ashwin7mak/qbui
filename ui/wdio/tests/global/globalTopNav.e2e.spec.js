@@ -6,8 +6,8 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
+    let leftNavPO = requirePO('leftNav');
     let reportContentPO = requirePO('reportContent');
-    let RequestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
 
     describe('Global - TopNav Tests: ', function() {
@@ -40,15 +40,16 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            //wait until loading screen disappear in leftnav
+            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
         /**
          * Test Method - checking for usability of topNav on Table homepage
          */
         it('Visibility and usability of topNav on Table homepage', function() {
-            //Go to app page
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
 
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
@@ -84,6 +85,10 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
+            //Go to reports page directly
+            //select report
+            reportContentPO.selectReport('Table 1', 0);
+
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
 
             //Verify if the global icons are displayed
@@ -99,7 +104,7 @@
          * Test Method - checking for visibility of topNav on User homepage
          */
         xit('Visibility of topNav on User homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
@@ -113,7 +118,7 @@
          * Test Method - checking for visibility of topNav on App homepage
          */
         xit('Visibility of topNav on App homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
