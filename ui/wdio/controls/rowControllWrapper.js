@@ -3,6 +3,9 @@ module.exports = class RowControlWrapper {
         this.rowControl = rowControl;
     }
 
+    /**
+     *  Gets the cells' text in table row
+     */
     get cells() {
         let cells = this.rowControl.elements('td').value;
         let values = [];

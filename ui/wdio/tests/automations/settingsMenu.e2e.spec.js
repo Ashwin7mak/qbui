@@ -47,7 +47,7 @@
             //click 'Automations' button on settings list
             appSettingsList.automationSettingsBtn.click();
 
-            //verify that 'Automations button leads to table of automations 
+            //verify that 'Automations button leads to table of automations
             expect(automationSettings.pageTitle.getText()).toBe('Automations');
             expect(automationSettings.automationsTable.isVisible).toBe(true);
         });

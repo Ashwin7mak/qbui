@@ -3,12 +3,18 @@ module.exports = class TableControlWrapper {
         this.selector = selector;
     }
 
+    /**
+     * Gets the table UI control
+     */
     get tableControl() {
         browser.waitForVisible(this.selector);
         let tableControl = browser.element(this.selector);
         return tableControl;
     }
 
+    /**
+     * Gets the headers row in table
+     */
     get header() {
         let headerControl = this.tableControl.element('thead > tr');
         let HeaderRowControlWrapper = require('./tableHeaderControlWrapper.js');
@@ -16,6 +22,9 @@ module.exports = class TableControlWrapper {
         return header;
     }
 
+    /**
+     * Gets the rows in table
+     */
     get rows() {
         let rowControls = this.tableControl.elements('tbody > tr');
 
@@ -27,6 +36,9 @@ module.exports = class TableControlWrapper {
         return rows;
     }
 
+    /**
+     * Get the 'Visible' property of UI element
+     */
     get isVisible() {
         let control = browser.element(this.selector);
         return control.isVisible();
