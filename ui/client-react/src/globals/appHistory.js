@@ -384,10 +384,8 @@ class AppHistory {
         }
     }
 
-    _discardChangesForReportBuilder(reportBuilderStoreIsPendingEdit) {
-        if (reportBuilderStoreIsPendingEdit) {
-            self.store.dispatch(self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV));
-        }
+    _discardChangesForReportBuilder() {
+        self.store.dispatch(self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV));
         self._continueToDestination();
     }
 
@@ -427,7 +425,7 @@ class AppHistory {
             }
 
             if (reportBuilderStore.isPendingEdit) {
-                self._discardChangesForReportBuilder(reportBuilderStore.isPendingEdit);
+                self._discardChangesForReportBuilder();
             }
             self._continueToDestination();
         }
