@@ -4,12 +4,12 @@
 class automationsSettings {
 
     get pageTitle() {
-        return browser.element('//*[@class="automationListSettingsStage stageHeadLine"]');
+        return browser.element('.automationSettings .automationListSettingsStage');
     }
 
     get automationsTable() {
         let Table = require('../../controls/tableControlWrapper.js');
-        let tableControl = new Table('//*[@class="automationSettings--table table table-hover"]');
+        let tableControl = new Table('.automationSettings--table');
         return tableControl;
     }
 }

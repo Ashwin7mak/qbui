@@ -51,7 +51,7 @@
             appSettingsList.automationSettingsBtn.click();
 
             //verify that 'Automations button leads to table of automations
-            expect(automationSettings.pageTitle.getText()).toBe('Automations');
+            expect(automationSettings.pageTitle.getAttribute('textContent')).toBe('Automations');
             expect(automationSettings.automationsTable.isVisible).toBe(true);
         });
     });
