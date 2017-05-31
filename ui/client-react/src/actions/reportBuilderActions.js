@@ -146,12 +146,16 @@ export const saveReport = (appId, tblId, rptId, reportDef, redirectRoute) => {
             if (appId && tblId && rptId) {
                 let reportService = new ReportService();
                 reportService.updateReport(appId, tblId, rptId, reportDef)
-                    .then(() => {
-                        logger.debug('ReportService saveReport success');
+                    .then((response) => {
+                        logger.debug('ReportService updateReport success');
                         dispatch(event(null, types.SET_IS_PENDING_EDIT_TO_FALSE));
                         NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
                         NotificationManager.success(Locale.getMessage('report.notification.save.success'), Locale.getMessage('success'));
                         resolve();
+                    }, (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.updateReport');
+                        NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                        reject();
                     })
                     .catch((ex) => {
                         logger.logException(ex);
