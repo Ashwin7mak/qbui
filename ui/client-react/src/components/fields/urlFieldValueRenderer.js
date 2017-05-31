@@ -51,7 +51,7 @@ const UrlFieldValueRenderer = React.createClass({
     },
     renderLinkHref() {
         let linkHref = UrlFileAttachmentReportLinkFormatter.addProtocol(this.props.value);
-        return encodeURIComponent(linkHref);
+        return encodeURI(linkHref);
     },
     renderLink() {
         let target = (this.props.openInNewWindow ? '_blank' : '_self');
