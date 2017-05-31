@@ -36,6 +36,7 @@ export default {
     FORMS_TYPE          : 'formsType',
     LOG                 : 'log',
     USERS               : 'users',
+    RELATIONSHIPS       : 'relationships',
     RIGHTS              : 'accessRights',
 
     FEATURE_SWITCHES    : 'featureSwitches',
@@ -59,6 +60,9 @@ export default {
     APPCOMPONENTS       : 'appComponents',
     // Legacy actions
     STACK               : 'stack',
+
+	// Slugs
+    SEARCH              : 'search',
 
     // Automations
     AUTOMATION : {

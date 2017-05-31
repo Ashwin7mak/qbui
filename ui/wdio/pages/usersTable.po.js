@@ -22,7 +22,7 @@
         appRolesPodCount: {get: function() {return browser.elements('.appRolesPod .appRolesPodCount');}},
 
         // Add new user button
-        newUserBtn: {get: function() {return browser.element('.iconActionButton.disabled.addRecord');}},
+        newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
@@ -69,6 +69,30 @@
 
         // User email field in user table
         userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
+
+        /**
+         * Method to click on user remove button.
+         */
+        clickUserRemoveButton : {value: function() {
+            //Wait until remove button visible
+            this.userRemoveButton.waitForVisible();
+            //Click on remove button
+            this.userRemoveButton.click();
+            //Need this to wait for container to slide away
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /**
+         * Method to click on cancel remove user button.
+         */
+        clickUserCancelRemoveButton : {value: function() {
+            //Wait until remove button visible
+            this.userCancelButton.waitForVisible();
+            //Click on remove button
+            this.userCancelButton.click();
+            //Need this to wait for container to slide away
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
     });
 
     module.exports = UsersTablePage;

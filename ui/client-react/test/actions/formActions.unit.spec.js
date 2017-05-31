@@ -19,12 +19,17 @@ const mockTransformHelper = {
 const mockFieldsActions = {
     saveAllNewFields(_appId, _tableId, formType) {
         return (dispatch) => {
-            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsAdded'})));
         };
     },
     updateAllFieldsWithEdits(_appId, _tableId) {
         return (dispatch) => {
-            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsUpdated'})));
+        };
+    },
+    deleteMarkedFields(_appId, _formMeta) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsDeleted'})));
         };
     }
 };
@@ -219,15 +224,10 @@ describe('Form Actions', () => {
 
         const expectedSaveActions = [
             {id:'view', type:types.SAVING_FORM, content: null},
-            {type: 'AllFieldsSaved'},
-            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsAdded'},
+            {type: 'AllFieldsUpdated'},
+            {type: 'AllFieldsDeleted'},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
-        ];
-        const expectedActions = [
-            {type: 'AllFieldsSaved'},
-            {type: 'AllFieldsSaved'},
-            {id:'view', type:types.SAVING_FORM, content: null},
-            {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
         class mockFormService {
             constructor() {}
@@ -249,8 +249,10 @@ describe('Form Actions', () => {
 
             spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
             spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
+            spyOn(mockFieldsActions, 'deleteMarkedFields').and.callThrough();
             FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
             FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
+            FormActionsRewireAPI.__Rewire__('deleteMarkedFields', mockFieldsActions.deleteMarkedFields);
         });
 
         afterEach(() => {
@@ -326,6 +328,25 @@ describe('Form Actions', () => {
             return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
                 () => {
                     expect(mockFieldsActions.updateAllFieldsWithEdits).toHaveBeenCalledWith(appId, tableId);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+
+        it('deletes fields marked for deletion on the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.deleteMarkedFields).toHaveBeenCalledWith(appId, tableId, formData);
                     done();
                 },
                 () => {
@@ -411,18 +432,47 @@ describe('Form Actions', () => {
             });
         });
     });
-    describe('addNewFieldToForm', () => {
-        it('creates an action that will add a field', () => {
-            const testNewField = {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: false, fieldId: 'newField_1', displayText: 'New Text Field'}};
-            expect(formActions.addNewFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
+    describe('addFieldToForm', () => {
+        it('creates an action that will add a new field when no field id is passed in', () => {
+            const testNewField = {field: 'mockFieldData'};
+            expect(formActions.addFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
                 id: 'view',
                 type: types.ADD_FIELD,
                 appId: 1,
                 tblId: 2,
                 content: {
                     newLocation: 3,
-                    newField: testNewField,
+                    field:  {
+                        id: 'newField_1',
+                        edit: true,
+                        field: 'mockFieldData',
+                        FormFieldElement: {
+                            positionSameRow: false,
+                            fieldId: 'newField_1'
+                        },
+                    }
+                },
+            });
+        });
 
+        it('will build an existing field with the existing field id passed in', () => {
+            const testNewField = {id: 'existingField_Id', field: 'mockFieldData'};
+            expect(formActions.addFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
+                id: 'view',
+                type: types.ADD_FIELD,
+                appId: 1,
+                tblId: 2,
+                content: {
+                    newLocation: 3,
+                    field:  {
+                        id: 'existingField_Id',
+                        edit: true,
+                        field: 'mockFieldData',
+                        FormFieldElement: {
+                            positionSameRow: false,
+                            fieldId: 'existingField_Id'
+                        },
+                    }
                 }
             });
         });
@@ -452,12 +502,12 @@ describe('Form Actions', () => {
 
     describe('removeFieldFromForm', () => {
         it('creates an action that will remove a field', () => {
-            expect(formActions.removeFieldFromForm('view', 1)).toEqual({
+            expect(formActions.removeFieldFromForm('view', {id: 6}, 1)).toEqual({
                 id: 'view',
                 type: types.REMOVE_FIELD,
-                content: {
-                    location: 1
-                }});
+                field: {id: 6},
+                location: 1
+            });
         });
     });
 
@@ -510,15 +560,6 @@ describe('Form Actions', () => {
             expect(formActions.endDraggingState('view')).toEqual({
                 id: 'view',
                 type: types.END_DRAG,
-                content: null});
-        });
-    });
-
-    describe('isInDraggingState', () => {
-        it('creates an action that updates dragging state to true', () => {
-            expect(formActions.isInDraggingState('view')).toEqual({
-                id: 'view',
-                type: types.IS_DRAGGING,
                 content: null});
         });
     });

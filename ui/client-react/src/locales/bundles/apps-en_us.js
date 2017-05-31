@@ -41,7 +41,7 @@ export default {
             },
             settings: "Settings",
             users: {
-                addUser: "Adding a new user is not available yet",
+                addUser: "Add a new user",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
                 manager: "Application Manager",
@@ -54,8 +54,8 @@ export default {
                 singular: "user",
                 plural: "users",
                 usersRemoved: " users have been removed",
-                userRemoved: " user has been removed"
-
+                userRemoved: " user has been removed",
+                userAdded: "You added"
             }
         },
         appMenu: {
@@ -96,6 +96,7 @@ export default {
             deleteTheseOverrides: "Delete these overrides?",
             more: "More...",
             placeholder: "Select...",
+            tablesPlaceholder: "Select a table...",
             notFound: "Not Found"
         },
         footer: {
@@ -133,7 +134,8 @@ export default {
         },
         field: {
             search: "Search",
-            searchNoMatch: "Nobody matches"
+            searchNoMatch: "Nobody matches",
+            searchNoMatchAddUser: "No users match what you're looking for"
         },
         grid: {
             no_data: "There is no data to display.",
@@ -236,7 +238,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Child Table"
+            childTable: "Child Table",
+            addChildRecord: "Add {tableNoun}"
         },
         durationWithUnits: {
             // these keys can't change they correspond to the
@@ -289,6 +292,12 @@ export default {
                 clearFacet: "Clear {facet} filter",
                 clearFacetSelection: "Click to clear this filter",
                 filter: "Filter"
+            },
+            notification: {
+                save: {
+                    success: "Report saved",
+                    error: "Error saving report"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -566,6 +575,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Rating",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formula",
+            [FieldFormats.LINK_TO_RECORD]: "Get another record",
+            LINK_TO_RECORD_FROM: "Get another record from {parentTable}",
             FORMULA: "Formula",
             SCALAR: "Scalar",
             CONCRETE: "Concrete",
@@ -578,14 +589,19 @@ export default {
             title: "Field Properties",
             name: "Name",
             required: "Must be filled in",
-            multiChoice: "Choices"
+            multiChoice: "Choices",
+            linkToRecord: "Link to a record in the table"
         },
         builder: {
             tabs: {
                 existingFields: 'Add an existing field',
                 newFields:  'Create a new field',
             },
+            reportBuilder: {
+                modify: 'Modify report'
+            },
             formBuilder: {
+                modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
                 newFieldsMenuTitle: 'New',
@@ -617,6 +633,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Create a numeric choice list and add it to the form",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Create numeric radio buttons and add them to the form",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Create radio buttons field and add them to the form",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Create link to a record in another table",
                 }
             },
             fieldGroups: {
@@ -624,14 +641,20 @@ export default {
                 numeric: "Number",
                 date: "Date",
                 other: "Other",
-                relationships: "Relationships"
+                relationships: "Relationships",
+                tableDataConnections: "Table data connections"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
             },
-            modify: 'Modify form'
+            linkToRecord: {
+                dialogTitle: "Get another record",
+                addToForm: "Add to form",
+                tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
+                tableChooserHeading: "Where is the record you want to get?"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -741,6 +764,11 @@ export default {
             activeHeader: "Active",
             activeYes: "Yes",
             activeNo: "No"
+        },
+        addUserToApp: {
+            title: "Add users to",
+            description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
+            searching: "Searching..."
         }
     }
 };

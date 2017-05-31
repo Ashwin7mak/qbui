@@ -38,7 +38,7 @@ export default {
             },
             settings: "Paramètres",
             users: {
-                addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
+                addUser: "Ajouter un nouvel utilisateur",
                 users: "Utilisateurs",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
@@ -51,7 +51,8 @@ export default {
                 singular: "utilisateur",
                 plural: "utilisateurs",
                 usersRemoved: " Les utilisateurs ont été enlevés",
-                userRemoved: " L'utilisateur a été supprimé"
+                userRemoved: " L'utilisateur a été supprimé",
+                userAdded: "Vous avez ajouté"
 
             }
         },
@@ -93,6 +94,7 @@ export default {
             deleteTheseOverrides: "Supprimer ces annule?",
             more: "Plus...",
             placeholder: "Sélectionner...",
+            tablesPlaceholder: "Sélectionnez une table...",
             notFound: "Pas trouvé"
         },
         footer: {
@@ -129,7 +131,8 @@ export default {
         },
         field: {
             search: "Chercher",
-            searchNoMatch: "Personne ne correspond à"
+            searchNoMatch: "Personne ne correspond à",
+            searchNoMatchAddUser: "Aucun utilisateur ne correspond à ce que vous recherchez"
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher.",
@@ -231,7 +234,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Table Enfant"
+            childTable: "Table Enfant",
+            addChildRecord: "Ajouter {tableNoun}"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",
@@ -282,6 +286,12 @@ export default {
                 clearFacet: "Enlever le filtre {facet}",
                 clearFacetSelection: "Cliquez pour désactiver ce filtre",
                 filter: "Filtre"
+            },
+            notification: {
+                save: {
+                    success: "Rapport enregistré",
+                    error: "Impossible d'enregistrer le rapport"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -557,6 +567,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Évaluation",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formule",
+            [FieldFormats.LINK_TO_RECORD]: "Obtenir un autre disque",
+            LINK_TO_RECORD_FROM: "Obtenez un autre enregistrement de {parentTable}",
             FORMULA: "Formule",
             SCALAR: "Scalaire",
             CONCRETE: "Béton",
@@ -569,14 +581,19 @@ export default {
             title: "Propriétés du champ",
             name: "prénom",
             required: "Doit être rempli",
-            multiChoice: "Les choix"
+            multiChoice: "Les choix",
+            linkToRecord: "Lien vers un enregistrement dans la table"
         },
         builder: {
             tabs: {
                 existingFields: 'Ajouter un champ existant',
                 newFields:  'Créer un nouveau champ',
             },
+            reportBuilder: {
+                modify: 'Modifiez rapport'
+            },
             formBuilder: {
+                modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
                 newFieldsMenuTitle: 'Nouveau',
@@ -607,6 +624,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Créer une liste de choix numérique et l'ajouter au formulaire",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Créez des boutons radio numériques et ajoutez-les au formulaire",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Créer les boutons radio des champs et les ajouter au formulaire",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
             fieldGroups: {
@@ -614,14 +632,20 @@ export default {
                 numeric: "Nombre",
                 date: "Date",
                 other: "Autre",
-                relationships: "Des relations"
+                relationships: "Des relations",
+                tableDataConnections: "Connexions de données de table"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
             },
-            modify: 'Modifier formulaire'
+            linkToRecord: {
+                dialogTitle: "Obtenir un autre disque",
+                addToForm: "Ajouter au formulaire",
+                tableChooserDescription: "Lorsque vous créez ou mettez à jour un {tableNoun}, vous pouvez rechercher et obtenir des informations à partir d'un enregistrement dans un autre tableau",
+                tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",
@@ -730,6 +754,11 @@ export default {
             activeHeader: "Actif",
             activeYes: "Oui",
             activeNo: "Non"
+        },
+        addUserToApp: {
+            title: "Ajouter des utilisateurs à",
+            description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle",
+            searching: "Recherche..."
         }
     }
 };

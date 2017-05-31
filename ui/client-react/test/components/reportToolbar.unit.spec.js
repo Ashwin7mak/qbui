@@ -1,4 +1,7 @@
 import React from 'react';
+import {shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import Fluxxor from 'fluxxor';
@@ -91,6 +94,7 @@ describe('ReportToolbar functions', () => {
     let callBacks = {};
     let store = {};
     beforeEach(() => {
+        jasmineEnzyme();
         store = mockStore({});
         // init props
         props = {
@@ -288,6 +292,70 @@ describe('ReportToolbar functions', () => {
         component.handleFacetClearAllSelects();
 
         expect(callBacks.filterOnSelections).toHaveBeenCalled();
+    });
+
+    it('does not render FilterSearchBox if isSearchBoxVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isSearchBoxVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
+
+        let reportToolbarSearchBox = component.find('.reportToolbarSearchBox');
+
+        expect(reportToolbarSearchBox).not.toBePresent();
+    });
+
+    it('does not render SortAndGroup if isSortAndGroupVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isSortAndGroupVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
+
+        let reportToolbarSortAndGroup = component.find('.reportToolbarSortAndGroup');
+
+        expect(reportToolbarSortAndGroup).not.toBePresent();
+    });
+
+    it('does not render FacetsMenu if isFacetMenuVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isFacetMenuVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
+
+        let facetMenu = component.find('.facetMenu');
+
+        expect(facetMenu).not.toBePresent();
+    });
+
+    it('does not render rightReportToolbar if isRightToolbarVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isRightToolbarVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
+
+        let rightReportToolbar = component.find('.rightReportToolbar');
+
+        expect(rightReportToolbar).not.toBePresent();
     });
 
 });
