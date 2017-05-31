@@ -5,7 +5,7 @@ class RelationshipUtils {
 
     static canCreateNewParentRelationship(tableId, tables, relationships) {
 
-        const validParentTables = tables.filter(table => table.recordTitleFieldId);
+        const validParentTables = tables.filter(table => table.recordTitleFieldId && table.fields && table.fields.find(field => field.id === table.recordTitleFieldId));
         if (tableId && validParentTables.length) {
 
             let parentTables = [];

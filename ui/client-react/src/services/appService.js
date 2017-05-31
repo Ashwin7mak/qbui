@@ -15,7 +15,8 @@ class AppService extends BaseService {
             GET_APP_USERS            : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.USERS}`,
             GET_APPS                 : `${constants.BASE_URL.QBUI}/${constants.APPS}`,
 
-            GET_APP_RELATIONSHIPS : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.RELATIONSHIPS}`
+            GET_APP_RELATIONSHIPS  : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.RELATIONSHIPS}`,
+            POST_APP_RELATIONSHIPS : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.RELATIONSHIPS}`
         };
     }
 
@@ -85,7 +86,7 @@ class AppService extends BaseService {
      * @returns promise
      */
     createRelationship(appId, relationship) {
-        let url = super.constructUrl(this.API.GET_APP_RELATIONSHIPS, [appId]);
+        let url = super.constructUrl(this.API.POST_APP_RELATIONSHIPS, [appId]);
         return super.post(url, relationship);
     }
 }
