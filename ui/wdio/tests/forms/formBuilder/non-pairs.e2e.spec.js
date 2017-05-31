@@ -105,6 +105,7 @@
                 formBuilderPO.selectFieldByIndex(1);
                 // add the first new field item to the form
                 newField.click();
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // verify that the new row has the expected label
                 expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
             });
