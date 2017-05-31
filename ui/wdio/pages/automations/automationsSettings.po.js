@@ -9,7 +9,7 @@ class automationsSettings {
 
     get automationsTable() {
         let Table = require('../../controls/tableControlWrapper.js');
-        let tableControl = new Table('.automationSettings--table');
+        let tableControl = new Table('//*[@class="automationSettings--table table table-hover"]');
         return tableControl;
     }
 }
