@@ -49,7 +49,7 @@ export const TablePropertiesRoute = React.createClass({
         }
     },
     componentWillReceiveProps(nextProps) {
-        if ((nextProps.table && this.props.table && this.props.table.id !== nextProps.table.id) || (!this.props.table && nextProps.table)) {
+        if (nextProps.table !== this.props.table) {
             nextProps.loadTableProperties(nextProps.table);
         }
     },
