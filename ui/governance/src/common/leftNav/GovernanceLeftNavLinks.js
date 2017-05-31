@@ -2,7 +2,7 @@ import {AVAILABLE_ICON_FONTS} from "../../../../reuse/client/src/components/icon
 import Locale from "../../../../client-react/src/locales/locales";
 
 const GetLeftNavLinks = (isAccountAdmin, isRealmAdmin, isAccountURL) => {
-    const MyAppsLink = {icon: 'home', title: Locale.getMessage('governance.leftNav.myApps'), isPrimaryAction: true, secondaryIcon: 'caret-left', href: '/qbase/apps'};
+    const MyAppsLink = {icon: 'home', title: Locale.getMessage('governance.leftNav.myApps'), isDisabled: true, isPrimaryAction: true, secondaryIcon: 'caret-left', href: '/qbase/apps'};
     const ManageBillingLink = {icon: 'currency', title: Locale.getMessage('governance.leftNav.manageBilling'), isDisabled: true};
     const ContactSupportLink = {icon: 'bell', title: Locale.getMessage('governance.leftNav.contactSupport'), iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, isDisabled: true};
     const ManageUsersLink =  {icon: 'users', title: Locale.getMessage('governance.leftNav.manageUsers'), isSelected: true};

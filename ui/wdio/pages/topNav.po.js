@@ -4,15 +4,18 @@
  */
 (function() {
     'use strict';
+    // Import the base page object
+    var e2ePageBase = requirePO('./e2ePageBase');
+
     module.exports = Object.create(e2ePageBase, {
         center: {
             get: function() {
                 return browser.element('.topNav .center');
             }
         },
-        modifyThisForm: {
+        settingsBtn: {
             get: function() {
-                return browser.element('.topNav .modifyForm');
+                return browser.element('.topNav .builder');
             }
         },
         // Feedback button topNav
@@ -25,6 +28,11 @@
         feedbackMenuButton: {
             get: function() {
                 return this.feedbackBtn.element('.feedbackMenuButton');
+            }
+        },
+        modifyThisForm: {
+            get: function() {
+                return browser.element('.topNav .modifyForm');
             }
         },
         //Report issue option in Feedback button
@@ -136,5 +144,18 @@
                 return browser.element('.smallHeader .cancelButton');
             }
         },
+        /**
+         * Function to click on topNavToggleHamburgerEl
+         */
+        clickTopNavToggleHamburgerEl: {
+            value: function() {
+                //wait for hamburger in the topNav
+                this.topNavToggleHamburgerEl.waitForVisible();
+
+                //click on the hamburger in the topNav
+                return this.topNavToggleHamburgerEl.click();
+            }
+        },
+
     });
 }());

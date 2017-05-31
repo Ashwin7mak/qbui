@@ -122,8 +122,8 @@
             reportContentPO.reportFilterSearchBox.setValue(value);
             reportContentPO.waitForReportContent();
             // verify expected results
-            expect(browser.waitForExist('.reportNavigation')).toBeTruthy();
-            expect(browser.isEnabled('.reportNavigation')).toBeTruthy();
+            expect(browser.waitForExist('.reportNavigation')).toBe(true);
+            expect(browser.isEnabled('.reportNavigation')).toBe(true);
         });
     });
 }());

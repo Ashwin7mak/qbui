@@ -61,6 +61,9 @@ export default {
     // Legacy actions
     STACK               : 'stack',
 
+	// Slugs
+    SEARCH              : 'search',
+
     // Automations
     AUTOMATION : {
         INVOKE   : 'workflow',
