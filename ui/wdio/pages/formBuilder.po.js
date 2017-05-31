@@ -186,7 +186,7 @@ class formBuilderPage {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
         topNavPO.modifyThisForm.click();
-        browser.pause(e2eConsts.shortWaitTimeMs);
+        this.formBuilderContainer.waitForExist();
         return this;
     }
 
