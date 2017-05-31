@@ -1,5 +1,6 @@
 import MoveFieldHelper from '../../../src/components/formBuilder/moveFieldHelper';
 import {buildTestArrayBasedFormData} from '../../testHelpers/testFormData';
+import _ from 'lodash';
 
 const testFormData = buildTestArrayBasedFormData();
 
@@ -166,10 +167,12 @@ describe('MoveFieldHelper', () => {
 
         removeFieldTestCases.forEach(testCase => {
             it(`removeField: The form has ${testCase.formMetaData} fields, one is removed, and only ${testCase.expectedRemoveFieldResult} remains`, () => {
-                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
+                // These functions have side effects so we want to create a copy of the data fresh for each test
+                let copyOfTestFormData = _.cloneDeep(testFormData);
+                let originalElement = copyOfTestFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
                 let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
 
-                let result = MoveFieldHelper.removeField(testFormData.formMeta, elementProps.location);
+                let result = MoveFieldHelper.removeField(copyOfTestFormData.formMeta, elementProps.location);
                 let simplifiedResult = getFieldIdsAsIndexedArray(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
 
                 expect(simplifiedResult.length).toEqual(testCase.expectedRemoveFieldResult);
@@ -178,11 +181,13 @@ describe('MoveFieldHelper', () => {
 
         moveFieldTestCases.forEach(testCase => {
             it(`moveField: ${testCase.description}`, () => {
-                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
+                // These functions have side effects so we want to create a copy of the data fresh for each test
+                let copyOfTestFormData = _.cloneDeep(testFormData);
+                let originalElement = copyOfTestFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
                 let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
                 let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newElementIndex);
 
-                let result = MoveFieldHelper.moveField(testFormData.formMeta, newLocation, elementProps);
+                let result = MoveFieldHelper.moveField(copyOfTestFormData.formMeta, newLocation, elementProps);
                 let simplifiedResult = getFieldIdsAsIndexedArray(result, testCase.newTab, testCase.newSection, testCase.newColumn);
 
                 expect(simplifiedResult).toEqual(testCase.expectedResult);
