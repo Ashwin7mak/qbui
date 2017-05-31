@@ -246,7 +246,7 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
             recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(
                 () =>{
-                    recordBase.apiBase.cleanup().then(function(){
+                    recordBase.apiBase.cleanup().then(function() {
                         done();
                     });
                 });

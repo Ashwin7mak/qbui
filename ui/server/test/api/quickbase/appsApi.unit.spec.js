@@ -359,7 +359,7 @@ describe("Validate appsApi", function() {
                 },
                 function(error) {
                     assert.ok(true);
-                    done()
+                    done();
                 }
             ).catch(function(errorMsg) {
                 done(new Error('getApp: exception processing success test: ' + JSON.stringify(errorMsg)));
