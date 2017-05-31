@@ -91,57 +91,6 @@
              * @param table
              * @returns {Promise}
              */
-            getTableProperties: function(req, table) {
-                return new Promise((resolve, reject) => {
-                    let opts = requestHelper.setOptions(req);
-                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, table.id);
-
-                    requestHelper.executeRequest(req, opts).then(
-                        (eeResponse) => {
-                            resolve(JSON.parse(eeResponse.body));
-                        },
-                        (error) => {
-                            log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties from EE");
-                            // If the table properties object is not in ee, create one with table noun in it.
-                            if (error.statusCode === 404) {
-                                let tableProperReq = _.clone(req);
-
-                                tableProperReq.method = 'POST';
-                                tableProperReq.rawBody = JSON.stringify({"tableNoun": table.name});
-                                tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
-
-                                this._createTableProperties(tableProperReq, table.id).then(
-                                    (eeResponse) => {
-                                        resolve(JSON.parse(eeResponse.body));
-                                    },
-                                    (eeError) => {
-                                        //resolve - we do not want to block the get Apps call on this failure
-                                        log.error({req: req}, "appsApi._createTableProperties(): Error creating table properties on EE");
-                                        resolve({});
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties on EE', ex, true);
-                                    //always resolve - we do not want to block the get Apps call on this failure
-                                    resolve({});
-                                });
-                            }                            else {
-                                //resolve - we do not want to block the get Apps call on this failure
-                                resolve({});
-                            }
-                        }).catch((ex) => {
-                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties from EE', ex, true);
-                        //always resolve - we do not want to block the get Apps call on this failure
-                            resolve({});
-                        });
-                });
-            },
-
-            /**
-             * Get endpoint for tableProperties object.
-             * @param req
-             * @param table
-             * @returns {Promise}
-             */
             getTablePropertiesList: function(req) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
@@ -214,7 +163,8 @@
                                         tablePromises.push(this._createTableProperties(tablePropsReq, table));
                                     });
                                     Promise.all(tablePromises).then(
-                                        () => {
+                                        (propsResponses) => {
+                                            this._mergeTableProps(app, propsResponses);
                                             resolve(app);
                                         },
                                         () => {
@@ -224,9 +174,12 @@
                                         requestHelper.logUnexpectedError('appsApi.getApp(): unexpected error creating table props for tables missing props in EE', ex, true);
                                         resolve(app);
                                     });
+                                } else {
+                                    resolve(app);
                                 }
+                            } else {
+                                resolve(app);
                             }
-                            resolve(app);
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsApi.getApp(): unexpected error fetching app', ex, true);
