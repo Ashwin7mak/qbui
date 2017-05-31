@@ -276,7 +276,7 @@
             //wait until you see field panel
             this.fieldsPanel.waitForVisible();
             //Verify cancel button is enabled
-            return expect(browser.isEnabled('.fieldsPanel .cancel')).toBeTruthy();
+            return expect(browser.isEnabled('.fieldsPanel .cancel')).toBe(true);
             //TODO Element fieldsPanelTitle not getting identified
             //Verify the title of the field panel
             //expect(this.fieldsPanelTitle.getAttribute('textContent')).toBe(title);
@@ -574,7 +574,7 @@
 
             if (items !== []) {
                 //verify the check mark beside the item selected
-                expect(items[0].element('.iconUISturdy-checkmarkincircle-outline').isVisible()).toBeTruthy();
+                expect(items[0].element('.iconUISturdy-checkmarkincircle-outline').isVisible()).toBe(true);
             } else {
                 browser.logger.error('Item with name ' + itemToVerify + ' not found under column header menu');
                 throw new Error('Item with name ' + itemToVerify + ' not found under column header menu');

@@ -1,6 +1,8 @@
 import FieldsService from '../services/fieldsService';
+import ReportService from '../services/reportService';
 import Promise from 'bluebird';
-
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
@@ -58,21 +60,14 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
 };
 
 /**
- * Toggle the field select menu open.
+ * Inserts a placeholder columns in the grid before/after the specified id.
+ * Will remove any other placeholder columns in the grid.
  * @param context
  * @param clickedColumnId
  * @param addBeforeColumn
  */
-export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) => {
-    return event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn});
-};
-
-/**
- * Toggle the field select menu closed.
- * @param context
- */
-export const closeFieldSelectMenu = (context) => {
-    return event(context, types.CLOSE_FIELD_SELECT_MENU, {});
+export const insertPlaceholderColumn = (context, clickedColumnId, addBeforeColumn) => {
+    return event(context, types.INSERT_PLACEHOLDER_COLUMN, {clickedColumnId, addBeforeColumn});
 };
 
 /**
@@ -126,4 +121,36 @@ export const moveColumn = (context, params) => {
  */
 export const changeReportName = (context, newName) => {
     return event(context, types.CHANGE_REPORT_NAME, {newName});
+};
+
+/**
+ * Save and updates the report with new data
+ * @param appId
+ * @param tableId
+ * @param reportId
+ * @param reportDef
+ * @returns {function(*=)}
+ */
+export const saveReport = (appId, tableId, reportId, reportDef) => {
+    return () => {
+        return new Promise((resolve, reject) => {
+            if (appId && tableId && reportId) {
+                let reportService = new ReportService();
+                reportService.updateReport(appId, tableId, reportId, reportDef)
+                    .then(() => {
+                        logger.debug('ReportService saveReport success');
+                        NotificationManager.success(Locale.getMessage('report.notification.save.success'), Locale.getMessage('success'));
+                        resolve();
+                    })
+                    .catch((ex) => {
+                        logger.logException(ex);
+                        NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                        reject();
+                    });
+            } else {
+                logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tableId: ${tableId}`);
+                reject();
+            }
+        });
+    };
 };

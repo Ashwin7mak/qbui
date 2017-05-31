@@ -50,18 +50,13 @@ describe('Report Builder actions', () => {
             .toEqual(expectedAction);
     });
 
-    it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', () => {
+    it('insertPlaceholderColumn action dispatches type.INSERT_PLACEHOLDER_COLUMN with open parameter', () => {
         const params = {
             clickedColumnId: 6,
             addBeforeColumn: true
         };
-        const expectedAction = event(context, types.OPEN_FIELD_SELECT_MENU, params);
-        expect(reportBuilderActions.openFieldSelectMenu(context, 6, true)).toEqual(expectedAction);
-    });
-
-    it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', () => {
-        const expectedAction = event(context, types.CLOSE_FIELD_SELECT_MENU, {});
-        expect(reportBuilderActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
+        const expectedAction = event(context, types.INSERT_PLACEHOLDER_COLUMN, params);
+        expect(reportBuilderActions.insertPlaceholderColumn(context, 6, true)).toEqual(expectedAction);
     });
 
     it('should create an action to enter builder mode', () => {
@@ -99,19 +94,36 @@ describe('Test ReportBuilderActions function success workflow', () => {
         ]
     };
 
+    let mockResponseUpdateReport = {
+        data: {
+            name: 'sample report',
+            fids: [1, 2, 3]
+        }
+    };
+
     class mockFieldService {
         getFields() {
             return Promise.resolve(mockResponseGetFields);
         }
     }
 
+    class mockReportService {
+        updateReport() {
+            return Promise.resolve(mockResponseUpdateReport);
+        }
+    }
+
     beforeEach(() => {
         spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
+        spyOn(mockReportService.prototype, 'updateReport').and.callThrough();
         ReportsBuilderActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
+        ReportsBuilderActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
+        mockFieldService.prototype.getFields.calls.reset();
         ReportsBuilderActionsRewireAPI.__ResetDependency__('FieldsService');
+        ReportsBuilderActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     it('refreshFieldSelectMenu action dispatches type:REFRESH_FIELD_SELECT_MENU', (done) => {
@@ -129,5 +141,28 @@ describe('Test ReportBuilderActions function success workflow', () => {
                 expect(false).toBe(true);
                 done();
             });
+    });
+
+    it('save report', (done) => {
+        const store = mockReportsStore({});
+
+        let rptDef = {
+            data : {
+                name: 'Sample Report',
+                fids: [2, 3]
+            }
+        };
+
+        return store.dispatch(reportBuilderActions.saveReport(appId, tblId, rptId, rptDef)).then(
+            () => {
+                expect(mockReportService.prototype.updateReport).toHaveBeenCalled();
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            }
+        );
+
     });
 });
