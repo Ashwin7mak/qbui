@@ -5,6 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
+    let topNavPO = requirePO('topNav');
 
     let realmName;
     let realmId;
@@ -42,7 +43,7 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                e2ePageBase.viewFirstRecordInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
             });
 
             beforeEach(function() {
@@ -200,6 +201,25 @@
                 }
                 // release button
                 browser.buttonUp();
+            });
+
+            it('basic UI validation', function() {
+                // wait for the form name to exist
+                formBuilderPO.title.waitForExist();
+                // verify the page name in the (purple) topNav bar
+                expect(topNavPO.title.getText()).toBe('Modify form');
+                // go back to view record form
+                formBuilderPO.cancel();
+                // verify the text of the invoking menu item
+                expect(topNavPO.modifyThisForm.getAttribute('textContent')).toBe('Modify this form');
+                reportContentPO.tableHomepageLink.click();
+                // verify that the menu option no longer exists
+                topNavPO.modifyThisForm.waitForExist(null, true);
+                // verify that the form container no longer exists
+                formBuilderPO.formBuilderContainer.waitForExist(null, true);
+                // get back to form builder so afterEach doesn't fail on Cancel
+                reportContentPO.clickOnRecordInReportTable(1);
+                formBuilderPO.open();
             });
         }
     });

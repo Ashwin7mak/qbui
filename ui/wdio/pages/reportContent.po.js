@@ -27,6 +27,7 @@
         settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
         settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
+        tableHomepageLink: {get: function() {return browser.element('.tableHomepageLink');}},
 
         // Delete and Don't Delete button on modal dialog box
         deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},

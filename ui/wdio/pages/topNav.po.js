@@ -13,6 +13,11 @@
                 return browser.element('.topNav .center');
             }
         },
+        title: {
+            get: function() {
+                return browser.element('.topTitle');
+            }
+        },
         settingsBtn: {
             get: function() {
                 return browser.element('.topNav .builder');

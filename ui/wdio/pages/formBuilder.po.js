@@ -104,6 +104,11 @@ class formBuilderPage {
         return browser.element('.notification-success');
     }
 
+    get title() {
+        // The name of the form, as displayed at the top of the form builder
+        return browser.element('.formContainer .qbPanelHeaderTitleText');
+    }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
