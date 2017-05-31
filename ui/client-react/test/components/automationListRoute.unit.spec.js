@@ -24,6 +24,31 @@ const propsWithAutos = {
 describe('AutomationListRoute', () => {
     let component;
 
+    describe('AutomationListRoute with different props', () => {
+        it('test get app id from app in props', () => {
+            component = TestUtils.renderIntoDocument(<AutomationListRoute {...props}/>);
+            expect(component.getAppId()).toEqual("app1");
+        });
+
+        it('test get app id from app id in matches', () => {
+            let localProps = {...props, app: undefined, match:{params:{appId: 'app2'}}};
+            component = TestUtils.renderIntoDocument(<AutomationListRoute {...localProps}/>);
+            expect(component.getAppId()).toEqual("app2");
+        });
+
+        it('test get app id with no matches', () => {
+            let localProps = {...props, app: undefined, match: undefined};
+            component = TestUtils.renderIntoDocument(<AutomationListRoute {...localProps}/>);
+            expect(component.getAppId()).toBeUndefined();
+        });
+
+        it('test get app id with no params', () => {
+            let localProps = {...props, app: undefined, match:{params:undefined}};
+            component = TestUtils.renderIntoDocument(<AutomationListRoute {...localProps}/>);
+            expect(component.getAppId()).toBeUndefined();
+        });
+    });
+
     describe('AutomationListRoute without automations', () => {
         beforeEach(() => {
             component = TestUtils.renderIntoDocument(<AutomationListRoute {...props}/>);

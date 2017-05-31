@@ -20,7 +20,7 @@
                 return checkBoxes;
             }},
         deleteIcon: {get: function() {return browser.element('.icon-delete span');}},
-
+        reportTitle: {get: function() {return browser.element('.formContainer .qbPanelHeaderTitleText');}},
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
@@ -128,17 +128,19 @@
          */
         waitForLeftNavLoaded : {value: function() {
             //wait for apps Toggle area
+            browser.element('.appsToggleArea').waitForExist();
             browser.element('.appsToggleArea').waitForVisible();
             //wait for table headings area
             browser.element('.tablesHeadingAndList .tablesHeading').waitForVisible();
             //wait until you see tables leftNav links labels
             browser.element('.tablesHeadingAndList .tablesList .leftNavLink').waitForVisible();
             //wait until text is shown up on leftNavLinks.Selected table is not loaded until all table properties are available
-            return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.mediumWaitTimeMs);
+            return browser.waitForText('.tablesList .link', e2eConsts.mediumWaitTimeMs);
         }},
         getReportListUlEl: {
             get: function() {
-                return browser.elements('.reportLink');
+                browser.element('.qbPanelBody .reportItems .reportLink').waitForVisible();
+                return browser.elements('.qbPanelBody .reportItems .reportLink');
             }
         },
         /**
@@ -431,22 +433,29 @@
         }},
 
         //Select a report from tables page with reportID being the index of the report
-        selectReport: {value: function(tableName, reportID) {
+        selectReport: {value: function(tableName, reportIndex) {
             //wait unti leftNav is loaded
             this.waitForLeftNavLoaded();
             //Select the tabe
             tablesPO.selectTable(tableName);
             //Click on reports menu
+            browser.element('.selected .iconUISturdy-report-menu-3').waitForVisible();
             browser.element('.selected .iconUISturdy-report-menu-3').click();
-            browser.element('.reportGroups').waitForVisible();
+            //wait for container to slide down
+            browser.pause(e2eConsts.mediumWaitTimeMs);
+            browser.element('.reportGroups .reportGroup .open').waitForVisible();
             //Filter the reports
             var allReports = this.getReportListUlEl.value.filter(function(report) {
-                return report.index === reportID;
+                return report.index === reportIndex;
             });
 
             if (allReports !== []) {
                 //Click on the report
-                return allReports[0].click();
+                allReports[0].element('.iconUISturdy-report-table').click();
+                //wait for container to slide away
+                browser.pause(e2eConsts.mediumWaitTimeMs);
+                //wait for reportContent to load
+                return this.waitForReportContent();
             }
         }},
 
@@ -527,8 +536,8 @@
          */
         clickDropdownToggleActionButtonSB: {
             value: function() {
-                expect(this.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
-                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBeTruthy();
+                expect(this.dropdownToggleActionButtonSB.isVisible()).toBe(true);
+                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBe(true);
                 return browser.element('.qbIcon.iconUISturdy-fries').click();
             }
         },
@@ -537,8 +546,8 @@
          */
         clickCardExpanderButtonSB: {
             value: function() {
-                expect(this.cardExpanderButtonSB.isVisible()).toBeTruthy();
-                expect(this.cardExpanderButtonSB.isEnabled()).toBeTruthy();
+                expect(this.cardExpanderButtonSB.isVisible()).toBe(true);
+                expect(this.cardExpanderButtonSB.isEnabled()).toBe(true);
                 return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
             }
         },
