@@ -593,7 +593,7 @@ module.exports = function(grunt) {
                     // Stabilize in CI before enabling
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
                     //failing in CI
-                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
                     //failing in CI
                     './wdio/tests/automations/automationsList.e2e.spec.js'
                 ],
