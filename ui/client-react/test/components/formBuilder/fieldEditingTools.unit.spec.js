@@ -33,7 +33,7 @@ describe('FieldEditingTools', () => {
             location={location}
             relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
-            isFieldDeletable="true"
+            isFieldDeletable={true}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');

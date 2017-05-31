@@ -371,7 +371,7 @@ export const QBForm = React.createClass({
         */
 
         const currentTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.tblId}) : null;
-        let showFieldEditingTools = true;
+        const showFieldEditingTools = true;
         let isFieldDeletable = true;
         if (currentTable && currentTable.recordTitleFieldId && relatedField && currentTable.recordTitleFieldId === FormFieldElement.fieldId) {
             isFieldDeletable = false;
