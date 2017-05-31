@@ -61,6 +61,18 @@
 
     .checkboxPropertyContainer {
         padding-top: $spacing-xx-small;
+        .checkbox.hasLabel {
+            .label {
+                margin: 0;
+                padding: 0;
+            }
+            input[type="checkbox"] {
+                height: 10px;
+            }
+            .qbIcon.checked {
+                width: 18px;
+            }
+        }
     }
 
     @include small-breakpoint {
