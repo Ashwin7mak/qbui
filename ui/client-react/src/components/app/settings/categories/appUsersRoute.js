@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import UserManagement from './userManagement';
+import AddUserDialog from './addUserDialog';
 import Stage from '../../../../../../reuse/client/src/components/stage/stage';
 import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
@@ -23,6 +24,7 @@ export const AppUsersRoute = React.createClass({
     componentDidMount() {
         this.props.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
+        this.props.flux.actions.searchRealmUsers();
     },
 
     componentWillReceiveProps(props) {
@@ -48,7 +50,7 @@ export const AppUsersRoute = React.createClass({
 
     getPageActions() {
         const actions = [
-            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', disabled: true},
+            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', onClick: this.toggleAddUserDialog},
             {msg: 'unimplemented.makeFavorite', icon: 'star', disabled: true},
             {msg: 'unimplemented.email', icon: 'mail', disabled: true},
             {msg: 'unimplemented.print', icon: 'print', disabled: true}
@@ -56,6 +58,17 @@ export const AppUsersRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={4}/>);
     },
 
+    toggleAddUserDialog(state = true) {
+        this.props.flux.actions.openAddUserDialog(state);
+    },
+
+    setUserRoleToAdd(roleId) {
+        this.props.flux.actions.setUserRoleToAdd(roleId);
+    },
+
+    assignUserToApp(appId, userInfo) {
+        return this.props.flux.actions.assignUserToApp(appId, userInfo.userId, userInfo.roleId);
+    },
 
     getStageHeadline() {
         const userHeadLine = `${this.props.selectedApp.name} : ${Locale.getMessage('app.users.users')}`;
@@ -150,14 +163,25 @@ export const AppUsersRoute = React.createClass({
     render() {
         if (this.props.appRoles) {
             return (
-                <div>
-                    <Stage stageHeadline={this.getStageHeadline()}
-                           pageActions={this.getPageActions()}>
+            <div>
+                <Stage stageHeadline={this.getStageHeadline()}
+                       pageActions={this.getPageActions()}>
 
                         <AppSettingsStage appUsers={this.props.appUsersUnfiltered}
                                           appRoles={this.props.appRoles}
                                           appOwner={this.props.appOwner}/>
                     </Stage>
+                <AddUserDialog realmUsers={this.props.realmUsers}
+                               searchUsers={this.props.flux.actions.searchRealmUsers}
+                               appRoles={this.props.appRoles}
+                               assignUserToApp={this.assignUserToApp}
+                               setUserRoleToAdd={this.setUserRoleToAdd}
+                               userRoleIdToAdd={this.props.userRoleIdToAdd}
+                               appId={this.props.match.params.appId}
+                               selectedApp={this.props.selectedApp}
+                               existingUsers={this.props.appUsersUnfiltered}
+                               addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
+                               hideDialog={this.toggleAddUserDialog}/>
                     {this.getTableActions()}
                     <div className="userManagementContainer">
                         <UserManagement appId={this.props.match.params.appId}

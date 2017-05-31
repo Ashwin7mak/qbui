@@ -3,6 +3,7 @@ import {combineReducers} from 'redux';
 import user from '../../../reuse/client/src/reducers/userReducer';
 import fields from './fields';
 import forms from './forms';
+import relationshipBuilder from './relationshipBuilder';
 import record from './record';
 import report from './report';
 import reportBuilder from './reportBuilder';
@@ -27,6 +28,7 @@ export default combineReducers({
     featureSwitches,
     fields,
     forms,
+    relationshipBuilder,
     record,
     report,
     reportBuilder,

@@ -7,7 +7,6 @@
 
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
-    let reportContentMobilePO = requireMobilePO('reportContent');
     let RequestAppsPage = requirePO('requestApps');
     let reportContentPO = requirePO('reportContent');
 
@@ -38,7 +37,7 @@
         });
 
         beforeAll(function() {
-            reportContentMobilePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         /**

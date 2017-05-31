@@ -10,34 +10,18 @@
  */
 
 .reportFieldSelectMenuBase {
+    height: 100%;
     width: 100%;
     position: relative;
-    display: flex;
-    flex: 1 auto;
-    height: 100%;
-
-    .fieldSelectCloseIcon {
-        margin-left: 90%;
-        margin-top: 10px;
-        cursor: pointer;
-    }
-
-    .fieldSelectCloseIcon:hover {
-        color: $topnav-hover-color;
-    }
 
     .header {
         font-size: 20px;
+        margin-top: 10px;
         margin-left: 10px;
         margin-bottom: 10px;
     }
 
     .info {
-        margin-left: 10px;
-    }
-
-    .no-elements {
-        margin-top: 10px;
         margin-left: 10px;
     }
 
@@ -55,6 +39,7 @@
         > .reportFieldSelectMenuMain {
             position: relative;
             flex: 1 auto;
+            height: 100%;
             overflow: auto;
             display: flex;
             flex-direction: column;
@@ -67,6 +52,7 @@
         }
 
         > .reportFieldSelectMenuContent {
+            position: relative;
             flex: 0;
         }
     }
@@ -76,23 +62,22 @@
     }
 
     > .reportFieldSelectMenuContent {
+        border-right: $stroke-width-thin  solid $trowser-right-trowser-nav-border-color;
+        border-left: $stroke-width-thin  solid $trowser-left-trowser-nav-border-color;
         position: absolute;
         top: 0;
-        bottom: 0;
 
         overflow: auto;
         background-color: $leftnav-background-color;
-        border-left: 1px solid $leftnav-background-stroke-color;
-        border-bottom: 1px solid $leftnav-background-stroke-color;
         z-index: $zindex-trowser;
+        height: 100%;
 
         @include baseMenuWidths;
 
         &.reportFieldSelectMenuCollapsed {
-            min-width: 0;
+            min-width: $leftNav-width-collapsed;
             // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
-            max-width: 0;
-            border: none;
+            max-width: $leftNav-width-collapsed;
         }
 
         // Styling when the side trowser is on the left

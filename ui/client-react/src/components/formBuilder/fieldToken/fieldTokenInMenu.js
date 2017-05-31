@@ -1,14 +1,18 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import FieldToken from './fieldToken';
+import FieldFormats from '../../../utils/fieldFormats';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
-import {addNewFieldToForm, endDraggingState, isInDraggingState} from "../../../actions/formActions";
+import {addFieldToForm, endDraggingState, isInDraggingState} from "../../../actions/formActions";
+import {hideRelationshipDialog} from "../../../actions/relationshipBuilderActions";
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import _ from 'lodash';
 import DraggableField from '../draggableField';
+import fieldFormats from '../../../utils/fieldFormats';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
@@ -30,6 +34,8 @@ export class FieldTokenInMenu extends Component {
         return fieldToken;
     }
 }
+
+const Element = DraggableField(FieldTokenInMenu, false);
 
 /**
  * A component which allows the field token to be clicked and dragged. The click and drag cannot be on the same element because drag
@@ -56,7 +62,7 @@ export class DraggableFieldToken extends Component {
 
     clickToAddToForm = () => {
         const {selectedField, formId, appId, tblId, relatedField} = this.props;
-        this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
+        this.props.addFieldToForm(formId, appId, tblId, selectedField, relatedField);
     };
 
     onEnterClickToAdd = (e) => {
@@ -77,7 +83,7 @@ export class DraggableFieldToken extends Component {
         if (!this.state.addedToForm) {
             const {formId, appId, tblId, relatedField} = this.props;
 
-            this.props.addNewFieldToForm(formId, appId, tblId, dropTargetProps.location, relatedField);
+            this.props.addFieldToForm(formId, appId, tblId, dropTargetProps.location, relatedField);
             this.setState({addedToForm: true});
         }
     };
@@ -88,11 +94,12 @@ export class DraggableFieldToken extends Component {
     endDrag = () => {
         this.setState({addedToForm: false});
         this.props.updateFormAnimationState(false);
+        if (this.props.endDrag) {
+            this.props.endDrag();
+        }
     };
 
-    render() {
-        const Element = DraggableField(FieldTokenInMenu, false);
-
+    render = () => {
         return (
             <div className="fieldTokenInMenuWrapper"
                  onClick={this.clickToAddToForm}
@@ -143,7 +150,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    addNewFieldToForm,
+    addFieldToForm,
+    hideRelationshipDialog,
     updateFormAnimationState,
     endDraggingState,
     isInDraggingState

@@ -2,9 +2,8 @@ var baseConf = require('./wdioSauce.conf');
 var config = {
     capabilities: [
         {
-            platform: 'OS X 10.11',
+            platform: 'OS X 10.12',
             browserName: 'firefox',
-            version: '53.0',
             marionette: 'false',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX Firefox Browser',
