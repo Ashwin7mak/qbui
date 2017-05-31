@@ -186,14 +186,14 @@ export const AppUsersRoute = React.createClass({
                                addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
                                hideDialog={this.toggleAddUserDialog}
                                successDialogOpen={this.props.successDialogOpen}
-                               showSuccessDialog={this.props.showSuccessDialog}/>
-                    {this.getTableActions()}
+                               showSuccessDialog={this.props.showSuccessDialog}
+                />
                 <UserSuccessDialog appUrl={this.state.appUrl}
                                    successDialogOpen={this.props.successDialogOpen}
                                    addedAppUser={this.props.addedAppUser}
-                                   addedUser="test@test.com"
                                    showSuccessDialog={this.props.showSuccessDialog}
                 />
+                    {this.getTableActions()}
                     <div className="userManagementContainer">
                         <UserManagement appId={this.props.match.params.appId}
                                         appUsers={this.props.appUsersUnfiltered}

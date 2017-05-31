@@ -31,7 +31,7 @@ class UserSuccessDialog extends React.Component {
     }
 
     /**
-     * render the modal dialog for creating a table
+     * render the modal dialog after succesfully adding user to an app
      * @returns {XML}
      */
     render() {

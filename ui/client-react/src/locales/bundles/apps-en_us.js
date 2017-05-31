@@ -779,7 +779,7 @@ export default {
             userSuccessDialogOK: "No thanks",
             copied: "Link copied",
             messageSubject:"Hello",
-            messageBody: "HELLO",
+            messageBody: "HELLO"
         }
     }
 };

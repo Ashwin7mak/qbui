@@ -209,11 +209,14 @@ let appsActions = {
     },
 };
 
-// using redux
+/**
+ * Toggle Add to app success dialog
+ * @param boolean status
+ * @param string email
+ * @returns void
+ */
 export const toggleAddToAppSuccessDialog = (status, email) => ({
     type: types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, status, email
 });
 
 export default appsActions;
-
-

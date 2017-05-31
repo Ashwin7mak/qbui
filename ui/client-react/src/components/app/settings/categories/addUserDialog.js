@@ -44,10 +44,10 @@ export class AddUserDialog extends React.Component {
         if (responsePromise) {
             responsePromise.then(
             (response) => {
-                let user = this.props.realmUsers.filter((realmUser)=>{
+                let assignedUser = this.props.realmUsers.filter((realmUser)=>{
                     return realmUser.id === userInfo.userId;
                 });
-                let userEmail = user[0].email;
+                let userEmail = assignedUser[0].email;
                 this.state.isValid = false;
                 this.props.hideDialog(false);
                 this.props.showSuccessDialog(true, userEmail);

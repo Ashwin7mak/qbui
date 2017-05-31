@@ -28,6 +28,7 @@
                     height: 120px;
                     color: $color-black-100;
                     background-color: $newTableDialog-highlight-color;
+
                     @include correctFontWeightForLightTextOnDarkBackground;
                     font-size: $font-size-h2;
 
@@ -36,7 +37,7 @@
                         height: 60px;
                         font-size: 60px;
                         text-align: center;
-                        color: #ffffff;
+                        color: $color-black-100;
                         margin-left: 30px;
                         margin-right: 31px;
                     }
@@ -73,7 +74,7 @@
                         cursor: pointer;
 
                         .qbIcon {
-                        font-size: x-large;
+                            font-size: x-large;
                             margin-right: 10px;
                         }
                         span {
@@ -94,7 +95,7 @@
                 font-size: 16px;
                 cursor: pointer;
                 color: $add-user-button;
-                &:hover{
+                &:hover {
                     color: $add-user-button;
                 }
             }
