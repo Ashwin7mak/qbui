@@ -46,6 +46,7 @@ class StandardGrid extends Component {
 
     /**
      * stick the header and sticky first column when the grid scrolls
+     * If the sticky column needs to be implemented, check out the code from qbGrid.js in client-react
      */
     handleScroll = () => {
 
@@ -60,6 +61,10 @@ class StandardGrid extends Component {
                 stickyHeaders[i].style.transform = translate;
             }
         }
+    }
+
+    bodyRef = (body) => {
+        this.tableRef = body && body.getRef().parentNode;
     }
 
     render() {
@@ -87,9 +92,7 @@ class StandardGrid extends Component {
                             rows={this.props.items}
                             rowKey={this.getUniqueRowKey.bind(this)}
                             onRow={onRowFn}
-                            ref={body => {
-                                this.tableRef = body && body.getRef().parentNode;
-                            }}
+                            ref={this.bodyRef}
                             />
                     </Table.Provider>
                 </div>
