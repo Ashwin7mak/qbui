@@ -104,7 +104,6 @@
                             log.error({req: req}, "appsApi.getTablePropertiesList(): Error getting table properties list from EE");
                             //resolve - we do not want to block the get Apps call on this failure
                             resolve({});
-                            //}
                         }).catch((ex) => {
                             requestHelper.logUnexpectedError('appsApi.getTablePropertiesList(): unexpected error getting table properties list from EE', ex, true);
                             //always resolve - we do not want to block the get Apps call on this failure
