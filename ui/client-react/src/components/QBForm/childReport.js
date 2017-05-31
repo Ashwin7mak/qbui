@@ -75,7 +75,8 @@ class ChildReport extends React.Component {
 
     render() {
         const {appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        const validProps = [appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
+        let validProps = [appId, childAppId,  childTableId, childReportId, detailKeyFid].every(prop => prop || typeof prop === 'number');
+        validProps = validProps && !_.isUndefined(detailKeyValue);
         let rowOfButtons = false;
 
         let tableName;
