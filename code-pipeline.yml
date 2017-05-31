@@ -1,35 +1,29 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: CoreUI Code Pipeline
+Description: CoreUI Code Pipeline # CUSTOMIZE
 
 Parameters:
   ServiceName:
     Type: String
-    Default: coreui
-
+    Default: coreui # CUSTOMIZE
+  GitRepoName:
+    Type: String
+    Default: qbui # CUSTOMIZE
+  # You probably shouldn't change any of the following parameters
   CodeBuildContainerSize:
     Type: String
     Default: BUILD_GENERAL1_LARGE
-
   CodeBuildImage:
     Type: String
     Default: aws/codebuild/docker:1.12.1
-
   CodeBuildTimeOutMins:
     Type: String
     Default: 30
-
   GitRepoBranch: 
     Type: String
     Default: master
-
-  GitRepoName: 
-    Type: String
-    Default: qbui
-
   GitRepoOwner:
     Type: String
     Default: QuickBase
-
   PreProdCrossAccountID:
     Type: String
     Default: 723670383381
@@ -37,7 +31,6 @@ Parameters:
     AllowedPattern: '[0-9]*'
     MinLength: 12
     Description: PreProd Account ID where we want to deploy resources from CodePipeline
-
   ProdCrossAccountID:
     Type: String
     Default: 729325871063
@@ -45,7 +38,6 @@ Parameters:
     AllowedPattern: '[0-9]*'
     MinLength: 12
     Description: Prod Account ID where we want to deploy resources from CodePipeline
-
   PerfCrossAccountID:
     Type: String
     Default: 956858433230
@@ -53,17 +45,37 @@ Parameters:
     AllowedPattern: '[0-9]*'
     MinLength: 12
     Description: Perf Account ID where we want to deploy resources from CodePipeline
-
   GitHubOauthToken:
     Type: String
     Default: 78ddf6f5c2fefd18f983fa734ff485eaefb15d2d
     Description: Oauth token for GitHub Access
 
 Resources:
+  # This repo is being deprecated and will be deleted after all client configurations are updated
   Repository:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: !Sub quickbase/ui # Normally this is quickbase/${ServiceName}
+      RepositoryPolicyText:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Ref PreProdCrossAccountID
+                - !Ref ProdCrossAccountID
+                - !Ref PerfCrossAccountID
+            Action:
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+              - ecr:BatchCheckLayerAvailability
+              - ecr:ListImages
+              - ecr:DescribeImages
+
+  NewRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub quickbase/${ServiceName}
       RepositoryPolicyText:
         Version: 2012-10-17
         Statement:
@@ -206,7 +218,7 @@ Resources:
         Type: LINUX_CONTAINER
         EnvironmentVariables:
           - Name: REPOSITORY_URI
-            Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repository}
+            Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${NewRepository}
           - Name: NEXUS_SG
             Value: sg-9e809be6
           - Name: REGISTRYID

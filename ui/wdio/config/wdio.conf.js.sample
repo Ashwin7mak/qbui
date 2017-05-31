@@ -75,9 +75,11 @@ exports.config = {
         ],
         users: [
             './ui/wdio/tests/users/usersTable.e2e.spec.js',
+            './ui/wdio/tests/users/usersRemove.e2e.spec.js'
         ],
         global: [
             './ui/wdio/tests/global/globalTopNav.e2e.spec.js',
+            './ui/wdio/tests/global/globalLeftNav.e2e.spec.js',
         ]
     },
     //

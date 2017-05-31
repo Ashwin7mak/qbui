@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import {CONTEXT} from '../../actions/context';
-import {changeReportName} from '../../actions/reportActions';
+import {changeReportName} from '../../actions/reportBuilderActions';
 import TextFieldValueEditor from '../fields/textFieldValueEditor';
 
 /**

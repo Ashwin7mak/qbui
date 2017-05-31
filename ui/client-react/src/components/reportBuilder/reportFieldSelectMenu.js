@@ -2,16 +2,15 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import {CONTEXT} from '../../actions/context';
-import {refreshFieldSelectMenu, closeFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportActions';
+import {refreshFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportBuilderActions';
 
 import ReportUtils from '../../utils/reportUtils';
 import FieldFormats from '../../utils/fieldFormats';
 
 import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
-import QBicon from '../qbIcon/qbIcon';
 import Locale from '../../../../reuse/client/src/locales/locale';
-import SideMenuBase from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
+import SideMenu from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
 
 import './reportFieldSelectMenu.scss';
 
@@ -22,7 +21,6 @@ export class ReportFieldSelectMenu extends Component {
 
     componentDidMount() {
         this.refreshMenuContent();
-        this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
     }
 
     refreshMenuContent = () => {
@@ -60,20 +58,20 @@ export class ReportFieldSelectMenu extends Component {
         if (!this.props.menu) {return <div />;}
 
         let elements = this.getElements();
+        let isCollapsed = this.props.isCollapsed;
 
         return (
             <div className="fieldSelect">
-                <QBicon
-                    icon="close"
-                    onClick={() => this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV)}
-                    className="fieldSelectCloseIcon"
-                />
-                <div className="header">
-                    {Locale.getMessage('report.drawer.title')}
-                </div>
-                <div className="info">
-                    {Locale.getMessage('report.drawer.info')}
-                </div>
+                {!isCollapsed &&
+                    <div>
+                        <div className="header">
+                            {Locale.getMessage('report.drawer.title')}
+                        </div>
+                        <div className="info">
+                            {Locale.getMessage('report.drawer.info')}
+                        </div>
+                    </div>
+                    }
                 <ListOfElements
                     renderer={FieldTokenInMenu}
                     elements={elements}
@@ -83,16 +81,14 @@ export class ReportFieldSelectMenu extends Component {
     };
 
     render() {
-        let content = this.getMenuContent();
-        let isCollapsed = this.props.menu ? this.props.menu.isCollapsed : true;
-
         return (
-            <SideMenuBase {...this.props}
-                          baseClass="reportFieldSelectMenu"
-                          sideMenuContent={content}
-                          isCollapsed={isCollapsed}
-                          isDocked={false}
-            />
+            <SideMenu
+                baseClass="reportFieldSelectMenu"
+                sideMenuContent={this.getMenuContent()}
+                isCollapsed={this.props.isCollapsed}
+            >
+                {this.props.children}
+            </SideMenu>
         );
     }
 }
@@ -113,15 +109,13 @@ ReportFieldSelectMenu.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        menu: state.reportBuilder
+        menu: state.reportBuilder,
+        isCollapsed: state.builderNav.isNavCollapsed
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        closeFieldSelectMenu: (context) => {
-            dispatch(closeFieldSelectMenu(context));
-        },
         refreshFieldSelectMenu: (context, appId, tblId) => {
             dispatch(refreshFieldSelectMenu(context, appId, tblId));
         },

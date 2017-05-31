@@ -49,14 +49,25 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
             // fieldFormats.NUMERIC_FORMULA_FORMAT,
             // fieldFormats.URL_FORMULA_FORMAT
         ]
+    },
+    {
+        fieldGroupId: 'tableDataConnections',
+        titleI18nKey: 'builder.fieldGroups.tableDataConnections',
+        fieldTypes: [
+            fieldFormats.LINK_TO_RECORD,
+        ]
     }
+
 ];
 
 /**
  * A helper function that has the supported fields along with the default props for each field type for display in form builder
  */
-export const supportedNewFieldTypesWithProperties = () => {
-    return SUPPORTED_NEW_FIELD_TYPES.map((fieldGroup, index) => {
+export const supportedNewFieldTypesWithProperties = (omittedFieldGroups = []) => {
+
+    const withoutOmittedGroups = _.reject(SUPPORTED_NEW_FIELD_TYPES, (element) => omittedFieldGroups.indexOf(element.fieldGroupId) !== -1);
+
+    return withoutOmittedGroups.map((fieldGroup, index) => {
         return {
             ...fieldGroup,
             key: `group_${index}`,
@@ -71,10 +82,10 @@ export const supportedNewFieldTypesWithProperties = () => {
  * @param fieldType
  * @returns {{type: *, title: *, tooltipText: string, isNewField: boolean}}
  */
-export function createFieldTypeProps(fieldType) {
+export function createFieldTypeProps(fieldType, userDefaultProperties = null) {
     let title = Locale.getMessage(`fieldsDefaultLabels.${fieldType}`);
     let id = `fieldType_${fieldType}`;
-    let field = createScalarDefaultFieldsProperties()[fieldType];
+    let field = createScalarDefaultFieldsProperties(userDefaultProperties)[fieldType];
 
     return {
         containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},

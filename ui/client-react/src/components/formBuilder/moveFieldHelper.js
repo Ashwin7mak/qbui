@@ -23,8 +23,9 @@ const MoveFieldHelper = {
 
     removeField(formMeta, location) {
         let formMetaCopy = _.cloneDeep(formMeta);
-        removeElementFromCurrentLocation(formMetaCopy, location);
 
+        removeFieldIdFromFormMetaData(formMetaCopy, location);
+        removeElementFromCurrentLocation(formMetaCopy, location);
         return formMetaCopy;
     },
 
@@ -42,10 +43,14 @@ const MoveFieldHelper = {
         return formMetaCopy;
     },
 
-    addNewFieldToForm(formMeta, newLocation, newField) {
+    addFieldToForm(formMeta, newLocation, field) {
         let formMetaCopy = _.cloneDeep(formMeta);
-        newField = {containingElement: newField};
-        addElementToNewLocation(formMetaCopy, newLocation, newField);
+        field = {containingElement: field};
+        addElementToNewLocation(formMetaCopy, newLocation, field);
+        if (!_.includes(field.containingElement.id, 'new')) {
+            formMetaCopy.fields.push(field.containingElement.id);
+        }
+
         return formMetaCopy;
     },
 
@@ -96,6 +101,22 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
     errors.forEach(error => logger.error(error));
 
     return (errors.length === 0);
+}
+
+/**
+ * I needed to create a separate function just to remove the id from the fieldMeta data
+ * This prevents fields from being removed elsewhere
+ * WARNING: This function has side effects on the formMetaData.fields passed in.
+ * */
+function removeFieldIdFromFormMetaData(formMetaData, location) {
+    let {tabIndex, sectionIndex, columnIndex, elementIndex} = location;
+    let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
+
+    if (!_.includes(column.elements[elementIndex].FormFieldElement.fieldId, 'new')) {
+        let formMetaFieldIndex = _.indexOf(formMetaData.fields, column.elements[elementIndex].FormFieldElement.fieldId);
+
+        formMetaData.fields.splice(formMetaFieldIndex, 1);
+    }
 }
 
 /**

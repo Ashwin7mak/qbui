@@ -94,6 +94,8 @@ export class FormBuilder extends Component {
                     cancelFormReorder={this.cancelFormReorder}
                     updateAnimationState={this.props.updateAnimationState}
                     hasAnimation={false}
+                    app={this.props.app}
+                    tblId={this.props.tblId}
                     appUsers={[]}
                 />
             </div>
