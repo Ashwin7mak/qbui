@@ -355,7 +355,6 @@ describe("Validate appsApi", function() {
             promise.then(
                 function(response) {
                     done(new Error('getApp: unexpected success when getTablePropertiesList returns error: '));
-                    done();
                 },
                 function(error) {
                     assert.ok(true);
