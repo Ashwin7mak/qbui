@@ -3,6 +3,13 @@
  */
 class RelationshipUtils {
 
+    /**
+     * can we create a new parent relationship to table with id
+     * @param tableId child table ID
+     * @param tables existing app tables
+     * @param relationships existing app relationships
+     * @returns {boolean}
+     */
     static canCreateNewParentRelationship(tableId, tables, relationships) {
 
         const validParentTables = tables.filter(table => table.recordTitleFieldId && table.fields && table.fields.find(field => field.id === table.recordTitleFieldId));
