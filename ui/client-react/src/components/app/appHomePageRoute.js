@@ -73,6 +73,7 @@ export const AppHomePageRoute = React.createClass({
         this.props.showTopNav();
         this.props.setTopTitle();
         this.selectAppFromParams(_.get(this.props, 'match.params'));
+        let flux = this.getFlux();
         flux.actions.doneRoute();
         if (this.props.notifyTableDeleted) {
             NotificationManager.success(Locale.getMessage('tableEdit.tableDeleted', {tableName: this.props.tableJustDeleted}), Locale.getMessage('success'));

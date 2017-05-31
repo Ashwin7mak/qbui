@@ -72,6 +72,7 @@ export const Nav = React.createClass({
     getStateFromFlux() {
         let flux = this.getFlux();
         return {
+            nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState()
         };
     },
@@ -467,11 +468,9 @@ export const Nav = React.createClass({
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
-                <TopNav title={this.props.shell.navTopTitle}
-                        // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
+                <TopNav // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        showOnSmall={this.props.shell.topNavVisible}
                 />
                 {this.props.routes &&
                 <div className="mainContent" >

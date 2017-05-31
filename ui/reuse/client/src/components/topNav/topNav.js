@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import Icon from 'REUSE/components/icon/icon';
+import {connect} from 'react-redux';
 
 import './topNav.scss';
 
@@ -37,8 +38,7 @@ class TopNav extends Component {
                             <Button tabIndex="1"  className="iconLink toggleNavButton" onClick={onNavClick}>
                                 <Icon icon="hamburger" />
                             </Button>
-
-                            {this.getTopTitle()}
+                             {this.getTopTitle()}
                         </ButtonGroup>
                     </div>
 
@@ -81,4 +81,14 @@ TopNav.defaultProps = {
     showOnSmall: true,
 };
 
-export default TopNav;
+const mapStateToProps = (state) => {
+    return {
+        title: state.shell.navTopTitle,
+        showOnSmall:state.shell.topNavVisible
+    };
+};
+
+
+export default connect(
+    mapStateToProps
+)(TopNav);

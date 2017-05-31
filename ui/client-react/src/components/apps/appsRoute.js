@@ -4,6 +4,7 @@ import Fluxxor from 'fluxxor';
 import Stage from '../../../../reuse/client/src/components/stage/stage';
 import Locale from '../../locales/locales';
 import MyAppsPage from './myAppsPage';
+import {connect} from 'react-redux';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -47,4 +48,19 @@ let AppsRoute = React.createClass({
     }
 });
 
-export default AppsRoute;
+const mapStateToProps = (state, ownProps) => {
+    return {
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setTopTitle: (title) => dispatch(setTopTitle(title)),
+        showTopNav: () => dispatch(showTopNav())
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppsRoute);
