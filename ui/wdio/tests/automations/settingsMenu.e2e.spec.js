@@ -5,6 +5,7 @@
     let appSettingsList = requirePO('/app/appSettings');
     let automationSettings = requirePO('/automations/automationsSettings');
     let newStackAuthPO = requirePO('newStackAuth');
+    let leftNavPO = requirePO('leftNav');
     let appBuilder = require('../../../test_generators/app.builder.js');
 
     describe('Automations - application settings ', function() {
@@ -36,6 +37,8 @@
         it('should contains menu item that leads to automations settings', function() {
             //navigate to Application main page
             e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
+            //wait until loading screen disappear in leftnav
+            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
 
             //validate the 'Settings' button is visible
             expect(appToolbar.appSettingsBtn.isVisible()).toBe(true);
