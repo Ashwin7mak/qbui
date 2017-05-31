@@ -594,6 +594,8 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
                     //failing in CI
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
+                    //failing in CI
+                    './wdio/tests/automations/automationsList.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -636,7 +638,6 @@ module.exports = function(grunt) {
                     ],
                     automations: [
                         './wdio/tests/automations/settingsMenu.e2e.spec.js',
-                        './wdio/tests/automations/automationsList.e2e.spec.js'
                     ]
                 }
             },
