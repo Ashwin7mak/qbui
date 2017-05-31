@@ -281,7 +281,7 @@ export const QBForm = React.createClass({
             // when elements are passing each other during animation.
             arrangedElements = (
                 <FlipMove
-                    duration={200}
+                    duration={100}
                     easing="ease"
                     appearAnimation="fade"
                     enterAnimation={FORM_ELEMENT_ENTER}

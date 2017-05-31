@@ -3,6 +3,7 @@ import Logger from '../../utils/logger';
 
 /**
  * A helper class to move a field from one location in teh FormMetaData to another place in the data.
+ * Warning: This method has side effects on formMeta!
  * @type {{moveField}}
  */
 const MoveFieldHelper = {
@@ -13,45 +14,38 @@ const MoveFieldHelper = {
 
         let currentLocation = findCurrentElementLocation(formMeta, draggedItemProps.containingElement);
 
-        let formMetaCopy = _.cloneDeep(formMeta);
+        removeElementFromCurrentLocation(formMeta, currentLocation);
+        addElementToNewLocation(formMeta, newLocation, draggedItemProps);
 
-        removeElementFromCurrentLocation(formMetaCopy, currentLocation);
-        addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
-
-        return formMetaCopy;
+        return formMeta;
     },
 
     removeField(formMeta, location) {
-        let formMetaCopy = _.cloneDeep(formMeta);
-
-        removeFieldIdFromFormMetaData(formMetaCopy, location);
-        removeElementFromCurrentLocation(formMetaCopy, location);
-        return formMetaCopy;
+        removeFieldIdFromFormMetaData(formMeta, location);
+        removeElementFromCurrentLocation(formMeta, location);
+        return formMeta;
     },
 
     keyBoardMoveFieldUp(formMeta, currentLocation) {
-        let formMetaCopy = _.cloneDeep(formMeta);
-        swapFieldLocation(formMetaCopy, currentLocation, -1);
+        swapFieldLocation(formMeta, currentLocation, -1);
 
-        return formMetaCopy;
+        return formMeta;
     },
 
     keyBoardMoveFieldDown(formMeta, currentLocation) {
-        let formMetaCopy = _.cloneDeep(formMeta);
-        swapFieldLocation(formMetaCopy, currentLocation, 1);
+        swapFieldLocation(formMeta, currentLocation, 1);
 
-        return formMetaCopy;
+        return formMeta;
     },
 
     addFieldToForm(formMeta, newLocation, field) {
-        let formMetaCopy = _.cloneDeep(formMeta);
         field = {containingElement: field};
-        addElementToNewLocation(formMetaCopy, newLocation, field);
+        addElementToNewLocation(formMeta, newLocation, field);
         if (!_.includes(field.containingElement.id, 'new')) {
-            formMetaCopy.fields.push(field.containingElement.id);
+            formMeta.fields.push(field.containingElement.id);
         }
 
-        return formMetaCopy;
+        return formMeta;
     },
 
     updateSelectedFieldLocation(location, updatedLocation) {

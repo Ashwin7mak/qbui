@@ -1,11 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import QbForm from '../QBForm/qbform';
 import {findFormElementKey} from '../../utils/formUtils';
-import {findDOMNode} from 'react-dom';
 
 import './formBuilder.scss';
 
-const DRAG_PREVIEW_TIMEOUT = 10;
+const DRAG_PREVIEW_TIMEOUT = 20;
 
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
@@ -93,7 +92,7 @@ export class FormBuilder extends Component {
                     handleFormReorder={this.handleFormReorder}
                     cancelFormReorder={this.cancelFormReorder}
                     updateAnimationState={this.props.updateAnimationState}
-                    hasAnimation={false}
+                    hasAnimation={true}
                     app={this.props.app}
                     tblId={this.props.tblId}
                     appUsers={[]}
