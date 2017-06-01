@@ -1,6 +1,7 @@
 'use strict';
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
+let formsPO = requirePO('formsPage');
 
 class formBuilderPage {
 
@@ -113,6 +114,7 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         this.dirtyForm_Dismiss();
+        formsPO.viewFormContainerEl.waitForVisible();
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
