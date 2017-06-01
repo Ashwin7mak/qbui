@@ -234,6 +234,10 @@ export default {
                 approverecord: {
                     success: "Record Approved.",
                     error: "An error occured when approving this record."
+                },
+                testautomation: {
+                    success: "Automation Test Successful.",
+                    error: "An error occured when testing this automation."
                 }
             }
         },
@@ -762,6 +766,8 @@ export default {
         automationList: {
             nameHeader: "Name",
             activeHeader: "Active",
+            actionHeader: "Action",
+            actionButton: "Test",
             activeYes: "Yes",
             activeNo: "No"
         },

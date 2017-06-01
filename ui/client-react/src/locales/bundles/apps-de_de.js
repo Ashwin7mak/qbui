@@ -231,7 +231,12 @@ export default {
                 approverecord: {
                     success: "Rekord genehmigt.",
                     error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
+                },
+                testautomation: {
+                    success: "Automatisierungstest erfolgreich.",
+                    error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
                 }
+
             }
         },
         relationship: {
@@ -754,6 +759,8 @@ export default {
         automationList: {
             nameHeader: "Name",
             activeHeader: "Aktiv",
+            actionHeader: "Aktion",
+            actionButton: "Test",
             activeYes: "Ja",
             activeNo: "Nein"
         },

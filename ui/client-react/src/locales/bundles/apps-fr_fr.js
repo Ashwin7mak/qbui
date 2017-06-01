@@ -230,6 +230,10 @@ export default {
                 approverecord: {
                     success: "Enregistrement approuvé.",
                     error: "Une erreur s'est produite lors de l'approbation de ce document."
+                },
+                testautomation: {
+                    success: "Test d'automatisation réussi.",
+                    error: "Une erreur s'est produite lors du test de cette automatisation."
                 }
             }
         },
@@ -752,6 +756,8 @@ export default {
         automationList: {
             nameHeader: "Prénom",
             activeHeader: "Actif",
+            actionHeader: "action",
+            actionButton: "Tester",
             activeYes: "Oui",
             activeNo: "Non"
         },
