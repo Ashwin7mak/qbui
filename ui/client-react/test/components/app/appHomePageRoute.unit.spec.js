@@ -21,7 +21,7 @@ describe('AppHomePageRoute functions', () => {
     const props = {
         showTopNav: () => {},
         setTopTitle: () => {}
-    }
+    };
     const selectedAppId = 2;
     const selectedAppName = 'Adams';
     const selectedApp = {name: selectedAppName};
