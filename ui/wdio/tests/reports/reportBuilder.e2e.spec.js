@@ -37,11 +37,18 @@
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // invoke report builder
-            return reportBuilderPO.open();
+            return reportBuilderPO.enterBuilderMode();
         });
 
         it('verify CANCEL', function() {
-            reportBuilderPO.cancel();
+            // ReportBuilderContainer exists in the browser before clicking on cancel
+            let isReportBuilderContainerPresent = reportBuilderPO.reportBuilderContainerIsExisting();
+            expect(isReportBuilderContainerPresent).toEqual(true);
+            // Clicks cancel after reportBuilder page opens
+            reportBuilderPO.clickCancel();
+            // ReportBuilderContainer should not exist in the browser after cancel is clicked
+            let isReportBuilderContainerPresent1 = reportBuilderPO.reportBuilderContainerIsExisting();
+            expect(isReportBuilderContainerPresent1).toEqual(false);
         });
     });
 
