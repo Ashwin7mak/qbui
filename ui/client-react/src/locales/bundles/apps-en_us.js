@@ -594,6 +594,7 @@ export default {
             name: "Name",
             required: "Must be filled in",
             multiChoice: "Choices",
+            unique: "Must have unique values",
             linkToRecord: "Link to a record in the table"
         },
         builder: {

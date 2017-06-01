@@ -4,6 +4,7 @@ import ReportModelHelper from '../models/reportModelHelper';
 const reportBuilder = (
     state = {
         redirectRoute: null,
+        isPendingEdit: false,
         isInBuilderMode: false,
         availableColumns: []
     }, action) => {
@@ -13,6 +14,12 @@ const reportBuilder = (
         return {
             ...state,
             redirectRoute: action.content.route
+        };
+    }
+    case types.SET_IS_PENDING_EDIT_TO_FALSE: {
+        return {
+            ...state,
+            isPendingEdit: false
         };
     }
     case types.REFRESH_FIELD_SELECT_MENU: {
@@ -36,6 +43,15 @@ const reportBuilder = (
         return {
             ...state,
             isInBuilderMode: false
+        };
+    }
+    case types.CHANGE_REPORT_NAME:
+    case types.MOVE_COLUMN:
+    case types.HIDE_COLUMN:
+    case types.ADD_COLUMN_FROM_EXISTING_FIELD: {
+        return {
+            ...state,
+            isPendingEdit: true
         };
     }
     default:

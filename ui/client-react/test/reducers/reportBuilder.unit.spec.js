@@ -8,6 +8,7 @@ const route = 'new/route/';
 function initializeState() {
     initialState = {
         redirectRoute: null,
+        isPendingEdit: false,
         isInBuilderMode: false,
         availableColumns: []
     };
