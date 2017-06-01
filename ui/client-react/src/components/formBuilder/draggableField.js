@@ -88,7 +88,6 @@ function collect(connect, monitor) {
  * A higher order component that accepts a field which will become draggable
  * @param FieldComponent
  * @param showFieldEditingTools
- * @param isFieldDeletable
  * @returns {*}
  * @constructor
  */
