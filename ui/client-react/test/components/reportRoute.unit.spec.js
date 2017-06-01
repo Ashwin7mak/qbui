@@ -29,6 +29,7 @@ describe('ReportRoute', () => {
 
     let props = {
         clearSearchInput: () => {},
+        hideTopNav: () => {},
         loadFields: (app, tbl) => {},
         loadReport: (context, appId, tblId, rptId, format, offset, rows) => {},
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {},
@@ -57,8 +58,7 @@ describe('ReportRoute', () => {
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
-        selectTableId() {return;},
-        hideTopNav() {return;}
+        selectTableId() {return;}
     };
 
     const StageMock = React.createClass({

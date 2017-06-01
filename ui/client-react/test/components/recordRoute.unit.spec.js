@@ -23,8 +23,6 @@ describe('RecordRoute', () => {
     //TODO: to use enzyme
     let flux = {};
     flux.actions = {
-        hideTopNav() {return;},
-        setTopTitle() {return;},
         selectTableId() {return;}
     };
 
@@ -33,6 +31,8 @@ describe('RecordRoute', () => {
         loadForm: () => {},
         openRecord: () => {},
         clearSearchInput: () => {},
+        hideTopNav: () => {},
+        setTopTitle: () => {},
         record: {
             recordIdBeingEdited: 2,
             records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
