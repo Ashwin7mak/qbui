@@ -45,5 +45,24 @@ class reportBuilderPage {
         return this;
     }
 
+    getColumnLabels() {
+        // Gets the list of field labels from the form builder
+        let labelEls = browser.elements('.qbHeaderCell');
+        return labelEls.value.map(function(labelEl) {
+            let label = labelEl.element('.gridHeaderLabel').getText();
+            return label;
+        });
+    }
+
+    getReportLocator(index) {
+        // Returns a locator string for a specific field in the form builder
+        return '.qbHeaderCell:nth-child(' + index + ')';
+    }
+
+    get reportTokenDragging() {
+        // the token which appears when dragging a field to another position
+        return browser.element('.reportTokenDragging');
+    }
+
 }
 module.exports = new reportBuilderPage();

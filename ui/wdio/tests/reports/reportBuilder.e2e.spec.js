@@ -43,6 +43,49 @@
         it('verify CANCEL', function() {
             reportBuilderPO.cancel();
         });
+
+        it('drag a column without dropping, then drag back to original field, release & verify no change', function() {
+            let originalColumns = reportBuilderPO.getColumnLabels();
+
+            // drag 1st column onto 2nd
+            let source = reportBuilderPO.getReportLocator(1);
+            let target = reportBuilderPO.getReportLocator(3);
+
+            // drag source to target without dropping
+            browser.moveToObject(source);
+            browser.buttonDown();
+            browser.moveToObject(target);
+
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.moveToObject(source);
+            browser.buttonUp();
+
+            // verify original order
+            let newColumns = reportBuilderPO.getColumnLabels();
+            expect(reportBuilderPO.getColumnLabels()).toEqual(originalColumns);
+            expect(newColumns[0]).toBe(originalColumns[0]);
+            expect(newColumns[2]).toBe(originalColumns[2]);
+        });
+
+        it('drag/drop a column & verify move', function() {
+            let originalColumns = reportBuilderPO.getColumnLabels();
+
+            let source = reportBuilderPO.getReportLocator(1);
+            let target = reportBuilderPO.getReportLocator(2);
+
+            // move the first column to second position
+            browser.moveToObject(source);
+            browser.buttonDown();
+            browser.moveToObject(target);
+            browser.buttonUp();
+
+            // verify the new order
+            let newColumns = reportBuilderPO.getColumnLabels();
+            expect(reportBuilderPO.getColumnLabels().length).toBe(originalColumns.length);
+            expect(newColumns[0]).toBe(originalColumns[1]);
+            expect(newColumns[1]).toBe(originalColumns[0]);
+
+        })
     });
 
 }());
