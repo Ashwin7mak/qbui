@@ -92,5 +92,10 @@ export const openAddUserDialog = (status) => {
     };
 };
 
-
+export const selectUserRows = (selected) => {
+    return {
+        type: types.SELECT_USER_ROWS,
+        selectedUsers: selected
+    };
+};
 

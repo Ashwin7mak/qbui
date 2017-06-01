@@ -12,13 +12,13 @@ import Locale from '../../../../../../reuse/client/src/locales/locale';
 import {connect} from 'react-redux';
 
 import UserActions from '../../../actions/userActions';
-import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog} from '../../../../actions/userActions';
+import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows} from '../../../../actions/userActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {assignUserToApp} from '../../../../actions/appActions';
 
 import {getAppRoles} from '../../../../reducers/appRoles';
 import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
-import {getSearchedUsers} from '../../../../reducers/users';
+import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
 
 import './appUsersRoute.scss';
 
@@ -39,17 +39,18 @@ export const AppUsersRoute = React.createClass({
     },
 
     componentWillReceiveProps(props) {
-        const selectedApp = this.props.selectedApp;
-        if (props.match.params.appId && _.has(selectedApp, 'ownerId')) {
+        const selectedApp = this.props.selectedApp || {};
+        if (props.match.params.appId && selectedApp.ownerId) {
             if (this.props.match.params.appId !== props.match.params.appId) {
                 this.props.loadAppRoles(this.props.match.params.appId);
                 this.props.loadAppOwner(selectedApp.ownerId);
             }
-        }
-
-        if (this.props.match.params.appId !== props.match.params.appId && _.has(selectedApp, 'ownerId') && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
-            this.props.loadAppRoles(this.props.match.params.appId);
-            this.props.loadAppOwner(this.props.selectedApp.ownerId);
+        } else {
+            const propsSelectedApp = props.selectedApp || {};
+            if (this.props.match.params.appId !== props.match.params.appId && selectedApp.ownerId !== propsSelectedApp.ownerId) {
+                this.props.loadAppRoles(this.props.match.params.appId);
+                this.props.loadAppOwner(selectedApp.ownerId);
+            }
         }
     },
 
@@ -106,7 +107,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     selectRows(selectedRows) {
-        this.props.flux.actions.selectUsersRows(selectedRows);
+        this.props.selectUserRows(selectedRows);
     },
 
     toggleSelectedRow(id, roleId) {
@@ -124,7 +125,7 @@ export const AppUsersRoute = React.createClass({
         }
         this.setState({roleId:roleId});
 
-        this.props.flux.actions.selectUsersRows(selectedRows);
+        this.props.selectUserRows(selectedRows);
     },
 
     /**
@@ -177,11 +178,11 @@ export const AppUsersRoute = React.createClass({
                                searchUsers={this.props.searchUsers}
                                appRoles={this.props.appRoles}
                                setUserRoleToAdd={this.setUserRoleToAdd}
-                               userRoleIdToAdd={this.props.userRoleIdToAdd}
+                               userRoleIdToAdd={this.props.roleIdToAdd}
                                appId={this.props.match.params.appId}
                                selectedApp={this.props.selectedApp}
                                existingUsers={this.props.selectedApp.unfilteredUsers}
-                               addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
+                               addUserToAppDialogOpen={this.props.openDialogStatus}
                                hideDialog={this.toggleAddUserDialog}/>
                     {this.getTableActions()}
                     <div className="userManagementContainer">
@@ -212,7 +213,10 @@ const mapStateToProps = (state, ownProps) => {
         selectedApp: getApp(state.app, selectedAppId),
         appOwner: getAppOwner(state.app),
         realmUsers: getSearchedUsers(state.users),
-        unfilteredUsers: getSelectedAppUnfilteredUsers(state.app)
+        unfilteredUsers: getSelectedAppUnfilteredUsers(state.app),
+        openDialogStatus: getDialogStatus(state.users),
+        roleIdToAdd: getRoleIdToAdd(state.users),
+        selectedUserRows: getSelectedUsers(state.users)
     };
 };
 
@@ -222,7 +226,8 @@ const mapDispatchToProps = (dispatch) => {
         loadAppOwner: (appId, userId) => {dispatch(loadAppOwner(appId, userId));},
         searchUsers: (searchTerm) => {return dispatch(searchUsers(searchTerm));},
         setUserRoleToAdd: (roleId) => {dispatch(setUserRoleToAdd(roleId));},
-        openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));}
+        openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));},
+        selectUserRows: (selected) => {dispatch(selectUserRows(selected));}
     };
 };
 

@@ -4,6 +4,7 @@ const users = (
     //  default states
     state = {
         searchedUsers: [],
+        selectedUsers: [],
         roleIdToAdd: null,
         dialogStatus: false
     },
@@ -26,6 +27,11 @@ const users = (
             ...state,
             dialogStatus: action.status
         };
+    case types.SELECT_USER_ROWS:
+        return {
+            ...state,
+            selectedUsers: action.selectedUsers
+        };
     default:
         // return existing state by default in redux
         return state;
@@ -44,4 +50,8 @@ export const getDialogStatus = (state) => {
 
 export const getRoleIdToAdd = (state) => {
     return state.roleIdToAdd;
-}
+};
+
+export const getSelectedUsers = (state) => {
+    return state.selectedUsers;
+};

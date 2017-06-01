@@ -14,13 +14,14 @@ export class AddUserDialog extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            isValid: false
-        };
         // bind to fix context for event handlers
         this.onFinished = this.onFinished.bind(this);
         this.onCancel = this.onCancel.bind(this);
         this.isValid = this.isValid.bind(this);
+    }
+
+    componentWillMount() {
+        this.isValid(false);
     }
 
     /**
@@ -28,7 +29,7 @@ export class AddUserDialog extends React.Component {
      * @returns void
      */
     onCancel() {
-        this.state.isValid = false;
+        this.isValid(false);
         this.props.hideDialog(false);
     }
 
@@ -45,7 +46,7 @@ export class AddUserDialog extends React.Component {
 
             this.props.assignUserToApp(this.props.appId, userInfo.userId, userInfo.roleId).then(
                 () => {
-                    this.state.isValid = false;
+                    this.isValid(false);
                     this.props.hideDialog(false);
                     //this.props.onAddedUser(userInfo.userId);
                     NotificationManager.success(Locale.getMessage('app.users.userAdded'));

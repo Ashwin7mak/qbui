@@ -19,7 +19,7 @@ let AppsStore = Fluxxor.createStore({
         // Default is true because the apps must load before the website is usable
         //this.loading = true;
         //this.error = false;
-        this.selectedUserRows = [];
+        //this.selectedUserRows = [];
 
         //this.selectedAppId = null;
         //this.selectedTableId = null;
@@ -43,13 +43,13 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
             actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess,
 
-            actions.SELECT_USERS_DETAILS, this.onSelectedRows,
+            //actions.SELECT_USERS_DETAILS, this.onSelectedRows
 
             actions.UNASSIGN_USERS, this.onUnasssignUsers,
             actions.UNASSIGN_USERS_FAILED, this.onUnasssignUsersFail,
-            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess,
+            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess
 
-            actions.LOAD_ALL_USERS, this.onLoadAllUsers,
+            //actions.LOAD_ALL_USERS, this.onLoadAllUsers
             //actions.SEARCH_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
 
             //actions.ADD_USER, this.onAddUser
@@ -163,11 +163,11 @@ let AppsStore = Fluxxor.createStore({
     //
     //    this.emit('change');
     //},
-    onSelectedRows(selectedRows) {
-        this.selectedUserRows = selectedRows;
-
-        this.emit('change');
-    },
+    //onSelectedRows(selectedRows) {
+    //    this.selectedUserRows = selectedRows;
+    //
+    //    this.emit('change');
+    //},
     onUnasssignUsers() {
         this.emit('change');
     },
@@ -198,9 +198,9 @@ let AppsStore = Fluxxor.createStore({
     onUnasssignUsersFail() {
         this.emit('change');
     },
-    onLoadAllUsers() {
-        this.emit('change');
-    },
+    //onLoadAllUsers() {
+    //    this.emit('change');
+    //},
     //onLoadAllUsersSuccess(data) {
     //    this.realmUsers = data;
     //    this.emit('change');
@@ -272,11 +272,11 @@ let AppsStore = Fluxxor.createStore({
             //selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
             appUsersUnfiltered: this.appUsersUnfiltered,
-            appOwner: this.appOwner,
+            appOwner: this.appOwner
             //selectedTableId: this.selectedTableId,
             //loading: this.loading,
             //error: this.error,
-            selectedUserRows:this.selectedUserRows,
+            //selectedUserRows:this.selectedUserRows,
             //realmUsers: this.realmUsers,
             //addUserToAppDialogOpen: this.addUserToAppDialogOpen,
             //userRoleIdToAdd: this.userRoleIdToAdd

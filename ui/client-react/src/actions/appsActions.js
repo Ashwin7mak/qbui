@@ -110,9 +110,9 @@ let appsActions = {
     //    this.dispatch(actions.UPDATED_TABLE_PROPS, {tableId: tableId, tableInfo: tableInfo});
     //},
 
-    selectUsersRows(selectedRows) {
-        this.dispatch(actions.SELECT_USERS_DETAILS, selectedRows);
-    },
+    //selectUsersRows(selectedRows) {
+    //    this.dispatch(actions.SELECT_USERS_DETAILS, selectedRows);
+    //},
 
     unassignUsers(appId, roleId, userIds) {
         let logger = new Logger();

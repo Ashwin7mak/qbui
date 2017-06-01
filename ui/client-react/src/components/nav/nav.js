@@ -32,7 +32,6 @@ import * as TableCreationActions from '../../actions/tableCreationActions';
 import * as AppActions from '../../actions/appActions';
 
 import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../reducers/app';
-import {getDialogStatus, getRoleIdToAdd} from '../../reducers/users';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -504,11 +503,8 @@ export const Nav = React.createClass({
                                 isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                                 selectedApp: selectedApp,
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
-                                selectedUserRows: this.state.apps.selectedUserRows,
-                                addUserToAppDialogOpen: this.props.openDialogStatus,
                                 scrollingReport: this.state.nav.scrollingReport,
-                                flux: flux,
-                                userRoleIdToAdd: this.props.roleIdToAdd
+                                flux: flux
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
                         }
@@ -590,8 +586,6 @@ const mapStateToProps = (state) => {
         getApp: (appId) => getApp(state.app, appId),
         getApps: () => getApps(state.app),
         isAppsLoading: getIsAppsLoading(state.app),
-        openDialogStatus: getDialogStatus(state.users),
-        roleIdToAdd: getRoleIdToAdd(state.users),
         forms: state.forms,
         shell: state.shell,
         record: state.record,
