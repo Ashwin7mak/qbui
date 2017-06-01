@@ -88,6 +88,7 @@ function collect(connect, monitor) {
  * A higher order component that accepts a field which will become draggable
  * @param FieldComponent
  * @param showFieldEditingTools
+ * @param isFieldDeletable
  * @returns {*}
  * @constructor
  */
@@ -114,7 +115,17 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement} relatedField={this.props.relatedField}/>}
+                        {showFieldEditingTools &&
+                            <FieldEditingTools
+                                location={location}
+                                isDragging={isDragging}
+                                formBuilderContainerContentElement={formBuilderContainerContentElement}
+                                relatedField={this.props.relatedField}
+                                app={this.props.app}
+                                tblId={this.props.tblId}
+                                fieldId={this.props.fieldId}
+                            />
+                        }
                         <FieldComponent {...this.props} />
                     </div>
                 </div>

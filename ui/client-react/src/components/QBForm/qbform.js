@@ -403,6 +403,7 @@ export const QBForm = React.createClass({
                   key={`fieldElement-${containingElement.id}`}
                   idKey={"fe-" + this.props.idKey}
                   relatedField={relatedField}
+                  fieldId={_.get(relatedField, 'id', null)}
                   fieldRecord={fieldRecord}
                   includeLabel={true}
                   indicateRequiredOnLabel={this.props.edit}
@@ -417,7 +418,7 @@ export const QBForm = React.createClass({
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, location);}}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
                   goToParent={goToParent}
                   masterTableId={masterTableId}
                   masterAppId={masterAppId}
