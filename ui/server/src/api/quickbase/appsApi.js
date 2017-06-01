@@ -76,7 +76,7 @@
                             resolve(JSON.parse(eeResponse.body));
                         },
                         (error) =>{
-                            log.error({req: req}, "tablesApi.createTableProperties(): Error creating table properties on EE");
+                            requestHelper.logUnexpectedError('appsApi._createTableProperties(): error creating table properties', error, true);
                             resolve();
                         }).catch((ex) =>{
                             requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties', ex, true);
@@ -118,8 +118,7 @@
              * @param tablePropsArray
              * @private
              */
-            _mergeTableProps(app, tablePropsArray) {
-                let tablesWithoutProps = [];
+            _mergeTableProps(app, tablePropsArray, tablesWithoutProps) {
                 //ideally there should be same number of responses as tables but just to be sure look up which response corresponds to which table
                 app.tables.map((table) => {
                     let idx = _.findIndex(tablePropsArray, function(props) {return props.tableId === table.id;});
@@ -127,12 +126,11 @@
                         Object.keys(tablePropsArray[idx]).forEach(function(key, index) {
                             table[key] = tablePropsArray[idx][key];
                         });
-                    } else {
+                    } else if (tablesWithoutProps) {
                         //no props found - maybe this table was created through api so populate values into the tableProperties object for the benefit of UI
                         tablesWithoutProps.push(table);
                     }
                 });
-                return tablesWithoutProps;
             },
 
             getApp: function(req, appId) {
@@ -151,7 +149,8 @@
                         (responses) => {
                             let app = JSON.parse(responses[0].body);
                             if (responses.length > 1) {
-                                let tablesWithoutProps = this._mergeTableProps(app, responses[1]);
+                                let tablesWithoutProps = [];
+                                this._mergeTableProps(app, responses[1], tablesWithoutProps);
                                 if (tablesWithoutProps.length > 0) {
                                     let tablePromises = [];
                                     tablesWithoutProps.forEach(table => {
