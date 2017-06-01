@@ -284,3 +284,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
         display: block;
     }
 }
+
+.textLink {
+    @include text-link($link-normal-color, $link-hover-color, $link-hover-decoration, $cursor-pointer);
+}

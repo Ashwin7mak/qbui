@@ -15,6 +15,10 @@ describe('GetLeftNavLinks', () => {
         expect(actual.map((elem) => elem.title)).toEqual(expected);
     };
 
+    const assertEnabledLinks = (actual, expected) => {
+        expect(actual.filter(link => !link.isDisabled).map((elem) => elem.title)).toEqual(expected);
+    };
+
     beforeEach(() => {
         GovernanceBundleLoader.changeLocale('en-us');
     });
@@ -38,5 +42,14 @@ describe('GetLeftNavLinks', () => {
     // AccountURL realm, user may still be a Realm Admin
     it("should retrieve the correct links for Account Admin and Realm Admin in AccountURL Realm", ()=> {
         assertCorrectLink(GetLeftNavLinks(true, true, true), AccountAdminLinkNames);
+    });
+
+    // As of right now all links except 'Manage Users' should be disabled
+    it("should disable all the links except for 'Manage Users'", () =>{
+        let expected = ['Manage Users'];
+        assertEnabledLinks(GetLeftNavLinks(true, false, true), expected);
+        assertEnabledLinks(GetLeftNavLinks(true, false, false), expected);
+        assertEnabledLinks(GetLeftNavLinks(false, true, false), expected);
+        assertEnabledLinks(GetLeftNavLinks(true, true, true), expected);
     });
 });

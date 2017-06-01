@@ -49,6 +49,9 @@
         TEXT_FORMULA    : 'TEXT_FORMULA',
         URL_FORMULA     : 'URL_FORMULA',
         NUMERIC_FORMULA : 'NUMERIC_FORMULA',
+		//default app roles
+        DEFAULT_ROLE    : 'Participant',
+        FIRST_THEN_LAST : 'FIRST_THEN_LAST',
 
         LINK_TO_RECORD  : 'LINK_TO_RECORD',
         LIST_OF_RECORDS : 'LIST_OF_RECORDS',
@@ -239,6 +242,8 @@
             DATE_CREATED: "Date Created",
             RECORD_OWNER: "Record Owner"
         },
+        //used to remove builtin fields from existing menu in form builder
+        BUILTIN_FIELD_ID_ARRAY: [1, 2, 3, 4, 5],
         BUILTIN_FIELD_ID: {
             DATE_CREATED: 1,
             DATE_MODIFIED: 2,

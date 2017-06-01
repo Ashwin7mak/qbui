@@ -187,6 +187,7 @@ describe('Test ReportsActions function success workflow', () => {
                 done();
             });
     });
+
 });
 
 describe('Test ReportsActions function failure workflow', () => {

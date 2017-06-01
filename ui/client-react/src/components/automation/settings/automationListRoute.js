@@ -36,16 +36,27 @@ export class AutomationListRoute extends Component {
     }
 
     componentDidMount() {
-        if (this.props.app) {
-            this.props.loadAutomations(CONTEXT.AUTOMATION.GRID, this.props.app.id);
+        if (this.getAppId()) {
+            this.props.loadAutomations(CONTEXT.AUTOMATION.GRID, this.getAppId());
         }
+    }
+
+    getAppId() {
+        if (this.props.app) {
+            return this.props.app.id;
+        }
+        return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
     }
 
     renderAutomations() {
         if (this.props.automations && this.props.automations.length > 0) {
-            return this.props.automations.map((automation, index) => (
-                <tr><td>{automation.name}</td><td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td></tr>
-            ));
+            return this.props.automations
+                .filter((automation) => {
+                    return "EMAIL" === automation.type;
+                })
+                .map((automation, index) => (
+                    <tr><td>{automation.name}</td><td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td></tr>
+                ));
         }
         return [];
     }

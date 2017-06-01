@@ -5,7 +5,8 @@ import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import _ from 'lodash';
-
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 

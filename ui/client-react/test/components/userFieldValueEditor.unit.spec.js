@@ -103,6 +103,7 @@ describe('UserFieldValueEditor', () => {
 
         let options = ReactDOM.findDOMNode(select).querySelectorAll('.Select-option');
         expect(options.length).toEqual(4);
+
     });
 
     it(`displays matching users when searched - "user"`, () => {
@@ -138,4 +139,12 @@ describe('UserFieldValueEditor', () => {
         let results = ReactDOM.findDOMNode(select).querySelector('.Select-noresults');
         expect(results.innerText).toEqual(`Nobody matches "thing"`);
     });
+
+
+    it('tests selectUser method', ()=>{
+        component = TestUtils.renderIntoDocument(<UserFieldValueEditor appUsers={appUsers} fieldDef={fieldDef} />);
+        component.selectUser({value: 1});
+        expect(component.state.selectedUserId).toEqual(1);
+    });
+
 });

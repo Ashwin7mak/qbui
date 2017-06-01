@@ -324,7 +324,7 @@
             browser.waitForVisible('.Select-menu-outer');
             //get all options from the list
             var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.element('div div').getText() === listOption;
+                return optionText.element('div div').getText().includes(listOption);
             });
 
             if (option !== []) {

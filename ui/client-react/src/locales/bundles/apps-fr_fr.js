@@ -38,7 +38,7 @@ export default {
             },
             settings: "Paramètres",
             users: {
-                addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
+                addUser: "Ajouter un nouvel utilisateur",
                 users: "Utilisateurs",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
@@ -51,7 +51,8 @@ export default {
                 singular: "utilisateur",
                 plural: "utilisateurs",
                 usersRemoved: " Les utilisateurs ont été enlevés",
-                userRemoved: " L'utilisateur a été supprimé"
+                userRemoved: " L'utilisateur a été supprimé",
+                userAdded: "Vous avez ajouté"
 
             }
         },
@@ -130,7 +131,8 @@ export default {
         },
         field: {
             search: "Chercher",
-            searchNoMatch: "Personne ne correspond à"
+            searchNoMatch: "Personne ne correspond à",
+            searchNoMatchAddUser: "Aucun utilisateur ne correspond à ce que vous recherchez"
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher.",
@@ -284,6 +286,12 @@ export default {
                 clearFacet: "Enlever le filtre {facet}",
                 clearFacetSelection: "Cliquez pour désactiver ce filtre",
                 filter: "Filtre"
+            },
+            notification: {
+                save: {
+                    success: "Rapport enregistré",
+                    error: "Impossible d'enregistrer le rapport"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -574,6 +582,7 @@ export default {
             name: "prénom",
             required: "Doit être rempli",
             multiChoice: "Les choix",
+            unique: "Doit avoir des valeurs uniques",
             linkToRecord: "Lien vers un enregistrement dans la table"
         },
         builder: {
@@ -746,6 +755,11 @@ export default {
             activeHeader: "Actif",
             activeYes: "Oui",
             activeNo: "Non"
+        },
+        addUserToApp: {
+            title: "Ajouter des utilisateurs à",
+            description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle",
+            searching: "Recherche..."
         }
     }
 };

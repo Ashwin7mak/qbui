@@ -67,14 +67,18 @@ export class FieldEditingTools extends Component {
         } else {
             tabIndex = '-1';
         }
-
-        return (
-            <div className="actionIcons">
-                    <div className="deleteFieldIcon">
-                        <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="clear-mini" /> </button>
-                        </QbToolTip>
-                    </div>
+        //Hide deleteFieldIcon if it is the last field on the form
+        return (<div>
+            {this.props.numberOfFieldsOnForm > 1 &&
+                <div className="actionIcons">
+                    {this.props.isFieldDeletable ?
+                        <div className="deleteFieldIcon">
+                            <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
+                                <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}><QbIcon icon="clear-mini"/>
+                                </button>
+                            </QbToolTip>
+                        </div> : null}
+                </div>}
             </div>
         );
     }
@@ -203,11 +207,13 @@ FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     isDragging: PropTypes.bool,
-    formId: PropTypes.string
+    formId: PropTypes.string,
+    isFieldDeletable: PropTypes.bool
 };
 
 FieldEditingTools.defaultProps = {
     formId: CONTEXT.FORM.VIEW,
+    isDeletable: true
 };
 
 
@@ -216,6 +222,7 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = _.get(state, `forms[${formId}]`, {});
     let formBuilderChildrenTabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
+    let numberOfFieldsOnForm = (_.has(currentForm, "formData.formMeta.numberOfFieldsOnForm") ? currentForm.formData.formMeta.numberOfFieldsOnForm : 1);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
     //If a new field is added to form builder we use the state isDragging to indicate whether or not it is in a dragon state,
     //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragon state
@@ -228,7 +235,8 @@ const mapStateToProps = (state, ownProps) => {
         selectedFields,
         previouslySelectedField,
         formBuilderChildrenTabIndex,
-        isDragging
+        isDragging,
+        numberOfFieldsOnForm
     };
 };
 
