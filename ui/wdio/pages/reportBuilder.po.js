@@ -16,10 +16,10 @@ class reportBuilderPage {
         return browser.element('.saveOrCancelFooter');
     }
 
-    get reportBuilderContainer() { 
+    get reportBuilderContainer() {
         // the whole report builder page
-        return browser.element('.reportBuilderContainer'); 
-         }
+        return browser.element('.reportBuilderContainer');
+    }
 
     get fieldToken() {
         // the field token from hidden fields
@@ -99,7 +99,7 @@ class reportBuilderPage {
         });
     }
 
-    reportBuilderContainerIsExisting(){
+    reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
         browser.pause(fiveSeconds);
