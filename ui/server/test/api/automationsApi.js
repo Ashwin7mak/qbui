@@ -10,7 +10,7 @@ module.exports = class AutomationsApi {
      * @return the list of automations for application
      */
     getAppAutomations(appId) {
-        this.apiBase.executeRequestToPath('/we/api/v1/apps/' + appId + '/workflow/flows/', this.constsants.GET).then(function(requestResponse) {
+        return this.apiBase.executeRequestToPath('/we/api/v1/apps/' + appId + '/workflow/flows/', this.constsants.GET).then(function(requestResponse) {
             let automations = JSON.parse(requestResponse.body);
             return automations;
         }).catch(function(error) {
