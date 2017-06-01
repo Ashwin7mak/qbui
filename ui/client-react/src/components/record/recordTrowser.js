@@ -289,7 +289,7 @@ export const RecordTrowser = React.createClass({
 
         //get the fields for the currently edited app/table
         if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields) &&
-            (this.props.reportData.tblId === this.props.editingTblId) && (this.props.reportData.appId === this.props.this.props.editingAppId)) {
+            (this.props.reportData.tblId === this.props.editingTblId) && (this.props.reportData.appId === this.props.editingAppId)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
