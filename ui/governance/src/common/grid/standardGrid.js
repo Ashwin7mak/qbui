@@ -44,6 +44,29 @@ class StandardGrid extends Component {
         return `${this.props.id}-row-${rowData[this.props.rowKey]}`;
     }
 
+    /**
+     * stick the header and sticky first column when the grid scrolls
+     * If the sticky column needs to be implemented, check out the code from qbGrid.js in client-react
+     */
+    handleScroll = () => {
+
+        let scrolled = this.tableRef;
+        if (scrolled) {
+            let currentTopScroll = scrolled.scrollTop;
+
+            // move the headers down to their original positions
+            let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
+            for (let i = 0; i < stickyHeaders.length; i++) {
+                let translate = "translate(0," + currentTopScroll + "px)";
+                stickyHeaders[i].style.transform = translate;
+            }
+        }
+    }
+
+    bodyRef = (body) => {
+        this.tableRef = body && body.getRef().parentNode;
+    }
+
     render() {
         return (
             <div className="gridWrapper">
@@ -58,6 +81,7 @@ class StandardGrid extends Component {
                     <Table.Provider
                         className="qbGrid"
                         columns={this.getColumns()}
+                        onScroll={this.handleScroll}
                         components={tableSubComponents}
                         >
 
@@ -68,6 +92,7 @@ class StandardGrid extends Component {
                             rows={this.props.items}
                             rowKey={this.getUniqueRowKey.bind(this)}
                             onRow={onRowFn}
+                            ref={this.bodyRef}
                             />
                     </Table.Provider>
                 </div>

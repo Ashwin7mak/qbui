@@ -23,15 +23,17 @@ describe('FieldEditingTools', () => {
         jasmineEnzyme();
     });
 
-    it('has a delete button', () => {
+    it('has a delete button if there are more than one field on the form', () => {
         spyOn(mockParentProps, 'removeFieldFromForm');
 
         component = shallow(<FieldEditingTools
+            numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
             relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            isFieldDeletable={true}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
@@ -41,6 +43,38 @@ describe('FieldEditingTools', () => {
         deleteButton.simulate('click');
 
         expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, relatedField, location);
+        mockParentProps.removeFieldFromForm.calls.reset();
+    });
+
+    it('has no delete button if the prop isFieldDeletable is not present', () => {
+        component = shallow(<FieldEditingTools
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            selectedFields={[]}
+            location={location}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            relatedField={relatedField}
+        />);
+
+        let deleteButton = component.find('.deleteFieldIcon button');
+
+        expect(deleteButton.length).toBe(0);
+    });
+
+    it('does not have a a delete button if there is only one field on the form', () => {
+        spyOn(mockParentProps, 'removeFieldFromForm');
+
+        component = shallow(<FieldEditingTools
+            numberOfFieldsOnForm={1}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            selectedFields={[]}
+            location={location}
+            relatedField={relatedField}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+        />);
+
+        let deleteButton = component.find('.deleteFieldIcon button');
+
+        expect(deleteButton).not.toBePresent();
     });
 
     it('selects a field when an element is clicked', () => {
