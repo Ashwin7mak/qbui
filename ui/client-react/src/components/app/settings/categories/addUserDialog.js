@@ -1,5 +1,8 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+
 import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
+import {assignUserToApp} from '../../../../actions/appActions';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from "../../../../utils/i18nMessage";
 import AddUserPanel from './addUserPanel';
@@ -34,28 +37,25 @@ export class AddUserDialog extends React.Component {
      * @returns void
      */
     onFinished() {
-        const userInfo = {
-            // refs is used here to get the instance of
-            // AddUserPanel, as opposed to using redux/flux actions
-            userId: this.userPanel.getSelectedUser(),
-            roleId: this.props.userRoleIdToAdd,
-        };
-        const responsePromise = this.props.assignUserToApp(this.props.appId, userInfo);
+        if (this.props.assignUserToApp) {
+            const userInfo = {
+                userId: this.userPanel.getSelectedUser(),
+                roleId: this.props.userRoleIdToAdd
+            };
 
-        if (responsePromise) {
-            responsePromise.then(
-            (response) => {
-                this.state.isValid = false;
-                this.props.hideDialog(false);
-                this.props.onAddedUser(userInfo.userId);
-            },
-            (error) => {
-                // leave the dialog open but issue a growl indicating an error
-                NotificationManager.error(Locale.getMessage('users.addUser'), Locale.getMessage('failed'));
-            }
-        );
+            this.props.assignUserToApp(this.props.appId, userInfo.userId, userInfo.roleId).then(
+                () => {
+                    this.state.isValid = false;
+                    this.props.hideDialog(false);
+                    //this.props.onAddedUser(userInfo.userId);
+                    NotificationManager.success(Locale.getMessage('app.users.userAdded'));
+                },
+                () => {
+                    // leave the dialog open but issue a growl indicating an error
+                    NotificationManager.error(Locale.getMessage('app.users.userAddError'));
+                }
+            );
         }
-
     }
 
     /**
@@ -111,4 +111,13 @@ AddUserDialog.propTypes = {
     hideDialog: PropTypes.func
 };
 
-export default AddUserDialog;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        assignUserToApp: (appId, userId, roleId) => {return dispatch(assignUserToApp(appId, userId, roleId));}
+    };
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(AddUserDialog);

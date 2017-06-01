@@ -78,3 +78,19 @@ export const searchUsers = (searchTerm) => {
     };
 };
 
+export const setUserRoleToAdd = (roleId) => {
+    return {
+        type: types.SET_USER_ROLE_TO_ADD,
+        roleId: roleId
+    };
+};
+
+export const openAddUserDialog = (status) => {
+    return {
+        type: types.TOGGLE_ADD_USER_DIALOG,
+        status: status
+    };
+};
+
+
+

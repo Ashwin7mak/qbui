@@ -9,13 +9,17 @@ import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
-import UserActions from '../../../actions/userActions';
 import {connect} from 'react-redux';
-import {loadAppOwner, searchUsers} from '../../../../actions/userActions';
+
+import UserActions from '../../../actions/userActions';
+import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog} from '../../../../actions/userActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
+import {assignUserToApp} from '../../../../actions/appActions';
+
 import {getAppRoles} from '../../../../reducers/appRoles';
-import {getSelectedAppId, getApp, getAppOwner} from '../../../../reducers/app';
+import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
 import {getSearchedUsers} from '../../../../reducers/users';
+
 import './appUsersRoute.scss';
 
 export const AppUsersRoute = React.createClass({
@@ -26,22 +30,24 @@ export const AppUsersRoute = React.createClass({
     },
     componentDidMount() {
         this.props.loadAppRoles(this.props.match.params.appId);
-        this.props.loadAppOwner(this.props.appId, this.props.selectedApp.ownerId);
+
+        const selectedApp = this.props.selectedApp;
+        if (selectedApp) {
+            this.props.loadAppOwner(this.props.appId, this.props.selectedApp.ownerId);
+        }
         this.props.searchUsers();
     },
 
     componentWillReceiveProps(props) {
-        if (props.match.params.appId && props.selectedApp.ownerId) {
+        const selectedApp = this.props.selectedApp;
+        if (props.match.params.appId && _.has(selectedApp, 'ownerId')) {
             if (this.props.match.params.appId !== props.match.params.appId) {
                 this.props.loadAppRoles(this.props.match.params.appId);
-                this.props.loadAppOwner(this.props.selectedApp.ownerId);
+                this.props.loadAppOwner(selectedApp.ownerId);
             }
-        } else {
-            this.props.loadAppRoles(null);
-            this.props.loadAppOwner(null);
         }
 
-        if (this.props.match.params.appId !== props.match.params.appId && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
+        if (this.props.match.params.appId !== props.match.params.appId && _.has(selectedApp, 'ownerId') && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
             this.props.loadAppRoles(this.props.match.params.appId);
             this.props.loadAppOwner(this.props.selectedApp.ownerId);
         }
@@ -62,15 +68,11 @@ export const AppUsersRoute = React.createClass({
     },
 
     toggleAddUserDialog(state = true) {
-        this.props.flux.actions.openAddUserDialog(state);
+        this.props.openAddUserDialog(state);
     },
 
     setUserRoleToAdd(roleId) {
-        this.props.flux.actions.setUserRoleToAdd(roleId);
-    },
-
-    assignUserToApp(appId, userInfo) {
-        return this.props.flux.actions.assignUserToApp(appId, userInfo.userId, userInfo.roleId);
+        this.props.setUserRoleToAdd(roleId);
     },
 
     getStageHeadline() {
@@ -174,12 +176,11 @@ export const AppUsersRoute = React.createClass({
                 <AddUserDialog realmUsers={this.props.realmUsers}
                                searchUsers={this.props.searchUsers}
                                appRoles={this.props.appRoles}
-                               assignUserToApp={this.assignUserToApp}
                                setUserRoleToAdd={this.setUserRoleToAdd}
                                userRoleIdToAdd={this.props.userRoleIdToAdd}
                                appId={this.props.match.params.appId}
                                selectedApp={this.props.selectedApp}
-                               existingUsers={this.props.appUsersUnfiltered}
+                               existingUsers={this.props.selectedApp.unfilteredUsers}
                                addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
                                hideDialog={this.toggleAddUserDialog}/>
                     {this.getTableActions()}
@@ -210,7 +211,8 @@ const mapStateToProps = (state, ownProps) => {
         appId: selectedAppId,
         selectedApp: getApp(state.app, selectedAppId),
         appOwner: getAppOwner(state.app),
-        realmUsers: getSearchedUsers(state.users)
+        realmUsers: getSearchedUsers(state.users),
+        unfilteredUsers: getSelectedAppUnfilteredUsers(state.app)
     };
 };
 
@@ -218,7 +220,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));},
         loadAppOwner: (appId, userId) => {dispatch(loadAppOwner(appId, userId));},
-        searchUsers: (searchTerm) => {dispatch(searchUsers(searchTerm));}
+        searchUsers: (searchTerm) => {return dispatch(searchUsers(searchTerm));},
+        setUserRoleToAdd: (roleId) => {dispatch(setUserRoleToAdd(roleId));},
+        openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));}
     };
 };
 

@@ -145,11 +145,11 @@ const app = (
         };
     case types.LOAD_APP_SUCCESS:
         let appModel = new AppModel(action.content);
-
         return {
             ...state,
             loading: false,
             error: false,
+            //  app is an appModel object
             app: appModel.get(),
             //  update app in apps list
             apps: setAppInApps(appModel.getApp()),
@@ -207,6 +207,25 @@ const app = (
             loading: false,
             error: true
         };
+    case types.ASSIGN_USER_TO_APP_SUCCESS:
+        //  update the users for the app in the store
+        if (state.app) {
+            let clonedAppModel = _.clone(state.app);
+
+            let model = new AppModel();
+            model.setModel(clonedAppModel);
+            model.setUsers(action.content.appUsers[0]);
+            model.setUnfilteredUsers(action.content.appUsers[1]);
+
+            return {
+                ...state,
+                app: model.get(),
+                apps: setAppInApps(model.getApp())
+            };
+        }
+        return  state;
+    case types.ASSIGN_USER_TO_APP_ERROR:
+        return state;
     default:
         return state;
     }

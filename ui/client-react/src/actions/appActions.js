@@ -1,8 +1,11 @@
 import AppService from '../services/appService';
+import RoleService from '../services/roleService';
 import Promise from 'bluebird';
 import * as types from '../actions/types';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+
+import Locale from '../../../reuse/client/src/locales/locale';
 
 /**
  * Construct apps store redux store payload
@@ -61,6 +64,37 @@ export const loadApp = (appId) => {
                 error => {
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.loadApp:');
                     dispatch(event(types.LOAD_APP_ERROR, error));
+                    reject();
+                }
+            );
+        });
+    };
+};
+
+export const assignUserToApp = (appId, userId, roleId) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            let roleService = new RoleService();
+            roleService.assignUserToApp(appId, userId, roleId).then(
+                () => {
+                    let appService = new AppService();
+                    appService.getAppUsers(appId).then(
+                        response => {
+                            dispatch(event(types.ASSIGN_USER_TO_APP_SUCCESS, {appId:appId, appUsers:response.data}));
+                            resolve();
+                        },
+                        error => {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.assignUserToApp_getAppUsers:');
+                            // promise reject is handled by component to render appropriate messaging..
+                            reject();
+                        }
+                    );
+                },
+                err => {
+                    logger.parseAndLogError(LogLevel.ERROR, err.response, 'appActions.assignUserToApp:');
+                    // promise reject is handled by component to render appropriate messaging..
                     reject();
                 }
             );

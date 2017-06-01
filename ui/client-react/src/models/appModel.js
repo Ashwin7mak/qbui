@@ -35,6 +35,26 @@ class AppModel {
         return this.model.app;
     }
 
+    getUsers() {
+        return this.model.app.users;
+    }
+
+    getUnfilteredUsers() {
+        return this.model.app.unfilteredUsers;
+    }
+
+    setModel(model) {
+        this.model = model;
+    }
+
+    setUsers(users) {
+        this.model.app.users = users;
+    }
+
+    setUnfilteredUsers(unfilteredUsers) {
+        this.model.app.unfilteredUsers = unfilteredUsers;
+    }
+
 }
 
 export default AppModel;

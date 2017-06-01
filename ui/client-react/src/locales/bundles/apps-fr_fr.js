@@ -48,12 +48,11 @@ export default {
                 deleteUsers: "Retirer {valeur} utilisateurs",
                 removeButton: "Retirer",
                 cancel: "Annuler",
-                singular: "utilisateur",
                 plural: "utilisateurs",
                 usersRemoved: " Les utilisateurs ont été enlevés",
                 userRemoved: " L'utilisateur a été supprimé",
-                userAdded: "Vous avez ajouté"
-
+                userAdded: "Utilisateur ajouté",
+                userAddError: "Erreur d'ajout d'utilisateur"
             }
         },
         appMenu: {

@@ -51,11 +51,11 @@ export default {
                 deleteUsers: "Remove {value} users",
                 removeButton: "Remove",
                 cancel: "Cancel",
-                singular: "user",
                 plural: "users",
                 usersRemoved: " users have been removed",
                 userRemoved: " user has been removed",
-                userAdded: "You added"
+                userAdded: "User added",
+                userAddError: 'Error adding user'
             }
         },
         appMenu: {
