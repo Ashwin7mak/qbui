@@ -340,9 +340,7 @@
         openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
-            e2ePageBase.navigateTo(requestRecordPageEndPoint);
-            //wait until view form is visible
-            return formsPO.viewFormContainerEl.waitForVisible();
+            return browser.url(requestRecordPageEndPoint);
         }},
 
         /**
