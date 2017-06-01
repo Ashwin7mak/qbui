@@ -6,6 +6,7 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from '../../utils/i18nMessage';
 import NavigationUtils from '../../utils/navigationUtils';
+import AppHistory from '../../globals/appHistory';
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 
 export class ReportSaveOrCancelFooter extends Component {
@@ -15,14 +16,15 @@ export class ReportSaveOrCancelFooter extends Component {
     }
 
     onSave = () => {
-        HideAppModal();
+        //HideAppModal();
         let reportDef = {
             name: this.props.reportData.data.name,
             fids: this.props.reportData.data.fids
         };
 
-        this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef, this.props.redirectRoute);
+        this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef);
         this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
+        this.closeReportBuilder();
     };
 
     closeReportBuilder = () => {
@@ -30,7 +32,12 @@ export class ReportSaveOrCancelFooter extends Component {
     };
 
     onCancel = () => {
-        this.closeReportBuilder();
+        if (this.props.isPendingEdit) {
+            AppHistory.showPendingEditsConfirmationModal(this.onSave, this.closeReportBuilder, () => HideAppModal());
+        } else {
+            HideAppModal();
+            this.closeReportBuilder();
+        }
         this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
     };
 

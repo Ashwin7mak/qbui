@@ -48,13 +48,11 @@ class AppHistory {
             this.updateRecord = null;
             this.showErrorMsgDialog = null;
             this.updateForm = null;
-            this.saveReport = null;
             this.saveFormComplete = null;
             this.hideTrowser = null;
             this.getNavReport = null;
             this.setFieldsPropertiesPendingEditToFalse = null;
             this.setFormBuilderPendingEditToFalse = null;
-            this.setReportBuilderPendingEditToFalse = null;
 
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
@@ -79,13 +77,11 @@ class AppHistory {
             self.updateRecord = storeFunc.updateRecord;
             self.showErrorMsgDialog = storeFunc.showErrorMsgDialog;
             self.updateForm = storeFunc.updateForm;
-            self.saveReport = storeFunc.saveReport;
             self.saveFormComplete = storeFunc.saveFormComplete;
             self.hideTrowser = storeFunc.hideTrowser;
             self.getNavReport = storeFunc.getNavReport;
             self.setFieldsPropertiesPendingEditToFalse = storeFunc.setFieldsPropertiesPendingEditToFalse;
             self.setFormBuilderPendingEditToFalse = storeFunc.setFormBuilderPendingEditToFalse;
-            self.setReportBuilderPendingEditToFalse = storeFunc.setReportBuilderPendingEditToFalse;
         }
 
         self._setupHistoryListeners();
@@ -144,9 +140,9 @@ class AppHistory {
         if (self.store) {
             const state = self.store.getState();
             //fetch stores that have pendEdits
-            let {recordStore, formsStore, fieldsStore, reportBuilderStore} = self.getStores(state);
+            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
-            if (formsStore.isPendingEdit || fieldsStore.isPendingEdit || recordStore.isPendingEdit || reportBuilderStore.isPendingEdit) {
+            if (formsStore.isPendingEdit || fieldsStore.isPendingEdit || recordStore.isPendingEdit) {
                 //for form builder
                 hasPendingEdit = true;
             }
@@ -165,8 +161,7 @@ class AppHistory {
         return {
             recordStore: recordStore,
             formsStore: (state.forms && state.forms.view) ? state.forms.view : {},
-            fieldsStore: (state.fields && state.fields[0]) ? state.fields[0] : {},
-            reportBuilderStore: state.reportBuilder  || {}
+            fieldsStore: (state.fields && state.fields[0]) ? state.fields[0] : {}
         };
     }
 
@@ -337,33 +332,6 @@ class AppHistory {
         }
     }
 
-    /**
-     * Default save changes for report builder
-     */
-    _saveChangesForReportBuilder() {
-        if (self.store) {
-            const state = self.store.getState();
-            //fetch stores that have pendEdits
-            let {reportBuilderStore} = self.getStores(state);
-            let reportData = (_.find(state.report, {'id': CONTEXT.REPORT.NAV}));
-            let {appId, tblId, rptId} = reportData;
-            let {name, fids} = reportData.data;
-            let reportDef = {
-                name,
-                fids
-            };
-
-            self.store.dispatch(self.saveReport(appId, tblId, rptId, reportDef)).then(
-                () => {
-                    self._continueToDestination();
-                    if (reportBuilderStore.isPendingEdit) {
-                        self.setReportBuilderPendingEditToFalse();
-                    }
-                }
-            );
-        }
-    }
-
     /*
      * All functions below reference 'self' instead of 'this' because of a context change
      * after being called from the modal
@@ -372,21 +340,15 @@ class AppHistory {
         self._hideModal();
         if (self.store) {
             const state = self.store.getState();
-            let {recordStore, formsStore, fieldsStore, reportBuilderStore} = self.getStores(state);
+            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
             if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
                 self._saveChangesForFormBuilder();
             } else if (recordStore.isPendingEdit) {
+
                 self._saveChangesForRecord();
-            } else if (reportBuilderStore.isPendingEdit) {
-                self._saveChangesForReportBuilder();
             }
         }
-    }
-
-    _discardChangesForReportBuilder() {
-        self.store.dispatch(self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV));
-        self._continueToDestination();
     }
 
     _discardChangesForFormBuilder(fieldsStoreIsPendingEdit, formsStoreIsPendingEdit) {
@@ -414,7 +376,7 @@ class AppHistory {
         if (self.store) {
             //  clean up pending edits in store
             const state = self.store.getState();
-            let {recordStore, formsStore, fieldsStore, reportBuilderStore} = self.getStores(state);
+            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
             if (recordStore.isPendingEdit) {
                 self._discardChangesForRecord(recordStore);
@@ -422,10 +384,6 @@ class AppHistory {
 
             if (fieldsStore.isPendingEdit || formsStore.isPendingEdit) {
                 self._discardChangesForFormBuilder(fieldsStore.isPendingEdit, formsStore.isPendingEdit);
-            }
-
-            if (reportBuilderStore.isPendingEdit) {
-                self._discardChangesForReportBuilder();
             }
             self._continueToDestination();
         }

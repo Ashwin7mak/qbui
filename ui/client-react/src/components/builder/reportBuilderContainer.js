@@ -15,7 +15,6 @@ import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
-import AppQbModal from '../qbModal/appQbModal';
 
 import './reportBuilderContainer.scss';
 
@@ -85,8 +84,6 @@ export class ReportBuilderContainer extends Component {
         let content = this.getReportBuilderContent(transformedColumns, transformedRows);
         return (
             <div className="reportBuilderContainer">
-                {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
-                <AppQbModal/>
                 <ReportFieldSelectMenu
                     className="reportBuilderFieldSelectMenu"
                     appId={appId}

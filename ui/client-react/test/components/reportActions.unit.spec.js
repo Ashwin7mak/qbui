@@ -10,31 +10,14 @@ const mockReportData = {
     data: {
         keyField: {name: 'Record ID#'},
         records: [
-            {'Record ID#': {value: testRecordId}}
+            {'Record ID#': {id: testRecordId, value: testRecordId}}
         ]
     },
     selectedRows: [testRecordId]
 };
-const mockRecordsArray = [
-    {
-        'Record ID#': {
-            display: '1',
-            value: 1
-        }
-    },
-    {
-        'Record ID#': {
-            display: '2',
-            value: 2
-        }
-    },
-    {
-        'Record ID#': {
-            display: '3',
-            value: 3
-        }
-    }
-];
+const mockRecordsArray = {
+    'RecordID#': {value: testRecordId}
+};
 
 describe('ReportActions functions', () => {
     'use strict';
@@ -134,7 +117,7 @@ describe('ReportActions functions', () => {
 
             component.navigateToRecord(testRecordId);
 
-            expect(mockParentActions.openRecord).toHaveBeenCalledWith(testRecordId, 3, 1);
+            expect(mockParentActions.openRecord).toHaveBeenCalledWith(testRecordId, null, null);
         });
     });
 

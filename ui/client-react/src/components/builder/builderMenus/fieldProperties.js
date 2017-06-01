@@ -55,9 +55,9 @@ export class FieldProperties extends Component {
      * @param fieldName
      * @returns {XML}
      */
-    createPropertiesTitle(key) {
+    createPropertiesTitle() {
         return (
-            <div key={key} className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
+            <div key={0} className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
         );
     }
 
@@ -69,7 +69,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-    createTextPropertyContainer(propertyTitle, propertyValue, key) {
+    createTextPropertyContainer(propertyTitle, propertyValue, key = 1) {
         return (
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
@@ -88,19 +88,16 @@ export class FieldProperties extends Component {
      * Using a checkboxfieldvalueeditor to keep it green and the awesome label/onChange built in support
      * @param propertyTitle
      * @param propertyValue
-     * @param propertyName
-     * @param isDisabled
      * @param key
      * @returns {XML}
      */
-    createCheckBoxPropertyContainer(propertyTitle, propertyValue, propertyName, key, isDisabled = false) {
+    createCheckBoxPropertyContainer(propertyTitle, propertyValue, key = 2) {
         return (
             <div key={key} className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
-                                          isDisabled={isDisabled}
                                           tabIndex={tabIndexConstants.FIELD_PROP_TABINDEX}
-                                          onChange={(newValue) => this.updateFieldProps(newValue, propertyName)}
+                                          onChange={(newValue) => this.updateFieldProps(newValue, 'required')}
                 />
             </div>
         );
@@ -114,7 +111,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-    createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue, key) {
+    createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue, key = 3) {
         return (
             <div key={key} className="multiChoicePropertyContainer">
                 <div className="multiChoicePropertyTitle">{propertyTitle}</div>
@@ -133,7 +130,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-    createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
+    createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key = 4) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
         return (
@@ -165,8 +162,8 @@ export class FieldProperties extends Component {
      * @param name
      * @returns {XML}
      */
-    createNameProperty(name, key) {
-        return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name, key));
+    createNameProperty(name) {
+        return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name));
     }
 
     /**
@@ -175,20 +172,9 @@ export class FieldProperties extends Component {
      * @param required
      * @returns {XML}
      */
-    createRequiredProperty(required, key) {
-        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, 'required', key));
+    createRequiredProperty(required) {
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required));
     }
-
-    /**
-     * hard coded required property creation since we know EVERY field type has a required property
-     * this could be refactored out if the next iteration wants to go super generic
-     * @param required
-     * @returns {XML}
-     */
-    createUniqueProperty(unique, key, isDisabled) {
-        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.unique'), unique, 'unique', key, isDisabled));
-    }
-
 
     /**
      * Find all field properties for a given field type
@@ -198,25 +184,19 @@ export class FieldProperties extends Component {
      * @returns {Array}
      */
     findFieldProperties() {
-        let key = 0;
         let fieldPropContainers = [
-            this.createPropertiesTitle(key++),
-            this.createNameProperty(this.props.selectedField.name, key++),
-            this.createRequiredProperty(this.props.selectedField.required, key++)
+            this.createPropertiesTitle(),
+            this.createNameProperty(this.props.selectedField.name),
+            this.createRequiredProperty(this.props.selectedField.required)
         ];
 
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
 
         if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
-            fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices, key++));
+            fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         } else if (formatType === FieldFormats.LINK_TO_RECORD) {
-            fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField, key++));
-        }
-
-        const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
-        if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
-            fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
+            fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField));
         }
 
         return fieldPropContainers;

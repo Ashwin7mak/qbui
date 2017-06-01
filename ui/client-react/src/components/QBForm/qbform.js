@@ -370,13 +370,7 @@ export const QBForm = React.createClass({
         }
         */
 
-        const currentTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.tblId}) : null;
-        let isFieldDeletable = true;
-        if (currentTable && currentTable.recordTitleFieldId && relatedField && currentTable.recordTitleFieldId === FormFieldElement.fieldId) {
-            isFieldDeletable = false;
-        }
-
-        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement, true, isFieldDeletable) : FieldElement);
+        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -414,7 +408,7 @@ export const QBForm = React.createClass({
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, location);}}
                   goToParent={goToParent}
                   masterTableId={masterTableId}
                   masterAppId={masterAppId}

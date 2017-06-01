@@ -9,6 +9,7 @@
     flex-direction: column;
     background-color: $topnav-header-background-color;
     border-bottom: 1px solid $color-black-300;
+    box-sizing: content-box;
 
     .top {
         display: flex;
@@ -69,8 +70,12 @@
     }
 
     .btn {
-        background: transparent;
+        background: $topnav-header-background-color;
         border: 0;
+    }
+
+    .btn.disabled {
+        background: $topnav-header-background-color;
     }
 
     .navGroup .btn-group .btn:not(.disabled):hover {
