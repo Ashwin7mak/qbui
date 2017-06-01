@@ -16,10 +16,10 @@ class reportBuilderPage {
         return browser.element('.saveOrCancelFooter');
     }
 
-    get reportBuilderContainer() { 
+    get reportBuilderContainer() {
         // the whole report builder page
-        return browser.element('.reportBuilderContainer'); 
-         }
+        return browser.element('.reportBuilderContainer');
+    }
 
     enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
@@ -47,7 +47,7 @@ class reportBuilderPage {
         return this;
     }
 
-    reportBuilderContainerIsExisting(){
+    reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
         browser.pause(fiveSeconds);
