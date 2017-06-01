@@ -144,6 +144,9 @@ describe('Test ReportBuilderActions function success workflow', () => {
     });
 
     it('save report', (done) => {
+        const expectedAction = [
+            event(null, types.SET_IS_PENDING_EDIT_TO_FALSE)
+        ];
         const store = mockReportsStore({});
 
         let rptDef = {
@@ -153,9 +156,12 @@ describe('Test ReportBuilderActions function success workflow', () => {
             }
         };
 
-        return store.dispatch(reportBuilderActions.saveReport(appId, tblId, rptId, rptDef)).then(
+        let route = 'localhost';
+
+        return store.dispatch(reportBuilderActions.saveReport(appId, tblId, rptId, rptDef, route)).then(
             () => {
                 expect(mockReportService.prototype.updateReport).toHaveBeenCalled();
+                expect(store.getActions()).toEqual(expectedAction);
                 done();
             },
             () => {
