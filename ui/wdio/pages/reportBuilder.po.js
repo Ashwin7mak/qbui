@@ -28,8 +28,23 @@ class reportBuilderPage {
         return browser.element('.hideColumnText');
     }
 
+    get saveChangesBeforeLeavingStayButton() {
+        return browser.element('.leftButton');
+    }
+
+    get saveChangesBeforeLeavingDontSaveButton() {
+        return browser.element('.middleButton');
+    }
+
+    get saveChangesBeforeLeavingSaveButton() {
+        return browser.element('.primaryButton');
+    }
+
     getHeaderLabels() {
-        return browser.elements('.gridHeaderLabel');
+        let labels = browser.elements('.gridHeaderLabel');
+        return labels.value.map(label => {
+            return label.getText();
+        });
     }
 
     clickHeaderMenu() {
@@ -46,6 +61,24 @@ class reportBuilderPage {
 
     clickSave() {
         this.saveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSaveChangesBeforeLeavingStayButton() {
+        this.saveChangesBeforeLeavingStayButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSaveChangesBeforeLeavingDontSaveButton() {
+        this.saveChangesBeforeLeavingDontSaveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSaveChangesBeforeLeavingSaveButton() {
+        this.saveChangesBeforeLeavingSaveButton.click();
         browser.pause(fiveSeconds);
         return this;
     }

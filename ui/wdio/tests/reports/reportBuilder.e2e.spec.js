@@ -44,25 +44,42 @@
             reportBuilderPO.cancel();
         });
 
-        it('hide a column and verify it is hidden after SAVE', () => {
+        it('hide a column and verify it is hidden', () => {
             // store the list of columns before hiding
             let originalColumns = reportBuilderPO.getHeaderLabels();
+            // store the first column label
+            let toBeHiddenColumnLabel = originalColumns[0];
             // open the first headerMenu
             reportBuilderPO.clickHeaderMenu();
             // click hide option on menu
             reportBuilderPO.clickHideMenuOption();
             // store the list of columns after hiding
             let hiddenColumns = reportBuilderPO.getHeaderLabels();
-            // verify that the first column is hidden
+            // verify that the hidden columns has one less column that original
             expect(originalColumns.length - 1).toEqual(hiddenColumns.length);
-            // save
-            reportBuilderPO.clickSave();
-            // verify persistence
-            expect(originalColumns.length - 1).toEqual(hiddenColumns.length);
+            // verify that the correct hidden column was removed
+            expect(hiddenColumns).not.toContain(toBeHiddenColumnLabel);
         });
 
         xit('hide a column and verify it is visible after CANCEL', () => {
-
+            // store the list of columns before hiding
+            let originalColumns = reportBuilderPO.getHeaderLabels();
+            // store the first column label
+            let toBeHiddenColumnLabel = originalColumns[0];
+            // open the first headerMenu
+            reportBuilderPO.clickHeaderMenu();
+            // click hide option on menu
+            reportBuilderPO.clickHideMenuOption();
+            // click cancel
+            reportBuilderPO.cancel();
+            // click don't save
+            reportBuilderPO.clickSaveChangesBeforeLeavingDontSaveButton();
+            // store the list of columns after hiding and canceling
+            let columnsAfterHideAndCancel = reportBuilderPO.getHeaderLabels();
+            // verify that columns are the same length
+            expect(originalColumns.length).toEqual(columnsAfterHideAndCancel.length);
+            // verify that the hidden column is visible after canceling
+            expect(columnsAfterHideAndCancel).toContain(toBeHiddenColumnLabel);
         });
     });
 
