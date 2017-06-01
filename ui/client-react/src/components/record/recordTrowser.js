@@ -310,6 +310,7 @@ export const RecordTrowser = React.createClass({
                     this.props.syncForm(CONTEXT.FORM.VIEW);
                 }
 
+                //refresh the embedded report,after a child record is added to the embedded report
                 this.loadReportFromProps();
                 if (next) {
                     this.nextRecord();
@@ -508,7 +509,7 @@ export const RecordTrowser = React.createClass({
     },
 
     /**
-     * Figure out what report we need to load based on the props.
+     * Figure out what embedded report we need to load based on the props.
      */
     loadReportFromProps() {
 
