@@ -14,7 +14,8 @@ module.exports = class AutomationsApi {
             let automations = JSON.parse(requestResponse.body);
             return automations;
         }).catch(function(error) {
-            return promise.reject(error);
+            browser.logger.error('Error in getAppAutomations function:' + JSON.stringify(error));
+            return Promise.reject(error);
         });
     }
 
@@ -25,11 +26,12 @@ module.exports = class AutomationsApi {
      * @return created automation
      */
     createAutomation(appId, automation) {
-        this.apiBase.executeRequestToPath('/we/api/v1/apps/' + appId + '/workflow/flows/', this.constsants.POST, automation).then(function(requestResponse) {
+        return this.apiBase.executeRequestToPath('/we/api/v1/apps/' + appId + '/workflow/flows/', this.constsants.POST, automation).then(function(requestResponse) {
             let createdAutomation = JSON.parse(requestResponse.body);
             return createdAutomation;
         }).catch(function(error) {
-            return promise.reject(error);
+            browser.logger.error('Error in createAutomation function:' + JSON.stringify(error));
+            return Promise.reject(error);
         });
     }
 };
