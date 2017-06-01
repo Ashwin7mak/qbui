@@ -644,8 +644,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                // suite: 'forms,relationships,reports,tables,users,global,automations'
-                suite: 'automations'
+                suite: 'forms,relationships,reports,tables,users,global,automations'
             }
         },
 
