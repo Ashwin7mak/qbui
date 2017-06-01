@@ -70,10 +70,6 @@ describe('Test AutomationActions function success workflow', () => {
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
             });
     });
     it('verify testAutomation action', (done) => {
