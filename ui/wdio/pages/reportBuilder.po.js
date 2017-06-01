@@ -15,13 +15,7 @@ class reportBuilderPage {
         // footer bar (container for SAVE & CANCEL buttons)
         return browser.element('.saveOrCancelFooter');
     }
-    //
-    cancel() {
-        // Clicks on CANCEL in the report builder and waits for the next page to render
-        this.cancelBtn.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
+
     get reportBuilderContainer() { 
         // the whole report builder page
         return browser.element('.reportBuilderContainer'); 
@@ -45,7 +39,7 @@ class reportBuilderPage {
         return browser.element('.addColumnAfterText');
     }
 
-    open() {
+    enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
         browser.pause(fiveSeconds);
@@ -56,7 +50,15 @@ class reportBuilderPage {
         browser.pause(fiveSeconds);
         return this;
     }
-    save() {
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelBtn.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSave() {
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveBtn.click();
         browser.pause(fiveSeconds);
@@ -91,10 +93,17 @@ class reportBuilderPage {
     getColumnLabels() {
         // Gets the list of field labels from the form builder
         let labelEls = browser.elements('.qbHeaderCell');
-        return labelEls.value.map(function(labelEl) {
+        return labelEls.value.map(function (labelEl) {
             let label = labelEl.element('.gridHeaderLabel').getText();
             return label;
         });
+    }
+
+    reportBuilderContainerIsExisting(){
+        // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
+        let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
+        browser.pause(fiveSeconds);
+        return reportBuilderContainerIsExisting;
     }
 
 }
