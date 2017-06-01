@@ -40,8 +40,29 @@
             return reportBuilderPO.open();
         });
 
-        it('verify CANCEL', function() {
+        xit('verify CANCEL', function() {
             reportBuilderPO.cancel();
+        });
+
+        it('hide a column and verify it is hidden after SAVE', () => {
+            // store the list of columns before hiding
+            let originalColumns = reportBuilderPO.getHeaderLabels();
+            // open the first headerMenu
+            reportBuilderPO.clickHeaderMenu();
+            // click hide option on menu
+            reportBuilderPO.clickHideMenuOption();
+            // store the list of columns after hiding
+            let hiddenColumns = reportBuilderPO.getHeaderLabels();
+            // verify that the first column is hidden
+            expect(originalColumns.length - 1).toEqual(hiddenColumns.length);
+            // save
+            reportBuilderPO.clickSave();
+            // verify persistence
+            expect(originalColumns.length - 1).toEqual(hiddenColumns.length);
+        });
+
+        xit('hide a column and verify it is visible after CANCEL', () => {
+
         });
     });
 
