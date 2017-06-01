@@ -15,19 +15,13 @@ class reportBuilderPage {
         // footer bar (container for SAVE & CANCEL buttons)
         return browser.element('.saveOrCancelFooter');
     }
-    //
-    cancel() {
-        // Clicks on CANCEL in the report builder and waits for the next page to render
-        this.cancelBtn.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
+
     get reportBuilderContainer() { 
         // the whole report builder page
         return browser.element('.reportBuilderContainer'); 
          }
 
-    open() {
+    enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
         browser.pause(fiveSeconds);
@@ -38,7 +32,15 @@ class reportBuilderPage {
         browser.pause(fiveSeconds);
         return this;
     }
-    save() {
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelBtn.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSave() {
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveBtn.click();
         browser.pause(fiveSeconds);
