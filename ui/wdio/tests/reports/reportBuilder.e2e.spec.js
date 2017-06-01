@@ -73,10 +73,20 @@
         });
 
         it('verify add column by add after', function() {
+            let columnsListInitial = reportBuilderPO.getColumnLabels();
             reportBuilderPO.headerMenu();
             reportBuilderPO.addColumnAfter();
             reportBuilderPO.addRecord();
+
+            let columnsListUpdated = reportBuilderPO.getColumnLabels();
+
+            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+            reportBuilderPO.cancel();
+            reportBuilderPO.open();
+
+
+            let columnsAfterReopen = reportBuilderPO.getColumnLabels();
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
     });
-
 }());
