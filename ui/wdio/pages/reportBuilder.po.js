@@ -61,11 +61,6 @@ class reportBuilderPage {
         return '.qbHeaderCell:nth-child(' + index + ')';
     }
 
-    get reportTokenDragging() {
-        // the token which appears when dragging a field to another position
-        return browser.element('.reportTokenDragging');
-    }
-
     reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');

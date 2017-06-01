@@ -91,8 +91,8 @@
             expect(reportBuilderPO.getColumnLabels().length).toBe(originalColumns.length);
             expect(newColumns[0]).toBe(originalColumns[1]);
             expect(newColumns[1]).toBe(originalColumns[0]);
+        });
 
-        })
     });
 
 }());
