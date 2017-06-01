@@ -12,6 +12,7 @@ class reportBuilderPage {
     }
 
     get saveButton() {
+        // SAVE (report) button in footer bar
         return browser.element('.mainTrowserFooterButton');
     }
 
@@ -21,25 +22,33 @@ class reportBuilderPage {
     }
 
     get headerMenu() {
+        // header menu in each column header cell
         return browser.element('.headerMenu');
     }
 
     get hideMenuOption() {
+        // hide option from header menu
         return browser.element('.hideColumnText');
     }
 
     get saveChangesBeforeLeavingStayButton() {
+        // STAY option in the Save Changes Before Leaving modal
         return browser.element('.leftButton');
     }
 
     get saveChangesBeforeLeavingDontSaveButton() {
+        // CANCEL option in the Save Changes Before Leaving modal
         return browser.element('.middleButton');
     }
 
     get saveChangesBeforeLeavingSaveButton() {
+        // SAVE option in the Save Changes Before Leaving modal
         return browser.element('.primaryButton');
     }
 
+    /**
+     * Returns a list of header names for a report.
+     */
     getHeaderLabels() {
         let labels = browser.elements('.gridHeaderLabel');
         return labels.value.map(label => {
