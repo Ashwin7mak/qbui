@@ -65,26 +65,26 @@ class reportBuilderPage {
         return this;
     }
 
-    addRecord() {
-        // Clicks on one of the hidden fields after entering builder mode, which adds column at the first index
+    addColumnFromFieldsList() {
+        // Clicks on one of the hidden fields after entering builder mode
         this.fieldToken.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
-    headerMenu() {
+    headerMenuClick() {
         this.qbGidHeaderMenu.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
-    addColumnBefore() {
+    addColumnBeforeClick() {
         this.addColumnBeforeText.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
-    addColumnAfter() {
+    addColumnAfterClick() {
         this.addColumnAfterText.click();
         browser.pause(fiveSeconds);
         return this;

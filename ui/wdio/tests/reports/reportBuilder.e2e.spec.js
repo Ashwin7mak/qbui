@@ -52,46 +52,59 @@
         });
 
         it('verify add column and click cancel', function() {
+            // gets the column list before adding a column
             let columnsListInitial = reportBuilderPO.getColumnLabels();
-            reportBuilderPO.addRecord();
+            // adds a column
+            reportBuilderPO.addColumnFromFieldsList();
+            // gets the updated column labels after adding the new column
             let columnsListUpdated = reportBuilderPO.getColumnLabels();
             expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
-            reportBuilderPO.cancel();
-            reportBuilderPO.open();
+            // clicks on cancel
+            reportBuilderPO.clickCancel();
+            // re-enters builderMode
+            reportBuilderPO.enterBuilderMode();
+            // column label list must be equal to the initial list without the added column
             let columnsAfterReopen = reportBuilderPO.getColumnLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
 
         it('verify add column by add before', function() {
+            // gets the column list before adding a column
             let columnsListInitial = reportBuilderPO.getColumnLabels();
-            reportBuilderPO.headerMenu();
-            reportBuilderPO.addColumnBefore();
-            reportBuilderPO.addRecord();
+            // adds a column by clicking on AddColumnBefore from headerMenu dropdown
+            reportBuilderPO.headerMenuClick();
+            reportBuilderPO.addColumnBeforeClick();
+            reportBuilderPO.addColumnFromFieldsList();
 
+            // gets the updated column labels after adding the new column
             let columnsListUpdated = reportBuilderPO.getColumnLabels();
-
             expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
-            reportBuilderPO.cancel();
-            reportBuilderPO.open();
+            // clicks on cancel
+            reportBuilderPO.clickCancel();
+            // re-enters builderMode
+            reportBuilderPO.enterBuilderMode();
 
-
+            // column label list must be equal to the initial list without the added column
             let columnsAfterReopen = reportBuilderPO.getColumnLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
 
         it('verify add column by add after', function() {
+            // gets the column list before adding a column
             let columnsListInitial = reportBuilderPO.getColumnLabels();
-            reportBuilderPO.headerMenu();
-            reportBuilderPO.addColumnAfter();
-            reportBuilderPO.addRecord();
-
+            // adds a column by clicking on AddColumnAfter from headerMenu dropdown
+            reportBuilderPO.headerMenuClick();
+            reportBuilderPO.addColumnAfterClick();
+            reportBuilderPO.addColumnFromFieldsList();
+            // gets the updated column labels after adding the new column
             let columnsListUpdated = reportBuilderPO.getColumnLabels();
-
             expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
-            reportBuilderPO.cancel();
-            reportBuilderPO.open();
+            // clicks on cancel
+            reportBuilderPO.clickCancel();
+            // re-enters builderMode
+            reportBuilderPO.enterBuilderMode();
 
-
+            // column label list must be equal to the initial list without the added column
             let columnsAfterReopen = reportBuilderPO.getColumnLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
