@@ -401,7 +401,7 @@
             if (root) {
                 let eeUrl = getEEReqURL(root);
                 if (eeUrl) {
-                    return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '') + '/' + TABLEPROPERTIES;
+                    return eeUrl + (tableId ? '/' + TABLES + '/' + tableId : '') + '/' + TABLEPROPERTIES;
                 }
             }
 
