@@ -1,19 +1,20 @@
 (function() {
     'use strict';
     //Bluebird Promise library
-    var Promise = require('bluebird');
+    let Promise = require('bluebird');
     // Lodash utility library
-    var _ = require('lodash');
+    let _ = require('lodash');
 
     // Import the base page object
-    var e2ePageBase = requirePO('e2ePageBase');
-    var formsPO = requirePO('formsPage');
-    var reportContentPO = requirePO('reportContent');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let leftNavPO = requirePO('leftNav');
+    let formsPO = requirePO('formsPage');
+    let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitle = "Table name";
 
-    var tablesPage = Object.create(e2ePageBase, {
+    let tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
+        newTableBtn : {get: function() {return browser.element('.tablesList .newTableItem .newTable');}},
         //New table Icon
         newTableIconBtn : {get: function() {return browser.element('.newTableItem .newTable .iconUISturdy-add-new-stroke');}},
         //new table container
@@ -36,7 +37,7 @@
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
         //Icon chooser down arrow
-        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle .showAllSelectedIcon');}},
+        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle .iconUISturdy-caret-down');}},
         //Icon chooser search
         iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
 
@@ -85,11 +86,11 @@
             //search for tasks
             this.searchIconFromChooser('tasks');
             //get all icons to a list
-            var icons = this.getAllIconsFromIconChooser;
+            let icons = this.getAllIconsFromIconChooser;
             //Get random Icon from the list of Icons
-            var randomIcon = _.sample(icons.value);
+            let randomIcon = _.sample(icons.value);
             //Get the className of Icon
-            var randomIconClassName = randomIcon.getAttribute('className').split(' ').splice(-1)[0];
+            let randomIconClassName = randomIcon.getAttribute('className').split(' ').splice(-1)[0];
             //Select the Icon
             randomIcon.waitForVisible();
             randomIcon.click();
@@ -111,14 +112,21 @@
         }},
 
         /**
+         * Method to select Icon Chooser
+         */
+        selectIconChooser: {value: function() {
+            //Wait untill you see closed Icon chooser
+            this.tableFieldIconChooser.waitForVisible();
+            //Click on Icon chooser select dropdown to open
+            return this.iconChooserSelect.click();
+        }},
+
+        /**
          * Method to search for an Icon from the Icon Chooser
          *@param searchIcon item name
          */
         searchIconFromChooser: {value: function(searchIconName) {
-            //Wait untill you see closed Icon chooser
-            this.tableFieldIconChooser.waitForVisible();
-            //Click on Icon chooser select dropdown to open
-            this.iconChooserSelect.click();
+            this.selectIconChooser();
             //Wait until you see open icon chooser
             this.iconChooserSearch.waitForVisible();
             //Click in search
@@ -132,12 +140,10 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
-            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
-            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
-                browser.pause(e2eConsts.shortWaitTimeMs);
-            }
-            return browser.elements('.tablesList .leftNavLabel');
+            //wait until loading screen disappear in leftnav
+            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
+            return browser.elements('.tablesList .withSecondary .leftNavLabel');
         }},
 
 
@@ -156,7 +162,7 @@
          */
         selectTable: {value: function(tableName) {
             //filter table names from leftNav links
-            var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
+            let results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;
             });
 
@@ -174,7 +180,7 @@
          */
         getAllTablesFromLeftNav: {value: function() {
             //filter table names from leftNav links
-            var results = [];
+            let results = [];
             this.getAllTableLeftNavLinksList.value.map(function(table) {
                 results.push(table.getAttribute('textContent'));
             });
@@ -185,7 +191,6 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button
@@ -194,7 +199,7 @@
             this.newTableBtn.element('.iconUISturdy-add-new-stroke').waitForVisible();
             //Click on the new Table Btn
             this.newTableIconBtn.click();
-            return browser.element('.tableFieldInput').waitForVisible();
+            return browser.element('.tableField .tableFieldInput').waitForVisible();
         }},
 
         /**
@@ -212,7 +217,7 @@
          */
         clickBtnOnTableDlgFooter : {value: function(btnName) {
             //get all save buttons on the form
-            var buttonToClick = this.tableFooterButtons.value.filter(function(button) {
+            let buttonToClick = this.tableFooterButtons.value.filter(function(button) {
                 return button.getAttribute('textContent') === btnName;
             });
 
@@ -297,13 +302,13 @@
             //Verify table title
             expect(this.tableTitle.getAttribute('textContent')).toContain('Name your table');
             //Verify Icon choose is enabled
-            expect(browser.isEnabled('.iconChooser.closed')).toBeTruthy();
+            expect(browser.isEnabled('.iconChooser.closed')).toBe(true);
             //Verify cancel button is enabled
-            expect(browser.isEnabled('.modal-footer .cancelButton')).toBeTruthy();
+            expect(browser.isEnabled('.modal-footer .cancelButton')).toBe(true);
             //Verify create button is disabled
-            expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
+            expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
             //verify close button enabled
-            expect(browser.isEnabled('.rightIcons .iconUISturdy-close')).toBeTruthy();
+            expect(browser.isEnabled('.modal-dialog .iconUISturdy-close')).toBe(true);
         }},
 
         /**
@@ -313,7 +318,7 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
-            return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
+            return filteredElement.element(filteredElementInputClassName).setValue(fieldValue);
         }},
 
         /**
@@ -323,7 +328,7 @@
          */
         enterTableFieldValue : {value: function(tableField, fieldValue) {
             //Filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
@@ -356,7 +361,7 @@
          */
         verifyTableFieldValues : {value: function(tableField, expectedFieldValue) {
             //Filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
@@ -378,7 +383,7 @@
         }},
 
         getAllTableFieldValues : {value: function() {
-            var allTableFieldValues = [];
+            let allTableFieldValues = [];
 
             //Get all textField input values tableName, A record in the table is called
             browser.element('.tableFieldInput input').waitForVisible();
@@ -400,7 +405,7 @@
          */
         verifyTableFieldPlaceHolders : {value: function(tableField, expectedPlaceHolder) {
             //Filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.getAttribute('textContent') === tableField;
             });
 
@@ -431,7 +436,7 @@
          */
         verifyTableFieldValidation : {value: function(tableField, errorMsg) {
             //filter all fields in create new table dialogue
-            var results = this.getAllTableFieldsList.value.filter(function(field) {
+            let results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.getAttribute('textContent') === tableField;
             });
 
@@ -453,7 +458,7 @@
          * Method to verify table settings drop down
          */
         verifyTableSettingsDropDown : {value: function() {
-            var liElements = [];
+            let liElements = [];
             this.settingsBtn.waitForVisible();
             //Click on settings gear Icon on table global actions
             this.settingsBtn.click();
@@ -466,7 +471,7 @@
                 liElements.push(elm.getAttribute('textContent'));
             });
 
-            var i = 0;
+            let i = 0;
             expect(liElements[i++]).toContain('App');
             expect(liElements[i++]).toContain('Automation');
             expect(liElements[i++]).toContain('Table');
@@ -531,12 +536,14 @@
          * Method to click deleteTableButton
          */
         clickDeleteTableButton: {value: function() {
-            //use the predefined deleteTableButton here
-            expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
             //wait for deletetable button to be visible
             browser.element('.modal-dialog .modal-footer .primaryButton').waitForVisible();
+            //use the predefined deleteTableButton here
+            expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(true);
             //Click on delete table button
-            return browser.element('.modal-dialog .modal-footer .primaryButton').click();
+            browser.element('.modal-dialog .modal-footer .primaryButton').click();
+            //Need this to wait for model dialogue to slide away
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
@@ -548,7 +555,7 @@
             //wait for deletePromtTextField tobe visible
             this.deletePromtTextField.waitForVisible();
             //set the deletePromtTextField value to 'YES'
-            return this.setInputValue(this.deletePromtTextField, 'input', fieldValue);
+            return this.deletePromtTextField.element('.deletePrompt').setValue([fieldValue]);
         }},
 
         /**

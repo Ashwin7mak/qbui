@@ -15,6 +15,7 @@ import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
+import AppQbModal from '../qbModal/appQbModal';
 
 import './reportBuilderContainer.scss';
 
@@ -23,12 +24,14 @@ const RECORD_SHOW_LIMIT = 50;
 export class ReportBuilderContainer extends Component {
 
     getSaveOrCancelFooter = () => {
-        let {appId, tblId} = this.props.match.params;
+        let {appId, tblId, rptId} = this.props.match.params;
         return (
             <ReportSaveOrCancelFooter
                 className="reportBuilderSaveOrCancelFooter"
                 appId={appId}
                 tblId={tblId}
+                rptId={rptId}
+                reportData={this.props.reportData}
             />
         );
     };
@@ -82,6 +85,8 @@ export class ReportBuilderContainer extends Component {
         let content = this.getReportBuilderContent(transformedColumns, transformedRows);
         return (
             <div className="reportBuilderContainer">
+                {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
+                <AppQbModal/>
                 <ReportFieldSelectMenu
                     className="reportBuilderFieldSelectMenu"
                     appId={appId}

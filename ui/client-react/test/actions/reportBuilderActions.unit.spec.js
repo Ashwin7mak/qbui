@@ -94,19 +94,36 @@ describe('Test ReportBuilderActions function success workflow', () => {
         ]
     };
 
+    let mockResponseUpdateReport = {
+        data: {
+            name: 'sample report',
+            fids: [1, 2, 3]
+        }
+    };
+
     class mockFieldService {
         getFields() {
             return Promise.resolve(mockResponseGetFields);
         }
     }
 
+    class mockReportService {
+        updateReport() {
+            return Promise.resolve(mockResponseUpdateReport);
+        }
+    }
+
     beforeEach(() => {
         spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
+        spyOn(mockReportService.prototype, 'updateReport').and.callThrough();
         ReportsBuilderActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
+        ReportsBuilderActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
+        mockFieldService.prototype.getFields.calls.reset();
         ReportsBuilderActionsRewireAPI.__ResetDependency__('FieldsService');
+        ReportsBuilderActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     it('refreshFieldSelectMenu action dispatches type:REFRESH_FIELD_SELECT_MENU', (done) => {
@@ -124,5 +141,34 @@ describe('Test ReportBuilderActions function success workflow', () => {
                 expect(false).toBe(true);
                 done();
             });
+    });
+
+    it('save report', (done) => {
+        const expectedAction = [
+            event(null, types.SET_IS_PENDING_EDIT_TO_FALSE)
+        ];
+        const store = mockReportsStore({});
+
+        let rptDef = {
+            data : {
+                name: 'Sample Report',
+                fids: [2, 3]
+            }
+        };
+
+        let route = 'localhost';
+
+        return store.dispatch(reportBuilderActions.saveReport(appId, tblId, rptId, rptDef, route)).then(
+            () => {
+                expect(mockReportService.prototype.updateReport).toHaveBeenCalled();
+                expect(store.getActions()).toEqual(expectedAction);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            }
+        );
+
     });
 });

@@ -13,6 +13,7 @@ import ChildReport from './childReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
+import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
 import {removeFieldFromForm} from '../../actions/formActions';
 
 import * as FieldsReducer from '../../reducers/fields';
@@ -56,7 +57,9 @@ export const QBForm = React.createClass({
 
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
-        hasAnimation: PropTypes.bool
+        hasAnimation: PropTypes.bool,
+        goToParent: React.PropTypes.func, //handles drill down to parent
+        uniqueId: React.PropTypes.string
     },
 
     getDefaultProps() {
@@ -327,6 +330,14 @@ export const QBForm = React.createClass({
         return formattedElement;
     },
 
+    /***
+     * find if the current field is the detailKeyField, if true return relationship
+     * @param fieldId
+     */
+    getRelationshipIfReferenceFieldToParent(fieldId) {
+        return _.get(this.props, 'relationships') && this.props.relationships.find((relationship) => relationship.detailFieldId === fieldId);
+    },
+
     /**
      * create a form field element
      * @param FormFieldElement
@@ -338,9 +349,18 @@ export const QBForm = React.createClass({
      */
     createFieldElement(FormFieldElement, validationStatus, containingElement, location) {
         let formId = this.props.formId || CONTEXT.FORM.VIEW;
+        let goToParent, masterTableId, masterAppId, masterFieldId;
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
+
+        const relationship = relatedField !== null ? this.getRelationshipIfReferenceFieldToParent(relatedField.id) : {};
+        if (relationship) {
+            goToParent = this.props.goToParent;
+            masterTableId = relationship.masterTableId;
+            masterAppId = relationship.masterAppId;
+            masterFieldId = relationship.masterFieldId;
+        }
 
         /* if the form prop calls for element to be required update fieldDef accordingly
          * This isn't functionality that currently exists in newstack. Its causing issues with updating field properties
@@ -350,7 +370,13 @@ export const QBForm = React.createClass({
         }
         */
 
-        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
+        const currentTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.tblId}) : null;
+        let isFieldDeletable = true;
+        if (currentTable && currentTable.recordTitleFieldId && relatedField && currentTable.recordTitleFieldId === FormFieldElement.fieldId) {
+            isFieldDeletable = false;
+        }
+
+        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement, true, isFieldDeletable) : FieldElement);
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -388,7 +414,11 @@ export const QBForm = React.createClass({
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, location);}}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
+                  goToParent={goToParent}
+                  masterTableId={masterTableId}
+                  masterAppId={masterAppId}
+                  masterFieldId={masterFieldId}
               />
             </div>
         );
@@ -599,11 +629,12 @@ function buildUserField(id, fieldValue, name) {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
+    let formId = (ownProps.formId || ownProps.uniqueId || CONTEXT.FORM.VIEW);
     let currentForm = _.get(state, `forms[${formId}]`, {});
     return {
         fields: state.fields,
         isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
+        relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : []
     };
 };
 

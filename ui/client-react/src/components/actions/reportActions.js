@@ -153,7 +153,7 @@ export const ReportActions = React.createClass({
             let record = _.find(report.data.records, function(rec) {
                 return rec[key].value === selectedRecId;
             });
-            return record[key].id;
+            return record[key].value;
         }
         return null;
     },

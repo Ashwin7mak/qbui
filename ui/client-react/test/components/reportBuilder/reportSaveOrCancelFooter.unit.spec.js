@@ -4,23 +4,35 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../../src/utils/navigationUtils';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
 let component;
 const appId = 1;
 const tblId = 2;
+const rptId = 3;
 const previousLocation = '/somewhere/over/the/rainbow';
 
 describe('Report Builder Save and Cancel Footer', () => {
     const props = {
         appId: appId,
         tblId: tblId,
+        rptId: rptId,
         redirectRoute: previousLocation,
-        exitBuilderMode: (context) => {}
+        exitBuilderMode: (context) => {},
+        saveReport: () => {},
+        reportData: {
+            data: {
+                name: 'test report',
+                fids: [1, 2, 3]
+            }
+        }
     };
 
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(props, 'exitBuilderMode').and.callThrough();
+        spyOn(props, 'saveReport').and.callThrough();
     });
 
     afterEach(() => {
@@ -42,5 +54,15 @@ describe('Report Builder Save and Cancel Footer', () => {
         component = shallow(<ReportSaveOrCancelFooter {...props} />);
         let saveOrCancelFooter = component.find(SaveOrCancelFooter);
         expect(saveOrCancelFooter).toBePresent();
+    });
+
+    it('save button functionality', () => {
+        component = mount(<ReportSaveOrCancelFooter {...props} />);
+
+        let saveButton = component.find('.mainTrowserFooterButton');
+        saveButton.simulate('click');
+
+        expect(props.saveReport).toHaveBeenCalled();
+        expect(props.exitBuilderMode).toHaveBeenCalled();
     });
 });

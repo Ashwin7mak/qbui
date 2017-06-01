@@ -26,6 +26,7 @@ phases:
       - bin/opensg.sh "${NEXUS_SG}"
   build:
     commands:
+      # CUSTOMIZE the following line to build the service and run all the tests (unit/functional/integration)
       - ./gradlew -p ui npmPrune npmInstallLean clean npmRunLint npmListConfig test build -Pdocker
       - docker build -t "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}" -t "${REPOSITORY_URI}:latest" .
       - docker push "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}"

@@ -432,18 +432,47 @@ describe('Form Actions', () => {
             });
         });
     });
-    describe('addNewFieldToForm', () => {
-        it('creates an action that will add a field', () => {
-            const testNewField = {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: false, fieldId: 'newField_1', displayText: 'New Text Field'}};
-            expect(formActions.addNewFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
+    describe('addFieldToForm', () => {
+        it('creates an action that will add a new field when no field id is passed in', () => {
+            const testNewField = {field: 'mockFieldData'};
+            expect(formActions.addFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
                 id: 'view',
                 type: types.ADD_FIELD,
                 appId: 1,
                 tblId: 2,
                 content: {
                     newLocation: 3,
-                    newField: testNewField,
+                    field:  {
+                        id: 'newField_1',
+                        edit: true,
+                        field: 'mockFieldData',
+                        FormFieldElement: {
+                            positionSameRow: false,
+                            fieldId: 'newField_1'
+                        },
+                    }
+                },
+            });
+        });
 
+        it('will build an existing field with the existing field id passed in', () => {
+            const testNewField = {id: 'existingField_Id', field: 'mockFieldData'};
+            expect(formActions.addFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
+                id: 'view',
+                type: types.ADD_FIELD,
+                appId: 1,
+                tblId: 2,
+                content: {
+                    newLocation: 3,
+                    field:  {
+                        id: 'existingField_Id',
+                        edit: true,
+                        field: 'mockFieldData',
+                        FormFieldElement: {
+                            positionSameRow: false,
+                            fieldId: 'existingField_Id'
+                        },
+                    }
                 }
             });
         });
