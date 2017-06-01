@@ -13,7 +13,7 @@ export const SUPPORT_LINK_PATH = '/qb/support/NewCase?subject=MercuryBeta';
 export const FEEDBACK_LINK_PATH = 'quickbase.uservoice.com/forums/378045-mercury';
 export const WALKME_ID_FOR_LARGE = 228348;
 export const WALKME_ID_FOR_SMALL_AND_MEDIUM = 272137;
-export const EMBEDDED_REPORT = 'EMBEDDED_REPORT';
+export const EMBEDDED_REPORT = 'embeddedReport';
 //  client routes
 export const APPS_ROUTE = `${BASE_CLIENT_ROUTE}/apps`;
 export const APP_ROUTE = `${BASE_CLIENT_ROUTE}/app`;

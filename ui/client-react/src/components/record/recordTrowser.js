@@ -506,17 +506,6 @@ export const RecordTrowser = React.createClass({
             this.saveClicked();
         }
     },
-    /**
-     * Load a report with query parameters.
-     */
-    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
-        // Display a filtered child report, the child report should only contain children that
-        // belong to a parent. A child has a parent if its detailKey field contains the
-        // detailKeyValue that contains a parent record's masterKeyValue.
-        queryParams.query = QueryUtils.parseStringIntoExactMatchExpression(this.props.location.query[UrlConsts.DETAIL_KEY_FID], this.props.location.query[UrlConsts.DETAIL_KEY_VALUE]);
-
-        this.props.loadDynamicReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT], appId, tblId, rptId, format, filter, queryParams);
-    },
 
     /**
      * Figure out what report we need to load based on the props.
@@ -535,9 +524,15 @@ export const RecordTrowser = React.createClass({
             //  loading a report..always render the 1st page on initial load
             const queryParams = {
                 offset: constants.PAGE.DEFAULT_OFFSET,
-                numRows: NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS
+                numRows: NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS,
+                // Display a filtered child report, the child report should only contain children that
+                // belong to a parent. A child has a parent if its detailKey field contains the
+                // detailKeyValue that contains a parent record's masterKeyValue.
+                query: QueryUtils.parseStringIntoExactMatchExpression(this.props.location.query[UrlConsts.DETAIL_KEY_FID], this.props.location.query[UrlConsts.DETAIL_KEY_VALUE])
             };
-            this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
+
+
+            this.props.loadDynamicReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT], appId, tblId, rptId, true, /*filter*/{}, queryParams);
         }
     },
 
