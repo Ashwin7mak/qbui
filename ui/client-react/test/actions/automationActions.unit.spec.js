@@ -88,6 +88,10 @@ describe('Test AutomationActions function success workflow', () => {
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
             });
     });
 });
@@ -182,6 +186,10 @@ describe('Test AutomationActions function failure workflow', () => {
         const store = mockAutomationStore({});
 
         return store.dispatch(automationActions.testAutomation(automationName, appId)).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
