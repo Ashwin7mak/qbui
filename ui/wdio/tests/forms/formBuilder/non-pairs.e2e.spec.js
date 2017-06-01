@@ -217,7 +217,7 @@
                 expect(topNavPO.modifyThisForm.getAttribute('textContent')).toBe('Modify this form');
                 reportContentPO.tableHomepageLink.click();
                 // verify that the menu option no longer exists
-                topNavPO.modifyThisForm.waitForExist(null, true);
+                topNavPO.modifyThisForm.waitForVisible(null, true);
                 // verify that the form container no longer exists
                 formBuilderPO.formBuilderContainer.waitForExist(null, true);
                 // get back to form builder so afterEach doesn't fail on Cancel

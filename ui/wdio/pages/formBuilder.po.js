@@ -113,8 +113,9 @@ class formBuilderPage {
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
-        this.dirtyForm_Dismiss();
-        formsPO.viewFormContainerEl.waitForVisible();
+        while (!formsPO.viewFormContainerEl.isExisting()) {
+            this.dirtyForm_Dismiss();
+        }
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
@@ -123,16 +124,15 @@ class formBuilderPage {
         try { // browser's LEAVE THIS PAGE? dlg
             browser.alertDismiss();
         } catch (err) {
-            browser.logger.info('no alert after CANCEL');
+            browser.pause(0);
         }
         try { // modal SAVE CHANGES? dlg
             this.modalDismiss.click();
             if (this.modalDismiss.isExisting()) {
-                browser.logger.info("first click on DON'T SAVE didn't do the trick; trying again");
                 this.modalDismiss.click();
             }
         } catch (err) {
-            browser.logger.info('no modal after CANCEL');
+            browser.pause(0);
         }
         return this;
     }
@@ -200,7 +200,6 @@ class formBuilderPage {
         topNavPO.settingsBtn.waitForExist();
         try {
             topNavPO.settingsBtn.click();
-            browser.pause(e2eConsts.shortWaitTimeMs);
         } catch (err) {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
