@@ -56,6 +56,7 @@
         ADMIN_ROLEID : 12,
         PARTICIPANT_ROLEID : 11,
         VIEWER_ROLEID : 10,
+        NONE_ROLEID : 9,
 
         user1 :  {
             id: null,

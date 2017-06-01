@@ -75,29 +75,41 @@
             return UsersTablePage.newUserBtn.waitForVisible();
         });
         /**
-         * Selects a single user, clicks remove and checks the user count.
+         * Adds a new user, assigns role and verifies the user was added in report.
          */
         it('Add new user to application', function() {
 
             //Click on add a new user button
             UsersTablePage.newUserBtn.click();
 
-
-
-            //Click on select user search
+            // Click on select user search
             // UsersTablePage.userAddSearchBoxSelect.click();
+            // browser.element('.Select.Select--single.is-searchable .Select-control .Select-placeholder').click();
+            // browser.element('.selectUser .Select-placeholder').click();
+            //browser.element('.Select.Select--single.is-searchable').click();
 
-            // UsersTablePage.searchUserFromSearch(searchText);
+            UsersTablePage.clickUserSearchbox();
 
+            // browser.element('.combobox').waitForVisible();
+            // browser.element('.selectUser .Select-input').click();
+            browser.setValue('.Select-input', "asdfasdf");
+
+            // Search for known user
+            UsersTablePage.selectUserFromSearch(searchText);
             // UsersTablePage.userAddSearchBox.setValue(searchText);
 
+            // Select user
 
-            // // Click on remove button from the dialogue box
-            // UsersTablePage.clickUserRemoveButton();
-            //
-            // // Check that the user was removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+            // Click on select user role
+
+            // Select role
+
+            // Click Add
+
+            // Verify user was added to report
+
+
+
         });
     });
 }());

@@ -51,7 +51,7 @@
          */
         it('Visibility and usability of topNav on Table homepage', function() {
 
-            //select table
+            //Select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
@@ -85,10 +85,8 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
-            //Go to reports page directly
-            //select report
+            //Select report
             reportContentPO.selectReport('Table 1', 0);
-
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
 
             //Verify if the global icons are displayed
@@ -99,11 +97,10 @@
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
 
-        //TODO: To enable these when topNav is added to User/App homepage MC-2646
         /**
          * Test Method - checking for visibility of topNav on User homepage
          */
-        xit('Visibility of topNav on User homepage', function() {
+        it('Visibility of topNav on User homepage', function() {
             e2ePageBase.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Verify if the global icons are displayed
