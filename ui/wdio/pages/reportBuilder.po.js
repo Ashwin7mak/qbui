@@ -15,19 +15,13 @@ class reportBuilderPage {
         // footer bar (container for SAVE & CANCEL buttons)
         return browser.element('.saveOrCancelFooter');
     }
-    //
-    cancel() {
-        // Clicks on CANCEL in the report builder and waits for the next page to render
-        this.cancelBtn.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-    get reportBuilderContainer() { 
-        // the whole report builder page
-        return browser.element('.reportBuilderContainer'); 
-         }
 
-    open() {
+    get reportBuilderContainer() {
+        // the whole report builder page
+        return browser.element('.reportBuilderContainer');
+    }
+
+    enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
         browser.pause(fiveSeconds);
@@ -38,7 +32,15 @@ class reportBuilderPage {
         browser.pause(fiveSeconds);
         return this;
     }
-    save() {
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelBtn.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSave() {
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveBtn.click();
         browser.pause(fiveSeconds);
@@ -62,6 +64,13 @@ class reportBuilderPage {
     get reportTokenDragging() {
         // the token which appears when dragging a field to another position
         return browser.element('.reportTokenDragging');
+    }
+
+    reportBuilderContainerIsExisting() {
+        // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
+        let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
+        browser.pause(fiveSeconds);
+        return reportBuilderContainerIsExisting;
     }
 
 }
