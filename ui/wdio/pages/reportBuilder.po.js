@@ -47,5 +47,12 @@ class reportBuilderPage {
         return this;
     }
 
+    reportBuilderContainerIsExisting(){
+        // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
+        let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
+        browser.pause(fiveSeconds);
+        return reportBuilderContainerIsExisting;
+    }
+
 }
 module.exports = new reportBuilderPage();
