@@ -40,11 +40,11 @@
             return reportBuilderPO.open();
         });
 
-        xit('verify CANCEL', function() {
+        it('verify CANCEL', function() {
             reportBuilderPO.cancel();
         });
 
-        it('hide a column and verify it is hidden', () => {
+        it('hide a column and verify it is hidden before CANCEL', () => {
             // store the list of columns before hiding
             let originalColumns = reportBuilderPO.getHeaderLabels();
             // store the first column label
@@ -59,17 +59,6 @@
             expect(originalColumns.length - 1).toEqual(hiddenColumns.length);
             // verify that the correct hidden column was removed
             expect(hiddenColumns).not.toContain(toBeHiddenColumnLabel);
-        });
-
-        xit('hide a column and verify it is visible after CANCEL', () => {
-            // store the list of columns before hiding
-            let originalColumns = reportBuilderPO.getHeaderLabels();
-            // store the first column label
-            let toBeHiddenColumnLabel = originalColumns[0];
-            // open the first headerMenu
-            reportBuilderPO.clickHeaderMenu();
-            // click hide option on menu
-            reportBuilderPO.clickHideMenuOption();
             // click cancel
             reportBuilderPO.cancel();
             // click don't save
