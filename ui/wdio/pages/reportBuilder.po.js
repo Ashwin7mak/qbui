@@ -52,15 +52,8 @@ class reportBuilderPage {
     }
 
     /**
-     * Returns a list of header names for a report.
+     * Enters into builder mode.
      */
-    getHeaderLabels() {
-        let labels = browser.elements('.gridHeaderLabel');
-        return labels.value.map(label => {
-            return label.getText();
-        });
-    }
-
     enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
@@ -73,11 +66,24 @@ class reportBuilderPage {
         return this;
     }
 
+    /**
+     * Checks to see if you are in report builder.
+     */
     reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
         browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
+    }
+
+    /**
+     * Returns a list of header names for a report.
+     */
+    getHeaderLabels() {
+        let labels = browser.elements('.gridHeaderLabel');
+        return labels.value.map(label => {
+            return label.getText();
+        });
     }
 
     clickCancel() {
@@ -120,18 +126,6 @@ class reportBuilderPage {
 
     clickSaveChangesBeforeLeavingSaveButton() {
         this.saveChangesBeforeLeavingSaveButton.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    open() {
-        // Invokes the report builder from the VIEW REPORT page
-        reportContentPO.settingsIcon.waitForVisible();
-        browser.pause(fiveSeconds);
-        reportContentPO.settingsIcon.click();
-        topNavPO.modifyThisForm.waitForExist(fiveSeconds);
-        topNavPO.modifyThisForm.click();
-        this.reportBuilderContainer.waitForVisible();
         browser.pause(fiveSeconds);
         return this;
     }
