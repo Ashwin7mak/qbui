@@ -6,7 +6,7 @@ let fiveSeconds = 5 * oneSecond;
 
 class reportBuilderPage {
 
-    get cancelBtn() {
+    get cancelButton() {
         // CANCEL (report) button in footer bar
         return browser.element('.alternativeTrowserFooterButton');
     }
@@ -19,6 +19,11 @@ class reportBuilderPage {
     get saveOrCancelFooter() {
         // footer bar (container for SAVE & CANCEL buttons)
         return browser.element('.saveOrCancelFooter');
+    }
+
+    get reportBuilderContainer() {
+        // the whole report builder page
+        return browser.element('.reportBuilderContainer');
     }
 
     get headerMenu() {
@@ -56,6 +61,39 @@ class reportBuilderPage {
         });
     }
 
+    enterBuilderMode() {
+        // Invokes the report builder from the VIEW REPORT page
+        reportContentPO.settingsIcon.waitForVisible();
+        browser.pause(fiveSeconds);
+        reportContentPO.settingsIcon.click();
+        topNavPO.modifyThisForm.waitForExist(fiveSeconds);
+        topNavPO.modifyThisForm.click();
+        this.reportBuilderContainer.waitForVisible();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    reportBuilderContainerIsExisting() {
+        // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
+        let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
+        browser.pause(fiveSeconds);
+        return reportBuilderContainerIsExisting;
+    }
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSave() {
+        // Clicks on the SAVE button in the report builder and waits for the next page to appear
+        this.saveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
     clickHeaderMenu() {
         this.headerMenu.click();
         browser.pause(fiveSeconds);
@@ -64,12 +102,6 @@ class reportBuilderPage {
 
     clickHideMenuOption() {
         this.hideMenuOption.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    clickSave() {
-        this.saveButton.click();
         browser.pause(fiveSeconds);
         return this;
     }
@@ -91,18 +123,6 @@ class reportBuilderPage {
         browser.pause(fiveSeconds);
         return this;
     }
-
-    //
-    cancel() {
-        // Clicks on CANCEL in the report builder and waits for the next page to render
-        this.cancelBtn.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-    get reportBuilderContainer() { 
-        // the whole report builder page
-        return browser.element('.reportBuilderContainer'); 
-         }
 
     open() {
         // Invokes the report builder from the VIEW REPORT page
