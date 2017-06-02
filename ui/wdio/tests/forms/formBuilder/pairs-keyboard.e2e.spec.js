@@ -5,6 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
+    let formsPO = requirePO('formsPage');
 
     let realmName;
     let realmId;
