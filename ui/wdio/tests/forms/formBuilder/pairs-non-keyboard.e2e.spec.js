@@ -136,6 +136,7 @@
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField);
                 // add the first new field item to the form
                 newField.click();
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // verify that the new field appears at the end of the revised fields list
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
