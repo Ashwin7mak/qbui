@@ -5,12 +5,6 @@ import AppsBundleLoader from '../locales/appsBundleLoader';
 
 let navActions = {
 
-    /**
-     * checks to see if row pop up menu is open
-     * */
-    onToggleRowPopUpMenu(isOpen) {
-        this.dispatch(actions.TOGGLE_ROW_POP_UP_MENU, isOpen);
-    },
     searchFor(text) {
         this.dispatch(actions.SEARCH_FOR, text);
     },

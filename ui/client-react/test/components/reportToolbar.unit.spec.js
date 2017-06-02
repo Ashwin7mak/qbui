@@ -20,23 +20,12 @@ const mockStore = configureMockStore(middlewares);
 describe('ReportToolbar functions', () => {
     'use strict';
 
-    let navStore = Fluxxor.createStore({
-        getState() {
-            return {leftNavOpen: true};
-        }
-    });
-
-    let stores = {
-        NavStore: new navStore()
+    let propsIcon = {
+        onToggleRowPopUpMenu: () =>{},
+        store:{}
     };
 
-    let flux = new Fluxxor.Flux(stores);
-    flux.actions = {
-        onToggleRowPopUpMenu() {
-            return;
-        }
-    };
-    const pageActions = <IconActions flux={flux} actions={[]}/>;
+    const pageActions = <IconActions props={propsIcon} actions={[]}/>;
 
     let fakefacets = [
         {

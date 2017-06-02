@@ -13,6 +13,8 @@ function initializeState() {
         leftNavVisible: false,
         trowserOpen: false,
         trowserContent: null,
+        topNavVisible: true,
+        navTopTitle: null,
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
