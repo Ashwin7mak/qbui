@@ -63,7 +63,8 @@ export class UserActions extends React.Component {
                     Locale.getMessage('app.users.userRemoved') : Locale.getMessage('app.users.usersRemoved', {numOfUsers:userIds.length});
                 NotificationManager.success(msg);
 
-                //  clear out the selection counter
+                //  clear out the selection counter..
+                // TODO: turn back on to see exception
                 //this.props.selectUserRows(0);
             },
             () => {

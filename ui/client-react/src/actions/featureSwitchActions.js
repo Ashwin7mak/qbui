@@ -12,6 +12,9 @@ import _ from 'lodash';
 
 const logger = new Logger();
 
+Promise.onPossiblyUnhandledRejection(function() {
+    // swallow the error..otherwise the log gets cluttered with the exception
+});
 
 /**
  * get feature switch to send to server (omit props like 'editing')
