@@ -3,7 +3,6 @@ import Logger from '../../utils/logger';
 
 /**
  * A helper class to move a field from one location in teh FormMetaData to another place in the data.
- * Warning: This method has side effects on formMeta!
  * @type {{moveField}}
  */
 const MoveFieldHelper = {
@@ -12,40 +11,50 @@ const MoveFieldHelper = {
             return formMeta;
         }
 
-        let currentLocation = findCurrentElementLocation(formMeta, draggedItemProps.containingElement);
+        if (newLocation ===  findCurrentElementLocation(formMeta, draggedItemProps.containingElement)) {
+            // Location hasn't changed so return existing form structure
+            return formMeta;
+        }
 
-        removeElementFromCurrentLocation(formMeta, currentLocation);
-        addElementToNewLocation(formMeta, newLocation, draggedItemProps);
+        let formMetaCopy = _.cloneDeep(formMeta);
 
-        return formMeta;
+        removeElementFromCurrentLocationById(formMetaCopy, draggedItemProps);
+        addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
+
+        return formMetaCopy;
     },
 
     removeField(formMeta, location) {
-        removeFieldIdFromFormMetaData(formMeta, location);
-        removeElementFromCurrentLocation(formMeta, location);
-        return formMeta;
+        let formMetaCopy = _.cloneDeep(formMeta);
+
+        removeFieldIdFromFormMetaData(formMetaCopy, location);
+        removeElementFromCurrentLocation(formMetaCopy, location);
+        return formMetaCopy;
     },
 
     keyBoardMoveFieldUp(formMeta, currentLocation) {
-        swapFieldLocation(formMeta, currentLocation, -1);
+        let formMetaCopy = _.cloneDeep(formMeta);
+        swapFieldLocation(formMetaCopy, currentLocation, -1);
 
-        return formMeta;
+        return formMetaCopy;
     },
 
     keyBoardMoveFieldDown(formMeta, currentLocation) {
-        swapFieldLocation(formMeta, currentLocation, 1);
+        let formMetaCopy = _.cloneDeep(formMeta);
+        swapFieldLocation(formMetaCopy, currentLocation, 1);
 
-        return formMeta;
+        return formMetaCopy;
     },
 
     addFieldToForm(formMeta, newLocation, field) {
+        let formMetaCopy = _.cloneDeep(formMeta);
         field = {containingElement: field};
-        addElementToNewLocation(formMeta, newLocation, field);
+        addElementToNewLocation(formMetaCopy, newLocation, field);
         if (!_.includes(field.containingElement.id, 'new')) {
-            formMeta.fields.push(field.containingElement.id);
+            formMetaCopy.fields.push(field.containingElement.id);
         }
 
-        return formMeta;
+        return formMetaCopy;
     },
 
     updateSelectedFieldLocation(location, updatedLocation) {
@@ -97,6 +106,16 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
     return (errors.length === 0);
 }
 
+function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
+    let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
+
+    if (!updatedElementLocation) {
+        // Element doesn't yet appear on the form so we can safely return the existing formMetaData without removing anything
+        return formMetaData;
+    }
+    removeElementFromCurrentLocation(formMetaData, updatedElementLocation);
+}
+
 /**
  * I needed to create a separate function just to remove the id from the fieldMeta data
  * This prevents fields from being removed elsewhere
@@ -117,7 +136,7 @@ function removeFieldIdFromFormMetaData(formMetaData, location) {
  * Removes the element from where it currently exists in preparation for the move
  * WARNING: This function has side effects on the formMetaData passed in.
  * @param formMetaData
- * @param location
+ * @param draggedItemProps
  * @returns {*}
  */
 function removeElementFromCurrentLocation(formMetaData, location) {
@@ -125,8 +144,11 @@ function removeElementFromCurrentLocation(formMetaData, location) {
 
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
 
-    column.elements.splice(elementIndex, 1);
+    column.elements = column.elements.filter(element => {
+        return element.orderIndex !== elementIndex;
+    });
 
+    updateOrderIndices(column, 'elements');
     clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, columnIndex);
 
     return formMetaData;
@@ -142,6 +164,8 @@ function swapFieldLocation(formMetaData, currentLocation, newLocation) {
     let swappedElement = column.elements[newElementIndex];
     column.elements[newElementIndex] = column.elements[elementIndex];
     column.elements[elementIndex] = swappedElement;
+
+    updateOrderIndices(column, 'elements');
 
     return formMetaData;
 }
@@ -165,6 +189,7 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
     }
 
     column.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
+    updateOrderIndices(column, 'elements');
 
     return formMetaData;
 }
@@ -238,8 +263,8 @@ function findCurrentElementLocation(formMeta, element) {
             sectionIndex = section.orderIndex;
             return section.columns.some(column => {
                 columnIndex = column.orderIndex;
-                return column.elements.some((currentElement, index) => {
-                    elementIndex = index;
+                return column.elements.some(currentElement => {
+                    elementIndex = currentElement.orderIndex;
                     foundElement = currentElement;
                     return currentElement.id === element.id;
                 });

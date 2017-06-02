@@ -133,7 +133,6 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-
     createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
@@ -176,8 +175,8 @@ export class FieldProperties extends Component {
      * @param required
      * @returns {XML}
      */
-    createRequiredProperty(required, key, isDisabled) {
-        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, 'required', key, isDisabled));
+    createRequiredProperty(required, key) {
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, 'required', key));
     }
 
     /**
@@ -200,24 +199,11 @@ export class FieldProperties extends Component {
      */
     findFieldProperties() {
         let key = 0;
-
-        let isRecordTitleField = false;
-        const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
-        if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
-            isRecordTitleField = true;
-        }
-
         let fieldPropContainers = [
             this.createPropertiesTitle(key++),
-            this.createNameProperty(this.props.selectedField.name, key++)
+            this.createNameProperty(this.props.selectedField.name, key++),
+            this.createRequiredProperty(this.props.selectedField.required, key++)
         ];
-
-        if (isRecordTitleField) {
-            fieldPropContainers.push(this.createRequiredProperty(true, key++, true));
-            fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
-        } else {
-            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
-        }
 
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
 
@@ -225,8 +211,12 @@ export class FieldProperties extends Component {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices, key++));
         } else if (formatType === FieldFormats.LINK_TO_RECORD) {
-
             fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField, key++));
+        }
+
+        const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
+        if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
+            fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
         }
 
         return fieldPropContainers;

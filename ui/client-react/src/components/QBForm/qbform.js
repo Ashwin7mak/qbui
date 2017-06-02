@@ -23,8 +23,6 @@ import {connect} from 'react-redux';
 import './qbform.scss';
 import './tabs.scss';
 
-const DragDropFieldElement = DragAndDropField(FieldElement);
-
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -250,14 +248,6 @@ export const QBForm = React.createClass({
         );
     },
 
-    setAnimationRunning() {
-        return this.props.updateAnimationState(true);
-    },
-
-    setAnimationStopped() {
-        return this.props.updateAnimationState(false);
-    },
-
     /**
      * Creates a column of rows on the form
      * @param column
@@ -271,7 +261,7 @@ export const QBForm = React.createClass({
         let newLocation = Object.assign({}, location, {columnIndex: column.orderIndex});
 
         if (column.elements && Array.isArray(column.elements)) {
-            elements = column.elements.map((element, index) => this.createElement(element, newLocation, index));
+            elements = column.elements.map(element => this.createElement(element, newLocation));
         }
 
         let arrangedElements = elements;
@@ -281,7 +271,7 @@ export const QBForm = React.createClass({
             // when elements are passing each other during animation.
             arrangedElements = (
                 <FlipMove
-                    duration={100}
+                    duration={200}
                     easing="ease"
                     appearAnimation="fade"
                     enterAnimation={FORM_ELEMENT_ENTER}
@@ -289,8 +279,8 @@ export const QBForm = React.createClass({
                     staggerDelayBy={0}
                     staggerDurationBy={0}
                     delay={0}
-                    onStartAll={this.setAnimationRunning}
-                    onFinishAll={this.setAnimationStopped}
+                    onStartAll={() => this.props.updateAnimationState(true)}
+                    onFinishAll={() => this.props.updateAnimationState(false)}
                 >
                     {elements}
                 </FlipMove>
@@ -322,12 +312,11 @@ export const QBForm = React.createClass({
      * Creates an element on the form
      * @param element
      * @param location
-     * @param index - NOTE: We ignore the order index because the array is already ordered correctly. This improves performance on Form Builder.
      * @returns {*}
      */
-    createElement(element, location, index) {
+    createElement(element, location) {
         let formattedElement;
-        let newLocation = Object.assign({}, location, {elementIndex: index});
+        let newLocation = Object.assign({}, location, {elementIndex: element.orderIndex});
 
         if (element.FormTextElement) {
             formattedElement = this.createTextElement(element.id, element.FormTextElement);
@@ -381,7 +370,13 @@ export const QBForm = React.createClass({
         }
         */
 
-        let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
+        const currentTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.tblId}) : null;
+        let isFieldDeletable = true;
+        if (currentTable && currentTable.recordTitleFieldId && relatedField && currentTable.recordTitleFieldId === FormFieldElement.fieldId) {
+            isFieldDeletable = false;
+        }
+
+        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement, true, isFieldDeletable) : FieldElement);
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -390,6 +385,7 @@ export const QBForm = React.createClass({
         let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
             <div key={containingElement.id} className="formElementContainer">
+<<<<<<< HEAD
                 <CurrentFieldElement
                     selectedField={this.props.selectedField}
                     tabIndex={tabIndex}
@@ -424,6 +420,43 @@ export const QBForm = React.createClass({
                     masterAppId={masterAppId}
                     masterFieldId={masterFieldId}
                 />
+=======
+              <CurrentFieldElement
+                  selectedField={this.props.selectedField}
+                  tabIndex={tabIndex}
+                  location={location}
+                  orderIndex={FormFieldElement.orderIndex}
+                  formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
+                  beginDrag={this.props.beginDrag}
+                  handleFormReorder={this.props.handleFormReorder}
+                  cacheDragElement={this.props.cacheDragElement}
+                  clearDragElementCache={this.props.clearDragElementCache}
+                  containingElement={containingElement}
+                  element={FormFieldElement}
+                  key={`fieldElement-${containingElement.id}`}
+                  idKey={"fe-" + this.props.idKey}
+                  relatedField={relatedField}
+                  fieldRecord={fieldRecord}
+                  includeLabel={true}
+                  indicateRequiredOnLabel={this.props.edit}
+                  isDisabled={isDisabled}
+                  edit={this.props.edit && !FormFieldElement.readOnly}
+                  onChange={this.props.onFieldChange}
+                  onBlur={this.props.onFieldChange}
+                  isInvalid={validationStatus.isInvalid}
+                  invalidMessage={validationStatus.invalidMessage}
+                  app={this.props.app}
+                  tblId={this.props.tblId}
+                  appUsers={this.props.appUsers}
+                  recId={recId}
+                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
+                  goToParent={goToParent}
+                  masterTableId={masterTableId}
+                  masterAppId={masterAppId}
+                  masterFieldId={masterFieldId}
+              />
+>>>>>>> parent of 4f16566... Merge branch 'master' into e2e-addColumns-reportBuilder
             </div>
         );
     },

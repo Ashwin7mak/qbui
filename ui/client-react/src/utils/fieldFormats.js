@@ -84,10 +84,6 @@ class FieldFormats {
                 if (numLines > 1) {
                     return FieldFormats.MULTI_LINE_TEXT_FORMAT;
                 }
-
-                if (_.has(fieldDef, 'parentTableId')) {
-                    return FieldFormats.LINK_TO_RECORD;
-                }
                 return FieldFormats.TEXT_FORMAT;
 
             case serverTypeConsts.TEXT_FORMULA :

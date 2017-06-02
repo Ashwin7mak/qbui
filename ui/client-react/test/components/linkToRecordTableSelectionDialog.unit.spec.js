@@ -14,8 +14,8 @@ const mockParentFunctions = {
 };
 
 let tables = [
-    {id: "childTableId", name: "child table", tableIcon: "childIcon", recordTitleFieldId: 5},
-    {id: "parentTableId", name: "parent table", tableIcon: "parentIcon", recordTitleFieldId: 5}
+    {id: "childTableId", name: "child table", tableIcon: "childIcon"},
+    {id: "parentTableId", name: "parent table", tableIcon: "parentIcon"}
 ];
 
 let props = {

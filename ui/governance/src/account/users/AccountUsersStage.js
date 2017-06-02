@@ -7,8 +7,6 @@ import Locale from "../../../../reuse/client/src/locales/locale";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import lodash from "lodash";
 
-import "./AccountUsersStage.scss";
-
 /**
  * The stage for the AccountUsers page
  */

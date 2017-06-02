@@ -433,8 +433,6 @@ describe('Validate FormsApi unit tests', function() {
                 fields: JSON.parse('[{"id":2}]')
             };
 
-            delete expectedSuccessResponse.formMeta.tabs["0"].sections["0"].elements["2"];
-
             fetchFormMetaStub.returns(Promise.resolve(formMeta()));
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));

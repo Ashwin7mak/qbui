@@ -13,6 +13,10 @@ import _ from "lodash";
  */
 const fieldDragSource = {
     beginDrag(props, monitor, component) {
+        if (props.cacheDragElement) {
+            props.cacheDragElement(component);
+        }
+
         if (props.beginDrag) {
             props.beginDrag(props);
         }
@@ -63,6 +67,9 @@ const fieldDragSource = {
             props.endDrag();
         }
 
+        if (props.clearDragElementCache) {
+            props.clearDragElementCache();
+        }
         if (props.endDraggingState) {
             props.endDraggingState(props.formId);
         }
@@ -91,7 +98,7 @@ function collect(connect, monitor) {
  * @returns {*}
  * @constructor
  */
-const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
+const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true, isFieldDeletable = true) => {
 
     class DraggableField extends Component {
         componentDidMount() {
@@ -114,6 +121,7 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
+<<<<<<< HEAD
                         {showFieldEditingTools &&
                         <FieldEditingTools
                             location={location}
@@ -125,6 +133,9 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
                             fieldId={this.props.fieldId}
                         />
                         }
+=======
+                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement} relatedField={this.props.relatedField} isFieldDeletable={isFieldDeletable}/>}
+>>>>>>> parent of 4f16566... Merge branch 'master' into e2e-addColumns-reportBuilder
                         <FieldComponent {...this.props} />
                     </div>
                 </div>

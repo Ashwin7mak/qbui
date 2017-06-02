@@ -51,6 +51,14 @@ NewFieldsMenu.propTypes = {
      * Focus for palette for keybaord nav*/
     toolPaletteFocus: PropTypes.bool,
 
+    /**
+     * tables in this app
+     */
+    tables: PropTypes.array
+};
+
+NewFieldsMenu.defaultProps = {
+    tables: []
 };
 
 

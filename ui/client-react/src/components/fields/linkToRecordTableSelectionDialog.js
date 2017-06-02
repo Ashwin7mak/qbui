@@ -50,14 +50,17 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
         let selectedValue = _.get(this, 'state.selectedValue');
 
-        let tableChoices = _.reject(this.props.tables, (table) => table.id === this.props.childTableId || !table.recordTitleFieldId);
-        let choices = tableChoices.map(table => {
-            return {
-                value: table.id,
-                icon: table.tableIcon,
-                label: table.name
-            };
-        });
+        let choices = this.props.tables ?
+            this.props.tables.map(table => {
+                return {
+                    value: table.id,
+                    icon: table.tableIcon,
+                    label: table.name
+                };
+            }) : [];
+
+        // don't include the current table in the selection
+        choices = _.reject(choices, (choice) => choice.value === this.props.childTableId);
 
         return <Select
             className="tableSelector"

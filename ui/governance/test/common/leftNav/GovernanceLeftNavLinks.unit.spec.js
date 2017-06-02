@@ -2,13 +2,13 @@ import GetLeftNavLinks from "../../../src/common/leftNav/GovernanceLeftNavLinks"
 import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 
 describe('GetLeftNavLinks', () => {
-    const AccountAdminLinkNames = ['My Apps', 'Account Summary', 'Manage Apps', 'Manage All Users', 'Manage Groups',
+    const AccountAdminLinkNames = ['MY APPS', 'Account Summary', 'Manage Apps', 'Manage Users', 'Manage Groups',
         'Set Account Properties', 'Manage Billing', 'Contact Support'];
 
-    const RealmAdminLinkNames = ['My Apps', 'Manage All Users', 'Set Realm Policies',
+    const RealmAdminLinkNames = ['MY APPS', 'Manage Users', 'Set Realm Policies',
         'Edit Realm Branding', 'Contact Support'];
 
-    const AllLinkNames = ['My Apps', 'Account Summary', 'Manage Apps', 'Manage All Users', 'Manage Groups',
+    const AllLinkNames = ['MY APPS', 'Account Summary', 'Manage Apps', 'Manage Users', 'Manage Groups',
         'Set Account Properties', 'Set Realm Policies', 'Edit Realm Branding', 'Manage Billing', 'Contact Support'];
 
     const assertCorrectLink = (actual, expected) => {
@@ -46,7 +46,7 @@ describe('GetLeftNavLinks', () => {
 
     // As of right now all links except 'Manage Users' should be disabled
     it("should disable all the links except for 'Manage Users'", () =>{
-        let expected = ['Manage All Users'];
+        let expected = ['Manage Users'];
         assertEnabledLinks(GetLeftNavLinks(true, false, true), expected);
         assertEnabledLinks(GetLeftNavLinks(true, false, false), expected);
         assertEnabledLinks(GetLeftNavLinks(false, true, false), expected);
