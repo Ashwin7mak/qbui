@@ -15,7 +15,7 @@
         },
         title: {
             get: function() {
-                return browser.element('.topTitle');
+                return browser.element('.topNav .topTitle');
             }
         },
         settingsBtn: {
