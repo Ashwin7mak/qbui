@@ -58,7 +58,7 @@ let AppsStore = Fluxxor.createStore({
             actions.GET_APP_USERS_FAILED, this.onGetAppUserFailed,
 
             actions.ASSIGN_USERS_TO_APP_SUCCESS, this.assignUsersToAppSuccess,
-            actions.TOGGLE_ADD_USER_TO_APP_DIALOG, this.addUserToAppDialog,
+            actions.TOGGLE_ADD_USER_TO_APP_DIALOG, this.addUserToAppDialog
         );
 
         this.logger = new Logger();

@@ -567,4 +567,20 @@ describe('Validate RouteHelper unit tests', function() {
             });
         });
     });
+    describe('validate getTablePropertiesRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', tableId: null, expectation: ''},
+            {name: 'test null url', url: null, tableId: null, expectation: null},
+            {name: 'test with invalid url', url: '/url/prefix/', tableId: null, expectation: '/url/prefix/'},
+            {name: 'test with valid url with appId, no tableId', url: '/url/apps/123', tableId: null, expectation: '/url/apps/123/tableproperties'},
+            {name: 'test with valid url with appId and tableId', url: '/url/apps/123', tableId: 456, expectation: '/url/apps/123/tables/456/tableproperties'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getTablePropertiesRoute(testCase.url, testCase.tableId), testCase.expectation);
+                done();
+            });
+        });
+    });
 });
