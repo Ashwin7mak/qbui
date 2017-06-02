@@ -31,7 +31,7 @@ describe('RecordRoute', () => {
         loadForm: () => {},
         openRecord: () => {},
         clearSearchInput: () => {},
-        hideTopNav: () => {},
+        showTopNav: () => {},
         setTopTitle: () => {},
         record: {
             recordIdBeingEdited: 2,
@@ -46,6 +46,7 @@ describe('RecordRoute', () => {
         spyOn(reduxProps, 'loadForm').and.callThrough();
         spyOn(reduxProps, 'openRecord').and.callThrough();
         spyOn(reduxProps, 'clearSearchInput').and.callThrough();
+        spyOn(reduxProps, 'showTopNav').and.callThrough();
     });
 
     afterEach(() => {
@@ -60,7 +61,7 @@ describe('RecordRoute', () => {
         it('test render of component with missing url params', () => {
             let params = {appId: 1, tblId: 2};
 
-            component = TestUtils.renderIntoDocument(<RecordRoute match={{params}} flux={flux}/>);
+            component = TestUtils.renderIntoDocument(<RecordRoute {...reduxProps} match={{params}} flux={flux}/>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);

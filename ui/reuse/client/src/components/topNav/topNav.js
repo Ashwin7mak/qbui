@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 
 import './topNav.scss';
 
-class TopNav extends Component {
+export class TopNav extends Component {
     constructor(props) {
         super(props);
     }

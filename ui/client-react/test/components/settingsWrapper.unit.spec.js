@@ -5,12 +5,13 @@ import {MemoryRouter} from 'react-router-dom';
 import Fluxxor from 'fluxxor';
 import {SettingsWrapper, __RewireAPI__ as SettingsWrapperRewireAPI}  from '../../src/components/settings/settingsWrapper';
 import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
-import TopNav from '../../../reuse/client/src/components/topNav/topNav';
+import {TopNav} from '../../../reuse/client/src/components/topNav/topNav';
 import LeftNav from '../../../reuse/client/src/components/sideNavs/standardLeftNav';
 import SimpleNavItem from '../../../reuse/client/src/components/simpleNavItem/simpleNavItem';
-
+import {mount, shallow} from 'enzyme';
 import Promise from 'bluebird';
 import _ from 'lodash';
+import {Provider} from "react-redux";
 
 const apps = [{id: 'app1', tables: [{id: 'table1'}, {id: 'table2'}]}];
 
@@ -32,13 +33,24 @@ flux.actions = {
     selectAppId: () => {return;},
     loadApps: () => {return;}
 };
-
+const reduxStore = {
+    getState: function() {
+        return {
+            shell: {}
+        };
+    },
+    subscribe: ()=>{}
+};
 const props = {
     match: {
         params: {
             appId: 'app1',
             tblId: 'table1'
         }
+    },
+    shell: {
+        navTopTitle:"",
+        topNavVisible: true
     },
     toggleNav: () => {},
     dispatch: () => {},
@@ -49,11 +61,12 @@ describe('SettingsWrapper tests', () => {
     'use strict';
     let component;
 
+
     beforeEach(() => {
         spyOn(flux.actions, 'loadApps').and.callThrough();
         spyOn(flux.actions, 'selectAppId').and.callThrough();
         spyOn(flux.actions, 'selectTableId').and.callThrough();
-        component = TestUtils.renderIntoDocument(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+        component =  TestUtils.renderIntoDocument(<MemoryRouter><Provider store={reduxStore}><SettingsWrapper {...props}/></Provider></MemoryRouter>);
     });
 
     afterEach(() => {
@@ -91,7 +104,9 @@ describe('SettingsWrapper tests', () => {
         let initialEntries = ['/one', '/aRoute'];
         component = TestUtils.renderIntoDocument(
             <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
+                <Provider store={reduxStore}>
                 <SettingsWrapper {...props} routes={childRoute}/>
+                </Provider>
             </MemoryRouter>);
         let child = TestUtils.scryRenderedComponentsWithType(component, ChildComponent);
         expect(child.length).toEqual(1);
