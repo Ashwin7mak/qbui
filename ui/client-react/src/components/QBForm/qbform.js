@@ -23,6 +23,8 @@ import {connect} from 'react-redux';
 import './qbform.scss';
 import './tabs.scss';
 
+const DragDropFieldElement = DragAndDropField(FieldElement);
+
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -248,6 +250,14 @@ export const QBForm = React.createClass({
         );
     },
 
+    setAnimationRunning() {
+        return this.props.updateAnimationState(true);
+    },
+
+    setAnimationStopped() {
+        return this.props.updateAnimationState(false);
+    },
+
     /**
      * Creates a column of rows on the form
      * @param column
@@ -261,7 +271,7 @@ export const QBForm = React.createClass({
         let newLocation = Object.assign({}, location, {columnIndex: column.orderIndex});
 
         if (column.elements && Array.isArray(column.elements)) {
-            elements = column.elements.map(element => this.createElement(element, newLocation));
+            elements = column.elements.map((element, index) => this.createElement(element, newLocation, index));
         }
 
         let arrangedElements = elements;
@@ -271,7 +281,7 @@ export const QBForm = React.createClass({
             // when elements are passing each other during animation.
             arrangedElements = (
                 <FlipMove
-                    duration={200}
+                    duration={100}
                     easing="ease"
                     appearAnimation="fade"
                     enterAnimation={FORM_ELEMENT_ENTER}
@@ -279,8 +289,8 @@ export const QBForm = React.createClass({
                     staggerDelayBy={0}
                     staggerDurationBy={0}
                     delay={0}
-                    onStartAll={() => this.props.updateAnimationState(true)}
-                    onFinishAll={() => this.props.updateAnimationState(false)}
+                    onStartAll={this.setAnimationRunning}
+                    onFinishAll={this.setAnimationStopped}
                 >
                     {elements}
                 </FlipMove>
@@ -312,11 +322,12 @@ export const QBForm = React.createClass({
      * Creates an element on the form
      * @param element
      * @param location
+     * @param index - NOTE: We ignore the order index because the array is already ordered correctly. This improves performance on Form Builder.
      * @returns {*}
      */
-    createElement(element, location) {
+    createElement(element, location, index) {
         let formattedElement;
-        let newLocation = Object.assign({}, location, {elementIndex: element.orderIndex});
+        let newLocation = Object.assign({}, location, {elementIndex: index});
 
         if (element.FormTextElement) {
             formattedElement = this.createTextElement(element.id, element.FormTextElement);
@@ -370,7 +381,7 @@ export const QBForm = React.createClass({
         }
         */
 
-        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
+        let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -387,13 +398,12 @@ export const QBForm = React.createClass({
                   formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                   beginDrag={this.props.beginDrag}
                   handleFormReorder={this.props.handleFormReorder}
-                  cacheDragElement={this.props.cacheDragElement}
-                  clearDragElementCache={this.props.clearDragElementCache}
                   containingElement={containingElement}
                   element={FormFieldElement}
                   key={`fieldElement-${containingElement.id}`}
                   idKey={"fe-" + this.props.idKey}
                   relatedField={relatedField}
+                  fieldId={_.get(relatedField, 'id', null)}
                   fieldRecord={fieldRecord}
                   includeLabel={true}
                   indicateRequiredOnLabel={this.props.edit}
@@ -408,7 +418,7 @@ export const QBForm = React.createClass({
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, location);}}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
                   goToParent={goToParent}
                   masterTableId={masterTableId}
                   masterAppId={masterAppId}

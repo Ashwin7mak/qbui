@@ -110,8 +110,8 @@ describe('FormBuilderCustomDragLayer', () => {
             />);
 
             expect(component.find('.previewContainer')).toHaveProp('style', {
-                transform: 'translate(0px, 0px)',
-                WebkitTransform: 'translate(0px, 0px)'
+                transform: 'translate3d(0px, 0px, 0px)',
+                WebkitTransform: 'translate3d(0px, 0px, 0px)'
             });
         });
 
@@ -123,8 +123,8 @@ describe('FormBuilderCustomDragLayer', () => {
             />);
 
             expect(component.find('.previewContainer')).toHaveProp('style', {
-                transform: 'translate(0px, 0px)',
-                WebkitTransform: 'translate(0px, 0px)'
+                transform: 'translate3d(0px, 0px, 0px)',
+                WebkitTransform: 'translate3d(0px, 0px, 0px)'
             });
         });
     });
