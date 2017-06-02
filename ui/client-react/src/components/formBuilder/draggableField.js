@@ -91,7 +91,7 @@ function collect(connect, monitor) {
  * @returns {*}
  * @constructor
  */
-const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true, isFieldDeletable = true) => {
+const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
 
     class DraggableField extends Component {
         componentDidMount() {
@@ -114,21 +114,17 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true, isField
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-<<<<<<< HEAD
                         {showFieldEditingTools &&
-                            <FieldEditingTools
-                                location={location}
-                                isDragging={isDragging}
-                                formBuilderContainerContentElement={formBuilderContainerContentElement}
-                                relatedField={this.props.relatedField}
-                                app={this.props.app}
-                                tblId={this.props.tblId}
-                                fieldId={this.props.fieldId}
-                            />
+                        <FieldEditingTools
+                            location={location}
+                            isDragging={isDragging}
+                            formBuilderContainerContentElement={formBuilderContainerContentElement}
+                            relatedField={this.props.relatedField}
+                            app={this.props.app}
+                            tblId={this.props.tblId}
+                            fieldId={this.props.fieldId}
+                        />
                         }
-=======
-                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement} relatedField={this.props.relatedField} isFieldDeletable={isFieldDeletable}/>}
->>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
                         <FieldComponent {...this.props} />
                     </div>
                 </div>

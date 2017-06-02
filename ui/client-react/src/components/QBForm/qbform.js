@@ -376,22 +376,12 @@ export const QBForm = React.createClass({
         /* if the form prop calls for element to be required update fieldDef accordingly
          * This isn't functionality that currently exists in newstack. Its causing issues with updating field properties
          * in form builder. Once we had support for forms to have required fields,etc we will need to address this
-        if (relatedField) {
-            relatedField.required = relatedField.required || FormFieldElement.required;
-        }
-        */
+         if (relatedField) {
+         relatedField.required = relatedField.required || FormFieldElement.required;
+         }
+         */
 
-<<<<<<< HEAD
         let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
-=======
-        const currentTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.tblId}) : null;
-        let isFieldDeletable = true;
-        if (currentTable && currentTable.recordTitleFieldId && relatedField && currentTable.recordTitleFieldId === FormFieldElement.fieldId) {
-            isFieldDeletable = false;
-        }
-
-        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement, true, isFieldDeletable) : FieldElement);
->>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -400,40 +390,40 @@ export const QBForm = React.createClass({
         let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
             <div key={containingElement.id} className="formElementContainer">
-              <CurrentFieldElement
-                  selectedField={this.props.selectedField}
-                  tabIndex={tabIndex}
-                  location={location}
-                  orderIndex={FormFieldElement.orderIndex}
-                  formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
-                  beginDrag={this.props.beginDrag}
-                  handleFormReorder={this.props.handleFormReorder}
-                  containingElement={containingElement}
-                  element={FormFieldElement}
-                  key={`fieldElement-${containingElement.id}`}
-                  idKey={"fe-" + this.props.idKey}
-                  relatedField={relatedField}
-                  fieldId={_.get(relatedField, 'id', null)}
-                  fieldRecord={fieldRecord}
-                  includeLabel={true}
-                  indicateRequiredOnLabel={this.props.edit}
-                  isDisabled={isDisabled}
-                  edit={this.props.edit && !FormFieldElement.readOnly}
-                  onChange={this.props.onFieldChange}
-                  onBlur={this.props.onFieldChange}
-                  isInvalid={validationStatus.isInvalid}
-                  invalidMessage={validationStatus.invalidMessage}
-                  app={this.props.app}
-                  tblId={this.props.tblId}
-                  appUsers={this.props.appUsers}
-                  recId={recId}
-                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
-                  goToParent={goToParent}
-                  masterTableId={masterTableId}
-                  masterAppId={masterAppId}
-                  masterFieldId={masterFieldId}
-              />
+                <CurrentFieldElement
+                    selectedField={this.props.selectedField}
+                    tabIndex={tabIndex}
+                    location={location}
+                    orderIndex={FormFieldElement.orderIndex}
+                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
+                    beginDrag={this.props.beginDrag}
+                    handleFormReorder={this.props.handleFormReorder}
+                    containingElement={containingElement}
+                    element={FormFieldElement}
+                    key={`fieldElement-${containingElement.id}`}
+                    idKey={"fe-" + this.props.idKey}
+                    relatedField={relatedField}
+                    fieldId={_.get(relatedField, 'id', null)}
+                    fieldRecord={fieldRecord}
+                    includeLabel={true}
+                    indicateRequiredOnLabel={this.props.edit}
+                    isDisabled={isDisabled}
+                    edit={this.props.edit && !FormFieldElement.readOnly}
+                    onChange={this.props.onFieldChange}
+                    onBlur={this.props.onFieldChange}
+                    isInvalid={validationStatus.isInvalid}
+                    invalidMessage={validationStatus.invalidMessage}
+                    app={this.props.app}
+                    tblId={this.props.tblId}
+                    appUsers={this.props.appUsers}
+                    recId={recId}
+                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
+                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
+                    goToParent={goToParent}
+                    masterTableId={masterTableId}
+                    masterAppId={masterAppId}
+                    masterFieldId={masterFieldId}
+                />
             </div>
         );
     },
@@ -562,27 +552,27 @@ export const QBForm = React.createClass({
             let fieldValue = values.find(currentFieldValue => currentFieldValue.id === builtInField.id);
 
             switch (builtInField.id) {
-            case LAST_MODIFIED_BY :
-                return buildUserField(LAST_MODIFIED_BY, fieldValue, 'form.footer.lastUpdatedBy');
+                case LAST_MODIFIED_BY :
+                    return buildUserField(LAST_MODIFIED_BY, fieldValue, 'form.footer.lastUpdatedBy');
 
-            case DATE_CREATED :
-                return {
-                    name: Locale.getMessage('form.footer.createdOn'),
-                    value: fieldValue ? fieldValue.display : '',
-                    id: DATE_CREATED,
-                    type: Constants.DATE
-                };
+                case DATE_CREATED :
+                    return {
+                        name: Locale.getMessage('form.footer.createdOn'),
+                        value: fieldValue ? fieldValue.display : '',
+                        id: DATE_CREATED,
+                        type: Constants.DATE
+                    };
 
-            case DATE_MODIFIED :
-                return {
-                    name: Locale.getMessage('form.footer.lastUpdatedOn'),
-                    value: fieldValue ? fieldValue.display : '',
-                    id: DATE_MODIFIED,
-                    type: Constants.DATE
-                };
+                case DATE_MODIFIED :
+                    return {
+                        name: Locale.getMessage('form.footer.lastUpdatedOn'),
+                        value: fieldValue ? fieldValue.display : '',
+                        id: DATE_MODIFIED,
+                        type: Constants.DATE
+                    };
 
-            case RECORD_OWNER :
-                return buildUserField(RECORD_OWNER, fieldValue, 'form.footer.ownedBy');
+                case RECORD_OWNER :
+                    return buildUserField(RECORD_OWNER, fieldValue, 'form.footer.ownedBy');
             }
         });
     },
