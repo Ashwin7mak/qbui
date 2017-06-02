@@ -144,7 +144,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        browser.element('.field').waitForVisible();
+        this.firstField.waitForExist();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
