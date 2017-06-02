@@ -107,6 +107,7 @@ class reportBuilderPage {
     }
 
     clickHideMenuOption() {
+        this.hideMenuOption.waitForVisible(10000);
         this.hideMenuOption.click();
         browser.pause(fiveSeconds);
         return this;
