@@ -49,13 +49,6 @@ describe('Apps Actions functions with Tables', () => {
         }
     }
 
-    //class mockUserService {
-    //    constructor() { }
-    //    getUser(id) {
-    //        return Promise.resolve({data: responseData});
-    //    }
-    //}
-    //
     class mockUserServiceFailure {
         constructor() { }
         getUser(id) {
@@ -166,15 +159,6 @@ describe('Apps Actions functions with Tables', () => {
     //    });
     //});
 
-    it("Test selectUsersRows", function(done) {
-        var test = {selectedDetails: 1};
-        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
-        var result = flux.actions.selectUsersRows(test.selectedDetails);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.SELECT_USERS_DETAILS);
-        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        done();
-    });
-
     //const searchRealmUsers = [{name:'search for Realm users based on search term', searchTerm: 'la'}];
     //searchRealmUsers.forEach(function(test) {
     //    it(test.name, function(done) {
@@ -206,40 +190,5 @@ describe('Apps Actions functions with Tables', () => {
 		//	);
     //    });
     //});
-
-    const assignUserToApp = [{name:'get App User', appId: 123, userId: 1, roleId: 123}];
-    assignUserToApp.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.assignUserToApp(test.appId, test.userId, test.roleId).then(() => {
-                expect(mockRoleService.prototype.assignUserToApp).toHaveBeenCalledWith(test.appId, test.userId, test.roleId);
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                let {userId, roleId} = test;
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ASSIGN_USERS_TO_APP_SUCCESS, {userId, roleId}]);
-                done();
-            }, () => {
-                expect(false).toBe(true);
-                done();
-            }
-			);
-        });
-    });
-
-    it("Test setUserRoleToAdd", function(done) {
-        var test = {roleId: 123};
-        appsActionsRewireAPI.__Rewire__('RoleService', mockUserServiceFailure);
-        var result = flux.actions.setUserRoleToAdd(test.roleId);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.SET_USER_ROLE_TO_ADD_TO_APP, test.roleId);
-        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        done();
-    });
-
-    it("Test openAddUserDialog", function(done) {
-        var test = {status: true};
-        appsActionsRewireAPI.__Rewire__('RoleService', mockUserServiceFailure);
-        var result = flux.actions.openAddUserDialog(test.status);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.TOGGLE_ADD_USER_TO_APP_DIALOG, test.status);
-        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        done();
-    });
 
 });
