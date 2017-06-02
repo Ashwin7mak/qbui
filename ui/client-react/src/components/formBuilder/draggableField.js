@@ -13,10 +13,6 @@ import _ from "lodash";
  */
 const fieldDragSource = {
     beginDrag(props, monitor, component) {
-        if (props.cacheDragElement) {
-            props.cacheDragElement(component);
-        }
-
         if (props.beginDrag) {
             props.beginDrag(props);
         }
@@ -67,9 +63,6 @@ const fieldDragSource = {
             props.endDrag();
         }
 
-        if (props.clearDragElementCache) {
-            props.clearDragElementCache();
-        }
         if (props.endDraggingState) {
             props.endDraggingState(props.formId);
         }
@@ -98,7 +91,7 @@ function collect(connect, monitor) {
  * @returns {*}
  * @constructor
  */
-const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true, isFieldDeletable = true) => {
+const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
 
     class DraggableField extends Component {
         componentDidMount() {
@@ -121,7 +114,17 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true, isField
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement} relatedField={this.props.relatedField} isFieldDeletable={isFieldDeletable}/>}
+                        {showFieldEditingTools &&
+                            <FieldEditingTools
+                                location={location}
+                                isDragging={isDragging}
+                                formBuilderContainerContentElement={formBuilderContainerContentElement}
+                                relatedField={this.props.relatedField}
+                                app={this.props.app}
+                                tblId={this.props.tblId}
+                                fieldId={this.props.fieldId}
+                            />
+                        }
                         <FieldComponent {...this.props} />
                     </div>
                 </div>
