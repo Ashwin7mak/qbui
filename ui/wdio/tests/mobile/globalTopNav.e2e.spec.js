@@ -107,6 +107,7 @@
             TopNavPO.topNavSmallSearchEl.click();
 
             // Verify if the search box is open
+            // Did not use page object here as it returns an error saying "Element is not currently visible and may not be manipulated"
             expect(browser.isVisible('.smallHeader.searching.reportHeader')).toBe(true);
             expect(browser.element('.smallHeader .center .searchInput').getAttribute('placeholder')).toBe('Search these records');
 

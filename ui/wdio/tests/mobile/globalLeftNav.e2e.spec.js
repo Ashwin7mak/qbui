@@ -61,6 +61,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Verify if the search box is open
+            // Did not use page object here as it returns an error saying "Element is not currently visible and may not be manipulated"
             expect(browser.isVisible('.transitionGroup .search .searchInput ')).toBe(true);
 
             // Verify if the search box is user editable
