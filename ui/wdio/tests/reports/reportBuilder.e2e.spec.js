@@ -60,12 +60,12 @@
 
             // drag source to target without dropping
             browser.moveToObject(source);
-            browser.buttonDown();
+            browser.buttonDown(0);
             browser.moveToObject(target);
 
             browser.pause(e2eConsts.shortWaitTimeMs);
             browser.moveToObject(source);
-            browser.buttonUp();
+            browser.buttonUp(0);
 
             // verify original order
             let newColumns = reportBuilderPO.getColumnLabels();
@@ -88,9 +88,9 @@
 
             // move the first column to second position
             browser.moveToObject(source);
-            browser.buttonDown();
+            browser.buttonDown(0);
             browser.moveToObject(target);
-            browser.buttonUp();
+            browser.buttonUp(0);
 
             // verify the new order
             let newColumns = reportBuilderPO.getColumnLabels();
