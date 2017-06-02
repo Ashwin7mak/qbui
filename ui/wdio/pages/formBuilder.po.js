@@ -104,6 +104,11 @@ class formBuilderPage {
         return browser.element('.notification-success');
     }
 
+    get addAnotherRecordDialogTitle() {
+        // TITLE for add another record dialog
+        return browser.element('.modal-dialog .modal-title');
+    }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
@@ -278,6 +283,32 @@ class formBuilderPage {
             return browser.element(target).getText() === label;
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
         return this.getFieldLabels();
+    }
+
+    addNewFieldToFormByDoubleClicking (fieldToSelect) {
+        //get all field tokens
+        var token = browser.elements('.fieldToken .fieldTokenTitle').value.filter(function(tokenTitle) {
+            return tokenTitle.getAttribute('textContent') === fieldToSelect;
+        });
+
+        if (token !== []) {
+            console.log("the token is: "+JSON.stringify(token));
+            //scroll to a field.
+            browser.execute("return arguments[0].scrollIntoView(true);", token[0]);
+            //Click on filtered save button
+            return token[0].doubleClick();
+        } else {
+            throw new Error('field with name ' + fieldToSelect + " not found on the new list in form builder");
+        }
+    }
+
+    selectTableFromGetAnotherRecordDialog (optionToSelect) {
+        //Verify the dialog title
+        expect(this.addAnotherRecordDialogTitle.getAttribute('textContent')).toContain('Get another record');
+        //Select the table from the dropdown
+        browser.element('.modal-dialog .Select-arrow').click();
+        //wait for select outer menu
+        return formsPagePO.selectFromList(optionToSelect)
     }
 
     KB_cancel() {

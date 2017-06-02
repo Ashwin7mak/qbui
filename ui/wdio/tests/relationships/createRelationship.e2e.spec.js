@@ -10,10 +10,12 @@
     let leftNavPO = requirePO('leftNav');
     let formBuilderPO = requirePO('formBuilder');
 
-    const NEW_TABLE = 'relationshipTable';
+    const NEW_PARENT_TABLE = 'newParentTable';
+    const CHILD_TABLE = 'Table 1';
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const RECORD_TITLE_FIELD_NAME = '* Record title';
+    const GET_ANOTHER_RECORD = 'Get another record';
 
     describe('Relationships - Create relationship: ', function() {
         var realmName;
@@ -35,6 +37,10 @@
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
+            }).then(function(){
+                e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                //wait until loading screen disappear in leftnav
+                return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -53,7 +59,7 @@
             return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
         });
 
-        it('Verify title field does not show up with table created via API', function() {
+        xit('Verify title field does not show up with table created via API', function() {
 
             //wait until you see view form
             formsPO.viewFormContainerEl.waitForVisible();
@@ -63,16 +69,17 @@
 
             //Verify the record title field is not visible for a table created via api.
             let fieldsOnForm = formBuilderPO.getFieldLabels();
+            console.log("the fields on form are: "+JSON.stringify(fieldsOnForm));
             expect(fieldsOnForm.indexOf(RECORD_TITLE_FIELD_NAME) === -1).toBe(true);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
         })
 
-        it('Verify title field shows up with table created via UI', function() {
+        xit('Verify title field shows up with table created via UI', function() {
             let tableFields = [
-                {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_TABLE},
-                {fieldTitle: recordNameFieldTitleText, fieldValue: NEW_TABLE},
+                {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
             ];
 
             //Click on new table button
@@ -92,13 +99,38 @@
 
             //Verify the record title field is visible for a table created via UI.
             let fieldsOnForm = formBuilderPO.getFieldLabels();
+            console.log("the fields on form are: "+JSON.stringify(fieldsOnForm));
             expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
+
+            //create records in the new table created
+            browser.call(function() {
+                // Generate and add records to each table (include a dupe and an empty record)
+                return e2eBase.recordService.addRecordsToTable(testApp, 0, 5, false, false);
+            });
         })
 
-        it('Verify title field shows up with table created via UI', function() {
+        it('Create relationship from childTable to parentTable', function() {
+            //wait until you see view form
+            formsPO.viewFormContainerEl.waitForVisible();
+
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Click on add a new record button
+            //formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+            formBuilderPO.addNewFieldToFormByDoubleClicking('URL');
+
+            //wait until you see Get another record model dialogue
+            formBuilderPO.selectTableFromGetAnotherRecordDialog(CHILD_TABLE);
+
+            //Click Add To form button
+            formsPO.clickButtonOnSaveChangesDialog('Add to form');
+
+            //Verify
+            expect(formBuilderPO.getSelectedFieldLabel()).toBe('Get another record from '+NEW_PARENT_TABLE);
 
         })
 
