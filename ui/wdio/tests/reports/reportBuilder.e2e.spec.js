@@ -68,8 +68,6 @@
             expect(hiddenColumns).not.toContain(toBeHiddenColumnLabel);
             // click cancel
             reportBuilderPO.clickCancel();
-            // click don't save
-            reportBuilderPO.clickSaveChangesBeforeLeavingDontSaveButton();
             // store the list of columns after hiding and canceling
             let columnsAfterHideAndCancel = reportBuilderPO.getHeaderLabels();
             // verify that columns are the same length
