@@ -186,7 +186,10 @@ Resources:
               Effect: Allow
               Action:
                 - ssm:GetParameters
-              Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-${Environment}-${ServiceName}-db.*"
+              Resource:
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-${Environment}-${ServiceName}.*"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-ecs-SHARED.*"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/GLOBAL-${Environment}-SHARED.*"
             -
               Effect: Allow
               Action:
