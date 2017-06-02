@@ -26,20 +26,6 @@ class reportBuilderPage {
         return browser.element('.reportBuilderContainer');
     }
 
-    clickCancel() {
-        // Clicks on CANCEL in the report builder and waits for the next page to render
-        this.cancelButton.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    clickSave() {
-        // Clicks on the SAVE button in the report builder and waits for the next page to appear
-        this.saveButton.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
     get fieldToken() {
         // the field token from hidden fields
         return browser.element('.fieldToken');
@@ -109,6 +95,20 @@ class reportBuilderPage {
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
         browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
+    }
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSave() {
+        // Clicks on the SAVE button in the report builder and waits for the next page to appear
+        this.saveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
     }
 
 }
