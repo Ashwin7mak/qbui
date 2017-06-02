@@ -552,27 +552,27 @@ export const QBForm = React.createClass({
             let fieldValue = values.find(currentFieldValue => currentFieldValue.id === builtInField.id);
 
             switch (builtInField.id) {
-                case LAST_MODIFIED_BY :
-                    return buildUserField(LAST_MODIFIED_BY, fieldValue, 'form.footer.lastUpdatedBy');
+            case LAST_MODIFIED_BY :
+                return buildUserField(LAST_MODIFIED_BY, fieldValue, 'form.footer.lastUpdatedBy');
 
-                case DATE_CREATED :
-                    return {
-                        name: Locale.getMessage('form.footer.createdOn'),
-                        value: fieldValue ? fieldValue.display : '',
-                        id: DATE_CREATED,
-                        type: Constants.DATE
-                    };
+            case DATE_CREATED :
+                return {
+                    name: Locale.getMessage('form.footer.createdOn'),
+                    value: fieldValue ? fieldValue.display : '',
+                    id: DATE_CREATED,
+                    type: Constants.DATE
+                };
 
-                case DATE_MODIFIED :
-                    return {
-                        name: Locale.getMessage('form.footer.lastUpdatedOn'),
-                        value: fieldValue ? fieldValue.display : '',
-                        id: DATE_MODIFIED,
-                        type: Constants.DATE
-                    };
+            case DATE_MODIFIED :
+                return {
+                    name: Locale.getMessage('form.footer.lastUpdatedOn'),
+                    value: fieldValue ? fieldValue.display : '',
+                    id: DATE_MODIFIED,
+                    type: Constants.DATE
+                };
 
-                case RECORD_OWNER :
-                    return buildUserField(RECORD_OWNER, fieldValue, 'form.footer.ownedBy');
+            case RECORD_OWNER :
+                return buildUserField(RECORD_OWNER, fieldValue, 'form.footer.ownedBy');
             }
         });
     },
