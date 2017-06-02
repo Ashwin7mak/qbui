@@ -8,8 +8,11 @@ import LeftNav from "../common/leftNav/GovernanceLeftNav";
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
 
+<<<<<<< HEAD
 import "./governanceAppShell.scss";
 
+=======
+>>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
 export const GovernanceAppShell = (props) => (
     <AppShell functionalAreaName="governance">
         <LeftNav

@@ -583,6 +583,7 @@ export default {
             name: "Name",
             required: "Muss ausgefüllt werden",
             multiChoice: "Wahlen",
+            unique: "Muss einmalige Werte haben",
             linkToRecord: "Link zu einem Datensatz in der Tabelle"
         },
         builder: {

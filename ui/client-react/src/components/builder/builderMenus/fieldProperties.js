@@ -133,7 +133,10 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
     createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
@@ -212,7 +215,10 @@ export class FieldProperties extends Component {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices, key++));
         } else if (formatType === FieldFormats.LINK_TO_RECORD) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
             fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField, key++));
         }
 

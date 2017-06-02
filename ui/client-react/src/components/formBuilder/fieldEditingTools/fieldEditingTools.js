@@ -72,14 +72,22 @@ export class FieldEditingTools extends Component {
         return (<div>
             {this.props.numberOfFieldsOnForm > 1 &&
                 <div className="actionIcons">
+<<<<<<< HEAD
                     {this.props.isFieldDeletable &&
+=======
+                    {this.props.isFieldDeletable ?
+>>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
                         <div className="deleteFieldIcon">
                             <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                                 <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}><QbIcon icon="clear-mini"/>
                                 </button>
                             </QbToolTip>
+<<<<<<< HEAD
                         </div>
                     }
+=======
+                        </div> : null}
+>>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
                 </div>}
             </div>
         );
@@ -209,9 +217,12 @@ FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     isDragging: PropTypes.bool,
+<<<<<<< HEAD
     app: PropTypes.object,
     tblId: PropTypes.string,
     fieldId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+=======
+>>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
     formId: PropTypes.string,
     isFieldDeletable: PropTypes.bool
 };

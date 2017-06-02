@@ -381,7 +381,17 @@ export const QBForm = React.createClass({
         }
         */
 
+<<<<<<< HEAD
         let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
+=======
+        const currentTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.tblId}) : null;
+        let isFieldDeletable = true;
+        if (currentTable && currentTable.recordTitleFieldId && relatedField && currentTable.recordTitleFieldId === FormFieldElement.fieldId) {
+            isFieldDeletable = false;
+        }
+
+        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement, true, isFieldDeletable) : FieldElement);
+>>>>>>> parent of 4665f21... Revert "Merge remote-tracking branch 'origin/e2e-enter-reportbuilder' into e2e-enter-reportbuilder"
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
