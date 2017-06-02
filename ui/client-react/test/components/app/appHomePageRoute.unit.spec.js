@@ -13,8 +13,7 @@ describe('AppHomePageRoute functions', () => {
     const flux = {
         actions:{
             selectAppId: function() {return;},
-            doneRoute: function() {return;},
-            resetRowMenu: function() {return;}
+            doneRoute: function() {return;}
         }
     };
 

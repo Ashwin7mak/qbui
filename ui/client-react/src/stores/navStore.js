@@ -23,7 +23,6 @@ let NavStore = Fluxxor.createStore({
 
         this.bindActions(
             actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
-            actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
             actions.SCROLLING_REPORT, this.onScrollingReport,
             actions.FILTER_REPORTS_BY_NAME, this.onFilterReportsByName
@@ -39,13 +38,6 @@ let NavStore = Fluxxor.createStore({
             this.state.openCount--;
         }
         this.state.isRowPopUpMenuOpen = this.state.openCount > 0;
-        this.emit('change');
-    },
-    resetRowMenu() {
-        this.state.openCount = 0;
-    },
-    onToggleSearch() {
-        this.state.searchBarOpen = !this.state.searchBarOpen;
         this.emit('change');
     },
     onSearching(searching) {

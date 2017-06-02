@@ -11,9 +11,6 @@ let navActions = {
     onToggleRowPopUpMenu(isOpen) {
         this.dispatch(actions.TOGGLE_ROW_POP_UP_MENU, isOpen);
     },
-    toggleSearch() {
-        this.dispatch(actions.TOGGLE_SEARCH);
-    },
     searchFor(text) {
         this.dispatch(actions.SEARCH_FOR, text);
     },

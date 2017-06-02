@@ -38,41 +38,41 @@ describe('Test Nav Store', () => {
         store = null;
         StoreRewireAPI.__ResetDependency__('Locale');
     });
-
-    it('test toggle mobile nav searchbar action', () => {
-
-        let toggleSearchAction = {
-            type: actions.TOGGLE_SEARCH
-        };
-
-        //  should be closed by default
-        expect(flux.store('NavStore').state.searchBarOpen).toBeFalsy();
-
-        flux.dispatcher.dispatch(toggleSearchAction);
-        expect(flux.store('NavStore').state.searchBarOpen).toBeTruthy();
-        expect(flux.store('NavStore').emit).toHaveBeenCalledWith('change');
-        expect(flux.store('NavStore').emit.calls.count()).toBe(1);
-        flux.store('NavStore').emit.calls.reset();
-
-        flux.dispatcher.dispatch(toggleSearchAction);
-
-        expect(flux.store('NavStore').emit).toHaveBeenCalledWith('change');
-        expect(flux.store('NavStore').emit.calls.count()).toBe(1);
-    });
-
-    it('test searching action', () => {
-
-        let toggleSearchingAction = {
-            type: actions.SEARCHING,
-            payload: true
-        };
-
-        expect(flux.store(STORE_NAME).state.searching).toBeFalsy();
-
-        flux.dispatcher.dispatch(toggleSearchingAction);
-        expect(flux.store(STORE_NAME).state.searching).toBeTruthy();
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-        flux.store(STORE_NAME).emit.calls.reset();
-    });
+    //
+    // it('test toggle mobile nav searchbar action', () => {
+    //
+    //     let toggleSearchAction = {
+    //         type: actions.TOGGLE_SEARCH
+    //     };
+    //
+    //     //  should be closed by default
+    //     expect(flux.store('NavStore').state.searchBarOpen).toBeFalsy();
+    //
+    //     flux.dispatcher.dispatch(toggleSearchAction);
+    //     expect(flux.store('NavStore').state.searchBarOpen).toBeTruthy();
+    //     expect(flux.store('NavStore').emit).toHaveBeenCalledWith('change');
+    //     expect(flux.store('NavStore').emit.calls.count()).toBe(1);
+    //     flux.store('NavStore').emit.calls.reset();
+    //
+    //     flux.dispatcher.dispatch(toggleSearchAction);
+    //
+    //     expect(flux.store('NavStore').emit).toHaveBeenCalledWith('change');
+    //     expect(flux.store('NavStore').emit.calls.count()).toBe(1);
+    // });
+    //
+    // it('test searching action', () => {
+    //
+    //     let toggleSearchingAction = {
+    //         type: actions.SEARCHING,
+    //         payload: true
+    //     };
+    //
+    //     expect(flux.store(STORE_NAME).state.searching).toBeFalsy();
+    //
+    //     flux.dispatcher.dispatch(toggleSearchingAction);
+    //     expect(flux.store(STORE_NAME).state.searching).toBeTruthy();
+    //     expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+    //     expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    //     flux.store(STORE_NAME).emit.calls.reset();
+    // });
 });
