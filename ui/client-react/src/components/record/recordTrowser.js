@@ -27,7 +27,7 @@ import {getPendEdits, getRecord} from '../../reducers/record';
 import {getRecordTitle} from '../../utils/formUtils';
 import './recordTrowser.scss';
 import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
-import {loadDynamicReport} from '../../actions/reportActions';
+import {unloadEmbeddedReport} from '../../actions/reportActions';
 import NumberUtils from '../../utils/numberUtils';
 import constants from '../../../../common/src/constants';
 import * as UrlConsts from "../../constants/urlConstants";
@@ -311,7 +311,7 @@ export const RecordTrowser = React.createClass({
                 }
 
                 //refresh the embedded report,after a child record is added to the embedded report
-                this.loadReportFromProps();
+                this.props.unloadEmbeddedReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT]);
                 if (next) {
                     this.nextRecord();
                 } else {
@@ -509,35 +509,6 @@ export const RecordTrowser = React.createClass({
     },
 
     /**
-     * Figure out what embedded report we need to load based on the props.
-     */
-    loadReportFromProps() {
-
-        const appId = this.props.location.query[UrlConsts.DETAIL_APPID];
-        const tblId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
-        const rptId = this.props.location.query[UrlConsts.DETAIL_REPORTID];
-        const detailKeyFid = this.props.location.query[UrlConsts.DETAIL_KEY_FID];
-        const detailKeyValue = this.props.location.query[UrlConsts.DETAIL_KEY_VALUE];
-
-        const validProps = [appId, tblId, rptId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
-
-        if (validProps) {
-            //  loading a report..always render the 1st page on initial load
-            const queryParams = {
-                offset: constants.PAGE.DEFAULT_OFFSET,
-                numRows: NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS,
-                // Display a filtered child report, the child report should only contain children that
-                // belong to a parent. A child has a parent if its detailKey field contains the
-                // detailKeyValue that contains a parent record's masterKeyValue.
-                query: QueryUtils.parseStringIntoExactMatchExpression(this.props.location.query[UrlConsts.DETAIL_KEY_FID], this.props.location.query[UrlConsts.DETAIL_KEY_VALUE])
-            };
-
-
-            this.props.loadDynamicReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT], appId, tblId, rptId, true, /*filter*/{}, queryParams);
-        }
-    },
-
-    /**
      * trowser to wrap report manager
      */
     render() {
@@ -600,8 +571,8 @@ const mapDispatchToProps = (dispatch) => {
         openRecord:(recId, nextRecordId, prevRecordId) => {
             dispatch(openRecord(recId, nextRecordId, prevRecordId));
         },
-        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        unloadEmbeddedReport: (context) => {
+            dispatch(unloadEmbeddedReport(context));
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));
