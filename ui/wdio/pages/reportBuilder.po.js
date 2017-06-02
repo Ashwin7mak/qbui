@@ -26,27 +26,36 @@ class reportBuilderPage {
         return browser.element('.reportBuilderContainer');
     }
 
-    get saveChangesBeforeLeavingStayButton() {
-        // STAY option in the Save Changes Before Leaving modal
-        return browser.element('.leftButton');
+    get modalDismiss() {
+        // DON'T SAVE button in the SAVE CHANGES? dlg
+        return browser.element('.modal-dialog .middleButton');
     }
 
-    get saveChangesBeforeLeavingDontSaveButton() {
-        // CANCEL option in the Save Changes Before Leaving modal
-        return browser.element('.middleButton');
-    }
-
-    get saveChangesBeforeLeavingSaveButton() {
-        // SAVE option in the Save Changes Before Leaving modal
-        return browser.element('.primaryButton');
-    }
     clickCancel() {
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
         browser.pause(fiveSeconds);
+        this.dirtyForm_Dismiss();
+        browser.pause(fiveSeconds);
         return this;
     }
 
+    dirtyForm_Dismiss() {
+        try { // browser's LEAVE THIS PAGE? dlg
+            browser.alertDismiss();
+        } catch (err) {
+            browser.pause(0);
+        }
+        try { // modal SAVE CHANGES? dlg
+            this.modalDismiss.click();
+            if (this.modalDismiss.isExisting()) {
+                this.modalDismiss.click();
+            }
+        } catch (err) {
+            browser.pause(0);
+        }
+        return this;
+    }
     clickSave() {
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveButton.click();
@@ -85,23 +94,6 @@ class reportBuilderPage {
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
         browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
-    }
-    clickSaveChangesBeforeLeavingStayButton() {
-        this.saveChangesBeforeLeavingStayButton.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    clickSaveChangesBeforeLeavingDontSaveButton() {
-        this.saveChangesBeforeLeavingDontSaveButton.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    clickSaveChangesBeforeLeavingSaveButton() {
-        this.saveChangesBeforeLeavingSaveButton.click();
-        browser.pause(fiveSeconds);
-        return this;
     }
 
 
