@@ -51,7 +51,7 @@
             expect(isReportBuilderContainerPresent1).toEqual(false);
         });
 
-        it('drag a column without dropping, then drag back to original field, release & verify no change', function() {
+        it('drag a column then drag back to original field, release & verify no change', function() {
             let originalColumns = reportBuilderPO.getColumnLabels();
 
             // drag 1st column onto 2nd
@@ -59,13 +59,9 @@
             let target = reportBuilderPO.getReportLocator(3);
 
             // drag source to target without dropping
-            browser.moveToObject(source);
-            browser.buttonDown(0);
-            browser.moveToObject(target);
-
+            browser.dragAndDrop(source, target);
             browser.pause(e2eConsts.shortWaitTimeMs);
-            browser.moveToObject(source);
-            browser.buttonUp(0);
+            browser.dragAndDrop(target, source);
 
             // verify original order
             let newColumns = reportBuilderPO.getColumnLabels();
@@ -87,10 +83,7 @@
             let target = reportBuilderPO.getReportLocator(2);
 
             // move the first column to second position
-            browser.moveToObject(source);
-            browser.buttonDown(0);
-            browser.moveToObject(target);
-            browser.buttonUp(0);
+            browser.dragAndDrop(source, target);
 
             // verify the new order
             let newColumns = reportBuilderPO.getColumnLabels();
