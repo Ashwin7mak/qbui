@@ -2,13 +2,13 @@ import GetLeftNavLinks from "../../../src/common/leftNav/GovernanceLeftNavLinks"
 import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 
 describe('GetLeftNavLinks', () => {
-    const AccountAdminLinkNames = ['My Apps', 'Account Summary', 'Manage Apps', 'Manage All Users', 'Manage Groups',
+    const AccountAdminLinkNames = ['back to My Apps', 'Account Summary', 'Manage Apps', 'Manage All Users', 'Manage Groups',
         'Set Account Properties', 'Manage Billing', 'Contact Support'];
 
-    const RealmAdminLinkNames = ['My Apps', 'Manage All Users', 'Set Realm Policies',
+    const RealmAdminLinkNames = ['back to My Apps', 'Manage All Users', 'Set Realm Policies',
         'Edit Realm Branding', 'Contact Support'];
 
-    const AllLinkNames = ['My Apps', 'Account Summary', 'Manage Apps', 'Manage All Users', 'Manage Groups',
+    const AllLinkNames = ['back to My Apps', 'Account Summary', 'Manage Apps', 'Manage All Users', 'Manage Groups',
         'Set Account Properties', 'Set Realm Policies', 'Edit Realm Branding', 'Manage Billing', 'Contact Support'];
 
     const assertCorrectLink = (actual, expected) => {
