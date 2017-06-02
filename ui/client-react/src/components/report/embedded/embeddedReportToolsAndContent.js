@@ -3,9 +3,7 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 
 import {TrackableReportToolsAndContent} from '../reportToolsAndContent';
-import withUniqueId from '../../hoc/withUniqueId';
 import {loadDynamicReport, unloadEmbeddedReport} from '../../../actions/reportActions';
-import {CONTEXT} from '../../../actions/context';
 
 import Logger from '../../../utils/logger';
 import QueryUtils from '../../../utils/queryUtils';
@@ -117,9 +115,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const ConnectedEmbeddedReportToolsAndContent = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(EmbeddedReportToolsAndContent);
-
-export default withUniqueId(ConnectedEmbeddedReportToolsAndContent, CONTEXT.REPORT.EMBEDDED);

@@ -423,24 +423,25 @@ export const Nav = React.createClass({
             {this.props.match.params && this.props.match.params.appId &&
             <RecordTrowser
                 visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD && hasEditQuery}
-                           history={this.props.history}
-                           editForm={this.getEditFormFromProps()}
-                           appId={this.props.match.params.appId}
-                           tblId={this.props.match.params.tblId}
-                           editingAppId={editingAppId}
-                           editingTblId={editingTblId}
-                           editingRecId={editingRecId}
-                           recId={editRecordId}
-                           viewingRecordId={viewingRecordId}
-                           pendEdits={pendEdits}
-                           appUsers={this.state.apps.appUsers}
-                           selectedApp={this.getSelectedApp()}
-                           selectedTable={this.getSelectedTable(this.props.match.params.tblId)}
-                           editingApp={this.getEditingApp()}
-                           editingTable={this.getEditingTable(editingTblId)}
-                           reportData={reportsData}
-                           errorPopupHidden={this.props.shell.errorPopupHidden}
-                           onHideTrowser={this.hideTrowser}/>
+                history={this.props.history}
+                location={this.props.location}
+                editForm={this.getEditFormFromProps()}
+                appId={this.props.match.params.appId}
+                tblId={this.props.match.params.tblId}
+                editingAppId={editingAppId}
+                editingTblId={editingTblId}
+                editingRecId={editingRecId}
+                recId={editRecordId}
+                viewingRecordId={viewingRecordId}
+                pendEdits={pendEdits}
+                appUsers={this.state.apps.appUsers}
+                selectedApp={this.getSelectedApp()}
+                selectedTable={this.getSelectedTable(this.props.match.params.tblId)}
+                editingApp={this.getEditingApp()}
+                editingTable={this.getEditingTable(editingTblId)}
+                reportData={reportsData}
+                errorPopupHidden={this.props.shell.errorPopupHidden}
+                onHideTrowser={this.hideTrowser}/>
             }
 
             {this.props.match.params && this.props.match.params.appId &&
