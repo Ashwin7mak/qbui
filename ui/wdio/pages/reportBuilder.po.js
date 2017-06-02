@@ -48,7 +48,7 @@ class reportBuilderPage {
     }
 
     getColumnLabels() {
-        // Gets the list of field labels from the form builder
+        // Gets the list of column labels from the report builder
         let labelEls = browser.elements('.qbHeaderCell');
         return labelEls.value.map(function(labelEl) {
             let label = labelEl.element('.gridHeaderLabel').getText();
@@ -57,7 +57,7 @@ class reportBuilderPage {
     }
 
     getReportLocator(index) {
-        // Returns a locator string for a specific field in the form builder
+        // Returns a locator string for a specific column in the report builder
         return '.qbHeaderCell:nth-child(' + index + ')';
     }
 
