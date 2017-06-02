@@ -458,6 +458,6 @@ const ReportToolsAndContent = connect(
 export default ReportToolsAndContent;
 
 // Wrap ReportToolsAndContent with unloadable HOC for use in embedded reports. The HOC will call
-// loadDynamicReport to add data to the redux store. The HOC also handles unloading data from the
-// redux store when the component unmounts.
+// loadDynamicReport to add data to the redux store.If the report is unavailable, then it makes a call to the loaddynamic report and reloads the embedded report.
+// The HOC also handles unloading data from the redux store when the component unmounts.
 export const TrackableReportToolsAndContent = unloadable(ReportToolsAndContent);

@@ -1,6 +1,7 @@
 'use strict';
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
+let formsPO = requirePO('formsPage');
 
 class formBuilderPage {
 
@@ -104,10 +105,17 @@ class formBuilderPage {
         return browser.element('.notification-success');
     }
 
+    get title() {
+        // The name of the form, as displayed at the top of the form builder
+        return browser.element('.formContainer .qbPanelHeaderTitleText');
+    }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
-        this.dirtyForm_Dismiss();
+        while (!formsPO.viewFormContainerEl.isExisting()) {
+            this.dirtyForm_Dismiss();
+        }
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
@@ -116,16 +124,15 @@ class formBuilderPage {
         try { // browser's LEAVE THIS PAGE? dlg
             browser.alertDismiss();
         } catch (err) {
-            browser.logger.info('no alert after CANCEL');
+            browser.pause(0);
         }
         try { // modal SAVE CHANGES? dlg
             this.modalDismiss.click();
             if (this.modalDismiss.isExisting()) {
-                browser.logger.info("first click on DON'T SAVE didn't do the trick; trying again");
                 this.modalDismiss.click();
             }
         } catch (err) {
-            browser.logger.info('no modal after CANCEL');
+            browser.pause(0);
         }
         return this;
     }
@@ -137,7 +144,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        browser.element('.field').waitForVisible();
+        this.firstField.waitForExist();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
@@ -181,7 +188,7 @@ class formBuilderPage {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
         topNavPO.modifyThisForm.click();
-        browser.pause(e2eConsts.shortWaitTimeMs);
+        this.firstField.waitForExist();
         return this;
     }
 
@@ -193,7 +200,6 @@ class formBuilderPage {
         topNavPO.settingsBtn.waitForExist();
         try {
             topNavPO.settingsBtn.click();
-            browser.pause(e2eConsts.shortWaitTimeMs);
         } catch (err) {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
