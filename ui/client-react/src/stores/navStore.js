@@ -10,7 +10,6 @@ let NavStore = Fluxxor.createStore({
 
     initialize() {
         this.state = {
-            searchBarOpen: false,
             searching:false,
             isRowPopUpMenuOpen: false,
             scrollingReport: false,
