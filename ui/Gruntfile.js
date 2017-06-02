@@ -611,7 +611,6 @@ module.exports = function(grunt) {
                     relationships: [
                     ],
                     reports: [
-                        './wdio/tests/reports/reportBuilder.e2e.spec.js',
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
                         './wdio/tests/reports/reportTable.e2e.spec.js',

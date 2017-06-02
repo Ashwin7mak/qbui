@@ -108,10 +108,10 @@ const UrlUtils = {
      * Return URL of route for adding a related child in the following form:
      *
      *    `location?${EDIT_RECORD_KEY}=new&${DETAIL_APPID}={detailAppId}${DETAIL_TABLEID}={detailTableId}
-     *       ${DETAIL_REPORTID}={detailReportId}${DETAIL_KEY_FID}={detailKeyFid}&${DETAIL_KEY_VALUE}={detailKeyValue}&${EMBEDDED_REPORT}={uniqueEmbeddedReportId}`;
+     *       ${DETAIL_REPORTID}={detailReportId}${DETAIL_KEY_FID}={detailKeyFid}&${DETAIL_KEY_VALUE}={detailKeyValue}`;
      * @return {string} URL of route for showing new child record
      */
-    getAddRelatedChildLink(location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, uniqueEmbeddedReportId) {
+    getAddRelatedChildLink(location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue) {
         return StringUtils.format(URL.ADD_RELATED_CHILD_LINK, [...arguments]);
     },
 

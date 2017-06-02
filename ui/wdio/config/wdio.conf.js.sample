@@ -55,7 +55,6 @@ exports.config = {
             './ui/wdio/tests/forms/formEditValidation.e2e.spec.js'
         ],
         reports: [
-            './ui/wdio/tests/reports/reportBuilder.e2e.spec.js',
             './ui/wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
             './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
             './ui/wdio/tests/reports/reportNavigation.e2e.spec.js',

@@ -6,14 +6,9 @@ let fiveSeconds = 5 * oneSecond;
 
 class reportBuilderPage {
 
-    get cancelButton() {
+    get cancelBtn() {
         // CANCEL (report) button in footer bar
         return browser.element('.alternativeTrowserFooterButton');
-    }
-
-    get saveButton() {
-        // SAVE (report) button in footer bar
-        return browser.element('.mainTrowserFooterButton');
     }
 
     get saveOrCancelFooter() {
@@ -52,6 +47,20 @@ class reportBuilderPage {
         topNavPO.modifyThisForm.waitForExist(fiveSeconds);
         topNavPO.modifyThisForm.click();
         this.reportBuilderContainer.waitForVisible();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelBtn.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSave() {
+        // Clicks on the SAVE button in the report builder and waits for the next page to appear
+        this.saveBtn.click();
         browser.pause(fiveSeconds);
         return this;
     }

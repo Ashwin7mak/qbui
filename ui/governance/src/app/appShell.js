@@ -28,7 +28,7 @@ export const GovernanceAppShell = (props) => (
             <Switch>
                 {props.routes !== undefined ? props.routes.map((route, i) => {
                     return (
-                        <RouteWithSubRoutes key={i} {...route} />
+                            <RouteWithSubRoutes key={i} {...route} />
                     );
                 }) : ''}
             </Switch>

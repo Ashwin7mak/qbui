@@ -390,40 +390,40 @@ export const QBForm = React.createClass({
         let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
             <div key={containingElement.id} className="formElementContainer">
-                <CurrentFieldElement
-                    selectedField={this.props.selectedField}
-                    tabIndex={tabIndex}
-                    location={location}
-                    orderIndex={FormFieldElement.orderIndex}
-                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
-                    beginDrag={this.props.beginDrag}
-                    handleFormReorder={this.props.handleFormReorder}
-                    containingElement={containingElement}
-                    element={FormFieldElement}
-                    key={`fieldElement-${containingElement.id}`}
-                    idKey={"fe-" + this.props.idKey}
-                    relatedField={relatedField}
-                    fieldId={_.get(relatedField, 'id', null)}
-                    fieldRecord={fieldRecord}
-                    includeLabel={true}
-                    indicateRequiredOnLabel={this.props.edit}
-                    isDisabled={isDisabled}
-                    edit={this.props.edit && !FormFieldElement.readOnly}
-                    onChange={this.props.onFieldChange}
-                    onBlur={this.props.onFieldChange}
-                    isInvalid={validationStatus.isInvalid}
-                    invalidMessage={validationStatus.invalidMessage}
-                    app={this.props.app}
-                    tblId={this.props.tblId}
-                    appUsers={this.props.appUsers}
-                    recId={recId}
-                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
-                    goToParent={goToParent}
-                    masterTableId={masterTableId}
-                    masterAppId={masterAppId}
-                    masterFieldId={masterFieldId}
-                />
+              <CurrentFieldElement
+                  selectedField={this.props.selectedField}
+                  tabIndex={tabIndex}
+                  location={location}
+                  orderIndex={FormFieldElement.orderIndex}
+                  formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
+                  beginDrag={this.props.beginDrag}
+                  handleFormReorder={this.props.handleFormReorder}
+                  containingElement={containingElement}
+                  element={FormFieldElement}
+                  key={`fieldElement-${containingElement.id}`}
+                  idKey={"fe-" + this.props.idKey}
+                  relatedField={relatedField}
+                  fieldId={_.get(relatedField, 'id', null)}
+                  fieldRecord={fieldRecord}
+                  includeLabel={true}
+                  indicateRequiredOnLabel={this.props.edit}
+                  isDisabled={isDisabled}
+                  edit={this.props.edit && !FormFieldElement.readOnly}
+                  onChange={this.props.onFieldChange}
+                  onBlur={this.props.onFieldChange}
+                  isInvalid={validationStatus.isInvalid}
+                  invalidMessage={validationStatus.invalidMessage}
+                  app={this.props.app}
+                  tblId={this.props.tblId}
+                  appUsers={this.props.appUsers}
+                  recId={recId}
+                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
+                  goToParent={goToParent}
+                  masterTableId={masterTableId}
+                  masterAppId={masterAppId}
+                  masterFieldId={masterFieldId}
+              />
             </div>
         );
     },

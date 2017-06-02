@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 
 import {unloadEmbeddedReport} from '../../../actions/reportActions';
+import withUniqueId from '../../hoc/withUniqueId';
+import {CONTEXT} from '../../../actions/context';
 import QBicon from '../../qbIcon/qbIcon';
 
 import Breakpoints from '../../../utils/breakpoints';
@@ -77,7 +79,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default withRouter(connect(
+const ConnectedEmbeddedReportLink = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
 )(EmbeddedReportLink));
+
+export default withUniqueId(ConnectedEmbeddedReportLink, CONTEXT.REPORT.EMBEDDED);
