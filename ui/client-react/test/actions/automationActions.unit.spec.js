@@ -90,7 +90,7 @@ describe('Test AutomationActions function success workflow', () => {
                 done();
             },
             () => {
-                expect(true).toBe(true);
+                expect(false).toBe(true);
             });
     });
 });
@@ -178,8 +178,7 @@ describe('Test AutomationActions function failure workflow', () => {
 
     it('verify testAutomation action with error response', (done) => {
         const expectedActions = [
-            event(automationName, appId, types.TEST_AUTOMATION),
-            event(automationName, appId, types.TEST_AUTOMATION_FAILED, mockTestAutomationResponse)
+            event(null, appId, types.TEST_AUTOMATION_FAILED, mockTestAutomationResponse.data)
         ];
 
         const store = mockAutomationStore({});
