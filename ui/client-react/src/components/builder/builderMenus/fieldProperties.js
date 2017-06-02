@@ -133,6 +133,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
+
     createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
@@ -211,6 +212,7 @@ export class FieldProperties extends Component {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices, key++));
         } else if (formatType === FieldFormats.LINK_TO_RECORD) {
+
             fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField, key++));
         }
 

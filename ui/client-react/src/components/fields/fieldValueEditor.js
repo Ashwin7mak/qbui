@@ -270,7 +270,12 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.LINK_TO_RECORD: {
-            return <LinkToRecordFieldValueEditor {...commonProps} appId={this.props.app.id} tblId={this.props.tblId} tables={this.props.app ? this.props.app.tables : []} removeFieldFromForm={this.props.removeFieldFromForm} classes="cellEdit" />;
+            return <LinkToRecordFieldValueEditor {...commonProps}
+                                                 appId={_.get(this.props, "app.id", null)}
+                                                 tblId={this.props.tblId}
+                                                 tables={_.get(this.props, "app.tables", [])}
+                                                 removeFieldFromForm={this.props.removeFieldFromForm}
+                                                 classes="cellEdit"/>;
         }
 
         case FieldFormats.TEXT_FORMAT:
