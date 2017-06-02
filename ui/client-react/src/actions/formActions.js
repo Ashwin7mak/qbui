@@ -9,10 +9,12 @@ import Locale from '../locales/locales';
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as types from '../actions/types';
 import NavigationUtils from '../utils/navigationUtils';
+import FieldUtils from '../utils/fieldUtils';
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
 import _ from 'lodash';
-import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
+import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from './actionHelpers/transformFormData';
 import {saveAllNewFields, updateAllFieldsWithEdits, deleteField} from './fieldsActions';
+
 
 let logger = new Logger();
 
@@ -111,6 +113,7 @@ export const saveFormComplete = (id) => {
     };
 };
 
+
 /**
  * load a form, optionally with record data
  * @param appId app
@@ -156,6 +159,8 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
                     } else {
                         response.data.recordId = recordId;
                     }
+
+                    addRelationshipFieldProps(appId, tblId, response.data.formMeta, response.data.fields);
 
                     dispatch(loadFormSuccess(context, response.data, appId, tblId));
                     resolve(response.data);

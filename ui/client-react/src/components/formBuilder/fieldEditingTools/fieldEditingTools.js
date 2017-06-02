@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
 import _ from "lodash";
 import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
+import {isFieldDeletable} from '../../../reducers/fields';
 import {CONTEXT} from "../../../actions/context";
 import * as tabIndexConstants from '../tabindexConstants';
 import "./fieldEditingTools.scss";
@@ -71,13 +72,14 @@ export class FieldEditingTools extends Component {
         return (<div>
             {this.props.numberOfFieldsOnForm > 1 &&
                 <div className="actionIcons">
-                    {this.props.isFieldDeletable ?
+                    {this.props.isFieldDeletable &&
                         <div className="deleteFieldIcon">
                             <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                                 <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}><QbIcon icon="clear-mini"/>
                                 </button>
                             </QbToolTip>
-                        </div> : null}
+                        </div>
+                    }
                 </div>}
             </div>
         );
@@ -207,6 +209,9 @@ FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     isDragging: PropTypes.bool,
+    app: PropTypes.object,
+    tblId: PropTypes.string,
+    fieldId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     formId: PropTypes.string,
     isFieldDeletable: PropTypes.bool
 };
@@ -236,7 +241,8 @@ const mapStateToProps = (state, ownProps) => {
         previouslySelectedField,
         formBuilderChildrenTabIndex,
         isDragging,
-        numberOfFieldsOnForm
+        numberOfFieldsOnForm,
+        isFieldDeletable: isFieldDeletable(state, ownProps.app, ownProps.tblId, ownProps.fieldId)
     };
 };
 

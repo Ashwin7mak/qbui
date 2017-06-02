@@ -212,3 +212,50 @@ function convertSectionsToObjectStructure(tab) {
 
     return sections;
 }
+
+
+/**
+ * convert link-to-record fields created in the form builder as TEXT fields,
+ * the parent-child relationship is determined dynamically from the app relationships
+ * @param field
+ * @returns {*}
+ */
+export function transformFieldBeforeSave(field) {
+
+    const transformedField = _.cloneDeep(field);
+    if (_.get(transformedField, "datatypeAttributes.type", null) === "LINK_TO_RECORD") {
+        transformedField.datatypeAttributes.type = "TEXT";
+        delete transformedField.parentTableId;
+        delete transformedField.parentFieldId;
+    }
+    return transformedField;
+}
+
+/**
+ * add parentTableId/parentFieldId props to fields based on the app relationships
+ * @param appId
+ * @param tblId
+ * @param formMeta
+ * @param fields
+ */
+export function addRelationshipFieldProps(appId, tblId, formMeta, fields)  {
+
+    const relationships = formMeta.relationships;
+
+    if (formMeta.fields && formMeta.relationships) {
+        formMeta.fields.map(id => {
+            const field = _.find(fields, {id});
+
+            const relationship = _.find(relationships, {
+                detailAppId: appId,
+                detailTableId: tblId,
+                detailFieldId: id
+            });
+
+            if (relationship) {
+                field.parentTableId = relationship.masterTableId;
+                field.parentFieldId = relationship.masterFieldId;
+            }
+        });
+    }
+}
