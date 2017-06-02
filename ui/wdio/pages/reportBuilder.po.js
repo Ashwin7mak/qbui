@@ -26,6 +26,20 @@ class reportBuilderPage {
         return browser.element('.reportBuilderContainer');
     }
 
+    get saveChangesBeforeLeavingStayButton() {
+        // STAY option in the Save Changes Before Leaving modal
+        return browser.element('.leftButton');
+    }
+
+    get saveChangesBeforeLeavingDontSaveButton() {
+        // CANCEL option in the Save Changes Before Leaving modal
+        return browser.element('.middleButton');
+    }
+
+    get saveChangesBeforeLeavingSaveButton() {
+        // SAVE option in the Save Changes Before Leaving modal
+        return browser.element('.primaryButton');
+    }
     clickCancel() {
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
@@ -72,6 +86,24 @@ class reportBuilderPage {
         browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
     }
+    clickSaveChangesBeforeLeavingStayButton() {
+        this.saveChangesBeforeLeavingStayButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSaveChangesBeforeLeavingDontSaveButton() {
+        this.saveChangesBeforeLeavingDontSaveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickSaveChangesBeforeLeavingSaveButton() {
+        this.saveChangesBeforeLeavingSaveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
 
 }
 module.exports = new reportBuilderPage();
