@@ -49,10 +49,11 @@ export default {
                 removeButton: "Retirer",
                 cancel: "Annuler",
                 plural: "utilisateurs",
-                usersRemoved: " Les utilisateurs ont été enlevés",
-                userRemoved: " L'utilisateur a été supprimé",
+                usersRemovedFromAppRole: "{numOfUsers} utilisateurs ont été supprimés du rôle de l'application",
+                userRemovedFromAppRole: "Utilisateur supprimé du rôle de l'application",
                 userAdded: "Utilisateur ajouté",
-                userAddError: "Erreur d'ajout d'utilisateur"
+                userAddError: "Erreur d'ajout d'utilisateur",
+                userRemovingError: "Erreur lors de l'enlever"
             }
         },
         appMenu: {

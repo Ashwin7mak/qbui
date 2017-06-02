@@ -1,14 +1,19 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+
 import Locale from '../../locales/locales';
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
+import {removeUsersFromAppRole} from '../../actions/appRoleActions';
+import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
+
 import './reportActions.scss';
 
 /**
  * User-level actions
  *
  */
-class UserActions extends React.Component {
+export class UserActions extends React.Component {
 
     constructor(props) {
         super(props);
@@ -51,7 +56,16 @@ class UserActions extends React.Component {
      * this.props.selection has the current selected rows with the unique identifier as the value in the array
      */
     handleBulkDelete() {
-        this.props.actions.unassignUsers(this.props.appId, this.props.roleId, this.props.selection);
+        this.props.removeUsersFromAppRole(this.props.appId, this.props.roleId, this.props.selection).then(
+            (userIds) => {
+                const msg = userIds.length > 1 ?
+                    Locale.getMessage('app.users.userRemoved') : Locale.getMessage('app.users.usersRemoved', {numOfUsers:userIds.length});
+                NotificationManager.success(msg);
+            },
+            () => {
+                NotificationManager.error(Locale.getMessage('app.users.userRemovingError'));
+            }
+        );
         this.setState({confirmDeletesDialogOpen: false});
     }
 
@@ -110,7 +124,17 @@ UserActions.propTypes = {
     selection: PropTypes.array,
     roleId: PropTypes.string,
     appId: PropTypes.string,
-    onEditSelected: PropTypes.func
+    onEditSelected: PropTypes.func,
+    removeUsersFromAppRole: PropTypes.func
 };
 
-export default UserActions;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        removeUsersFromAppRole: (appId, roleId, userIds) => {return dispatch(removeUsersFromAppRole(appId, roleId, userIds));}
+    };
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(UserActions);

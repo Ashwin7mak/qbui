@@ -14,7 +14,6 @@ import {connect} from 'react-redux';
 import UserActions from '../../../actions/userActions';
 import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows} from '../../../../actions/userActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
-import {assignUserToApp} from '../../../../actions/appActions';
 
 import {getAppRoles} from '../../../../reducers/appRoles';
 import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';

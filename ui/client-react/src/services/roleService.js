@@ -26,38 +26,25 @@ class RoleService extends BaseService {
     }
 
     /**
-     * unassign users from app role
+     * remove users from app role
      * @param appId
      * @param roleId
+     * @param userIds - list of user ids
      */
-    unassignUsersFromRole(appId, roleId, userIds) {
-
+    removeUsersFromAppRole(appId, roleId, userIds) {
         let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-
         return super.delete(url, {data: userIds});
     }
 
-
     /**
-     * assign users to an app role
+     * Assign an app role to a list of users
      * @param appId
      * @param roleId
-     */
-    assignUsersToRole(appId, roleId) {
-        let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-        return super.post(url);
-    }
-
-    /**
-     * Adds a User to an App
-     * @param appId
-     * @param userInfo
+     * @param userIds - list of userids
      * @returns {*}
      */
-    assignUserToApp(appId, userId, roleId) {
+    assignUsersToAppRole(appId, roleId, userIds) {
         let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-        let userIds = [];
-        userIds.push(userId);
         return super.post(url, userIds);
     }
 }

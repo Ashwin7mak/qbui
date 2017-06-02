@@ -7,17 +7,17 @@ class AppModel {
     }
 
     init(appData) {
-        this.model = {};
+        this.app = {};
 
         if (appData) {
-            this.model.app = appData.app;
-            if (this.model.app) {
-                this.model.app.users = appData.users[0];
-                this.model.app.unfilteredUsers = appData.users[1];
-                this.model.app.link = `${APP_ROUTE}/${this.model.app.id}`;
+            if (appData.app) {
+                this.app = appData.app;
+                this.setUsers(appData.users[0]);
+                this.setUnfilteredUsers(appData.users[1]);
+                this.app.link = `${APP_ROUTE}/${this.app.id}`;
 
                 //  set the table icons
-                let tables = this.model.app.tables;
+                let tables = this.app.tables;
                 if (tables) {
                     tables.forEach((table) => {
                         table.tableIcon = TableIconUtils.getTableIcon(table.name);
@@ -27,32 +27,41 @@ class AppModel {
         }
     }
 
-    get() {
-        return this.model;
+    getApp() {
+        return this.app;
     }
 
-    getApp() {
-        return this.model.app;
+    getAppId() {
+        return this.app.id;
     }
 
     getUsers() {
-        return this.model.app.users;
+        return this.app.users || [];
     }
 
     getUnfilteredUsers() {
-        return this.model.app.unfilteredUsers;
+        return this.app.unfilteredUsers || [];
     }
 
-    setModel(model) {
-        this.model = model;
+    getUnfilteredUsersByRole(roleId) {
+        const unfilteredUsers = this.getUnfilteredUsers();
+        return unfilteredUsers[roleId] || [];
+    }
+
+    setApp(app) {
+        this.app = app;
     }
 
     setUsers(users) {
-        this.model.app.users = users;
+        this.app.users = users;
     }
 
     setUnfilteredUsers(unfilteredUsers) {
-        this.model.app.unfilteredUsers = unfilteredUsers;
+        this.app.unfilteredUsers = unfilteredUsers;
+    }
+
+    setUnfilteredUsersByRole(unfilteredUsers, roleId) {
+        this.app.unfilteredUsers[roleId] = unfilteredUsers;
     }
 
 }

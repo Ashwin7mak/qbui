@@ -52,10 +52,11 @@ export default {
                 removeButton: "Remove",
                 cancel: "Cancel",
                 plural: "users",
-                usersRemoved: " users have been removed",
-                userRemoved: " user has been removed",
+                usersRemovedFromAppRole: "{numOfUsers} users removed from the app role",
+                userRemovedFromAppRole: "User removed removed from the app role",
                 userAdded: "User added",
-                userAddError: 'Error adding user'
+                userAddError: "Error adding user",
+                userRemovingError: "Error removing user"
             }
         },
         appMenu: {

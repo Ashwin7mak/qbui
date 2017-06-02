@@ -49,10 +49,11 @@ export default {
                 removeButton: "Entfernen",
                 cancel: "Stornieren",
                 plural: "Benutzer",
-                usersRemoved: " Benutzer wurden entfernt",
-                userRemoved: " Benutzer wurde entfernt",
+                usersRemovedFromAppRole: "{numOfUsers} Benutzer aus der App-Rolle entfernt",
+                userRemovedFromAppRole: "Benutzer aus der App-Rolle entfernt",
                 userAdded: "Benutzer hinzugefügt",
-                userAddError: "Fehler beim Hinzufügen von Benutzer"
+                userAddError: "Fehler beim Hinzufügen von Benutzer",
+                userRemovingError: "Fehler beim Entfernen des Benutzers"
             }
         },
         appMenu: {

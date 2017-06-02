@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
-import {assignUserToApp} from '../../../../actions/appActions';
+import {assignUserToAppRole} from '../../../../actions/appRoleActions';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from "../../../../utils/i18nMessage";
 import AddUserPanel from './addUserPanel';
@@ -38,13 +38,13 @@ export class AddUserDialog extends React.Component {
      * @returns void
      */
     onFinished() {
-        if (this.props.assignUserToApp) {
+        if (this.props.assignUserToAppRole) {
             const userInfo = {
                 userId: this.userPanel.getSelectedUser(),
                 roleId: this.props.userRoleIdToAdd
             };
 
-            this.props.assignUserToApp(this.props.appId, userInfo.userId, userInfo.roleId).then(
+            this.props.assignUserToAppRole(this.props.appId, userInfo.roleId, userInfo.userId).then(
                 () => {
                     this.isValid(false);
                     this.props.hideDialog(false);
@@ -103,7 +103,7 @@ AddUserDialog.propTypes = {
     realmUsers: PropTypes.arrayOf(PropTypes.object),
     searchUsers: PropTypes.func,
     appRoles: PropTypes.arrayOf(PropTypes.object),
-    assignUserToApp: PropTypes.func,
+    assignUserToAppRole: PropTypes.func,
     setUserRoleToAdd: PropTypes.func,
     userRoleIdToAdd: PropTypes.number,
     appId: PropTypes.string,
@@ -114,7 +114,7 @@ AddUserDialog.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        assignUserToApp: (appId, userId, roleId) => {return dispatch(assignUserToApp(appId, userId, roleId));}
+        assignUserToAppRole: (appId, roleId, userId) => {return dispatch(assignUserToAppRole(appId, roleId, userId));}
     };
 };
 

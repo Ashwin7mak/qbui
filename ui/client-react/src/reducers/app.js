@@ -150,7 +150,7 @@ const app = (
             loading: false,
             error: false,
             //  app is an appModel object
-            app: appModel.get(),
+            app: appModel.getApp(),
             //  update app in apps list
             apps: setAppInApps(appModel.getApp()),
             selected: setSelectedApp(appModel.getApp().id)
@@ -207,25 +207,48 @@ const app = (
             loading: false,
             error: true
         };
-    case types.ASSIGN_USER_TO_APP_SUCCESS:
+    case types.ASSIGN_USERS_TO_APP_ROLE:
         //  update the users for the app in the store
         if (state.app) {
-            let clonedAppModel = _.clone(state.app);
-
             let model = new AppModel();
-            model.setModel(clonedAppModel);
+            model.setApp(_.clone(state.app));
             model.setUsers(action.content.appUsers[0]);
             model.setUnfilteredUsers(action.content.appUsers[1]);
 
             return {
                 ...state,
-                app: model.get(),
+                app: model.getApp(),
                 apps: setAppInApps(model.getApp())
             };
         }
-        return  state;
-    case types.ASSIGN_USER_TO_APP_ERROR:
         return state;
+    case types.REMOVE_USERS_FROM_APP_ROLE:
+        const roleId = action.content.roleId;
+        const userIds = action.content.userIds;
+
+        let model = new AppModel();
+        model.setApp(_.clone(state.app));
+
+        let appUsers = model.getUsers();
+        let unfilteredUsers = model.getUnfilteredUsersByRole(roleId);
+
+        userIds.forEach(userId => {
+            appUsers = appUsers.filter(function(obj) {
+                return obj.userId !== userId;
+            });
+            unfilteredUsers = unfilteredUsers.filter(function(obj) {
+                return obj.userId !== userId;
+            });
+        });
+
+        model.setUsers(appUsers);
+        model.setUnfilteredUsersByRole(unfilteredUsers, roleId);
+
+        return {
+            ...state,
+            app: model.getApp(),
+            apps: setAppInApps(model.getApp())
+        };
     default:
         return state;
     }
@@ -253,11 +276,23 @@ export const getSelectedTableId = (state) => {
 };
 
 export const getSelectedAppUsers = (state) => {
-    return state.app ? state.app.users : [];
+    let appUsers = [];
+    if (state.app) {
+        let appModel = new AppModel();
+        appModel.setApp(state.app);
+        appUsers = appModel.getUsers();
+    }
+    return appUsers;
 };
 
 export const getSelectedAppUnfilteredUsers = (state) => {
-    return state.app ? state.app.unfilteredUsers : {};
+    let appUnfilteredUsers = [];
+    if (state.app) {
+        let appModel = new AppModel();
+        appModel.setApp(state.app);
+        appUnfilteredUsers = appModel.getUnfilteredUsers();
+    }
+    return appUnfilteredUsers;
 };
 
 export const getAppOwner = (state) => {
