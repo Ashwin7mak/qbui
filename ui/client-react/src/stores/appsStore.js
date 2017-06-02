@@ -12,10 +12,10 @@ let AppsStore = Fluxxor.createStore({
 
     initialize() {
         //this.apps = null;
-        this.appUsers = [];
+        //this.appUsers = [];
         //this.realmUsers = [];
-        this.appUsersUnfiltered = {};
-        this.appOwner = {};
+        //this.appUsersUnfiltered = {};
+        //this.appOwner = {};
         // Default is true because the apps must load before the website is usable
         //this.loading = true;
         //this.error = false;
@@ -39,15 +39,15 @@ let AppsStore = Fluxxor.createStore({
             //actions.SELECT_TABLE, this.onSelectTable,
             //actions.UPDATED_TABLE_PROPS, this.onUpdateTableProps,
 
-            actions.LOAD_APP_OWNER, this.onLoadAppOwner,
-            actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
-            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess,
+            //actions.LOAD_APP_OWNER, this.onLoadAppOwner,
+            //actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
+            //actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess,
 
             //actions.SELECT_USERS_DETAILS, this.onSelectedRows
 
-            actions.UNASSIGN_USERS, this.onUnasssignUsers,
-            actions.UNASSIGN_USERS_FAILED, this.onUnasssignUsersFail,
-            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess
+            //actions.UNASSIGN_USERS, this.onUnasssignUsers,
+            //actions.UNASSIGN_USERS_FAILED, this.onUnasssignUsersFail,
+            //actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess
 
             //actions.LOAD_ALL_USERS, this.onLoadAllUsers
             //actions.SEARCH_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
@@ -147,16 +147,16 @@ let AppsStore = Fluxxor.createStore({
     //
     //    this.emit('change');
     //},
-    onLoadAppOwner() {
-        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
-    },
-    onLoadAppOwnerFailed() {
-        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
-    },
-    onLoadAppOwnerSuccess(appOwner) {
-        this.appOwner = appOwner;
-        this.emit('change');
-    },
+    //onLoadAppOwner() {
+    //    //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    //},
+    //onLoadAppOwnerFailed() {
+    //    //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    //},
+    //onLoadAppOwnerSuccess(appOwner) {
+    //    this.appOwner = appOwner;
+    //    this.emit('change');
+    //},
 
     //onSelectTable(tblId) {
     //    this.selectedTableId = tblId;
@@ -168,36 +168,36 @@ let AppsStore = Fluxxor.createStore({
     //
     //    this.emit('change');
     //},
-    onUnasssignUsers() {
-        this.emit('change');
-    },
-    onUnasssignUsersSuccess(data) {
-        let appUsers = this.appUsers;
-        let appUsersUnfiltered = this.appUsersUnfiltered[data.roleId];
-        let users = data.userIds.length;
-
-        (data.userIds).forEach(selectedUser => {
-            appUsers = appUsers.filter(function(obj) {
-                return obj.userId !== selectedUser;
-            });
-            appUsersUnfiltered = appUsersUnfiltered.filter(function(obj) {
-                return obj.userId !== selectedUser;
-            });
-        });
-
-        this.appUsersUnfiltered[data.roleId] = appUsersUnfiltered;
-        this.appUsers = appUsers;
-        this.selectedUserRows = [];
-        let msg = " ";
-        msg = (users > 1) ? users + Locale.getMessage('app.users.usersRemoved') :
-            msg = users + Locale.getMessage('app.users.userRemoved');
-
-        NotificationManager.success(msg);
-        this.emit('change');
-    },
-    onUnasssignUsersFail() {
-        this.emit('change');
-    },
+    //onUnasssignUsers() {
+    //    this.emit('change');
+    //},
+    //onUnasssignUsersSuccess(data) {
+    //    let appUsers = this.appUsers;
+    //    let appUsersUnfiltered = this.appUsersUnfiltered[data.roleId];
+    //    let users = data.userIds.length;
+    //
+    //    (data.userIds).forEach(selectedUser => {
+    //        appUsers = appUsers.filter(function(obj) {
+    //            return obj.userId !== selectedUser;
+    //        });
+    //        appUsersUnfiltered = appUsersUnfiltered.filter(function(obj) {
+    //            return obj.userId !== selectedUser;
+    //        });
+    //    });
+    //
+    //    this.appUsersUnfiltered[data.roleId] = appUsersUnfiltered;
+    //    this.appUsers = appUsers;
+    //    this.selectedUserRows = [];
+    //    let msg = " ";
+    //    msg = (users > 1) ? users + Locale.getMessage('app.users.usersRemoved') :
+    //        msg = users + Locale.getMessage('app.users.userRemoved');
+    //
+    //    NotificationManager.success(msg);
+    //    this.emit('change');
+    //},
+    //onUnasssignUsersFail() {
+    //    this.emit('change');
+    //},
     //onLoadAllUsers() {
     //    this.emit('change');
     //},
@@ -270,9 +270,9 @@ let AppsStore = Fluxxor.createStore({
         return {
             //apps: this.apps,
             //selectedAppId: this.selectedAppId,
-            appUsers: this.appUsers,
-            appUsersUnfiltered: this.appUsersUnfiltered,
-            appOwner: this.appOwner
+            //appUsers: this.appUsers,
+            //appUsersUnfiltered: this.appUsersUnfiltered,
+            //appOwner: this.appOwner
             //selectedTableId: this.selectedTableId,
             //loading: this.loading,
             //error: this.error,

@@ -5,6 +5,7 @@ import Locale from '../../locales/locales';
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
 import {removeUsersFromAppRole} from '../../actions/appRoleActions';
+import {selectUserRows} from '../../actions/userActions';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 
 import './reportActions.scss';
@@ -61,6 +62,9 @@ export class UserActions extends React.Component {
                 const msg = userIds.length > 1 ?
                     Locale.getMessage('app.users.userRemoved') : Locale.getMessage('app.users.usersRemoved', {numOfUsers:userIds.length});
                 NotificationManager.success(msg);
+
+                //  clear out the selection counter
+                //this.props.selectUserRows(0);
             },
             () => {
                 NotificationManager.error(Locale.getMessage('app.users.userRemovingError'));
@@ -130,7 +134,8 @@ UserActions.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        removeUsersFromAppRole: (appId, roleId, userIds) => {return dispatch(removeUsersFromAppRole(appId, roleId, userIds));}
+        removeUsersFromAppRole: (appId, roleId, userIds) => {return dispatch(removeUsersFromAppRole(appId, roleId, userIds));},
+        selectUserRows: (selected) => {dispatch(selectUserRows(selected));}
     };
 };
 

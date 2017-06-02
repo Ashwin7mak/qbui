@@ -31,7 +31,8 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import * as AppActions from '../../actions/appActions';
 
-import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../reducers/app';
+import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getSelectedAppUsers, getSelectedAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
+import {getAppRoles} from '../../reducers/appRoles';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -66,7 +67,7 @@ const OPEN_APPS_LIST = true;
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 export const Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -75,8 +76,7 @@ export const Nav = React.createClass({
     getStateFromFlux() {
         let flux = this.getFlux();
         return {
-            nav: flux.store('NavStore').getState(),
-            apps: flux.store('AppsStore').getState()
+            nav: flux.store('NavStore').getState()
         };
     },
 
@@ -199,11 +199,14 @@ export const Nav = React.createClass({
     },
 
     getEditingApp() {
+        const appsList = this.props.getApps() || [];
+        const selectedAppId = this.props.getSelectedAppId();
+
         if (this.props.location.query[UrlConsts.DETAIL_APPID]) {
             let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
-            return _.find(this.state.apps.apps, (a) => a.id === childAppId);
-        } else if (this.state.apps.selectedAppId) {
-            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+            return _.find(appsList, (a) => a.id === childAppId);
+        } else if (selectedAppId) {
+            return _.find(appsList, (a) => a.id === selectedAppId);
         }
         return null;
     },
@@ -249,7 +252,6 @@ export const Nav = React.createClass({
      */
     getSelectedReport() {
         if (this.aReportIsSelected()) {
-            //return this.state.reportData.data;
             return this.getReportsData();
         }
         return null;
@@ -497,8 +499,8 @@ export const Nav = React.createClass({
                                 reportData: reportsData,
                                 appUsers: this.props.getSelectedAppUsers(),
                                 appUsersUnfiltered: this.props.getSelectedAppUnfilteredUsers(),
-                                appRoles: this.state.apps.appRoles,
-                                appOwner: this.state.apps.appOwner,
+                                appRoles: this.props.getAppRoles(),
+                                appOwner: this.props.getAppOwner(),
                                 locale: this.state.nav.locale,
                                 isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                                 selectedApp: selectedApp,
@@ -577,7 +579,7 @@ export const Nav = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
         getSelectedAppId: () => getSelectedAppId(state.app),
         getSelectedAppUnfilteredUsers: () => getSelectedAppUnfilteredUsers(state.app),
@@ -585,6 +587,8 @@ const mapStateToProps = (state) => {
         getSelectedTableId: () => getSelectedTableId(state.app),
         getApp: (appId) => getApp(state.app, appId),
         getApps: () => getApps(state.app),
+        getAppOwner: () => getAppOwner(state.app),
+        getAppRoles: () => getAppRoles(state.appRoles, ownProps.match.params.appId),
         isAppsLoading: getIsAppsLoading(state.app),
         forms: state.forms,
         shell: state.shell,
