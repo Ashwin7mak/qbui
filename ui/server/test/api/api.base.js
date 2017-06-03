@@ -449,9 +449,9 @@
                     lastName         : generateString(10),
                     screenName       : generateString(10),
                     email            : generateEmail(),
-                    //password         : 'quickbase',
-                    //challengeQuestion: 'who is your favorite scrum team?',
-                    //challengeAnswer  : 'blue'
+                    password         : 'quickbase',
+                    challengeQuestion: 'who is your favorite scrum team?',
+                    challengeAnswer  : 'blue'
                 };
                 return this.createSpecificUser(userToMake);
             },
