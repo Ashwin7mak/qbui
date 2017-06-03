@@ -4,16 +4,14 @@
     //Load the page Objects
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let RequestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
-    let formsPO = requirePO('formsPage');
-    let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let leftNavPO = requirePO('leftNav');
-    let rawValueGenerator = require('../../../test_generators/rawValue.generator');
-    let ReportContentPO = requirePO('reportContent');
+    let modalDialog = requirePO('/common/modalDialog');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
+    const CREATE_TABLE_DLG_TITLE = 'New Table';
+    const CANCEL_BTN = 'Cancel';
 
     describe('Tables - Create table validation tests: ', function() {
         let realmName;
@@ -116,7 +114,9 @@
                 });
 
                 //Cancel table dialogue
-                tableCreatePO.clickCancelBtn();
+                modalDialog.clickOnModelDialogBtn(modalDialog.CREATE_TABLE_DLG_CANCEL_BTN);
+                //Need this for dialog to slide away
+                browser.pause(e2eConsts.shortWaitTimeMs);
 
                 //Get the new count of table links in the left nav
                 let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;

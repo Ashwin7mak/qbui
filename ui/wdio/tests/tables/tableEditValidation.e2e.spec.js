@@ -111,8 +111,8 @@
                 //Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify Apply button is enabled
-                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBe(true);
+                    //Verify Apply button is disabled
+                    expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBe(false);
                     //Verify Reset button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
                 });
@@ -125,6 +125,9 @@
 
                 //Verify bck to app link is enabled
                 expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBe(true);
+
+                //Click on reset at the end
+                tableCreatePO.clickOnEditTableResetBtn();
 
             });
         });

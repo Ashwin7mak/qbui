@@ -12,6 +12,7 @@
     let tableCreatePO = requirePO('tableCreate');
     let ReportContentPO = requirePO('reportContent');
     let leftNavPO = requirePO('leftNav');
+    let modalDialog = requirePO('/common/modalDialog');
 
     describe('Tables - delete table tests: ', function() {
         let realmName;
@@ -19,7 +20,6 @@
         let testApp;
         let EXISTING_TABLE_NAME_1 = 'Table 1';
         let EXISTING_TABLE_NAME_2 = 'Table 2';
-        let userId;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -77,7 +77,9 @@
             tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Click don't delete table button
-            tableCreatePO.clickDontDeleteTableButton();
+            modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_DONT_DELETE_BTN);
+            //Need this for dialog to slide away
+            browser.pause(e2eConsts.shortWaitTimeMs);
 
             //Click on go back to apps Link
             tableCreatePO.clickBackToAppsLink();
@@ -138,10 +140,10 @@
                 tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
                 //Make sure delete table button is disabled
-                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
+                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(false);
 
                 //Click on don't Delete finally to make the dialogue to dissapear
-                tableCreatePO.clickDontDeleteTableButton();
+                modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_DONT_DELETE_BTN);
             });
         });
 
@@ -168,7 +170,7 @@
             tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Delete table
-            tableCreatePO.clickDeleteTableButton();
+            modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_DELETE_BTN);
 
             //Wait until new table button visible
             tableCreatePO.newTableBtn.waitForVisible();

@@ -4,16 +4,16 @@
     //Load the page Objects
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let RequestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
     let formsPO = requirePO('formsPage');
-    let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let leftNavPO = requirePO('leftNav');
+    let modalDialog = requirePO('/common/modalDialog');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
+
 
     describe('Tables - Create a table via builder tests: ', function() {
         let realmName;
@@ -90,13 +90,16 @@
             });
 
             //Click on finished button and make sure it landed in edit Form container page
-            tableCreatePO.clickFinishedBtn();
+            modalDialog.clickOnModelDialogBtn(modalDialog.CREATE_TABLE_BTN);
+            tableCreatePO.waitUntilNotificationContainerGoesAway();
 
             //Verify the create table dialogue
             tableCreatePO.verifyNewTableCreateDialogue();
 
             //Click OK button on create table dialogue
-            tableCreatePO.clickOkBtn();
+            modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+            //Need small wait for the container to dissapear
+            browser.pause(e2eConsts.mediumWaitTimeMs);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
@@ -132,6 +135,9 @@
             //Click on new table button
             tableCreatePO.clickCreateNewTable();
 
+            //Enter table name
+            tableCreatePO.enterTableFieldValue(tableNameFieldTitleText, 'searchIcon');
+
             //Verify iconChooser search functionality
             tableCreatePO.searchIconFromChooser('bicycle');
             let searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
@@ -140,10 +146,7 @@
             expect(searchReturnedIcons.getAttribute('className')).toContain('iconTableSturdy-bicycle');
 
             //close the table dialogue
-            if (browser.isVisible('.modal-dialog .modal-body') === true) {
-                //Click on close button on the dialogue
-                tableCreatePO.clickCloseBtn();
-            }
+            tableCreatePO.clickCloseBtn();
 
         });
 

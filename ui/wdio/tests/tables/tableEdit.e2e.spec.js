@@ -8,6 +8,7 @@
     var formsPO = requirePO('formsPage');
     let ReportContentPO = requirePO('reportContent');
     let leftNavPO = requirePO('leftNav');
+    let modalDialog = requirePO('/common/modalDialog');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
@@ -94,10 +95,13 @@
             });
 
             //Click on finished button and make sure it landed in edit Form container page
-            tableCreatePO.clickFinishedBtn();
+            modalDialog.clickOnModelDialogBtn(modalDialog.CREATE_TABLE_BTN);
+            tableCreatePO.waitUntilNotificationContainerGoesAway();
 
             //Click OK button on create table dialogue
-            tableCreatePO.clickOkBtn();
+            modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+            //Need small wait for the container to dissapear
+            browser.pause(e2eConsts.mediumWaitTimeMs);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();

@@ -445,39 +445,6 @@
         }},
 
         /**
-         * Method to click a button on Save changes dialogue box
-         */
-        clickButtonOnSaveChangesDialog : {value: function(btnName) {
-            //get all save buttons on the form
-            var btns = this.formsSaveChangesDialogFooter.elements('button').value.filter(function(button) {
-                return button.getAttribute('textContent') === btnName;
-            });
-
-            if (btns !== []) {
-                //Click on filtered save button
-                return btns[0].click();
-            } else {
-                throw new Error('button with name ' + btnName + " not found on the Save Changes Dialogue box");
-            }
-        }},
-
-        /**
-         * Method to close save changes dialogue box by clicking on 'Dont save' button
-         */
-        closeSaveChangesDialogue : {value: function() {
-            //Need this for notifications to slide away
-            browser.pause(5000);
-            //click on form close button
-            this.clickFormCloseBtn();
-            //wait until save changes dialogue popups
-            this.formsSaveChangesDialog.waitForVisible();
-            //come out of dirty form state
-            expect(this.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
-            //close the dialogue by clicking on don't save
-            return this.clickButtonOnSaveChangesDialog("Don't save");
-        }},
-
-        /**
          * Method to verify cell values in the report table for table 1 -> report1 -> ListAll report
          */
         verifyFieldValuesInReportTable : {value: function(expectedRecordValues) {
