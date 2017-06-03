@@ -8,7 +8,6 @@
     // Import the base page object
 
     var e2ePageBase = requirePO('e2ePageBase');
-    var reportContentPO = requirePO('reportContent');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
 
     var sText = 'testTextValue';
@@ -46,11 +45,6 @@
         //close btn on error container
         formErrorMessageContainerCloseBtn : {get: function() {return this.formErrorMessageContainerEl.element('.iconUISturdy-x-secondary');}},
         formErrorMessageContent : {get: function() {return this.formErrorMessageContainerEl.element('.qbErrorMessageContent');}},
-
-        //Save changes before leaving dialogue
-        formsSaveChangesDialog : {get: function() {return browser.element('.modal-dialog');}},
-        formsSaveChangesDialogHeader : {get: function() {return this.formsSaveChangesDialog.element('.modal-body');}},
-        formsSaveChangesDialogFooter : {get: function() {return this.formsSaveChangesDialog.element('.modal-footer');}},
 
         // Notification Container for form actions
         notificationContainerEl: {get: function() {return browser.element('.notification-container');}},

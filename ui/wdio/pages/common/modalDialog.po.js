@@ -41,6 +41,7 @@ class modelDialog {
         });
 
         if (btns !== []) {
+            btns[0].waitForEnabled(e2eConsts.shortWaitTimeMs);
             //Click on filtered button
             return btns[0].click();
         } else {
