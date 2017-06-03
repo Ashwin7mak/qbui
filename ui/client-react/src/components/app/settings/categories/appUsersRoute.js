@@ -21,7 +21,6 @@ export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
             roleId: '',
-            appUrl: window.location.href,
         };
     },
     componentDidMount() {
@@ -188,10 +187,10 @@ export const AppUsersRoute = React.createClass({
                                successDialogOpen={this.props.successDialogOpen}
                                showSuccessDialog={this.props.showSuccessDialog}
                 />
-                <UserSuccessDialog appUrl={this.state.appUrl}
-                                   successDialogOpen={this.props.successDialogOpen}
+                <UserSuccessDialog successDialogOpen={this.props.successDialogOpen}
                                    addedAppUser={this.props.addedAppUser}
                                    showSuccessDialog={this.props.showSuccessDialog}
+                                   selectedAppName={this.props.selectedApp.name}
                 />
                     {this.getTableActions()}
                     <div className="userManagementContainer">

@@ -215,8 +215,8 @@ let appsActions = {
  * @param string email
  * @returns void
  */
-export const toggleAddToAppSuccessDialog = (status, email) => ({
-    type: types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, status, email
+export const toggleAddToAppSuccessDialog = (isOpen, email) => ({
+    type: types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, isOpen, email
 });
 
 export default appsActions;

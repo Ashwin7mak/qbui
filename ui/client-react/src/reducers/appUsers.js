@@ -12,7 +12,7 @@ const appUser = (
     case types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG: {
         return {
             ...state,
-            successDialogOpen: action.status,
+            successDialogOpen: action.isOpen,
             addedAppUser: [action.email]
         };
     }

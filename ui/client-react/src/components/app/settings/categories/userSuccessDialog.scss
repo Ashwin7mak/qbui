@@ -95,6 +95,8 @@
                 font-size: 16px;
                 cursor: pointer;
                 color: $add-user-button;
+                background-color: $add-user-dialog-border-button-color;
+                border: none;
                 &:hover {
                     color: $add-user-button;
                 }

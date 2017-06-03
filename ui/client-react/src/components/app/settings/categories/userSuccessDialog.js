@@ -7,15 +7,13 @@ import QbToolTip from "../../../qbToolTip/qbToolTip";
 import NotificationManager from '../../../../../../reuse/client/src/scripts/notificationManager';
 import FieldValueEditor from '../../../fields/fieldValueEditor';
 import copy from 'copy-to-clipboard';
+import WindowLocationUtils from '../../../../utils/windowLocationUtils';
+import {ONE} from '../../../../../../common/src/constants';
 
 import './userSuccessDialog.scss';
 
 
 class UserSuccessDialog extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     /**
      * dialog finished
@@ -25,9 +23,18 @@ class UserSuccessDialog extends React.Component {
     };
 
     onClickCopy = () =>{
-        copy(this.props.appUrl);
+        copy(this.getUrl());
         NotificationManager.info(Locale.getMessage('addUserToApp.copied'), Locale.getMessage('success'));
 
+    }
+
+    getUrl() {
+        let url = WindowLocationUtils.getHref();
+        return url.substr(0, url.lastIndexOf('/'));
+    }
+
+    getMailtoString() {
+        return `mailto:${this.props.addedAppUser}?Subject=${Locale.getMessage("addUserToApp.messageSubject", {appName: this.props.selectedAppName})}&body=${Locale.getMessage("addUserToApp.messageBody", {link: this.getUrl(), appName: this.props.selectedAppName})}`;
     }
 
     /**
@@ -35,7 +42,8 @@ class UserSuccessDialog extends React.Component {
      * @returns {XML}
      */
     render() {
-        return (<MultiStepDialog show={this.props.successDialogOpen}
+        return (
+            <MultiStepDialog show={this.props.successDialogOpen}
                                  classes="userSuccessDialog"
                                  onFinished={this.onFinished}
                                  onCancel={this.onFinished}
@@ -52,10 +60,10 @@ class UserSuccessDialog extends React.Component {
                     </div>
                 </div>
                 <div className="userSuccessText">
-                    <p><I18nMessage message="addUserToApp.userSuccessText1"/></p>
+                    <p><I18nMessage message="addUserToApp.userSuccessText"/></p>
                     <div className="userSuccessDetails">
                         <div className="url flexChild">
-                            <FieldValueEditor type={1} value={this.props.appUrl} />
+                            <FieldValueEditor type={ONE} value={this.getUrl()} />
                         </div>
                             <div className="cellEditIcon flexChild" onClick={this.onClickCopy}>
                                 <QbToolTip i18nMessageKey="addUserToApp.toCopy">
@@ -63,7 +71,7 @@ class UserSuccessDialog extends React.Component {
                                     <span><I18nMessage message="addUserToApp.copy"/></span>
                                 </QbToolTip>
                             </div>
-                        <a href={`mailto:${this.props.addedAppUser}?Subject=${Locale.getMessage("addUserToApp.messageSubject")}&body=${Locale.getMessage("addUserToApp.messageBody")}`} className="cellEditIcon flexChild" onClick={this.onClickEmail}>
+                        <a href={this.getMailtoString()} className="cellEditIcon flexChild">
                             <QbToolTip i18nMessageKey="addUserToApp.toEmail">
                                 <QbIcon icon="mail"/>
                                 <span><I18nMessage message="addUserToApp.email"/></span>

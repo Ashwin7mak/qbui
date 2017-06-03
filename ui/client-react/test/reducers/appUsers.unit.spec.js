@@ -10,11 +10,20 @@ describe('Test appUsers reducer', () => {
 
     it('return update state', () => {
         let email = 'test@test.com';
-        let status = true;
-        const state = reducer(initialState, {type: types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, email, status});
+        let isOpen = true;
+        const state = reducer(initialState, {type: types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, email, isOpen});
         expect(state.successDialogOpen).toBe(true);
         expect(state.addedAppUser).toEqual(['test@test.com']);
 
+    });
+    it('returns correct initial state empty action', () => {
+        let resultState = reducer(undefined, {});
+        expect(resultState).toEqual({successDialogOpen: false, addedAppUser: []});
+    });
+
+    it('returns correct initial state on non-appUsers action', () => {
+        let resultState = reducer(undefined, {type: types.CHANGE_LOCALE, id: 10});
+        expect(resultState).toEqual({successDialogOpen: false, addedAppUser: []});
     });
 
 });
