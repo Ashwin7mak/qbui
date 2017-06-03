@@ -257,6 +257,8 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
+            //Need this to trigger a change in the field especially when testing the empty field values in firefox
+            filteredElement.element(filteredElementInputClassName).setValue('aaa');
             return filteredElement.element(filteredElementInputClassName).setValue(fieldValue);
         }},
 
