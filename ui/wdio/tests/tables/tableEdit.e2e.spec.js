@@ -262,7 +262,8 @@
             ReportContentPO.waitForReportContent();
 
             //Verify settings icon not available for user other than ADMIN
-            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBe(false);
+            expect(browser.isExisting('.topNav .iconUISturdy-settings')).toBe(false);
+            expect(browser.isVisible('.topNav .iconUISturdy-settings')).toBe(false);
         });
     });
 }());
