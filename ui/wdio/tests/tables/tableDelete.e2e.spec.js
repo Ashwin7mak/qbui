@@ -47,10 +47,7 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            //wait until loading screen disappear in leftnav
-            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
         });
 
 
@@ -119,7 +116,7 @@
             it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
                 //Load the app
                 browser.call(function() {
-                    return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                    return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
                 });
 
                 //Select table to delete ('Table 1' here) and make sure it lands in reports page

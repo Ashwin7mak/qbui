@@ -7,7 +7,7 @@
 
     // Import the base page object
     let e2ePageBase = requirePO('e2ePageBase');
-    let leftNavPO = requirePO('leftNav');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
     let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitle = "Table name";
 
@@ -136,8 +136,11 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            //wait until loading screen disappear in leftnav
-            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            //wait until loading screen disappear in leftNav
+
+            loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+            //wait until loading screen disappear in report Content
+            loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
             browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
             return browser.elements('.tablesList .withSecondary .leftNavLabel');
         }},

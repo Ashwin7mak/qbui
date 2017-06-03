@@ -36,9 +36,7 @@
 
         it('should contains menu item that leads to automations settings', function() {
             //navigate to Application main page
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
-            //wait until loading screen disappear in leftnav
-            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            e2ePageBase.loadAppByIdInBrowser(realmName, app.id);
 
             //validate the 'Settings' button is visible
             expect(appToolbar.appSettingsBtn.isVisible()).toBe(true);

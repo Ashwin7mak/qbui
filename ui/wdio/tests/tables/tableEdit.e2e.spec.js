@@ -57,9 +57,7 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            //wait until loading screen disappear in leftnav
-            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
         });
 
         it('Add a new table and then edit that table', function() {
@@ -253,7 +251,7 @@
 
             browser.call(function() {
                 // Load the app in the realm
-                return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+                return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
             });
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page
