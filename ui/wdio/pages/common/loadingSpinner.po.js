@@ -2,7 +2,7 @@
     'use strict';
     var e2ePageBase = requirePO('./e2ePageBase');
 
-    var loadingSpinner = Object.create(e2ePageBase, {
+    module.exports = Object.create(e2ePageBase, {
         /**
          * Method for spinner to dissaper in leftNav
          */
@@ -25,6 +25,4 @@
                 return browser.pause(e2eConsts.shortWaitTimeMs);
             }},
     });
-
-    module.exports = new loadingSpinner();
 }());
