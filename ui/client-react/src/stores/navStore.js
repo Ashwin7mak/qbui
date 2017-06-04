@@ -13,8 +13,7 @@ let NavStore = Fluxxor.createStore({
             searching:false,
             scrollingReport: false,
             filterReportsName: '',
-            locale: null,
-            openCount: 0
+            locale: null
         };
 
         //this.setLocaleBundle();
