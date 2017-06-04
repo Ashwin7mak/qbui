@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import Loader from "react-loader";
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
+import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from "../../../utils/i18nMessage";
 import {loadAutomations, testAutomation} from "../../../actions/automationActions";
 import {getAutomationList} from "../../../reducers/automation";
@@ -57,7 +58,7 @@ export class AutomationListRoute extends Component {
                 .map((automation, index) => (
                     <tr><td>{automation.name}</td>
                         <td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td>
-                        <td><button type="button" onClick={() => this.testButtonClicked(automation.name)}><I18nMessage message="automationList.actionButton"/></button></td>
+                        <td><Button className="finishedButton" bsStyle="primary" onClick={() => this.testButtonClicked(automation.name)}><I18nMessage message="automationList.actionButton"/></Button></td>
                     </tr>
                 ));
         }
