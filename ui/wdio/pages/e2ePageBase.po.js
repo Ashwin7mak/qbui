@@ -67,8 +67,8 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until report container loaded
-        return reportContentPO.reportContainerEl;
+        //wait until apps home page is visible
+        return browser.waitForVisible('.myappsBody');
     };
 
     /**
