@@ -58,7 +58,7 @@ describe('Test AutomationActions function success workflow', () => {
         AutomationActionsRewireAPI.__ResetDependency__('AutomationService');
     });
 
-    it('verify loadAutomations action', () => {
+    it('verify loadAutomations action', (done) => {
 
         const expectedActions = [
             event(context, types.LOAD_AUTOMATIONS, appId),
@@ -69,12 +69,14 @@ describe('Test AutomationActions function success workflow', () => {
         return store.dispatch(automationActions.loadAutomations(context, appId)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
+                done();
             },
             () => {
                 expect(false).toBe(true);
+                done();
             });
     });
-    it('verify testAutomation action', () => {
+    it('verify testAutomation action', (done) => {
         const expectedActions = [
             event(automationName, appId, types.TEST_AUTOMATION),
             event(automationName, appId, types.TEST_AUTOMATION_SUCCESS, mockTestAutomationResponse.data)
@@ -121,7 +123,7 @@ describe('Test AutomationActions function failure workflow', () => {
         AutomationActionsRewireAPI.__ResetDependency__('AutomationService');
     });
 
-    it('verify loadAutomations action with no context', () => {
+    it('verify loadAutomations action with no context', (done) => {
         const expectedActions = [
             event(null, types.LOAD_AUTOMATIONS_FAILED, 500)
         ];
@@ -130,10 +132,11 @@ describe('Test AutomationActions function failure workflow', () => {
         return store.dispatch(automationActions.loadAutomations(null, appId)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
+                done();
             });
     });
 
-    it('verify loadAutomations action with no app', () => {
+    it('verify loadAutomations action with no app', (done) => {
         const expectedActions = [
             event(null, types.LOAD_AUTOMATIONS_FAILED, 500)
         ];
@@ -142,13 +145,15 @@ describe('Test AutomationActions function failure workflow', () => {
         return store.dispatch(automationActions.loadAutomations(context, null)).then(
             () => {
                 expect(false).toBe(true);
+                done();
             },
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
+                done();
             });
     });
 
-    it('verify loadAutomations action with error response', () => {
+    it('verify loadAutomations action with error response', (done) => {
         const expectedActions = [
             event(context, types.LOAD_AUTOMATIONS, appId),
             event(context, types.LOAD_AUTOMATIONS_FAILED, mockAutomationsResponse)
@@ -158,13 +163,15 @@ describe('Test AutomationActions function failure workflow', () => {
         return store.dispatch(automationActions.loadAutomations(context, appId)).then(
             () => {
                 expect(false).toBe(true);
+                done();
             },
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
+                done();
             });
     });
 
-    it('verify testAutomation action with error response', () => {
+    it('verify testAutomation action with error response', (done) => {
         const expectedActions = [
         ];
 
@@ -176,8 +183,8 @@ describe('Test AutomationActions function failure workflow', () => {
             },
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
+                done();
             });
-
     });
 
 });
