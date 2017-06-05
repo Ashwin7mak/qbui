@@ -5,7 +5,7 @@ import {MemoryRouter} from 'react-router-dom';
 import Fluxxor from 'fluxxor';
 import {SettingsWrapper, __RewireAPI__ as SettingsWrapperRewireAPI}  from '../../src/components/settings/settingsWrapper';
 import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
-import {TopNav} from '../../../reuse/client/src/components/topNav/topNav';
+import TopNav from '../../../reuse/client/src/components/topNav/topNav';
 import LeftNav from '../../../reuse/client/src/components/sideNavs/standardLeftNav';
 import SimpleNavItem from '../../../reuse/client/src/components/simpleNavItem/simpleNavItem';
 import {mount, shallow} from 'enzyme';
