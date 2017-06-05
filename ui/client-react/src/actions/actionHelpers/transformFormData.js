@@ -224,7 +224,7 @@ export function transformFieldBeforeSave(field) {
 
     const transformedField = _.cloneDeep(field);
     if (_.get(transformedField, "datatypeAttributes.type", null) === "LINK_TO_RECORD") {
-        transformedField.datatypeAttributes.type = "TEXT";
+        transformedField.datatypeAttributes.type = "DATE";
         delete transformedField.parentTableId;
         delete transformedField.parentFieldId;
     }
@@ -253,6 +253,7 @@ export function addRelationshipFieldProps(appId, tblId, formMeta, fields)  {
             });
 
             if (relationship) {
+                field.parentAppId = relationship.masterAppId;
                 field.parentTableId = relationship.masterTableId;
                 field.parentFieldId = relationship.masterFieldId;
             }

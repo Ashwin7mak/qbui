@@ -14,6 +14,9 @@ class FieldFormats {
 
 
         if (fieldDef && fieldDef.datatypeAttributes) {
+            if (_.has(fieldDef, 'parentTableId')) {
+                return FieldFormats.LINK_TO_RECORD;
+            }
 
             switch (fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
@@ -85,9 +88,6 @@ class FieldFormats {
                     return FieldFormats.MULTI_LINE_TEXT_FORMAT;
                 }
 
-                if (_.has(fieldDef, 'parentTableId')) {
-                    return FieldFormats.LINK_TO_RECORD;
-                }
                 return FieldFormats.TEXT_FORMAT;
 
             case serverTypeConsts.TEXT_FORMULA :
