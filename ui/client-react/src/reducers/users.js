@@ -30,7 +30,7 @@ const users = (
     case types.SELECT_USER_ROWS:
         return {
             ...state,
-            selectedUsers: action.selectedUsers
+            selectedUsers: Array.isArray(action.selectedUsers) ? action.selectedUsers : []
         };
     default:
         // return existing state by default in redux

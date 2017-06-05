@@ -152,14 +152,14 @@ export const AppUsersRoute = React.createClass({
     },
 
     toggleSelectAllRows() {
-        if (this.props.selectedUserRows.length === this.props.selectedApp.users) {
+        if (this.props.selectedUserRows.length === this.props.selectedApp.users.length) {
             this.deselectAllRows();
         } else {
             this.selectAllRows();
         }
     },
     areAllRowsSelected() {
-        return this.props.selectedUserRows.length === this.props.selectedApp.users;
+        return this.props.selectedUserRows.length === this.props.selectedApp.users.length;
     },
 
     render() {
