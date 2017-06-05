@@ -11,7 +11,6 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let tableCreatePO = requirePO('tableCreate');
     let ReportContentPO = requirePO('reportContent');
-    let leftNavPO = requirePO('leftNav');
     let modalDialog = requirePO('/common/modalDialog');
 
     describe('Tables - delete table tests: ', function() {
@@ -74,7 +73,7 @@
             tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Click don't delete table button
-            modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_DONT_DELETE_BTN);
+            modalDialog.clickOnModelDialogBtn(modalDialog.DONT_DELETE_BTN);
             //Need this for dialog to slide away
             browser.pause(e2eConsts.shortWaitTimeMs);
 
@@ -112,7 +111,6 @@
         }
 
         deletePromtTextFieldTestCases().forEach(function(testCase) {
-
             it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
                 //Load the app
                 browser.call(function() {
@@ -140,7 +138,7 @@
                 expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(false);
 
                 //Click on don't Delete finally to make the dialogue to dissapear
-                modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_DONT_DELETE_BTN);
+                modalDialog.clickOnModelDialogBtn(modalDialog.DONT_DELETE_BTN);
             });
         });
 
@@ -166,8 +164,16 @@
             //Set the deletePromtTextField value to 'YES'
             tableCreatePO.setDeletePromtTextFieldValue('YES');
 
-            //Delete table
-            modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_DELETE_BTN);
+            //Click on Delete table. Need to use JS click because sometimes this button is not getting clicked intermittently
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 2
+                });
+                document.getElementsByClassName('modal-content')[0].getElementsByClassName('modal-footer')[0].querySelector('.primaryButton').dispatchEvent(event);
+            });
 
             //Wait until new table button visible
             tableCreatePO.newTableBtn.waitForVisible();

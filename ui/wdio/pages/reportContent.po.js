@@ -29,10 +29,6 @@
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         tableHomepageLink: {get: function() {return browser.element('.tableHomepageLink');}},
 
-        // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},
-        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .secondaryButton');}},
-
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -426,9 +422,10 @@
             }},
 
         // Record Row to be selected:
-        selectRow: {value: function(recordRow) {
+        selectRowAndClickDeleteIcon: {value: function(recordRow) {
             this.recordCheckBoxes.value[recordRow].click();
-            this.deleteIcon.waitForExist();
+            this.deleteIcon.waitForVisible();
+            return this.deleteIcon.click()
         }},
 
         //Select a report from tables page with reportID being the index of the report

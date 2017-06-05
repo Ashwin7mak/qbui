@@ -5,7 +5,8 @@ class modelDialog {
     get CREATE_TABLE_DLG_CANCEL_BTN() {return 'Cancel';}
     get TABLE_READY_DLG_OK_BTN() {return 'OK';}
     get TABLE_DELETE_BTN() {return 'Delete table';}
-    get TABLE_DONT_DELETE_BTN() {return  "Don't delete";}
+    get DELETE_BTN() {return 'Delete';}
+    get DONT_DELETE_BTN() {return  "Don't delete";}
 
     get modelDialog() {
         // model dialog
@@ -37,6 +38,7 @@ class modelDialog {
 
         if (btns !== []) {
             btns[0].waitForEnabled(e2eConsts.shortWaitTimeMs);
+            btns[0].waitForVisible();
             //Click on filtered button
             return btns[0].click();
         } else {
