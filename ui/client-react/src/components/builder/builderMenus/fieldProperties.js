@@ -133,14 +133,16 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-
     createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
+        const field = table && _.find(table.fields, {id: this.props.selectedField.parentFieldId});
+
         return (
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 {table && <div className="linkToRecordPropertyValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+                {field && <div className="linkToRecordPropertyValue"><Icon icon="url"/> Connected on {field.name} field</div>}
             </div>
         );
     }
