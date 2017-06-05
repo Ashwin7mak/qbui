@@ -21,11 +21,6 @@ describe('ReportRoute', () => {
     'use strict';
     const pendEdits = {};
     let component;
-    let mockNavStore = Fluxxor.createStore({
-        getState() {
-            return {};
-        }
-    });
 
     let props = {
         clearSearchInput: () => {},
@@ -52,14 +47,6 @@ describe('ReportRoute', () => {
     };
     let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}, pageOffset: offset, numRows: numRows}};
 
-    let stores = {
-        NavStore: new mockNavStore()
-    };
-    let flux = new Fluxxor.Flux(stores);
-
-    flux.actions = {
-        selectTableId() {return;}
-    };
 
     const StageMock = React.createClass({
         render() {
@@ -86,7 +73,6 @@ describe('ReportRoute', () => {
     }
 
     beforeEach(() => {
-        spyOn(flux.actions, 'selectTableId');
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadReport');
@@ -98,7 +84,6 @@ describe('ReportRoute', () => {
     });
 
     afterEach(() => {
-        flux.actions.selectTableId.calls.reset();
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();
         props.loadReport.calls.reset();

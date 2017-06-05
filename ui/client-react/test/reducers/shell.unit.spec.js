@@ -18,6 +18,9 @@ function initializeState() {
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
+        searching:false,
+        scrollingReport: false,
+        filterReportsName: ''
     };
 }
 

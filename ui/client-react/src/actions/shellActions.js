@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import Breakpoints from '../utils/breakpoints';
+import AppsBundleLoader from '../locales/appsBundleLoader';
 
 // Shell action creators (the Fluxxor navActions.js should be migrated over)
 
@@ -119,6 +120,24 @@ export const hideTopNav = () => {
     };
 };
 
+export const setSearching = (searching) => {
+    return {
+        type: types.SEARCHING,
+        searching
+    };
+};
+export const filterReportsByName = (reportName = "") => {
+    return {
+        type: types.FILTER_REPORTS_BY_NAME,
+        reportName
+    };
+};
+export const scrollingReport = (isScrolling = true) => {
+    return {
+        type: types.SCROLLING_REPORT,
+        isScrolling
+    };
+};
 /**
  * Set a top nav title
  * @param title a react node (or null to omit one)
