@@ -5,6 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
+    let formsPO = requirePO('formsPage');
 
     let realmName;
     let realmId;
@@ -42,7 +43,9 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                return e2ePageBase.viewFirstRecordInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+                //wait until view form is visible
+                return formsPO.viewFormContainerEl.waitForVisible();
             });
 
             beforeEach(function() {
@@ -133,6 +136,7 @@
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField);
                 // add the first new field item to the form
                 newField.click();
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // verify that the new field appears at the end of the revised fields list
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);

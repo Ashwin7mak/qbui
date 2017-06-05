@@ -55,6 +55,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         // update the field with the parent table ID and a name incorporating the selected table
         const field = this.props.fieldDef;
         field.parentTableId = tableId;
+        field.parentFieldId = parentTable.recordTitleFieldId;
+
         field.name = Locale.getMessage('fieldsDefaultLabels.LINK_TO_RECORD_FROM', {parentTable: parentTable.name});
 
         this.props.updateField(field, this.props.appId, this.props.tblId);

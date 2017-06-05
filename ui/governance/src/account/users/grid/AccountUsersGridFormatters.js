@@ -64,15 +64,15 @@ export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
 
 export const FormatAccessStatusHTML = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
-        return (<span className="accessStatusLabel deactivated"><Icon icon="errorincircle-outline"/> Deactivated</span>);
+        return (<div className="accessStatusLabel deactivated"><span className="deactivatedIcon"><Icon icon="errorincircle-outline"/></span> Deactivated</div>);
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
-        return (<span className="accessStatusLabel denied"><Icon icon="deactivate"/> Denied</span>);
+        return (<div className="accessStatusLabel denied"><span className="deniedIcon"><Icon icon="deactivate"/></span> Denied</div>);
     } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
-        return (<span className="accessStatusLabel staff"><Icon icon="user"/> Quick Base Staff</span>);
+        return (<div className="accessStatusLabel staff"><span className="staffIcon"><Icon iconFont="iconTableSturdy" icon="User"/></span> Quick Base Staff</div>);
     } else if (hasAppAccess) {
-        return (<span className="accessStatusLabel paid"><Icon icon="currency-dollar"/> Paid Seat</span>);
+        return (<div className="accessStatusLabel paid"><span className="paidIcon"><Icon icon="currency-dollar"/></span> Paid Seat</div>);
     } else {
-        return (<span className="accessStatusLabel none"><Icon icon="lock"/> No App Access</span>);
+        return (<div className="accessStatusLabel none"><span className="noneIcon"><Icon icon="infoincircle-fill"/></span> No App Access</div>);
     }
 };
 
