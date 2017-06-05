@@ -37,7 +37,7 @@ if (__QB_PROD__) {
             logToConsole: false,
             logToServer: true
         },
-        unauthorizedRedirect: '/qbase/unauthorized',
+        unauthorizedRedirect: null,
         // walkme java script
         walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js',
         evergageDataset: 'test'
@@ -70,7 +70,7 @@ if (__QB_LOCAL__) {
             logToServer: false
         },
         detectInvalidMutations: false, /* use redux-immutable-state-invariant middleware? */
-        unauthorizedRedirect: null,
+        unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script
         walkmeJSSnippet : '',
         evergageDataset: null,
