@@ -51,7 +51,7 @@
             expect(isReportBuilderContainerPresent1).toEqual(false);
         });
 
-        if (browserName !== 'Safari') {
+        if (browserName !== 'safari') {
             it('hide a column and verify it is hidden before CANCEL', () => {
                 // store the list of columns before hiding
                 let originalColumns = reportBuilderPO.getHeaderLabels();
