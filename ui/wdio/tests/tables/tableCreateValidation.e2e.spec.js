@@ -57,7 +57,7 @@
                     message: 'with empty table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -68,7 +68,6 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -80,7 +79,6 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
@@ -106,9 +104,10 @@
                 //Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify create table button is not enabled since there is error in field values
-                    expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
                 });
+
+                //Verify create table button is not enabled since there is error in field values
+                expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
 
                 //Cancel table dialogue
                 modalDialog.clickOnModelDialogBtn(modalDialog.CREATE_TABLE_DLG_CANCEL_BTN);
