@@ -42,7 +42,7 @@ describe('Role Service functions', () => {
         let userIds = [1, 2];
         let url = StringUtils.format(roleService.API.APP_ROLE_USERS, [appId, roleId]);
         roleService.assignUsersToAppRole(appId, roleId, userIds);
-        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, Object({data: userIds}));
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, userIds);
     });
 
 });
