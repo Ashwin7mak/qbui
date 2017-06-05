@@ -26,13 +26,36 @@ class reportBuilderPage {
         return browser.element('.reportBuilderContainer');
     }
 
+    get modalDismiss() {
+        // DON'T SAVE button in the SAVE CHANGES? dlg
+        return browser.element('.modal-dialog .middleButton');
+    }
+
     clickCancel() {
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
         browser.pause(fiveSeconds);
+        this.dirtyForm_Dismiss();
+        browser.pause(fiveSeconds);
         return this;
     }
 
+    dirtyForm_Dismiss() {
+        try { // browser's LEAVE THIS PAGE? dlg
+            browser.alertDismiss();
+        } catch (err) {
+            browser.pause(0);
+        }
+        try { // modal SAVE CHANGES? dlg
+            this.modalDismiss.click();
+            if (this.modalDismiss.isExisting()) {
+                this.modalDismiss.click();
+            }
+        } catch (err) {
+            browser.pause(0);
+        }
+        return this;
+    }
     clickSave() {
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveButton.click();
@@ -52,12 +75,27 @@ class reportBuilderPage {
         return this;
     }
 
+    getColumnLabels() {
+        // Gets the list of column labels from the report builder
+        let labelEls = browser.elements('.qbHeaderCell');
+        return labelEls.value.map(function(labelEl) {
+            let label = labelEl.element('.gridHeaderLabel').getText();
+            return label;
+        });
+    }
+
+    getReportLocator(index) {
+        // Returns a locator string for a specific column in the report builder
+        return '.qbHeaderCell:nth-child(' + index + ')';
+    }
+
     reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
         browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
     }
+
 
 }
 module.exports = new reportBuilderPage();
