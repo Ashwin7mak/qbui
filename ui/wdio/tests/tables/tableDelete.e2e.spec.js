@@ -86,62 +86,6 @@
             expect(newTableLinksCount).toBe(originalTableLinksCount);
         });
 
-        /**
-         * Data provider for deletePromt textField value validation testCases.
-         */
-        function deletePromtTextFieldTestCases() {
-            return [
-                {
-                    message: 'all lower case letters',
-                    fieldValue: 'yes'
-                },
-                {
-                    message: 'combination of lower and upper case letters',
-                    fieldValue: 'Yes'
-                },
-                {
-                    message: 'wrong string value',
-                    fieldValue: 'no'
-                },
-                {
-                    message: 'empty string',
-                    fieldValue: ''
-                }
-            ];
-        }
-
-        deletePromtTextFieldTestCases().forEach(function(testCase) {
-            it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
-                //Load the app
-                browser.call(function() {
-                    return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-                });
-
-                //Select table to delete ('Table 1' here) and make sure it lands in reports page
-                tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
-                // wait for the report content to be visible
-                ReportContentPO.waitForReportContent();
-
-                //Click table settings Icon
-                ReportContentPO.clickSettingsIcon();
-
-                //Go to 'Table properties & settings'
-                ReportContentPO.clickModifyTableSettings();
-
-                //Click delete table action button
-                tableCreatePO.clickDeleteTableActionButton();
-
-                //Set the deletePromtTextField value
-                tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
-
-                //Make sure delete table button is disabled
-                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(false);
-
-                //Click on don't Delete finally to make the dialogue to dissapear
-                modalDialog.clickOnModelDialogBtn(modalDialog.DONT_DELETE_BTN);
-            });
-        });
-
         it('Delete table', function()   {
 
             //get the original count of table links in the left nav
@@ -182,6 +126,57 @@
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
             //Verify the table links count decreased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
+        });
+
+        /**
+         * Data provider for deletePromt textField value validation testCases.
+         */
+        function deletePromtTextFieldTestCases() {
+            return [
+                {
+                    message: 'all lower case letters',
+                    fieldValue: 'yes'
+                },
+                {
+                    message: 'combination of lower and upper case letters',
+                    fieldValue: 'Yes'
+                },
+                {
+                    message: 'wrong string value',
+                    fieldValue: 'no'
+                },
+                {
+                    message: 'empty string',
+                    fieldValue: ''
+                }
+            ];
+        }
+
+        it('Delete table negative test cases with deletePrompt set to lowerCase yes, lowercase no,Mix of upper and lowerCase and empty', function()   {
+
+            //Select table to delete ('Table 1' here) and make sure it lands in reports page
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
+
+            //Click table settings Icon
+            ReportContentPO.clickSettingsIcon();
+
+            //Go to 'Table properties & settings'
+            ReportContentPO.clickModifyTableSettings();
+
+            //Click delete table action button
+            tableCreatePO.clickDeleteTableActionButton();
+
+            deletePromtTextFieldTestCases().forEach(function(testCase) {
+
+                //Set the deletePromtTextField value
+                tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
+
+                //Make sure delete table button is disabled
+                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(false);
+            });
+
         });
 
     });
