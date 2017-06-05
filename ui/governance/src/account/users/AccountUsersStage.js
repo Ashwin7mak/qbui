@@ -48,7 +48,7 @@ class AccountUsersStage extends React.Component {
             <Stage stageHeadline={
                 <StageHeader
                     title={Locale.getMessage("governance.account.users.stageTitle")}
-                    icon="users"
+                    icon="settings"
                     iconClassName="governanceAccountUsersStageIcon"
                     description={
                         <p>
