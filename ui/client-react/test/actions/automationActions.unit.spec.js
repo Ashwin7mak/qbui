@@ -92,7 +92,7 @@ describe('Test AutomationActions function success workflow', () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
             },
-            (err) => {
+            (error) => {
                 expect(false).toBe(true);
                 done();
             });
