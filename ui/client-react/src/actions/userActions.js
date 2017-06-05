@@ -85,6 +85,12 @@ export const setUserRoleToAdd = (roleId) => {
     };
 };
 
+/**
+ * Manage the open/close state of the add user popup dialog
+ *
+ * @param status -- true to open; false to close
+ * @returns {{type, status: *}}
+ */
 export const openAddUserDialog = (status) => {
     return {
         type: types.TOGGLE_ADD_USER_DIALOG,
@@ -92,10 +98,28 @@ export const openAddUserDialog = (status) => {
     };
 };
 
+/**
+ * Select 1..n user rows in user management grid
+ *
+ * @param selected - list of selected ids
+ * @returns {{type, selectedUsers: *}}
+ */
 export const selectUserRows = (selected) => {
     return {
         type: types.SELECT_USER_ROWS,
         selectedUsers: selected
+    };
+};
+
+/**
+ * Clear all selected user rows in user management grid
+ *
+ * @returns {{type, selectedUsers: Array}}
+ */
+export const clearSelectedUserRows = () => {
+    return {
+        type: types.SELECT_USER_ROWS,
+        selectedUsers: []  // empty list
     };
 };
 
