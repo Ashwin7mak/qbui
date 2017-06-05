@@ -224,9 +224,10 @@ export function transformFieldBeforeSave(field) {
 
     const transformedField = _.cloneDeep(field);
     if (_.get(transformedField, "datatypeAttributes.type", null) === "LINK_TO_RECORD") {
-        transformedField.datatypeAttributes.type = "TEXT";
+        transformedField.datatypeAttributes.type = transformedField.parentFieldType;
         delete transformedField.parentTableId;
         delete transformedField.parentFieldId;
+        delete transformedField.parentFieldType;
     }
     return transformedField;
 }

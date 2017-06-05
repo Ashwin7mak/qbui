@@ -46,7 +46,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      * parent table selected
      * @param tableId
      */
-    tableSelected(tableId) {
+    tableSelected(tableId, parentField) {
 
         this.props.hideRelationshipDialog();
 
@@ -55,7 +55,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         // update the field with the parent table ID and a name incorporating the selected table
         const field = this.props.fieldDef;
         field.parentTableId = tableId;
-        field.parentFieldId = parentTable.recordTitleFieldId;
+        field.parentFieldId = parentField.id;
+        field.parentFieldType = parentField.datatypeAttributes.type;
 
         field.name = Locale.getMessage('fieldsDefaultLabels.LINK_TO_RECORD_FROM', {parentTable: parentTable.name});
 

@@ -645,7 +645,9 @@ export default {
                 dialogTitle: "Obtenir un autre disque",
                 addToForm: "Ajouter au formulaire",
                 tableChooserDescription: "Lorsque vous créez ou mettez à jour un {tableNoun}, vous pouvez rechercher et obtenir des informations à partir d'un enregistrement dans un autre tableau",
-                tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?"
+                tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?",
+                advancedSettingsHeading: "Réglages avancés",
+                fieldChooserDescription: "Pour obtenir un enregistrement dans la table {tableName}, une association automatique est réalisée à l'aide d'un champ unique et obligatoire. Pour sélectionner un autre champ, vous pouvez choisir parmi la liste ci-dessous. Vous ne pouvez pas modifier ce champ une fois que vous l'avez ajouté à votre formulaire."
             }
         },
         featureSwitchAdmin: {

@@ -121,6 +121,10 @@ class MultiStepDialog extends React.Component {
 
     render() {
         let classes = ['multiStepModal'];
+
+        if (this.props.fixedHeight) {
+            classes.push('absolutePageContainer');
+        }
         if (this.props.classes) {
             classes = [...classes, this.props.classes];
         }
@@ -201,7 +205,11 @@ MultiStepDialog.propTypes = {
     /**
      *
      */
-    finishedButtonLabel: PropTypes.string
+    finishedButtonLabel: PropTypes.string,
+    /**
+     *
+     */
+    fixedHeight: PropTypes.bool,
 };
 
 MultiStepDialog.defaultProps = {
@@ -209,7 +217,8 @@ MultiStepDialog.defaultProps = {
     canProceed: true,
     isLoading: false,
     showCancelButton: true,
-    finishedButtonLabel: Locale.getMessage("nav.finished")
+    finishedButtonLabel: Locale.getMessage("nav.finished"),
+    fixedHeight: true
 };
 
 export default MultiStepDialog;

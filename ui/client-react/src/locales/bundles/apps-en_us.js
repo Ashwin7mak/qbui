@@ -654,7 +654,9 @@ export default {
                 dialogTitle: "Get another record",
                 addToForm: "Add to form",
                 tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
-                tableChooserHeading: "Where is the record you want to get?"
+                tableChooserHeading: "Where is the record you want to get?",
+                advancedSettingsHeading: "Advanced Settings",
+                fieldChooserDescription: "To get a record in the {tableName} table, an automatic association is made using a unique and required field.  To select another field, you can choose from the list below.  You can't change this field once you add it to your form."
             }
         },
         featureSwitchAdmin: {
