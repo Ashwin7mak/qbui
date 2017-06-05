@@ -583,7 +583,8 @@ export default {
             required: "Doit être rempli",
             multiChoice: "Les choix",
             unique: "Doit avoir des valeurs uniques",
-            linkToRecord: "Lien vers un enregistrement dans la table"
+            linkToRecord: "Lien vers un enregistrement dans la table",
+            connectedTo: "Connecté sur le champ {fieldName}"
         },
         builder: {
             tabs: {

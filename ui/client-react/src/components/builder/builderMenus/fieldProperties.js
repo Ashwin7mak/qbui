@@ -5,6 +5,7 @@ import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
 import MultiLineTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
 import FieldFormats from '../../../utils/fieldFormats';
 import Locale from '../../../../../reuse/client/src/locales/locale';
+import {I18nMessage} from '../../../utils/i18nMessage';
 import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
@@ -142,7 +143,7 @@ export class FieldProperties extends Component {
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 {table && <div className="linkToRecordPropertyValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
-                {field && <div className="linkToRecordPropertyValue"><Icon icon="url"/> Connected on {field.name} field</div>}
+                {field && <div className="linkToRecordPropertyValue"><Icon icon="url"/> <I18nMessage message="fieldPropertyLabels.connectedTo" fieldName={field.name} /></div>}
             </div>
         );
     }

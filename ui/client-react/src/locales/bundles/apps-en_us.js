@@ -591,7 +591,8 @@ export default {
             required: "Must be filled in",
             multiChoice: "Choices",
             unique: "Must have unique values",
-            linkToRecord: "Link to a record in the table"
+            linkToRecord: "Link to a record in the table",
+            connectedTo: "Connected on {fieldName} field"
         },
         builder: {
             tabs: {

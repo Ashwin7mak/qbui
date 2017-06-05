@@ -584,7 +584,8 @@ export default {
             required: "Muss ausgefüllt werden",
             multiChoice: "Wahlen",
             unique: "Muss einmalige Werte haben",
-            linkToRecord: "Link zu einem Datensatz in der Tabelle"
+            linkToRecord: "Link zu einem Datensatz in der Tabelle",
+            connectedTo: "Auf {fieldName}-Feld verbunden"
         },
         builder: {
             tabs: {
