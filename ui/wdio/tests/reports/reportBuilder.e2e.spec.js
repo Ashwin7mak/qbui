@@ -54,7 +54,7 @@
 
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             it('drag a column then drag back to original field, release & verify no change', function() {
-                let originalColumns = reportBuilderPO.getColumnLabels();
+                let originalColumns = reportBuilderPO.getHeaderLabels();
 
                 // drag 1st column onto 2nd
                 let source = reportBuilderPO.getReportLocator(1);
@@ -66,8 +66,8 @@
                 browser.dragAndDrop(target, source);
 
                 // verify original order
-                let newColumns = reportBuilderPO.getColumnLabels();
-                expect(reportBuilderPO.getColumnLabels()).toEqual(originalColumns);
+                let newColumns = reportBuilderPO.getHeaderLabels();
+                expect(reportBuilderPO.getHeaderLabels()).toEqual(originalColumns);
                 expect(newColumns[0]).toBe(originalColumns[0]);
                 expect(newColumns[2]).toBe(originalColumns[2]);
 
@@ -78,7 +78,7 @@
             });
 
             it('drag/drop a column & verify move', function() {
-                let originalColumns = reportBuilderPO.getColumnLabels();
+                let originalColumns = reportBuilderPO.getHeaderLabels();
 
                 let source = reportBuilderPO.getReportLocator(1);
                 let target = reportBuilderPO.getReportLocator(2);
@@ -87,8 +87,8 @@
                 browser.dragAndDrop(source, target);
 
                 // verify the new order
-                let newColumns = reportBuilderPO.getColumnLabels();
-                expect(reportBuilderPO.getColumnLabels().length).toBe(originalColumns.length);
+                let newColumns = reportBuilderPO.getHeaderLabels();
+                expect(reportBuilderPO.getHeaderLabels().length).toBe(originalColumns.length);
                 expect(newColumns[0]).toBe(originalColumns[1]);
                 expect(newColumns[1]).toBe(originalColumns[0]);
                 reportBuilderPO.clickCancel();

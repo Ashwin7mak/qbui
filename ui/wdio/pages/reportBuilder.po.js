@@ -51,15 +51,10 @@ class reportBuilderPage {
         });
     }
 
-    getColumnLabels() {
-        // Gets the list of column labels from the report builder
-        let labelEls = browser.elements('.qbHeaderCell');
-        return labelEls.value.map(function(labelEl) {
-            let label = labelEl.element('.gridHeaderLabel').getText();
-            return label;
-        });
-    }
-
+    /**
+     * Gets the header cell of a specified index.
+     * @param index
+     */
     getReportLocator(index) {
         // Returns a locator string for a specific column in the report builder
         return '.qbHeaderCell:nth-child(' + index + ')';
