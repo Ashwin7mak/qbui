@@ -224,8 +224,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));},
-        showSuccessDialog: (status, email) => {
-            dispatch(toggleAddToAppSuccessDialog(status, email));
+        showSuccessDialog: (isOpen, email) => {
+            dispatch(toggleAddToAppSuccessDialog(isOpen, email));
         },
     };
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import UserSuccessDialog from '../../../../../src/components/app/settings/categories/userSuccessDialog';
+import UserSuccessDialog, {__RewireAPI__ as UserSuccessDialogRewireAPI}  from '../../../../../src/components/app/settings/categories/userSuccessDialog';
 import {shallow} from 'enzyme';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
@@ -66,6 +66,19 @@ describe('showSuccessDialog', () => {
         Simulate.click(cancelButton);
 
         expect(mockParentFunctions.showSuccessDialog).toHaveBeenCalled();
+    });
+
+    it('should copy link', ()=>{
+        let copy = {copy: ()=>{}};
+        spyOn(copy, 'copy');
+        UserSuccessDialogRewireAPI.__Rewire__('copy', copy.copy);
+        component = buildMockParentComponent();
+        domComponent = document.querySelector('.userSuccessDialog');
+        let copyButton = domComponent.querySelector('.iconUISturdy-url');
+
+        Simulate.click(copyButton);
+
+        expect(copy.copy).toHaveBeenCalled();
     });
 
     it('should have the correct email url', ()=>{
