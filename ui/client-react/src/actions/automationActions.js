@@ -73,20 +73,20 @@ export const testAutomation = (automationName, appId) => {
                 automationService.invokeAutomation(appId, automationName, null)
                     .then((response) => {
                         logger.debug('AutomationService testAutomationSuccess');
-                        NotificationManager.info(Locale.getMessage('form.automation.testautomation.success'), Locale.getMessage('success'));
+                        NotificationManager.info(Locale.getMessage('automation.testautomation.success'), Locale.getMessage('success'));
                         dispatch(event(automationName, types.TEST_AUTOMATION_SUCCESS, response.data));
                         resolve();
                     })
                     .catch((error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'AutomationService.testAutomation');
-                        NotificationManager.error(Locale.getMessage('form.automation.testautomation.error'), Locale.getMessage('failed'));
+                        NotificationManager.error(Locale.getMessage('automation.testautomation.error'), Locale.getMessage('failed'));
                         dispatch(event(automationName, types.TEST_AUTOMATION_FAILED, error));
                         reject();
                     });
             } else {
                 logger.error(`AutomationService.testAutomation: Missing required input parameters. Automation ID : ${automationName}`);
                 dispatch(event(automationName, types.TEST_AUTOMATION_FAILED, error));
-                NotificationManager.error(Locale.getMessage('form.automation.testautomation.error'), Locale.getMessage('failed'));
+                NotificationManager.error(Locale.getMessage('automation.testautomation.error'), Locale.getMessage('failed'));
                 reject();
             }
         });

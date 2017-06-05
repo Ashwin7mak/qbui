@@ -227,16 +227,23 @@ export default {
                     error: "Fehler beim Speichern des Formulars"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Rekord genehmigt.",
-                    error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
-                },
-                testautomation: {
-                    success: "Automatisierungstest erfolgreich.",
-                    error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
-                }
-
+        },
+        automation: {
+            approverecord: {
+                success: "Rekord genehmigt.",
+                error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
+            },
+            testautomation: {
+                success: "Automatisierungstest erfolgreich.",
+                error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
+            },
+            automationList: {
+                nameHeader: "Name",
+                activeHeader: "Aktiv",
+                actionHeader: "Aktion",
+                actionButton: "Test",
+                activeYes: "Ja",
+                activeNo: "Nein"
             }
         },
         relationship: {
@@ -756,14 +763,6 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
-        },
-        automationList: {
-            nameHeader: "Name",
-            activeHeader: "Aktiv",
-            actionHeader: "Aktion",
-            actionButton: "Test",
-            activeYes: "Ja",
-            activeNo: "Nein"
         },
         addUserToApp: {
             title: "Benutzer hinzufügen",

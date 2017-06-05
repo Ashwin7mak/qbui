@@ -57,8 +57,8 @@ export class AutomationListRoute extends Component {
                 })
                 .map((automation, index) => (
                     <tr><td>{automation.name}</td>
-                        <td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td>
-                        <td><Button className="finishedButton" bsStyle="primary" onClick={() => this.testButtonClicked(automation.name)}><I18nMessage message="automationList.actionButton"/></Button></td>
+                        <td>{automation.active ? <I18nMessage message="automation.automationList.activeYes"/> : <I18nMessage message="automation.automationList.activeNo"/>}</td>
+                        <td><Button className="finishedButton" bsStyle="primary" onClick={() => this.testButtonClicked(automation.name)}><I18nMessage message="automation.automationList.actionButton"/></Button></td>
                     </tr>
                 ));
         }
@@ -81,9 +81,9 @@ export class AutomationListRoute extends Component {
                         <Table hover className="automationSettings--table">
                           <thead>
                             <tr>
-                                <th><I18nMessage message="automationList.nameHeader"/></th>
-                                <th><I18nMessage message="automationList.activeHeader"/></th>
-                                <th><I18nMessage message="automationList.actionHeader"/></th>
+                                <th><I18nMessage message="automation.automationList.nameHeader"/></th>
+                                <th><I18nMessage message="automation.automationList.activeHeader"/></th>
+                                <th><I18nMessage message="automation.automationList.actionHeader"/></th>
                             </tr>
                           </thead>
                           <tbody>
