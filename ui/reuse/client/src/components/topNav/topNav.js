@@ -33,6 +33,7 @@ export class TopNav extends Component {
         return (
             <div className={classes}>
                 <div className="top">
+                    {this.props.hasNavItem &&
                     <div className="navGroup left">
                         <ButtonGroup className="navItem">
                             <Button tabIndex="1"  className="iconLink toggleNavButton" onClick={onNavClick}>
@@ -40,7 +41,7 @@ export class TopNav extends Component {
                             </Button>
                              {this.getTopTitle()}
                         </ButtonGroup>
-                    </div>
+                    </div> }
 
                     <div className="navGroup center">
                         {this.props.centerGlobalActions}
@@ -79,6 +80,7 @@ TopNav.propTypes = {
 
 TopNav.defaultProps = {
     showOnSmall: true,
+    hasNavItem: true
 };
 
 const mapStateToProps = (state) => {
