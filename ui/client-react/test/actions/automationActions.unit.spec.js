@@ -25,7 +25,7 @@ function event(ctx, type, content) {
 }
 
 
-describe('Test AutomationActions function success workflow', () => {
+xdescribe('Test AutomationActions function success workflow', () => {
 
     let mockAutomationsResponse = {
         data: [
@@ -92,7 +92,7 @@ describe('Test AutomationActions function success workflow', () => {
     });
 });
 
-describe('Test AutomationActions function failure workflow', () => {
+xdescribe('Test AutomationActions function failure workflow', () => {
 
     let mockAutomationsResponse = {
         response: 'error'
