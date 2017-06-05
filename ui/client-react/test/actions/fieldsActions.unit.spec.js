@@ -78,7 +78,6 @@ describe('Field Actions success workflow', () => {
     });
 
     it('verify updateFieldProperties action', (done) => {
-        const formId = null;
         const expectedActions = [];
         const store = mockReportsStore({});
         return store.dispatch(fieldActions.updateFieldProperties(appId, tblId, field)).then(

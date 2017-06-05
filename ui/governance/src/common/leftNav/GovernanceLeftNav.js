@@ -4,7 +4,7 @@ import StandardLeftNav from "../../../../reuse/client/src/components/sideNavs/st
 import DefaultTopNavGlobalActions from "../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions";
 import GetLeftNavLinks from "./GovernanceLeftNavLinks";
 import * as RequestContextActions from "../requestContext/RequestContextActions";
-import {isFetching} from "../requestContext/RequestContextReducer";
+import {isFetching, getCurrentUser, getRealm} from "../requestContext/RequestContextReducer";
 
 class GovernanceLeftNav extends Component {
     componentDidMount() {
@@ -20,7 +20,14 @@ class GovernanceLeftNav extends Component {
                 isContextHeaderSmall={true}
                 showContextHeader={true}
                 contextHeaderTitle="Manage Quick Base"
-                navItems={GetLeftNavLinks(this.props.isAccountAdmin, this.props.isRealmAdmin, this.props.isAccountURL)}
+                navItems={
+                    GetLeftNavLinks(
+                        this.props.isAccountAdmin,
+                        this.props.isRealmAdmin,
+                        this.props.isAccountURL,
+                        this.props.isCSR
+                    )
+                }
             >
                 {this.props.children}
             </StandardLeftNav>
@@ -39,9 +46,10 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
     return {
         isLoading: isFetching(state),
-        isAccountAdmin: state.RequestContext.currentUser.isAccountAdmin,
-        isRealmAdmin: state.RequestContext.currentUser.isRealmAdmin,
-        isAccountURL: state.RequestContext.realm.isAccountURL
+        isAccountAdmin: getCurrentUser(state).isAccountAdmin,
+        isRealmAdmin: getCurrentUser(state).isRealmAdmin,
+        isAccountURL: getRealm(state).isAccountURL,
+        isCSR: getCurrentUser(state).isCSR
     };
 };
 
