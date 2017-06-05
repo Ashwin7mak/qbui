@@ -45,6 +45,8 @@ const RequestContext = combineReducers({
 export const isFetching = (state) => {
     return state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id;
 };
+export const getCurrentUser = (state) => {return state.RequestContext.currentUser;};
+export const getRealm = (state) => {return state.RequestContext.realm;};
 
 
 export default RequestContext;
