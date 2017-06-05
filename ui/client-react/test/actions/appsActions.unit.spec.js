@@ -118,12 +118,10 @@ describe('Apps Actions functions with Tables', () => {
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_SUCCESS, responseData]);
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -146,12 +144,10 @@ describe('Apps Actions functions with Tables', () => {
                         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     }
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -166,12 +162,10 @@ describe('Apps Actions functions with Tables', () => {
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_SUCCESS, {appId:test.appId, roleId:test.roleId, userIds:test.userIds}]);
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -185,13 +179,11 @@ describe('Apps Actions functions with Tables', () => {
                 () => {
                     expect(false).toBe(true);
                     done();
-                },
-                () => {
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_FAILED]);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    done();
-                }
-            );
+                }, () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                done();
+            });
         });
     });
 
@@ -210,12 +202,10 @@ describe('Apps Actions functions with Tables', () => {
                         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_SUCCESS, responseData]);
                     }
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -229,13 +219,11 @@ describe('Apps Actions functions with Tables', () => {
                 () => {
                     expect(false).toBe(true);
                     done();
-                },
-                () => {
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_FAILED]);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    done();
-                }
-            );
+                }, () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                done();
+            });
         });
     });
 
@@ -279,8 +267,7 @@ describe('Apps Actions functions with Tables', () => {
             }, () => {
                 expect(false).toBe(true);
                 done();
-            }
-			);
+            });
         });
     });
 
@@ -291,13 +278,11 @@ describe('Apps Actions functions with Tables', () => {
             flux.actions.searchRealmUsers(test.searchTerm).then(() => {
                 expect(false).toBe(true);
                 done();
-            },
-            () => {
+            }, () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SEARCH_ALL_USERS_FAILED]);
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                 done();
-            }
-			);
+            });
         });
     });
 
@@ -312,8 +297,7 @@ describe('Apps Actions functions with Tables', () => {
             }, () => {
                 expect(false).toBe(true);
                 done();
-            }
-			);
+            });
         });
     });
 
@@ -329,8 +313,7 @@ describe('Apps Actions functions with Tables', () => {
             }, () => {
                 expect(false).toBe(true);
                 done();
-            }
-			);
+            });
         });
     });
 
@@ -341,13 +324,11 @@ describe('Apps Actions functions with Tables', () => {
             flux.actions.assignUserToApp(test.appId, test.roleId, test.userIds).then(() => {
                 expect(false).toBe(true);
                 done();
-            },
-				() => {
-    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_USER_FAILED]);
-    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-    done();
-}
-			);
+            }, () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_USER_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                done();
+            });
         });
     });
 

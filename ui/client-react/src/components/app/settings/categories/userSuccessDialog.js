@@ -12,9 +12,7 @@ import FieldFormats from '../../../../utils/fieldFormats';
 
 import './userSuccessDialog.scss';
 
-
 class UserSuccessDialog extends React.Component {
-
     /**
      * dialog finished
      */
@@ -36,7 +34,6 @@ class UserSuccessDialog extends React.Component {
     getMailtoString() {
         return `mailto:${this.props.addedAppUser}?Subject=${Locale.getMessage("addUserToApp.messageSubject", {appName: this.props.selectedAppName})}&body=${Locale.getMessage("addUserToApp.messageBody", {link: this.getUrl(), appName: this.props.selectedAppName})}`;
     }
-
     /**
      * render the modal dialog after succesfully adding user to an app
      * @returns {XML}
@@ -78,7 +75,6 @@ class UserSuccessDialog extends React.Component {
                             </QbToolTip>
                         </a>
                     </div>
-
                 </div>
             </div>
         </MultiStepDialog>);

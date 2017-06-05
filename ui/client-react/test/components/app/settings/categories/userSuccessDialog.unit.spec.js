@@ -3,7 +3,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import UserSuccessDialog, {__RewireAPI__ as UserSuccessDialogRewireAPI}  from '../../../../../src/components/app/settings/categories/userSuccessDialog';
 import {shallow} from 'enzyme';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-
+import WindowLocationUtils from '../../../../../src/utils/windowLocationUtils';
 
 let component;
 let domComponent;
@@ -75,10 +75,12 @@ describe('showSuccessDialog', () => {
         component = buildMockParentComponent();
         domComponent = document.querySelector('.userSuccessDialog');
         let copyButton = domComponent.querySelector('.iconUISturdy-url');
+        let url = WindowLocationUtils.getHref();
+        url = url.substr(0, url.lastIndexOf('/'));
 
         Simulate.click(copyButton);
 
-        expect(copy.copy).toHaveBeenCalled();
+        expect(copy.copy).toHaveBeenCalledWith(url);
     });
 
     it('should have the correct email url', ()=>{
@@ -88,5 +90,4 @@ describe('showSuccessDialog', () => {
 
         expect(emailLink.href.includes('mailto:test@test.com?Subject=Link%20to%20the%20'));
     });
-
 });

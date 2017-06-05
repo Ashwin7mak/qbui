@@ -2,7 +2,7 @@ import * as types from '../actions/types';
 
 const appUser = (
 	state = {
-		//  default states
+	//  default states
     successDialogOpen: false,
     addedAppUser: [],
 },
@@ -18,7 +18,7 @@ const appUser = (
     }
 
     default:
-        // return existing state by default in redux
+    // return existing state by default in redux
         return state;
     }
 };

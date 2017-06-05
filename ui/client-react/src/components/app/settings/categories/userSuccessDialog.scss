@@ -1,6 +1,5 @@
 @import '../../../../assets/css/_qbVariables';
 
-
 @include not-small-breakpoint {
 
     .multiStepModal.userSuccessDialog .modal-dialog .modal-content {
@@ -102,7 +101,6 @@
                 }
             }
         }
-
         width: 580px;
     }
 }
