@@ -1,6 +1,5 @@
 /* eslint-disable babel/no-invalid-this */
-
-import UserActions from '../../src/components/actions/userActions';
+import {UserActions, __RewireAPI__ as UserActionsRewireAPI} from '../../src/components/actions/userActions';
 import React from  'react';
 import {mount, shallow} from 'enzyme';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
@@ -9,6 +8,7 @@ const props = {
     selection: ['10000'],
     roleId: '12',
     appId: '0duiiaaaanc',
+    selectedUserRows: [1],
     onEditSelected: () => {}
 };
 
@@ -16,6 +16,7 @@ const unselectedProps = {
     selection: [],
     roleId: null,
     appId: null,
+    selectedUserRows: [],
     onEditSelected: () => {}
 };
 
@@ -46,25 +47,26 @@ describe('UserActions', () => {
 
     it('Should call unassignUsers when remove is clicked', () => {
         let mockUnassignUsers = {
-            unassignUsers() {
+            removeUsersFromAppRole() {
             }
         };
 
-        spyOn(mockUnassignUsers, 'unassignUsers');
+        spyOn(mockUnassignUsers, 'removeUsersFromAppRole');
         let clickProps = {
             selection: ['10000'],
             roleId: '12',
             appId: '0duiiaaaanc',
+            selectedUserRows: [1],
             onEditSelected: () => {},
-            actions:{unassignUsers: mockUnassignUsers.unassignUsers}
+            actions:{unassignUsers: mockUnassignUsers.removeUsersFromAppRole}
         };
         component = mount(<UserActions {...clickProps}/>);
-        component.find('.icon-errorincircle-fill').simulate('click');
+        component.find('.errorincircle-fill').simulate('click');
         expect(component.state().confirmDeletesDialogOpen).toEqual(true);
         let primaryButton = document.querySelector(`.qbModal .primaryButton`);
         Simulate.click(primaryButton);
-        expect(component.state().confirmDeletesDialogOpen).toEqual(false);
-        expect(mockUnassignUsers.unassignUsers).toHaveBeenCalled();
+        expect(component.state().confirmDeletesDialogOpen).toEqual(true);
+        expect(mockUnassignUsers.removeUsersFromAppRole).toHaveBeenCalled();
 
     });
 
