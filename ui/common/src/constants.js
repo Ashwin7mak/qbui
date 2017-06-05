@@ -55,7 +55,6 @@
 
         LINK_TO_RECORD  : 'LINK_TO_RECORD',
         LIST_OF_RECORDS : 'LIST_OF_RECORDS',
-        ONE             : '1',
 
         SYNTHETIC_TABLE_REPORT: {
             ID: '0',

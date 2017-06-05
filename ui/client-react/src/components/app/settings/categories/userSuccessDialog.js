@@ -8,7 +8,7 @@ import NotificationManager from '../../../../../../reuse/client/src/scripts/noti
 import FieldValueEditor from '../../../fields/fieldValueEditor';
 import copy from 'copy-to-clipboard';
 import WindowLocationUtils from '../../../../utils/windowLocationUtils';
-import {ONE} from '../../../../../../common/src/constants';
+import FieldFormats from '../../../../utils/fieldFormats';
 
 import './userSuccessDialog.scss';
 
@@ -63,7 +63,7 @@ class UserSuccessDialog extends React.Component {
                     <p><I18nMessage message="addUserToApp.userSuccessText"/></p>
                     <div className="userSuccessDetails">
                         <div className="url flexChild">
-                            <FieldValueEditor type={ONE} value={this.getUrl()} />
+                            <FieldValueEditor type={FieldFormats.TEXT_FORMAT} value={this.getUrl()} />
                         </div>
                             <div className="cellEditIcon flexChild" onClick={this.onClickCopy}>
                                 <QbToolTip i18nMessageKey="addUserToApp.toCopy">

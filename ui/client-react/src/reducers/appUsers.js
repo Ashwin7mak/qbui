@@ -18,7 +18,7 @@ const appUser = (
     }
 
     default:
-			// return existing state by default in redux
+        // return existing state by default in redux
         return state;
     }
 };
