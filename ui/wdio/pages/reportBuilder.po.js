@@ -26,9 +26,46 @@ class reportBuilderPage {
         return browser.element('.reportBuilderContainer');
     }
 
+    get modalDismiss() {
+        // DON'T SAVE button in the SAVE CHANGES? dlg
+        return browser.element('.modal-dialog .middleButton');
+    }
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelButton.click();
+        browser.pause(fiveSeconds);
+        this.dirtyForm_Dismiss();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
     get fieldToken() {
         // the field token from hidden fields
         return browser.element('.fieldToken');
+    }
+
+    dirtyForm_Dismiss() {
+        try { // browser's LEAVE THIS PAGE? dlg
+            browser.alertDismiss();
+        } catch (err) {
+            browser.pause(0);
+        }
+        try { // modal SAVE CHANGES? dlg
+            this.modalDismiss.click();
+            if (this.modalDismiss.isExisting()) {
+                this.modalDismiss.click();
+            }
+        } catch (err) {
+            browser.pause(0);
+        }
+        return this;
+    }
+    clickSave() {
+        // Clicks on the SAVE button in the report builder and waits for the next page to appear
+        this.saveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
     }
 
     get qbGidHeaderMenu() {
@@ -54,6 +91,20 @@ class reportBuilderPage {
         this.reportBuilderContainer.waitForVisible();
         browser.pause(fiveSeconds);
         return this;
+    }
+
+    getColumnLabels() {
+        // Gets the list of column labels from the report builder
+        let labelEls = browser.elements('.qbHeaderCell');
+        return labelEls.value.map(function(labelEl) {
+            let label = labelEl.element('.gridHeaderLabel').getText();
+            return label;
+        });
+    }
+
+    getReportLocator(index) {
+        // Returns a locator string for a specific column in the report builder
+        return '.qbHeaderCell:nth-child(' + index + ')';
     }
 
     addColumnFromFieldsList() {
@@ -96,20 +147,5 @@ class reportBuilderPage {
         browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
     }
-
-    clickCancel() {
-        // Clicks on CANCEL in the report builder and waits for the next page to render
-        this.cancelButton.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    clickSave() {
-        // Clicks on the SAVE button in the report builder and waits for the next page to appear
-        this.saveButton.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
 }
 module.exports = new reportBuilderPage();
