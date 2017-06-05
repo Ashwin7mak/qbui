@@ -39,6 +39,28 @@ const automation = (
             error: undefined
         };
     }
+    case types.LOAD_AUTOMATION: {
+        //  load an automation
+        return {
+            ...state,
+            appId: action.content.appId,
+            automationId: action.content.automationId
+        };
+    }
+    case types.LOAD_AUTOMATION_FAILED: {
+        return {
+            ...state,
+            automation: null,
+            error: action.content
+        };
+    }
+    case types.LOAD_AUTOMATION_SUCCESS: {
+        return {
+            ...state,
+            automation: action.content,
+            error: undefined
+        };
+    }
     default:
         // by default, return existing state
         return state;
@@ -49,4 +71,8 @@ export default automation;
 
 export const getAutomationList = (state) => {
     return state.automation.list;
+};
+
+export const getAutomation = (state) => {
+    return state.automation.automation;
 };

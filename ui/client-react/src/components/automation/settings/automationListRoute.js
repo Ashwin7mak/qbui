@@ -7,8 +7,11 @@ import IconActions from "../../../../../reuse/client/src/components/iconActions/
 import {I18nMessage} from "../../../utils/i18nMessage";
 import {loadAutomations} from "../../../actions/automationActions";
 import {getAutomationList} from "../../../reducers/automation";
+import UrlUtils from '../../../utils/urlUtils';
+import {Link} from 'react-router-dom';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
+
 
 import "./automationList.scss";
 import {CONTEXT} from "../../../actions/context";
@@ -54,15 +57,23 @@ export class AutomationListRoute extends Component {
                 .filter((automation) => {
                     return "EMAIL" === automation.type;
                 })
-                .map((automation, index) => (
-                    <tr><td>{automation.name}</td><td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td></tr>
-                ));
+                .map((automation, index) => {
+                    let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
+                    return (
+                        <tr>
+                            <td><Link to={link} onClick={this.onClick} onKeyDown={this.onClick}>{automation.name}</Link></td>
+                            <td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td>
+                        </tr>
+                    );
+                });
         }
         return [];
     }
+    //<td><Link to={link} onClick={this.onClick} onKeyDown={this.onClick}>{automation.name}</Link></td>
+    // let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
 
     render() {
-        let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.automations));
+        let loaded = !(_.isUndefined(this.props.automations));
         let automationRows = this.renderAutomations();
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>

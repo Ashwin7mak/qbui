@@ -758,6 +758,15 @@ export default {
             activeYes: "Ja",
             activeNo: "Nein"
         },
+        automationView: {
+            stageHeading: "Automatisierung",
+            nameHeader: "Name",
+            triggerHeader: "Auslöser",
+            actionHeader: "Aktion",
+            actions: {
+                email: "Eine E-Mail senden"
+            }
+        },
         addUserToApp: {
             title: "Benutzer hinzufügen",
             description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
