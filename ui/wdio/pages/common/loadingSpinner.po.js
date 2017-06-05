@@ -24,5 +24,16 @@
                 //Need this to stabilize DOM
                 return browser.pause(e2eConsts.shortWaitTimeMs);
             }},
+
+        /**
+         * Method for spinner to dissaper in record content
+         */
+        waitUntilRecordLoadingSpinnerGoesAway: {
+            value: function() {
+                //wait until report loading screen disappear
+                browser.waitForVisible('.recordContainer .loader .spinner', e2eConsts.longWaitTimeMs, true);
+                //Need this to stabilize DOM
+                return browser.pause(e2eConsts.shortWaitTimeMs);
+            }},
     });
 }());

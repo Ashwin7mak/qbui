@@ -9,6 +9,7 @@
     var e2ePageBase = requirePO('./e2ePageBase');
     var formsPO = requirePO('formsPage');
     var tablesPO = requirePO('tableCreate');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
@@ -336,7 +337,9 @@
         openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
-            return browser.url(requestRecordPageEndPoint);
+            browser.url(requestRecordPageEndPoint);
+            //wait until loading screen disappear in record Content
+            return loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         }},
 
         /**
