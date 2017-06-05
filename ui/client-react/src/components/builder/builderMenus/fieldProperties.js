@@ -142,8 +142,8 @@ export class FieldProperties extends Component {
         return (
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
-                {table && <div className="linkToRecordPropertyValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
-                {field && <div className="linkToRecordPropertyValue"><Icon icon="url"/> <I18nMessage message="fieldPropertyLabels.connectedTo" fieldName={field.name} /></div>}
+                {table && <div className="linkToRecordLinkedToValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+                {field && <div className="linkToRecordConnectedOnValue"><Icon icon="url"/> <I18nMessage message="fieldPropertyLabels.connectedTo" fieldName={field.name} /></div>}
             </div>
         );
     }

@@ -93,7 +93,8 @@ describe('FieldProperties', () => {
             expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(linkToRecordField.required);
             expect(component.find('.textPropertyTitle')).toBePresent();
             expect(component.find('.textPropertyValue')).toHaveValue(linkToRecordField.name);
-            expect(component.find('.linkToRecordPropertyValue')).toBePresent();
+            expect(component.find('.linkToRecordLinkedToValue')).toBePresent();
+            expect(component.find('.linkToRecordConnectedOnValue')).toBePresent();
         });
     });
 
