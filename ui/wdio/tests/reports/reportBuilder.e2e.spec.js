@@ -99,24 +99,24 @@
             });
         }
 
-    it('verify add column and click cancel', function() {
-        // gets the column list before adding a column
-        let columnsListInitial = reportBuilderPO.getColumnLabels();
-        // adds a column
-        reportBuilderPO.addColumnFromFieldsList();
-        // gets the updated column labels after adding the new column
-        let columnsListUpdated = reportBuilderPO.getColumnLabels();
-        expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
-        // clicks on cancel
-        reportBuilderPO.clickCancel();
-        // re-enters builderMode
-        reportBuilderPO.enterBuilderMode();
-        // column label list must be equal to the initial list without the added column
-        let columnsAfterReopen = reportBuilderPO.getColumnLabels();
-        expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
-    });
+        it('verify add column and click cancel', function() {
+            // gets the column list before adding a column
+            let columnsListInitial = reportBuilderPO.getColumnLabels();
+            // adds a column
+            reportBuilderPO.addColumnFromFieldsList();
+            // gets the updated column labels after adding the new column
+            let columnsListUpdated = reportBuilderPO.getColumnLabels();
+            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+            // clicks on cancel
+            reportBuilderPO.clickCancel();
+            // re-enters builderMode
+            reportBuilderPO.enterBuilderMode();
+            // column label list must be equal to the initial list without the added column
+            let columnsAfterReopen = reportBuilderPO.getColumnLabels();
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
+        });
 
-    it('verify add column by add before', function() {
+        it('verify add column by add before', function() {
             // gets the column list before adding a column
             let columnsListInitial = reportBuilderPO.getColumnLabels();
             // adds a column by clicking on AddColumnBefore from headerMenu dropdown

@@ -135,7 +135,7 @@ class reportBuilderPage {
     getColumnLabels() {
         // Gets the list of field labels from the form builder
         let labelEls = browser.elements('.qbHeaderCell');
-        return labelEls.value.map(function (labelEl) {
+        return labelEls.value.map(function(labelEl) {
             let label = labelEl.element('.gridHeaderLabel').getText();
             return label;
         });
