@@ -69,10 +69,6 @@
         return reportContentPO.waitForReportContent();
     };
 
-    PageBase.prototype.viewFirstRecordInBrowser = function(realmName, appId, tableId, reportId) {
-        return browser.url(e2eBase.getRequestViewFirstRecordEndpoint(realmName, appId, tableId, reportId));
-    };
-
     PageBase.prototype.navigateTo = function(url) {
         return browser.url(url);
     };

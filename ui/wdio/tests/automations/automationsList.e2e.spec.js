@@ -37,14 +37,15 @@
                 app = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-
+            }).then(function() {
+                let createAutomations = [];
                 for (let flowName of emailFlowNames) {
                     let automation = {
                         name: flowName,
                         active: true,
                         type: 'EMAIL'
                     };
-                    e2eBase.automationsService.createAutomation(app.id, automation);
+                    createAutomations.push(e2eBase.automationsService.createAutomation(app.id, automation));
                 }
 
                 for (let flowName of notEmailFlowNames) {
@@ -52,8 +53,10 @@
                         name: flowName,
                         active: true,
                     };
-                    e2eBase.automationsService.createAutomation(app.id, automation);
+                    createAutomations.push(e2eBase.automationsService.createAutomation(app.id, automation));
                 }
+
+                return Promise.all(createAutomations);
             }).then(function() {
                 return newStackAuthPO.realmLogin(realmName, realmId);
             }).catch(function(error) {

@@ -70,7 +70,7 @@ if (__QB_LOCAL__) {
             logToServer: false
         },
         detectInvalidMutations: false, /* use redux-immutable-state-invariant middleware? */
-        unauthorizedRedirect: '/qbase/unauthorized',
+        unauthorizedRedirect: null,
         // walkme java script
         walkmeJSSnippet : '',
         evergageDataset: null,
