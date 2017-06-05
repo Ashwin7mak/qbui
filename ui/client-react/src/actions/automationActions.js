@@ -38,29 +38,23 @@ export const loadAutomations = (context, appId) => {
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            console.log("skjdfbsdk");
             if (context && appId) {
                 logger.debug(`AutomationsAction.loadAutomations: loading automation list for appId: ${appId}`);
 
                 dispatch(event(context, types.LOAD_AUTOMATIONS, appId));
-                console.log("1");
                 let automationService = new AutomationService();
                 automationService.getAutomations(appId)
                     .then((response) => {
-                        console.log("12");
                         logger.debug('AutomationService getAutomations success');
                         dispatch(event(context, types.LOAD_AUTOMATIONS_SUCCESS, response.data));
                         resolve();
                     })
                     .catch((error) => {
-                        console.log("13");
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'automationService.getAutomations:');
                         dispatch(event(context, types.LOAD_AUTOMATIONS_FAILED, error));
                         reject();
                     });
             } else {
-                console.log("missing context block");
-
                 logger.error(`automationService.getAutomations: Missing required input parameters.  appId: ${appId}`);
                 dispatch(event(null, types.LOAD_AUTOMATIONS_FAILED, 500));
                 reject();
@@ -74,28 +68,22 @@ export const testAutomation = (automationName, appId) => {
         return new Promise((resolve, reject) => {
             if (automationName && appId) {
                 logger.debug(`AutomationsAction.testAutomation: Testing automation with Automation ID : ${automationName}`);
-                console.log("tset");
                 dispatch(event(automationName, appId, types.TEST_AUTOMATION));
                 let automationService = new AutomationService();
-                console.log("tset 2 " + appId + " --- " + automationName);
                 automationService.invokeAutomation(appId, automationName, null)
                     .then((response) => {
-                        console.log("promise response now resolving");
                         logger.debug('AutomationService testAutomationSuccess');
                         NotificationManager.info(Locale.getMessage('form.automation.testautomation.success'), Locale.getMessage('success'));
                         dispatch(event(automationName, types.TEST_AUTOMATION_SUCCESS, response.data));
-                        console.log("Testing after dispatch");
                         resolve();
                     })
                     .catch((error) => {
-                        console.log("promise error rehject");
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'AutomationService.testAutomation');
                         NotificationManager.error(Locale.getMessage('form.automation.testautomation.error'), Locale.getMessage('failed'));
                         dispatch(event(automationName, types.TEST_AUTOMATION_FAILED, error));
                         reject();
                     });
             } else {
-                console.log("promise bad request params, reject");
                 logger.error(`AutomationService.testAutomation: Missing required input parameters. Automation ID : ${automationName}`);
                 dispatch(event(automationName, types.TEST_AUTOMATION_FAILED, error));
                 NotificationManager.error(Locale.getMessage('form.automation.testautomation.error'), Locale.getMessage('failed'));

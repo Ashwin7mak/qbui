@@ -82,19 +82,17 @@ describe('Test AutomationActions function success workflow', () => {
     it('verify testAutomation action', (done) => {
         const expectedActions = [
             event(automationName, appId, types.TEST_AUTOMATION),
-            event(automationName, appId, types.TEST_AUTOMATION_SUCCESS, mockTestAutomationResponse.data)
+            event(automationName, types.TEST_AUTOMATION_SUCCESS, mockTestAutomationResponse.data)
         ];
 
         const store = mockAutomationStore({});
 
         return store.dispatch(automationActions.testAutomation(automationName, appId)).then(
             (resp) => {
-                console.log("resp: " + resp);
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
             },
             (err) => {
-                console.log("bad");
                 expect(false).toBe(true);
                 done();
             });
@@ -142,7 +140,6 @@ describe('Test AutomationActions function failure workflow', () => {
                 done();
             },
             () => {
-                console.log("Erewrwerew:");
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
             }
