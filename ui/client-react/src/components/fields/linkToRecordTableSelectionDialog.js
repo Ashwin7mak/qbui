@@ -18,6 +18,13 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         tableSelected: PropTypes.func
     },
 
+    getInitialState() {
+        return {
+            selectedTableId: null,
+            selectedFieldId: null,
+            advancedSettingsOpen: false};
+    },
+
     /**
      * render a table name with an icon
      * @param option
@@ -54,7 +61,6 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         this.setState({selectedFieldId: field.value});
     },
 
-
     /**
      * select a table
      * @param choice
@@ -65,13 +71,6 @@ const LinkToRecordTableSelectionDialog = React.createClass({
             const selectedTable = _.find(this.props.tables, {id: table.value});
             this.setState({selectedTableId: table.value, selectedFieldId: selectedTable.recordTitleFieldId});
         }
-    },
-
-    getInitialState() {
-        return {
-            selectedTableId: null,
-            selectedFieldId: null,
-            advancedSettingsOpen: false};
     },
 
     /**
@@ -104,6 +103,10 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         />;
     },
 
+    /**
+     * get react-select for master table field
+     * @returns {XML}
+     */
     getFieldSelect() {
 
         const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
@@ -141,6 +144,9 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         this.props.tableSelected(this.state.selectedTableId, selectedField);
     },
 
+    /**
+     * show/hide advanced settings (field selection)
+     */
     toggleAdvancedSettings() {
 
         this.setState({advancedSettingsOpen: !this.state.advancedSettingsOpen});
@@ -177,7 +183,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
                     <div className={advancedSettingsClasses.join(" ")}>
                         <div className="advancedSettingsToggle" >
-                            <span onClick={this.toggleAdvancedSettings}>
+                            <span className="advancedSettingsToggleClickable" onClick={this.toggleAdvancedSettings}>
                                 <Icon icon="caret-down" className="toggleAdvancedIcon"/> <I18nMessage message="builder.linkToRecord.advancedSettingsHeading"/>
                             </span>
                         </div>
@@ -192,7 +198,6 @@ const LinkToRecordTableSelectionDialog = React.createClass({
                 </div>
             </MultiStepDialog>);
     }
-
 });
 
 export default LinkToRecordTableSelectionDialog;
