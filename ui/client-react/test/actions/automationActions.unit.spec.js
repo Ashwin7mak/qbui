@@ -46,6 +46,9 @@ describe('Test AutomationActions function success workflow', () => {
         testAutomation() {
             return Promise.resolve(mockTestAutomationResponse);
         }
+        invokeAutomation() {
+            return Promise.resolve(mockTestAutomationResponse);
+        }
     }
 
     beforeEach(() => {
@@ -85,11 +88,15 @@ describe('Test AutomationActions function success workflow', () => {
         const store = mockAutomationStore({});
 
         return store.dispatch(automationActions.testAutomation(automationName, appId)).then(
-            () => {
+            (resp) => {
+                console.log("resp: " + resp);
                 expect(store.getActions()).toEqual(expectedActions);
+                done();
             },
-            () => {
+            (err) => {
+                console.log("bad");
                 expect(false).toBe(true);
+                done();
             });
     });
 });
@@ -131,9 +138,15 @@ describe('Test AutomationActions function failure workflow', () => {
 
         return store.dispatch(automationActions.loadAutomations(null, appId)).then(
             () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                console.log("Erewrwerew:");
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
-            });
+            }
+        );
     });
 
     it('verify loadAutomations action with no app', (done) => {
@@ -180,6 +193,7 @@ describe('Test AutomationActions function failure workflow', () => {
         return store.dispatch(automationActions.testAutomation(null, appId)).then(
             () => {
                 expect(false).toBe(true);
+                done();
             },
             () => {
                 expect(store.getActions()).toEqual(expectedActions);

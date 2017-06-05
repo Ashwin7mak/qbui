@@ -26,7 +26,9 @@ class AutomationService extends BaseService {
 
     invokeAutomation(appId, wfId, payload)  {
         let url = super.constructUrl(this.API.AUTOMATION_INVOKE, [appId, wfId]);
+        console.log("Htis is usrl : " + url);
         return super.post(url, {}, {});
+
 
     }
 }
