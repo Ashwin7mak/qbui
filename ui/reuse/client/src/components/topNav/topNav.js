@@ -2,11 +2,10 @@ import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import Icon from 'REUSE/components/icon/icon';
-import {connect} from 'react-redux';
 
 import './topNav.scss';
 
-export class TopNav extends Component {
+class TopNav extends Component {
     constructor(props) {
         super(props);
     }
@@ -83,14 +82,4 @@ TopNav.defaultProps = {
     hasNavItem: true
 };
 
-const mapStateToProps = (state) => {
-    return {
-        title: state.shell.navTopTitle,
-        showOnSmall:state.shell.topNavVisible
-    };
-};
-
-
-export default connect(
-    mapStateToProps
-)(TopNav);
+export default TopNav;

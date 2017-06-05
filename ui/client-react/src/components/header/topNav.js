@@ -4,4 +4,14 @@
  **/
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 
-export default TopNav;
+const mapStateToProps = (state) => {
+    return {
+        title: state.shell.navTopTitle,
+        showOnSmall:state.shell.topNavVisible
+    };
+};
+
+
+export default connect(
+    mapStateToProps
+)(TopNav);
