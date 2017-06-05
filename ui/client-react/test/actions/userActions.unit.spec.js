@@ -24,10 +24,10 @@ class mockLogger {
     parseAndLogError() {}
 }
 
-function event(type, appId, content) {
+function event(type, id, content) {
     return {
         type,
-        appId: appId || null,
+        appId: id || null,
         content: content || null
     };
 }

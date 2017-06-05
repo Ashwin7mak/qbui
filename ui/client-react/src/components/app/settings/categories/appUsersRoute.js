@@ -14,7 +14,7 @@ import UserActions from '../../../actions/userActions';
 import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows} from '../../../../actions/userActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
-import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
+import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
 import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
 import './appUsersRoute.scss';
 
@@ -130,7 +130,7 @@ export const AppUsersRoute = React.createClass({
 
     selectAllRows() {
         let roleId = this.state.roleId;
-        let appUsers = this.props.selectedApp.unfilteredUsers;
+        let appUsers = this.props.unfilteredAppUsers;
         let selected = [];
         // Transform the records first so that subHeaders (grouped records) can be handled appropriately
         this.props.appRoles.map(role => {
@@ -149,14 +149,16 @@ export const AppUsersRoute = React.createClass({
     },
 
     toggleSelectAllRows() {
-        if (this.props.selectedUserRows.length === this.props.selectedApp.users.length) {
+        const selectedUserRows = this.props.selectedUserRows.length;
+        if (selectedUserRows === 0 || (selectedUserRows === this.props.selectedAppUsers.length)) {
             this.deselectAllRows();
         } else {
             this.selectAllRows();
         }
     },
     areAllRowsSelected() {
-        return this.props.selectedUserRows.length === this.props.selectedApp.users.length;
+        const selectedUserRows = this.props.selectedUserRows.length;
+        return selectedUserRows > 0 && (selectedUserRows === this.props.selectedAppUsers.length);
     },
 
     render() {
@@ -166,7 +168,7 @@ export const AppUsersRoute = React.createClass({
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>
 
-                        <AppSettingsStage appUsers={this.props.selectedApp.unfilteredUsers}
+                        <AppSettingsStage appUsers={this.props.unfilteredAppUsers}
                                           appRoles={this.props.appRoles}
                                           appOwner={this.props.appOwner}/>
                     </Stage>
@@ -177,13 +179,13 @@ export const AppUsersRoute = React.createClass({
                                userRoleIdToAdd={this.props.roleIdToAdd}
                                appId={this.props.match.params.appId}
                                selectedApp={this.props.selectedApp}
-                               existingUsers={this.props.selectedApp.unfilteredUsers}
+                               existingUsers={this.props.unfilteredAppUsers}
                                addUserToAppDialogOpen={this.props.openDialogStatus}
                                hideDialog={this.toggleAddUserDialog}/>
                     {this.getTableActions()}
                     <div className="userManagementContainer">
                         <UserManagement appId={this.props.appId}
-                                        appUsers={this.props.selectedApp.unfilteredUsers}
+                                        appUsers={this.props.unfilteredAppUsers}
                                         appRoles={this.props.appRoles}
                                         onClickToggleSelectedRow={this.toggleSelectedRow}
                                         onClickToggleSelectAllRows={this.toggleSelectAllRows}
@@ -209,7 +211,8 @@ const mapStateToProps = (state, ownProps) => {
         selectedApp: getApp(state.app, selectedAppId),
         appOwner: getAppOwner(state.app),
         realmUsers: getSearchedUsers(state.users),
-        unfilteredUsers: getSelectedAppUnfilteredUsers(state.app),
+        unfilteredAppUsers: getSelectedAppUnfilteredUsers(state.app),
+        selectedAppUsers: getSelectedAppUsers(state.app),
         openDialogStatus: getDialogStatus(state.users),
         roleIdToAdd: getRoleIdToAdd(state.users),
         selectedUserRows: getSelectedUsers(state.users)
