@@ -128,9 +128,6 @@ export const FieldElement = React.createClass({
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
                                              tabIndex={this.props.tabIndex}
                                              removeFieldFromForm={this.props.removeFieldFromForm}
-                                             masterTableId={this.props.masterTableId}
-                                             masterAppId={this.props.masterAppId}
-                                             masterFieldId={this.props.masterFieldId}
             />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
             fieldElement = <FieldValueRenderer type={fieldType}
