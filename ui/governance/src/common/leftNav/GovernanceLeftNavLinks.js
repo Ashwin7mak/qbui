@@ -8,7 +8,7 @@ const GetLeftNavLinks = (isAccountAdmin, isRealmAdmin, isAccountURL, isCSR) => {
     const ManageUsersLink =  {icon: 'users', title: Locale.getMessage('governance.leftNav.manageUsers'), isSelected: true};
 
     const AccountAdminLinks = [
-        {icon: 'Report', title: Locale.getMessage('governance.leftNav.accountSummary'), iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY,  isDisabled: true},
+        {icon: 'report-table', title: Locale.getMessage('governance.leftNav.accountSummary'), isDisabled: true},
         {icon: 'favicon', title: Locale.getMessage('governance.leftNav.manageApps'), isDisabled: true},
         ManageUsersLink,
         {icon: 'Group', title: Locale.getMessage('governance.leftNav.manageGroups'), iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY,  isDisabled: true},
