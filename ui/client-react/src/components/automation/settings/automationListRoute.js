@@ -69,7 +69,7 @@ export class AutomationListRoute extends Component {
         }
         return [];
     }
-    //<td><Link to={link} onClick={this.onClick} onKeyDown={this.onClick}>{automation.name}</Link></td>
+    // <td><Link to={link} onClick={this.onClick} onKeyDown={this.onClick}>{automation.name}</Link></td>
     // let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
 
     render() {

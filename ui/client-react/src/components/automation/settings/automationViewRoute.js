@@ -28,7 +28,7 @@ export class AutomationViewRoute extends Component {
     }
 
     getStageHeadline() {
-        return <div className="automationListSettingsStage stageHeadLine"><I18nMessage message="automationView.stageHeading"/>: {this.getAutomationName()}</div>;
+        return <div className="automationViewSettingsStage stageHeadLine"><I18nMessage message="automationView.stageHeading"/>: {this.getAutomationName()}</div>;
     }
 
     componentDidMount() {
@@ -65,19 +65,19 @@ export class AutomationViewRoute extends Component {
         let loaded = !(_.isUndefined(this.props.automation));
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
-                <div className="automationSettings">
+                <div className="automationView">
                     <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions()}/>
-                    <div>
+                    <div className="automationViewName">
                         <I18nMessage message="automationView.nameHeader"/>: <br/>
-                        {this.getAutomationName()}
+                        <span className="value">{this.getAutomationName()}</span>
                     </div>
-                    <div>
+                    <div className="automationViewTrigger">
                         <I18nMessage message="automationView.triggerHeader"/>: <br/>
-                        N/A
+                        <span className="value">N/A</span>
                     </div>
-                    <div>
+                    <div className="automationViewAction">
                         <I18nMessage message="automationView.actionHeader"/>: <br/>
-                        <I18nMessage message="automationView.actions.email"/>
+                        <span className="value"><I18nMessage message="automationView.actions.email"/></span>
                     </div>
                 </div>
             </Loader>
