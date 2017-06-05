@@ -10,15 +10,12 @@ import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import {connect} from 'react-redux';
-
 import UserActions from '../../../actions/userActions';
 import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows} from '../../../../actions/userActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
-
 import {getAppRoles} from '../../../../reducers/appRoles';
 import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
 import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
-
 import './appUsersRoute.scss';
 
 export const AppUsersRoute = React.createClass({

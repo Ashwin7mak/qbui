@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import {shallow} from 'enzyme';
-import TestUtils from 'react-addons-test-utils';
 import {AppUsersRoute, __RewireAPI__ as AppUsersRouteAPI} from '../../../../../src/components/app/settings/categories/appUsersRoute';
 
 describe('AppUsersRoute functions', () => {
@@ -12,26 +11,19 @@ describe('AppUsersRoute functions', () => {
     const appUsersUnfiltered = [{id: 1, name: 'Washington'}];
     const appRoles = [{"9": {"id": 1, "name": "none", "tableRights": {}, "fieldRights": {}, "description": "", "access": "NONE"}}];
     const appId = 1;
-    const selectedApp = {name: "Duder", ownerId: "CFalc"};
+    const selectedApp = {name: "Duder", ownerId: "CFalc", unfilteredUsers: appUsersUnfiltered, users: appUsersUnfiltered};
     const appOwner = {firstName: "Captain", lastName: "Falcon", email: "cfalc@fzero.com"};
     const appOwerNoEmail = {firstName: "Captain", lastName: "Falcon"};
     const match = {params: {appId: appId}};
     const nextMatch = {params: {appId: 2}};
-    const flux = {
-        actions:{
-            loadAppOwner: function() {return;},
-            selectUsersRows: function() {return;},
-            selectedUsersRows: function() {return;},
-            searchRealmUsers: function() {return;},
-            openAddUserDialog: function() {return;},
-            setUserRoleToAdd: function() {return;},
-            assignUserToApp: function() {return;}
-        }
-    };
 
     const mockActions = {
-        getAppRoles() {return appRoles;},
-        loadAppRoles() {return appRoles;}
+        loadAppOwner() {return appOwner;},
+        loadAppRoles() {return appRoles;},
+        searchUsers() {},
+        setUserRoleToAdd() {},
+        openAddUserDialog() {},
+        selectUserRows() {}
     };
 
     var IconActionsMock = React.createClass({
@@ -43,40 +35,33 @@ describe('AppUsersRoute functions', () => {
     });
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadAppOwner');
-        spyOn(flux.actions, 'selectedUsersRows');
-        spyOn(flux.actions, 'openAddUserDialog');
-        spyOn(mockActions, 'getAppRoles');
+        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
+        spyOn(mockActions, 'loadAppOwner');
         spyOn(mockActions, 'loadAppRoles');
+        spyOn(mockActions, 'searchUsers');
+        spyOn(mockActions, 'setUserRoleToAdd');
+        spyOn(mockActions, 'openAddUserDialog');
+        spyOn(mockActions, 'selectUserRows');
     });
 
     afterEach(() => {
-        flux.actions.loadAppOwner.calls.reset();
-        flux.actions.selectedUsersRows.calls.reset();
-        flux.actions.openAddUserDialog.calls.reset();
-        mockActions.getAppRoles.calls.reset();
+        AppUsersRouteAPI.__ResetDependency__('IconActions');
+        mockActions.loadAppOwner.calls.reset();
         mockActions.loadAppRoles.calls.reset();
+        mockActions.searchUsers.calls.reset();
+        mockActions.setUserRoleToAdd.calls.reset();
+        mockActions.openAddUserDialog.calls.reset();
+        mockActions.selectUserRows.calls.reset();
     });
 
     it('test render of component', () => {
-        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
-
-        let component = TestUtils.renderIntoDocument(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
-                                                                    loadAppRoles={mockActions.loadAppRoles}
-                                                                    appRoles={appRoles}
-                                                                    appOwner={appOwner}
-                                                                    flux={flux}
-                                                                    selectedApp={selectedApp}
-                                                                    selectedUserRows={[]}
-                                                                    params={{appId: 1}}
-                                                                    appUsers={[]}
-                                                                    match={match}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+        let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                         loadAppOwner={mockActions.loadAppOwner}
                                          loadAppRoles={mockActions.loadAppRoles}
+                                         searchUsers={mockActions.searchUsers}
+                                         selectUserRows={mockActions.selectUserRows}
                                          appRoles={appRoles}
                                          appOwner={appOwner}
-                                         flux={flux}
                                          selectedApp={selectedApp}
                                          selectedUserRows={[]}
                                          params={{appId: 1}}
@@ -85,32 +70,28 @@ describe('AppUsersRoute functions', () => {
         let instance = component.instance();
         instance.componentDidMount();
         instance.selectAllRows();
-        AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 
     it('test component will receive props', () => {
-        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
-
         let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                               loadAppOwner={mockActions.loadAppOwner}
                                                loadAppRoles={mockActions.loadAppRoles}
                                                appOwner={appOwner}
                                                appRoles={appRoles}
-                                               flux={flux}
                                                selectedApp={selectedApp}
                                                selectedUserRows={[]}
                                                params={{appId: 1}}
                                                appUsers={[]}
                                                match={match}/>);
         let instance = component.instance();
-        instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, flux, selectedApp, selectedUserRows: [], params:{appId:2}, appUsers:[]});
-        AppUsersRouteAPI.__ResetDependency__('IconActions');
+        instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, selectedApp, selectedUserRows: [], params:{appId:2}, appUsers:[]});
     });
     it('test Selections', () => {
-        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
         let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                           selectUserRows={mockActions.selectUserRows}
                                            appRoles={appRoles}
                                            appOwner={appOwner}
-                                           flux={flux}
+                                           flux={{actions: {}}}
                                            selectedApp={selectedApp}
                                            selectedUserRows={[]}
                                            params={{appId: 1}}
@@ -120,23 +101,5 @@ describe('AppUsersRoute functions', () => {
         instance.toggleSelectedRow(1, 1);
         instance.toggleSelectAllRows();
         instance.deselectAllRows();
-        AppUsersRouteAPI.__ResetDependency__('IconActions');
-    });
-    it('test AddUserDialog functions', () => {
-        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
-        let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
-                                               appRoles={appRoles}
-                                               appOwner={appOwner}
-                                               flux={flux}
-                                               selectedApp={selectedApp}
-                                               selectedUserRows={[]}
-                                               params={{appId: 1}}
-                                               appUsers={[]}
-                                               match={match}/>);
-        let instance = component.instance();
-        instance.toggleAddUserDialog(false);
-        instance.setUserRoleToAdd();
-        instance.assignUserToApp(1, {userId: 1}, {roleId: 2});
-        AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 });
