@@ -66,7 +66,7 @@
                 reportContentPO.selectRowAndClickDeleteIcon(rowToBeDeleted);
 
                 // Step 2: Click on delete button from the dialogue box
-                modalDialog.clickOnModelDialogBtn(modalDialog.DELETE_BTN);
+                modalDialog.clickOnModalDialogBtn(modalDialog.DELETE_BTN);
 
                 //Need this to wait for delete success container to slide away
                 browser.pause(e2eConsts.mediumWaitTimeMs);
@@ -95,7 +95,7 @@
                 reportContentPO.dropDownDeleteIcon.click();
 
                 // Step 2: Click on delete button from the dialogue box
-                modalDialog.clickOnModelDialogBtn(modalDialog.DONT_DELETE_BTN);
+                modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
                 //Need this to wait for delete success container to slide away
                 browser.pause(e2eConsts.mediumWaitTimeMs);
 

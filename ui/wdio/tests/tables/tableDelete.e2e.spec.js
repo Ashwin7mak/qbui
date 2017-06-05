@@ -73,7 +73,7 @@
             tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Click don't delete table button
-            modalDialog.clickOnModelDialogBtn(modalDialog.DONT_DELETE_BTN);
+            modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
             //Need this for dialog to slide away
             browser.pause(e2eConsts.shortWaitTimeMs);
 

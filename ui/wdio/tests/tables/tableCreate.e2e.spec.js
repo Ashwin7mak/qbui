@@ -88,14 +88,14 @@
             });
 
             //Click on finished button and make sure it landed in edit Form container page
-            modalDialog.clickOnModelDialogBtn(modalDialog.CREATE_TABLE_BTN);
+            modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
             tableCreatePO.waitUntilNotificationContainerGoesAway();
 
             //Verify the create table dialogue
             tableCreatePO.verifyNewTableCreateDialogue();
 
             //Click OK button on create table dialogue
-            modalDialog.clickOnModelDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+            modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
             //Need small wait for the container to dissapear
             browser.pause(e2eConsts.mediumWaitTimeMs);
 

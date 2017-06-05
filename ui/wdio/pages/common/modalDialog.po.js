@@ -1,6 +1,6 @@
 'use strict';
 
-class modelDialog {
+class modalDialog {
     get CREATE_TABLE_BTN() {return 'Create table';}
     get CREATE_TABLE_DLG_CANCEL_BTN() {return 'Cancel';}
     get TABLE_READY_DLG_OK_BTN() {return 'OK';}
@@ -8,19 +8,19 @@ class modelDialog {
     get DELETE_BTN() {return 'Delete';}
     get DONT_DELETE_BTN() {return  "Don't delete";}
 
-    get modelDialog() {
+    get modalDialog() {
         // model dialog
         return browser.element('.modal-dialog');
     }
 
-    get modelDialogTitle() {
+    get modalDialogTitle() {
         // model dialog title
-        return this.modelDialog.element('.bodyContainer .modal-title .title').getAttribute('textContent');
+        return this.modalDialog.element('.bodyContainer .modal-title .title').getAttribute('textContent');
     }
 
-    get modelDialogFooterButtons() {
+    get modalDialogFooterButtons() {
         // model dialog footer buttons
-        return this.modelDialog.elements('.modal-footer .buttons button');
+        return this.modalDialog.elements('.modal-footer .buttons button');
     }
 
     /**
@@ -28,11 +28,11 @@ class modelDialog {
      * @dialogTitle to verify the dialog
      * @btnName to click
      */
-    clickOnModelDialogBtn(btnName) {
-        this.modelDialog.waitForVisible();
+    clickOnModalDialogBtn(btnName) {
+        this.modalDialog.waitForVisible();
 
         //get all buttons from model dialog footer
-        let btns = this.modelDialogFooterButtons.value.filter(function(button) {
+        let btns = this.modalDialogFooterButtons.value.filter(function(button) {
             return button.getAttribute('textContent') === btnName;
         });
 
@@ -42,11 +42,11 @@ class modelDialog {
             //Click on filtered button
             return btns[0].click();
         } else {
-            throw new Error('button with name ' + btnName + " not found on the " + this.modelDialogTitle + " dialog box");
+            throw new Error('button with name ' + btnName + " not found on the " + this.modalDialogTitle + " dialog box");
         }
 
     }
 
 
 }
-module.exports = new modelDialog();
+module.exports = new modalDialog();

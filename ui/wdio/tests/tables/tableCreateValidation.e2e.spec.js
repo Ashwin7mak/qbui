@@ -110,7 +110,7 @@
                 expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
 
                 //Cancel table dialogue
-                modalDialog.clickOnModelDialogBtn(modalDialog.CREATE_TABLE_DLG_CANCEL_BTN);
+                modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_DLG_CANCEL_BTN);
                 //Need this for dialog to slide away
                 browser.pause(e2eConsts.shortWaitTimeMs);
 
