@@ -89,7 +89,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     getSelectionActions() {
-        return (<UserActions selection={this.props.selectedUserRows} actions={this.props.flux.actions} appId={this.props.appId} roleId={this.state.roleId}/>);
+        return (<UserActions appId={this.props.appId} roleId={this.state.roleId} />);
     },
 
     getTableActions() {

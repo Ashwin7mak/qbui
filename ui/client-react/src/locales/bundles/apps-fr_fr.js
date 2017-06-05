@@ -43,7 +43,7 @@ export default {
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
-                unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
+                unAssignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
                 deleteUser: "Retirer {valeur} utilisateur",
                 deleteUsers: "Retirer {valeur} utilisateurs",
                 removeButton: "Retirer",

@@ -7,6 +7,7 @@ import QBModal from '../qbModal/qbModal';
 import {removeUsersFromAppRole} from '../../actions/appRoleActions';
 import {clearSelectedUserRows} from '../../actions/userActions';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
+import {getSelectedUsers} from '../../reducers/users';
 
 import './reportActions.scss';
 
@@ -37,7 +38,7 @@ export class UserActions extends React.Component {
     }
 
     getSelectionTip(actionMsg) {
-        return Locale.getPluralizedMessage(actionMsg, {value: this.props.selection.length});
+        return Locale.getPluralizedMessage(actionMsg, {value: this.props.selectedUserRows.length});
     }
 
     /**
@@ -54,16 +55,17 @@ export class UserActions extends React.Component {
         this.setState({confirmDeletesDialogOpen: false});
     }
     /**
-     * this.props.selection has the current selected rows with the unique identifier as the value in the array
+     * this.props.selectedUserRows has the current selected rows with the unique identifier as the value in the array
      */
     handleBulkDelete() {
-        this.props.removeUsersFromAppRole(this.props.appId, this.props.roleId, this.props.selection).then(
+        const selectedRows = this.props.selectedUserRows;
+        this.props.removeUsersFromAppRole(this.props.appId, this.props.roleId, selectedRows).then(
             (userIds) => {
-                const msg = userIds.length > 1 ?
-                    Locale.getMessage('app.users.userRemoved') : Locale.getMessage('app.users.usersRemoved', {numOfUsers:userIds.length});
+                const msg = selectedRows.length > 1 ?
+                    Locale.getMessage('app.users.usersRemovedFromAppRole', {numOfUsers:selectedRows.length}) : Locale.getMessage('app.users.userRemovedFromAppRole');
                 NotificationManager.success(msg);
 
-                //  clear out the selection counter with empty list..
+                //  clear out the selected user rows..
                 this.props.clearSelectedUserRows();
             },
             () => {
@@ -80,12 +82,12 @@ export class UserActions extends React.Component {
     getConfirmDialog() {
 
         let msg;
-        if (this.props.selection.length > 1) {
+        if (this.props.selectedUserRows.length > 1) {
             msg = this.getSelectionTip("app.users.deleteUsers") + '?';
         } else {
             msg = Locale.getMessage('app.users.removeUser');
         }
-        const bodymsg  = Locale.getMessage('app.users.unassignUser');
+        const bodyMsg  = Locale.getMessage('app.users.unAssignUser');
 
         return (
             <QBModal
@@ -94,7 +96,7 @@ export class UserActions extends React.Component {
                 primaryButtonOnClick={this.handleBulkDelete}
                 leftButtonName={Locale.getMessage('app.users.cancel')}
                 leftButtonOnClick={this.cancelBulkDelete}
-                bodyMessage={bodymsg}
+                bodyMessage={bodyMsg}
                 type="delete"
                 title={msg}/>);
     }
@@ -107,15 +109,16 @@ export class UserActions extends React.Component {
      * render the actions
      */
     render() {
+        const selectedRows = this.props.selectedUserRows.length;
         return (
             <div className={'reportActions'}>
                 <div className={'reportActionsBlock'}>
-                    {<span className="selectedRowsLabel">{this.props.selection.length}</span>}
+                    {<span className="selectedRowsLabel">{selectedRows}</span>}
                     <div className="actionIcons">
                         <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true} identifier="mail"/>
                         {this.getEmailAction()}
                         <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true} identifier="settings"/>
-                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(this.props.selection.length > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
+                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(selectedRows > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
                     </div>
                 </div>
                 {this.getConfirmDialog()}
@@ -124,12 +127,18 @@ export class UserActions extends React.Component {
     }
 }
 
-UserActions.propTypes = {
-    selection: PropTypes.array,
-    roleId: PropTypes.string,
-    appId: PropTypes.string,
-    onEditSelected: PropTypes.func,
-    removeUsersFromAppRole: PropTypes.func
+//UserActions.propTypes = {
+//    appId: PropTypes.string,
+//    roleId: PropTypes.string,
+//    removeUsersFromAppRole: PropTypes.func,
+//    selectedUserRows: PropTypes.array,
+//    clearSelectedUserRows: PropTypes.func
+//};
+
+const mapStateToProps = (state) => {
+    return {
+        selectedUserRows: getSelectedUsers(state.users)
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -140,6 +149,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(UserActions);

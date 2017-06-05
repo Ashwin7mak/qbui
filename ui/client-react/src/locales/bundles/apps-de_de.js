@@ -43,7 +43,7 @@ export default {
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
-                unassignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
+                unAssignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
                 deleteUser: "Entfernen {Wert} Benutzer",
                 deleteUsers: "Entfernen {Wert} Benutzer",
                 removeButton: "Entfernen",
