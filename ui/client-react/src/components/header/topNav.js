@@ -3,6 +3,7 @@
  * What remains here is a stub so existing code does not have to change yet.
  **/
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
+import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => {
     return {
