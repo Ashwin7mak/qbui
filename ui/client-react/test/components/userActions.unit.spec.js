@@ -19,7 +19,7 @@ const unselectedProps = {
     onEditSelected: () => {}
 };
 
-xdescribe('UserActions', () => {
+describe('UserActions', () => {
     let component;
     beforeEach(() => {
         component = mount(<UserActions {...props}/>);

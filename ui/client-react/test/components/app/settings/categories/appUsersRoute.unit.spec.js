@@ -5,7 +5,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import {AppUsersRoute, __RewireAPI__ as AppUsersRouteAPI} from '../../../../../src/components/app/settings/categories/appUsersRoute';
 
-xdescribe('AppUsersRoute functions', () => {
+describe('AppUsersRoute functions', () => {
     'use strict';
 
     const appUsersUnfiltered = [{id: 1, name: 'Washington'}];

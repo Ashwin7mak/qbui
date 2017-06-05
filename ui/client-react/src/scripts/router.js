@@ -80,7 +80,7 @@ const withFlux = (ComponentToWrap) => {
     return WrappedComponent;
 };
 
-const ConnectedNav = withFlux(NavWrapper);
+//const ConnectedNav = withFlux(NavWrapper);
 const ConnectedBuilderNav = withFlux(BuilderWrapper);
 const ConnectedSettingsNav = connect(mapStateToProps)(withFlux(SettingsWrapper)); // pass Redux state as qbui prop
 
@@ -104,7 +104,7 @@ const createElementWithFlux = (Component, props) => <Component {...props} flux={
 const routes = [
     {
         path: ADMIN_ROUTE,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes: [
             {
                 path: `${ADMIN_ROUTE}/featureSwitches/:id`,
@@ -118,7 +118,7 @@ const routes = [
     },
     {
         path: `${APP_ROUTE}/:appId/users`,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes: [
             {
                 path: `${APP_ROUTE}/:appId/users`,
@@ -128,7 +128,7 @@ const routes = [
     },
     {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes:  [
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/(report)?/:rptId?/record/:recordId`,
@@ -165,7 +165,7 @@ const routes = [
     {
         path: APPS_ROUTE,
         exact: true,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes: [
             {
                 path: APPS_ROUTE,
