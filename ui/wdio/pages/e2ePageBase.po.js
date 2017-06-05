@@ -105,6 +105,22 @@
         return reportContentPO.waitForReportContent();
     };
 
+    /**
+     * Helper method that will load users for an app for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadUsersInAnAppInBrowser = function(realmName, appId) {
+        this.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, appId));
+        //wait until loading screen disappear in leftNav
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        //wait until loading screen disappear in report Content
+        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //wait until apps home page is visible
+        return browser.waitForVisible('.iconActionButton.addRecord');
+    };
+
     PageBase.prototype.navigateTo = function(url) {
         return browser.url(url);
     };

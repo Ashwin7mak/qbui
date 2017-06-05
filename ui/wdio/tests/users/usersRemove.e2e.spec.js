@@ -41,11 +41,7 @@
          */
         beforeEach(function() {
             //load the users page
-            e2ePageBase.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
-            //wait until user table rows are loaded
-            ReportContentPO.waitForReportContent();
-            //Wait until you see newUser button
-            return UsersTablePage.newUserBtn.waitForVisible();
+            return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });
 
         /**
