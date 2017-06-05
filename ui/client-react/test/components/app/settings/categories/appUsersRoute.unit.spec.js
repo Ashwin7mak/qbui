@@ -13,7 +13,7 @@ describe('AppUsersRoute functions', () => {
     const appId = 1;
     const selectedApp = {name: "Duder", ownerId: "CFalc", unfilteredUsers: appUsersUnfiltered, users: appUsersUnfiltered};
     const appOwner = {firstName: "Captain", lastName: "Falcon", email: "cfalc@fzero.com"};
-    const appOwerNoEmail = {firstName: "Captain", lastName: "Falcon"};
+    const selectedAppUsers = [1,3,3,7];
     const match = {params: {appId: appId}};
     const nextMatch = {params: {appId: 2}};
 
@@ -55,7 +55,7 @@ describe('AppUsersRoute functions', () => {
     });
 
     it('test render of component', () => {
-        let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+        let component = shallow(<AppUsersRoute unfilteredAppUsers={appUsersUnfiltered}
                                          loadAppOwner={mockActions.loadAppOwner}
                                          loadAppRoles={mockActions.loadAppRoles}
                                          searchUsers={mockActions.searchUsers}
@@ -87,8 +87,9 @@ describe('AppUsersRoute functions', () => {
         instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, selectedApp, selectedUserRows: [], params:{appId:2}, appUsers:[]});
     });
     it('test Selections', () => {
-        let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+        let component = shallow(<AppUsersRoute unfilteredAppUsers={appUsersUnfiltered}
                                            selectUserRows={mockActions.selectUserRows}
+                                           selectedAppUsers={selectedAppUsers}
                                            appRoles={appRoles}
                                            appOwner={appOwner}
                                            flux={{actions: {}}}
