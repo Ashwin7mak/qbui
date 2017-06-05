@@ -1,9 +1,4 @@
 'use strict';
-//CREATE_TABLE_BTN : {get: function() {return 'Create table'}},
-//CREATE_TABLE_DLG_TITLE : {get: function() {return 'New Table'}},
-//CREATE_TABLE_DLG_CANCEL_BTN: {get: function() {return 'New Table'}},
-//TABLE_READY_DLG_TITLE : {get: function() {return "Your table's ready!"}},
-//TABLE_READY_DLG_OK_BTN : {get: function() {return 'OK'}},
 
 class modelDialog {
     get CREATE_TABLE_BTN() {return 'Create table';}
