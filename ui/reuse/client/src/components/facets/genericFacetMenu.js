@@ -171,7 +171,7 @@ export class GenericFacetMenu extends Component {
             <div className="facetsMenuContainer">
 
                 {/* the filter icon button */}
-                <div className={"facetsMenuButton " +  (this.props.isMenuVisible ? "popoverisMenuVisiblen" : "") +
+                <div className={"facetsMenuButton " +  (this.props.isMenuVisible ? "popoverShown" : "") +
                 (hasSelections ? " withSelections " : " withoutSelections") +
                 (this.props.isMenuVisible ? " ignore-react-onclickoutside" : "")}
                      ref="facetsMenuButton"
