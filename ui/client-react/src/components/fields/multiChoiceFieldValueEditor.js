@@ -41,7 +41,11 @@ const MultiChoiceFieldValueEditor = React.createClass({
         /**
          * Group name for the radio buttons, if component is rendered as radio button group
          */
-        radioGroupName: React.PropTypes.string
+        radioGroupName: React.PropTypes.string,
+        /**
+         * callback on react select open
+         */
+        onOpen: React.PropTypes.func
     },
 
     getInitialState() {
@@ -182,7 +186,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
             noResultsText={notFoundMessage}
             autosize={false}
             clearable={false}
-            onBlur={this.onBlur} />;
+            onBlur={this.onBlur}
+            onOpen={this.props.onOpen}/>;
     },
 
     getFieldElement() {

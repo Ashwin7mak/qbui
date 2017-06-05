@@ -39,36 +39,6 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         };
     },
 
-    componentDidMount() {
-        // get the values for the dropDown if we are in edit mode ( and not form builder )
-        if (this.props.newFormFieldId && this.props.newFormFieldId === this.props.fieldDef.id) {
-            //do nothing
-        } else {
-            const recordService = new RecordService();
-            const queryParams = {
-                columns: [this.props.fieldDef.parentFieldId],
-                format: 'display'
-            };
-            let promise = recordService.getRecords(this.props.fieldDef.parentAppId, this.props.fieldDef.parentTableId, queryParams);
-            promise.then((data) => {
-                let records = data.data.records;
-                let choices = [];
-                //the records will always return record Id in addition to the required parentfieldId values so parse these out
-                if (Array.isArray(records)) {
-                    records.map((record) => {
-                        record.map((field) => {
-                            if (field.id === this.props.fieldDef.parentFieldId) {
-                                choices.push({coercedValue: {value: field.value}, displayValue: field.display});
-                            }
-                        });
-                    });
-                    this.setState({choices: choices});
-                }
-            }).catch((recordResponseError) => {
-                logger.parseAndLogError(LogLevel.ERROR, recordResponseError.response, 'recordService.getRecords:');
-            });
-        }
-    },
     /**
      * parent table selected
      * @param tableId
@@ -100,6 +70,32 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         this.props.removeFieldFromForm();
     },
 
+    getChoices() {
+        const recordService = new RecordService();
+        const queryParams = {
+            columns: [this.props.fieldDef.parentFieldId],
+            format: 'display'
+        };
+        let promise = recordService.getRecords(this.props.fieldDef.parentAppId, this.props.fieldDef.parentTableId, queryParams);
+        promise.then((data) => {
+            let records = data.data.records;
+            let choices = [];
+            //the records will always return record Id in addition to the required parentfieldId values so parse these out
+            if (Array.isArray(records)) {
+                records.map((record) => {
+                    record.map((field) => {
+                        if (field.id === this.props.fieldDef.parentFieldId) {
+                            choices.push({coercedValue: {value: field.value}, displayValue: field.display});
+                        }
+                    });
+                });
+                this.setState({choices: choices});
+            }
+        }).catch((recordResponseError) => {
+            logger.parseAndLogError(LogLevel.ERROR, recordResponseError.response, 'recordService.getRecords:');
+        });
+    },
+
     /**
      *
      * @returns {*}
@@ -113,7 +109,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
                                                   tableSelected={this.tableSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {
-            return <MultiChoiceFieldValueEditor choices={this.state.choices}
+            return <MultiChoiceFieldValueEditor choices={this.state.choices} onOpen={this.getChoices}
                 {...this.props} showAsRadio={false}/>;
         }
     }
