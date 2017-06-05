@@ -12,8 +12,11 @@ const TextFieldValueRenderer = React.createClass({
     displayName: 'TextFieldValueRenderer',
     propTypes: {
         /**
-         * the value to render */
+         * the rawvalue for this field */
         value: React.PropTypes.any,
+        /**
+         * the display value to render */
+        display: React.PropTypes.any,
 
         /**
          * optional additional classes for the input to customize styling */
@@ -62,10 +65,10 @@ const TextFieldValueRenderer = React.createClass({
     getParentLink(classes, htmlAllowed) {
         classes += ' textLink';
         if (htmlAllowed) {
-            return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.value}}
+            return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.display}}
                          onClick={this.handleClick}/>;
         } else {
-            return <span className={classes} onClick={this.handleClick}>{_.unescape(this.props.value)}</span>;
+            return <span className={classes} onClick={this.handleClick}>{_.unescape(this.props.display)}</span>;
         }
     },
 
@@ -95,13 +98,13 @@ const TextFieldValueRenderer = React.createClass({
             if (this.props.goToParent) {
                 return this.getParentLink(classes, true);
             }
-            return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.value}} />;
+            return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.display}} />;
         } else {
             //react will encode
             if (this.props.goToParent) {
                 return this.getParentLink(classes, false);
             }
-            return <div className={classes}>{_.unescape(this.props.value)}</div>;
+            return <div className={classes}>{_.unescape(this.props.display)}</div>;
         }
     }
 });

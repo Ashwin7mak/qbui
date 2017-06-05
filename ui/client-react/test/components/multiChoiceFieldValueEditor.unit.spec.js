@@ -75,7 +75,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
     // Listbox, test render of component with a selection, should display selected text and a clear button
     it('For a listbox, test render of component when there is an existing selection', () => {
         component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor choices={listbox_renderWithSelection.choices}
-                                                                              value={listbox_renderWithSelection.value}/>);
+                                                                              display={listbox_renderWithSelection.value}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var node = ReactDOM.findDOMNode(component);
@@ -144,7 +144,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
                 this.setState({value: val});
             },
             render() {
-                return <MultiChoiceFieldValueEditor ref="field" value={this.state.value} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices} onChange={this.onChange}/>;
+                return <MultiChoiceFieldValueEditor ref="field" display={this.state.value} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices} onChange={this.onChange}/>;
             }
         }));
 
