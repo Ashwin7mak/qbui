@@ -2,8 +2,7 @@ import React, {PropTypes, Component} from "react";
 import StandardGridNavigation from "./StandardGridNavigation";
 import StandardGridItemsCount from "./StandardGridItemsCount";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
-import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
-import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
+import GenericFilterSearchBox from "../../../../../reuse/client/src/components/facets/genericFilterSearchBox";
 import {connect} from "react-redux";
 import FacetSelections from "../../../../../reuse/client/src/components/facets/facetSelections";
 import StandardGridFacetsMenu from "./StandardGridFacetsMenu";
@@ -36,11 +35,11 @@ class StandardGridToolBar extends Component {
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
                         {this.props.shouldSearch &&
-                        // TODO: MC-2733 : REPLACE THIS WITH FilterSearchBox component from reuse
-                        <IconInputBox placeholder={`Search ${this.props.itemTypePlural}`}
-                                      onChange={this.props.onSearchChange}
-                                      onClear={this.props.clearSearchTerm}
-                                      value={this.props.searchTerm}
+                        <GenericFilterSearchBox searchBoxKey={`${this.props.id}_searchBox`}
+                                                placeholder={`Search ${this.props.itemTypePlural}`}
+                                                onChange={this.props.onSearchChange}
+                                                clearSearchTerm={this.props.clearSearchTerm}
+                                                searchTerm={this.props.searchTerm}
                         />
                         }
                         {hasFacets &&
