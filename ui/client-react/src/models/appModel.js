@@ -1,5 +1,6 @@
 import {APP_ROUTE} from '../constants/urlConstants';
 import TableIconUtils from '../utils/tableIconUtils';
+import _ from 'lodash';
 
 class AppModel {
     constructor(appData) {
@@ -9,20 +10,18 @@ class AppModel {
     init(appData) {
         this.app = {};
 
-        if (appData) {
-            if (appData.app) {
-                this.app = appData.app;
-                this.setUsers(appData.users[0]);
-                this.setUnfilteredUsers(appData.users[1]);
-                this.app.link = `${APP_ROUTE}/${this.app.id}`;
+        if (_.has(appData, 'app')) {
+            this.app = appData.app;
+            this.setUsers(appData.users[0]);
+            this.setUnfilteredUsers(appData.users[1]);
+            this.app.link = `${APP_ROUTE}/${this.app.id}`;
 
-                //  set the table icons
-                let tables = this.app.tables;
-                if (tables) {
-                    tables.forEach((table) => {
-                        table.tableIcon = TableIconUtils.getTableIcon(table.name);
-                    });
-                }
+            //  set the table icons
+            let tables = this.app.tables;
+            if (tables) {
+                tables.forEach((table) => {
+                    table.tableIcon = TableIconUtils.getTableIcon(table.name);
+                });
             }
         }
     }
