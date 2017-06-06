@@ -1,6 +1,6 @@
 'use strict';
 
-class modalDialog {
+class modalDialogWindow {
     get CREATE_TABLE_BTN() {return 'Create table';}
     get CREATE_TABLE_DLG_CANCEL_BTN() {return 'Cancel';}
     get TABLE_READY_DLG_OK_BTN() {return 'OK';}
@@ -49,4 +49,4 @@ class modalDialog {
 
 
 }
-module.exports = new modalDialog();
+module.exports = new modalDialogWindow();
