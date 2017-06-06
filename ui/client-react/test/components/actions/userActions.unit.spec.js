@@ -1,8 +1,8 @@
 /* eslint-disable babel/no-invalid-this */
-import {UserActions, __RewireAPI__ as UserActionsRewireAPI} from '../../src/components/actions/userActions';
+import {UserActions, __RewireAPI__ as UserActionsRewireAPI} from '../../../src/components/actions/userActions';
 import React from  'react';
-import {mount, shallow} from 'enzyme';
-import TestUtils, {Simulate} from 'react-addons-test-utils';
+import {mount} from 'enzyme';
+import {Simulate} from 'react-addons-test-utils';
 
 const props = {
     selection: ['10000'],
@@ -25,6 +25,9 @@ describe('UserActions', () => {
     beforeEach(() => {
         component = mount(<UserActions {...props}/>);
     });
+    afterEach(() => {
+        component.unmount();
+    });
 
     it('Should have all necessary elements', () => {
         expect(component.find('.actionIcons').length).toEqual(1);
@@ -45,28 +48,17 @@ describe('UserActions', () => {
         expect(component.find('.settings').childAt(0).hasClass('disabled')).toEqual(true);
     });
 
-    it('Should call unassignUsers when remove is clicked', () => {
-        let mockUnassignUsers = {
-            removeUsersFromAppRole() {
-            }
-        };
-
-        spyOn(mockUnassignUsers, 'removeUsersFromAppRole');
+    it('Confirm qbModal dialog appears when remove is clicked', () => {
         let clickProps = {
             selection: ['10000'],
             roleId: '12',
             appId: '0duiiaaaanc',
             selectedUserRows: [1],
-            onEditSelected: () => {},
-            actions:{unassignUsers: mockUnassignUsers.removeUsersFromAppRole}
+            onEditSelected: () => {}
         };
         component = mount(<UserActions {...clickProps}/>);
-        component.find('.errorincircle-fill').simulate('click');
+        component.find('.iconUISturdy-errorincircle-fill').simulate('click');
         expect(component.state().confirmDeletesDialogOpen).toEqual(true);
-        let primaryButton = document.querySelector(`.qbModal .primaryButton`);
-        Simulate.click(primaryButton);
-        expect(component.state().confirmDeletesDialogOpen).toEqual(true);
-        expect(mockUnassignUsers.removeUsersFromAppRole).toHaveBeenCalled();
 
     });
 
