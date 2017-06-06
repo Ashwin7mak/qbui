@@ -7,6 +7,7 @@ import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
 import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
+import _ from 'lodash';
 
 /**
  * # LinkToRecordFieldValueEditor
@@ -46,7 +47,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      * parent table selected
      * @param tableId
      */
-    tableSelected(tableId, parentField) {
+    relationshipSelected(tableId, parentTableField) {
 
         this.props.hideRelationshipDialog();
 
@@ -55,8 +56,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         // update the field with the parent table ID and a name incorporating the selected table
         const field = _.cloneDeep(this.props.fieldDef);
         field.parentTableId = tableId;
-        field.parentFieldId = parentField.id;
-        field.parentFieldType = parentField.datatypeAttributes.type;
+        field.parentFieldId = parentTableField.id;
+        field.parentFieldType = parentTableField.datatypeAttributes.type;
 
         field.name = Locale.getMessage('fieldsDefaultLabels.LINK_TO_RECORD_FROM', {parentTable: parentTable.name});
 
@@ -84,7 +85,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
                                                   tables={this.props.tables}
-                                                  tableSelected={this.tableSelected}
+                                                  tableSelected={this.relationshipSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {
             return this.getReactSelect();

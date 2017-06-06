@@ -62,7 +62,7 @@ describe('LinkToRecordValueEditor functions', () => {
         spyOn(props, "updateField");
         component = shallow(<LinkToRecordFieldValueEditor {...props}/>);
 
-        component.instance().tableSelected("parentTableId", parentTableFields);
+        component.instance().relationshipSelected("parentTableId", parentTableFields);
         expect(props.hideRelationshipDialog).toHaveBeenCalled();
         expect(props.updateField).toHaveBeenCalled();
     });
