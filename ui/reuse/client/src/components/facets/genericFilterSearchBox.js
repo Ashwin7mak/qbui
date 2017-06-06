@@ -24,7 +24,7 @@ class GenericFilterSearchBox extends Component {
         return (<div className="filterSearchBoxContainer">
                     <IconInputBox className="filterSearchBox"
                                   iconInputBoxKey={"filterSearchBox_" + this.props.searchBoxKey}
-                                  value={this.props.search}
+                                  value={this.props.searchTerm}
                                   onChange={this.props.onChange}
                                   onClear={this.props.clearSearchString}
                                   placeholder={this.props.placeholder}
@@ -46,7 +46,7 @@ GenericFilterSearchBox.propTypes = {
     /**
      *   Value inside the search box
      */
-    search: React.PropTypes.string,
+    searchTerm: React.PropTypes.string,
     /**
      *   Describes where the genericFilterSearchBox component is being used
      */

@@ -34,11 +34,11 @@ class StandardGridToolBar extends React.Component {
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
                         {this.props.shouldSearch &&
-                        <GenericFilterSearchBox searchBoxKey="standardGridSearchBox"
+                        <GenericFilterSearchBox searchBoxKey={`${this.props.id}_searchBox`}
                                                 placeholder={`Search ${this.props.itemTypePlural}`}
                                                 onChange={this.props.onSearchChange}
                                                 clearSearchString={this.props.clearSearchTerm}
-                                                search={this.props.searchTerm}
+                                                searchTerm={this.props.searchTerm}
                         />
                         }
                         {hasFacets &&

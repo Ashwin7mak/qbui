@@ -44,7 +44,7 @@ describe('StandardGridToolBar', () => {
         expect(StandardGridSearchComponent).toBeDefined();
         expect(StandardGridSearchComponent.length).toBeTruthy();
         expect(StandardGridSearchComponent.props().placeholder).toEqual("Search users");
-        expect(StandardGridSearchComponent).toHaveProp('search', mockSearchTerm);
+        expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
 
         expect(component.find(StandardGridItemsCount)).toBePresent();
     });
