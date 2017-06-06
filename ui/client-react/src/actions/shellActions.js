@@ -1,6 +1,5 @@
 import * as types from '../actions/types';
 import Breakpoints from '../utils/breakpoints';
-import AppsBundleLoader from '../locales/appsBundleLoader';
 
 /**
  * Show the trowser
@@ -118,31 +117,15 @@ export const hideTopNav = () => {
     };
 };
 
-export const setSearching = (searching) => {
-    return {
-        type: types.SEARCHING,
-        searching
-    };
-};
+/**
+ * set report name for filtering
+ * @param reportName
+ * @returns {{type, reportName: string}}
+ */
 export const filterReportsByName = (reportName = "") => {
     return {
         type: types.FILTER_REPORTS_BY_NAME,
         reportName
     };
 };
-export const scrollingReport = (isScrolling = true) => {
-    return {
-        type: types.SCROLLING_REPORT,
-        isScrolling
-    };
-};
-/**
- * Set a top nav title
- * @param title a react node (or null to omit one)
- */
-export const setTopTitle = (title = null) => {
-    return {
-        type: types.SET_TOP_TITLE,
-        title
-    };
-};
+

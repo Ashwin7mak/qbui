@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => {
     return {
-        title: state.shell.navTopTitle,
         showOnSmall:state.shell.topNavVisible
     };
 };

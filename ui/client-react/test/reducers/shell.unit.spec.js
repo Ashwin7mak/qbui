@@ -14,11 +14,9 @@ function initializeState() {
         trowserOpen: false,
         trowserContent: null,
         topNavVisible: true,
-        navTopTitle: null,
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
-        searching:false,
         scrollingReport: false,
         filterReportsName: ''
     };

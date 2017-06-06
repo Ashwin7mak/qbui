@@ -11,7 +11,7 @@ import Stage from '../../../../reuse/client/src/components/stage/stage';
 import Locale from '../../locales/locales';
 import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
 import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';
-import {setTopTitle, showTopNav} from '../../actions/shellActions';
+import {showTopNav} from '../../actions/shellActions';
 import './appHomePage.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -131,7 +131,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         resetTableDeleteNotification: () => {dispatch(notifyTableDeleted(false));},
-        setTopTitle: (title) => dispatch(setTopTitle(title)),
         showTopNav: () => dispatch(showTopNav())
     };
 };
