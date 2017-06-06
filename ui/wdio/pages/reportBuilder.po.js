@@ -74,6 +74,14 @@ class reportBuilderPage {
         return browser.element('.fieldToken');
     }
 
+    get addColumnBeforeText() {
+        return browser.element('.addColumnBeforeText');
+    }
+
+    get addColumnAfterText() {
+        return browser.element('.addColumnAfterText');
+    }
+
     dirtyForm_Dismiss() {
         try { // browser's LEAVE THIS PAGE? dlg
             browser.alertDismiss();
@@ -111,22 +119,6 @@ class reportBuilderPage {
         return this;
     }
 
-    /**
-     * Enters into builder mode.
-     */
-    get qbGidHeaderMenu() {
-        // the field token from hidden fields
-        return browser.element('.headerMenu');
-    }
-
-    get addColumnBeforeText() {
-        return browser.element('.addColumnBeforeText');
-    }
-
-    get addColumnAfterText() {
-        return browser.element('.addColumnAfterText');
-    }
-
     enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
@@ -139,55 +131,23 @@ class reportBuilderPage {
         return this;
     }
 
-    /**
-     * Checks to see if you are in report builder.
-     */
-    getColumnLabels() {
-        // Gets the list of column labels from the report builder
-        let labelEls = browser.elements('.qbHeaderCell');
-        return labelEls.value.map(function(labelEl) {
-            let label = labelEl.element('.gridHeaderLabel').getText();
-            return label;
-        });
-    }
-
-    getReportLocator(index) {
-        // Returns a locator string for a specific column in the report builder
-        return '.qbHeaderCell:nth-child(' + index + ')';
-    }
-
-    addColumnFromFieldsList() {
+    clickAddColumnFromFieldsList() {
         // Clicks on one of the hidden fields after entering builder mode
         this.fieldToken.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
-    headerMenuClick() {
-        this.qbGidHeaderMenu.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    addColumnBeforeClick() {
+    clickAddColumnBefore() {
         this.addColumnBeforeText.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
-    addColumnAfterClick() {
+    clickAddColumnAfter() {
         this.addColumnAfterText.click();
         browser.pause(fiveSeconds);
         return this;
-    }
-
-    getColumnLabels() {
-        // Gets the list of field labels from the form builder
-        let labelEls = browser.elements('.qbHeaderCell');
-        return labelEls.value.map(function(labelEl) {
-            let label = labelEl.element('.gridHeaderLabel').getText();
-            return label;
-        });
     }
 
     reportBuilderContainerIsExisting() {

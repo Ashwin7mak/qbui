@@ -128,59 +128,53 @@
 
         it('verify add column and click cancel', function() {
             // gets the column list before adding a column
-            let columnsListInitial = reportBuilderPO.getColumnLabels();
+            let columnsListInitial = reportBuilderPO.getHeaderLabels();
             // adds a column
-            reportBuilderPO.addColumnFromFieldsList();
+            reportBuilderPO.clickAddColumnFromFieldsList();
             // gets the updated column labels after adding the new column
-            let columnsListUpdated = reportBuilderPO.getColumnLabels();
+            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
             // clicks on cancel
             reportBuilderPO.clickCancel();
-            // re-enters builderMode
-            reportBuilderPO.enterBuilderMode();
             // column label list must be equal to the initial list without the added column
-            let columnsAfterReopen = reportBuilderPO.getColumnLabels();
+            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
 
         it('verify add column by add before', function() {
             // gets the column list before adding a column
-            let columnsListInitial = reportBuilderPO.getColumnLabels();
+            let columnsListInitial = reportBuilderPO.getHeaderLabels();
             // adds a column by clicking on AddColumnBefore from headerMenu dropdown
-            reportBuilderPO.headerMenuClick();
-            reportBuilderPO.addColumnBeforeClick();
-            reportBuilderPO.addColumnFromFieldsList();
+            reportBuilderPO.clickHeaderMenu();
+            reportBuilderPO.clickAddColumnBefore();
+            reportBuilderPO.clickAddColumnFromFieldsList();
 
             // gets the updated column labels after adding the new column
-            let columnsListUpdated = reportBuilderPO.getColumnLabels();
+            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
             // clicks on cancel
             reportBuilderPO.clickCancel();
-            // re-enters builderMode
-            reportBuilderPO.enterBuilderMode();
 
             // column label list must be equal to the initial list without the added column
-            let columnsAfterReopen = reportBuilderPO.getColumnLabels();
+            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
 
         it('verify add column by add after', function() {
             // gets the column list before adding a column
-            let columnsListInitial = reportBuilderPO.getColumnLabels();
+            let columnsListInitial = reportBuilderPO.getHeaderLabels();
             // adds a column by clicking on AddColumnAfter from headerMenu dropdown
-            reportBuilderPO.headerMenuClick();
-            reportBuilderPO.addColumnAfterClick();
-            reportBuilderPO.addColumnFromFieldsList();
+            reportBuilderPO.clickHeaderMenu();
+            reportBuilderPO.clickAddColumnAfter();
+            reportBuilderPO.clickAddColumnFromFieldsList();
             // gets the updated column labels after adding the new column
-            let columnsListUpdated = reportBuilderPO.getColumnLabels();
+            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
             // clicks on cancel
             reportBuilderPO.clickCancel();
-            // re-enters builderMode
-            reportBuilderPO.enterBuilderMode();
 
             // column label list must be equal to the initial list without the added column
-            let columnsAfterReopen = reportBuilderPO.getColumnLabels();
+            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
     });
