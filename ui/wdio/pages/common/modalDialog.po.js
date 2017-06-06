@@ -9,29 +9,34 @@ class modalDialogWindow {
     get DONT_DELETE_BTN() {return  "Don't delete";}
 
     get modalDialog() {
-        // model dialog
+        // modal dialog
         return browser.element('.modal-dialog');
     }
 
     get modalDialogTitle() {
-        // model dialog title
+        // modal dialog title
         return this.modalDialog.element('.bodyContainer .modal-title .title').getAttribute('textContent');
     }
 
     get modalDialogFooterButtons() {
-        // model dialog footer buttons
+        // modal dialog footer buttons
         return this.modalDialog.elements('.modal-footer .buttons button');
     }
 
+    get modalDialogPrimaryButton() {
+        // modal dialog footer buttons
+        return this.modalDialog.element('.modal-dialog .modal-footer .primaryButton');
+    }
+
     /**
-     * Method to click on model dialog button
+     * Method to click on modal dialog button
      * @dialogTitle to verify the dialog
      * @btnName to click
      */
     clickOnModalDialogBtn(btnName) {
         this.modalDialog.waitForVisible();
 
-        //get all buttons from model dialog footer
+        //get all buttons from modal dialog footer
         let btns = this.modalDialogFooterButtons.value.filter(function(button) {
             return button.getAttribute('textContent') === btnName;
         });

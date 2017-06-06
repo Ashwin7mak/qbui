@@ -172,7 +172,7 @@
                 tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
                 //Make sure delete table button is disabled
-                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBe(false);
+                expect(modalDialog.modalDialogPrimaryButton.isEnabled()).toBe(false);
             });
 
         });
