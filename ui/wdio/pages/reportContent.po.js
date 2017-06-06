@@ -6,7 +6,7 @@
 (function() {
     'use strict';
     // Import the base page object
-    var e2ePageBase = requirePO('./e2ePageBase');
+    var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
     var tablesPO = requirePO('tableCreate');
 
@@ -341,6 +341,7 @@
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             return browser.url(requestRecordPageEndPoint);
+            // return e2ePageBase.navigateTo(requestRecordPageEndPoint); // fails to load page locally...?
         }},
 
         /**
