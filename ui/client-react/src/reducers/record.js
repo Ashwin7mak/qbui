@@ -193,6 +193,9 @@ const record = (state = {}, action) => {
             model.set(currentRecd.pendEdits);
             model.setRecordSaveSuccess(action.content.appId, action.content.tblId, action.content.recId);
             model.setSaving(false);
+            if (_.has(currentRecd, 'pendEdits.recordChanges')) {
+                currentRecd.pendEdits.recordChanges = {}; //clear the form for next edit
+            }
             savedState = newState(currentRecd);
         }
 

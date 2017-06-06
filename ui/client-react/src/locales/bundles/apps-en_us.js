@@ -778,7 +778,17 @@ export default {
         addUserToApp: {
             title: "Add users to",
             description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
-            searching: "Searching..."
+            searching: "Searching...",
+            userSuccessTitle: "Your app has new user!",
+            userSuccessText: "Let them know they have access to your app by sharing the link with them.",
+            copy: "Copy",
+            email: "Email",
+            toCopy: "Click to Copy to Clipboard",
+            toEmail: "Click to send an Email",
+            userSuccessDialogOK: "No thanks",
+            copied: "Link copied",
+            messageSubject:"Link to the {appName} app",
+            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
         }
     }
 };

@@ -160,6 +160,8 @@ $edit-field-padding: 5px;
     }
 
     .editForm {
+        @include correctFontWeightForLightTextOnDarkBackground;
+
         .fieldLabel {
             margin-top: $edit-field-padding;
             max-width: $form-edit-input-width;
@@ -257,7 +259,7 @@ $edit-field-padding: 5px;
     }
 
     .viewForm {
-        -webkit-font-smoothing: antialiased;
+        @include correctFontWeightForLightTextOnDarkBackground;
     }
 
     /* For mobile phones: */
