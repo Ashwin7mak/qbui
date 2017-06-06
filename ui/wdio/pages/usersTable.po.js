@@ -52,12 +52,6 @@
         // Remove user button on user report
         userRemoveIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-errorincircle-fill');}},
 
-        // Remove user button in modal
-        userRemoveButton: {get: function() {return browser.element('.modal-dialog .primaryButton');}},
-
-        // Cancel remove user button in modal
-        userCancelButton: {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
-
         // User action icon elements
         userActionsListUlEl: {get: function() {return browser.element('.reportActionsBlock .actionIcons');}},
 
