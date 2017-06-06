@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import StandardGridNavigation from "./StandardGridNavigation";
-import StandardGridItemsCount from "./StandardGridItemsCount";
+import StandardGridItemsCount from "../../../../../reuse/client/src/components/itemsCount/StandardGridItemsCount";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";

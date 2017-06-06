@@ -1,7 +1,7 @@
 import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import StandardGridItemsCount from "../../../src/common/grid/toolbar/StandardGridItemsCount";
+import StandardGridItemsCount from "../../../../reuse/client/src/components/itemsCount/StandardGridItemsCount";
 
 let component;
 
