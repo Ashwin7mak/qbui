@@ -82,14 +82,14 @@ export const LinkToRecordFieldValueEditor = React.createClass({
             let choices = [];
             //the records will always return record Id in addition to the required parentfieldId values so parse these out
             if (Array.isArray(records)) {
-                records.map((record) => {
-                    record.map((field) => {
+                records.map(record => {
+                    record.map(field => {
                         if (field.id === this.props.fieldDef.parentFieldId) {
                             choices.push({coercedValue: {value: field.value}, displayValue: field.display});
                         }
                     });
                 });
-                this.setState({choices: choices});
+                this.setState({choices});
             }
         }).catch((recordResponseError) => {
             logger.parseAndLogError(LogLevel.ERROR, recordResponseError.response, 'recordService.getRecords:');
