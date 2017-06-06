@@ -33,10 +33,10 @@ export const EmbeddedAddChildLink = React.createClass({
 
 
     render() {
-        const {childAppId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun, location, parentIsBeingEdited} = this.props;
+        const {childAppId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun, location, uniqueId, parentIsBeingEdited} = this.props;
         // render add child link
         const urlPath = _.get(location, 'pathname', '');
-        const link = UrlUtils.getAddRelatedChildLink(urlPath, childAppId, childTableId, childReportId, detailKeyFid, encodeURIComponent(detailKeyValue));
+        const link = UrlUtils.getAddRelatedChildLink(urlPath, childAppId, childTableId, childReportId, detailKeyFid, encodeURIComponent(detailKeyValue), uniqueId);
         const noParent = parentIsBeingEdited && (detailKeyValue === null || detailKeyValue.trim() === '');
         const noun = childTableNoun ? childTableNoun.toLowerCase() : Locale.getMessage("records.singular");
         const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={noun}/>;

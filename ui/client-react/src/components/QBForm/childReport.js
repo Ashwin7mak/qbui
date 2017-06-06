@@ -11,7 +11,8 @@ import EmbeddedReportLink from '../report/embedded/embeddedReportLink';
 import EmbeddedAddChildLink from '../report/embedded/embeddedAddChildLink';
 import QueryUtils from '../../utils/queryUtils';
 import Breakpoints from '../../utils/breakpoints';
-
+import {CONTEXT} from '../../actions/context';
+import withUniqueId from '../hoc/withUniqueId';
 /**
  * This component renders child records as an embedded report. In small-breakpoint, we render a link
  * to a child report.
@@ -139,4 +140,6 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(ChildReport);
+const connectedChildReportComponent = connect(null, mapDispatchToProps)(ChildReport);
+
+export default withUniqueId(connectedChildReportComponent, CONTEXT.REPORT.EMBEDDED);

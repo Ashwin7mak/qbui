@@ -27,7 +27,11 @@ import {getPendEdits, getRecord} from '../../reducers/record';
 import {getRecordTitle} from '../../utils/formUtils';
 import './recordTrowser.scss';
 import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
-
+import {unloadEmbeddedReport} from '../../actions/reportActions';
+import NumberUtils from '../../utils/numberUtils';
+import constants from '../../../../common/src/constants';
+import * as UrlConsts from "../../constants/urlConstants";
+import QueryUtils from '../../utils/queryUtils';
 /**
  * trowser containing a record component
  *
@@ -309,6 +313,8 @@ export const RecordTrowser = React.createClass({
                     this.props.syncForm(CONTEXT.FORM.VIEW);
                 }
 
+                //refresh the embedded report,after a child record is added to the embedded report
+                this.props.unloadEmbeddedReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT]);
                 if (next) {
                     this.nextRecord();
                 } else {
@@ -567,6 +573,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         openRecord:(recId, nextRecordId, prevRecordId) => {
             dispatch(openRecord(recId, nextRecordId, prevRecordId));
+        },
+        unloadEmbeddedReport: (context) => {
+            dispatch(unloadEmbeddedReport(context));
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));

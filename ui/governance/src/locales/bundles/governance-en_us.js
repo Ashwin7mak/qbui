@@ -10,10 +10,10 @@ export default {
     messages: {
         governance: {
             leftNav: {
-                myApps: "MY APPS",
+                myApps: "back to My Apps",
                 manageBilling: "Manage Billing",
                 contactSupport: "Contact Support",
-                manageUsers: "Manage Users",
+                manageUsers: "Manage All Users",
                 accountSummary: "Account Summary",
                 manageApps: "Manage Apps",
                 manageGroups: "Manage Groups",

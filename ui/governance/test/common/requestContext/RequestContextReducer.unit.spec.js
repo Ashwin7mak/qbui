@@ -1,4 +1,4 @@
-import RequestContextReducer, {isFetching} from "../../../src/common/requestContext/RequestContextReducer";
+import RequestContextReducer, {isFetching, getCurrentUser, getRealm} from "../../../src/common/requestContext/RequestContextReducer";
 import * as types from "../../../src/app/actionTypes";
 
 const initialState = {
@@ -56,16 +56,32 @@ describe('RequestContext Reducers Tests', () => {
         expect(state.status.error).toEqual(null);
     });
 
-    describe('isFetching', () => {
-        it("should return true while fetching the request user's context", () => {
-            expect(isFetching({RequestContext:{...initialState, status: {...initialState.status, isFetching: true}}})).toEqual(true);
+    describe('selectors', () => {
+        describe('isFetching', () => {
+            it("should return true while fetching the request user's context", () => {
+                expect(isFetching({RequestContext:{...initialState, status: {...initialState.status, isFetching: true}}})).toEqual(true);
+            });
+            it("should return false if the state isFetching is false AND we don't have the current user's information", () => {
+                expect(isFetching({RequestContext:{...initialState}})).toEqual(true);
+            });
+            it("should return false while we have completed fetching the request user's context", () => {
+                expect(isFetching({RequestContext:{...initialState, currentUser:{id: 1}}})).toEqual(false);
+            });
         });
-        it("should return false if the state isFetching is false AND we don't have the current user's information", () => {
-            expect(isFetching({RequestContext:{...initialState}})).toEqual(true);
+        describe('getCurrentUser', () => {
+            it('should return the current user from the request context', () => {
+                let user = {id: 1};
+                expect(getCurrentUser({RequestContext:{...initialState, currentUser: user}})).toEqual(user);
+            });
         });
-        it("should return false while we have completed fetching the request user's context", () => {
-            expect(isFetching({RequestContext:{...initialState, currentUser:{id: 1}}})).toEqual(false);
+        describe('getRealm', () => {
+            it('should return the realm from the request context', () => {
+                let realm = {id: 1};
+                expect(getRealm({RequestContext:{...initialState, realm: realm}})).toEqual(realm);
+            });
         });
     });
+
+
 
 });
