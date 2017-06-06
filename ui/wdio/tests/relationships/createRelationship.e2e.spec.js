@@ -76,7 +76,7 @@
             formsPO.clickFormCancelBtn();
         })
 
-        xit('Verify title field shows up with table created via UI', function() {
+        it('Verify title field shows up with table created via UI', function() {
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
@@ -120,8 +120,7 @@
             formBuilderPO.open();
 
             //Click on add a new record button
-            //formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
-            formBuilderPO.addNewFieldToFormByDoubleClicking('URL');
+            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
             //wait until you see Get another record model dialogue
             formBuilderPO.selectTableFromGetAnotherRecordDialog(CHILD_TABLE);

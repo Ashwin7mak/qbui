@@ -314,7 +314,7 @@ class formBuilderPage {
         //Select the table from the dropdown
         browser.element('.modal-dialog .Select-arrow').click();
         //wait for select outer menu
-        return formsPagePO.selectFromList(optionToSelect)
+        return formsPO.selectFromList(optionToSelect)
     }
 
     KB_cancel() {
