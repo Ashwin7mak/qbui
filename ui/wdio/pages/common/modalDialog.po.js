@@ -75,7 +75,7 @@ class modalDialogWindow {
             //Click on filtered button
             btns[0].click();
             //wait until loading screen disappear
-            return browser.waitForVisible('.modal-dialog .bodyContainer', e2eConsts.mediumWaitTimeMs, true);
+            return browser.waitForVisible('.modal-dialog .modal-footer', e2eConsts.mediumWaitTimeMs, true);
         } else {
             throw new Error('button with name ' + btnName + " not found on the " + this.modalDialogTitle + " dialog box");
         }
