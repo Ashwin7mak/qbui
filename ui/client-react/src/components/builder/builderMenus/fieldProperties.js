@@ -5,6 +5,7 @@ import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
 import MultiLineTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
 import FieldFormats from '../../../utils/fieldFormats';
 import Locale from '../../../../../reuse/client/src/locales/locale';
+import {I18nMessage} from '../../../utils/i18nMessage';
 import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
@@ -133,14 +134,16 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-
     createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
+        const field = table && _.find(table.fields, {id: this.props.selectedField.parentFieldId});
+
         return (
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
-                {table && <div className="linkToRecordPropertyValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+                {table && <div className="linkToRecordLinkedToValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+                {field && <div className="linkToRecordConnectedOnValue"><Icon icon="url"/> <I18nMessage message="fieldPropertyLabels.connectedTo" fieldName={field.name} /></div>}
             </div>
         );
     }
