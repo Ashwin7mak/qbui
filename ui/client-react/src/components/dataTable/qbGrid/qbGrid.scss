@@ -87,6 +87,10 @@ $edit-icon-font-size: 18px;
             }
         }
 
+        &.isDraggable {
+            cursor: move;
+        }
+
         // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
         &.stickyCell {
             z-index: $zindex-qbGrid-header-stickyCell;
@@ -100,11 +104,6 @@ $edit-icon-font-size: 18px;
             border-right: 1px solid $grid-column-header-border-color;
             width: 100%;
         }
-
-        &:hover {
-            cursor: move;
-        }
-
     }
 
     // leftmost cell of the table header that serves as the vertical header for the sticky row actions column

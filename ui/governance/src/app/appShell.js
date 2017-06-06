@@ -7,6 +7,9 @@ import TopNav from "../../../reuse/client/src/components/topNav/topNav";
 import LeftNav from "../common/leftNav/GovernanceLeftNav";
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
+
+import "./governanceAppShell.scss";
+
 export const GovernanceAppShell = (props) => (
     <AppShell functionalAreaName="governance">
         <LeftNav
@@ -14,7 +17,7 @@ export const GovernanceAppShell = (props) => (
             isNavOpen={props.isNavOpen}
             accountId={Number.parseInt(props.match.params.accountId)}
         >
-            <TopNav onNavClick={props.toggleNav} globalActions={
+            <TopNav onNavClick={props.toggleNav} hasNavItem={false} globalActions={
                 <DefaultTopNavGlobalActions
                     startTabIndex={4}
                     dropdownIcon="user"
@@ -25,7 +28,7 @@ export const GovernanceAppShell = (props) => (
             <Switch>
                 {props.routes !== undefined ? props.routes.map((route, i) => {
                     return (
-                            <RouteWithSubRoutes key={i} {...route} />
+                        <RouteWithSubRoutes key={i} {...route} />
                     );
                 }) : ''}
             </Switch>

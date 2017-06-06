@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
 import _ from "lodash";
 import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
+import {isFieldDeletable} from '../../../reducers/fields';
 import {CONTEXT} from "../../../actions/context";
 import * as tabIndexConstants from '../tabindexConstants';
 import "./fieldEditingTools.scss";
@@ -69,14 +70,16 @@ export class FieldEditingTools extends Component {
         }
         //Hide deleteFieldIcon if it is the last field on the form
         return (<div>
-            {this.props.numberOfFieldsOnForm > 1 &&
+                {this.props.numberOfFieldsOnForm > 1 &&
                 <div className="actionIcons">
+                    {this.props.isFieldDeletable &&
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                             <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}><QbIcon icon="clear-mini"/>
                             </button>
                         </QbToolTip>
                     </div>
+                    }
                 </div>}
             </div>
         );
@@ -206,11 +209,16 @@ FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     isDragging: PropTypes.bool,
-    formId: PropTypes.string
+    app: PropTypes.object,
+    tblId: PropTypes.string,
+    fieldId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    formId: PropTypes.string,
+    isFieldDeletable: PropTypes.bool
 };
 
 FieldEditingTools.defaultProps = {
     formId: CONTEXT.FORM.VIEW,
+    isDeletable: true
 };
 
 
@@ -233,7 +241,8 @@ const mapStateToProps = (state, ownProps) => {
         previouslySelectedField,
         formBuilderChildrenTabIndex,
         isDragging,
-        numberOfFieldsOnForm
+        numberOfFieldsOnForm,
+        isFieldDeletable: isFieldDeletable(state, ownProps.app, ownProps.tblId, ownProps.fieldId)
     };
 };
 

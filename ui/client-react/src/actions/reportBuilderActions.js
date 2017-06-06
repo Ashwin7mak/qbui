@@ -2,6 +2,7 @@ import FieldsService from '../services/fieldsService';
 import ReportService from '../services/reportService';
 import Promise from 'bluebird';
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import NavigationUtils from '../utils/navigationUtils';
 import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
@@ -34,6 +35,14 @@ function event(context, type, content) {
  */
 export const updateReportRedirectRoute = (context, route) => {
     return event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route});
+};
+
+/**
+ * Sets isPendingEdit to false.
+ * @param context
+ */
+export const setReportBuilderPendingEditToFalse = (context) => {
+    return event(context, types.SET_IS_PENDING_EDIT_TO_FALSE);
 };
 
 /**
@@ -126,21 +135,27 @@ export const changeReportName = (context, newName) => {
 /**
  * Save and updates the report with new data
  * @param appId
- * @param tableId
- * @param reportId
+ * @param tblId
+ * @param rptId
  * @param reportDef
- * @returns {function(*=)}
+ * @param redirectRoute
  */
-export const saveReport = (appId, tableId, reportId, reportDef) => {
-    return () => {
+export const saveReport = (appId, tblId, rptId, reportDef, redirectRoute) => {
+    return (dispatch) => {
         return new Promise((resolve, reject) => {
-            if (appId && tableId && reportId) {
+            if (appId && tblId && rptId) {
                 let reportService = new ReportService();
-                reportService.updateReport(appId, tableId, reportId, reportDef)
-                    .then(() => {
-                        logger.debug('ReportService saveReport success');
+                reportService.updateReport(appId, tblId, rptId, reportDef)
+                    .then((response) => {
+                        logger.debug('ReportService updateReport success');
+                        dispatch(event(null, types.SET_IS_PENDING_EDIT_TO_FALSE));
+                        NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
                         NotificationManager.success(Locale.getMessage('report.notification.save.success'), Locale.getMessage('success'));
                         resolve();
+                    }, (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.updateReport');
+                        NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                        reject();
                     })
                     .catch((ex) => {
                         logger.logException(ex);
@@ -148,7 +163,7 @@ export const saveReport = (appId, tableId, reportId, reportDef) => {
                         reject();
                     });
             } else {
-                logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tableId: ${tableId}`);
+                logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
                 reject();
             }
         });

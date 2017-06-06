@@ -24,7 +24,11 @@ export const FieldElement = React.createClass({
         fieldRecord: React.PropTypes.object, // the record data
         includeLabel: React.PropTypes.bool, // render label above field (otherwise ignore it)
         appUsers: React.PropTypes.array.isRequired, // app users,
-        removeFieldFromForm: React.PropTypes.func
+        removeFieldFromForm: React.PropTypes.func,
+        goToParent: React.PropTypes.func, //handles drill down to parent
+        masterTableId: React.PropTypes.string,
+        masterAppId: React.PropTypes.string,
+        masterFieldId: React.PropTypes.number
     },
 
     getChanges(theVals) {
@@ -135,6 +139,10 @@ export const FieldElement = React.createClass({
                                                includeUnits={true}
                                                fieldDef={this.props.relatedField}
                                                label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                                               goToParent={this.props.goToParent}
+                                               masterTableId={this.props.masterTableId}
+                                               masterAppId={this.props.masterAppId}
+                                               masterFieldId={this.props.masterFieldId}
             />;
         }
 

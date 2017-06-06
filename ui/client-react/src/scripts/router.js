@@ -31,6 +31,7 @@ import {APPS_ROUTE, APP_ROUTE, AUTOMATION_PATH, BUILDER_ROUTE, ADMIN_ROUTE, SETT
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
 import {updateForm, saveFormComplete, setFormBuilderPendingEditToFalse} from '../actions/formActions';
+import {setReportBuilderPendingEditToFalse, saveReport} from '../actions/reportBuilderActions';
 import {setFieldsPropertiesPendingEditToFalse} from '../actions/fieldsActions';
 import {getNavReport} from '../reducers/report';
 
@@ -54,11 +55,13 @@ let storeFunc = {
     updateRecord,
     hideTrowser,
     updateForm,
+    saveReport,
     saveFormComplete,
     showErrorMsgDialog,
     getNavReport,
     setFieldsPropertiesPendingEditToFalse,
-    setFormBuilderPendingEditToFalse
+    setFormBuilderPendingEditToFalse,
+    setReportBuilderPendingEditToFalse
 };
 //  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;
