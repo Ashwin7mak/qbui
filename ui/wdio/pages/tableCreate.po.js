@@ -9,6 +9,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let loadingSpinner = requirePO('/common/loadingSpinner');
     let reportContentPO = requirePO('reportContent');
+    let modalDialog = requirePO('/common/modalDialog');
     const tableNameFieldTitle = "Table name";
 
     let tablesPage = Object.create(e2ePageBase, {
@@ -16,17 +17,12 @@
         newTableBtn : {get: function() {return browser.element('.tablesList .newTableItem .newTable');}},
         //New table Icon
         newTableIconBtn : {get: function() {return browser.element('.newTableItem .newTable .iconUISturdy-add-new-stroke');}},
-        //new table container
-        tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
-        //new table header
-        tableHeader : {get: function() {return this.tableContainer.element('.modal-title');}},
-        //new table description
-        tableDescription : {get: function() {return this.tableContainer.element('.pageContainer .description');}},
-        //new table title
-        tableTitle : {get: function() {return this.tableContainer.element('.pageContainer .title');}},
 
-        //table close
-        tableCloseBtn : {get: function() {return browser.element('.modal-dialog .iconUISturdy-close');}},
+        //new table description
+        tableDescription : {get: function() {return modalDialog.modalDialogContainer.element('.pageContainer .description');}},
+        //new table title
+        tableTitle : {get: function() {return modalDialog.modalDialogContainer.element('.pageContainer .title');}},
+
         //table help
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
@@ -60,8 +56,6 @@
 
         //Delete Table
         deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
-        deletePromtTextField: {get: function() {return browser.element('.modal-dialog .deleteTableDialogContent .prompt');}},
-
 
 
         /**
@@ -224,9 +218,7 @@
          */
         clickCloseBtn : {value: function() {
             //Wait until Finished button visible
-            this.tableCloseBtn.waitForVisible();
-            //Click on finished button
-            this.tableCloseBtn.click();
+            modalDialog.modalDialogCloseBtn.click();
             //Need this to wait for container to slide away
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
@@ -236,9 +228,9 @@
          */
         verifyTable : {value: function() {
             //Wait until table container visible
-            this.tableContainer.waitForVisible();
+            modalDialog.modalDialogContainer.waitForVisible();
             //Verify table header
-            expect(this.tableHeader.getAttribute('textContent')).toContain('New Table');
+            expect(modalDialog.modalDialogTitle).toContain('New Table');
             //Verify table header description
             expect(this.tableDescription.getAttribute('textContent')).toContain('Create a new table when you want to collect a new type of information.');
             //Verify table title
@@ -250,7 +242,7 @@
             //Verify create button is disabled
             expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
             //verify close button enabled
-            expect(browser.isEnabled('.modal-dialog .iconUISturdy-close')).toBe(true);
+            expect(modalDialog.modalDialogCloseBtn.isEnabled()).toBe(true);
         }},
 
         /**
@@ -473,19 +465,14 @@
             this.deleteTableActionButton.waitForVisible();
             //Click on delete table action button
             this.deleteTableActionButton.click();
-            return browser.waitForExist('.modal-dialog .deleteTableDialogContent');
+            return modalDialog.deletePromptTextField.waitForVisible();
         }},
 
         /**
          * Set the deletePromtTextField value
          */
         setDeletePromtTextFieldValue: {value: function(fieldValue) {
-            //wait for model dialogue
-            browser.waitForExist('.modal-dialog .deleteTableDialogContent');
-            //wait for deletePromtTextField tobe visible
-            this.deletePromtTextField.waitForVisible();
-            //set the deletePromtTextField value to 'YES'
-            return this.deletePromtTextField.element('.deletePrompt').setValue([fieldValue]);
+            return modalDialog.deletePromptTextField.setValue([fieldValue]);
         }}
 
     });

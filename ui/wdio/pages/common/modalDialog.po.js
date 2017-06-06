@@ -11,27 +11,49 @@ class modalDialogWindow {
 
     get modalDialog() {
         // modal dialog
+        browser.element('.modal-dialog').waitForVisible();
         return browser.element('.modal-dialog');
+    }
+
+    get modalDialogCloseBtn() {
+        // modal dialog
+        browser.element('.modal-dialog .iconUISturdy-close').waitForVisible();
+        return browser.element('.modal-dialog .iconUISturdy-close');
+    }
+
+    get modalDialogContainer() {
+        //modal dialog container
+        this.modalDialog.element('.bodyContainer').waitForVisible();
+        return this.modalDialog.element('.bodyContainer');
     }
 
     get modalDialogTitle() {
         // modal dialog title
-        return this.modalDialog.element('.bodyContainer .modal-title .title').getAttribute('textContent');
+        return this.modalDialogContainer.element('.modal-title').getAttribute('textContent');
     }
 
     get modalDialogFooterButtons() {
         // modal dialog footer buttons
+        this.modalDialog.element('.modal-footer .buttons button').waitForVisible();
         return this.modalDialog.elements('.modal-footer .buttons button');
     }
 
     get modalDialogPrimaryButton() {
         // modal dialog footer buttons
-        return this.modalDialog.element('.modal-dialog .modal-footer .primaryButton');
+        this.modalDialog.element('.modal-footer .buttons .primaryButton').waitForVisible();
+        return this.modalDialog.element('.modal-footer .buttons .primaryButton');
     }
 
     get modalDialogSecondaryButton() {
         // modal dialog footer buttons
-        return this.modalDialog.element('.modal-dialog .modal-footer .secondaryButton');
+        this.modalDialog.element('.modal-footer .buttons .secondaryButton').waitForVisible();
+        return this.modalDialog.element('.modal-footer .buttons .secondaryButton');
+    }
+
+    get deletePromptTextField() {
+        //Delete prompt textField
+        this.modalDialog.element('.deleteTableDialogContent .prompt .deletePrompt').waitForVisible();
+        return this.modalDialog.element('.deleteTableDialogContent .prompt .deletePrompt');
     }
 
     /**
