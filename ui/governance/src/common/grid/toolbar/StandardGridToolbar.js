@@ -70,7 +70,7 @@ class StandardGridToolBar extends Component {
                             </div>
                         </div>
                         <div className="standardGridNavigation" >
-                            {(this.props.totalFilteredItems || this.props.totalItems) > constants.USERS_GRID_ITEMSPERPAGE &&
+                            {(this.props.totalFilteredItems || this.props.totalItems) > this.props.numberOfItemsPerPage &&
                                 <StandardGridNavigation className="standardGridNavigation"
                                                         getPreviousPage={this.props.getPreviousPage}
                                                         getNextPage={this.props.getNextPage}
@@ -133,6 +133,7 @@ StandardGridToolBar.propTypes = {
     shouldSearch: PropTypes.bool,
     onSearchChange: PropTypes.func.isRequired,
     searchTerm: PropTypes.string,
+    numberOfItemsPerPage: PropTypes.number
 };
 
 const mapStateToProps = (state, ownProps) => {
