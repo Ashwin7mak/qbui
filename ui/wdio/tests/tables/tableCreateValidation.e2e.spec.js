@@ -111,8 +111,6 @@
 
                 //Cancel table dialogue
                 modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_DLG_CANCEL_BTN);
-                //Need this for dialog to slide away
-                browser.pause(e2eConsts.shortWaitTimeMs);
 
                 //Get the new count of table links in the left nav
                 let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;

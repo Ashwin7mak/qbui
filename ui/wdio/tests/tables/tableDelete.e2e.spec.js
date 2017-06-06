@@ -74,8 +74,6 @@
 
             //Click don't delete table button
             modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
-            //Need this for dialog to slide away
-            browser.pause(e2eConsts.shortWaitTimeMs);
 
             //Click on go back to apps Link
             tableCreatePO.clickBackToAppsLink();

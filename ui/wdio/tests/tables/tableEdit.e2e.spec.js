@@ -187,8 +187,6 @@
 
             //Click OK button on create table dialogue
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
-            //Need small wait for the container to dissapear
-            browser.pause(e2eConsts.mediumWaitTimeMs);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
