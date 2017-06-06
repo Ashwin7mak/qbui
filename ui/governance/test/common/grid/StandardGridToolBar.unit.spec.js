@@ -18,7 +18,7 @@ describe('StandardGridToolBar', () => {
 
     it('should render with navigation, search and itemsCount component', () => {
 
-        let mockSearchTerm="test search";
+        let mockSearchTerm = "test search";
 
         let component = mount(
             <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}, searchTerm: mockSearchTerm}}})}>
