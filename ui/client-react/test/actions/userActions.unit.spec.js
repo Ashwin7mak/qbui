@@ -32,6 +32,13 @@ function event(type, id, content) {
     };
 }
 
+function userEvent(type, content) {
+    return {
+        type,
+        content: content || null
+    };
+}
+
 describe('App Actions success workflow functions', () => {
 
     let responseData = {
@@ -83,7 +90,7 @@ describe('App Actions success workflow functions', () => {
         // the mock store makes the actions dispatched available via getActions()
         // so we don't need to spy on the dispatcher etc.
         const expectedActions = [
-            event(types.SEARCH_USERS_SUCCESS, null, responseData.data)
+            userEvent(types.SEARCH_USERS_SUCCESS, {searchedUsers: responseData.data})
         ];
 
         const store = mockStore({});
