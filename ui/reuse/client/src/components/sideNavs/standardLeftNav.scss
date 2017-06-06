@@ -236,4 +236,19 @@
             opacity: 0;
         }
     }
+
+    .standardLeftNavPrimaryActions {
+        .primaryAction {
+
+            .navItemPrimaryAction {
+                .primaryNavItem {
+                    margin: 10px 50px 10px 0px;
+
+                    .navItemSecondaryIcon {
+                      margin-left: -1px;
+                    }
+                }
+            }
+        }
+    }
 }
