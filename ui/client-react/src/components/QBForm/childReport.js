@@ -48,7 +48,7 @@ class ChildReport extends React.Component {
     loadReportRecordsCount() {
 
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        const hasParentDetails = !_.isUndefined(detailKeyFid) && !_.isUndefined(detailKeyValue);
+        const hasParentDetails = !_.isUndefined(detailKeyFid) && !_.isUndefined(detailKeyValue) && detailKeyValue !== null && detailKeyValue.length > 0;
         if (hasParentDetails) {
             // Display a filtered child report, the child report should only contain children that
             // belong to a parent. A child has a parent if its detailKey field contains the
