@@ -71,7 +71,6 @@ export const AppHomePageRoute = React.createClass({
     componentDidMount() {
         // no title for now...
         this.props.showTopNav();
-        this.props.setTopTitle();
         this.selectAppFromParams(_.get(this.props, 'match.params'));
         let flux = this.getFlux();
         flux.actions.doneRoute();
@@ -131,7 +130,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         resetTableDeleteNotification: () => {dispatch(notifyTableDeleted(false));},
-        showTopNav: () => dispatch(showTopNav())
+        showTopNav
     };
 };
 
