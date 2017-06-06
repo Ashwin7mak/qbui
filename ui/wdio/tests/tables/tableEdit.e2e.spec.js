@@ -7,7 +7,6 @@
     var tableCreatePO = requirePO('tableCreate');
     var formsPO = requirePO('formsPage');
     let ReportContentPO = requirePO('reportContent');
-    let leftNavPO = requirePO('leftNav');
     let modalDialog = requirePO('/common/modalDialog');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
@@ -169,6 +168,8 @@
 
             //Click on new table button
             tableCreatePO.clickCreateNewTable();
+            //Wait until table container visible
+            modalDialog.modalDialogContainer.waitForVisible();
 
             //Choose an Icon from Icon picker
             var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();

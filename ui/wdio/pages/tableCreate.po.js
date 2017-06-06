@@ -145,6 +145,8 @@
          * @returns Array of fields
          */
         getAllTableFieldsList: {get: function() {
+            //Wait until table container visible
+            modalDialog.modalDialogContainer.waitForVisible();
             browser.element('.tableInfo .sections .tableField').waitForVisible();
             return browser.elements('.tableInfo .sections .tableField');
         }},
