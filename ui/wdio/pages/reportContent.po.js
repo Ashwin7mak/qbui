@@ -428,7 +428,7 @@
         selectRowAndClickDeleteIcon: {value: function(recordRow) {
             this.recordCheckBoxes.value[recordRow].click();
             this.deleteIcon.waitForVisible();
-            return this.deleteIcon.click()
+            return this.deleteIcon.click();
         }},
 
         //Select a report from tables page with reportID being the index of the report
