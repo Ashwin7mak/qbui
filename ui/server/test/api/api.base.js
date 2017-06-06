@@ -61,10 +61,10 @@
         var DEFAULT_HEADERS = {};
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var PRIVATE_API_HEADERS = {};
-        var salt = generateSalt();
+        var apiSalt = generateSalt();
         PRIVATE_API_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
-        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode('e4d1d39f-3352-474e-83bb-74dda6c4d8d7', salt);
-        PRIVATE_API_HEADERS[PRIVATE_API_SALT_HEADER] = salt;
+        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode('e4d1d39f-3352-474e-83bb-74dda6c4d8d7', apiSalt);
+        PRIVATE_API_HEADERS[PRIVATE_API_SALT_HEADER] = apiSalt;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
         var TABLES_PROPERTIES = '/tableproperties/';
