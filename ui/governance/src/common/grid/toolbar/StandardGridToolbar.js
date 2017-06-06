@@ -5,15 +5,17 @@ import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
 import {connect} from "react-redux";
-import "./StandardGridToolBar.scss";
 import FacetSelections from "../../../../../reuse/client/src/components/facets/facetSelections";
 import StandardGridFacetsMenu from "./StandardGridFacetsMenu";
 import _ from "lodash";
+import constants from "../../../app/constants";
+
+import "./StandardGridToolBar.scss";
 
 /**
  * The toolbar for Standard Grid
  */
-class StandardGridToolBar extends React.Component {
+class StandardGridToolBar extends Component {
 
     handleFacetSelect = (facet, value) => {
         let newSelections = _.isEmpty(this.props.facetSelections) ? new FacetSelections() : this.props.facetSelections.copy();
@@ -67,10 +69,12 @@ class StandardGridToolBar extends React.Component {
                                 }
                             </div>
                         </div>
-                        <StandardGridNavigation className="standardGridNavigation"
-                                                getPreviousPage={this.props.getPreviousPage}
-                                                getNextPage={this.props.getNextPage}
-                                                id={this.props.id}/>
+                        {(this.props.totalFilteredItems || this.props.totalItems) > constants.USERS_GRID_ITEMSPERPAGE &&
+                            <StandardGridNavigation className="standardGridNavigation"
+                                                    getPreviousPage={this.props.getPreviousPage}
+                                                    getNextPage={this.props.getNextPage}
+                                                    id={this.props.id}/>
+                        }
                     </div>
                 </div>
             </div>
