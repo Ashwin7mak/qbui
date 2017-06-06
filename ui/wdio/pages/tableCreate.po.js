@@ -146,7 +146,6 @@
          */
         getAllTableFieldsList: {get: function() {
             //Wait until table container visible
-            modalDialog.modalDialogContainer.waitForVisible();
             browser.element('.tableInfo .sections .tableField').waitForVisible();
             return browser.elements('.tableInfo .sections .tableField');
         }},
@@ -191,7 +190,9 @@
             //Verify there is also + Icon associated with it
             this.newTableBtn.element('.iconUISturdy-add-new-stroke').waitForVisible();
             //Click on the new Table Btn
-            return this.newTableIconBtn.click();
+            this.newTableIconBtn.click();
+            //wait until modal dialog
+            return modalDialog.modalDialogContainer.waitForVisible();
         }},
 
         /**
