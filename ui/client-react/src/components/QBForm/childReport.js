@@ -11,7 +11,8 @@ import EmbeddedReportLink from '../report/embedded/embeddedReportLink';
 import EmbeddedAddChildLink from '../report/embedded/embeddedAddChildLink';
 import QueryUtils from '../../utils/queryUtils';
 import Breakpoints from '../../utils/breakpoints';
-
+import {CONTEXT} from '../../actions/context';
+import withUniqueId from '../hoc/withUniqueId';
 /**
  * This component renders child records as an embedded report. In small-breakpoint, we render a link
  * to a child report.
@@ -48,7 +49,7 @@ class ChildReport extends React.Component {
     loadReportRecordsCount() {
 
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        const hasParentDetails = !_.isUndefined(detailKeyFid) && !_.isUndefined(detailKeyValue);
+        const hasParentDetails = !_.isUndefined(detailKeyFid) && !_.isUndefined(detailKeyValue) && detailKeyValue !== null && detailKeyValue.length > 0;
         if (hasParentDetails) {
             // Display a filtered child report, the child report should only contain children that
             // belong to a parent. A child has a parent if its detailKey field contains the
@@ -75,7 +76,8 @@ class ChildReport extends React.Component {
 
     render() {
         const {appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        const validProps = [appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
+        let validProps = [appId, childAppId,  childTableId, childReportId, detailKeyFid].every(prop => prop || typeof prop === 'number');
+        validProps = validProps && !_.isUndefined(detailKeyValue);
         let rowOfButtons = false;
 
         let tableName;
@@ -138,4 +140,6 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(ChildReport);
+const connectedChildReportComponent = connect(null, mapDispatchToProps)(ChildReport);
+
+export default withUniqueId(connectedChildReportComponent, CONTEXT.REPORT.EMBEDDED);

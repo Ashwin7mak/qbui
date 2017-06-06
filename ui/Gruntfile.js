@@ -594,7 +594,8 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
                     //failing in CI
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
-                    //failing in CI
+                    // Removed due to configuration issue
+                    './wdio/tests/automations/settingsMenu.e2e.spec.js',
                     './wdio/tests/automations/automationsList.e2e.spec.js'
                 ],
                 suites: {
@@ -611,6 +612,7 @@ module.exports = function(grunt) {
                     relationships: [
                     ],
                     reports: [
+                        './wdio/tests/reports/reportBuilder.e2e.spec.js',
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
                         './wdio/tests/reports/reportTable.e2e.spec.js',
@@ -637,7 +639,8 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalLeftNav.e2e.spec.js'
                     ],
                     automations: [
-                        './wdio/tests/automations/settingsMenu.e2e.spec.js',
+                        // './wdio/tests/automations/settingsMenu.e2e.spec.js',
+                        // './wdio/tests/automations/automationsList.e2e.spec.js'
                     ]
                 }
             },
@@ -645,7 +648,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'forms,relationships,reports,tables,users,global,automations'
+                suite: 'forms,relationships,reports,tables,users,global'
             }
         },
 

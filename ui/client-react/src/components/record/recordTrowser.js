@@ -27,7 +27,11 @@ import {getPendEdits, getRecord} from '../../reducers/record';
 import {getRecordTitle} from '../../utils/formUtils';
 import './recordTrowser.scss';
 import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
-
+import {unloadEmbeddedReport} from '../../actions/reportActions';
+import NumberUtils from '../../utils/numberUtils';
+import constants from '../../../../common/src/constants';
+import * as UrlConsts from "../../constants/urlConstants";
+import QueryUtils from '../../utils/queryUtils';
 /**
  * trowser containing a record component
  *
@@ -286,7 +290,10 @@ export const RecordTrowser = React.createClass({
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+
+        //get the fields for the currently edited app/table
+        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields) &&
+            (this.props.reportData.tblId === this.props.editingTblId) && (this.props.reportData.appId === this.props.editingAppId)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
@@ -306,6 +313,8 @@ export const RecordTrowser = React.createClass({
                     this.props.syncForm(CONTEXT.FORM.VIEW);
                 }
 
+                //refresh the embedded report,after a child record is added to the embedded report
+                this.props.unloadEmbeddedReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT]);
                 if (next) {
                     this.nextRecord();
                 } else {
@@ -564,6 +573,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         openRecord:(recId, nextRecordId, prevRecordId) => {
             dispatch(openRecord(recId, nextRecordId, prevRecordId));
+        },
+        unloadEmbeddedReport: (context) => {
+            dispatch(unloadEmbeddedReport(context));
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));

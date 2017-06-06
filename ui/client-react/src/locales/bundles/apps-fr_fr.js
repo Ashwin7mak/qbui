@@ -583,7 +583,8 @@ export default {
             required: "Doit être rempli",
             multiChoice: "Les choix",
             unique: "Doit avoir des valeurs uniques",
-            linkToRecord: "Lien vers un enregistrement dans la table"
+            linkToRecord: "Lien vers un enregistrement dans la table",
+            connectedTo: "Connecté sur le champ {fieldName}"
         },
         builder: {
             tabs: {
@@ -645,7 +646,9 @@ export default {
                 dialogTitle: "Obtenir un autre disque",
                 addToForm: "Ajouter au formulaire",
                 tableChooserDescription: "Lorsque vous créez ou mettez à jour un {tableNoun}, vous pouvez rechercher et obtenir des informations à partir d'un enregistrement dans un autre tableau",
-                tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?"
+                tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?",
+                advancedSettingsHeading: "Réglages avancés",
+                fieldChooserDescription: "Pour obtenir un enregistrement dans la table {tableName}, une association automatique est réalisée à l'aide d'un champ unique et obligatoire. Pour sélectionner un autre champ, vous pouvez choisir parmi la liste ci-dessous. Vous ne pouvez pas modifier ce champ une fois que vous l'avez ajouté à votre formulaire."
             }
         },
         featureSwitchAdmin: {
@@ -759,7 +762,17 @@ export default {
         addUserToApp: {
             title: "Ajouter des utilisateurs à",
             description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle",
-            searching: "Recherche..."
+            searching: "Recherche...",
+            userSuccessTitle: "Votre application a un nouvel utilisateur!",
+            userSuccessText: "Faites-leur savoir qu'ils ont accès à votre application en partageant le lien avec eux.",
+            copy: "Copie",
+            email: "Email",
+            toCopy: "Cliquez pour copier dans le presse-papiers",
+            toEmail: "Cliquez pour envoyer un courriel",
+            userSuccessDialogOK: "Non merci",
+            copied: "Lien copié",
+            messageSubject:"Lien vers le {nom de l'application} Application",
+            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
         }
     }
 };

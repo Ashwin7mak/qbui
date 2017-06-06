@@ -5,6 +5,7 @@ import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
 import MultiLineTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
 import FieldFormats from '../../../utils/fieldFormats';
 import Locale from '../../../../../reuse/client/src/locales/locale';
+import {I18nMessage} from '../../../utils/i18nMessage';
 import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
@@ -133,14 +134,16 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-
     createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
+        const field = table && _.find(table.fields, {id: this.props.selectedField.parentFieldId});
+
         return (
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
-                {table && <div className="linkToRecordPropertyValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+                {table && <div className="linkToRecordLinkedToValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+                {field && <div className="linkToRecordConnectedOnValue"><Icon icon="url"/> <I18nMessage message="fieldPropertyLabels.connectedTo" fieldName={field.name} /></div>}
             </div>
         );
     }
@@ -176,8 +179,8 @@ export class FieldProperties extends Component {
      * @param required
      * @returns {XML}
      */
-    createRequiredProperty(required, key) {
-        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, 'required', key));
+    createRequiredProperty(required, key, isDisabled) {
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, 'required', key, isDisabled));
     }
 
     /**
@@ -200,11 +203,24 @@ export class FieldProperties extends Component {
      */
     findFieldProperties() {
         let key = 0;
+
+        let isRecordTitleField = false;
+        const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
+        if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
+            isRecordTitleField = true;
+        }
+
         let fieldPropContainers = [
             this.createPropertiesTitle(key++),
-            this.createNameProperty(this.props.selectedField.name, key++),
-            this.createRequiredProperty(this.props.selectedField.required, key++)
+            this.createNameProperty(this.props.selectedField.name, key++)
         ];
+
+        if (isRecordTitleField) {
+            fieldPropContainers.push(this.createRequiredProperty(true, key++, true));
+            fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
+        } else {
+            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
+        }
 
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
 
@@ -214,11 +230,6 @@ export class FieldProperties extends Component {
         } else if (formatType === FieldFormats.LINK_TO_RECORD) {
 
             fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField, key++));
-        }
-
-        const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
-        if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
-            fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
         }
 
         return fieldPropContainers;

@@ -390,40 +390,40 @@ export const QBForm = React.createClass({
         let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
             <div key={containingElement.id} className="formElementContainer">
-              <CurrentFieldElement
-                  selectedField={this.props.selectedField}
-                  tabIndex={tabIndex}
-                  location={location}
-                  orderIndex={FormFieldElement.orderIndex}
-                  formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
-                  beginDrag={this.props.beginDrag}
-                  handleFormReorder={this.props.handleFormReorder}
-                  containingElement={containingElement}
-                  element={FormFieldElement}
-                  key={`fieldElement-${containingElement.id}`}
-                  idKey={"fe-" + this.props.idKey}
-                  relatedField={relatedField}
-                  fieldId={_.get(relatedField, 'id', null)}
-                  fieldRecord={fieldRecord}
-                  includeLabel={true}
-                  indicateRequiredOnLabel={this.props.edit}
-                  isDisabled={isDisabled}
-                  edit={this.props.edit && !FormFieldElement.readOnly}
-                  onChange={this.props.onFieldChange}
-                  onBlur={this.props.onFieldChange}
-                  isInvalid={validationStatus.isInvalid}
-                  invalidMessage={validationStatus.invalidMessage}
-                  app={this.props.app}
-                  tblId={this.props.tblId}
-                  appUsers={this.props.appUsers}
-                  recId={recId}
-                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
-                  goToParent={goToParent}
-                  masterTableId={masterTableId}
-                  masterAppId={masterAppId}
-                  masterFieldId={masterFieldId}
-              />
+                <CurrentFieldElement
+                    selectedField={this.props.selectedField}
+                    tabIndex={tabIndex}
+                    location={location}
+                    orderIndex={FormFieldElement.orderIndex}
+                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
+                    beginDrag={this.props.beginDrag}
+                    handleFormReorder={this.props.handleFormReorder}
+                    containingElement={containingElement}
+                    element={FormFieldElement}
+                    key={`fieldElement-${containingElement.id}`}
+                    idKey={"fe-" + this.props.idKey}
+                    relatedField={relatedField}
+                    fieldId={_.get(relatedField, 'id', null)}
+                    fieldRecord={fieldRecord}
+                    includeLabel={true}
+                    indicateRequiredOnLabel={this.props.edit}
+                    isDisabled={isDisabled}
+                    edit={this.props.edit && !FormFieldElement.readOnly}
+                    onChange={this.props.onFieldChange}
+                    onBlur={this.props.onFieldChange}
+                    isInvalid={validationStatus.isInvalid}
+                    invalidMessage={validationStatus.invalidMessage}
+                    app={this.props.app}
+                    tblId={this.props.tblId}
+                    appUsers={this.props.appUsers}
+                    recId={recId}
+                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
+                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
+                    goToParent={goToParent}
+                    masterTableId={masterTableId}
+                    masterAppId={masterAppId}
+                    masterFieldId={masterFieldId}
+                />
             </div>
         );
     },
@@ -456,13 +456,14 @@ export const QBForm = React.createClass({
         // the field id is specified as 'masterFieldId' in the relationship object.
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
-        const detailKeyValue = _.get(fieldRecord, 'value');
+        const detailKeyValue = _.get(fieldRecord, 'value', null);
 
         // Find the child table's name.
         const tables = _.get(this, 'props.selectedApp.tables');
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
         const childTableNoun = childTable.tableNoun;
+        const parentIsBeingEdited = this.props.edit;
 
         // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
         // child record in a drawer.
@@ -485,6 +486,7 @@ export const QBForm = React.createClass({
                     relationship={relationship}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
+                    parentIsBeingEdited={parentIsBeingEdited}
                     handleDrillIntoChild={handleDrillIntoChild}
                 />
             </div>
