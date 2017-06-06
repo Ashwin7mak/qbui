@@ -229,7 +229,7 @@
             resolveHealthEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + HEALTH_ENDPOINT;
             },
-            resolveUsersEndpoint        : function(userId) {
+            resolvePrivateUsersEndpoint        : function(userId) {
                 var endpoint = JAVA_BASE_ENDPOINT + PRIVATE_USERS_ENDPOINT;
                 if (userId) {
                     endpoint = endpoint + userId;
@@ -467,7 +467,7 @@
             },
             //Create user helper method generates an specific user, calls execute request and returns a promise
             createSpecificUser: function(userToMake) {
-                return this.executeRequest(this.resolveUsersEndpoint(), consts.POST, userToMake, PRIVATE_API_HEADERS);
+                return this.executeRequest(this.resolvePrivateUsersEndpoint(), consts.POST, userToMake, PRIVATE_API_HEADERS);
             },
             //Create user helper method generates an arbitrary user, calls execute request and returns a promise
             createUser        : function() {
