@@ -99,6 +99,11 @@
                 return browser.element('.leftNav .tablesList .leftNavLabel');
             }
         },
+        leftNavAppsList:{
+            get: function() {
+                return browser.elements('.leftNav .appsList .leftNavLabel');
+            }
+        },
 
         /**
          * Method to click on leftNav search

@@ -9,10 +9,14 @@ import {getFields} from '../reducers/fields';
 const forms = (
 
     state = {}, action) => {
-
     const {id, formId} = action;
     // retrieve currentForm and assign the rest of the form to newState
-    let {[id || formId]: currentForm, ...newState} = _.cloneDeep(state);
+    // We use JSON.parse(JSON.stringify()) instead of _.cloneDeep in this case because:
+    // a) There was about 0.3 to 0.5 ms performance improvement and we need all the performance we can get for drag and drop
+    // b) It is a simple object, so no prototype information will be lost in the conversion.
+    // This is not a generally recommended practice. Consider either Object.assign, Object spread {...}, or _.cloneDeep before using this method.
+    let {[id || formId]: currentForm, ...newState} = JSON.parse(JSON.stringify(state));
+
     let updatedForm = currentForm;
 
     // TODO: do this smarter, change to markCopiesAsDirty
@@ -165,6 +169,7 @@ const forms = (
 
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
+
         return newState;
     }
 
@@ -556,8 +561,8 @@ export const getExistingFields = (state, id, appId, tblId) => {
  * @returns {Array}
  */
 export const getParentRelationshipsForSelectedFormElement = (state, id) => {
-    const currentForm = state.forms[id];
-    const formMeta = _.get(currentForm, 'formData.formMeta', {});
+    const currentForm = _.has(state, 'forms') ? state.forms[id] : null;
+    const formMeta = currentForm !== null ? _.get(currentForm, 'formData.formMeta', {}) : {};
     const relationships = !_.isEmpty(formMeta) && _.get(formMeta, 'relationships') ? formMeta.relationships : [];
 
     const tableId = formMeta.tableId;

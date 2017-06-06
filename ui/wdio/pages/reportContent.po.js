@@ -20,13 +20,14 @@
                 return checkBoxes;
             }},
         deleteIcon: {get: function() {return browser.element('.icon-delete span');}},
-
+        reportTitle: {get: function() {return browser.element('.formContainer .qbPanelHeaderTitleText');}},
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
         settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
         settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
+        tableHomepageLink: {get: function() {return browser.element('.tableHomepageLink');}},
 
         // Delete and Don't Delete button on modal dialog box
         deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},
@@ -128,6 +129,7 @@
          */
         waitForLeftNavLoaded : {value: function() {
             //wait for apps Toggle area
+            browser.element('.appsToggleArea').waitForExist();
             browser.element('.appsToggleArea').waitForVisible();
             //wait for table headings area
             browser.element('.tablesHeadingAndList .tablesHeading').waitForVisible();
@@ -338,9 +340,7 @@
         openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
-            browser.url(requestRecordPageEndPoint);
-            //wait until view form is visible
-            return formsPO.viewFormContainerEl.waitForVisible();
+            return browser.url(requestRecordPageEndPoint);
         }},
 
         /**

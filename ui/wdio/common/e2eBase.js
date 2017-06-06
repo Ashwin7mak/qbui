@@ -13,6 +13,7 @@
 
     module.exports = function(config) {
         var recordBase = require('../../server/test/api/recordApi.base.js')(config);
+        let AutomationApi = require('../../server/test/api/automationsApi.js');
         var e2eUtils = require('./e2eUtils.js');
         var appService = require('./services/appService.js');
         var recordService = require('./services/recordService.js');
@@ -22,6 +23,7 @@
         var userService = require('./services/userService.js');
         var roleService = require('./services/roleService.js');
         var relationshipService = require('./services/relationshipService.js');
+        let AutomationsService = require('./services/automationsService.js');
 
         var e2eBase = {
             // Instantiate recordBase module to use for your tests
@@ -52,6 +54,7 @@
             userService: userService(recordBase),
             roleService: roleService(recordBase),
             relationshipService: relationshipService(recordBase),
+            automationsService: new AutomationsService(new AutomationApi(recordBase.apiBase)),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
@@ -102,6 +105,7 @@
                 var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users');
                 return requestUsersEndPoint;
             },
+
             /**
              * Setup method that generates an app, table, list all report, forms, default table homepage, a set of users and a specified number of records
              * @param tableToFieldToFieldTypeMap - Map containing the structure of the app, tables and fields
@@ -168,6 +172,16 @@
                 }).catch(function(error) {
                     // Catch any errors and reject the promise with it
                     log.error('Error during basicAppSetup');
+                    return promise.reject(error);
+                });
+            },
+
+            createApp: function(app) {
+                return e2eBase.appService.createApp(app).then(function(appResponse) {
+                    //add more functionality as needed
+                    return appResponse;
+                }).catch(function(error) {
+                    log.error('Error during app creation.');
                     return promise.reject(error);
                 });
             },

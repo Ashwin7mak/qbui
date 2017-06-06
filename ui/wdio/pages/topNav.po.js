@@ -13,9 +13,14 @@
                 return browser.element('.topNav .center');
             }
         },
-        modifyThisForm: {
+        title: {
             get: function() {
-                return browser.element('.topNav .modifyForm');
+                return browser.element('.topNav .topTitle');
+            }
+        },
+        settingsBtn: {
+            get: function() {
+                return browser.element('.topNav .builder');
             }
         },
         // Feedback button topNav
@@ -28,6 +33,11 @@
         feedbackMenuButton: {
             get: function() {
                 return this.feedbackBtn.element('.feedbackMenuButton');
+            }
+        },
+        modifyThisForm: {
+            get: function() {
+                return browser.element('.topNav .modifyForm');
             }
         },
         //Report issue option in Feedback button
