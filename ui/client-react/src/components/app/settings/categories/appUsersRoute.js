@@ -184,7 +184,6 @@ export const AppUsersRoute = React.createClass({
                                existingUsers={this.props.appUsersUnfiltered}
                                addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
                                hideDialog={this.toggleAddUserDialog}
-                               successDialogOpen={this.props.successDialogOpen}
                                showSuccessDialog={this.props.showSuccessDialog}
                 />
                 <UserSuccessDialog successDialogOpen={this.props.successDialogOpen}
