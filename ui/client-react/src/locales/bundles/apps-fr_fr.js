@@ -231,7 +231,8 @@ export default {
                     success: "Enregistrement approuvé.",
                     error: "Une erreur s'est produite lors de l'approbation de ce document."
                 }
-            }
+            },
+            noParentRecordSelected: "Aucun enregistrement sélectionné"
         },
         relationship: {
             childTable: "Table Enfant",

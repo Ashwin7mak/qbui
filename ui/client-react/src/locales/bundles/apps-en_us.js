@@ -235,7 +235,8 @@ export default {
                     success: "Record Approved.",
                     error: "An error occured when approving this record."
                 }
-            }
+            },
+            noParentRecordSelected: "No record selected"
         },
         relationship: {
             childTable: "Child Table",

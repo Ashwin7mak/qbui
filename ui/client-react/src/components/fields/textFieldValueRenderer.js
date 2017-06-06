@@ -1,6 +1,7 @@
 import React from 'react';
 import './fields.scss';
 import _ from 'lodash';
+import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
 /**
  * # TextFieldValueRenderer
  *
@@ -63,12 +64,17 @@ const TextFieldValueRenderer = React.createClass({
      * @return {XML}
      */
     getParentLink(classes, htmlAllowed) {
-        classes += ' textLink';
-        if (htmlAllowed) {
-            return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.display}}
-                         onClick={this.handleClick}/>;
+        if (this.props.display) {
+            classes += ' textLink';
+            if (htmlAllowed) {
+                return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.display}}
+                             onClick={this.handleClick}/>;
+            } else {
+                return <span className={classes} onClick={this.handleClick}>{_.unescape(this.props.display)}</span>;
+            }
         } else {
-            return <span className={classes} onClick={this.handleClick}>{_.unescape(this.props.display)}</span>;
+            classes += ' italicize';
+            return <span className={classes}><I18nMessage message="form.noParentRecordSelected"/></span>;
         }
     },
 
