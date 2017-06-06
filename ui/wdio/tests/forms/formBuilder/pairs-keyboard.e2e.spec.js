@@ -5,6 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
+    let formsPO = requirePO('formsPage');
 
     let realmName;
     let realmId;
@@ -42,7 +43,9 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                e2ePageBase.viewFirstRecordInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+                //wait until view form is visible
+                return formsPO.viewFormContainerEl.waitForVisible();
             });
 
             beforeEach(function() {

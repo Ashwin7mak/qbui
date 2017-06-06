@@ -105,11 +105,7 @@
                 var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users');
                 return requestUsersEndPoint;
             },
-            // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
-            getRequestViewFirstRecordEndpoint: function(realmName, appId, tableId, reportId) {
-                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/1');
-                return requestReportsPageEndPoint;
-            },
+
             /**
              * Setup method that generates an app, table, list all report, forms, default table homepage, a set of users and a specified number of records
              * @param tableToFieldToFieldTypeMap - Map containing the structure of the app, tables and fields
