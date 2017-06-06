@@ -14,7 +14,8 @@ const routes = [
     '/settings/app/:appId/properties',
     '/settings/app/:appId/automation',
     '/settings/app/:appId/table/:tblId/properties',
-    '/app/:appId/table/:tblId/report/:rptId/record/:recordId/sr_app_:appId_table_:tblId_report_:rptIrecordd_record_:recId*'
+    '/app/:appId/table/:tblId/report/:rptId/record/:recordId/sr_app_:appId_table_:tblId_report_:rptId_record_:recId*',
+    '/app/:appId/table/:tblId/report/:rptId/record/:recordId/sr_report_app_:appId_table_:tblId_report_:rptId_dtFid_:dtlFid_dtVal_:dtVal*'
 ];
 
 // Routes related to base app functionality (viewing data, modifying records, etc.)
