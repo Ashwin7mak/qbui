@@ -18,6 +18,10 @@ class FieldFormats {
                 return FieldFormats.LINK_TO_RECORD;
             }
 
+            if (_.has(fieldDef, 'parentTableId')) {
+                return FieldFormats.LINK_TO_RECORD;
+            }
+
             switch (fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
@@ -87,7 +91,6 @@ class FieldFormats {
                 if (numLines > 1) {
                     return FieldFormats.MULTI_LINE_TEXT_FORMAT;
                 }
-
                 return FieldFormats.TEXT_FORMAT;
 
             case serverTypeConsts.TEXT_FORMULA :

@@ -16,6 +16,7 @@ describe('LinkToRecordValueEditor functions', () => {
     //props object for a edit/view form
     let existingRecordProps = {};
 
+    const parentTableFields = {id: 1, datatypeAttributes: {type: 'TEXT'}};
     //common props
     const props = {
         hideRelationshipDialog: () => {},
@@ -23,8 +24,22 @@ describe('LinkToRecordValueEditor functions', () => {
         removeFieldFromForm: () => {},
         tblId: "childTableId",
         tables: [
-            {id: "childTableId", name: "childTable", tableIcon: "childIcon", tableNoun: "child"},
-            {id: "parentTableId", name: "parentTable", tableIcon: "parentIcon", tableNoun: "parent"}
+            {
+                id: "childTableId",
+                name: "childTable",
+                tableIcon: "childIcon",
+                tableNoun: "child",
+                fields: []
+            },
+            {
+                id: "parentTableId",
+                name: "parentTable",
+                tableIcon: "parentIcon",
+                tableNoun: "parent",
+                fields: [
+                    parentTableFields
+                ]
+            }
         ],
         childTableId: "childTableId",
         location: {},
@@ -58,7 +73,7 @@ describe('LinkToRecordValueEditor functions', () => {
         spyOn(newRecordProps, "updateField");
         component = shallow(<LinkToRecordFieldValueEditor {...newRecordProps}/>);
 
-        component.instance().tableSelected("parentTableId");
+        component.instance().relationshipSelected("parentTableId", parentTableFields);
         expect(newRecordProps.hideRelationshipDialog).toHaveBeenCalled();
         expect(newRecordProps.updateField).toHaveBeenCalled();
     });
