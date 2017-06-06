@@ -20,6 +20,20 @@ function event(type, appId, content) {
     };
 }
 
+/**
+ * Construct user store payload
+ *
+ * @param type - event type
+ * @param content - optional content related to event type
+ * @returns {{type: *, content: *}}
+ */
+function userEvent(type, content) {
+    return {
+        type,
+        content: content || null
+    };
+}
+
 export const loadAppOwner = (appId, userId) => {
     //  promise is returned in support of unit testing only
     return (dispatch) => {
@@ -65,7 +79,7 @@ export const searchUsers = (searchTerm) => {
             let userService = new UserService();
             userService.searchUsers(searchTerm).then(
                 response => {
-                    dispatch(event(types.SEARCH_USERS_SUCCESS, null, response.data));
+                    dispatch(userEvent(types.SEARCH_USERS_SUCCESS, {searchedUsers: response.data}));
                     resolve();
                 },
                 (error) => {
@@ -79,10 +93,7 @@ export const searchUsers = (searchTerm) => {
 };
 
 export const setUserRoleToAdd = (roleId) => {
-    return {
-        type: types.SET_USER_ROLE_TO_ADD,
-        roleId: roleId
-    };
+    return userEvent(types.SET_USER_ROLE_TO_ADD, {roleId: roleId});
 };
 
 /**
@@ -92,10 +103,7 @@ export const setUserRoleToAdd = (roleId) => {
  * @returns {{type, status: *}}
  */
 export const openAddUserDialog = (status) => {
-    return {
-        type: types.TOGGLE_ADD_USER_DIALOG,
-        status: status
-    };
+    return userEvent(types.TOGGLE_ADD_USER_DIALOG, {status: status});
 };
 
 /**
@@ -105,21 +113,15 @@ export const openAddUserDialog = (status) => {
  * @returns {{type, selectedUsers: *}}
  */
 export const selectUserRows = (selected) => {
-    return {
-        type: types.SELECT_USER_ROWS,
-        selectedUsers: selected
-    };
+    return userEvent(types.SELECT_USER_ROWS, {selectedUsers: selected});
 };
 
 /**
  * Clear all selected user rows in user management grid
  *
- * @returns {{type, selectedUsers: Array}}
+ * @returns {{type, selectedUsers: *}}
  */
 export const clearSelectedUserRows = () => {
-    return {
-        type: types.SELECT_USER_ROWS,
-        selectedUsers: []  // empty list
-    };
+    return userEvent(types.SELECT_USER_ROWS, {selectedUsers: []});
 };
 
