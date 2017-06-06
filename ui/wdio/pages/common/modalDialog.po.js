@@ -2,11 +2,12 @@
 
 class modalDialogWindow {
     get CREATE_TABLE_BTN() {return 'Create table';}
-    get CREATE_TABLE_DLG_CANCEL_BTN() {return 'Cancel';}
+    get CANCEL_BTN() {return 'Cancel';}
     get TABLE_READY_DLG_OK_BTN() {return 'OK';}
     get TABLE_DELETE_BTN() {return 'Delete table';}
     get DELETE_BTN() {return 'Delete';}
     get DONT_DELETE_BTN() {return  "Don't delete";}
+    get REMOVE_BTN() {return  "Remove";}
 
     get modalDialog() {
         // modal dialog
@@ -26,6 +27,11 @@ class modalDialogWindow {
     get modalDialogPrimaryButton() {
         // modal dialog footer buttons
         return this.modalDialog.element('.modal-dialog .modal-footer .primaryButton');
+    }
+
+    get modalDialogSecondaryButton() {
+        // modal dialog footer buttons
+        return this.modalDialog.element('.modal-dialog .modal-footer .secondaryButton');
     }
 
     /**

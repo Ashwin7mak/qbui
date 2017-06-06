@@ -110,7 +110,7 @@
                 expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
 
                 //Cancel table dialogue
-                modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_DLG_CANCEL_BTN);
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
 
                 //Get the new count of table links in the left nav
                 let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
