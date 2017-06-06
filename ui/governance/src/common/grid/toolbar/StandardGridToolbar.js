@@ -69,12 +69,15 @@ class StandardGridToolBar extends Component {
                                 }
                             </div>
                         </div>
-                        {(this.props.totalFilteredItems || this.props.totalItems) > constants.USERS_GRID_ITEMSPERPAGE &&
-                            <StandardGridNavigation className="standardGridNavigation"
-                                                    getPreviousPage={this.props.getPreviousPage}
-                                                    getNextPage={this.props.getNextPage}
-                                                    id={this.props.id}/>
-                        }
+                        <div className="standardGridNavigation" >
+                            {(this.props.totalFilteredItems || this.props.totalItems) > constants.USERS_GRID_ITEMSPERPAGE &&
+                                <StandardGridNavigation className="standardGridNavigation"
+                                                        getPreviousPage={this.props.getPreviousPage}
+                                                        getNextPage={this.props.getNextPage}
+                                                        id={this.props.id}
+                                />
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
