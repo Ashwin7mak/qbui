@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import {AppsRoute, _RewireAPI__ as AppsRouteRewireAPI}  from '../../src/components/apps/appsRoute';
+import {AppsRoute, __RewireAPI__ as AppsRouteRewireAPI}  from '../../src/components/apps/appsRoute';
 import HtmlUtils from '../../src/utils/htmlUtils';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import {DEFAULT_PAGE_TITLE} from '../../src/constants/urlConstants';
