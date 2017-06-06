@@ -230,11 +230,23 @@ export default {
                     error: "Error saving form"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Record Approved.",
-                    error: "An error occured when approving this record."
-                }
+        },
+        automation: {
+            approverecord: {
+                success: "Record Approved.",
+                error: "An error occured when approving this record."
+            },
+            testautomation: {
+                success: "Automation Test Successful.",
+                error: "An error occured when testing this automation."
+            },
+            automationList: {
+                nameHeader: "Name",
+                activeHeader: "Active",
+                actionHeader: "Action",
+                actionButton: "Test",
+                activeYes: "Yes",
+                activeNo: "No"
             }
         },
         relationship: {
@@ -762,12 +774,6 @@ export default {
                 prompt: "Type YES to confirm that you want to delete this table"
             },
             YES: "YES"
-        },
-        automationList: {
-            nameHeader: "Name",
-            activeHeader: "Active",
-            activeYes: "Yes",
-            activeNo: "No"
         },
         addUserToApp: {
             title: "Add users to",
