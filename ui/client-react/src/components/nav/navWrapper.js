@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 import Nav from './nav';
 import * as ReportActions from '../../actions/reportActions';
@@ -139,7 +138,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavWrapper));
+export default connect(mapStateToProps, mapDispatchToProps)(NavWrapper);
 
 
 

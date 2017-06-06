@@ -53,7 +53,7 @@ export default {
                 cancel: "Cancel",
                 plural: "users",
                 usersRemovedFromAppRole: "{numOfUsers} users removed from the app role",
-                userRemovedFromAppRole: "User removed removed from the app role",
+                userRemovedFromAppRole: "User removed from the app role",
                 userAdded: "User added",
                 userAddError: "Error adding user",
                 userRemovingError: "Error removing user"
