@@ -53,7 +53,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         const parentTable = _.find(this.props.tables, {id: tableId});
 
         // update the field with the parent table ID and a name incorporating the selected table
-        const field = this.props.fieldDef;
+        const field = _.cloneDeep(this.props.fieldDef);
         field.parentTableId = tableId;
         field.parentFieldId = parentField.id;
         field.parentFieldType = parentField.datatypeAttributes.type;
