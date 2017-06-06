@@ -303,7 +303,7 @@ export const ReportGrid = React.createClass({
                     onStartEditingRow={this.startEditingRow}
                     editingRowId={editingRecordId}
                     isInlineEditOpen={isInLineEditOpen}
-                    isDraggable={true}
+                    isDraggable={this.props.isDraggable}
                     selectedRows={this.props.selectedRows}
                     areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
                     onClickToggleSelectedRow={this.props.toggleSelectedRow}
@@ -361,7 +361,8 @@ const mapStateToProps = (state) => {
     return {
         report: state.report,
         record: state.record,
-        searchString: state.search && state.search.searchInput
+        searchString: state.search && state.search.searchInput,
+        isDraggable: state.reportBuilder.isInBuilderMode
     };
 };
 
