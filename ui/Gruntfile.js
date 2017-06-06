@@ -593,7 +593,10 @@ module.exports = function(grunt) {
                     // Stabilize in CI before enabling
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
                     //failing in CI
-                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    // Removed due to configuration issue
+                    './wdio/tests/automations/settingsMenu.e2e.spec.js',
+                    './wdio/tests/automations/automationsList.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -636,8 +639,8 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalLeftNav.e2e.spec.js'
                     ],
                     automations: [
-                        './wdio/tests/automations/settingsMenu.e2e.spec.js',
-                        './wdio/tests/automations/automationsList.e2e.spec.js'
+                        // './wdio/tests/automations/settingsMenu.e2e.spec.js',
+                        // './wdio/tests/automations/automationsList.e2e.spec.js'
                     ]
                 }
             },
