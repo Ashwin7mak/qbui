@@ -36,7 +36,7 @@ class StandardGridToolBar extends React.Component {
                         <GenericFilterSearchBox searchBoxKey={`${this.props.id}_searchBox`}
                                                 placeholder={`Search ${this.props.itemTypePlural}`}
                                                 onChange={this.props.onSearchChange}
-                                                clearSearchString={this.props.clearSearchTerm}
+                                                clearSearchTerm={this.props.clearSearchTerm}
                                                 searchTerm={this.props.searchTerm}
                         />
                         }
