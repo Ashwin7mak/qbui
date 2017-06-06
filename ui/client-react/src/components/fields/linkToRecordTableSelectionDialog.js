@@ -81,7 +81,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         const placeHolderMessage = Locale.getMessage("selection.tablesPlaceholder");
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
 
-        const tableChoices = _.reject(this.props.tables, table => table.id === this.props.childTableId || !table.recordTitleFieldId);
+        const tableChoices = _.reject(this.props.tables, table => table.id === this.props.childTableId);
         const choices = tableChoices.map(table => {
             return {
                 value: table.id,
