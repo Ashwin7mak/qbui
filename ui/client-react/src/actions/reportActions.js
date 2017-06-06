@@ -214,7 +214,6 @@ const getDynamicReportResults = (context, {appId, tblId, rptId, queryParams, for
         });
 };
 
-
 /**
  * Utility function for handling rejected promises.
  * This is a curried function which returns a function expecting 2 parameters, which returns another
@@ -306,19 +305,6 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
         }
     };
 };
-
-/**
- * enable/disable scrolling
- * @param isScrolling
- * @returns {{type, isScrolling: boolean}}
- */
-export const scrollingReport = (isScrolling = true) => {
-    return {
-        type: types.SCROLLING_REPORT,
-        isScrolling
-    };
-};
-
 
 /**
  * Called when an embedded report is being unmounted. We want to clear its report entry from the

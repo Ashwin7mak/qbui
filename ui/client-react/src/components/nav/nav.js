@@ -500,7 +500,7 @@ export const Nav = React.createClass({
                                 selectedUserRows: this.state.apps.selectedUserRows,
                                 realmUsers: this.state.apps.realmUsers,
                                 addUserToAppDialogOpen: this.state.apps.addUserToAppDialogOpen,
-                                scrollingReport: this.props.report.scrollingReport,
+                                scrollingReport: this.props.shell.scrollingReport,
                                 flux: flux,
                                 userRoleIdToAdd: this.state.apps.userRoleIdToAdd,
                             };

@@ -129,3 +129,17 @@ export const filterReportsByName = (reportName = "") => {
     };
 };
 
+
+/**
+ * enable/disable scrolling
+ * @param isScrolling
+ * @returns {{type, isScrolling: boolean}}
+ */
+export const scrollingReport = (isScrolling = true) => {
+    return {
+        type: types.SCROLLING_REPORT,
+        isScrolling
+    };
+};
+
+
