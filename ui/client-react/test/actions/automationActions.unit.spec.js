@@ -6,11 +6,15 @@ import {CONTEXT} from "../../src/actions/context";
 import mockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
-
+import Logger from '../../src/utils/logger';
+import LogLevel from '../../src/utils/logLevels.js';
 
 let appId = 1;
 let context = CONTEXT.AUTOMATION.GRID;
 let automationName = "SendEmailAction";
+let logger = new Logger();
+logger.logToConsole = true;
+
 
 // mock the Redux store when testing async action creators
 const middlewares = [thunk];
@@ -93,6 +97,9 @@ describe('Test AutomationActions function success workflow', () => {
                 done();
             },
             (error) => {
+                if(error) {
+                    logger.parseAndLogError(LogLevel.INFO, error, 'automationActions' );
+                }
                 expect(false).toBe(true);
                 done();
             });
