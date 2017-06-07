@@ -184,7 +184,7 @@
                 // store the list of new column labels
                 let newColumnLabels = reportBuilderPO.getHeaderLabels();
                 // store the column label just added to the front
-                let addedColumnLabel = reportBuilderPO.getHeaderLabels()[0];
+                let addedColumnLabel = newColumnLabels[0];
                 // get the two columns to reorder
                 let source = reportBuilderPO.getReportLocator(3);
                 let target = reportBuilderPO.getReportLocator(4);
@@ -207,8 +207,8 @@
                 expect(columnsAfterSave).not.toContain(toBeHiddenColumnLabel);
                 // verify that the added column is in the table
                 expect(columnsAfterSave).toContain(addedColumnLabel);
-                expect(columnsAfterSave[2]).toEqual(newColumnLabels[3]);
-                expect(columnsAfterSave[3]).toEqual(newColumnLabels[2]);
+                expect(columnsAfterSave[1]).toEqual(newColumnLabels[3]);
+                expect(columnsAfterSave[2]).toEqual(newColumnLabels[2]);
             });
         }
     });

@@ -110,16 +110,19 @@ class reportBuilderPage {
 
     clickHideMenuOption() {
         this.hideMenuOption.click();
+        browser.pause(fiveSeconds);
         return this;
     }
 
     clickAddBeforeMenuOption() {
         this.addBeforeMenuOption.click();
+        browser.pause(fiveSeconds);
         return this;
     }
 
     clickFieldToken() {
         this.fieldToken.click();
+        browser.pause(fiveSeconds);
         return this;
     }
 
