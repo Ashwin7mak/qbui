@@ -30,6 +30,7 @@ class modalDialogWindow {
 
     get modalDialogTitle() {
         // modal dialog title
+        this.modalDialogContainer.element('.modal-title').waitForVisible();
         return this.modalDialogContainer.element('.modal-title').getAttribute('textContent');
     }
 
@@ -91,6 +92,7 @@ class modalDialogWindow {
      * Method to click on modal dialog any drop down arrow
      */
     clickOnModalDialogDropDownArrow() {
+        this.modalDialogDropDownArrow.waitForVisible();
         return this.modalDialogDropDownArrow.click();
     }
 
@@ -98,6 +100,7 @@ class modalDialogWindow {
      * Method to click on modal dialog advanced settngs drop down arrow
      */
     clickOnModalDialogAdvancedSettingsDropDownArrow() {
+        this.modalDialogAdvancedSettingsDropDownArrow.waitForVisible();
         return this.modalDialogAdvancedSettingsDropDownArrow.click();
     }
 
@@ -113,8 +116,9 @@ class modalDialogWindow {
 
         if (option !== []) {
             //Click on filtered option
+            option[0].element('div div').waitForVisible();
             option[0].element('div div').click();
-            //wait until loading screen disappear
+            //wait until select menu outer
             return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
         } else {
             throw new Error('Option with name ' + listOption + " not found in the list");

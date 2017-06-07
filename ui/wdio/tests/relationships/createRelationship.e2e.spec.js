@@ -12,14 +12,13 @@
     let modalDialog = requirePO('/common/modalDialog');
 
     const NEW_PARENT_TABLE = 'newParentTable';
-    const PARENT_TABLE_WITHOUT_TITLE_FIELD = 'Parent Table A';
     const CHILD_TABLE = 'Table 1';
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const RECORD_TITLE_FIELD_NAME = '* Record title';
     const GET_ANOTHER_RECORD = 'Get another record';
 
-    describe('Relationships - Create relationship: ', function() {
+    describe('Relationships - Create relationship from form builder: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -48,7 +47,7 @@
         });
 
         /**
-         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         * Before each it block reload the 1st record of list all report in view form mode
          */
         beforeEach(function() {
             //Step 1 - Go to report (LIST all report)
@@ -72,7 +71,7 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Click on finished button and make sure it landed in edit Form container page
+            //Click on create table button
             modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
             tableCreatePO.waitUntilNotificationContainerGoesAway();
 
@@ -81,16 +80,11 @@
 
             //Verify the record title field is visible for a table created via UI.
             let fieldsOnForm = formBuilderPO.getFieldLabels();
+            //Verify 1st field on the page is 'record title'
             expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
-
-            //create records in the new table created
-            browser.call(function() {
-                // Generate and add records to each table (include a dupe and an empty record)
-                return e2eBase.recordService.addRecordsToTable(testApp, 0, 5, false, false);
-            });
         })
 
         it('Verify Add another record relationship modal dialog functionality', function(){
@@ -108,6 +102,7 @@
         })
 
         it('Create relationship between 2 tables via form builder', function() {
+            let allFieldsOnViewForm = [];
             //beforeEach goes to 'Table 1'
             //Select settings -> modify this form
             formBuilderPO.open();
@@ -116,14 +111,14 @@
             formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
             //Select table from table list
-            modalDialog.clickOnModalDialogDropDownArrow()
+            modalDialog.clickOnModalDialogDropDownArrow();
             modalDialog.selectItemFromModalDialogDropDownList(NEW_PARENT_TABLE);
 
             //Click on advanced settings
             modalDialog.clickModalDialogAdvancedSettingsToggle();
 
             //Verify title field is automatically selected
-
+            expect (browser.element('.modal-dialog .advancedSettings .Select-control').getAttribute('textContent')).toBe('Record title');
 
             //Click Add To form button
             modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
@@ -134,7 +129,16 @@
 
             //Save the form builder
             formBuilderPO.save();
-            browser.pause(e2eConsts.longWaitTimeMs);
+            //wait until save success container goes away
+            tableCreatePO.waitUntilNotificationContainerGoesAway();
+            //verify You land in view form
+            formsPO.waitForViewFormsTableLoad();
+
+            //Verify field got added to the view form
+             formsPO.getAllFieldLabelsOnForm(formsPO.viewFormContainerEl).value.filter(function(fieldLabel){
+                 allFieldsOnViewForm.push(fieldLabel.getAttribute('textContent'));
+             });
+            expect(allFieldsOnViewForm.includes('Get another record from '+NEW_PARENT_TABLE)).toBe(true);
 
         })
 
