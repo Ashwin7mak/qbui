@@ -298,7 +298,7 @@
 
             // column label list must be equal to the initial list with the added column
             let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length -1);
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
         });
 
         it('verify add column by add after and SAVE', function() {
