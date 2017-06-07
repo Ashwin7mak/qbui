@@ -18,6 +18,11 @@
             outline: none;
             @include text-input-focus;
         }
+
+        &::-ms-clear {
+            width: 0;
+            height: 0;
+        }
     }
 
     .searchIcon {
