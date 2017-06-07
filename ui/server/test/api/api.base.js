@@ -98,7 +98,7 @@
 
         //Generates and returns a psuedo-random email string
         function generateEmail() {
-            return generateString(10) + '_' + generateString(10) + '@intuit.com';
+            return generateString(10) + '_' + generateString(10) + '@quickbase.com';
         }
 
         var apiBase = {
@@ -449,9 +449,8 @@
                     lastName         : generateString(10),
                     screenName       : generateString(10),
                     email            : generateEmail(),
-                    password         : 'quickbase',
-                    challengeQuestion: 'who is your favorite scrum team?',
-                    challengeAnswer  : 'blue'
+                    deactivated      : false,
+                    administrator    : false
                 };
                 return this.createSpecificUser(userToMake);
             },

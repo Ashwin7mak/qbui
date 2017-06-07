@@ -21,8 +21,9 @@ const mockStore = configureMockStore(middlewares);
 describe('TableHomePageRoute functions', () => {
     'use strict';
 
-    let props = {
+    const props = {
         clearSearchInput: () => {},
+        hideTopNav: () => {},
         loadFields: (app, tbl) => {},
         loadTableHomePage: () => {},
         reportBuilder: {
@@ -66,7 +67,6 @@ describe('TableHomePageRoute functions', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.actions = {
         selectTableId() {return;},
-        hideTopNav() {return;}
     };
 
     class mockReportToolsAndContent extends React.Component {
@@ -82,8 +82,8 @@ describe('TableHomePageRoute functions', () => {
     }
 
     beforeEach(() => {
-        spyOn(flux.actions, 'hideTopNav');
         spyOn(flux.actions, 'selectTableId');
+        spyOn(props, 'hideTopNav');
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadTableHomePage');
@@ -92,7 +92,6 @@ describe('TableHomePageRoute functions', () => {
     });
 
     afterEach(() => {
-        flux.actions.hideTopNav.calls.reset();
         flux.actions.selectTableId.calls.reset();
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();

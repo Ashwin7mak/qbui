@@ -78,7 +78,7 @@ describe('AutomationListRoute', () => {
 
         it('test list of automation names contains automations', () => {
             let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
-            expect(autoTDs.length).toEqual(4);
+            expect(autoTDs.length).toEqual(6);
         });
 
         it('test list of automation names has the correct name first', () => {
@@ -87,8 +87,10 @@ describe('AutomationListRoute', () => {
             let i = 0;
             expect(autoTDs[i++].innerText).toEqual("Auto 1");
             expect(autoTDs[i++].innerText).toEqual("Yes");
+            expect(autoTDs[i++].innerText).toEqual("Test");
             expect(autoTDs[i++].innerText).toEqual("Auto 2");
             expect(autoTDs[i++].innerText).toEqual("No");
+            expect(autoTDs[i++].innerText).toEqual("Test");
         });
 
     });
