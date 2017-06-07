@@ -229,5 +229,30 @@
             let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
         });
+
+        if (browserName !== 'safari') {
+            it('hide a column and verify it is hidden and SAVED', () => {
+                // store the list of columns before hiding
+                let originalColumns = reportBuilderPO.getHeaderLabels();
+                // store the first column label
+                let toBeHiddenColumnLabel = originalColumns[0];
+                // open the first headerMenu
+                reportBuilderPO.clickHeaderMenu();
+                // click hide option on menu
+                reportBuilderPO.clickHideMenuOption();
+                // store the list of columns after hiding
+                let hiddenColumns = reportBuilderPO.getHeaderLabels();
+                // verify that the hidden columns has one less column that original
+                expect(originalColumns.length - 1).toEqual(hiddenColumns.length);
+                // verify that the correct hidden column was removed
+                expect(hiddenColumns).not.toContain(toBeHiddenColumnLabel);
+                // click save
+                reportBuilderPO.clickSave();
+                // store the list of columns after hiding and canceling
+                let columnsAfterHideAndSave = reportBuilderPO.getHeaderLabels();
+                // verify that columns are the same length
+                expect(originalColumns.length).toEqual(columnsAfterHideAndSave.length + 1);
+            });
+        }
     });
 }());
