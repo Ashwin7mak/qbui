@@ -14,11 +14,13 @@ import {connect} from 'react-redux';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
 import './appUsersRoute.scss';
+import {toggleAddToAppSuccessDialog} from '../../../../actions/appsActions';
+import UserSuccessDialog from './userSuccessDialog.js';
 
 export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
-            roleId: ''
+            roleId: '',
         };
     },
     componentDidMount() {
@@ -181,7 +183,14 @@ export const AppUsersRoute = React.createClass({
                                selectedApp={this.props.selectedApp}
                                existingUsers={this.props.appUsersUnfiltered}
                                addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
-                               hideDialog={this.toggleAddUserDialog}/>
+                               hideDialog={this.toggleAddUserDialog}
+                               showSuccessDialog={this.props.showSuccessDialog}
+                />
+                <UserSuccessDialog successDialogOpen={this.props.successDialogOpen}
+                                   addedAppUser={this.props.addedAppUser}
+                                   showSuccessDialog={this.props.showSuccessDialog}
+                                   selectedAppName={this.props.selectedApp.name}
+                />
                     {this.getTableActions()}
                     <div className="userManagementContainer">
                         <UserManagement appId={this.props.match.params.appId}
@@ -205,13 +214,18 @@ export const AppUsersRoute = React.createClass({
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId)
+        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
+        successDialogOpen: state.appUsers.successDialogOpen,
+        addedAppUser: state.appUsers.addedAppUser,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));}
+        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));},
+        showSuccessDialog: (isOpen, email) => {
+            dispatch(toggleAddToAppSuccessDialog(isOpen, email));
+        },
     };
 };
 

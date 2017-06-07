@@ -762,7 +762,17 @@ export default {
         addUserToApp: {
             title: "Ajouter des utilisateurs à",
             description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle",
-            searching: "Recherche..."
+            searching: "Recherche...",
+            userSuccessTitle: "Votre application a un nouvel utilisateur!",
+            userSuccessText: "Faites-leur savoir qu'ils ont accès à votre application en partageant le lien avec eux.",
+            copy: "Copie",
+            email: "Email",
+            toCopy: "Cliquez pour copier dans le presse-papiers",
+            toEmail: "Cliquez pour envoyer un courriel",
+            userSuccessDialogOK: "Non merci",
+            copied: "Lien copié",
+            messageSubject:"Lien vers le {nom de l'application} Application",
+            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
         }
     }
 };
