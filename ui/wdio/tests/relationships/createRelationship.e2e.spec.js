@@ -19,79 +19,79 @@
     const GET_ANOTHER_RECORD = 'Get another record';
 
     describe('Relationships - Create relationship via form builder: ', function() {
-        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
-        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
-            var realmName;
-            var realmId;
-            var testApp;
+        var realmName;
+        var realmId;
+        var testApp;
 
-            /**
-             * Setup method. Creates test app then authenticates into the new stack
-             */
-            beforeAll(function() {
-                browser.logger.info('beforeAll spec function - Generating test data and logging in');
-                // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
-                // No need to call done() anymore
-                return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
-                    // Set your global objects to use in the test functions
-                    testApp = createdApp;
-                    realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-                    realmId = e2eBase.recordBase.apiBase.realm.id;
-                }).then(function() {
-                    // Auth into the new stack
-                    return newStackAuthPO.realmLogin(realmName, realmId);
-                }).catch(function(error) {
-                    // Global catch that will grab any errors from chain above
-                    // Will appropriately fail the beforeAll method so other tests won't run
-                    browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
-                    return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
-                });
+        /**
+         * Setup method. Creates test app then authenticates into the new stack
+         */
+        beforeAll(function() {
+            browser.logger.info('beforeAll spec function - Generating test data and logging in');
+            // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
+            // No need to call done() anymore
+            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
+                // Set your global objects to use in the test functions
+                testApp = createdApp;
+                realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+                realmId = e2eBase.recordBase.apiBase.realm.id;
+            }).then(function() {
+                // Auth into the new stack
+                return newStackAuthPO.realmLogin(realmName, realmId);
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                // Will appropriately fail the beforeAll method so other tests won't run
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
+            });
+        });
+
+        /**
+         * Before each it block reload the 1st record of list all report in view form mode
+         */
+        beforeEach(function() {
+            //Step 1 - Go to report (LIST all report)
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+            //wait until view form is visible
+            return formsPO.viewFormContainerEl.waitForVisible();
+        });
+
+        it('Create table via UI and verify title field shows up', function() {
+            let tableFields = [
+                {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
+            ];
+
+            //Click on new table button
+            tableCreatePO.clickCreateNewTable();
+
+            //Enter table field values
+            tableFields.forEach(function(tableField) {
+                //Enter field values
+                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            /**
-             * Before each it block reload the 1st record of list all report in view form mode
-             */
-            beforeEach(function() {
-                //Step 1 - Go to report (LIST all report)
-                reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
-                //wait until view form is visible
-                return formsPO.viewFormContainerEl.waitForVisible();
-            });
+            //Click on create table button
+            modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
+            tableCreatePO.waitUntilNotificationContainerGoesAway();
 
-            it('Create table via UI and verify title field shows up', function() {
-                let tableFields = [
-                    {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
-                    {fieldTitle: recordNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
-                ];
+            //Click OK button on create table dialogue
+            modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
 
-                //Click on new table button
-                tableCreatePO.clickCreateNewTable();
+            //Verify the record title field is visible for a table created via UI.
+            let fieldsOnForm = formBuilderPO.getFieldLabels();
+            //Verify 1st field on the page is 'record title'
+            expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
 
-                //Enter table field values
-                tableFields.forEach(function(tableField) {
-                    //Enter field values
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-                });
+            //Click on forms save button
+            formBuilderPO.save();
+            //wait until save success container goes away
+            tableCreatePO.waitUntilNotificationContainerGoesAway();
+        });
 
-                //Click on create table button
-                modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
-                tableCreatePO.waitUntilNotificationContainerGoesAway();
-
-                //Click OK button on create table dialogue
-                modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
-
-                //Verify the record title field is visible for a table created via UI.
-                let fieldsOnForm = formBuilderPO.getFieldLabels();
-                //Verify 1st field on the page is 'record title'
-                expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
-
-                //Click on forms save button
-                formBuilderPO.save();
-                //wait until save success container goes away
-                tableCreatePO.waitUntilNotificationContainerGoesAway();
-            });
-
-            it('Verify Add another record relationship modal dialog functionality', function() {
+        it('Verify Add another record relationship modal dialog functionality', function() {
+            //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+            if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
                 let expectedTablesList = ['Table 2', 'Parent Table A', 'Child Table A', 'newParentTable'];
                 let expectedFieldsList = ['Record ID#', 'Record title'];
 
@@ -103,9 +103,12 @@
 
                 //Verify all dialog contents and functionality
                 formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, NEW_PARENT_TABLE, CHILD_TABLE, expectedFieldsList);
-            });
+            }
+        });
 
-            it('Create relationship between 2 tables via form builder', function() {
+        it('Create relationship between 2 tables via form builder', function() {
+            //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+            if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
                 let allFieldsOnViewForm = [];
                 //beforeEach goes to 'Table 1'
                 //Select settings -> modify this form
@@ -139,15 +142,18 @@
                 formsPO.waitForViewFormsTableLoad();
 
                 //Verify field got added to the view form
-                formsPO.getAllFieldLabelsOnForm(formsPO.viewFormContainerEl).value.filter(function(fieldLabel) {
+                formsPO.getAllFieldLabelsOnForm(formsPO.viewFormContainerEl).value.filter(function (fieldLabel) {
                     allFieldsOnViewForm.push(fieldLabel.getAttribute('textContent'));
                 });
                 expect(allFieldsOnViewForm.includes('Get another record from ' + NEW_PARENT_TABLE)).toBe(true);
-            });
+            }
+        });
 
-            it('Verify there is no create relationship button visible if child table has relationships to all the tables in an app', function() {
+        it('Verify there is no create relationship button visible if child table has relationships to all the tables in an app', function() {
+            //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+            if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
                 //Delete all tables in app except the child and parent table
-                browser.call(function() {
+                browser.call(function () {
                     e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE2].id);
                     e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE3].id);
                     e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE4].id);
@@ -166,9 +172,9 @@
 
                 //Click on forms Cancel button
                 formsPO.clickFormCancelBtn();
+            }
 
-            });
-        }
+        });
 
     });
 }());
