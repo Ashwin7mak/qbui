@@ -1,0 +1,38 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+$table-properties-panel-width: 776px;
+
+.settingsAppShell {
+    .pageActions {
+        .deleteTable {
+            color: $color-red-700;
+        }
+    }
+    .automationViewSettingsStage {
+        font-size: 24px;
+        color: $stage-headline-color;
+        padding-top: 30px;
+        .qbIcon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        & > * {
+            vertical-align: middle;
+        }
+    }
+}
+
+.automationView--container {
+    margin: 32px;
+    padding: 24px;
+    background-color: $panel-background-color;
+    border: solid 1px $panel-border-color;
+}
+
+.automationView--section {
+    margin-bottom: 24px;
+}
+
+.automationView--header {
+    font-weight: bold;
+}

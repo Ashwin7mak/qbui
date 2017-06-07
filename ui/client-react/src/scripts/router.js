@@ -22,11 +22,12 @@ import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
 import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
 import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
 import AutomationListRoute from "../components/automation/settings/automationListRoute";
+import AutomationViewRoute from "../components/automation/settings/automationViewRoute";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
 import Logger from "../utils/logger";
-import {APPS_ROUTE, APP_ROUTE, AUTOMATION_PATH, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
+import {APPS_ROUTE, APP_ROUTE, AUTOMATION, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
@@ -210,7 +211,11 @@ const routes = [
                 component: AppPropertiesRoute
             },
             {
-                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION_PATH}`,
+                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId/${AUTOMATION.VIEW}`,
+                component: AutomationViewRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION.PATH}`,
                 component: AutomationListRoute
             },
             {
