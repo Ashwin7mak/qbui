@@ -49,7 +49,6 @@ const props = {
         }
     },
     shell: {
-        navTopTitle:"",
         topNavVisible: true
     },
     toggleNav: () => {},

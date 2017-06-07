@@ -64,19 +64,13 @@ let ReportManager = React.createClass({
     }
 });
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-
-    };
-};
 const mapDispatchToProps = (dispatch) => {
-    return {
-        filterReportsByName: (reportName) => dispatch(filterReportsByName(reportName))
-    };
+    return {filterReportsByName};
 };
+
 export {ReportManager};
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(ReportManager);

@@ -117,13 +117,6 @@ export const hideTopNav = () => {
         type: types.HIDE_TOP_NAV
     };
 };
-
-export const setSearching = (searching) => {
-    return {
-        type: types.SEARCHING,
-        searching
-    };
-};
 export const filterReportsByName = (reportName = "") => {
     return {
         type: types.FILTER_REPORTS_BY_NAME,
@@ -134,15 +127,5 @@ export const scrollingReport = (isScrolling = true) => {
     return {
         type: types.SCROLLING_REPORT,
         isScrolling
-    };
-};
-/**
- * Set a top nav title
- * @param title a react node (or null to omit one)
- */
-export const setTopTitle = (title = null) => {
-    return {
-        type: types.SET_TOP_TITLE,
-        title
     };
 };

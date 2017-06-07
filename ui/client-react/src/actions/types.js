@@ -52,10 +52,8 @@ export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const SHOW_TOP_NAV = "SHOW_TOP_NAV";
 export const HIDE_TOP_NAV = "HIDE_TOP_NAV";
-export const SET_TOP_TITLE = "SET_TOP_TITLE";
 export const SCROLLING_REPORT = "SCROLLING_REPORT";
 export const FILTER_REPORTS_BY_NAME = "FILTER_REPORTS_BY_NAME";
-export const SEARCHING = "SEARCHING";
 
 //  ******** Field actions *********
 export const LOAD_FIELDS = 'LOAD_FIELDS';
