@@ -30,6 +30,7 @@ class StandardGridToolBar extends Component {
 
     render() {
         let hasFacets = this.props.shouldFacet;
+        let hasNavigation = (this.props.totalFilteredItems || this.props.totalItems) > this.props.numberOfItemsPerPage;
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
@@ -69,7 +70,7 @@ class StandardGridToolBar extends Component {
                             </div>
                         </div>
                         <div className="standardGridNavigation" >
-                            {(this.props.totalFilteredItems || this.props.totalItems) > this.props.numberOfItemsPerPage &&
+                            {hasNavigation &&
                                 <StandardGridNavigation className="standardGridNavigation"
                                                         getPreviousPage={this.props.getPreviousPage}
                                                         getNextPage={this.props.getNextPage}

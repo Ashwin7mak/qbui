@@ -16,7 +16,7 @@ describe('StandardGridToolBar', () => {
         jasmineEnzyme();
     });
 
-    it('should render with navigation, search and itemsCount component', () => {
+    it('should render with search and itemsCount component', () => {
 
         let mockSearchTerm = "test search";
 
@@ -35,11 +35,6 @@ describe('StandardGridToolBar', () => {
         expect(component).toBeDefined();
         expect(component.length).toBeTruthy();
 
-        let StandardGridNavigationComponent = component.find(StandardGridNavigation);
-        expect(StandardGridNavigationComponent).toBeDefined();
-        expect(StandardGridNavigationComponent.length).toBeTruthy();
-        expect(StandardGridNavigationComponent.props().id).toEqual("accountUsers");
-
         let StandardGridSearchComponent = component.find(GenericFilterSearchBox);
         expect(StandardGridSearchComponent).toBeDefined();
         expect(StandardGridSearchComponent.length).toBeTruthy();
@@ -47,5 +42,56 @@ describe('StandardGridToolBar', () => {
         expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
 
         expect(component.find(StandardGridItemsCount)).toBePresent();
+    });
+
+    it('should render with Navigation component', () => {
+
+        let mockSearchTerm = "test search";
+
+        let component = mount(
+            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}, searchTerm: mockSearchTerm}}})}>
+                <StandardGridToolBar
+                    doUpdate={Actions.doUpdate}
+                    doFacet={false}
+                    id={"accountUsers"}
+                    rowKey={"uid"}
+                    itemTypePlural= "users"
+                    itemTypeSingular="user"
+                    numberOfItemsPerPage={550}
+                />
+            </Provider>);
+
+        expect(component).toBeDefined();
+        expect(component.length).toBeTruthy();
+
+        let StandardGridNavigationComponent = component.find(StandardGridNavigation);
+        expect(StandardGridNavigationComponent).toBeDefined();
+        expect(StandardGridNavigationComponent.length).toBeTruthy();
+        expect(StandardGridNavigationComponent.props().id).toEqual("accountUsers");
+
+    });
+
+    it('should not render with Navigation component', () => {
+
+        let mockSearchTerm = "test search";
+
+        let component = mount(
+            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}, searchTerm: mockSearchTerm}}})}>
+                <StandardGridToolBar
+                    doUpdate={Actions.doUpdate}
+                    doFacet={false}
+                    id={"accountUsers"}
+                    rowKey={"uid"}
+                    itemTypePlural= "users"
+                    itemTypeSingular="user"
+                    numberOfItemsPerPage={10}
+                />
+            </Provider>);
+
+        expect(component).toBeDefined();
+        expect(component.length).toBeTruthy();
+
+        let StandardGridNavigationComponent = component.find(StandardGridNavigation);
+        expect(StandardGridNavigationComponent).not.toBeDefined();
     });
 });
