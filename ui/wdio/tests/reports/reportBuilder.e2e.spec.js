@@ -207,6 +207,8 @@
                 expect(columnsAfterSave).not.toContain(toBeHiddenColumnLabel);
                 // verify that the added column is in the table
                 expect(columnsAfterSave).toContain(addedColumnLabel);
+                expect(columnsAfterSave[2]).toEqual(newColumnLabels[3]);
+                expect(columnsAfterSave[3]).toEqual(newColumnLabels[2]);
             });
         }
     });
