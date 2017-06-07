@@ -346,6 +346,11 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
+        // if (this.props.isDrawerContext) {
+        //     // console.log(this.props);
+        //     const {appId, tblId, reportId, }
+        //     const link = UrlUtils.getAddRelatedChildLink(urlPath, appId, childTableId, childReportId, detailKeyFid, encodeURI(detailKeyValue), uniqueId);
+        // }
         // convert to  a number from a string
         const recordId = +this.props.match.params.recordId;
         this.navigateToRecord(recordId);
@@ -397,10 +402,10 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-        // Currently page actions are disabled for child records shown in drawers.
-        if (this.props.isDrawerContext) {
-            actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
-        }
+        // // Currently page actions are disabled for child records shown in drawers.
+        // if (this.props.isDrawerContext) {
+        //     actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
+        // }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 

@@ -1,3 +1,5 @@
+import queryString from 'query-string';
+
 import AppHistory from '../globals/appHistory';
 
 export const WindowHistoryUtils = {
@@ -7,23 +9,35 @@ export const WindowHistoryUtils = {
      * @param value
      */
     pushWithQuery(key, value) {
+        this.pushWithQueries({[key]: value});
+    },
 
-        let urlQueryString = document.location.search;
-        let newParam = key + '=' + value;
-        let params = '?' + newParam;
+    /**
+     * push current url with key=value query param
+     * @param {Object} params
+     */
+    pushWithQueries(params = {}) {
+        const urlQueryString = location.search;
+        let newParams = '';
 
-        // If the "search" string exists, then build params from it
         if (urlQueryString) {
-            let keyRegex = new RegExp('([\?&])' + key + '[^&]*');
-
-            // If param exists already, update it
-            if (urlQueryString.match(keyRegex) !== null) {
-                params = urlQueryString.replace(keyRegex, "$1" + newParam);
-            } else { // Otherwise, add it to end of query string
-                params = urlQueryString + '&' + newParam;
-            }
+            newParams = this.buildQueryString(params);
         }
+
         AppHistory.history.push(location.pathname + params);
+    },
+
+    buildQueryString(urlQueryString, params) {
+        if (urlQueryString) {
+            const parsed = queryString.parse(urlQueryString);
+            Object.keys(params).forEach(key => {
+                // add the key:value pairs
+                // overwrites the value if the key already exists as a query
+                parsed[key] = params[key];
+            });
+            return '?' + queryString.stringify(parsed);
+        }
+        return '';
     },
 
     /**
