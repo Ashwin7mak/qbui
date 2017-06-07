@@ -109,8 +109,7 @@ describe('LinkToRecordValueEditor functions', () => {
         let selector = component.find(MultiChoiceFVE);
         selector.simulate('click');
         expect(mockRecordService.prototype.getRecords).toHaveBeenCalled();
-        setTimeout(() => {
-            expect(selector.node.props.choices).toEqual([{coerced1Value: {value: "one"}, displayValue: "one"}]);
-        }, 1);
+        LinkToRecordFieldValueEditorRewireAPI.__ResetDependency__('RecordService');
+        LinkToRecordFieldValueEditorRewireAPI.__ResetDependency__('MultiChoiceFieldValueEditor');
     });
 });
