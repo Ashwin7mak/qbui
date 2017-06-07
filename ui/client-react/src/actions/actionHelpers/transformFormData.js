@@ -254,6 +254,7 @@ export function addRelationshipFieldProps(appId, tblId, formMeta, fields)  {
             });
 
             if (relationship) {
+                field.parentAppId = relationship.masterAppId;
                 field.parentTableId = relationship.masterTableId;
                 field.parentFieldId = relationship.masterFieldId;
             }
