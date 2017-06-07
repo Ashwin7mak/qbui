@@ -7,11 +7,12 @@ import Select from 'react-select';
 
 const listbox_renderWithSelection = {
     choices: [
-                {value: 'Apples', label: 'Apples'},
-                {value: 'Apricots', label: 'Apricots'},
-                {value: 'Bananas', label: 'Bananas'},
+                {displayValue: 'Apples', label: 'Apples'},
+                {displayValue: 'Apricots', label: 'Apricots'},
+                {displayValue: 'Bananas', label: 'Bananas'},
     ],
-    value: "Apricots"
+    value: "Apricots",
+    display: "Apricots"
 };
 
 const listbox_noEmptyChoicesData = {
@@ -74,8 +75,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
 
     // Listbox, test render of component with a selection, should display selected text and a clear button
     it('For a listbox, test render of component when there is an existing selection', () => {
-        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor choices={listbox_renderWithSelection.choices}
-                                                                              value={listbox_renderWithSelection.value}/>);
+        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor choices={listbox_renderWithSelection.choices} value={listbox_renderWithSelection.value} display={listbox_renderWithSelection.value}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var node = ReactDOM.findDOMNode(component);

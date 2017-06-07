@@ -178,6 +178,7 @@ const FieldValueEditor = React.createClass({
         if (fieldId === DEFAULT_RECORD_KEY_ID) {
             return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
         }
+
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT: {
             if (typeof commonProps.value === 'string') {

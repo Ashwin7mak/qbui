@@ -19,8 +19,6 @@ class GovernanceLeftNav extends Component {
                 showLoadingIndicator={this.props.isLoading}
                 isContextHeaderSmall={true}
                 showContextHeader={true}
-                contextHeaderIcon="settings"
-                contextHeaderIconFont="iconUISturdy"
                 contextHeaderTitle="Manage Quick Base"
                 navItems={
                     GetLeftNavLinks(

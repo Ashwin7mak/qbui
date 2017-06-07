@@ -18,7 +18,7 @@ describe('TextFieldValueRenderer functions', () => {
 
     it('test render of component with value', () => {
         let text = "testing testing 1 2 3";
-        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer value={text}/>);
+        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer display={text}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(textFieldValueRenderer).toHaveText(text);
@@ -26,7 +26,7 @@ describe('TextFieldValueRenderer functions', () => {
 
     it('test render of component with bold', () => {
         let text = "some text";
-        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer value={text} isBold={true}/>);
+        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer display={text} isBold={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(textFieldValueRenderer.classList.contains('bold')).toBeTruthy();
@@ -34,7 +34,7 @@ describe('TextFieldValueRenderer functions', () => {
 
     it('test render of component with added className', () => {
         let text = "some text";
-        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer value={text} classes="unitTesting" />);
+        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer display={text} classes="unitTesting" />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(textFieldValueRenderer.classList.contains('unitTesting')).toBeTruthy();
@@ -42,7 +42,7 @@ describe('TextFieldValueRenderer functions', () => {
 
     it('test render of component with html allowed', () => {
         let text = "some text <i>italic</i>";
-        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer attributes={{htmlAllowed : true}} value={text} />);
+        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer attributes={{htmlAllowed : true}} display={text} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         let italic = ReactDOM.findDOMNode(textFieldValueRenderer).querySelectorAll("i");
@@ -51,7 +51,7 @@ describe('TextFieldValueRenderer functions', () => {
 
     it('test render of component with no html allowed', () => {
         let text = "some text <i>italic</i>";
-        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer attributes={{htmlAllowed : false}} value={text} />);
+        component = TestUtils.renderIntoDocument(<TextFieldValueRenderer attributes={{htmlAllowed : false}} display={text} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         let italic = ReactDOM.findDOMNode(textFieldValueRenderer).querySelectorAll("i");
