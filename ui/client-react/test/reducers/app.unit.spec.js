@@ -270,3 +270,109 @@ describe('Test app reducer - load list of apps', () => {
         expect(AppReducer.getSelectedAppUnfilteredUsers(state)).toEqual([]);
     });
 });
+
+describe('Test app reducer - load app owner', () => {
+    it('test start of load app owner', () => {
+        const appId = '1';
+        const state = reducer(storeState, {type: types.LOAD_APP_OWNER});
+
+        expect(state.loading).toBe(true);
+        expect(AppReducer.getIsAppsLoading(state)).toBe(true);
+        expect(state.error).toBe(false);
+        expect(state.app).toEqual(null);
+        expect(state.apps).toEqual([]);
+        expect(AppReducer.getAppOwner(state)).toEqual(null);
+    });
+
+    it('test successful load of app owner', () => {
+        const appId = '1';
+        const appData = {
+            users: [
+                [{id: appId}],
+                {}
+            ],
+            app: {
+                id: '1',
+                tables: [{
+                    id: '2',
+                    tableData: 'some old table data'
+                }]
+            }
+        };
+        const appOwner = {id: 1, firstName: "Captain", lastName: "Obvious", email: "noyouremail@what.who"}
+        const appModel = new AppModel(appData);
+        const app = appModel.getApp();
+        const state = reducer(reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: appData}), {type: types.LOAD_APP_OWNER_SUCCESS, content: appOwner});
+        expect(AppReducer.getAppOwner(state)).toEqual(appOwner);
+    });
+
+    it('test fail load of app owner', () => {
+        const appId = '1';
+        const state = reducer(storeState, {type: types.LOAD_APP_OWNER_ERROR});
+
+        expect(state.loading).toBe(false);
+        expect(AppReducer.getIsAppsLoading(state)).toBe(false);
+        expect(state.error).toBe(true);
+        expect(state.app).toEqual(null);
+        expect(state.apps).toEqual([]);
+        expect(AppReducer.getAppOwner(state)).toEqual(null);
+    });
+});
+
+describe('Test app reducer - add/remove users from app', () => {
+    it('test adding users to the app', () => {
+        const appId = '1';
+        const appData = {
+            users: [
+                [{id: appId}],
+                {}
+            ],
+            app: {
+                id: '1',
+                tables: [{
+                    id: '2',
+                    tableData: 'some old table data'
+                }]
+            }
+        };
+        const users = [{"userId": 1}];
+        const unfilteredUsers = {"1": [{"userId": 1}]};
+        const state = reducer(reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: appData}), {type: types.ASSIGN_USERS_TO_APP_ROLE, content: {appUsers: [users, unfilteredUsers]}});
+
+        expect(AppReducer.getSelectedAppUsers(state)).toEqual(users);
+        expect(AppReducer.getSelectedAppUnfilteredUsers(state)).toEqual(unfilteredUsers);
+    });
+
+    it('test removing users from the app', () => {
+        //first we need to add users to the app
+        const appId = '1';
+        const roleId = '11';
+        const appData = {
+            users: [
+                [{id: appId}],
+                {}
+            ],
+            app: {
+                id: '1',
+                tables: [{
+                    id: '2',
+                    tableData: 'some old table data'
+                }]
+            }
+        };
+        const users = [{"userId": 1, firstName: "Ghost"},{"userId": 2, firstName: "Pepper"},{"userId": 3, firstName: "Jalepeno"},{"userId": 4, firstName: "Cucumber"}];
+        const unfilteredUsers = {"11": [{"userId": 1, firstName: "Ghost"},
+                                     {"userId": 2, firstName: "Pepper"},
+                                     {"userId": 3, firstName: "Jalepeno"},
+                                     {"userId": 4, firstName: "Cucumber"}]};
+        const usersRemoved = [{"userId": 1, firstName: "Ghost"},{"userId": 4, firstName: "Cucumber"}];
+        const unfilteredRemoved = {"11": [{"userId": 1, firstName: "Ghost"},
+                                          {"userId": 4, firstName: "Cucumber"}]};
+        let usersAddedState = reducer(reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: appData}), {type: types.ASSIGN_USERS_TO_APP_ROLE, content: {appUsers: [users, unfilteredUsers]}});
+        //now we need to remove them
+        let usersToRemove = [2,3];
+        let usersRemovedState = reducer(usersAddedState, {type: types.REMOVE_USERS_FROM_APP_ROLE, content: {roleId: roleId, userIds: usersToRemove}});
+        expect(AppReducer.getSelectedAppUsers(usersRemovedState)).toEqual(usersRemoved);
+        expect(AppReducer.getSelectedAppUnfilteredUsers(usersRemovedState)).toEqual(unfilteredRemoved);
+    });
+});
