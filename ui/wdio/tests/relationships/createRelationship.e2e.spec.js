@@ -83,8 +83,10 @@
             //Verify 1st field on the page is 'record title'
             expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
 
-            //Click on forms Cancel button
-            formsPO.clickFormCancelBtn();
+            //Click on forms save button
+            formBuilderPO.save();
+            //wait until save success container goes away
+            tableCreatePO.waitUntilNotificationContainerGoesAway();
         })
 
         it('Verify Add another record relationship modal dialog functionality', function(){
@@ -139,9 +141,23 @@
                  allFieldsOnViewForm.push(fieldLabel.getAttribute('textContent'));
              });
             expect(allFieldsOnViewForm.includes('Get another record from '+NEW_PARENT_TABLE)).toBe(true);
-
         })
 
+        it('Verify there is no create relationship button visible if child table has relationships to all the tables in an app', function() {
+            //Delete all tables in user except the child and parent table
+
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Verify that the create relationship button is not visible.
+            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            console.log("The fields on form are: "+newFieldsOnForm);
+            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+
+            //Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
+
+        })
 
     });
 }());

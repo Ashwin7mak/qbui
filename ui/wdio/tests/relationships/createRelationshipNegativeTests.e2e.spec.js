@@ -9,7 +9,7 @@
     let formBuilderPO = requirePO('formBuilder');
 
     const PARENT_TABLE_WITHOUT_TITLE_FIELD = 'Parent Table A';
-    const CHILD_TABLE = 'Table 1';
+    const CHILD_TABLE = 'Child Table A';
     const RECORD_TITLE_FIELD_NAME = '* Record title';
     const GET_ANOTHER_RECORD = 'Get another record';
 
@@ -45,8 +45,8 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //Step 1 - Go to report (LIST all report)
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+            //Go to report (LIST all report) for child table a in UI which is created via API
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
             //wait until view form is visible
             return formsPO.viewFormContainerEl.waitForVisible();
         });
@@ -64,29 +64,23 @@
             formsPO.clickFormCancelBtn();
         })
 
-        it('Verify there is no create relationship button visible in form builder if relationship already exists for a table', function() {
-            browser.call(function() {
-                //get the user authentication
-                return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
-            });
-
-            //verify You land in view form
-            formsPO.waitForViewFormsTableLoad();
+        it('Verify create relationship button is visible even tough there is no parent table with title field or for table created via UI', function() {
 
             //Select settings -> modify this form
             formBuilderPO.open();
 
             //Verify that the create relationship button is not visible.
             let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+            expect(newFieldsOnForm.includes(GET_ANOTHER_RECORD)).toBe(true);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
 
         })
 
+
         it('Verify only recordId shows up in the field list of Add another record relationship modal dialog when there is no parent table with title field', function(){
-            let expectedTablesList = [ 'Table 2', 'Parent Table A', 'Child Table A'];
+            let expectedTablesList = [ 'Table 1', 'Table 2', 'Parent Table A'];
             let expectedFieldsList = [ 'Record ID#'];
 
             //Select settings -> modify this form
