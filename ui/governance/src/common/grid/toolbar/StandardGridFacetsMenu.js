@@ -168,7 +168,6 @@ export class StandardGridFacetsMenu extends Component {
      *
      **/
     render() {
-        console.log("THIS.PROPS:", this.props);
         let selectedValues = (this.props.selectedValues ? this.props.selectedValues : {});
 
         return <GenericFacetMenu isMenuVisible={this.props.show}

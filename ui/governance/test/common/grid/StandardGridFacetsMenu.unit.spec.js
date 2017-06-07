@@ -3,7 +3,6 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FacetSelections  from '../../../../reuse/client/src/components/facets/facetSelections';
 import {__RewireAPI__ as GenericFacetsItemRewireAPI}  from '../../../../reuse/client/src/components/facets/genericFacetItem';
 import {__RewireAPI__ as GenericFacetsListRewireAPI}  from '../../../../reuse/client/src/components/facets/genericFacetsList';
 import {StandardGridFacetsMenu} from '../../../src/common/grid/toolbar/StandardGridFacetsMenu';
@@ -22,10 +21,10 @@ const mockParentActions = {
 
 describe('StandardGridFacetsMenu functions', () => {
     let component;
-    let reportDataParams = {reportData: {loading:false}};
+
     const fakeFacetsData_valid = {
-        facets : [{id:1, name:'test', type:"TEXT",
-            values:[{value:"a"}, {value:"b"}, {value:"c"}]}
+        facets : [
+            {id:1, name:'test', type:"TEXT", values:[{value:"a"}, {value:"b"}, {value:"c"}]}
         ]
     };
 
@@ -65,12 +64,13 @@ describe('StandardGridFacetsMenu functions', () => {
     });
 
     it('test render FacetsMenu shows selection tokens', () => {
-        let selected = new FacetSelections();
-        selected.addSelection(1, 'a');
-        selected.addSelection(1, 'c');
+        let selected = {
+            1: ['a', 'c']
+        };
         let callbacks = {
             onFacetSelect(e, facet, value) {}
         };
+        spyOn(callbacks, 'onFacetSelect');
 
         component = mount(<StandardGridFacetsMenu show={true}
                                                   popoverId="test"
@@ -81,10 +81,9 @@ describe('StandardGridFacetsMenu functions', () => {
 
         // selection tokens rendered
         let tokens = component.find(".selectedTokenName");
+        expect(tokens).toBePresent();
         expect(tokens.length).toEqual(2);
 
-        //click on token deselects
-        spyOn(callbacks, 'onFacetSelect').and.callThrough();
         tokens = component.find('.selectedTokenName');
         tokens.at(1).simulate('click');
         expect(callbacks.onFacetSelect).toHaveBeenCalled();
@@ -273,39 +272,33 @@ describe('StandardGridFacetsMenu functions', () => {
         });
     });
 
-    fdescribe('showMenu', () => {
+    describe('showMenu', () => {
         const parentActions = {
-            showFacetMenu() {},
-            hideFacetMenu() {}
+            toggleFacetMenu() {}
         };
 
         beforeEach(() => {
-            spyOn(parentActions, 'showFacetMenu');
-            spyOn(parentActions, 'hideFacetMenu');
+            spyOn(parentActions, 'toggleFacetMenu');
         });
 
-        fit('calls the hideFacetMenu callback if the menu is visible', () => {
-            component = shallow(<StandardGridFacetsMenu showFacetMenu={parentActions.showFacetMenu}
-                                                        hideFacetMenu={parentActions.hideFacetMenu}
+        it('calls the hideFacetMenu callback if the menu is visible', () => {
+            component = shallow(<StandardGridFacetsMenu toggleFacetMenu={parentActions.toggleFacetMenu}
                                                         show={true}
             />);
 
-            component.instance()();
+            component.instance().changeMenuVisibility();
 
-            expect(parentActions.hideFacetMenu).not.toHaveBeenCalled();
-            expect(parentActions.showFacetMenu).toHaveBeenCalled();
+            expect(parentActions.toggleFacetMenu).toHaveBeenCalled();
         });
 
         it('calls the showFacetMenu callback if the menu is hidden', () => {
-            component = shallow(<StandardGridFacetsMenu showFacetMenu={parentActions.showFacetMenu}
-                                                        hideFacetMenu={parentActions.hideFacetMenu}
+            component = shallow(<StandardGridFacetsMenu toggleFacetMenu={parentActions.toggleFacetMenu}
                                                         show={false}
             />);
 
-            component.instance().showMenu();
+            component.instance().changeMenuVisibility();
 
-            expect(parentActions.showFacetMenu).toHaveBeenCalled();
-            expect(parentActions.hideFacetMenu).not.toHaveBeenCalled();
+            expect(parentActions.toggleFacetMenu).toHaveBeenCalled();
         });
     });
 
