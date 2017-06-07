@@ -12,6 +12,7 @@ import Locale from '../../../../../../reuse/client/src/locales/locale';
 import {connect} from 'react-redux';
 import UserActions from '../../../actions/userActions';
 import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows} from '../../../../actions/userActions';
+import {loadApp} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
 import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
@@ -25,13 +26,14 @@ export const AppUsersRoute = React.createClass({
         };
     },
     componentDidMount() {
-        this.props.loadAppRoles(this.props.match.params.appId);
-
-        const selectedApp = this.props.selectedApp;
-        if (selectedApp) {
-            this.props.loadAppOwner(this.props.appId, this.props.selectedApp.ownerId);
+        const appId = this.props.match.params.appId;
+        if (!this.props.selectedApp) {
+            this.props.loadApp(appId);
+        } else {
+            this.props.loadAppOwner(appId, this.props.selectedApp.ownerId);
+            this.props.loadAppRoles(appId);
+            this.props.searchUsers();
         }
-        this.props.searchUsers();
     },
 
     componentWillReceiveProps(props) {
@@ -226,7 +228,8 @@ const mapDispatchToProps = (dispatch) => {
         searchUsers: (searchTerm) => {return dispatch(searchUsers(searchTerm));},
         setUserRoleToAdd: (roleId) => {dispatch(setUserRoleToAdd(roleId));},
         openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));},
-        selectUserRows: (selected) => {dispatch(selectUserRows(selected));}
+        selectUserRows: (selected) => {dispatch(selectUserRows(selected));},
+        loadApp: (appId) => dispatch(loadApp(appId))
     };
 };
 
