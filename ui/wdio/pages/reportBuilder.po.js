@@ -41,6 +41,16 @@ class reportBuilderPage {
         return browser.element('.hideColumnText');
     }
 
+    get addBeforeMenuOption() {
+        // add option from header menu
+        return browser.element('.addColumnBeforeText');
+    }
+
+    get fieldToken() {
+        // field token in the left side trowser
+        return browser.element('.fieldToken');
+    }
+
     /**
      * Returns a list of header names for a report.
      */
@@ -63,7 +73,6 @@ class reportBuilderPage {
     clickCancel() {
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
-        browser.pause(fiveSeconds);
         this.dirtyForm_Dismiss();
         browser.pause(fiveSeconds);
         return this;
@@ -100,9 +109,17 @@ class reportBuilderPage {
     }
 
     clickHideMenuOption() {
-        this.hideMenuOption.waitForVisible(5000);
         this.hideMenuOption.click();
-        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickAddBeforeMenuOption() {
+        this.addBeforeMenuOption.click();
+        return this;
+    }
+
+    clickFieldToken() {
+        this.fieldToken.click();
         return this;
     }
 
