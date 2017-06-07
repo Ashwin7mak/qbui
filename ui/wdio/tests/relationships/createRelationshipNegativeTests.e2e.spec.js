@@ -79,19 +79,22 @@
         })
 
 
-        it('Verify only recordId shows up in the field list of Add another record relationship modal dialog when there is no parent table with title field', function(){
-            let expectedTablesList = [ 'Table 1', 'Table 2', 'Parent Table A'];
-            let expectedFieldsList = [ 'Record ID#'];
+        it('Verify only recordId shows up in the field list of Add another record relationship modal dialog when there is no parent table with title field', function () {
+            if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+                let expectedTablesList = ['Table 1', 'Table 2', 'Parent Table A'];
+                let expectedFieldsList = ['Record ID#'];
 
-            //Select settings -> modify this form
-            formBuilderPO.open();
+                //Select settings -> modify this form
+                formBuilderPO.open();
 
-            //Click on add a new record button
-            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+                //Click on add a new record button
+                formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
-            //Verify all dialog contents and functionality
-            formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, PARENT_TABLE_WITHOUT_TITLE_FIELD, CHILD_TABLE, expectedFieldsList);
+                //Verify all dialog contents and functionality
+                formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, PARENT_TABLE_WITHOUT_TITLE_FIELD, CHILD_TABLE, expectedFieldsList);
+            }
         })
+
 
     });
 }());
