@@ -144,8 +144,17 @@
         })
 
         it('Verify there is no create relationship button visible if child table has relationships to all the tables in an app', function() {
-            //Delete all tables in user except the child and parent table
+            //Delete all tables in app except the child and parent table
+            browser.call (function() {
+                e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE2].id);
+                e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE3].id);
+                e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE4].id);
 
+                //Go to child table report that has relationships to all tables in an app.
+                return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+            });
+
+            formsPO.viewFormContainerEl.waitForVisible();
             //Select settings -> modify this form
             formBuilderPO.open();
 
