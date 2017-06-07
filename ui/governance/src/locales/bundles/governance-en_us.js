@@ -51,10 +51,10 @@ export default {
                         lastAccess: "LAST ACCESS",
                         quickbaseAccessStatus: "QUICK BASE ACCESS STATUS",
                         inactive: "INACTIVE?",
-                        inAnyGroup: "IN ANY GROUP",
-                        groupManager: "GROUP MANAGER",
-                        canCreateApps: "CAN CREATE APPS",
-                        appManager: "APP MANAGER",
+                        inAnyGroup: "IN ANY GROUP?",
+                        groupManager: "GROUP MANAGER?",
+                        canCreateApps: "CAN CREATE APPS?",
+                        appManager: "APP MANAGER?",
                         inRealmDirectory: "IN REALM DIRECTORY?",
                         realmApproved: "REALM APPROVED?"
                     }
