@@ -62,7 +62,7 @@
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
-        })
+        });
 
         it('Verify create relationship button is visible even tough there is no parent table with title field or for table created via UI', function() {
 
@@ -76,10 +76,10 @@
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
 
-        })
+        });
 
 
-        it('Verify only recordId shows up in the field list of Add another record relationship modal dialog when there is no parent table with title field', function () {
+        it('Verify only recordId shows up in the field list of Add another record relationship modal dialog when there is no parent table with title field', function() {
             if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
                 let expectedTablesList = ['Table 1', 'Table 2', 'Parent Table A'];
                 let expectedFieldsList = ['Record ID#'];
@@ -93,7 +93,7 @@
                 //Verify all dialog contents and functionality
                 formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, PARENT_TABLE_WITHOUT_TITLE_FIELD, CHILD_TABLE, expectedFieldsList);
             }
-        })
+        });
 
 
     });

@@ -61,7 +61,7 @@ class modalDialogWindow {
     get modalDialogDropDownArrow() {
         //drop down arrow to expand the list
         browser.element('.modal-dialog .Select-arrow-zone').waitForVisible();
-        return browser.element('.modal-dialog .Select-arrow-zone')
+        return browser.element('.modal-dialog .Select-arrow-zone');
     }
 
     clickModalDialogAdvancedSettingsToggle() {
@@ -75,7 +75,7 @@ class modalDialogWindow {
     get modalDialogAdvancedSettingsDropDownArrow() {
         //drop down arrow to expand the list
         browser.element('.modal-dialog .advancedSettings .Select-arrow-zone').waitForVisible();
-        return browser.element('.modal-dialog .advancedSettings .Select-arrow-zone')
+        return browser.element('.modal-dialog .advancedSettings .Select-arrow-zone');
     }
 
     get allDropDownListOptions() {

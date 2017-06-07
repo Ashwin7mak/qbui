@@ -204,6 +204,7 @@ class formBuilderPage {
         reportContentPO.reportTitle.waitForExist();
         reportContentPO.reportTitle.waitForVisible();
         topNavPO.settingsBtn.waitForExist();
+        topNavPO.settingsBtn.waitForVisible();
         try {
             topNavPO.settingsBtn.click();
         } catch (err) {
@@ -292,7 +293,7 @@ class formBuilderPage {
         return this.getFieldLabels();
     }
 
-    addNewFieldToFormByDoubleClicking (fieldToSelect) {
+    addNewFieldToFormByDoubleClicking(fieldToSelect) {
         //get all field tokens
         var token = browser.elements('.fieldToken .fieldTokenTitle').value.filter(function(tokenTitle) {
             return tokenTitle.getAttribute('textContent') === fieldToSelect;
@@ -315,14 +316,14 @@ class formBuilderPage {
      * @param childTable table to verify that I am inside this table while creating relationship
      * @param expectedFieldsList to verify the fields from advanced settings select dropdown
      */
-    verifyGetAnotherRecordRelationshipDialog (expectedTablesList, parentTable, childTable, expectedFieldsList) {
-        let advancedSettingsDesc = 'To get a record in the ' +parentTable+ ' table, ' +
-            'an automatic association is made using a unique and required field.'
+    verifyGetAnotherRecordRelationshipDialog(expectedTablesList, parentTable, childTable, expectedFieldsList) {
+        let advancedSettingsDesc = 'To get a record in the ' + parentTable + ' table, ' +
+            'an automatic association is made using a unique and required field.';
         expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
         //Verify title
         expect(modalDialog.modalDialogTitle).toContain('Get another record');
         //Verify description
-        expect(browser.element('.tableChooserDescription').getAttribute('textContent')).toContain('When you create or update a ' +childTable+ ', you can look up and get info from a record in another table.')
+        expect(browser.element('.tableChooserDescription').getAttribute('textContent')).toContain('When you create or update a ' + childTable + ', you can look up and get info from a record in another table.');
         //Verify table chooser heading
         expect(browser.element('.tableChooserHeading').getAttribute('textContent')).toContain('Where is the record you want to get?');
         //Verify select tables drop down has all the tables except the one you're in
