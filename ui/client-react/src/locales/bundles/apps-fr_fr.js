@@ -244,6 +244,15 @@ export default {
                 actionButton: "Tester",
                 activeYes: "Oui",
                 activeNo: "Non"
+            },
+            automationView: {
+                stageHeading: "Automatisation",
+                nameHeader: "Prénom",
+                triggerHeader: "Gâchette",
+                actionHeader: "action",
+                actions: {
+                    email: "Envoyer un e-mail"
+                }
             }
         },
         relationship: {
@@ -765,15 +774,6 @@ export default {
                 prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
             },
             YES: "OUI"
-        },
-        automationView: {
-            stageHeading: "Automatisation",
-            nameHeader: "Prénom",
-            triggerHeader: "Gâchette",
-            actionHeader: "action",
-            actions: {
-                email: "Envoyer un e-mail"
-            }
         },
         addUserToApp: {
             title: "Ajouter des utilisateurs à",

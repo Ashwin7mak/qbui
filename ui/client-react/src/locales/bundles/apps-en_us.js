@@ -248,6 +248,15 @@ export default {
                 actionButton: "Test",
                 activeYes: "Yes",
                 activeNo: "No"
+            },
+            automationView: {
+                stageHeading: "Automation",
+                nameHeader: "Name",
+                triggerHeader: "Trigger",
+                actionHeader: "Action",
+                actions: {
+                    email: "Send an email"
+                }
             }
         },
         relationship: {
@@ -775,15 +784,6 @@ export default {
                 prompt: "Type YES to confirm that you want to delete this table"
             },
             YES: "YES"
-        },
-        automationView: {
-            stageHeading: "Automation",
-            nameHeader: "Name",
-            triggerHeader: "Trigger",
-            actionHeader: "Action",
-            actions: {
-                email: "Send an email"
-            }
         },
         addUserToApp: {
             title: "Add users to",

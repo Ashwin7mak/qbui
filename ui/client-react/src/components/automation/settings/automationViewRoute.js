@@ -28,7 +28,7 @@ export class AutomationViewRoute extends Component {
     }
 
     getStageHeadline() {
-        return <div className="automationViewSettingsStage stageHeadLine"><I18nMessage message="automationView.stageHeading"/>: {this.getAutomationName()}</div>;
+        return <div className="automationViewSettingsStage stageHeadLine"><I18nMessage message="automation.automationView.stageHeading"/>: {this.getAutomationName()}</div>;
     }
 
     componentDidMount() {
@@ -68,16 +68,16 @@ export class AutomationViewRoute extends Component {
                 <div className="automationView">
                     <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions()}/>
                     <div className="automationViewName">
-                        <I18nMessage message="automationView.nameHeader"/>: <br/>
+                        <I18nMessage message="automation.automationView.nameHeader"/>: <br/>
                         <span className="value">{this.getAutomationName()}</span>
                     </div>
                     <div className="automationViewTrigger">
-                        <I18nMessage message="automationView.triggerHeader"/>: <br/>
+                        <I18nMessage message="automation.automationView.triggerHeader"/>: <br/>
                         <span className="value">N/A</span>
                     </div>
                     <div className="automationViewAction">
-                        <I18nMessage message="automationView.actionHeader"/>: <br/>
-                        <span className="value"><I18nMessage message="automationView.actions.email"/></span>
+                        <I18nMessage message="automation.automationView.actionHeader"/>: <br/>
+                        <span className="value"><I18nMessage message="automation.automationView.actions.email"/></span>
                     </div>
                 </div>
             </Loader>

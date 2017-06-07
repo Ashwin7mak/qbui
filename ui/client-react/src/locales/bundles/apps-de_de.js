@@ -245,6 +245,15 @@ export default {
                 actionButton: "Test",
                 activeYes: "Ja",
                 activeNo: "Nein"
+            },
+            automationView: {
+                stageHeading: "Automatisierung",
+                nameHeader: "Name",
+                triggerHeader: "Auslöser",
+                actionHeader: "Aktion",
+                actions: {
+                    email: "Eine E-Mail senden"
+                }
             }
         },
         relationship: {
@@ -767,15 +776,6 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
-        },
-        automationView: {
-            stageHeading: "Automatisierung",
-            nameHeader: "Name",
-            triggerHeader: "Auslöser",
-            actionHeader: "Aktion",
-            actions: {
-                email: "Eine E-Mail senden"
-            }
         },
         addUserToApp: {
             title: "Benutzer hinzufügen",
