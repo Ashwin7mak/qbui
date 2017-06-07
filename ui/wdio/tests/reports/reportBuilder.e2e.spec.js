@@ -76,7 +76,7 @@
                 expect(isReportBuilderContainerPresent1).toEqual(false);
             });
 
-            it('drag/drop a column & verify move', function() {
+            it('drag/drop a column & verify move and CANCEL', function() {
                 let originalColumns = reportBuilderPO.getHeaderLabels();
 
                 let source = reportBuilderPO.getReportLocator(1);
@@ -126,7 +126,7 @@
         }
 
         if (browserName !== 'safari') {
-            it('verify add column and click cancel', function() {
+            it('verify add column and click CANCEL', function() {
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column
@@ -141,7 +141,7 @@
                 expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
             });
 
-            it('verify add column by add before', function() {
+            it('verify add column by add before and CANCEL', function() {
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column by clicking on AddColumnBefore from headerMenu dropdown
@@ -160,7 +160,7 @@
                 expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
             });
 
-            it('verify add column by add after', function() {
+            it('verify add column by add after and CANCEL', function() {
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column by clicking on AddColumnAfter from headerMenu dropdown
@@ -267,7 +267,7 @@
             });
         }
 
-        it('verify add column save', function() {
+        it('verify add column SAVE', function() {
             // gets the column list before adding a column
             let columnsListInitial = reportBuilderPO.getHeaderLabels();
             // adds a column
@@ -282,7 +282,7 @@
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
         });
 
-        it('verify add column save by add before', function() {
+        it('verify add column by add before and SAVE', function() {
             // gets the column list before adding a column
             let columnsListInitial = reportBuilderPO.getHeaderLabels();
             // adds a column by clicking on AddColumnBefore from headerMenu dropdown
@@ -301,7 +301,7 @@
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length -1);
         });
 
-        it('verify add column save by add after', function() {
+        it('verify add column by add after and SAVE', function() {
             // gets the column list before adding a column
             let columnsListInitial = reportBuilderPO.getHeaderLabels();
             // adds a column by clicking on AddColumnAfter from headerMenu dropdown
