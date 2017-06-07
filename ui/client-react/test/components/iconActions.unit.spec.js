@@ -16,10 +16,6 @@ describe('QbIconActions functions', () => {
 
     let component;
 
-    let props = {
-        toggleRowActionsMenu: () => {}
-    };
-
     const actions = [
         {msg: 'action1', icon:'icon1'},
         {msg: 'action2', icon:'icon2'},
@@ -36,12 +32,12 @@ describe('QbIconActions functions', () => {
 
     it('test render of empty component', () => {
         const emptyActions = [];
-        component = TestUtils.renderIntoDocument(<QbIconActions {...props} actions={emptyActions} />);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={emptyActions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of no-menu component', () => {
-        component = TestUtils.renderIntoDocument(<QbIconActions {...props} actions={actions} />);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={actions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
@@ -52,7 +48,7 @@ describe('QbIconActions functions', () => {
     });
 
     it('test render of all-menu component', () => {
-        component = TestUtils.renderIntoDocument(<QbIconActions {...props} actions={actions} maxButtonsBeforeMenu={0}/>);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={actions} maxButtonsBeforeMenu={0}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
@@ -63,7 +59,7 @@ describe('QbIconActions functions', () => {
     });
 
     it('test render of menu after 1st component', () => {
-        component = TestUtils.renderIntoDocument(<QbIconActions {...props} actions={actions} maxButtonsBeforeMenu={1}/>);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={actions} maxButtonsBeforeMenu={1}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");

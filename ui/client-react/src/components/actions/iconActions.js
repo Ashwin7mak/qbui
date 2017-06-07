@@ -11,6 +11,12 @@ import {toggleRowActionsMenu} from '../../actions/shellActions';
  * If you are building a new IconActions set, please use IconActions from the reuse library.
  **/
 const QbIconActions = React.createClass({
+    onDropDownToggle(open) {
+        // This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
+        // It will remove the white space if the menu is closed. The class is added in reportContent.js
+        this.props.toggleRowActionsMenu(open);
+    },
+
     render() {
         // Some of the props have been made more descriptive and to bring it in line with other components (e.g., Tooltip).
         // This function maps to the new property names for each action.
@@ -23,7 +29,8 @@ const QbIconActions = React.createClass({
 
             return action;
         });
-        return <IconActions {...this.props} actions={actions} onDropdownToggle={this.props.toggleRowActionsMenu(open)} />;
+
+        return <IconActions {...this.props} actions={actions} onDropdownToggle={this.onDropDownToggle} />;
     }
 });
 
