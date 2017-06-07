@@ -124,6 +124,61 @@
                 expect(columnsAfterHideAndCancel).toContain(toBeHiddenColumnLabel);
             });
         }
+
+        if (browserName !== 'safari') {
+            it('verify add column and click cancel', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column
+                reportBuilderPO.clickFieldToken();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+                // clicks on cancel
+                reportBuilderPO.clickCancel();
+                // column label list must be equal to the initial list without the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
+            });
+
+            it('verify add column by add before', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnBefore from headerMenu dropdown
+                reportBuilderPO.clickHeaderMenu();
+                reportBuilderPO.clickAddColumnBeforeMenuOption();
+                reportBuilderPO.clickFieldToken();
+
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                // clicks on cancel
+                reportBuilderPO.clickCancel();
+
+                // column label list must be equal to the initial list without the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
+            });
+
+            it('verify add column by add after', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnAfter from headerMenu dropdown
+                reportBuilderPO.clickHeaderMenu();
+                reportBuilderPO.clickAddColumnAfterMenuOption();
+                reportBuilderPO.clickFieldToken();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                // clicks on cancel
+                reportBuilderPO.clickCancel();
+
+                // column label list must be equal to the initial list without the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
+            });
+        }
+
         // it is a known issue that dragAndDrop does not work for E2E on safari and FF so they will not run these tests
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             it('multiple actions: add, hide, reorder then CANCEL', () => {
@@ -138,7 +193,7 @@
                 // open the next headerMenu
                 reportBuilderPO.clickHeaderMenu();
                 // click the add option on menu
-                reportBuilderPO.clickAddBeforeMenuOption();
+                reportBuilderPO.clickAddColumnBeforeMenuOption();
                 // click the first field token to add it to the table
                 reportBuilderPO.clickFieldToken();
                 // store the list of new column labels
@@ -178,7 +233,7 @@
                 // open the next headerMenu
                 reportBuilderPO.clickHeaderMenu();
                 // click the add option on menu
-                reportBuilderPO.clickAddBeforeMenuOption();
+                reportBuilderPO.clickAddColumnBeforeMenuOption();
                 // click the first field token to add it to the table
                 reportBuilderPO.clickFieldToken();
                 // store the list of new column labels
@@ -212,5 +267,4 @@
             });
         }
     });
-
 }());

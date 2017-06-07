@@ -18,6 +18,12 @@
             outline: none;
             @include text-input-focus;
         }
+        
+        // this hides the extra 'x' that appears in Edge (since we have our own clear element in place)
+        &::-ms-clear {
+            width: 0;
+            height: 0;
+        }
     }
 
     .searchIcon {

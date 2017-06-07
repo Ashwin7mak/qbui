@@ -31,6 +31,11 @@ class reportBuilderPage {
         return browser.element('.modal-dialog .middleButton');
     }
 
+    get fieldToken() {
+        // the field token from hidden fields
+        return browser.element('.fieldToken');
+    }
+
     get headerMenu() {
         // header menu in each column header cell
         return browser.element('.headerMenu');
@@ -41,14 +46,14 @@ class reportBuilderPage {
         return browser.element('.hideColumnText');
     }
 
-    get addBeforeMenuOption() {
-        // add option from header menu
-        return browser.element('.addColumnBeforeText');
+    get addColumnAfterMenuOption() {
+        // add column after option from header menu
+        return browser.element('.addColumnAfterText');
     }
 
-    get fieldToken() {
-        // field token in the left side trowser
-        return browser.element('.fieldToken');
+    get addColumnBeforeMenuOption() {
+        // add column before option from header menu
+        return browser.element('.addColumnBeforeText');
     }
 
     /**
@@ -102,6 +107,12 @@ class reportBuilderPage {
         return this;
     }
 
+    clickFieldToken() {
+        this.fieldToken.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
     clickHeaderMenu() {
         this.headerMenu.click();
         browser.pause(fiveSeconds);
@@ -114,14 +125,14 @@ class reportBuilderPage {
         return this;
     }
 
-    clickAddBeforeMenuOption() {
-        this.addBeforeMenuOption.click();
+    clickAddColumnBeforeMenuOption() {
+        this.addColumnBeforeMenuOption.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
-    clickFieldToken() {
-        this.fieldToken.click();
+    clickAddColumnAfterMenuOption() {
+        this.addColumnAfterMenuOption.click();
         browser.pause(fiveSeconds);
         return this;
     }
