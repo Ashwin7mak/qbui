@@ -64,21 +64,7 @@
             formsPO.clickFormCancelBtn();
         })
 
-        it('Verify there is no create relationship button visible in form builder since there is no table created via UI or no parent table with title field at this point', function() {
-
-            //Select settings -> modify this form
-            formBuilderPO.open();
-
-            //Verify that the create relationship button is not visible.
-            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-            console.log("the new fields are: "+newFieldsOnForm)
-            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) > -1).toBe(false);
-
-            //Click on forms Cancel button
-            formsPO.clickFormCancelBtn();
-        })
-
-        it('Verify there is no create relationship button visible in form builder for child Table created via API', function() {
+        it('Verify there is no create relationship button visible in form builder if relationship already exists for a table', function() {
             browser.call(function() {
                 //get the user authentication
                 return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
