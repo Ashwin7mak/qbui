@@ -50,7 +50,7 @@ const reportBuilder = (
         return {
             ...state,
             addBeforeColumn: action.content.addBeforeColumn
-        }
+        };
     }
     case types.CHANGE_REPORT_NAME:
     case types.MOVE_COLUMN:
