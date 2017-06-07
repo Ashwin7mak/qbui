@@ -1,6 +1,5 @@
 import * as types from '../actions/types';
 import Breakpoints from '../utils/breakpoints';
-import AppsBundleLoader from '../locales/appsBundleLoader';
 
 /**
  * Show the trowser
@@ -117,12 +116,22 @@ export const hideTopNav = () => {
         type: types.HIDE_TOP_NAV
     };
 };
+/**
+ * filter report by name
+ * @param reportName
+ * @returns {{type, reportName: string}}
+ */
 export const filterReportsByName = (reportName = "") => {
     return {
         type: types.FILTER_REPORTS_BY_NAME,
         reportName
     };
 };
+/**
+ * hide scrolling on reports for a small interval
+ * @param isScrolling
+ * @returns {{type, isScrolling: boolean}}
+ */
 export const scrollingReport = (isScrolling = true) => {
     return {
         type: types.SCROLLING_REPORT,

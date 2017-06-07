@@ -41,18 +41,12 @@ export const AppsRoute = React.createClass({
     }
 });
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-    };
-};
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        showTopNav: () => dispatch(showTopNav())
-    };
+    return {showTopNav};
 };
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(AppsRoute);
