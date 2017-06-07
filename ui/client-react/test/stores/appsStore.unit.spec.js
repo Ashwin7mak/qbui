@@ -306,4 +306,34 @@ describe('Test Apps Store', () => {
         flux.dispatcher.dispatch(unassignUserSuccess);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
     });
+    it('test get app user failed', ()=>{
+        let getAppUserFailed = {
+            type: actions.GET_APP_USERS_FAILED,
+        };
+        flux.dispatcher.dispatch(getAppUserFailed);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+    });
+    it('test assign user to app success', ()=>{
+        let assignUsersToAppSuccess = {
+            type: actions.ASSIGN_USERS_TO_APP_SUCCESS,
+        };
+        flux.dispatcher.dispatch(assignUsersToAppSuccess);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+    });
+    it('test add user to app dialog', ()=>{
+        let addUserToAppDialog = {
+            type: actions.TOGGLE_ADD_USER_TO_APP_DIALOG,
+            payload: {status: true}
+        };
+        flux.dispatcher.dispatch(addUserToAppDialog);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+    });
+    it('test get app user success', ()=>{
+        let onGetAppUsersSuccess = {
+            type: actions.GET_APP_USERS_SUCCESS,
+            payload: {appUsers: ['', '']}
+        };
+        flux.dispatcher.dispatch(onGetAppUsersSuccess);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+    });
 });
