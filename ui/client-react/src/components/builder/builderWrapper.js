@@ -16,16 +16,12 @@ import _ from 'lodash';
 
 import './builderWrapper.scss';
 
-import Fluxxor from "fluxxor";
-let FluxMixin = Fluxxor.FluxMixin(React);
-
 /**
  * The AppsStore is needed for globalActions (The User and Help Button Located at the top of the screen)
  * The AppsStore selects the appId.
  *
  **/
 export const BuilderWrapper = React.createClass({
-    mixins: [FluxMixin],
 
     getSelectedApp() {
         const selectedAppId = this.props.selectedAppId;

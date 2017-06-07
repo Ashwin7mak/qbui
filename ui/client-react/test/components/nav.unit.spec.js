@@ -73,9 +73,10 @@ describe('Nav Unit tests', () => {
         appRoles: null,
         selectedAppId: null,
         selectedTableId: null,
-        selectedAppUsers: {},
-        selectedAppUnfilteredUsers: {},
+        appUsers: {},
+        appUnfilteredUsers: {},
         isAppsLoading: false,
+        forms: {},
         fields: [],
         record: [],
         report: [{

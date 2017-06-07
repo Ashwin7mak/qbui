@@ -529,6 +529,10 @@ hotloader only opens up node on port 9000 to other devices. Other services
 (such as core on port 8080 or Experience Engine on port 8081) are always open to
 all devices on the network and aren't affected by the hotloader settings.
 
+## Performance Logging
+Performance logging using 
+
+
 ## Troubleshooting
 POSSIBLE ISSUES -- and how to resolve
 

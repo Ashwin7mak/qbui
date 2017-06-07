@@ -1,15 +1,10 @@
 import React from 'react';
 
-import Fluxxor from 'fluxxor';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import './overlay.scss';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
-
 
 /**
  * Component for rendering the actions of a popover with apply/close/cancel

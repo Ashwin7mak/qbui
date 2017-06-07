@@ -11,11 +11,11 @@ import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import {connect} from 'react-redux';
 import UserActions from '../../../actions/userActions';
-import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows} from '../../../../actions/userActions';
+import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows, clearSelectedUserRows} from '../../../../actions/userActions';
 import {loadApp, toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
-import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
+import {getSelectedAppId, getApp, getAppOwner, getAppUsers, getAppUnfilteredUsers} from '../../../../reducers/app';
 import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
 import './appUsersRoute.scss';
 import UserSuccessDialog from './userSuccessDialog.js';
@@ -54,7 +54,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     componentWillUnmount() {
-        this.selectRows([]);
+        this.deselectAllRows();
     },
 
     getPageActions() {
@@ -148,30 +148,31 @@ export const AppUsersRoute = React.createClass({
     },
 
     deselectAllRows() {
-        this.selectRows([]);
+        this.props.clearUserRows();
     },
 
     toggleSelectAllRows() {
         const selectedUserRows = this.props.selectedUserRows.length;
-        if (selectedUserRows === 0 || (selectedUserRows === this.props.selectedAppUsers.length)) {
-            this.deselectAllRows();
-        } else {
+        if (selectedUserRows === 0 || (selectedUserRows !== this.props.appUsers.length)) {
             this.selectAllRows();
+        } else {
+            this.deselectAllRows();
         }
     },
     areAllRowsSelected() {
         const selectedUserRows = this.props.selectedUserRows.length;
-        return selectedUserRows > 0 && (selectedUserRows === this.props.selectedAppUsers.length);
+        return selectedUserRows > 0 && (selectedUserRows === this.props.appUsers.length);
     },
 
     render() {
         if (this.props.appRoles && this.props.selectedApp) {
+            const unfilteredAppUsers = this.props.unfilteredAppUsers;
             return (
             <div>
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>
 
-                        <AppSettingsStage appUsers={this.props.unfilteredAppUsers}
+                        <AppSettingsStage appUsers={unfilteredAppUsers}
                                           appRoles={this.props.appRoles}
                                           appOwner={this.props.appOwner}/>
                     </Stage>
@@ -182,9 +183,9 @@ export const AppUsersRoute = React.createClass({
                                userRoleIdToAdd={this.props.roleIdToAdd}
                                appId={this.props.match.params.appId}
                                selectedApp={this.props.selectedApp}
-                               existingUsers={this.props.unfilteredAppUsers}
+                               existingUsers={unfilteredAppUsers}
                                addUserToAppDialogOpen={this.props.openDialogStatus}
-                               hideDialog={this.toggleAddUserDialog}/>
+                               hideDialog={this.toggleAddUserDialog}
                                showSuccessDialog={this.props.showSuccessDialog}
                 />
                 <UserSuccessDialog successDialogOpen={this.props.successDialogOpen}
@@ -195,7 +196,7 @@ export const AppUsersRoute = React.createClass({
                     {this.getTableActions()}
                     <div className="userManagementContainer">
                         <UserManagement appId={this.props.appId}
-                                        appUsers={this.props.unfilteredAppUsers}
+                                        appUsers={unfilteredAppUsers}
                                         appRoles={this.props.appRoles}
                                         onClickToggleSelectedRow={this.toggleSelectedRow}
                                         onClickToggleSelectAllRows={this.toggleSelectAllRows}
@@ -216,13 +217,13 @@ export const AppUsersRoute = React.createClass({
 const mapStateToProps = (state, ownProps) => {
     let selectedAppId = getSelectedAppId(state.app);
     return {
+        unfilteredAppUsers: getAppUnfilteredUsers(state.app),
+        appUsers: getAppUsers(state.app),
         appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
         appId: selectedAppId,
         selectedApp: getApp(state.app, selectedAppId),
         appOwner: getAppOwner(state.app),
         realmUsers: getSearchedUsers(state.users),
-        unfilteredAppUsers: getSelectedAppUnfilteredUsers(state.app),
-        selectedAppUsers: getSelectedAppUsers(state.app),
         openDialogStatus: getDialogStatus(state.users),
         roleIdToAdd: getRoleIdToAdd(state.users),
         selectedUserRows: getSelectedUsers(state.users),
@@ -239,6 +240,7 @@ const mapDispatchToProps = (dispatch) => {
         setUserRoleToAdd: (roleId) => {dispatch(setUserRoleToAdd(roleId));},
         openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));},
         selectUserRows: (selected) => {dispatch(selectUserRows(selected));},
+        clearUserRows: () => {dispatch(clearSelectedUserRows());},
         loadApp: (appId) => dispatch(loadApp(appId)),
         showSuccessDialog: (isOpen, email) => {
             dispatch(toggleAddToAppSuccessDialog(isOpen, email));

@@ -3,7 +3,6 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import Locale from '../../../locales/locales';
 import Loader  from 'react-loader';
 import Swipeable from 'react-swipeable';
-import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
 import CardViewFooter from './cardViewFooter';

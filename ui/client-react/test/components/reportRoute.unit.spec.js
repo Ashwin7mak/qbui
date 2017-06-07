@@ -1,6 +1,5 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
-import Fluxxor from 'fluxxor';
 import {MemoryRouter} from 'react-router-dom';
 
 import ReportRoute, {
@@ -21,11 +20,6 @@ describe('ReportRoute', () => {
     'use strict';
     const pendEdits = {};
     let component;
-    let mockFluxStore = Fluxxor.createStore({
-        getState() {
-            return {};
-        }
-    });
 
     let props = {
         clearSearchInput: () => {},
@@ -53,15 +47,6 @@ describe('ReportRoute', () => {
         params: {appId, tblId, rptId, format: true}
     };
     let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}, pageOffset: offset, numRows: numRows}};
-
-    let stores = {
-        FluxStore: new mockFluxStore()
-    };
-    let flux = new Fluxxor.Flux(stores);
-
-    flux.actions = {
-        selectTableId() {return;}
-    };
 
     const StageMock = React.createClass({
         render() {
@@ -118,7 +103,7 @@ describe('ReportRoute', () => {
         component = mount(
             <Provider store={store}>
                 <MemoryRouter>
-                    <ReportRoute {...props} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute {...props} reportData={reportDataParams.reportData} pendEdits={pendEdits}/>
                 </MemoryRouter>
             </Provider>);
         expect(component.find(ReportRoute).length).toEqual(1);
@@ -134,7 +119,6 @@ describe('ReportRoute', () => {
                     {...props}
                     match={routeParams}
                     reportData={reportDataParams.reportData}
-                    flux={flux}
                     pendEdits={pendEdits}
                 />
             </Provider>);
@@ -151,7 +135,7 @@ describe('ReportRoute', () => {
         it('loadReport is called with app data on mount', () => {
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).toHaveBeenCalledWith(jasmine.any(String), appId, tblId, rptId, true, offset, numRows);
             expect(props.selectTable).toHaveBeenCalledWith(appId, tblId);
@@ -163,7 +147,7 @@ describe('ReportRoute', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {appId: null}});
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).not.toHaveBeenCalled();
             expect(props.selectTable).not.toHaveBeenCalled();
@@ -175,7 +159,7 @@ describe('ReportRoute', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {tblId: null}});
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).not.toHaveBeenCalled();
         });
@@ -184,7 +168,7 @@ describe('ReportRoute', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {rptId: null}});
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).not.toHaveBeenCalled();
         });
@@ -206,7 +190,6 @@ describe('ReportRoute', () => {
                         {...props}
                         match={{params: paramsWithChildTable}}
                         reportData={reportDataParams.reportData}
-                        flux={flux}
                         pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadDynamicReport).toHaveBeenCalledWith(
@@ -234,7 +217,6 @@ describe('ReportRoute', () => {
                         {...props}
                         match={routeParams}
                         reportData={reportDataParams.reportData}
-                        flux={flux}
                         pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadDynamicReport).not.toHaveBeenCalled();

@@ -161,8 +161,8 @@ describe('Test app reducer - load an app', () => {
         expect(state.app).toEqual(null);
         expect(state.selected.appId).toEqual(appId);
         expect(AppReducer.getSelectedAppId(state)).toEqual(appId);
-        expect(AppReducer.getSelectedAppUsers(state)).toEqual([]);
-        expect(AppReducer.getSelectedAppUnfilteredUsers(state)).toEqual([]);
+        expect(AppReducer.getAppUsers(state)).toEqual([]);
+        expect(AppReducer.getAppUnfilteredUsers(state)).toEqual([]);
     });
 
     it('test successful load of app', () => {
@@ -192,8 +192,8 @@ describe('Test app reducer - load an app', () => {
         expect(state.apps).toEqual(AppReducer.getApps(state));
         expect(state.selected.appId).toEqual(appId);
         expect(AppReducer.getSelectedAppId(state)).toEqual(appId);
-        expect(AppReducer.getSelectedAppUsers(state)).toEqual(app.users);
-        expect(AppReducer.getSelectedAppUnfilteredUsers(state)).toEqual(app.unfilteredUsers);
+        expect(AppReducer.getAppUsers(state)).toEqual(app.users);
+        expect(AppReducer.getAppUnfilteredUsers(state)).toEqual(app.unfilteredUsers);
     });
 
     it('test fail load of app', () => {
@@ -206,8 +206,8 @@ describe('Test app reducer - load an app', () => {
         expect(state.app).toEqual(null);
         expect(state.selected.appId).toEqual(null);
         expect(AppReducer.getSelectedAppId(state)).toEqual(null);
-        expect(AppReducer.getSelectedAppUsers(state)).toEqual([]);
-        expect(AppReducer.getSelectedAppUnfilteredUsers(state)).toEqual([]);
+        expect(AppReducer.getAppUsers(state)).toEqual([]);
+        expect(AppReducer.getAppUnfilteredUsers(state)).toEqual([]);
     });
 });
 
@@ -266,8 +266,8 @@ describe('Test app reducer - load list of apps', () => {
         expect(state.apps).toEqual([]);
         expect(state.selected.appId).toEqual(null);
         expect(AppReducer.getSelectedAppId(state)).toEqual(null);
-        expect(AppReducer.getSelectedAppUsers(state)).toEqual([]);
-        expect(AppReducer.getSelectedAppUnfilteredUsers(state)).toEqual([]);
+        expect(AppReducer.getAppUsers(state)).toEqual([]);
+        expect(AppReducer.getAppUnfilteredUsers(state)).toEqual([]);
     });
 });
 
@@ -339,8 +339,8 @@ describe('Test app reducer - add/remove users from app', () => {
         const unfilteredUsers = {"1": [{"userId": 1}]};
         const state = reducer(reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: appData}), {type: types.ASSIGN_USERS_TO_APP_ROLE, content: {appUsers: [users, unfilteredUsers]}});
 
-        expect(AppReducer.getSelectedAppUsers(state)).toEqual(users);
-        expect(AppReducer.getSelectedAppUnfilteredUsers(state)).toEqual(unfilteredUsers);
+        expect(AppReducer.getAppUsers(state)).toEqual(users);
+        expect(AppReducer.getAppUnfilteredUsers(state)).toEqual(unfilteredUsers);
     });
 
     it('test removing users from the app', () => {
@@ -380,7 +380,7 @@ describe('Test app reducer - add/remove users from app', () => {
         //now we need to remove them
         let usersToRemove = [2, 3];
         let usersRemovedState = reducer(usersAddedState, {type: types.REMOVE_USERS_FROM_APP_ROLE, content: {roleId: roleId, userIds: usersToRemove}});
-        expect(AppReducer.getSelectedAppUsers(usersRemovedState)).toEqual(usersRemoved);
-        expect(AppReducer.getSelectedAppUnfilteredUsers(usersRemovedState)).toEqual(unfilteredRemoved);
+        expect(AppReducer.getAppUsers(usersRemovedState)).toEqual(usersRemoved);
+        expect(AppReducer.getAppUnfilteredUsers(usersRemovedState)).toEqual(unfilteredRemoved);
     });
 });

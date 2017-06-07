@@ -4,7 +4,6 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import Fluxxor from 'fluxxor';
 import {IconActions} from '../../src/components/actions/iconActions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
 import {__RewireAPI__ as ReportToolbarRewireAPI} from '../../src/components/report/reportToolbar';

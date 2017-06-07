@@ -23,7 +23,6 @@ const defaultProps = {
     },
     isNavCollapsed: false,
     isOpen: true,
-    flux: {},
     location: {
         pathname: '/some/report/path'
     }

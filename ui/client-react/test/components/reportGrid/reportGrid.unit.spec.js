@@ -113,7 +113,7 @@ describe('ReportGrid', () => {
     });
 
     describe('onCellChange', () => {
-        it('transforms the field change into one accepted by the flux store', () => {
+        it('transforms the field change into one accepted by the redux store', () => {
             spyOn(requiredProps, 'onFieldChange');
             component = shallow(<UnconnectedReportGrid {...requiredProps} />);
             instance = component.instance();
@@ -126,7 +126,7 @@ describe('ReportGrid', () => {
     });
 
     describe('onCellBlur', () => {
-        it('transforms the field change into one accepted by the flux store', () => {
+        it('transforms the field change into one accepted by the redux store', () => {
             spyOn(requiredProps, 'onFieldChange');
             component = shallow(<UnconnectedReportGrid {...requiredProps}/>);
             instance = component.instance();

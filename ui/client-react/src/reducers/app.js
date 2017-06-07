@@ -275,7 +275,7 @@ export const getSelectedTableId = (state) => {
     return state.selected ? state.selected.tblId : null;
 };
 
-export const getSelectedAppUsers = (state) => {
+export const getAppUsers = (state) => {
     let appUsers = [];
     if (state.app) {
         let appModel = new AppModel();
@@ -285,7 +285,7 @@ export const getSelectedAppUsers = (state) => {
     return appUsers;
 };
 
-export const getSelectedAppUnfilteredUsers = (state) => {
+export const getAppUnfilteredUsers = (state) => {
     let appUnfilteredUsers = [];
     if (state.app) {
         let appModel = new AppModel();

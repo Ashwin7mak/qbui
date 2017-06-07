@@ -21,7 +21,7 @@ let domComponent;
 describe('ReportContentError', () => {
     it('displays when report content is in an error state', () => {
         component = TestUtils.renderIntoDocument(
-            <ReportContent flux={{}} pendEdits={{}} reportData={{error: true, errorDetails: mockErrorDetails}} />
+            <ReportContent pendEdits={{}} reportData={{error: true, errorDetails: mockErrorDetails}} />
         );
         let reportErrorContent = TestUtils.findRenderedComponentWithType(component, ReportContentError);
 

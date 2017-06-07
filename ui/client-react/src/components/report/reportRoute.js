@@ -14,7 +14,6 @@ import Breakpoints from '../../utils/breakpoints';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import withUniqueId from '../hoc/withUniqueId';
-import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
@@ -32,7 +31,6 @@ import * as FieldsReducer from '../../reducers/fields';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 
 let logger = new Logger();
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * report route
@@ -41,7 +39,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  */
 // export for unit tests
 export const ReportRoute = React.createClass({
-    mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
 
     loadReport(appId, tblId, rptId, offset, numRows) {

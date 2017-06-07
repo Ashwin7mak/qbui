@@ -3,7 +3,6 @@ import React from "react";
 import {render} from "react-dom";
 import {Router, Switch} from "react-router-dom";
 import AppHistory from '../globals/appHistory';
-import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
 import BuilderWrapper from '../components/builder/builderWrapper';
 import SettingsWrapper from '../components/settings/settingsWrapper';
@@ -41,13 +40,9 @@ import "react-fastclick";
 import {Provider, connect} from "react-redux";
 import createAppStore from './store';
 
-import getFlux from './fluxxor';
 import RouteWithSubRoutes from "./RouteWithSubRoutes";
 
-let fluxxor = getFlux();
-
 let logger = new Logger();
-PerfLogUtils.setLogger(logger);
 
 const store = createAppStore();
 let storeFunc = {
@@ -73,28 +68,25 @@ const mapStateToProps = (state) => {
     };
 };
 
-
-const withFlux = (ComponentToWrap) => {
+const connectedWrapper = (ComponentToWrap) => {
     class WrappedComponent extends React.Component {
         render() {
             const {...props} = this.props;
-            return <ComponentToWrap {...props} flux={fluxxor}/>;
+            return <ComponentToWrap {...props}/>;
         }
     }
     return WrappedComponent;
 };
 
-const ConnectedNav = withFlux(NavWrapper);
-const ConnectedBuilderNav = withFlux(BuilderWrapper);
-const ConnectedSettingsNav = connect(mapStateToProps)(withFlux(SettingsWrapper)); // pass Redux state as qbui prop
+const ConnectedNav = connectedWrapper(NavWrapper);
+const ConnectedBuilderNav = connectedWrapper(BuilderWrapper);
+const ConnectedSettingsNav = connect(mapStateToProps)(connectedWrapper(SettingsWrapper)); // pass Redux state as qbui prop
 
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
 
 // init the feature switches
 store.dispatch(FeatureSwitchActions.getStates());
-
-const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
 
 /**
  * routes config
@@ -157,7 +149,7 @@ const routes = [
             {
                 path: `${APP_ROUTE}/:appId/users`,
                 exact: true,
-                component: withFlux(AppUsersRoute)
+                component: AppUsersRoute
             },
             {
                 path: `${APP_ROUTE}/:appId`,
@@ -198,7 +190,7 @@ const routes = [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
                 exact: true,
-                component: withFlux(TablePropertiesRoute)
+                component: TablePropertiesRoute
             }
         ]
     },
@@ -224,12 +216,13 @@ const routes = [
                 component: AppSettingsRoute
             }
         ]
-    },
+    }
 ];
 
+const createElement = (Component, props) => <Component {...props}/>;
 render((
     <Provider store={store}>
-        <Router history={history} createElement={createElementWithFlux} >
+        <Router history={history} createElement={createElement} >
                 {/*  within Switch 1st match wins
                     includes all the above top level routes and passes on the child routes in the properties
                     note if an entry it is without a path to match it matches all

@@ -24,7 +24,9 @@ var Html = React.createClass({
         let components = [];
         let nodeConfig = this.renderNodeConfig();
 
-        if (this.props.isClientPerfTrackingEnabled) {
+        //  suspending client perf tracking until migrated to redux on client
+        const isClientPerfTracking = false; //this.props.isClientPerfTrackingEnabled
+        if (isClientPerfTracking) {
             let scriptKey = 1;
             let initialUrl = _.has(this.props, 'req.url') ? this.props.req.url : 'undefined';
             components.push(<script key={"s" + scriptKey++}  dangerouslySetInnerHTML={{__html:`

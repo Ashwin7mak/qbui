@@ -30,7 +30,7 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import * as AppActions from '../../actions/appActions';
 
-import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getSelectedAppUsers, getSelectedAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
+import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
 import {getAppRoles} from '../../reducers/appRoles';
 
 import {CONTEXT} from '../../actions/context';
@@ -483,8 +483,8 @@ export const Nav = React.createClass({
                                 selectedAppId: selectedAppId,
                                 appsLoading: this.props.isAppsLoading,
                                 reportData: reportsData,
-                                appUsers: this.props.selectedAppUsers,
-                                appUsersUnfiltered: this.props.selectedAppUnfilteredUsers,
+                                appUsers: this.props.appUsers,
+                                appUsersUnfiltered: this.props.appUnfilteredUsers,
                                 appRoles: this.props.appRoles,
                                 appOwner: this.props.appOwner,
                                 locale: this.props.shell.locale,
@@ -572,9 +572,10 @@ const mapStateToProps = (state, ownProps) => {
         appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
         selectedAppId: getSelectedAppId(state.app),
         selectedTableId: getSelectedTableId(state.app),
-        selectedAppUsers: getSelectedAppUsers(state.app),
-        selectedAppUnfilteredUsers: getSelectedAppUnfilteredUsers(state.app),
+        appUsers: getAppUsers(state.app),
+        appUnfilteredUsers: getAppUnfilteredUsers(state.app),
         isAppsLoading: getIsAppsLoading(state.app),
+        forms: state.forms,
         shell: state.shell,
         record: state.record,
         report: state.report
