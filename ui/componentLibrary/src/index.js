@@ -74,6 +74,7 @@ import StandardLeftNavDoc from './docs/standardLeftNav.js';
 import PaginationDoc from './docs/pagination.js';
 // import RowActionsDoc from './docs/rowActions.js';
 import NotificationManagerDoc from './docs/notificationManager.js';
+import StandardGridItemsCountDoc from './docs/StandardGridItemsCount.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -277,6 +278,10 @@ const routes = [
             {
                 path: `${LIB_ROUTE}/notificationManager`,
                 component: NotificationManagerDoc
+            },
+            {
+                path: `${LIB_ROUTE}/standardGridItemsCount`,
+                component: StandardGridItemsCountDoc
             }
         ]
     }
