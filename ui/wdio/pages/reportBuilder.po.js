@@ -60,15 +60,6 @@ class reportBuilderPage {
         return '.qbHeaderCell:nth-child(' + index + ')';
     }
 
-    clickCancel() {
-        // Clicks on CANCEL in the report builder and waits for the next page to render
-        this.cancelButton.click();
-        browser.pause(fiveSeconds);
-        this.dirtyForm_Dismiss();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
     get fieldToken() {
         // the field token from hidden fields
         return browser.element('.fieldToken');
@@ -102,6 +93,15 @@ class reportBuilderPage {
     clickSave() {
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveButton.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickCancel() {
+        // Clicks on CANCEL in the report builder and waits for the next page to render
+        this.cancelButton.click();
+        browser.pause(fiveSeconds);
+        this.dirtyForm_Dismiss();
         browser.pause(fiveSeconds);
         return this;
     }

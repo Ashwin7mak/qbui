@@ -177,5 +177,57 @@
             let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
             expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
         });
+
+        it('verify add column save', function() {
+            // gets the column list before adding a column
+            let columnsListInitial = reportBuilderPO.getHeaderLabels();
+            // adds a column
+            reportBuilderPO.clickAddColumnFromFieldsList();
+            // gets the updated column labels after adding the new column
+            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+            // clicks on save
+            reportBuilderPO.clickSave();
+            // column label list must be equal to the initial list with the added column
+            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+        });
+
+        it('verify add column save by add before', function() {
+            // gets the column list before adding a column
+            let columnsListInitial = reportBuilderPO.getHeaderLabels();
+            // adds a column by clicking on AddColumnBefore from headerMenu dropdown
+            reportBuilderPO.clickHeaderMenu();
+            reportBuilderPO.clickAddColumnBefore();
+            reportBuilderPO.clickAddColumnFromFieldsList();
+
+            // gets the updated column labels after adding the new column
+            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+            // clicks on save
+            reportBuilderPO.clickSave();
+
+            // column label list must be equal to the initial list with the added column
+            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length -1);
+        });
+
+        it('verify add column save by add after', function() {
+            // gets the column list before adding a column
+            let columnsListInitial = reportBuilderPO.getHeaderLabels();
+            // adds a column by clicking on AddColumnAfter from headerMenu dropdown
+            reportBuilderPO.clickHeaderMenu();
+            reportBuilderPO.clickAddColumnAfter();
+            reportBuilderPO.clickAddColumnFromFieldsList();
+            // gets the updated column labels after adding the new column
+            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+            // clicks on save
+            reportBuilderPO.clickSave();
+
+            // column label list must be equal to the initial list without the added column
+            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+        });
     });
 }());
