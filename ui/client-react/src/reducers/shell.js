@@ -16,7 +16,6 @@ const shell = (
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
-        scrollingReport: false,
         filterReportsName: ''
     },
     action) => {
@@ -91,12 +90,6 @@ const shell = (
             ... state,
             topNavVisible: false
         };
-    case types.SCROLLING_REPORT: {
-        return {
-            ...state,
-            scrollingReport: action.isScrolling
-        };
-    }
     case types.FILTER_REPORTS_BY_NAME:
         return {
             ...state,

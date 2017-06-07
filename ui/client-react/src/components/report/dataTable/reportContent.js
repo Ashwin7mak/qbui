@@ -28,7 +28,7 @@ import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
 import {getPendEdits} from '../../../reducers/record';
-import {scrollingReport} from '../../../actions/shellActions';
+import {scrollingReport} from '../../../actions/reportActions';
 
 let logger = new Logger();
 
