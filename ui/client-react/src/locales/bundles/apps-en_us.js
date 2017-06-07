@@ -250,7 +250,7 @@ export default {
                 activeNo: "No"
             },
             automationView: {
-                stageHeading: "Automation",
+                stageHeading: "Automation: {automationName}",
                 nameHeader: "Name",
                 triggerHeader: "Trigger",
                 actionHeader: "Action",

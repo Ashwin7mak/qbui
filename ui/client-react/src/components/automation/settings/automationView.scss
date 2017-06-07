@@ -21,3 +21,18 @@ $table-properties-panel-width: 776px;
         }
     }
 }
+
+.automationView--container {
+    margin: 32px;
+    padding: 24px;
+    background-color: white;
+    border: solid 1px #ced0d0;
+}
+
+.automationView--section {
+    margin-bottom: 24px;
+}
+
+.automationView--header {
+    font-weight: bold;
+}

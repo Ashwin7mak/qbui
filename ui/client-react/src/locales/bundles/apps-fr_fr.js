@@ -246,7 +246,7 @@ export default {
                 activeNo: "Non"
             },
             automationView: {
-                stageHeading: "Automatisation",
+                stageHeading: "Automatisation: {automationName}",
                 nameHeader: "Prénom",
                 triggerHeader: "Gâchette",
                 actionHeader: "action",

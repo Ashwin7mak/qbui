@@ -28,7 +28,7 @@ export class AutomationViewRoute extends Component {
     }
 
     getStageHeadline() {
-        return <div className="automationViewSettingsStage stageHeadLine"><I18nMessage message="automation.automationView.stageHeading"/>: {this.getAutomationName()}</div>;
+        return <div className="automationViewSettingsStage stageHeadLine"><I18nMessage message="automation.automationView.stageHeading" automationName={this.getAutomationName()}/></div>;
     }
 
     componentDidMount() {
@@ -67,17 +67,19 @@ export class AutomationViewRoute extends Component {
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
                 <div className="automationView">
                     <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions()}/>
-                    <div className="automationViewName">
-                        <I18nMessage message="automation.automationView.nameHeader"/>: <br/>
-                        <span className="value">{this.getAutomationName()}</span>
-                    </div>
-                    <div className="automationViewTrigger">
-                        <I18nMessage message="automation.automationView.triggerHeader"/>: <br/>
-                        <span className="value">N/A</span>
-                    </div>
-                    <div className="automationViewAction">
-                        <I18nMessage message="automation.automationView.actionHeader"/>: <br/>
-                        <span className="value"><I18nMessage message="automation.automationView.actions.email"/></span>
+                    <div className="automationView--container">
+                        <div className="automationViewName automationView--section">
+                            <span className="automationView--header"><I18nMessage message="automation.automationView.nameHeader"/>:</span> <br/>
+                            <span className="value">{this.getAutomationName()}</span>
+                        </div>
+                        <div className="automationViewTrigger automationView--section">
+                            <span className="automationView--header"><I18nMessage message="automation.automationView.triggerHeader"/>:</span> <br/>
+                            <span className="value">N/A</span>
+                        </div>
+                        <div className="automationViewAction automationView--section">
+                            <span className="automationView--header"><I18nMessage message="automation.automationView.actionHeader"/>:</span> <br/>
+                            <span className="value"><I18nMessage message="automation.automationView.actions.email"/></span>
+                        </div>
                     </div>
                 </div>
             </Loader>
