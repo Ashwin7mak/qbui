@@ -29,8 +29,6 @@ describe('RecordRoute', () => {
     //TODO: to use enzyme
     let flux = {};
     flux.actions = {
-        hideTopNav() {return;},
-        setTopTitle() {return;},
         selectTableId() {return;}
     };
 
@@ -39,6 +37,7 @@ describe('RecordRoute', () => {
         loadForm: () => {},
         openRecord: () => {},
         clearSearchInput: () => {},
+        showTopNav: () => {},
         record: {
             recordIdBeingEdited: 2,
             records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
@@ -52,6 +51,7 @@ describe('RecordRoute', () => {
         spyOn(reduxProps, 'loadForm').and.callThrough();
         spyOn(reduxProps, 'openRecord').and.callThrough();
         spyOn(reduxProps, 'clearSearchInput').and.callThrough();
+        spyOn(reduxProps, 'showTopNav').and.callThrough();
     });
 
     afterEach(() => {
@@ -66,7 +66,7 @@ describe('RecordRoute', () => {
         it('test render of component with missing url params', () => {
             let params = {appId: 1, tblId: 2};
 
-            component = TestUtils.renderIntoDocument(<RecordRoute match={{params}} flux={flux}/>);
+            component = TestUtils.renderIntoDocument(<RecordRoute {...reduxProps} match={{params}} flux={flux}/>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);

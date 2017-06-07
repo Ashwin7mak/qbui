@@ -50,6 +50,10 @@ export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_ERROR_MSG_DIALOG = 'SHOW_ERROR_MSG_DIALOG';
 export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
+export const SHOW_TOP_NAV = 'SHOW_TOP_NAV';
+export const HIDE_TOP_NAV = 'HIDE_TOP_NAV';
+export const SCROLLING_REPORT = "SCROLLING_REPORT";
+export const FILTER_REPORTS_BY_NAME = "FILTER_REPORTS_BY_NAME";
 
 //  ******** Field actions *********
 export const LOAD_FIELDS = 'LOAD_FIELDS';
