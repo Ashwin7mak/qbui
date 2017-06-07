@@ -299,7 +299,7 @@ describe('Test app reducer - load app owner', () => {
                 }]
             }
         };
-        const appOwner = {id: 1, firstName: "Captain", lastName: "Obvious", email: "noyouremail@what.who"}
+        const appOwner = {id: 1, firstName: "Captain", lastName: "Obvious", email: "noyouremail@what.who"};
         const appModel = new AppModel(appData);
         const app = appModel.getApp();
         const state = reducer(reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: appData}), {type: types.LOAD_APP_OWNER_SUCCESS, content: appOwner});
@@ -360,17 +360,25 @@ describe('Test app reducer - add/remove users from app', () => {
                 }]
             }
         };
-        const users = [{"userId": 1, firstName: "Ghost"},{"userId": 2, firstName: "Pepper"},{"userId": 3, firstName: "Jalepeno"},{"userId": 4, firstName: "Cucumber"}];
+        const users = [
+            {"userId": 1, firstName: "Ghost"},
+            {"userId": 2, firstName: "Pepper"},
+            {"userId": 3, firstName: "Jalepeno"},
+            {"userId": 4, firstName: "Cucumber"}
+        ];
         const unfilteredUsers = {"11": [{"userId": 1, firstName: "Ghost"},
                                      {"userId": 2, firstName: "Pepper"},
                                      {"userId": 3, firstName: "Jalepeno"},
                                      {"userId": 4, firstName: "Cucumber"}]};
-        const usersRemoved = [{"userId": 1, firstName: "Ghost"},{"userId": 4, firstName: "Cucumber"}];
+        const usersRemoved = [
+            {"userId": 1, firstName: "Ghost"},
+            {"userId": 4, firstName: "Cucumber"}
+        ];
         const unfilteredRemoved = {"11": [{"userId": 1, firstName: "Ghost"},
                                           {"userId": 4, firstName: "Cucumber"}]};
         let usersAddedState = reducer(reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: appData}), {type: types.ASSIGN_USERS_TO_APP_ROLE, content: {appUsers: [users, unfilteredUsers]}});
         //now we need to remove them
-        let usersToRemove = [2,3];
+        let usersToRemove = [2, 3];
         let usersRemovedState = reducer(usersAddedState, {type: types.REMOVE_USERS_FROM_APP_ROLE, content: {roleId: roleId, userIds: usersToRemove}});
         expect(AppReducer.getSelectedAppUsers(usersRemovedState)).toEqual(usersRemoved);
         expect(AppReducer.getSelectedAppUnfilteredUsers(usersRemovedState)).toEqual(unfilteredRemoved);

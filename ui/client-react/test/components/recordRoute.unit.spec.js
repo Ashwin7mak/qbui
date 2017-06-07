@@ -387,7 +387,7 @@ describe('RecordRoute', () => {
                         <RecordRoute
                             match={matchParams}
                             history={history}
-                            {...reduxProps}
+                            {...props}
                             reportData={reportData}
                             uniqueId={uniqueId}
                             isDrawerContext={false}
@@ -416,7 +416,7 @@ describe('RecordRoute', () => {
                         <RecordRoute
                             match={matchParams}
                             history={history}
-                            {...reduxProps}
+                            {...props}
                             reportData={reportData}
                             uniqueId={uniqueId}
                             isDrawerContext={true}
