@@ -10,7 +10,8 @@ function initializeState() {
         redirectRoute: null,
         isPendingEdit: false,
         isInBuilderMode: false,
-        availableColumns: []
+        availableColumns: [],
+        addBeforeColumn: false
     };
 }
 
