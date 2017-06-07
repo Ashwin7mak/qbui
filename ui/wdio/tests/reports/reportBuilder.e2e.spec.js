@@ -254,7 +254,7 @@
                 // verify that the reordered columns got reordered
                 expect(currentColumns[2]).toEqual(newColumnLabels[3]);
                 expect(currentColumns[3]).toEqual(newColumnLabels[2]);
-                // cancel
+                // save
                 reportBuilderPO.clickSave();
                 // verify that the table has retained its saved state
                 let columnsAfterSave = reportBuilderPO.getHeaderLabels();
