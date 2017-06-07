@@ -139,7 +139,6 @@ const config = {
             'bigdecimal',
             'bluebird',
             'cookie-parser',
-            'fluxxor',
             'intl',
             'intl/locale-data/jsonp/en',
             'intl/locale-data/jsonp/de',
