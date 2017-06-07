@@ -20,8 +20,10 @@
         let user2 = e2eConsts.user2;
         let user3 = e2eConsts.user3;
         let user4 = e2eConsts.user4;
-        let searchText = "spiderman";
-
+        let searchUserName = "spiderman";
+        let searchFirstName = "Steve"
+        let searchEmail = "super"
+        let searchLastName = "King Sr."
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -75,38 +77,37 @@
             return UsersTablePage.newUserBtn.waitForVisible();
         });
         /**
-         * Adds a new user, assigns role and verifies the user was added in report.
+         * Adds a new user by Username, assigns role and verifies the user was added.
          */
         it('Add new user to application', function() {
 
-            //Click on add a new user button
+            // Click on add a new user button
             UsersTablePage.newUserBtn.click();
 
-            // Click on select user search
-            // UsersTablePage.userAddSearchBoxSelect.click();
-            // browser.element('.Select.Select--single.is-searchable .Select-control .Select-placeholder').click();
-            // browser.element('.selectUser .Select-placeholder').click();
-            //browser.element('.Select.Select--single.is-searchable').click();
-
-            UsersTablePage.clickUserSearchbox();
-
-            // browser.element('.combobox').waitForVisible();
-            // browser.element('.selectUser .Select-input').click();
-            browser.setValue('.Select-input', "asdfasdf");
-
             // Search for known user
-            UsersTablePage.selectUserFromSearch(searchText);
-            // UsersTablePage.userAddSearchBox.setValue(searchText);
+            UsersTablePage.searchUser(searchUserName);
 
             // Select user
+            UsersTablePage.userAddSearcMenu.click();
 
-            // Click on select user role
+            browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Select role
 
-            // Click Add
+            // browser.selectByAttribute('id', 'react-select-7--value-item').click;
+            // browser.click('#react-select-7--value-item')
 
-            // Verify user was added to report
+            // browser.selectByValue('.modal-dialog .Select-value-label, "Administrator"');
+
+
+            // Click add user
+            UsersTablePage.addUserBtn.click();
+
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            // Verify user was added to report with correct role
+
+
 
 
 

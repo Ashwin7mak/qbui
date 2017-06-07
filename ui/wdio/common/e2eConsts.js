@@ -63,35 +63,23 @@
             firstName: 'Steve',
             lastName: 'rodgers',
             screenName: 'Captain America',
-            email: 'captain_america@quickbase.com',
-            challengeQuestion: 'who is your favorite scrum team?',
-            challengeAnswer: 'Appvengers',
-            password: 'quickbase'
+            email: 'captain_america@quickbase.com'
         },
         user2 :  {
             id: null,
             screenName: 'spiderman',
-            email: 'spiderman@quickbase.com',
-            challengeQuestion: 'who is your favorite scrum team?',
-            challengeAnswer: 'Appvengers',
-            password: 'quickbase'
+            email: 'spiderman@quickbase.com'
         },
         user3 :  {
             id: null,
             firstName: 'Henry',
             lastName: 'King Sr.',
             screenName: 'Brainwave',
-            email: 'brainwave@quickbase.com',
-            challengeQuestion: 'who is your favorite scrum team?',
-            challengeAnswer: 'Appvengers',
-            password: 'quickbase'
+            email: 'brainwave@quickbase.com'
         },
         user4 :  {
             id: null,
-            email: 'super.man@quickbase.com',
-            challengeQuestion: 'who is your favorite scrum team?',
-            challengeAnswer: 'Appvengers',
-            password: 'quickbase'
+            email: 'super.man@quickbase.com'
         },
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',

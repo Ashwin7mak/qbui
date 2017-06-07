@@ -24,11 +24,20 @@
         // Add new user button
         newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
-        // Add new user search container
-        userAddNewSearch: {get: function() {return browser.element('.selectUser.panel-items');}},
+        // Add user button
+        addUserBtn: {get: function() {return browser.element('.buttons .finishedButton.btn.btn-primary');}},
 
-        // Add new user searchbox
-        userAddSearchBox: {value: function() {return browser.element('.Select-placeholder');}},
+        // Search for a new user search container
+        searchNewUser: {get: function() {return browser.element('.modal-dialog .Select-multi-value-wrapper');}},
+
+        // Select user role container
+        userRoleSelection: {get: function() {return browser.element('.modal-dialog .Select-value-label');}},
+
+        // Select user option
+        userSelectSearch: {get: function() {return browser.element('.Select-input .Select-value-label span');}},
+
+        // Add new user menu
+        userAddSearcMenu: {get: function() {return browser.element('.modal-dialog .Select-menu-outer');}},
 
         // Add new user search select arrow
         userAddSearchBoxSelect: {get: function() {return browser.element('.Select-arrow-zone .Select-arrow');}},
@@ -110,52 +119,36 @@
 
 
         /**
-         * Method to search and select user from the user search
+         * Method to search for a user.
          *@param searchUser name
          */
-        selectUserFromSearch: {value: function(searchUser) {
+        searchUser: {value: function(searchUser) {
 
             //Wait until you see open User search
-            this.userAddNewSearch.waitForVisible();
+            this.searchNewUser.waitForVisible();
 
             //Click in search
-            this.userAddSearchBox.click();
+            this.searchNewUser.click();
 
             //Enter search value
-            return this.userAddSearchBox.setValue(searchUser);
+            return browser.keys(searchUser);
         }},
-
-
 
         /**
-         * Find and click in the searchbox for user search
+         * Method to select user.
+         *@param selectUser name
          */
-        clickUserSearchbox: {value: function() {
-            var userSearchBoxEl = this.userAddSearchBox();
-            userSearchBoxEl.waitForVisible();
-            try {
-                userSearchBoxEl.click();
-                // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMs, true);
-            } catch (err) {
-                browser.logger.info("Caught an error clicking in the searchbox - Trying again with JS. \n Error " + err.toString());
-                // Catch an error from above and then retry
-                // Single click via raw javascript
-                browser.execute(function() {
-                    var event = new MouseEvent('click', {
-                        'view': window,
-                        'bubbles': true,
-                        'cancelable': true,
-                        'detail': 1
-                    });
-                    document.querySelector('.Select-placeholder').dispatchEvent(event);
-                });
-                browser.waitForVisible('.Select.Select--single.is-focused.is-open.is-searchable', e2eConsts.mediumWaitTimeMs, true);
-            }
+        selectUserFromSearch: {value: function(selectText) {
+
+            //Wait until you see open User search
+            this.userSelectSearch.waitForVisible();
+
+            //Click in search
+            this.userSelectSearch.click();
+
+            //Enter search value
+            return browser.keys(selectText);
         }},
-
-
-
     });
 
     module.exports = UsersTablePage;
