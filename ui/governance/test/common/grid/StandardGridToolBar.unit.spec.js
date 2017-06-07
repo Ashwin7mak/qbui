@@ -16,7 +16,7 @@ describe('StandardGridToolBar', () => {
         jasmineEnzyme();
     });
 
-    fit('should render with navigation, search and itemsCount component', () => {
+    it('should render with navigation, search and itemsCount component', () => {
 
         let mockSearchTerm = "test search";
 
