@@ -27,7 +27,7 @@ import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
-import {showTopNav} from '../../actions/shellActions';
+import {setTopTitle, showTopNav} from '../../actions/shellActions';
 
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
@@ -96,6 +96,7 @@ export const RecordRoute = React.createClass({
         }
     },
     componentDidMount() {
+        this.props.setTopTitle();
         this.props.showTopNav();
         this.loadRecordFromParams();
     },
@@ -642,6 +643,7 @@ const mapDispatchToProps = (dispatch) => {
         clearSearchInput: () => {
             dispatch(clearSearchInput());
         },
+        setTopTitle: (title) => dispatch(setTopTitle(title)),
         showTopNav: () => dispatch(showTopNav())
     };
 };

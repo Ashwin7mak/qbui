@@ -32,6 +32,7 @@ describe('RecordRoute', () => {
         openRecord: () => {},
         clearSearchInput: () => {},
         showTopNav: () => {},
+        setTopTitle: () => {},
         record: {
             recordIdBeingEdited: 2,
             records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]

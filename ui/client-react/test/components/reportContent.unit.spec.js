@@ -379,6 +379,8 @@ const selectedRowIds = [
 let doneFunction = null; // Holds the done function for an asynchronous test so it can be called in the mock flux
 const flux = {
     actions: {
+        scrollingReport(scrolling) {
+        },
         mark: ()=> {
         },
         measure: ()=> {

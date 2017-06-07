@@ -1,6 +1,8 @@
 
 export const TOGGLE_ROW_POP_UP_MENU = 'TOGGLE_ROW_POP_UP_MENU';
+export const SET_TOP_TITLE = 'SET_TOP_TITLE';
 export const SEARCH_FOR = 'SEARCH_FOR';
+export const SEARCHING = 'SEARCH';
 export const FILTER_REPORTS_BY_NAME = 'FILTER_REPORTS_BY_NAME';
 
 export const LOAD_APPS = 'LOAD_APPS';

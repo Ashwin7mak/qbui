@@ -5,7 +5,7 @@ import Locale from '../../locales/locales';
 import MyAppsPage from './myAppsPage';
 import {connect} from 'react-redux';
 
-import {showTopNav} from '../../actions/shellActions';
+import {setTopTitle, showTopNav} from '../../actions/shellActions';
 
 /**
  * placeholder for my apps route
@@ -14,6 +14,8 @@ export const AppsRoute = React.createClass({
     componentDidMount() {
         // no title for now...
         this.props.showTopNav();
+        this.props.setTopTitle();
+
     },
 
     getStageHeadline() {
@@ -46,9 +48,14 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = {showTopNav};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setTopTitle: (title) => dispatch(setTopTitle(title)),
+        showTopNav: () => dispatch(showTopNav())
+    };
+};
 
 export default connect(
-    {},
+    mapStateToProps,
     mapDispatchToProps
 )(AppsRoute);

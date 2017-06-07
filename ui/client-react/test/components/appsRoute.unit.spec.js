@@ -19,7 +19,8 @@ describe('AppsRoute functions', () => {
 
     let component;
     let props = {
-        showTopNav: () => {}
+        showTopNav: () => {},
+        setTopTitle: () => {}
     };
 
     let mockRealm = 'Sinatra';

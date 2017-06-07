@@ -13,9 +13,12 @@ const shell = (
         trowserOpen: false,
         trowserContent: null,
         topNavVisible: true,
+        navTopTitle: null,
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
+        searching:false,
+        scrollingReport: false,
         filterReportsName: ''
     },
     action) => {
@@ -89,6 +92,21 @@ const shell = (
         return {
             ... state,
             topNavVisible: false
+        };
+    case types.SET_TOP_TITLE:
+        return {
+            ...state,
+            navTopTitle: action.navTopTitle
+        };
+    case types.SEARCHING:
+        return {
+            ...state,
+            searching: action.searching
+        };
+    case types.SCROLLING_REPORT:
+        return {
+            ...state,
+            scrollingReport: action.isScrolling
         };
     case types.FILTER_REPORTS_BY_NAME:
         return {
