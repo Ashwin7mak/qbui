@@ -14,6 +14,9 @@ class FieldFormats {
 
 
         if (fieldDef && fieldDef.datatypeAttributes) {
+            if (_.has(fieldDef, 'parentTableId')) {
+                return FieldFormats.LINK_TO_RECORD;
+            }
 
             if (_.has(fieldDef, 'parentTableId')) {
                 return FieldFormats.LINK_TO_RECORD;

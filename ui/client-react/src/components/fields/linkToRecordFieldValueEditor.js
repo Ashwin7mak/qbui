@@ -7,6 +7,8 @@ import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
 import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
+import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
+import RecordService from '../../services/recordService';
 import _ from 'lodash';
 
 /**
@@ -32,15 +34,10 @@ export const LinkToRecordFieldValueEditor = React.createClass({
             formId: CONTEXT.FORM.VIEW
         };
     },
-
-    /**
-     * get simple builder mode react-select component
-     * @returns {XML}
-     */
-    getReactSelect() {
-        const placeHolderMessage = Locale.getMessage("selection.placeholder");
-
-        return <Select placeholder={placeHolderMessage}/>;
+    getInitialState() {
+        return {
+            choices: []
+        };
     },
 
     /**
@@ -55,6 +52,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
         // update the field with the parent table ID and a name incorporating the selected table
         const field = _.cloneDeep(this.props.fieldDef);
+        field.parentAppId = parentTable.appId;
         field.parentTableId = tableId;
         field.parentFieldId = parentTableField.id;
         field.parentFieldType = parentTableField.datatypeAttributes.type;
@@ -74,12 +72,37 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         this.props.removeFieldFromForm();
     },
 
+    getChoices() {
+        const recordService = new RecordService();
+        const queryParams = {
+            columns: [this.props.fieldDef.parentFieldId],
+            format: 'display'
+        };
+        let promise = recordService.getRecords(this.props.fieldDef.parentAppId, this.props.fieldDef.parentTableId, queryParams);
+        promise.then((data) => {
+            let records = data.data.records;
+            let choices = [];
+            //the records will always return record Id in addition to the required parentfieldId values so parse these out
+            if (Array.isArray(records)) {
+                records.map(record => {
+                    record.map(field => {
+                        if (field.id === this.props.fieldDef.parentFieldId) {
+                            choices.push({coercedValue: {value: field.value}, displayValue: field.display});
+                        }
+                    });
+                });
+                this.setState({choices});
+            }
+        }).catch((recordResponseError) => {
+            logger.parseAndLogError(LogLevel.ERROR, recordResponseError.response, 'recordService.getRecords:');
+        });
+    },
+
     /**
      *
      * @returns {*}
      */
     render() {
-
         if (this.props.newFormFieldId && this.props.newFormFieldId === this.props.fieldDef.id) {
             return (
                 <LinkToRecordTableSelectionDialog show={true}
@@ -88,7 +111,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
                                                   tableSelected={this.relationshipSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {
-            return this.getReactSelect();
+            return <MultiChoiceFieldValueEditor choices={this.state.choices} onOpen={this.getChoices}
+                {...this.props} showAsRadio={false}/>;
         }
     }
 });

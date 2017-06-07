@@ -420,6 +420,7 @@ export const RecordRoute = React.createClass({
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
                 match={this.props.match}
+                direction={Breakpoints.isSmallBreakpoint() ? 'bottom' : 'right'}
                 />);
     },
 

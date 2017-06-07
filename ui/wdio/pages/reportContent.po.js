@@ -9,6 +9,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
     var tablesPO = requirePO('tableCreate');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
@@ -28,10 +29,6 @@
         settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         tableHomepageLink: {get: function() {return browser.element('.tableHomepageLink');}},
-
-        // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},
-        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .secondaryButton');}},
 
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
@@ -340,8 +337,9 @@
         openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
-            return browser.url(requestRecordPageEndPoint);
-            // return e2ePageBase.navigateTo(requestRecordPageEndPoint); // fails to load page locally...?
+            browser.url(requestRecordPageEndPoint);
+            //wait until loading screen disappear in record Content
+            return loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         }},
 
         /**
@@ -427,9 +425,10 @@
             }},
 
         // Record Row to be selected:
-        selectRow: {value: function(recordRow) {
+        selectRowAndClickDeleteIcon: {value: function(recordRow) {
             this.recordCheckBoxes.value[recordRow].click();
-            this.deleteIcon.waitForExist();
+            this.deleteIcon.waitForVisible();
+            return this.deleteIcon.click();
         }},
 
         //Select a report from tables page with reportID being the index of the report
@@ -451,6 +450,7 @@
 
             if (allReports !== []) {
                 //Click on the report
+                allReports[0].element('.iconUISturdy-report-table').waitForVisible();
                 allReports[0].element('.iconUISturdy-report-table').click();
                 //wait for container to slide away
                 browser.pause(e2eConsts.mediumWaitTimeMs);

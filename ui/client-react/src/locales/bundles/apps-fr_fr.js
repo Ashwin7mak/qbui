@@ -226,11 +226,24 @@ export default {
                     error: "Erreur lors de l'enregistrement du formulaire"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Enregistrement approuvé.",
-                    error: "Une erreur s'est produite lors de l'approbation de ce document."
-                }
+            noParentRecordSelected: "Aucun enregistrement sélectionné"
+        },
+        automation: {
+            approverecord: {
+                success: "Enregistrement approuvé.",
+                error: "Une erreur s'est produite lors de l'approbation de ce document."
+            },
+            testautomation: {
+                success: "Test d'automatisation réussi.",
+                error: "Une erreur s'est produite lors du test de cette automatisation."
+            },
+            automationList: {
+                nameHeader: "Prénom",
+                activeHeader: "Actif",
+                actionHeader: "action",
+                actionButton: "Tester",
+                activeYes: "Oui",
+                activeNo: "Non"
             }
         },
         relationship: {
@@ -752,12 +765,6 @@ export default {
                 prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
             },
             YES: "OUI"
-        },
-        automationList: {
-            nameHeader: "Prénom",
-            activeHeader: "Actif",
-            activeYes: "Oui",
-            activeNo: "Non"
         },
         addUserToApp: {
             title: "Ajouter des utilisateurs à",
