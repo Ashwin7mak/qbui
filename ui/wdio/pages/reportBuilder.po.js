@@ -69,6 +69,19 @@ class reportBuilderPage {
         return this;
     }
 
+    get fieldToken() {
+        // the field token from hidden fields
+        return browser.element('.fieldToken');
+    }
+
+    get addColumnBeforeText() {
+        return browser.element('.addColumnBeforeText');
+    }
+
+    get addColumnAfterText() {
+        return browser.element('.addColumnAfterText');
+    }
+
     dirtyForm_Dismiss() {
         try { // browser's LEAVE THIS PAGE? dlg
             browser.alertDismiss();
@@ -106,9 +119,6 @@ class reportBuilderPage {
         return this;
     }
 
-    /**
-     * Enters into builder mode.
-     */
     enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
@@ -121,9 +131,25 @@ class reportBuilderPage {
         return this;
     }
 
-    /**
-     * Checks to see if you are in report builder.
-     */
+    clickAddColumnFromFieldsList() {
+        // Clicks on one of the hidden fields after entering builder mode
+        this.fieldToken.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickAddColumnBefore() {
+        this.addColumnBeforeText.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickAddColumnAfter() {
+        this.addColumnAfterText.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
     reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
