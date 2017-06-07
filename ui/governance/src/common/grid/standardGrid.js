@@ -160,7 +160,7 @@ StandardGrid.propTypes = {
     facetFields: PropTypes.array,
 
     /**
-     *  Displays the number of items per page
+     *  Number of items to be displayed in a page in the grid
      */
     numberOfItemsPerPage: PropTypes.number
 };

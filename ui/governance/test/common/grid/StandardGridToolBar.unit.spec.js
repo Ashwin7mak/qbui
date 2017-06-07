@@ -16,12 +16,12 @@ describe('StandardGridToolBar', () => {
         jasmineEnzyme();
     });
 
-    it('should render with search and itemsCount component', () => {
+    fit('should render with navigation, search and itemsCount component', () => {
 
         let mockSearchTerm = "test search";
 
         let component = mount(
-            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}, searchTerm: mockSearchTerm}}})}>
+            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 1500}, searchTerm: mockSearchTerm}}})}>
                 <StandardGridToolBar
                     doUpdate={Actions.doUpdate}
                     doFacet={false}
@@ -29,35 +29,7 @@ describe('StandardGridToolBar', () => {
                     rowKey={"uid"}
                     itemTypePlural= "users"
                     itemTypeSingular="user"
-                />
-            </Provider>);
-
-        expect(component).toBeDefined();
-        expect(component.length).toBeTruthy();
-
-        let StandardGridSearchComponent = component.find(GenericFilterSearchBox);
-        expect(StandardGridSearchComponent).toBeDefined();
-        expect(StandardGridSearchComponent.length).toBeTruthy();
-        expect(StandardGridSearchComponent.props().placeholder).toEqual("Search users");
-        expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
-
-        expect(component.find(StandardGridItemsCount)).toBePresent();
-    });
-
-    it('should render with Navigation component', () => {
-
-        let mockSearchTerm = "test search";
-
-        let component = mount(
-            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}, searchTerm: mockSearchTerm}}})}>
-                <StandardGridToolBar
-                    doUpdate={Actions.doUpdate}
-                    doFacet={false}
-                    id={"accountUsers"}
-                    rowKey={"uid"}
-                    itemTypePlural= "users"
-                    itemTypeSingular="user"
-                    numberOfItemsPerPage={550}
+                    numberOfItemsPerPage={500}
                 />
             </Provider>);
 
@@ -69,9 +41,16 @@ describe('StandardGridToolBar', () => {
         expect(StandardGridNavigationComponent.length).toBeTruthy();
         expect(StandardGridNavigationComponent.props().id).toEqual("accountUsers");
 
+        let StandardGridSearchComponent = component.find(GenericFilterSearchBox);
+        expect(StandardGridSearchComponent).toBeDefined();
+        expect(StandardGridSearchComponent.length).toBeTruthy();
+        expect(StandardGridSearchComponent.props().placeholder).toEqual("Search users");
+        expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
+
+        expect(component.find(StandardGridItemsCount)).toBePresent();
     });
 
-    it('should not render with Navigation component', () => {
+    it('should not render with navigation but render with search and itemsCount component', () => {
 
         let mockSearchTerm = "test search";
 
@@ -84,7 +63,7 @@ describe('StandardGridToolBar', () => {
                     rowKey={"uid"}
                     itemTypePlural= "users"
                     itemTypeSingular="user"
-                    numberOfItemsPerPage={10}
+                    numberOfItemsPerPage={20}
                 />
             </Provider>);
 
@@ -92,6 +71,14 @@ describe('StandardGridToolBar', () => {
         expect(component.length).toBeTruthy();
 
         let StandardGridNavigationComponent = component.find(StandardGridNavigation);
-        expect(StandardGridNavigationComponent).not.toBeDefined();
+        expect(StandardGridNavigationComponent).not.toBePresent();
+
+        let StandardGridSearchComponent = component.find(GenericFilterSearchBox);
+        expect(StandardGridSearchComponent).toBeDefined();
+        expect(StandardGridSearchComponent.length).toBeTruthy();
+        expect(StandardGridSearchComponent.props().placeholder).toEqual("Search users");
+        expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
+
+        expect(component.find(StandardGridItemsCount)).toBePresent();
     });
 });

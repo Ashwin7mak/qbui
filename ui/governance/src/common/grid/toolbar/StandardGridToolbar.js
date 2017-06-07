@@ -133,6 +133,9 @@ StandardGridToolBar.propTypes = {
     shouldSearch: PropTypes.bool,
     onSearchChange: PropTypes.func.isRequired,
     searchTerm: PropTypes.string,
+    /**
+     * Number of items to be displayed in a page in the grid
+     */
     numberOfItemsPerPage: PropTypes.number
 };
 
