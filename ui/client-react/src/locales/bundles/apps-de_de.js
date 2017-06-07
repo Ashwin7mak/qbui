@@ -227,12 +227,24 @@ export default {
                     error: "Fehler beim Speichern des Formulars"
                 }
             },
-            noParentRecordSelected: "Kein Datensatz ausgewählt",
-            automation: {
-                approverecord: {
-                    success: "Rekord genehmigt.",
-                    error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
-                }
+            noParentRecordSelected: "Kein Datensatz ausgewählt"
+        },
+        automation: {
+            approverecord: {
+                success: "Rekord genehmigt.",
+                error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
+            },
+            testautomation: {
+                success: "Automatisierungstest erfolgreich.",
+                error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
+            },
+            automationList: {
+                nameHeader: "Name",
+                activeHeader: "Aktiv",
+                actionHeader: "Aktion",
+                actionButton: "Test",
+                activeYes: "Ja",
+                activeNo: "Nein"
             }
         },
         relationship: {
@@ -756,16 +768,20 @@ export default {
             },
             YES: "JA"
         },
-        automationList: {
-            nameHeader: "Name",
-            activeHeader: "Aktiv",
-            activeYes: "Ja",
-            activeNo: "Nein"
-        },
         addUserToApp: {
             title: "Benutzer hinzufügen",
             description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
-            searching: "Suchen..."
+            searching: "Suchen...",
+            userSuccessTitle: "Deine App hat neuen Benutzer!",
+            userSuccessText: "Lassen Sie sie wissen, dass sie Zugang zu Ihrer App haben, indem Sie den Link mit ihnen teilen.",
+            copy: "Kopieren",
+            email: "Email",
+            toCopy: "Klicken Sie auf Kopieren in die Zwischenablage",
+            toEmail: "Klicken Sie hier, um eine E-Mail zu senden",
+            userSuccessDialogOK: "Nein Danke",
+            copied: "Link kopiert",
+            messageSubject:"Link zum {App Name} App",
+            messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}"
         }
     }
 };

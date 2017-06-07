@@ -8,7 +8,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let NewStackAuthPO = requirePO('newStackAuth');
     let UsersTablePage = requirePO('usersTable');
-    let ReportContentPO = requirePO('reportContent');
+    let modalDialog = requirePO('/common/modalDialog');
     let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Users - Remove user(s) tests: ', function() {
@@ -41,11 +41,7 @@
          */
         beforeEach(function() {
             //load the users page
-            e2ePageBase.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
-            //wait until user table rows are loaded
-            ReportContentPO.waitForReportContent();
-            //Wait until you see newUser button
-            return UsersTablePage.newUserBtn.waitForVisible();
+            return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });
 
         /**
@@ -58,7 +54,9 @@
             UsersTablePage.userRemoveIcon.click();
 
             // Click on remove button from the dialogue box
-            UsersTablePage.clickUserRemoveButton();
+            modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
+            //wait until notification container goes away
+            browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Check that the user was removed
             ReportTableActionsPO.selectAllRecordsCheckbox();
@@ -75,7 +73,9 @@
             UsersTablePage.userRemoveIcon.click();
 
             // Click on cancel button from the dialogue box
-            UsersTablePage.clickUserCancelRemoveButton();
+            modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            //wait until notification container goes away
+            browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Check for the user not removed
             ReportTableActionsPO.selectAllRecordsCheckbox();

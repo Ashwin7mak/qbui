@@ -41,13 +41,16 @@ export class AddUserDialog extends React.Component {
             roleId: this.props.userRoleIdToAdd,
         };
         const responsePromise = this.props.assignUserToApp(this.props.appId, userInfo);
-
         if (responsePromise) {
             responsePromise.then(
             (response) => {
+                let assignedUser = _.find(this.props.realmUsers, (realmUser)=>{
+                    return realmUser.id === userInfo.userId;
+                });
+                let userEmail = assignedUser.email;
                 this.state.isValid = false;
                 this.props.hideDialog(false);
-                this.props.onAddedUser(userInfo.userId);
+                this.props.showSuccessDialog(true, userEmail);
             },
             (error) => {
                 // leave the dialog open but issue a growl indicating an error
