@@ -7,7 +7,8 @@ class modalDialogWindow {
     get TABLE_DELETE_BTN() {return 'Delete table';}
     get DELETE_BTN() {return 'Delete';}
     get DONT_DELETE_BTN() {return  "Don't delete";}
-    get REMOVE_BTN() {return  "Remove";}
+    get REMOVE_BTN() {return  'Remove';}
+    get ADD_TO_FORM_BTN() {return  'Add to form';}
 
     get modalDialog() {
         // modal dialog
@@ -54,6 +55,62 @@ class modalDialogWindow {
         //Delete prompt textField
         this.modalDialog.element('.deleteTableDialogContent .prompt .deletePrompt').waitForVisible();
         return this.modalDialog.element('.deleteTableDialogContent .prompt .deletePrompt');
+    }
+
+    get modalDialogDropDownArrow() {
+        //drop down arrow to expand the list
+        browser.element('.modal-dialog .Select-arrow-zone').waitForVisible();
+        return browser.element('.modal-dialog .Select-arrow-zone')
+    }
+
+    get modalDialogAdvancedSettingsDropDownArrow() {
+        //drop down arrow to expand the list
+        browser.element('.modal-dialog .advancedSettings .Select-arrow-zone').waitForVisible();
+        return browser.element('.modal-dialog .advancedSettings .Select-arrow-zone')
+    }
+
+    get allDropDownListOptions() {
+        let listOptions = [];
+        //get the list of all drop down options
+        browser.waitForVisible('.Select-menu-outer');
+        browser.elements('.Select-option').value.filter(function(optionText) {
+            listOptions.push(optionText.element('div div').getText());
+        });
+        return listOptions;
+    }
+
+    /**
+     * Method to click on modal dialog any drop down arrow
+     */
+    clickOnModalDialogDropDownArrow() {
+        return this.modalDialogDropDownArrow.click();
+    }
+
+    /**
+     * Method to click on modal dialog advanced settngs drop down arrow
+     */
+    clickOnModalDialogAdvancedSettingsDropDownArrow() {
+        return this.modalDialogAdvancedSettingsDropDownArrow.click();
+    }
+
+    /**
+     * Method to click on modal dialog any drop down arrow
+     */
+    selectItemFromModalDialogDropDownList(listOption) {
+        browser.waitForVisible('.Select-menu-outer');
+        //get all options from the list
+        var option = browser.elements('.Select-option').value.filter(function(optionText) {
+            return optionText.element('div div').getText().includes(listOption);
+        });
+
+        if (option !== []) {
+            //Click on filtered option
+            option[0].element('div div').click();
+            //wait until loading screen disappear
+            return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
+        } else {
+            throw new Error('Option with name ' + listOption + " not found in the list");
+        }
     }
 
     /**

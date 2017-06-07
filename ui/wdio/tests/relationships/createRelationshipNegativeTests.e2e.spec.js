@@ -19,7 +19,7 @@
     const RECORD_TITLE_FIELD_NAME = '* Record title';
     const GET_ANOTHER_RECORD = 'Get another record';
 
-    describe('Relationships - Create relationship: ', function() {
+    describe('Relationships - Create relationship Negative Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -57,45 +57,59 @@
             return formsPO.viewFormContainerEl.waitForVisible();
         });
 
-        it('Create table via UI and verify title field shows up', function() {
-            let tableFields = [
-                {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
-                {fieldTitle: recordNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
-            ];
+        it('Verify title field does not show up with table created via API', function() {
 
-            //Click on new table button
-            tableCreatePO.clickCreateNewTable();
+            //wait until you see view form
+            formsPO.viewFormContainerEl.waitForVisible();
 
-            //Enter table field values
-            tableFields.forEach(function(tableField) {
-                //Enter field values
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Verify the record title field is not visible for a table created via api.
+            let fieldsOnForm = formBuilderPO.getFieldLabels();
+            expect(fieldsOnForm.indexOf(RECORD_TITLE_FIELD_NAME) === -1).toBe(true);
+
+            //Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
+        })
+
+        it('Verify there is no create relationship button visible in form builder for child Table created via API', function() {
+            browser.call(function() {
+                //get the user authentication
+                return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
             });
 
-            //Click on finished button and make sure it landed in edit Form container page
-            modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
-            tableCreatePO.waitUntilNotificationContainerGoesAway();
+            // wait for the report content to be visible
+            reportContentPO.waitForReportContent();
 
-            //Click OK button on create table dialogue
-            modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+            //Select settings -> modify this form
+            formBuilderPO.open();
 
-            //Verify the record title field is visible for a table created via UI.
-            let fieldsOnForm = formBuilderPO.getFieldLabels();
-            expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
+            //Verify that the create relationship button is not visible.
+            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
 
-            //create records in the new table created
-            browser.call(function() {
-                // Generate and add records to each table (include a dupe and an empty record)
-                return e2eBase.recordService.addRecordsToTable(testApp, 0, 5, false, false);
-            });
         })
 
-        it('Verify Add another record relationship modal dialog functionality', function(){
+        it('Verify there is no create relationship button visible in form builder since there is no table created via UI or no parent table at this point', function() {
+
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Verify that the create relationship button is not visible.
+            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+
+            //Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
+        })
+
+        it('Verify only recordId shows up in the field list of Add another record relationship modal dialog when there is no parent table with title field', function(){
             let expectedTablesList = [ 'Table 2', 'Parent Table A', 'Child Table A', 'newParentTable' ];
-            let expectedFieldsList = [ 'Record ID#', 'Record title' ];
+            let expectedFieldsList = [ 'Record ID#'];
 
             //Select settings -> modify this form
             formBuilderPO.open();
@@ -104,28 +118,8 @@
             formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
             //Verify all dialog contents and functionality
-            formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, NEW_PARENT_TABLE, CHILD_TABLE, expectedFieldsList);
+            formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, PARENT_TABLE_WITHOUT_TITLE_FIELD, CHILD_TABLE, expectedFieldsList);
         })
-
-        xit('Create relationship from childTable to parentTable', function() {
-
-            //Select settings -> modify this form
-            formBuilderPO.open();
-
-            //Click on add a new record button
-            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
-
-            //Select table from Get another record model dialogue
-            modalDialog.selectItemFromModalDialogDropDownList(NEW_PARENT_TABLE);
-
-            //Click Add To form button
-            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
-
-            //Verify
-            expect(formBuilderPO.getSelectedFieldLabel()).toBe('Get another record from '+NEW_PARENT_TABLE);
-
-        })
-
 
     });
 }());

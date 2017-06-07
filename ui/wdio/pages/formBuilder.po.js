@@ -2,6 +2,7 @@
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
+let modalDialog = requirePO('/common/modalDialog');
 
 class formBuilderPage {
 
@@ -298,7 +299,6 @@ class formBuilderPage {
         });
 
         if (token !== []) {
-            console.log("the token is: "+JSON.stringify(token));
             //scroll to a field.
             browser.execute("return arguments[0].scrollIntoView(true);", token[0]);
             //Click on filtered save button
@@ -308,26 +308,39 @@ class formBuilderPage {
         }
     }
 
-    getAllDropDownListElements () {
-        let listOptions = [];
-        //Select the table from the dropdown
-        browser.element('.modal-dialog .Select-arrow-zone').waitForVisible();
-        browser.element('.modal-dialog .Select-arrow-zone').click();
-        browser.waitForVisible('.Select-menu-outer');
-        browser.elements('.Select-option').value.filter(function(optionText) {
-            listOptions.push(optionText.element('div div').getText());
-        });
-        return listOptions;
-    }
-
-    selectTableFromGetAnotherRecordDialog (optionToSelect) {
-        //Verify the dialog title
-        expect(this.addAnotherRecordDialogTitle.getAttribute('textContent')).toContain('Get another record');
-        //Select the table from the dropdown
-        browser.element('.modal-dialog .Select-arrow-zone').waitForVisible();
-        browser.element('.modal-dialog .Select-arrow-zone').click();
-        //wait for select outer menu
-        return formsPO.selectFromList(optionToSelect)
+    verifyGetAnotherRecordRelationshipDialog (expectedTablesList, parentTable, childTable, expectedFieldsList) {
+        let advancedSettingsDesc = 'To get a record in the ' +parentTable+ ' table, ' +
+            'an automatic association is made using a unique and required field.'
+        expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+        //Verify title
+        expect(modalDialog.modalDialogTitle).toContain('Get another record');
+        //Verify description
+        expect(browser.element('.tableChooserDescription').getAttribute('textContent')).toContain('When you create or update a ' +childTable+ ', you can look up and get info from a record in another table.')
+        //Verify table chooser heading
+        expect(browser.element('.tableChooserHeading').getAttribute('textContent')).toContain('Where is the record you want to get?');
+        //Verify select tables drop down has all the tables except the one you're in
+        modalDialog.clickOnModalDialogDropDownArrow();
+        let dropDownList = modalDialog.allDropDownListOptions;
+        expect(dropDownList).toEqual(expectedTablesList);
+        //Select the table
+        modalDialog.selectItemFromModalDialogDropDownList(parentTable);
+        //Verify advanced settings is dispalyed and enabled after selecting table
+        browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').waitForEnabled(e2eConsts.shortWaitTimeMs);
+        //Click on advanced settings
+        browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').click();
+        //Verify advancedSettings Description
+        expect(browser.element('.advancedSettingsDescription').getAttribute('textContent')).toContain(advancedSettingsDesc);
+        //Click on advanced setting table select
+        modalDialog.clickOnModalDialogAdvancedSettingsDropDownArrow();
+        //Verify select drop down has just record id
+        let selectFieldDropDownList = modalDialog.allDropDownListOptions;
+        expect(selectFieldDropDownList).toEqual(expectedFieldsList);
+        //Finally close the dialog
+        modalDialog.modalDialogCloseBtn.click();
+        //Verify the dialog got closed
+        browser.waitForVisible('.modal-dialog .iconUISturdy-close', e2eConsts.longWaitTimeMs, true);
+        //Close the form builder
+        this.cancel();
     }
 
     KB_cancel() {
