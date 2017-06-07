@@ -13,6 +13,7 @@ const routes = [
     '/settings/app/:appId',
     '/settings/app/:appId/properties',
     '/settings/app/:appId/automation',
+    '/settings/app/:appId/automation/:automationId/view',
     '/settings/app/:appId/table/:tblId/properties',
     '/app/:appId/table/:tblId/report/:rptId/record/:recordId/sr_app_:appId_table_:tblId_report_:rptId_record_:recId*',
     '/app/:appId/table/:tblId/report/:rptId/record/:recordId/sr_report_app_:appId_table_:tblId_report_:rptId_dtFid_:dtlFid_dtVal_:dtVal*'

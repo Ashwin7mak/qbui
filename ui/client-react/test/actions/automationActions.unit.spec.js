@@ -10,6 +10,7 @@ import Logger from '../../src/utils/logger';
 import LogLevel from '../../src/utils/logLevels.js';
 
 let appId = 1;
+let automationId = "auto1";
 let context = CONTEXT.AUTOMATION.GRID;
 let automationName = "SendEmailAction";
 let logger = new Logger();
@@ -37,6 +38,12 @@ describe('Test AutomationActions function success workflow', () => {
         ]
     };
 
+    let mockGetAutomationResponse = {
+        data: [
+            {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL"}
+        ]
+    };
+
     let mockTestAutomationResponse = {
         data: [
             {response: true}
@@ -46,6 +53,9 @@ describe('Test AutomationActions function success workflow', () => {
     class mockAutomationService {
         getAutomations() {
             return Promise.resolve(mockAutomationsResponse);
+        }
+        getAutomation() {
+            return Promise.resolve(mockGetAutomationResponse);
         }
         testAutomation() {
             return Promise.resolve(mockTestAutomationResponse);
@@ -57,6 +67,7 @@ describe('Test AutomationActions function success workflow', () => {
 
     beforeEach(() => {
         spyOn(mockAutomationService.prototype, 'getAutomations').and.callThrough();
+        spyOn(mockAutomationService.prototype, 'getAutomation').and.callThrough();
         spyOn(mockAutomationService.prototype, 'testAutomation').and.callThrough();
         AutomationActionsRewireAPI.__Rewire__('AutomationService', mockAutomationService);
     });
@@ -79,6 +90,27 @@ describe('Test AutomationActions function success workflow', () => {
                 done();
             },
             () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+    it('verify loadAutomation action', (done) => {
+        const expectedActions = [
+            event(null, types.LOAD_AUTOMATION, {appId: appId, automationId: automationId}),
+            event(null, types.LOAD_AUTOMATION_SUCCESS, mockGetAutomationResponse.data)
+        ];
+
+        const store = mockAutomationStore({});
+
+        return store.dispatch(automationActions.loadAutomation(appId, automationId)).then(
+            (resp) => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            (error) => {
+                if (error) {
+                    logger.parseAndLogError(LogLevel.INFO, error, 'automationActions');
+                }
                 expect(false).toBe(true);
                 done();
             });
@@ -111,6 +143,9 @@ describe('Test AutomationActions function failure workflow', () => {
     let mockAutomationsResponse = {
         response: 'error'
     };
+    let mockGetAutomationResponse = {
+        response: 'error'
+    };
 
     let mockTestAutomationResponse = {
         response: 'no content'
@@ -119,6 +154,9 @@ describe('Test AutomationActions function failure workflow', () => {
     class mockAutomationService {
         getAutomations() {
             return Promise.reject(mockAutomationsResponse);
+        }
+        getAutomation() {
+            return Promise.resolve(mockGetAutomationResponse);
         }
         testAutomation() {
             return Promise.reject(mockTestAutomationResponse);
@@ -178,6 +216,24 @@ describe('Test AutomationActions function failure workflow', () => {
         const store = mockAutomationStore({});
 
         return store.dispatch(automationActions.loadAutomations(context, appId)).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
+    });
+
+    it('verify loadAutomation action with error response', (done) => {
+        const expectedActions = [
+            event(null, types.LOAD_AUTOMATION_FAILED, 500)
+        ];
+
+        const store = mockAutomationStore({});
+
+        return store.dispatch(automationActions.loadAutomation(appId, null)).then(
             () => {
                 expect(false).toBe(true);
                 done();
