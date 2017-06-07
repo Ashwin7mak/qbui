@@ -424,7 +424,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                         // until all sub-components reference store directly, need to explicitly override this.props.fields
                                    fields={fields}/>}
 
-                    {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
+                    {!this.props.report.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
                 </div>
             );
         }

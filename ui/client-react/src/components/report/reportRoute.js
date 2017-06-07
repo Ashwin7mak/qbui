@@ -226,7 +226,7 @@ export const ReportRoute = React.createClass({
                         pageActions={this.getPageActions(0)}
                         nameForRecords={this.nameForRecords}
                         selectedRows={reportData.selectedRows}
-                        scrollingReport={this.props.scrollingReport}
+                        scrollingReport={this.props.report.scrollingReport}
                         loadDynamicReport={this.loadDynamicReport}
                         noRowsUI={true}
                         handleDrillIntoChild={this.handleDrillIntoChild}
@@ -260,7 +260,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state, ownProps) => {
     return {
         reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId),
-        embeddedReports: state.embeddedReports
+        embeddedReports: state.embeddedReports,
+        report: state.report
     };
 };
 

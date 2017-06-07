@@ -642,7 +642,7 @@ const mapDispatchToProps = (dispatch) => {
         clearSearchInput: () => {
             dispatch(clearSearchInput());
         },
-        showTopNav
+        showTopNav: () => dispatch(showTopNav())
     };
 };
 

@@ -1087,7 +1087,7 @@ const mapDispatchToProps = (dispatch) => {
             //  new row is added after the record save reducer event is executed but before
             //  the grid is refreshed.  See record save reducer for more info..
         },
-        scrollingReport
+        scrollingReport: (scroll) => {dispatch(scrollingReport(scroll));}
     };
 };
 
