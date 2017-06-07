@@ -50,8 +50,7 @@
             let isReportBuilderContainerPresent1 = reportBuilderPO.reportBuilderContainerIsExisting();
             expect(isReportBuilderContainerPresent1).toEqual(false);
         });
-
-
+        // it is a known issue that dragAndDrop does not work for E2E on safari and FF so they will not run these tests
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             it('drag a column then drag back to original field, release & verify no change', function() {
                 let originalColumns = reportBuilderPO.getHeaderLabels();
@@ -123,6 +122,48 @@
                 expect(originalColumns.length).toEqual(columnsAfterHideAndCancel.length);
                 // verify that the hidden column is visible after canceling
                 expect(columnsAfterHideAndCancel).toContain(toBeHiddenColumnLabel);
+            });
+        }
+        // it is a known issue that dragAndDrop does not work for E2E on safari and FF so they will not run these tests
+        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+            it('multiple actions: add, hide, reorder then CANCEL', () => {
+                // store the list of columns before changes
+                let originalColumns = reportBuilderPO.getHeaderLabels();
+                // store the column label to be hidden
+                let toBeHiddenColumnLabel = originalColumns[0];
+                // open the first headerMenu
+                reportBuilderPO.clickHeaderMenu();
+                // click hide option on menu
+                reportBuilderPO.clickHideMenuOption();
+                // open the next headerMenu
+                reportBuilderPO.clickHeaderMenu();
+                // click the add option on menu
+                reportBuilderPO.clickAddBeforeMenuOption();
+                // click the first field token to add it to the table
+                reportBuilderPO.clickFieldToken();
+                // store the list of new column labels
+                let newColumnLabels = reportBuilderPO.getHeaderLabels();
+                // store the column label just added to the front
+                let addedColumnLabel = reportBuilderPO.getHeaderLabels()[0];
+                // get the two columns to reorder
+                let source = reportBuilderPO.getReportLocator(3);
+                let target = reportBuilderPO.getReportLocator(4);
+                // move the first column to second position
+                browser.dragAndDrop(source, target);
+                // store the list of columns after changes
+                let currentColumns = reportBuilderPO.getHeaderLabels();
+                // verify that the hidden column is not in the table
+                expect(currentColumns).not.toContain(toBeHiddenColumnLabel);
+                // verify that the added column is in the table
+                expect(currentColumns).toContain(addedColumnLabel);
+                // verify that the reordered columns got reordered
+                expect(currentColumns[2]).toEqual(newColumnLabels[3]);
+                expect(currentColumns[3]).toEqual(newColumnLabels[2]);
+                // cancel
+                reportBuilderPO.clickCancel();
+                // verify that the table has reverted to its original state
+                let columnsAfterCancel = reportBuilderPO.getHeaderLabels();
+                expect(originalColumns).toEqual(columnsAfterCancel);
             });
         }
     });
