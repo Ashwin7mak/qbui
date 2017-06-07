@@ -22,7 +22,7 @@ describe('Test users reducer', () => {
             "realmUserFlags": 0
         }
     ];
-    const selectedUsers = [1,3,3,7];
+    const selectedUsers = [1, 3, 3, 7];
     const roleIdToAdd = 9;
     const openDialogStatus = true;
     const closeDialogStatus = false;

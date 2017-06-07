@@ -13,7 +13,7 @@ describe('AppUsersRoute functions', () => {
     const appId = 1;
     const selectedApp = {name: "Duder", ownerId: "CFalc", unfilteredUsers: appUsersUnfiltered, users: appUsersUnfiltered};
     const appOwner = {firstName: "Captain", lastName: "Falcon", email: "cfalc@fzero.com"};
-    const selectedAppUsers = [1,3,3,7];
+    const selectedAppUsers = [1, 3, 3, 7];
     const match = {params: {appId: appId}};
     const nextMatch = {params: {appId: 2}};
 

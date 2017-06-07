@@ -66,11 +66,11 @@ export const assignUsersToAppRole = (appId, roleId, userIds) => {
                 () => {
                     let appService = new AppService();
                     appService.getAppUsers(appId).then(
-                        response => {
+                        (response) => {
                             dispatch(event(appId, types.ASSIGN_USERS_TO_APP_ROLE, {appUsers:response.data}));
                             resolve();
                         },
-                        error => {
+                        (error) => {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.assignUsersToAppRole_getAppUsers:');
                             // promise reject is handled by component to render appropriate messaging..
                             reject();
@@ -97,13 +97,13 @@ export const removeUsersFromAppRole = (appId, roleId, userIds) => {
             let logger = new Logger();
             let roleService = new RoleService();
             roleService.removeUsersFromAppRole(appId, roleId, userIds).then(
-                response => {
+                () => {
                     logger.debug('RoleService removeUsersFromAppRole success');
                     dispatch(event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {roleId: roleId, userIds:userIds}));
                     resolve(userIds);
                 },
                 (error) => {
-                    logger.parseAndLogError(LogLevel.ERROR, err.response, 'appActions.removeUsersFromAppRole:');
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.removeUsersFromAppRole:');
                     reject();
                 }
             );
