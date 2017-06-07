@@ -25,6 +25,7 @@ const QbHeaderCell = React.createClass({
             classes.push('placeholderCell');
         }
         if (this.props.isDraggable) {
+            classes.push('isDraggable');
             return <dnd.Header className={classes.join(' ')} {...this.props} />;
         } else {
             return <th className={classes.join(' ')} {...this.props} />;
