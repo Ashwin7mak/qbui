@@ -11,6 +11,7 @@ import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
+import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -67,7 +68,11 @@ class StandardGrid extends Component {
         this.tableRef = body && body.getRef().parentNode;
     }
 
-    render() {
+    /**
+     * Renders the 'no records' UI
+     * @returns {XML}
+     */
+    renderNoRowsExist() {
         return (
             <div className="gridWrapper">
                 <StandardGridToolbar id={this.props.id}
@@ -77,27 +82,56 @@ class StandardGrid extends Component {
                                      facetFields={this.props.facetFields}
                                      itemTypePlural={this.props.itemTypePlural}
                                      itemTypeSingular={this.props.itemTypeSingular}/>
-                <div className="gridContainer">
-                    <Table.Provider
-                        className="qbGrid"
-                        columns={this.getColumns()}
-                        onScroll={this.handleScroll}
-                        components={tableSubComponents}
+                <div className="noRowsExist">
+                    <div className="noRowsIconLine">
+                        <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
+                    </div>
+
+                    <div className="noRowsText">
+                        No users match what you're looking for.
+                    </div>
+                </div>
+            </div>);
+    }
+
+    render() {
+        if (!_.isEmpty(this.props.items)) {
+            return (
+                <div className="gridWrapper">
+                    <StandardGridToolbar id={this.props.id}
+                                         doUpdate={this.props.doUpdate}
+                                         shouldFacet={this.props.shouldFacet}
+                                         shouldSearch={this.props.shouldSearch}
+                                         facetFields={this.props.facetFields}
+                                         itemTypePlural={this.props.itemTypePlural}
+                                         itemTypeSingular={this.props.itemTypeSingular}/>
+                    <div className="gridContainer">
+                        <Table.Provider
+                            className="qbGrid"
+                            columns={this.getColumns()}
+                            onScroll={this.handleScroll}
+                            components={tableSubComponents}
                         >
 
-                        <Table.Header className="qbHeader" />
+                            <Table.Header className="qbHeader"/>
 
-                        <Table.Body
-                            className="qbTbody"
-                            rows={this.props.items}
-                            rowKey={this.getUniqueRowKey.bind(this)}
-                            onRow={onRowFn}
-                            ref={this.bodyRef}
+                            <Table.Body
+                                className="qbTbody"
+                                rows={this.props.items}
+                                rowKey={this.getUniqueRowKey.bind(this)}
+                                onRow={onRowFn}
+                                ref={this.bodyRef}
                             />
-                    </Table.Provider>
+                        </Table.Provider>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+
+        } else {
+            // instead of grid, render a "no users" UI
+            return this.renderNoRowsExist();
+        }
+
     }
 }
 
