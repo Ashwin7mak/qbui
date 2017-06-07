@@ -35,6 +35,11 @@ const QbIconActions = React.createClass({
 });
 
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         toggleRowActionsMenu: (toggleState) => dispatch(toggleRowActionsMenu(toggleState)),
@@ -42,7 +47,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(QbIconActions);
 

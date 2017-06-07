@@ -64,6 +64,11 @@ let ReportManager = React.createClass({
     }
 });
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+
+    };
+};
 const mapDispatchToProps = (dispatch) => {
     return {
         filterReportsByName: (reportName) => dispatch(filterReportsByName(reportName))
@@ -72,6 +77,6 @@ const mapDispatchToProps = (dispatch) => {
 export {ReportManager};
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(ReportManager);

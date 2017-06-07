@@ -82,6 +82,12 @@ let ReportManagerTrowser = React.createClass({
 });
 
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         filterReportsByName: (reportName) => dispatch(filterReportsByName(reportName))
@@ -91,6 +97,6 @@ const mapDispatchToProps = (dispatch) => {
 export {ReportManagerTrowser};
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(ReportManagerTrowser);
