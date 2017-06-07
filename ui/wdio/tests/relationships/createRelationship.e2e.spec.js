@@ -76,6 +76,23 @@
             formsPO.clickFormCancelBtn();
         })
 
+        xit('Verify there is no create relationship button visible in form builder since there is no table created via UI or no parent table at this point', function() {
+
+            //wait until you see view form
+            formsPO.viewFormContainerEl.waitForVisible();
+
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Verify that the create relationship button is not visible.
+            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            console.log("the tokens on form are: "+JSON.stringify(newFieldsOnForm));
+            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+
+            //Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
+        })
+
         it('Verify title field shows up with table created via UI', function() {
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
@@ -112,7 +129,9 @@
             });
         })
 
-        it('Create relationship from childTable to parentTable', function() {
+        it('Verify Add another record dropdown has just parent tables in the drop down list', function(){
+            let expectedTablesList = [ 'Table 2', 'Parent Table A', 'Child Table A', 'newParentTable' ];
+
             //wait until you see view form
             formsPO.viewFormContainerEl.waitForVisible();
 
@@ -122,8 +141,24 @@
             //Click on add a new record button
             formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
+            //Verify Get Another Record drop down has all the tables except the one you're in (ie 'Table 1' in this case)
+            let dropDownList = formBuilderPO.getAllDropDownListElements();
+            expect(dropDownList).toEqual(expectedTablesList);
+        })
+
+        it('Create relationship from childTable to parentTable', function() {
+            //wait until you see view form
+            formsPO.viewFormContainerEl.waitForVisible();
+
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Click on add a new record button
+            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+            browser.pause(e2eConsts.extraLongWaitTimeMs);
+
             //wait until you see Get another record model dialogue
-            formBuilderPO.selectTableFromGetAnotherRecordDialog(CHILD_TABLE);
+            formBuilderPO.selectTableFromGetAnotherRecordDialog(NEW_PARENT_TABLE);
 
             //Click Add To form button
             formsPO.clickButtonOnSaveChangesDialog('Add to form');

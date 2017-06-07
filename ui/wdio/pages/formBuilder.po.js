@@ -308,11 +308,24 @@ class formBuilderPage {
         }
     }
 
+    getAllDropDownListElements () {
+        let listOptions = [];
+        //Select the table from the dropdown
+        browser.element('.modal-dialog .Select-arrow-zone').waitForVisible();
+        browser.element('.modal-dialog .Select-arrow-zone').click();
+        browser.waitForVisible('.Select-menu-outer');
+        browser.elements('.Select-option').value.filter(function(optionText) {
+            listOptions.push(optionText.element('div div').getText());
+        });
+        return listOptions;
+    }
+
     selectTableFromGetAnotherRecordDialog (optionToSelect) {
         //Verify the dialog title
         expect(this.addAnotherRecordDialogTitle.getAttribute('textContent')).toContain('Get another record');
         //Select the table from the dropdown
-        browser.element('.modal-dialog .Select-arrow').click();
+        browser.element('.modal-dialog .Select-arrow-zone').waitForVisible();
+        browser.element('.modal-dialog .Select-arrow-zone').click();
         //wait for select outer menu
         return formsPO.selectFromList(optionToSelect)
     }
