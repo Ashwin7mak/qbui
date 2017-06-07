@@ -101,7 +101,7 @@ $edit-field-padding: 5px;
                 flex-wrap: wrap;
 
                 .formElementContainer {
-                    flex: 1 100%;
+                    flex-grow: 1;
                     margin-right: 15px;
                     padding-bottom: 0;
                     //padding-top: 10px;

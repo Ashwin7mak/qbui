@@ -167,6 +167,15 @@
                         return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7);
                     }
                 }).then(function() {
+                    return e2eBase.relationshipService.retrieveSavedRelationships(createdApp);
+                }).then(function(savedRelationships) {
+                    return e2eBase.relationshipService.addChildReportsToTableForms(createdApp, savedRelationships);
+                }).then(function() {
+                    // Edit child records relating them to the parent (3rd and 4th tables)
+                    let fieldToEdit = createdApp.tables[3].fields[6];
+                    let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
+                    return e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[3].id, editRecords);
+                }).then(function() {
                     // Return the createdApp object
                     return createdApp;
                 }).catch(function(error) {
