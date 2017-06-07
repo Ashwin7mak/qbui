@@ -227,6 +227,7 @@ export default {
                     error: "Fehler beim Speichern des Formulars"
                 }
             },
+            noParentRecordSelected: "Kein Datensatz ausgewählt"
         },
         automation: {
             approverecord: {

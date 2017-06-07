@@ -226,6 +226,7 @@ export default {
                     error: "Erreur lors de l'enregistrement du formulaire"
                 }
             },
+            noParentRecordSelected: "Aucun enregistrement sélectionné"
         },
         automation: {
             approverecord: {

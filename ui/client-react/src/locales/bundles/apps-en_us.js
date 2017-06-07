@@ -230,6 +230,7 @@ export default {
                     error: "Error saving form"
                 }
             },
+            noParentRecordSelected: "No record selected"
         },
         automation: {
             approverecord: {
