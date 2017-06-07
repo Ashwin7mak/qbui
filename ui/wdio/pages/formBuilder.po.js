@@ -205,7 +205,7 @@ class formBuilderPage {
     }
 
     getExistingFieldLabels() {
-        // Gets the list of field labels from the NEW FIELD panel
+        // Gets the list of field labels from the EXISTING FIELD panel
         // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
         // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
         // this lets the message include the contents of the unexpectedly present list.
