@@ -1,16 +1,14 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import ReportManager from "./reportManager";
 import {I18nMessage} from "../../utils/i18nMessage";
 import Button from 'react-bootstrap/lib/Button';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
+import {filterReportsByName} from '../../actions/shellActions';
+import {connect} from 'react-redux';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 let ReportManagerTrowser = React.createClass({
-    mixins: [FluxMixin],
-
     propTypes: {
         visible: React.PropTypes.bool,
         reportsData: React.PropTypes.object,
@@ -64,8 +62,7 @@ let ReportManagerTrowser = React.createClass({
     },
 
     hideTrowser() {
-        let flux = this.getFlux();
-        flux.actions.filterReportsByName("");
+        this.props.filterReportsByName("");
         this.props.onHideTrowser();
     },
     /**
@@ -84,4 +81,22 @@ let ReportManagerTrowser = React.createClass({
     }
 });
 
-export default ReportManagerTrowser;
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        filterReportsByName: (reportName) => dispatch(filterReportsByName(reportName))
+    };
+};
+
+export {ReportManagerTrowser};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportManagerTrowser);
