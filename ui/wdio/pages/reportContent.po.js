@@ -338,8 +338,8 @@
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
-            //wait until loading screen disappear in record Content
-            return loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+            // wait until spinner disappears
+            browser.waitForVisible('.spinner', e2eConsts.longWaitTimeMs, true);
         }},
 
         /**
