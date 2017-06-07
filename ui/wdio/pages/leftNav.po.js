@@ -9,18 +9,6 @@
 
     module.exports = Object.create(e2ePageBase, {
 
-        /**
-         * Method for spinner to dissaper in leftNav
-         */
-        waitUntilSpinnerGoesAwayInLeftNav : {value: function() {
-            //wait until loading screen disappear
-            browser.waitForVisible('.leftNav .loader .spinner', e2eConsts.longWaitTimeMs, true);
-            //wait until report loading screen disappear
-            browser.waitForVisible('.reportContent .loader .spinner', e2eConsts.longWaitTimeMs, true);
-            //Need this to wait for leftNav labels to load
-            return browser.pause(e2eConsts.shortWaitTimeMs);
-        }},
-
         // Left Nav caret element
         leftNavCaretUpEl: {
             get: function() {

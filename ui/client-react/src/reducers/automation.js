@@ -39,6 +39,26 @@ const automation = (
             error: undefined
         };
     }
+    case types.TEST_AUTOMATION: {
+        return {
+            ...state,
+            appId: action.appId,
+            automationName: action.automationName,
+            payload: action.payload
+        };
+    }
+    case types.TEST_AUTOMATION_SUCCESS: {
+        return {
+            ...state,
+            error: undefined
+        };
+    }
+    case types.TEST_AUTOMATION_FAILED: {
+        return {
+            ...state,
+            error: action.content
+        };
+    }
     case types.LOAD_AUTOMATION: {
         //  load an automation
         return {
@@ -70,6 +90,10 @@ const automation = (
 export default automation;
 
 export const getAutomationList = (state) => {
+    return state.automation.list;
+};
+
+export const testAutomation = (state) => {
     return state.automation.list;
 };
 

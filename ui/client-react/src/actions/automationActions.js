@@ -7,6 +7,8 @@ import LogLevel from '../utils/logLevels';
 
 import * as types from '../actions/types';
 import {CONTEXT} from '../actions/context';
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import Locale from '../locales/locales';
 
 let logger = new Logger();
 
@@ -40,7 +42,6 @@ export const loadAutomations = (context, appId) => {
                 logger.debug(`AutomationsAction.loadAutomations: loading automation list for appId: ${appId}`);
 
                 dispatch(event(context, types.LOAD_AUTOMATIONS, appId));
-
                 let automationService = new AutomationService();
                 automationService.getAutomations(appId)
                     .then((response) => {
@@ -56,6 +57,36 @@ export const loadAutomations = (context, appId) => {
             } else {
                 logger.error(`automationService.getAutomations: Missing required input parameters.  appId: ${appId}`);
                 dispatch(event(null, types.LOAD_AUTOMATIONS_FAILED, 500));
+                reject();
+            }
+        });
+    };
+};
+
+export const testAutomation = (automationName, appId) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (automationName && appId) {
+                logger.debug(`AutomationsAction.testAutomation: Testing automation with Automation ID : ${automationName}`);
+                dispatch(event(automationName, appId, types.TEST_AUTOMATION));
+                let automationService = new AutomationService();
+                automationService.invokeAutomation(appId, automationName, null)
+                    .then((response) => {
+                        logger.debug('AutomationService testAutomationSuccess');
+                        NotificationManager.info(Locale.getMessage('automation.testautomation.success'), Locale.getMessage('success'));
+                        dispatch(event(automationName, types.TEST_AUTOMATION_SUCCESS, response.data));
+                        resolve();
+                    })
+                    .catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'AutomationService.testAutomation');
+                        NotificationManager.error(Locale.getMessage('automation.testautomation.error'), Locale.getMessage('failed'));
+                        dispatch(event(automationName, types.TEST_AUTOMATION_FAILED, error));
+                        reject();
+                    });
+            } else {
+                logger.error(`AutomationService.testAutomation: Missing required input parameters. Automation ID : ${automationName}`);
+                dispatch(event(automationName, types.TEST_AUTOMATION_FAILED, error));
+                NotificationManager.error(Locale.getMessage('automation.testautomation.error'), Locale.getMessage('failed'));
                 reject();
             }
         });

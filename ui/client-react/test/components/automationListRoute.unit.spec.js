@@ -83,7 +83,7 @@ describe('AutomationListRoute', () => {
 
         it('test table contains automations', () => {
             let autoTDs = component.find("td");
-            expect(autoTDs.length).toEqual(4);
+            expect(autoTDs.length).toEqual(6);
         });
 
         it('test names and active status of automations', () => {
@@ -92,8 +92,10 @@ describe('AutomationListRoute', () => {
             let i = 0;
             expect(autoTDs.at(i++).find(Link)).toHaveText("Auto 1");
             expect(autoTDs.at(i++)).toHaveText("Yes");
+            expect(autoTDs.at(i++)).not.toBeEmpty();
             expect(autoTDs.at(i++).find(Link)).toHaveText("Auto 2");
             expect(autoTDs.at(i++)).toHaveText("No");
+            expect(autoTDs.at(i++)).not.toBeEmpty();
         });
 
     });

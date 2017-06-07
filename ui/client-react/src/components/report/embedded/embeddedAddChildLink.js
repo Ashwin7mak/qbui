@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import Icon from '../../../../../reuse/client/src/components/icon/icon';
-
+import classNames from 'classnames';
 import {addChildRecord} from '../../../actions/recordActions';
 import QBicon from '../../qbIcon/qbIcon';
 
@@ -33,15 +33,16 @@ export const EmbeddedAddChildLink = React.createClass({
 
 
     render() {
-        const {childAppId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun, location, uniqueId} = this.props;
+        const {childAppId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun, location, uniqueId, parentIsBeingEdited} = this.props;
         // render add child link
         const urlPath = _.get(location, 'pathname', '');
-        const link = UrlUtils.getAddRelatedChildLink(urlPath, childAppId, childTableId, childReportId, detailKeyFid, encodeURI(detailKeyValue), uniqueId);
+        const link = UrlUtils.getAddRelatedChildLink(urlPath, childAppId, childTableId, childReportId, detailKeyFid, encodeURIComponent(detailKeyValue), uniqueId);
+        const noParent = parentIsBeingEdited && (detailKeyValue === null || detailKeyValue.trim() === '');
         const noun = childTableNoun ? childTableNoun.toLowerCase() : Locale.getMessage("records.singular");
         const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={noun}/>;
         return (
             <div className="linkContainer addChild">
-                <Link to={link} className="linkInRecord btn btn-default addChildBtn">
+                <Link to={link} className={classNames('linkInRecord', 'btn', 'btn-default', 'addChildBtn', {'disabled': noParent})}>
                     <Icon icon="add-new-stroke" />
                     <span className="tableName">{childTableMessage}</span>
                 </Link>

@@ -30,11 +30,7 @@
                 screenName        : screenName,
                 email             : email,
                 deactivated       : deactivated,
-                anonymous         : anonymous,
                 administrator     : administrator,
-                challengeQuestion : challengeQuestion,
-                challengeAnswer   : challengeAnswer,
-                password          : password
                 //id                : userId,
                 // ticketVersion     : ticketVersion
             };

@@ -34,11 +34,14 @@
             });
         });
 
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            return e2ePageBase.loadAppByIdInBrowser(realmName, app.id);
+        });
+
         it('should contains menu item that leads to automations settings', function() {
-            //navigate to Application main page
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
-            //wait until loading screen disappear in leftnav
-            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
 
             //validate the 'Settings' button is visible
             expect(appToolbar.appSettingsBtn.isVisible()).toBe(true);

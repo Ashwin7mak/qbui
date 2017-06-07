@@ -7,3 +7,12 @@ p > a {
 p > a:hover {
     color: $color-cyan-400;
 }
+
+.stageHeaderCounts {
+  .stageHeaderCountItem {
+     .stageHeaderCountDivider {
+        border-left: 3px solid #f2b835;
+     }
+  }
+}
+
