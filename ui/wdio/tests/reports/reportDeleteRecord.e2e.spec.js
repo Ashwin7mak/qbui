@@ -5,7 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let reportContentPO = requirePO('reportContent');
-    let reportInLineEditPO = requirePO('reportInLineEdit');
+    let modalDialog = requirePO('/common/modalDialog');
     let reportNavPO = requirePO('reportNavigation');
 
     describe('Reports - Delete record tests: ', function() {
@@ -62,14 +62,12 @@
                 deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount + " records");
 
-                // Step 1: Select the checkbox and click on delete icon
-                reportContentPO.selectRow(rowToBeDeleted);
-                reportContentPO.deleteIcon.waitForVisible();
-                reportContentPO.deleteIcon.click();
+                //Select the checkbox and click on delete icon
+                reportContentPO.selectRowAndClickDeleteIcon(rowToBeDeleted);
 
                 // Step 2: Click on delete button from the dialogue box
-                reportContentPO.deleteButton.waitForVisible();
-                reportContentPO.deleteButton.click();
+                modalDialog.clickOnModalDialogBtn(modalDialog.DELETE_BTN);
+
                 //Need this to wait for delete success container to slide away
                 browser.pause(e2eConsts.mediumWaitTimeMs);
 
@@ -97,8 +95,7 @@
                 reportContentPO.dropDownDeleteIcon.click();
 
                 // Step 2: Click on delete button from the dialogue box
-                reportContentPO.dontDeleteButton.waitForVisible();
-                reportContentPO.dontDeleteButton.click();
+                modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
                 //Need this to wait for delete success container to slide away
                 browser.pause(e2eConsts.mediumWaitTimeMs);
 

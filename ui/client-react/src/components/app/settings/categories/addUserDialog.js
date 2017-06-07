@@ -46,14 +46,19 @@ export class AddUserDialog extends React.Component {
 
             this.props.assignUserToAppRole(this.props.appId, userInfo.roleId, userInfo.userId).then(
                 () => {
+                    let assignedUser = _.find(this.props.realmUsers, (realmUser)=>{
+                        return realmUser.id === userInfo.userId;
+                    });
+                    let userEmail = assignedUser ? assignedUser.email : '';
+
                     this.isValid(false);
                     this.props.hideDialog(false);
-                    //this.props.onAddedUser(userInfo.userId);
-                    NotificationManager.success(Locale.getMessage('app.users.userAdded'));
+                    this.props.showSuccessDialog(true, userEmail);
+                    //NotificationManager.success(Locale.getMessage('app.users.userAdded'));
                 },
                 () => {
                     // leave the dialog open but issue a growl indicating an error
-                    NotificationManager.error(Locale.getMessage('app.users.userAddError'));
+                    NotificationManager.error(Locale.getMessage('app.users.userAddError'), Locale.getMessage('failed'));
                 }
             );
         }

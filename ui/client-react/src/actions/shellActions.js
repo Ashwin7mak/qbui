@@ -1,8 +1,6 @@
 import * as types from '../actions/types';
 import Breakpoints from '../utils/breakpoints';
 
-// Shell action creators (the Fluxxor navActions.js should be migrated over)
-
 /**
  * Show the trowser
  *
@@ -96,5 +94,47 @@ export const changeLocale = (locale) => {
     return {
         type: types.CHANGE_LOCALE,
         locale
+    };
+};
+
+/**
+ * Show top nav (Today, top nav is not shown only for small breakpoint)
+ * @returns {{type: *}}
+ */
+export const showTopNav = () => {
+    return {
+        type: types.SHOW_TOP_NAV
+    };
+};
+
+/**
+ * Hide top nav (Hidden for small breakpoint)
+ * @returns {{type}}
+ */
+export const hideTopNav = () => {
+    return {
+        type: types.HIDE_TOP_NAV
+    };
+};
+/**
+ * filter report by name
+ * @param reportName
+ * @returns {{type, reportName: string}}
+ */
+export const filterReportsByName = (reportName = "") => {
+    return {
+        type: types.FILTER_REPORTS_BY_NAME,
+        reportName
+    };
+};
+/**
+ * hide scrolling on reports for a small interval
+ * @param isScrolling
+ * @returns {{type, isScrolling: boolean}}
+ */
+export const scrollingReport = (isScrolling = true) => {
+    return {
+        type: types.SCROLLING_REPORT,
+        isScrolling
     };
 };

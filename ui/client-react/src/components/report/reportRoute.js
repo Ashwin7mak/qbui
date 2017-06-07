@@ -26,6 +26,7 @@ import {loadFields} from '../../actions/fieldsActions';
 import {selectAppTable} from '../../actions/appActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+import {hideTopNav} from '../../actions/shellActions';
 
 import * as FieldsReducer from '../../reducers/fields';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
@@ -105,8 +106,7 @@ export const ReportRoute = React.createClass({
     },
 
     componentDidMount() {
-        const flux = this.getFlux();
-        flux.actions.hideTopNav();
+        this.props.hideTopNav();
 
         if (this.props.match.params) {
             this.loadReportFromParams(this.props.match.params);
@@ -252,7 +252,9 @@ const mapDispatchToProps = (dispatch) => {
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         },
-        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId))
+        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId)),
+        hideTopNav: () => dispatch(hideTopNav())
+
     };
 };
 

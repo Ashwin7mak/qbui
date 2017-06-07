@@ -1,18 +1,15 @@
 import ReactDOM from "react-dom";
 
 import Fluxxor from "fluxxor";
-import NavStore from "../stores/navStore";
-import navActions from "../actions/navActions";
+
 import PerfStore from "../stores/perfStore";
 import perfActions from "../actions/perfActions";
 
 export default function getFlux() {
     let stores = {
-        NavStore: new NavStore(),
         PerfStore: new PerfStore()
     };
     let flux = new Fluxxor.Flux(stores);
-    flux.addActions(navActions);
     flux.addActions(perfActions);
 
     //to ensure you don't get cascading dispatch errors with Fluxxor

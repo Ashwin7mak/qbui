@@ -83,3 +83,7 @@ export const clearSelectedAppTable = () => {
     return event(types.CLEAR_SELECTED_APP_TABLE);
 };
 
+export const toggleAddToAppSuccessDialog = (isOpen, email) => {
+    return event(types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, {isOpen, email});
+};
+

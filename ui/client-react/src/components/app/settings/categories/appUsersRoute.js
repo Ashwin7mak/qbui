@@ -12,17 +12,18 @@ import Locale from '../../../../../../reuse/client/src/locales/locale';
 import {connect} from 'react-redux';
 import UserActions from '../../../actions/userActions';
 import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows} from '../../../../actions/userActions';
-import {loadApp} from '../../../../actions/appActions';
+import {loadApp, toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
 import {getSelectedAppId, getApp, getAppOwner, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../../../reducers/app';
 import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
 import './appUsersRoute.scss';
+import UserSuccessDialog from './userSuccessDialog.js';
 
 export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
-            roleId: ''
+            roleId: '',
         };
     },
     componentDidMount() {
@@ -184,6 +185,13 @@ export const AppUsersRoute = React.createClass({
                                existingUsers={this.props.unfilteredAppUsers}
                                addUserToAppDialogOpen={this.props.openDialogStatus}
                                hideDialog={this.toggleAddUserDialog}/>
+                               showSuccessDialog={this.props.showSuccessDialog}
+                />
+                <UserSuccessDialog successDialogOpen={this.props.successDialogOpen}
+                                   addedAppUser={this.props.addedAppUser}
+                                   showSuccessDialog={this.props.showSuccessDialog}
+                                   selectedAppName={this.props.selectedApp.name}
+                />
                     {this.getTableActions()}
                     <div className="userManagementContainer">
                         <UserManagement appId={this.props.appId}
@@ -217,7 +225,9 @@ const mapStateToProps = (state, ownProps) => {
         selectedAppUsers: getSelectedAppUsers(state.app),
         openDialogStatus: getDialogStatus(state.users),
         roleIdToAdd: getRoleIdToAdd(state.users),
-        selectedUserRows: getSelectedUsers(state.users)
+        selectedUserRows: getSelectedUsers(state.users),
+        successDialogOpen: state.appUsers.successDialogOpen,
+        addedAppUser: state.appUsers.addedAppUser
     };
 };
 
@@ -229,7 +239,10 @@ const mapDispatchToProps = (dispatch) => {
         setUserRoleToAdd: (roleId) => {dispatch(setUserRoleToAdd(roleId));},
         openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));},
         selectUserRows: (selected) => {dispatch(selectUserRows(selected));},
-        loadApp: (appId) => dispatch(loadApp(appId))
+        loadApp: (appId) => dispatch(loadApp(appId)),
+        showSuccessDialog: (isOpen, email) => {
+            dispatch(toggleAddToAppSuccessDialog(isOpen, email));
+        }
     };
 };
 

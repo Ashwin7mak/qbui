@@ -10,7 +10,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './../record/record';
 import {Link, withRouter} from 'react-router-dom';
 import simpleStringify from '../../../../common/src/simpleStringify';
-import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
@@ -28,6 +27,7 @@ import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {selectAppTable} from '../../actions/appActions';
+import {showTopNav} from '../../actions/shellActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
@@ -40,7 +40,6 @@ import ReportInDrawer from '../drawer/reportInDrawer';
 import {getRecordTitle} from '../../utils/formUtils';
 import QueryUtils from '../../utils/queryUtils';
 let logger = new Logger();
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * record route component
@@ -48,7 +47,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * Note: this component has been partially migrated to Redux
  */
 export const RecordRoute = React.createClass({
-    mixins: [FluxMixin],
 
     // TODO: remove
     getInitialState() {
@@ -93,10 +91,7 @@ export const RecordRoute = React.createClass({
         }
     },
     componentDidMount() {
-        let flux = this.getFlux();
-        flux.actions.hideTopNav();
-        flux.actions.setTopTitle();
-
+        this.props.showTopNav();
         this.loadRecordFromParams();
     },
 
@@ -419,6 +414,7 @@ export const RecordRoute = React.createClass({
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
                 match={this.props.match}
+                direction={Breakpoints.isSmallBreakpoint() ? 'bottom' : 'right'}
                 />);
     },
 
@@ -644,7 +640,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         selectTable: (appId, tableId) => {
             dispatch(selectAppTable(appId, tableId));
-        }
+        },
+        showTopNav
     };
 };
 

@@ -1,7 +1,6 @@
 import React from "react";
 import {Route} from 'react-router-dom';
 
-import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
@@ -64,20 +63,10 @@ const OPEN_NAV = true;
 const CLOSE_NAV = false;
 const OPEN_APPS_LIST = true;
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 export const Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
-    },
-
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            nav: flux.store('NavStore').getState()
-        };
     },
 
     navigateToFormBuilder() {
@@ -377,8 +366,6 @@ export const Nav = React.createClass({
             return <div dangerouslySetInnerHTML={{__html: LoadingScreen}} />;
         }
 
-        const flux = this.getFlux();
-
         let classes = "navShell";
         if (this.props.shell.leftNavVisible) {
             classes += " leftNavOpen";
@@ -455,7 +442,7 @@ export const Nav = React.createClass({
             <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                   history={this.props.history}
                                   selectedTable={this.getSelectedTable(reportsList.tblId)}
-                                  filterReportsName={this.state.nav.filterReportsName}
+                                  filterReportsName={this.props.shell.filterReportsName}
                                   reportsData={reportsList}
                                   onHideTrowser={this.hideTrowser}/>
             }
@@ -476,11 +463,9 @@ export const Nav = React.createClass({
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
-                <TopNav title={this.state.nav.topTitle}
-                        // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
+                <TopNav // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.routes &&
                 <div className="mainContent" >
@@ -502,12 +487,11 @@ export const Nav = React.createClass({
                                 appUsersUnfiltered: this.props.selectedAppUnfilteredUsers,
                                 appRoles: this.props.appRoles,
                                 appOwner: this.props.appOwner,
-                                locale: this.state.nav.locale,
+                                locale: this.props.shell.locale,
                                 isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                                 selectedApp: selectedApp,
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
-                                scrollingReport: this.state.nav.scrollingReport,
-                                flux: flux
+                                scrollingReport: this.props.shell.scrollingReport
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
                         }

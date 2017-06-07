@@ -19,6 +19,7 @@ import commonNavReducer from '../../../reuse/client/src/components/sideNavs/comm
 import facets from '../../../reuse/client/src/components/facets/facetMenuReducer';
 import automation from './automation';
 import appRoles from './appRoles';
+import appUsers from './appUsers';
 import users from './users';
 
 // combine individual reducers into a single root reducer (qbui)
@@ -27,6 +28,7 @@ export default combineReducers({
     user,
     animation,
     appRoles,
+    appUsers,
     automation,
     featureSwitches,
     fields,

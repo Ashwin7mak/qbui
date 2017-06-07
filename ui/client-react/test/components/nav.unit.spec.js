@@ -1,7 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import Fluxxor from 'fluxxor';
 import * as ShellActions from '../../src/actions/shellActions';
 import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 import {mount, shallow} from 'enzyme';
@@ -54,33 +53,6 @@ const query = {
 
 describe('Nav Unit tests', () => {
     'use strict';
-
-    let navStore = Fluxxor.createStore({
-        getState: function() {
-            return {leftNavOpen: true};
-        }
-    });
-    let appsStore = Fluxxor.createStore({
-        getState: function() {
-            return {};
-        }
-    });
-    let appsStoreWithV3App = Fluxxor.createStore({
-        getState: function() {
-            return {apps: [{id:"1"}], selectedAppId: "1"};
-        }
-    });
-    let appsStoreWithNoApps = Fluxxor.createStore({
-        getState: function() {
-            return {apps: null};
-        }
-    });
-
-    let stores = {
-        NavStore: new navStore(),
-        AppsStore: new appsStore()
-    };
-    let flux = new Fluxxor.Flux(stores);
 
     let props = {
         toggleAppsList: (state) => {},
@@ -177,12 +149,12 @@ describe('Nav Unit tests', () => {
     });
 
     it('test render of component', () => {
-        let component = shallow(<Nav {...props} flux={flux} />);
+        let component = shallow(<Nav {...props}/>);
         expect(component).toBeDefined();
     });
 
     it('test renders large by default', () => {
-        let component = mount(<Nav {...props} flux={flux} />);
+        let component = mount(<Nav {...props}/>);
         let leftNav = component.find('.leftMenu');
         expect(leftNav.length).toBe(1);
         let topNav = component.find('.topNav');
@@ -190,16 +162,10 @@ describe('Nav Unit tests', () => {
     });
 
     it('renders the loading screen while no apps are loaded', () => {
-        let storesWithoutApps = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithNoApps()
-        };
-
         let cloneProps = _.clone(props);
         cloneProps.isAppsLoading = true;
 
-        let fluxWithoutApps = new Fluxxor.Flux(storesWithoutApps);
-        let component = TestUtils.renderIntoDocument(<Nav {...cloneProps} flux={fluxWithoutApps} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...cloneProps}/>);
         let domComponent = ReactDOM.findDOMNode(component);
 
         let loadingScreen = domComponent.querySelector('.loadingScreen');
@@ -210,13 +176,7 @@ describe('Nav Unit tests', () => {
     });
 
     it('does not render the loading screen if apps are loaded', () => {
-        let storesWithApps = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithV3App()
-        };
-
-        let fluxWithApps = new Fluxxor.Flux(storesWithApps);
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithApps} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}/>);
 
         let domComponent = ReactDOM.findDOMNode(component);
         let loadingScreen = domComponent.querySelector('.loadingScreen');
@@ -230,7 +190,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
         smallBreakpoint = true;
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}/>);
         component.onSelectItem();
         expect(props.toggleLeftNav).toHaveBeenCalled();
 
@@ -238,20 +198,20 @@ describe('Nav Unit tests', () => {
     });
 
     it('test toggleNav method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}/>);
         component.toggleNav();
         expect(props.toggleLeftNav).toHaveBeenCalled();
     });
 
     it('test onSelectTableReports method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}/>);
         component.onSelectTableReports();
         expect(props.showTrowser).toHaveBeenCalled();
         expect(props.loadReports).toHaveBeenCalled();
     });
 
     it('test hideTrowser method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}/>);
         component.hideTrowser();
         expect(props.hideTrowser).toHaveBeenCalled();
     });
@@ -263,7 +223,7 @@ describe('Nav Unit tests', () => {
         ];
         testCases.forEach(testCase => {
             props.shell.leftNavExpanded = testCase.expanded;
-            let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
+            let component = TestUtils.renderIntoDocument(<Nav {...props}/>);
             component.toggleAppsList(testCase.expanded);
             if (testCase.expanded) {
                 expect(props.toggleAppsList(testCase.expanded));
@@ -279,7 +239,7 @@ describe('Nav Unit tests', () => {
         props.forms = {};
         props.history = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToFormBuilder();
 
         expect(props.history).toEqual(expectedRouter);
@@ -290,7 +250,7 @@ describe('Nav Unit tests', () => {
         props.forms = {'view': {}};
         props.history = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToFormBuilder();
 
         expect(props.history).toEqual(expectedRouter);
@@ -306,14 +266,14 @@ describe('Nav Unit tests', () => {
         props.forms = [];
         props.history = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}location={testLocation} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToFormBuilder();
 
         expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });
 
     it('enters report builder', () => {
-        let component = shallow(<Nav {...props} flux={flux} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
+        let component = shallow(<Nav {...props}updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
 
         let instance = component.instance();
 
@@ -326,7 +286,7 @@ describe('Nav Unit tests', () => {
         let expectedRouter = ['/qbase/builder/app/1/table/2/report/3'];
         props.history = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
         component.navigateToReportBuilder();
 
         expect(props.history).toEqual(expectedRouter);
@@ -341,7 +301,7 @@ describe('Nav Unit tests', () => {
         };
         props.history = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props}location={testLocation} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
         component.navigateToReportBuilder();
 
         expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);

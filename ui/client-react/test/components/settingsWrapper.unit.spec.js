@@ -7,17 +7,21 @@ import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/top
 import TopNav from '../../../reuse/client/src/components/topNav/topNav';
 import LeftNav from '../../../reuse/client/src/components/sideNavs/standardLeftNav';
 import SimpleNavItem from '../../../reuse/client/src/components/simpleNavItem/simpleNavItem';
-import {mount} from 'enzyme';
+
+import {mount, shallow} from 'enzyme';
 
 import Promise from 'bluebird';
 import _ from 'lodash';
+import {Provider} from "react-redux";
 
 const apps = [{id: 'app1', tables: [{id: 'table1'}, {id: 'tbl2'}]}];
 const params = {
     appId: 'app1',
     tblId: 'tbl1'
 };
+
 const initialProps = {
+
     match: {
         params: params
     },
@@ -26,6 +30,9 @@ const initialProps = {
     selectedAppId: null,
     selectedTableId: null,
     getApp: (appId) => {return _.find(apps, function(a) {return a.id === appId;});},
+    shell: {
+        topNavVisible: true
+    },
     toggleNav: () => {},
     clearSelectedApp: () => {},
     selectTable: (appId, tblId) => {},
@@ -202,6 +209,15 @@ describe('SettingsWrapper tests', () => {
         props = _.clone(initialProps);
         setSpies();
 
+        const reduxStore = {
+            getState: function() {
+                return {
+                    shell: {}
+                };
+            },
+            subscribe: ()=>{}
+        };
+
         const ChildComponent = React.createClass({
             render() {
                 return <div className="childComponentClass" />;
@@ -215,7 +231,9 @@ describe('SettingsWrapper tests', () => {
         let initialEntries = ['/one', '/aRoute'];
         component = mount(
             <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
+                <Provider store={reduxStore}>
                 <SettingsWrapper {...props} routes={childRoute}/>
+                </Provider>
             </MemoryRouter>);
 
         let child = component.find(ChildComponent);

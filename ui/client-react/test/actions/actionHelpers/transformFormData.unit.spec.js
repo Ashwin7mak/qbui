@@ -147,6 +147,7 @@ describe('TransformFormData', () => {
                         detailAppId: 'app1',
                         detailTableId: 'childTable1',
                         detailFieldId: 1,
+                        masterAppId: 'masterApp1',
                         masterTableId: 'masterTable1',
                         masterFieldId: 2
                     }
@@ -157,7 +158,7 @@ describe('TransformFormData', () => {
         it('adds parentTableId and parentFieldId props to fields when needed', () => {
 
             let fieldsWithRelationshipProps = [
-                {id: 1, parentTableId: 'masterTable1', parentFieldId: 2},
+                {id: 1, parentAppId: 'masterApp1', parentTableId: 'masterTable1', parentFieldId: 2},
                 {id: 2},
                 {id: 3}
             ];
