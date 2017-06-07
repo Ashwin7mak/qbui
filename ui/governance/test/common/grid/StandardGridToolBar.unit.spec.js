@@ -29,7 +29,7 @@ describe('StandardGridToolBar', () => {
                     rowKey={"uid"}
                     itemTypePlural= "users"
                     itemTypeSingular="user"
-                    numberOfItemsPerPage={500}
+                    itemsPerPage={500}
                 />
             </Provider>);
 
@@ -63,7 +63,7 @@ describe('StandardGridToolBar', () => {
                     rowKey={"uid"}
                     itemTypePlural= "users"
                     itemTypeSingular="user"
-                    numberOfItemsPerPage={20}
+                    itemsPerPage={20}
                 />
             </Provider>);
 

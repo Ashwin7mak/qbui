@@ -77,7 +77,7 @@ class StandardGrid extends Component {
                                      facetFields={this.props.facetFields}
                                      itemTypePlural={this.props.itemTypePlural}
                                      itemTypeSingular={this.props.itemTypeSingular}
-                                     numberOfItemsPerPage={this.props.numberOfItemsPerPage}
+                                     itemsPerPage={this.props.itemsPerPage}
                 />
                 <div className="gridContainer">
                     <Table.Provider
@@ -162,7 +162,7 @@ StandardGrid.propTypes = {
     /**
      *  Number of items to be displayed in a page in the grid
      */
-    numberOfItemsPerPage: PropTypes.number
+    itemsPerPage: PropTypes.number
 };
 
 

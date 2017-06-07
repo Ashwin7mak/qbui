@@ -21,7 +21,7 @@ class AccountUsersGrid extends Component {
                 rowKey="uid"
                 itemTypePlural="users"
                 itemTypeSingular="user"
-                numberOfItemsPerPage={constants.USERS_GRID_ITEMSPERPAGE}
+                itemsPerPage={constants.USERS_GRID_ITEMSPERPAGE}
             />
         );
     }

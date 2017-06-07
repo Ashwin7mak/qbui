@@ -30,7 +30,7 @@ class StandardGridToolBar extends Component {
 
     render() {
         let hasFacets = this.props.shouldFacet;
-        let hasNavigation = (this.props.totalFilteredItems || this.props.totalItems) > this.props.numberOfItemsPerPage;
+        let hasNavigation = (this.props.totalFilteredItems || this.props.totalItems) > this.props.itemsPerPage;
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
@@ -136,7 +136,7 @@ StandardGridToolBar.propTypes = {
     /**
      * Number of items to be displayed in a page in the grid
      */
-    numberOfItemsPerPage: PropTypes.number
+    itemsPerPage: PropTypes.number
 };
 
 const mapStateToProps = (state, ownProps) => {
