@@ -39,15 +39,21 @@ describe('Automation reducer functions', () => {
             expect(resultState).toEqual({appId: 'TEST'});
         });
 
-        it('returns correct initial state on automation action', () => {
+        it('returns correct initial state on load automations action', () => {
             let resultState = reducer(state, {type: types.LOAD_AUTOMATIONS_SUCCESS, id: 10, content: [{name: 'Auto 1'}]});
             expect(resultState).toEqual({appId: 'TEST', list: [{name: 'Auto 1'}], error: undefined});
         });
 
-        it('returns correct initial state on automation action', () => {
+        it('returns correct initial state on load automations action failed', () => {
             let resultState = reducer(state, {type: types.LOAD_AUTOMATIONS_FAILED, id: 10, content: {message: 'error'}});
             expect(resultState).toEqual({appId: 'TEST', list: null, error: {message: 'error'}});
         });
+
+        it('returns correct initial state on load automation action', () => {
+            let resultState = reducer(state, {type: types.LOAD_AUTOMATION_SUCCESS, id: 10, content: {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL"}});
+            expect(resultState).toEqual({appId: 'TEST', automation: {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL"}, error: undefined});
+        });
+
     });
 
 

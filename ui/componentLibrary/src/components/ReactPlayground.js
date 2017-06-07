@@ -60,6 +60,7 @@ const Pagination = require('../../../reuse/client/src/components/pagination/pagi
 // const PositionedRowEditActions = require('../../../client-react/src/components/dataTable/qbGrid/rowEditActions').default;
 const NotificationManager = require('../../../reuse/client/src/scripts/notificationManager.js').default;
 const NotificationContainer = require('react-notifications').NotificationContainer;
+const StandardGridItemsCount = require('../../../reuse/client/src/components/itemsCount/StandardGridItemsCount.js').default;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

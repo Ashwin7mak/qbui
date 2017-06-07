@@ -6,7 +6,7 @@
 (function() {
     'use strict';
     // Import the base page object
-    var e2ePageBase = requirePO('./e2ePageBase');
+    var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
     var tablesPO = requirePO('tableCreate');
     let loadingSpinner = requirePO('/common/loadingSpinner');
@@ -338,8 +338,8 @@
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
-            //wait until loading screen disappear in record Content
-            return loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+            // wait until spinner disappears
+            browser.waitForVisible('.spinner', e2eConsts.longWaitTimeMs, true);
         }},
 
         /**
