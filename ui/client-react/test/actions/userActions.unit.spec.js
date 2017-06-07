@@ -200,4 +200,23 @@ describe('App Actions error workflow functions', () => {
             });
     });
 
+    it('test add a user to a role', () => {
+        const roleId = 'VIEWER';
+        expect(UserActions.setUserRoleToAdd(roleId)).toEqual(userEvent(types.SET_USER_ROLE_TO_ADD, {roleId: roleId}));
+    });
+
+    it('test status setting for user dialog popup', () => {
+        const status = true;
+        expect(UserActions.openAddUserDialog(status)).toEqual(userEvent(types.TOGGLE_ADD_USER_DIALOG, {status: status}));
+    });
+
+    it('test select of 1..n users in management grid', () => {
+        const selected = ['1', '2'];
+        expect(UserActions.selectUserRows(selected)).toEqual(userEvent(types.SELECT_USER_ROWS, {selectedUsers: selected}));
+    });
+
+    it('test clear all selected users in management grid', () => {
+        expect(UserActions.clearSelectedUserRows()).toEqual(userEvent(types.SELECT_USER_ROWS, {selectedUsers: []}));
+    });
+
 });
