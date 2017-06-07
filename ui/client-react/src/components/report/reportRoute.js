@@ -121,7 +121,7 @@ export const ReportRoute = React.createClass({
         if (embeddedReport) {
             const existingPath = this.props.match.url;
             const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
-            const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
+            const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, thisprops.match.params.rptId, recId, this.props.uniqueId);
             const link = existingPath + recordDrawerSegment;
             if (this.props.history) {
                 this.props.history.push(link);
