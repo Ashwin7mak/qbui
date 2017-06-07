@@ -230,13 +230,13 @@ export default {
                     error: "Error saving form"
                 }
             },
+            noParentRecordSelected: "No record selected",
             automation: {
                 approverecord: {
                     success: "Record Approved.",
                     error: "An error occured when approving this record."
                 }
-            },
-            noParentRecordSelected: "No record selected"
+            }
         },
         relationship: {
             childTable: "Child Table",

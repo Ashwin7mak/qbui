@@ -226,13 +226,13 @@ export default {
                     error: "Erreur lors de l'enregistrement du formulaire"
                 }
             },
+            noParentRecordSelected: "Aucun enregistrement sélectionné",
             automation: {
                 approverecord: {
                     success: "Enregistrement approuvé.",
                     error: "Une erreur s'est produite lors de l'approbation de ce document."
                 }
-            },
-            noParentRecordSelected: "Aucun enregistrement sélectionné"
+            }
         },
         relationship: {
             childTable: "Table Enfant",

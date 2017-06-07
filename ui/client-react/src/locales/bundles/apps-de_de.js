@@ -227,13 +227,13 @@ export default {
                     error: "Fehler beim Speichern des Formulars"
                 }
             },
+            noParentRecordSelected: "Kein Datensatz ausgewählt",
             automation: {
                 approverecord: {
                     success: "Rekord genehmigt.",
                     error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
                 }
-            },
-            noParentRecordSelected: "Kein Datensatz ausgewählt"
+            }
         },
         relationship: {
             childTable: "Kind Tisch",
