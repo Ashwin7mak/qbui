@@ -63,6 +63,14 @@ class modalDialogWindow {
         return browser.element('.modal-dialog .Select-arrow-zone')
     }
 
+    clickModalDialogAdvancedSettingsToggle() {
+        //Toggle to expand advanced settings
+        //Verify advanced settings is dispalyed and enabled after selecting table
+        browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').waitForEnabled(e2eConsts.shortWaitTimeMs);
+        //Click on advanced settings
+        return browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').click();
+    }
+
     get modalDialogAdvancedSettingsDropDownArrow() {
         //drop down arrow to expand the list
         browser.element('.modal-dialog .advancedSettings .Select-arrow-zone').waitForVisible();

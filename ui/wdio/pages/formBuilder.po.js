@@ -308,6 +308,13 @@ class formBuilderPage {
         }
     }
 
+    /**
+     * Verify the Get another record relationship dialog titles, descriptions and functionality
+     * @param expectedTablesList to verify the select table drop down list
+     * @param parentTable table to select
+     * @param childTable table to verify that I am inside this table while creating relationship
+     * @param expectedFieldsList to verify the fields from advanced settings select dropdown
+     */
     verifyGetAnotherRecordRelationshipDialog (expectedTablesList, parentTable, childTable, expectedFieldsList) {
         let advancedSettingsDesc = 'To get a record in the ' +parentTable+ ' table, ' +
             'an automatic association is made using a unique and required field.'
@@ -324,10 +331,8 @@ class formBuilderPage {
         expect(dropDownList).toEqual(expectedTablesList);
         //Select the table
         modalDialog.selectItemFromModalDialogDropDownList(parentTable);
-        //Verify advanced settings is dispalyed and enabled after selecting table
-        browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').waitForEnabled(e2eConsts.shortWaitTimeMs);
         //Click on advanced settings
-        browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').click();
+        modalDialog.clickModalDialogAdvancedSettingsToggle();
         //Verify advancedSettings Description
         expect(browser.element('.advancedSettingsDescription').getAttribute('textContent')).toContain(advancedSettingsDesc);
         //Click on advanced setting table select

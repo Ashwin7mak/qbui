@@ -107,22 +107,34 @@
             formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, NEW_PARENT_TABLE, CHILD_TABLE, expectedFieldsList);
         })
 
-        xit('Create relationship from childTable to parentTable', function() {
-
+        it('Create relationship between 2 tables via form builder', function() {
+            //beforeEach goes to 'Table 1'
             //Select settings -> modify this form
             formBuilderPO.open();
 
             //Click on add a new record button
             formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
-            //Select table from Get another record model dialogue
+            //Select table from table list
+            modalDialog.clickOnModalDialogDropDownArrow()
             modalDialog.selectItemFromModalDialogDropDownList(NEW_PARENT_TABLE);
+
+            //Click on advanced settings
+            modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+            //Verify title field is automatically selected
+
 
             //Click Add To form button
             modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+            browser.pause(e2eConsts.shortWaitTimeMs);
 
-            //Verify
-            expect(formBuilderPO.getSelectedFieldLabel()).toBe('Get another record from '+NEW_PARENT_TABLE);
+            //Verify the get another record got added to the form builder
+            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe('Get another record from '+NEW_PARENT_TABLE);
+
+            //Save the form builder
+            formBuilderPO.save();
+            browser.pause(e2eConsts.longWaitTimeMs);
 
         })
 
