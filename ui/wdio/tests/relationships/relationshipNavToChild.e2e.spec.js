@@ -1,5 +1,5 @@
 /**
- * E2E tests for viewing and navigating parent and child records in the UI
+ * E2E tests for viewing and navigating from parent to child records in the UI
  * Written by klabak 4/29/17
  */
 
@@ -18,7 +18,7 @@ let testApp;
 
 let childRecordsTextValues = [];
 
-describe('Relationships - View child table on form tests: ', () => {
+describe('Relationships - Navigate to child record tests: ', () => {
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
         /**
          * Setup method. Creates test app then authenticates into the new stack
