@@ -20,14 +20,14 @@ import {getApp, getSelectedAppId, getSelectedTableId} from '../../reducers/app';
 export const SettingsWrapper = React.createClass({
 
     getSelectedApp() {
-        const appId = this.props.getSelectedAppId();
+        const appId = this.props.selectedAppId;
         return this.props.getApp(appId);
     },
 
     getSelectedTable(tableId) {
         const app = this.getSelectedApp();
         if (app) {
-            const selectedTableId = this.props.getSelectedTableId();
+            const selectedTableId = this.props.selectedTableId;
             return _.find(app.tables, (t) => t.id === selectedTableId);
         }
     },
@@ -66,7 +66,7 @@ export const SettingsWrapper = React.createClass({
                 this.props.selectTable(paramVals.appId, paramVals.tblId);
             } else {
                 /*eslint no-lonely-if:0 */
-                if (this.props.getSelectedTableId() !== null) {
+                if (this.props.selectedTableId !== null) {
                     this.props.clearSelectedTable();
                 }
             }
@@ -85,7 +85,7 @@ export const SettingsWrapper = React.createClass({
                 this.props.getFeatureSwitchStates(paramVals.appId);
             }
         } else {
-            if (this.getSelectedAppId() !== null) {
+            if (this.selectedAppId !== null) {
                 this.props.clearSelectedApp();
             }
         }
@@ -95,15 +95,15 @@ export const SettingsWrapper = React.createClass({
                 this.props.selectTable(paramVals.appId, paramVals.tblId);
             }
         } else {
-            if (this.props.getSelectedTableId() !== null) {
+            if (this.props.selectedTableId !== null) {
                 this.props.clearSelectedApp();
             }
         }
     },
     getBackToAppLink() {
-        let selectedAppId = this.props.getSelectedAppId();
+        let selectedAppId = this.props.selectedAppId;
         let link = `${UrlConsts.APP_ROUTE}/${selectedAppId}`;
-        let tableId = this.props.getSelectedTableId();
+        let tableId = this.props.selectedTableId;
         if (tableId) {
             link += `/table/${tableId}`;
         }
@@ -159,9 +159,9 @@ SettingsWrapper.propTypes = {
 const mapStateToProps = (state) => ({
     isNavCollapsed: !state.shell.leftNavExpanded,
     isOpen: state.shell.leftNavVisible,
-    getApp: (appId) => getApp(state.app, appId),
-    getSelectedAppId: () => getSelectedAppId(state.app),
-    getSelectedTableId: () => getSelectedTableId(state.app)
+    selectedAppId: getSelectedAppId(state.app),
+    selectedTableId: getSelectedTableId(state.app),
+    getApp: (appId) => getApp(state.app, appId)
 });
 
 const mapDispatchToProps = (dispatch) => {

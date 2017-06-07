@@ -126,7 +126,7 @@ export const Nav = React.createClass({
     getTopGlobalActions() {
         const actions = [];
         let selectedApp = this.getSelectedApp();
-        let selectedTableId = this.props.getSelectedTableId();
+        let selectedTableId = this.props.selectedTableId;
 
         let isAdmin = selectedApp ? AppUtils.hasAdminAccess(selectedApp.accessRights) : false;
 
@@ -182,7 +182,7 @@ export const Nav = React.createClass({
 
         this.props.showTrowser(TrowserConsts.TROWSER_REPORTS);
 
-        const selectedAppId = this.props.getSelectedAppId();
+        const selectedAppId = this.props.selectedAppId;
         this.props.loadReports(CONTEXT.REPORT.NAV_LIST, selectedAppId, tableId);
     },
 
@@ -194,13 +194,13 @@ export const Nav = React.createClass({
     },
 
     getSelectedApp() {
-        const selectedAppId = this.props.getSelectedAppId();
+        const selectedAppId = this.props.selectedAppId;
         return this.props.getApp(selectedAppId);
     },
 
     getEditingApp() {
         const appsList = this.props.getApps() || [];
-        const selectedAppId = this.props.getSelectedAppId();
+        const selectedAppId = this.props.selectedAppId;
 
         if (this.props.location.query[UrlConsts.DETAIL_APPID]) {
             let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
@@ -396,9 +396,9 @@ export const Nav = React.createClass({
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
 
-        const selectedAppId = this.props.getSelectedAppId();
+        const selectedAppId = this.props.selectedAppId;
         const selectedApp = this.getSelectedApp();
-        const selectedTableId = this.props.getSelectedTableId();
+        const selectedTableId = this.props.selectedTableId;
 
         let editingAppId = this.props.match.params.appId;
         let editingTblId = this.props.match.params.tblId;
@@ -441,7 +441,7 @@ export const Nav = React.createClass({
                 recId={editRecordId}
                 viewingRecordId={viewingRecordId}
                 pendEdits={pendEdits}
-                appUsers={this.props.getSelectedAppUsers()}
+                appUsers={this.props.selectedAppUsers}
                 selectedApp={selectedApp}
                 selectedTable={this.getSelectedTable(this.props.match.params.tblId)}
                 editingApp={this.getEditingApp()}
@@ -498,10 +498,10 @@ export const Nav = React.createClass({
                                 selectedAppId: selectedAppId,
                                 appsLoading: this.props.isAppsLoading,
                                 reportData: reportsData,
-                                appUsers: this.props.getSelectedAppUsers(),
-                                appUsersUnfiltered: this.props.getSelectedAppUnfilteredUsers(),
-                                appRoles: this.props.getAppRoles(),
-                                appOwner: this.props.getAppOwner(),
+                                appUsers: this.props.selectedAppUsers,
+                                appUsersUnfiltered: this.props.selectedAppUnfilteredUsers,
+                                appRoles: this.props.appRoles,
+                                appOwner: this.props.appOwner,
                                 locale: this.state.nav.locale,
                                 isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                                 selectedApp: selectedApp,
@@ -582,16 +582,15 @@ export const Nav = React.createClass({
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        getSelectedAppId: () => getSelectedAppId(state.app),
-        getSelectedAppUnfilteredUsers: () => getSelectedAppUnfilteredUsers(state.app),
-        getSelectedAppUsers: () => getSelectedAppUsers(state.app),
-        getSelectedTableId: () => getSelectedTableId(state.app),
         getApp: (appId) => getApp(state.app, appId),
         getApps: () => getApps(state.app),
-        getAppOwner: () => getAppOwner(state.app),
-        getAppRoles: () => getAppRoles(state.appRoles, ownProps.match.params.appId),
+        appOwner: getAppOwner(state.app),
+        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
+        selectedAppId: getSelectedAppId(state.app),
+        selectedTableId: getSelectedTableId(state.app),
+        selectedAppUsers: getSelectedAppUsers(state.app),
+        selectedAppUnfilteredUsers: getSelectedAppUnfilteredUsers(state.app),
         isAppsLoading: getIsAppsLoading(state.app),
-        forms: state.forms,
         shell: state.shell,
         record: state.record,
         report: state.report

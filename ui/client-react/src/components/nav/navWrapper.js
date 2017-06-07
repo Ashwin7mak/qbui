@@ -67,7 +67,7 @@ export const NavWrapper = React.createClass({
                 this.props.selectTable(paramVals.appId, paramVals.tblId);
                 this.props.loadReports(CONTEXT.REPORT.NAV_LIST, paramVals.appId, paramVals.tblId);
             } else {
-                if (this.props.getSelectedTableId() !== null) {
+                if (this.props.selectedTableId !== null) {
                     this.props.clearSelectedTable();
                 }
             }
@@ -96,7 +96,7 @@ export const NavWrapper = React.createClass({
                 this.props.getFeatureSwitchStates(incomingProps.match.params.appId);
             }
         } else {
-            if (this.props.getSelectedAppId() !== null) {
+            if (this.props.selectedAppId !== null) {
                 this.props.clearSelectedApp();
             }
         }
@@ -108,7 +108,7 @@ export const NavWrapper = React.createClass({
                 this.props.loadReports(CONTEXT.REPORT.NAV_LIST, appId, incomingProps.match.params.tblId);
             }
         } else {
-            if (this.props.getSelectedTableId() !== null) {
+            if (this.props.selectedTableId !== null) {
                 this.props.clearSelectedTable();
             }
         }
@@ -121,9 +121,9 @@ export const NavWrapper = React.createClass({
 
 const mapStateToProps = (state) => ({
     locales: state.shell.locales,
-    getApp: (appId) => getApp(state.app, appId),
-    getSelectedAppId: () => getSelectedAppId(state.app),
-    getSelectedTableId: () => getSelectedTableId(state.app)
+    selectedAppId: getSelectedAppId(state.app),
+    selectedTableId: getSelectedTableId(state.app),
+    getApp: (appId) => getApp(state.app, appId)
 });
 
 const mapDispatchToProps = (dispatch) => {

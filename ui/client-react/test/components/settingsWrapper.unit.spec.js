@@ -23,9 +23,9 @@ const initialProps = {
     },
     isNavCollapsed: false,
     isOpen: true,
+    selectedAppId: null,
+    selectedTableId: null,
     getApp: (appId) => {return _.find(apps, function(a) {return a.id === appId;});},
-    getSelectedAppId: () => {},
-    getSelectedTableId: () => {},
     toggleNav: () => {},
     clearSelectedApp: () => {},
     selectTable: (appId, tblId) => {},
@@ -39,8 +39,6 @@ let props = {};
 
 function setSpies() {
     spyOn(props, 'toggleNav').and.callThrough();
-    spyOn(props, 'getSelectedAppId').and.callThrough();
-    spyOn(props, 'getSelectedTableId').and.callThrough();
     spyOn(props, 'clearSelectedApp').and.callThrough();
     spyOn(props, 'selectTable').and.callThrough();
     spyOn(props, 'clearSelectedTable').and.callThrough();
@@ -52,8 +50,6 @@ function setSpies() {
 
 function resetSpies() {
     props.toggleNav.calls.reset();
-    props.getSelectedAppId.calls.reset();
-    props.getSelectedTableId.calls.reset();
     props.clearSelectedApp.calls.reset();
     props.selectTable.calls.reset();
     props.clearSelectedTable.calls.reset();
@@ -116,7 +112,7 @@ describe('SettingsWrapper tests', () => {
         props = _.clone(initialProps);
         props.match.params.appId = 'app1';
         props.match.params.tblId = null;
-        props.getSelectedTableId = () => {return null;};
+        props.selectedTableId = null;
         setSpies();
 
         component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
@@ -131,7 +127,7 @@ describe('SettingsWrapper tests', () => {
         props = _.clone(initialProps);
         props.match.params.appId = 'app1';
         props.match.params.tblId = null;
-        props.getSelectedTableId = () => {return true;};
+        props.selectedTableId = '1';
         setSpies();
 
         component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
@@ -166,14 +162,15 @@ describe('SettingsWrapper tests', () => {
         component.setProps({
             match: {
                 params: {
-                    appId: newApp
+                    appId: newApp,
+                    tblId: params.tblId
                 }
             }
         });
 
         expect(props.getFeatureSwitchStates).not.toHaveBeenCalledWith(newApp);
         expect(props.selectTable).not.toHaveBeenCalled();
-        expect(props.clearSelectedApp).toHaveBeenCalled();
+        expect(props.clearSelectedApp).not.toHaveBeenCalled();
     });
 
     it('test re-render of component with tblId update only', () => {
@@ -190,12 +187,13 @@ describe('SettingsWrapper tests', () => {
         component.setProps({
             match: {
                 params: {
+                    appId: params.appId,
                     tblId: newTbl
                 }
             }
         });
 
-        expect(props.getSelectedAppId).toHaveBeenCalled();
+        expect(props.clearSelectedApp).not.toHaveBeenCalled();
         expect(props.selectTable).not.toHaveBeenCalled();
 
     });

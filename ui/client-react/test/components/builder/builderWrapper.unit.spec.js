@@ -15,7 +15,7 @@ const params = {
 const defaultProps = {
     getApp: () => {},
     getApps: () => {},
-    getSelectedAppId: () => {return params.appId;},
+    selectedAppId: params.appId,
     loadApp: (appId) => {},
     loadApps: () => {},
     match: {
@@ -49,12 +49,10 @@ function setSpyOn() {
     spyOn(props, 'getApp').and.callThrough();
     spyOn(props, 'loadApp').and.callThrough();
     spyOn(props, 'loadApps').and.callThrough();
-    spyOn(props, 'getSelectedAppId').and.callThrough();
 }
 
 function resetSpyOn() {
     props.getApp.calls.reset();
-    props.getSelectedAppId.calls.reset();
     props.loadApp.calls.reset();
     props.loadApps.calls.reset();
 }
@@ -80,20 +78,19 @@ describe('BuilderWrapper tests', () => {
 
         component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
         expect(component).toBeDefined();
-        expect(props.getSelectedAppId).toHaveBeenCalled();
         expect(props.getApp).toHaveBeenCalled();
         expect(props.loadApps).toHaveBeenCalled();
     });
 
     it('test render of report component with app to get loaded', () => {
         defaultProps.getApp = () => {return params.appId;};
-        defaultProps.getSelectedAppId = () => {return null;};
+        defaultProps.selectedAppId = null;
         props = _.clone(defaultProps);
         setSpyOn();
 
         component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
         expect(component).toBeDefined();
-        expect(props.getSelectedAppId).toHaveBeenCalled();
+        expect(props.getApp).toHaveBeenCalled();
         expect(props.loadApp).toHaveBeenCalled();
         expect(props.loadApps).not.toHaveBeenCalled();
     });
@@ -105,7 +102,6 @@ describe('BuilderWrapper tests', () => {
 
         component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
         expect(component).toBeDefined();
-        expect(props.getSelectedAppId).toHaveBeenCalled();
         expect(props.getApp).toHaveBeenCalled();
     });
 

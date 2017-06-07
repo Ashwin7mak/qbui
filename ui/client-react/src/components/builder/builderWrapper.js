@@ -28,7 +28,7 @@ export const BuilderWrapper = React.createClass({
     mixins: [FluxMixin],
 
     getSelectedApp() {
-        const selectedAppId = this.props.getSelectedAppId();
+        const selectedAppId = this.props.selectedAppId;
         if (selectedAppId) {
             return this.props.getApp(selectedAppId);
         }
@@ -43,7 +43,7 @@ export const BuilderWrapper = React.createClass({
                 this.props.loadApps();
                 this.props.loadApp(appId);
             } else {
-                const selectedAppId = this.props.getSelectedAppId();
+                const selectedAppId = this.props.selectedAppId;
                 if (selectedAppId !== app.id) {
                     this.props.loadApp(appId);
                 }
@@ -98,17 +98,17 @@ export const BuilderWrapper = React.createClass({
     }
 });
 
+const mapStateToProps = (state) => ({
+    getApp: (appId) => getApp(state.app, appId),
+    getApps: () => getApps(state.app),
+    selectedAppId: getSelectedAppId(state.app)
+});
+
 const mapDispatchToProps = (dispatch) => {
     return {
         loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
         loadApps: () => dispatch(AppActions.loadApps())
     };
 };
-
-const mapStateToProps = (state) => ({
-    getApp: (appId) => getApp(state.app, appId),
-    getApps: () => getApps(state.app),
-    getSelectedAppId: () => getSelectedAppId(state.app)
-});
 
 export default withRouter(connect(mapStateToProps, commonNavActions('builder'))(BuilderWrapper));
