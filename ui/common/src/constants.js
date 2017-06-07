@@ -64,7 +64,8 @@
         COOKIES: {
             TICKET: 'TICKET',
             NSTICKET: 'NSTICKET',
-            V2TOV3: 'V2TOV3'
+            V2TOV3: 'V2TOV3',
+            SBIID: 'sbIID'
         },
 
         NUMERIC_SEPARATOR: {

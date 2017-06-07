@@ -29,12 +29,7 @@
              * @returns {Promise}
              */
             getAccountUsers: function(req, accountId) {
-                let opts = requestHelper.setOptions(req, false, true);
-                let host = requestHelper.getLegacyRealmBase(req, false);
-
-                opts.headers.host = host;
-                opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getAccountUsersLegacyStackRoute(accountId);
-
+                let opts = requestHelper.setLegacyOptions(req, routeHelper.getAccountUsersLegacyStackRoute(accountId));
                 return requestHelper
                     .executeRequest(req, opts)
                     .then((response) => {

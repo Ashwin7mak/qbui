@@ -413,6 +413,26 @@
 
                 return realmURL;
             },
+
+            /**
+             * Set the request options for Outbound DotNet Request
+             * @param req   Inbound request
+             * @param path  URL Path for DotNet endpoint
+             */
+            setLegacyOptions: function(req, path) {
+                // Setup some default options
+                let opts = this.setOptions(req, false);
+                let host = this.getLegacyRealmBase(req, false);
+
+                // Override the host url path in the options
+                opts.headers.host = host;
+                opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + path;
+
+                // Add sbIID to cookies
+                opts.headers.cookie =  `${opts.headers.cookie};${consts.COOKIES.SBIID}=${req.headers.tid}`;
+
+                return opts;
+            }
         };
 
         return helper;
