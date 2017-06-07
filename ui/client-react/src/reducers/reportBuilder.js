@@ -6,7 +6,8 @@ const reportBuilder = (
         redirectRoute: null,
         isPendingEdit: false,
         isInBuilderMode: false,
-        availableColumns: []
+        availableColumns: [],
+        addBeforeColumn: false
     }, action) => {
 
     switch (action.type) {
@@ -43,6 +44,12 @@ const reportBuilder = (
         return {
             ...state,
             isInBuilderMode: false
+        };
+    }
+    case types.INSERT_PLACEHOLDER_COLUMN: {
+        return {
+            ...state,
+            addBeforeColumn: action.content.addBeforeColumn
         };
     }
     case types.CHANGE_REPORT_NAME:
