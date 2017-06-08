@@ -192,7 +192,7 @@ export const Nav = React.createClass({
         const selectedAppId = this.props.selectedAppId;
 
         if (this.props.location.query[UrlConsts.DETAIL_APPID]) {
-            let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
+            const childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
             return _.find(appsList, (a) => a.id === childAppId);
         } else if (selectedAppId) {
             return _.find(appsList, (a) => a.id === selectedAppId);
@@ -357,8 +357,9 @@ export const Nav = React.createClass({
 
     render() {
         const appsList = this.props.getApps() || [];
+        const isAppsLoading = this.props.isAppsLoading;
 
-        if (appsList.length === 0 && this.props.isAppsLoading) {
+        if (appsList.length === 0 && isAppsLoading) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
             // therefore must be loaded using the dangerouslySetInnerHTML attribute
@@ -452,7 +453,7 @@ export const Nav = React.createClass({
                 expanded={this.props.shell.leftNavExpanded}
                 appsListOpen={this.props.shell.appsListOpen}
                 apps={appsList}
-                appsLoading={this.props.isAppsLoading}
+                appsLoading={isAppsLoading}
                 selectedAppId={selectedAppId}
                 selectedTableId={selectedTableId}
                 onSelectReports={this.onSelectTableReports}
@@ -469,7 +470,7 @@ export const Nav = React.createClass({
                 />
                 {this.props.routes &&
                 <div className="mainContent" >
-                    <TempMainErrorMessages apps={appsList} appsLoading={this.props.isAppsLoading} selectedAppId={selectedAppId} />
+                    <TempMainErrorMessages apps={appsList} appsLoading={isAppsLoading} selectedAppId={selectedAppId} />
 
                     <Switch>
                         { this.props.routes.map((route, i) => {
@@ -481,7 +482,7 @@ export const Nav = React.createClass({
                                 key : this.props.match ? this.props.match.url : "",
                                 apps: appsList,
                                 selectedAppId: selectedAppId,
-                                appsLoading: this.props.isAppsLoading,
+                                appsLoading: isAppsLoading,
                                 reportData: reportsData,
                                 appUsers: this.props.appUsers,
                                 appUsersUnfiltered: this.props.appUnfilteredUsers,
@@ -515,7 +516,6 @@ export const Nav = React.createClass({
      * new table was created, ensure it is displayed available in the UI
      */
     tableCreated(tblId) {
-        // TODO: ideally, we're  just adding the new table to the app
         this.props.loadApps();
 
         // store any new table IDs for duration of session for table homepage

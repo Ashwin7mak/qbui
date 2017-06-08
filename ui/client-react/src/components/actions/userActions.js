@@ -127,13 +127,13 @@ export class UserActions extends React.Component {
     }
 }
 
-//UserActions.propTypes = {
-//    appId: PropTypes.string,
-//    roleId: PropTypes.string,
-//    removeUsersFromAppRole: PropTypes.func,
-//    selectedUserRows: PropTypes.array,
-//    clearSelectedUserRows: PropTypes.func
-//};
+UserActions.propTypes = {
+    appId: PropTypes.string,
+    roleId: PropTypes.string,
+    removeUsersFromAppRole: PropTypes.func,
+    selectedUserRows: PropTypes.array,
+    clearSelectedUserRows: PropTypes.func
+};
 
 const mapStateToProps = (state) => {
     return {

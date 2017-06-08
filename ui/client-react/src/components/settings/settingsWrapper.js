@@ -54,12 +54,11 @@ export const SettingsWrapper = React.createClass({
             // see if the app is already loaded in state
             let app = this.getAppFromState(paramVals.appId);
             if (!app) {
+                //TODO: performance improvement to support app argument to load when fetching all apps
                 this.props.loadApps();
                 this.props.loadApp(paramVals.appId);
             }
 
-            //  TODO - not sure about removing this...will work in 'normal' workflow, but what about a bookmarked flow
-            //this.props.loadApp(paramVals.appId);
             this.props.getFeatureSwitchStates(paramVals.appId);
 
             if (paramVals.tblId) {
@@ -80,8 +79,6 @@ export const SettingsWrapper = React.createClass({
         /*eslint no-lonely-if:0 */
         if (paramVals.appId) {
             if (this.props.match.params.appId !== paramVals.appId) {
-                //  TODO - not sure about removing this...will work in 'normal' workflow, but what about a bookmarked flow
-                //this.props.loadApp(paramVals.appId);
                 this.props.getFeatureSwitchStates(paramVals.appId);
             }
         } else {

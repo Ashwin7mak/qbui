@@ -23,21 +23,23 @@ import UserSuccessDialog from './userSuccessDialog.js';
 export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
-            roleId: '',
+            roleId: ''
         };
     },
     componentDidMount() {
+        //  TODO: look at service performance..frequency of rendering...this component/route loads slow..
         const appId = this.props.match.params.appId;
         if (!this.props.selectedApp) {
             this.props.loadApp(appId);
         } else {
-            this.props.loadAppOwner(appId, this.props.selectedApp.ownerId);
             this.props.loadAppRoles(appId);
+            this.props.loadAppOwner(appId, this.props.selectedApp.ownerId);
             this.props.searchUsers();
         }
     },
 
     componentWillReceiveProps(props) {
+        //  TODO: look at service performance..frequency of rendering...this component/route loads slow..
         const selectedApp = this.props.selectedApp || {};
         if (props.match.params.appId && selectedApp.ownerId) {
             if (this.props.match.params.appId !== props.match.params.appId) {
@@ -167,6 +169,7 @@ export const AppUsersRoute = React.createClass({
     render() {
         if (this.props.appRoles && this.props.selectedApp) {
             const unfilteredAppUsers = this.props.unfilteredAppUsers;
+            const appId = this.props.match.params.appId;
             return (
             <div>
                 <Stage stageHeadline={this.getStageHeadline()}
@@ -181,7 +184,7 @@ export const AppUsersRoute = React.createClass({
                                appRoles={this.props.appRoles}
                                setUserRoleToAdd={this.setUserRoleToAdd}
                                userRoleIdToAdd={this.props.roleIdToAdd}
-                               appId={this.props.match.params.appId}
+                               appId={appId}
                                selectedApp={this.props.selectedApp}
                                existingUsers={unfilteredAppUsers}
                                addUserToAppDialogOpen={this.props.openDialogStatus}
@@ -195,7 +198,7 @@ export const AppUsersRoute = React.createClass({
                 />
                     {this.getTableActions()}
                     <div className="userManagementContainer">
-                        <UserManagement appId={this.props.appId}
+                        <UserManagement appId={appId}
                                         appUsers={unfilteredAppUsers}
                                         appRoles={this.props.appRoles}
                                         onClickToggleSelectedRow={this.toggleSelectedRow}
