@@ -105,7 +105,7 @@ class StandardGrid extends Component {
                     <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
                 </div>
                 <div className="noRowsText">
-                    {Locale.getPluralizedMessage(`${this.props.noItemsFound}`, {items: this.props.itemTypePlural})}
+                    {Locale.getMessage(`${this.props.noItemsFound}`, {items: this.props.itemTypePlural})}
                 </div>
             </div>
         );
