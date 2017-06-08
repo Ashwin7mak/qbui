@@ -107,7 +107,7 @@ export const RecordRoute = React.createClass({
         if (this.props.match.params.appId !== prev.match.params.appId ||
             this.props.match.params.tblId !== prev.match.params.tblId ||
             this.props.match.params.recordId !== prev.match.params.recordId ||
-            (viewData && viewData.syncLoadedForm === this.props.match.params.recordId)) {
+            (viewData && viewData.syncFormForRecordId === this.props.match.params.recordId)) {
 
             this.loadRecordFromParams();
         }
@@ -480,7 +480,7 @@ export const RecordRoute = React.createClass({
 
         return !viewData ||
             !_.isEqual(viewData.formData, nextData.formData) ||
-            !_.isEqual(viewData.syncLoadedForm, nextData.syncLoadedForm) ||
+            !_.isEqual(viewData.syncFormForRecordId, nextData.syncFormForRecordId) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
             !_.isEqual(viewData.loading, nextData.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
