@@ -95,7 +95,7 @@ class StandardGrid extends Component {
     }
 
     /**
-     * Renders the 'no records' UI
+     * Renders the no items found UI
      */
     renderNoItemsExist() {
         return (
