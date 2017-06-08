@@ -150,7 +150,9 @@ export const AppUsersRoute = React.createClass({
     },
 
     deselectAllRows() {
-        this.props.clearUserRows();
+        if (this.props.clearUserRows) {
+            this.props.clearUserRows();
+        }
     },
 
     toggleSelectAllRows() {
