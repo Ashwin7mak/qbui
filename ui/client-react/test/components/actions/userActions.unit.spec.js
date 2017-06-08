@@ -2,14 +2,21 @@
 import {UserActions, __RewireAPI__ as UserActionsRewireAPI} from '../../../src/components/actions/userActions';
 import React from  'react';
 import {mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+import Locale from '../../../../reuse/client/src/locales/locale';
 import {Simulate} from 'react-addons-test-utils';
+
+const mockActions = {
+    removeUsersFromAppRole() {return Promise.resolve([1]);}
+};
 
 const props = {
     selection: ['10000'],
     roleId: '12',
     appId: '0duiiaaaanc',
     selectedUserRows: [1],
-    onEditSelected: () => {}
+    onEditSelected: () => {},
+    removeUsersFromAppRole: mockActions.removeUsersFromAppRole
 };
 
 const unselectedProps = {
@@ -22,10 +29,15 @@ const unselectedProps = {
 
 describe('UserActions', () => {
     let component;
+    let instance;
     beforeEach(() => {
+        jasmineEnzyme();
         component = mount(<UserActions {...props}/>);
+        instance = component.instance();
+        spyOn(mockActions, 'removeUsersFromAppRole');
     });
     afterEach(() => {
+        mockActions.removeUsersFromAppRole.calls.reset();
         component.unmount();
     });
 
@@ -65,5 +77,23 @@ describe('UserActions', () => {
     it('Should not select a Row when an empty selection Props is passed', () => {
         let unselectedComponent = mount(<UserActions {...unselectedProps}/>);
         expect(unselectedComponent.find('.selectedRowsLabel').node.innerHTML).toEqual('0');
+    });
+
+    it('test cancelBulkDelete', () => {
+        instance.cancelBulkDelete();
+        expect(component.state().confirmDeletesDialogOpen).toEqual(false);
+    });
+
+    it('test handleBulkDelete', () => {
+        instance.handleBulkDelete();
+        expect(component.state().confirmDeletesDialogOpen).toEqual(false);
+    });
+
+    it('test getEmailBody', () => {
+        expect(instance.getEmailBody()).toEqual(Locale.getMessage('app.users.emailBody'));
+    });
+
+    it('test getEmailSubject', () => {
+        expect(instance.getEmailSubject()).toEqual(Locale.getMessage('app.users.emailSubject'));
     });
 });

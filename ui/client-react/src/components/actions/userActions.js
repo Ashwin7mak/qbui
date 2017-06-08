@@ -1,14 +1,12 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-
-import Locale from '../../locales/locales';
+import Locale from '../../../../reuse/client/src/locales/locale';
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
 import {removeUsersFromAppRole} from '../../actions/appRoleActions';
 import {clearSelectedUserRows} from '../../actions/userActions';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import {getSelectedUsers} from '../../reducers/users';
-
 import './reportActions.scss';
 
 /**
@@ -30,11 +28,11 @@ export class UserActions extends React.Component {
         this.getEmailAction = this.getEmailAction.bind(this);
     }
     getEmailSubject() {
-        return "Email subject goes here";
+        return Locale.getMessage('app.users.emailSubject');
     }
 
     getEmailBody() {
-        return "Email body goes here";
+        return Locale.getMessage('app.users.emailBody');
     }
 
     getSelectionTip(actionMsg) {

@@ -53,7 +53,9 @@ export default {
                 userRemovedFromAppRole: "Benutzer aus der App-Rolle entfernt",
                 userAdded: "Benutzer hinzugefügt",
                 userAddError: "Fehler beim Hinzufügen von Benutzer",
-                userRemovingError: "Fehler beim Entfernen des Benutzers"
+                userRemovingError: "Fehler beim Entfernen des Benutzers",
+                emailBody: "Email Körper geht hier",
+                emailSubject: "E-Mail-Thema geht hier"
             }
         },
         appMenu: {

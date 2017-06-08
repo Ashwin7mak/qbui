@@ -56,7 +56,9 @@ export default {
                 userRemovedFromAppRole: "User removed from the app role",
                 userAdded: "User added",
                 userAddError: "Error adding user",
-                userRemovingError: "Error removing user"
+                userRemovingError: "Error removing user",
+                emailBody: "Email body goes here",
+                emailSubject: "Email subject goes here"
             }
         },
         appMenu: {
