@@ -6,7 +6,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let tableCreatePO = requirePO('tableCreate');
     let formsPO = requirePO('formsPage');
-    let leftNavPO = requirePO('leftNav');
+    let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
