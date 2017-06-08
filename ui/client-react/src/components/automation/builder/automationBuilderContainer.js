@@ -10,7 +10,9 @@ import {loadAutomation, changeAutomationEmailSubject} from "../../../actions/aut
 import {getAutomation, emailAutomationGetTo, emailAutomationGetSubject, emailAutomationGetBody} from "../../../reducers/automation";
 import TextFieldValueEditor from "../../fields/textFieldValueEditor";
 import SaveOrCancelFooter from '../../saveOrCancelFooter/saveOrCancelFooter';
+import NavigationUtils from '../../../utils/navigationUtils';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import * as UrlConsts from "../../../constants/urlConstants";
 import _ from "lodash";
 
 
@@ -69,7 +71,11 @@ export class AutomationBuilderContainer extends Component {
     };
 
     onSave = () => { };
-    onCancel = () => { };
+
+    onCancel = () => {
+        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}/${this.getAutomationId()}/${UrlConsts.AUTOMATION.VIEW}`;
+        NavigationUtils.goBackToPreviousLocation(link);
+    };
 
     getRightAlignedButtons() {
         return (
@@ -78,6 +84,11 @@ export class AutomationBuilderContainer extends Component {
                 <Button bsStyle="primary" onClick={this.onSave} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
+    }
+
+    getTrowserActions() {
+        return (
+            <div className={"centerActions"} />);
     }
 
     render() {
@@ -107,6 +118,8 @@ export class AutomationBuilderContainer extends Component {
                 </div>
                 <SaveOrCancelFooter
                     rightAlignedButtons={this.getRightAlignedButtons()}
+                    centerAlignedButtons={this.getTrowserActions()}
+                    leftAlignedButtons={this.getTrowserActions()}
                 />
             </Loader>
         );
