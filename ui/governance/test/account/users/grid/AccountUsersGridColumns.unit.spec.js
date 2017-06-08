@@ -40,8 +40,8 @@ describe('AccountUsersGridColumns', () => {
 
     describe("Permissions", () => {
         const data = [{realmDirectoryFlags: 1, uid:0}];
-        const mockS = configureMockStore();
-        const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
+        const mockGridStore = configureMockStore();
+        const store = mockGridStore({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
         it("should show all the headers", ()=> {
             let props = {...baseProps,

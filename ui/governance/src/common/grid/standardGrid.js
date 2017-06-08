@@ -12,7 +12,6 @@ import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
-import Locale from "../../../../reuse/client/src/locales/locale"
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -70,74 +69,67 @@ class StandardGrid extends Component {
     }
 
     /**
-     *  Renders the StandardGridToolBar component
-     **/
-    standardGridToolBar = () => {
-        return(
-            <StandardGridToolbar id={this.props.id}
-                                 doUpdate={this.props.doUpdate}
-                                 shouldFacet={this.props.shouldFacet}
-                                 shouldSearch={this.props.shouldSearch}
-                                 facetFields={this.props.facetFields}
-                                 itemTypePlural={this.props.itemTypePlural}
-                                 itemTypeSingular={this.props.itemTypeSingular}
-                                 itemsPerPage={this.props.itemsPerPage}/>
-        )
-    };
+     * Render the grid when items exist
+     */
+    renderItemsExist() {
+        return (
+            <div className="gridContainer">
+                <Table.Provider
+                    className="qbGrid"
+                    columns={this.getColumns()}
+                    onScroll={this.handleScroll}
+                    components={tableSubComponents}
+                >
+                    <Table.Header className="qbHeader"/>
+
+                    <Table.Body
+                        className="qbTbody"
+                        rows={this.props.items}
+                        rowKey={this.getUniqueRowKey.bind(this)}
+                        onRow={onRowFn}
+                        ref={this.bodyRef}
+                    />
+                </Table.Provider>
+            </div>
+        );
+    }
 
     /**
      * Renders the 'no records' UI
      */
     renderNoItemsExist() {
         return (
-            <div className="gridWrapper">
-                {this.standardGridToolBar()}
-                <div className="noItemsExist">
-                    <div className="noItemsIconLine">
-                        <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
-                    </div>
-                    <div className="noRowsText">
-                        {Locale.getMessage('governance.account.users.grid.noItemsFound')}
-                    </div>
+            <div className="noItemsExist">
+                <div className="noItemsIconLine">
+                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
                 </div>
-            </div>);
+                <div className="noRowsText">
+                    {this.props.noItemsFound}
+                </div>
+            </div>
+        );
     }
 
     /**
      * The main render function for the StandardGrid component
+     * - Show the grid if items exist
+     * - else... show the noItemsExist UI
      */
     render() {
-        // if there are results to show on the grid, show the normal grid UI
-        if (!_.isEmpty(this.props.items)) {
-            return (
-                <div className="gridWrapper">
-                    {this.standardGridToolBar()}
-                    <div className="gridContainer">
-                        <Table.Provider
-                            className="qbGrid"
-                            columns={this.getColumns()}
-                            onScroll={this.handleScroll}
-                            components={tableSubComponents}
-                        >
-                            <Table.Header className="qbHeader"/>
-
-                            <Table.Body
-                                className="qbTbody"
-                                rows={this.props.items}
-                                rowKey={this.getUniqueRowKey.bind(this)}
-                                onRow={onRowFn}
-                                ref={this.bodyRef}
-                            />
-                        </Table.Provider>
-                    </div>
-                </div>
-            );
-
-        } else {
-            // instead of grid, render a "no users" UI if no results
-            return this.renderNoItemsExist();
-        }
-
+        return (
+            <div className="gridWrapper">
+                <StandardGridToolbar id={this.props.id}
+                                     doUpdate={this.props.doUpdate}
+                                     shouldFacet={this.props.shouldFacet}
+                                     shouldSearch={this.props.shouldSearch}
+                                     facetFields={this.props.facetFields}
+                                     itemTypePlural={this.props.itemTypePlural}
+                                     itemTypeSingular={this.props.itemTypeSingular}
+                                     itemsPerPage={this.props.itemsPerPage}
+                />
+                {!_.isEmpty(this.props.items) ? this.renderItemsExist() : this.renderNoItemsExist()}
+            </div>
+        );
     }
 }
 
@@ -200,7 +192,12 @@ StandardGrid.propTypes = {
     /**
      *  Number of items to be displayed in a page in the grid
      */
-    itemsPerPage: PropTypes.number
+    itemsPerPage: PropTypes.number,
+
+    /**
+     *  The text to display if there are no items found
+     */
+    noItemsFound: PropTypes.string
 };
 
 
