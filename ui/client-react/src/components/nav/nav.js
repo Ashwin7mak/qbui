@@ -384,7 +384,6 @@ export const Nav = React.createClass({
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
 
-        let viewingRecordId = null;
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
@@ -408,7 +407,6 @@ export const Nav = React.createClass({
                 table={this.getSelectedTable(reportsData.tblId)}
                 report={this.getSelectedReport()}
                 editingRecordId={editRecordIdForPageTitle}
-                selectedRecordId={viewingRecordId}
             />
 
             <Analytics dataset={Config.evergageDataset} app={this.getSelectedApp()} />
@@ -431,7 +429,6 @@ export const Nav = React.createClass({
                 editingTblId={editingTblId}
                 editingRecId={editingRecId}
                 recId={editRecordId}
-                viewingRecordId={viewingRecordId}
                 pendEdits={pendEdits}
                 appUsers={this.state.apps.appUsers}
                 selectedApp={this.getSelectedApp()}
@@ -528,7 +525,7 @@ export const Nav = React.createClass({
     tableCreated(tblId) {
         const flux = this.getFlux();
 
-        flux.actions.loadApps();
+        flux.actions.selectAppId(this.state.apps.selectedAppId);
 
         // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {
