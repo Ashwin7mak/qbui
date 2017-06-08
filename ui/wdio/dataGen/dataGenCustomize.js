@@ -64,7 +64,7 @@ projRecs.init(projGen);
     var table7UniqName = 'Unique Fields';
     var table8Par1Name = 'Parent Table 1';
     var table9Ch1Name = 'Child Table 1';
-    var table10Par1Name = 'Parent Table 2';
+    var table10Par2Name = 'Parent Table 2';
     var table11Ch2Name = 'Child Table 2';
     var table12CntryName = 'Country';
     var table13StateName = 'State';
@@ -81,7 +81,7 @@ projRecs.init(projGen);
 
         table8Par1Name,
         table9Ch1Name,
-        table10Par1Name,
+        table10Par2Name,
         table11Ch2Name,
 
         table12CntryName,
@@ -128,7 +128,7 @@ projRecs.init(projGen);
     const plainParentChildOnly = [
         table8Par1Name,
         table9Ch1Name,
-        table10Par1Name,
+        table10Par2Name,
         table11Ch2Name,
     ];
 
@@ -516,9 +516,9 @@ projRecs.init(projGen);
         addColumn(tableToFieldToFieldTypeMap[table9Ch1Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table9Ch1Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
         // Parent table 2 is a parent to Child table 2
-        tableToFieldToFieldTypeMap[table10Par1Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table10Par1Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table10Par1Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
+        tableToFieldToFieldTypeMap[table10Par2Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table10Par2Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table10Par2Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
         // Child table 2 is a child of Parent table 1 and Parent table 2
         tableToFieldToFieldTypeMap[table11Ch2Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table11Ch2Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
@@ -737,7 +737,7 @@ projRecs.init(projGen);
 
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table8Par1Name, numRecords:5}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table9Ch1Name, numRecords:6}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table10Par1Name, numRecords:6}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table10Par2Name, numRecords:6}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table11Ch2Name, numRecords:6}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table12CntryName, numRecords:31}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table13StateName, numRecords:31}));
@@ -856,7 +856,7 @@ projRecs.init(projGen);
                     projGen.getPeopleFid('companyName'),
                     projGen.getPeopleFid('department'),
                     projGen.getPeopleFid('title'),
-                    //projGen.getPeopleFid('manager')
+                    //projGen.getPeopleFid('manager') // don't include as there is new bug in reuse facets when too many
                 ],
                 sortFids: [
                     projGen.getPeopleFid('companyName'),
@@ -865,27 +865,6 @@ projRecs.init(projGen);
                 ],
                 reportName:'Employee Report with ID field'}, 2);
 
-            createReportExtended(rptPromises, createdApp, projGen.tablePeopleName, {
-                fids:[3,
-                    projGen.getPeopleFid('fullName'),
-                    projGen.getPeopleFid('title'),
-                    projGen.getPeopleFid('birthday'),
-                    projGen.getPeopleFid('manager'),
-                    projGen.getPeopleFid('companyName'),
-                    projGen.getPeopleFid('department')
-                ],
-                facetFids: [
-                    projGen.getPeopleFid('companyName'),
-                    projGen.getPeopleFid('department'),
-                    projGen.getPeopleFid('title'),
-                    projGen.getPeopleFid('manager')
-                ],
-                sortFids: [
-                    projGen.getPeopleFid('companyName'),
-                    projGen.getPeopleFid('department'),
-                    projGen.getPeopleFid('title')
-                ],
-                reportName:'Employee Report render error too many facets'});
 
             createSetDefaultHome(rptPromises, createdApp, projGen.tableAssignmentsName, [
                 3,
@@ -977,7 +956,7 @@ projRecs.init(projGen);
 
             // Table 11 is a child of both Table 8 and Table 10
             setupRelationship(addRelationshipPromises, createdApp, table8Par1Name, table11Ch2Name, 7);
-            setupRelationship(addRelationshipPromises, createdApp, table10Par1Name, table11Ch2Name, 8);
+            setupRelationship(addRelationshipPromises, createdApp, table10Par2Name, table11Ch2Name, 8);
 
             // Create table relationship, Table 14(City) is a child of Table 13(State)
             setupRelationship(addRelationshipPromises, createdApp, table13StateName, table14CityName, 7, 6, "State parent to City");
