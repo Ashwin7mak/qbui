@@ -80,7 +80,6 @@
     &:hover {
         transition: 0s;
         opacity: 1;
-        //padding-top: -2px;
         padding-left: 3px;
         border: $stroke-width-thin solid $input-text-focus-border-color;
         .deleteFieldIcon {
