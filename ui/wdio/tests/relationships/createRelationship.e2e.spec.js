@@ -7,15 +7,15 @@
     var tableCreatePO = requirePO('tableCreate');
     var formsPO = requirePO('formsPage');
     let reportContentPO = requirePO('reportContent');
-    let leftNavPO = requirePO('leftNav');
+    let RequestAppsPage = requirePO('requestApps');
     let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
 
     const NEW_PARENT_TABLE = 'newParentTable';
     const CHILD_TABLE = 'Table 1';
+    const RECORD_TITLE_FIELD_NAME = '* Record title';
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
-    const RECORD_TITLE_FIELD_NAME = '* Record title';
     const GET_ANOTHER_RECORD = 'Get another record';
 
     describe('Relationships - Create relationship via form builder: ', function() {
@@ -36,6 +36,15 @@
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
+                //Delete API created 'Table 2' table
+                return e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE2].id);
+            }).then(function() {
+                //Delete API created 'Parent Table A' table
+                return e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE3].id);
+            }).then(function() {
+                //Delete API created 'Child Table A' table
+                return e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE4].id);
+            }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
             }).catch(function(error) {
@@ -46,21 +55,16 @@
             });
         });
 
-        /**
-         * Before each it block reload the 1st record of list all report in view form mode
-         */
-        beforeEach(function() {
-            //Step 1 - Go to report (LIST all report)
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
-            //wait until view form is visible
-            return formsPO.viewFormContainerEl.waitForVisible();
-        });
+        beforeAll(function() {
+            //Create new parent table
 
-        it('Create table via UI and verify title field shows up', function() {
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: NEW_PARENT_TABLE},
             ];
+
+            //select app
+            RequestAppsPage.selectApp(testApp.name);
 
             //Click on new table button
             tableCreatePO.clickCreateNewTable();
@@ -89,10 +93,21 @@
             tableCreatePO.waitUntilNotificationContainerGoesAway();
         });
 
-        it('Verify Add another record relationship modal dialog functionality', function() {
-            //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
-            if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
-                let expectedTablesList = ['Table 2', 'Parent Table A', 'Child Table A', 'newParentTable'];
+        /**
+         * Before each it block reload the 1st record of list all report in view form mode
+         */
+        beforeEach(function() {
+            //Go to 'Table 1' 1st record in view mode
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+            //wait until view form is visible
+            return formsPO.viewFormContainerEl.waitForVisible();
+        });
+
+        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+            it('Verify Add another record relationship modal dialog functionality', function() {
+
+                let expectedTablesList = ['newParentTable'];
                 let expectedFieldsList = ['Record ID#', 'Record title'];
 
                 //Select settings -> modify this form
@@ -103,12 +118,9 @@
 
                 //Verify all dialog contents and functionality
                 formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, NEW_PARENT_TABLE, CHILD_TABLE, expectedFieldsList);
-            }
-        });
+            });
 
-        it('Create relationship between 2 tables via form builder', function() {
-            //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
-            if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+            it('Create relationship between 2 tables via form builder', function() {
                 let allFieldsOnViewForm = [];
                 //beforeEach goes to 'Table 1'
                 //Select settings -> modify this form
@@ -118,8 +130,7 @@
                 formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
                 //Select table from table list
-                modalDialog.clickOnModalDialogDropDownArrow();
-                modalDialog.selectItemFromModalDialogDropDownList(NEW_PARENT_TABLE);
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, NEW_PARENT_TABLE);
 
                 //Click on advanced settings
                 modalDialog.clickModalDialogAdvancedSettingsToggle();
@@ -132,7 +143,7 @@
                 browser.pause(e2eConsts.shortWaitTimeMs);
 
                 //Verify the get another record got added to the form builder
-                expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe('Get another record from ' + NEW_PARENT_TABLE);
+                expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + NEW_PARENT_TABLE);
 
                 //Save the form builder
                 formBuilderPO.save();
@@ -142,27 +153,13 @@
                 formsPO.waitForViewFormsTableLoad();
 
                 //Verify field got added to the view form
-                formsPO.getAllFieldLabelsOnForm(formsPO.viewFormContainerEl).value.filter(function (fieldLabel) {
+                formsPO.getAllFieldLabelsOnForm(formsPO.viewFormContainerEl).value.filter(function(fieldLabel) {
                     allFieldsOnViewForm.push(fieldLabel.getAttribute('textContent'));
                 });
                 expect(allFieldsOnViewForm.includes('Get another record from ' + NEW_PARENT_TABLE)).toBe(true);
-            }
-        });
+            });
 
-        it('Verify there is no create relationship button visible if child table has relationships to all the tables in an app', function() {
-            //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
-            if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
-                //Delete all tables in app except the child and parent table
-                browser.call(function () {
-                    e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE2].id);
-                    e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE3].id);
-                    e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE4].id);
-
-                    //Go to child table report that has relationships to all tables in an app.
-                    return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
-                });
-
-                formsPO.viewFormContainerEl.waitForVisible();
+            it('Verify there is no create relationship button visible if child table has relationships to all the tables in an app', function() {
                 //Select settings -> modify this form
                 formBuilderPO.open();
 
@@ -172,9 +169,9 @@
 
                 //Click on forms Cancel button
                 formsPO.clickFormCancelBtn();
-            }
 
-        });
+            });
+        }
 
     });
 }());

@@ -317,27 +317,21 @@ class formBuilderPage {
      * @param expectedFieldsList to verify the fields from advanced settings select dropdown
      */
     verifyGetAnotherRecordRelationshipDialog(expectedTablesList, parentTable, childTable, expectedFieldsList) {
-        let advancedSettingsDesc = 'To get a record in the ' + parentTable + ' table, ' +
-            'an automatic association is made using a unique and required field.';
         expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
         //Verify title
         expect(modalDialog.modalDialogTitle).toContain('Get another record');
-        //Verify description
-        expect(browser.element('.tableChooserDescription').getAttribute('textContent')).toContain('When you create or update a ' + childTable + ', you can look up and get info from a record in another table.');
-        //Verify table chooser heading
-        expect(browser.element('.tableChooserHeading').getAttribute('textContent')).toContain('Where is the record you want to get?');
         //Verify select tables drop down has all the tables except the one you're in
-        modalDialog.clickOnModalDialogDropDownArrow();
-        let dropDownList = modalDialog.allDropDownListOptions;
-        expect(dropDownList).toEqual(expectedTablesList);
+        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+        let tableDropDownList = modalDialog.allDropDownListOptions;
+        expect(tableDropDownList).toEqual(expectedTablesList);
+        //click again on the arrow to collapse the outer menu
+        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
         //Select the table
-        modalDialog.selectItemFromModalDialogDropDownList(parentTable);
+        modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
         //Click on advanced settings
         modalDialog.clickModalDialogAdvancedSettingsToggle();
-        //Verify advancedSettings Description
-        expect(browser.element('.advancedSettingsDescription').getAttribute('textContent')).toContain(advancedSettingsDesc);
-        //Click on advanced setting table select
-        modalDialog.clickOnModalDialogAdvancedSettingsDropDownArrow();
+        //Click on advanced setting field drop down
+        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
         //Verify select drop down has just record id
         let selectFieldDropDownList = modalDialog.allDropDownListOptions;
         expect(selectFieldDropDownList).toEqual(expectedFieldsList);

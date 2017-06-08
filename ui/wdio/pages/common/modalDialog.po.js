@@ -1,6 +1,8 @@
 'use strict';
 
 class modalDialogWindow {
+    //The methods below works for both qbModal dialog and also multiStepModal dialog.
+    // Since the underlying className for both modal dialogs are 'modal-dialog'
     get CREATE_TABLE_BTN() {return 'Create table';}
     get CANCEL_BTN() {return 'Cancel';}
     get TABLE_READY_DLG_OK_BTN() {return 'OK';}
@@ -41,13 +43,13 @@ class modalDialogWindow {
     }
 
     get modalDialogPrimaryButton() {
-        // modal dialog footer buttons
+        // modal dialog footer primary button
         this.modalDialog.element('.modal-footer .buttons .primaryButton').waitForVisible();
         return this.modalDialog.element('.modal-footer .buttons .primaryButton');
     }
 
     get modalDialogSecondaryButton() {
-        // modal dialog footer buttons
+        // modal dialog footer secondary button
         this.modalDialog.element('.modal-footer .buttons .secondaryButton').waitForVisible();
         return this.modalDialog.element('.modal-footer .buttons .secondaryButton');
     }
@@ -58,24 +60,16 @@ class modalDialogWindow {
         return this.modalDialog.element('.deleteTableDialogContent .prompt .deletePrompt');
     }
 
-    get modalDialogDropDownArrow() {
-        //drop down arrow to expand the list
-        browser.element('.modal-dialog .Select-arrow-zone').waitForVisible();
-        return browser.element('.modal-dialog .Select-arrow-zone');
+    get modalDialogTableSelectorDropDownArrow() {
+        //TableSelector drop down arrow to expand the list
+        this.modalDialog.element('.tableSelector .Select-arrow-zone').waitForVisible();
+        return this.modalDialog.element('.tableSelector .Select-arrow-zone');
     }
 
-    clickModalDialogAdvancedSettingsToggle() {
-        //Toggle to expand advanced settings
-        //Verify advanced settings is dispalyed and enabled after selecting table
-        browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').waitForEnabled(e2eConsts.shortWaitTimeMs);
-        //Click on advanced settings
-        return browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').click();
-    }
-
-    get modalDialogAdvancedSettingsDropDownArrow() {
-        //drop down arrow to expand the list
-        browser.element('.modal-dialog .advancedSettings .Select-arrow-zone').waitForVisible();
-        return browser.element('.modal-dialog .advancedSettings .Select-arrow-zone');
+    get modalDialogFieldSelectorDropDownArrow() {
+        //FieldSelector drop down arrow to expand the list
+        this.modalDialog.element('.fieldSelector .Select-arrow-zone').waitForVisible();
+        return this.modalDialog.element('.fieldSelector .Select-arrow-zone');
     }
 
     get allDropDownListOptions() {
@@ -89,25 +83,32 @@ class modalDialogWindow {
     }
 
     /**
-     * Method to click on modal dialog any drop down arrow
+     * Method to click on modal advanced setting down arrow to expand advanced settings area.
      */
-    clickOnModalDialogDropDownArrow() {
-        this.modalDialogDropDownArrow.waitForVisible();
-        return this.modalDialogDropDownArrow.click();
+    clickModalDialogAdvancedSettingsToggle() {
+        //Toggle to expand advanced settings
+        //Verify advanced settings is dispalyed and enabled after selecting table
+        browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').waitForEnabled(e2eConsts.shortWaitTimeMs);
+        //Click on advanced settings
+        return browser.element('.toggleAdvancedIcon.iconUISturdy-caret-down').click();
     }
 
     /**
-     * Method to click on modal dialog advanced settngs drop down arrow
+     * Method to click on modal advanced setting down arrow to expand advanced settings area.
      */
-    clickOnModalDialogAdvancedSettingsDropDownArrow() {
-        this.modalDialogAdvancedSettingsDropDownArrow.waitForVisible();
-        return this.modalDialogAdvancedSettingsDropDownArrow.click();
+    clickOnDropDownDownArrowToExpand(element) {
+        //Click on drop down arrow to expand the list
+        element.waitForVisible();
+        return element.click();
     }
 
     /**
      * Method to click on modal dialog any drop down arrow
      */
-    selectItemFromModalDialogDropDownList(listOption) {
+    selectItemFromModalDialogDropDownList(element, listOption) {
+        //Expand the drop down
+        this.clickOnDropDownDownArrowToExpand(element);
+        //wait until you see select outer menu
         browser.waitForVisible('.Select-menu-outer');
         //get all options from the list
         var option = browser.elements('.Select-option').value.filter(function(optionText) {

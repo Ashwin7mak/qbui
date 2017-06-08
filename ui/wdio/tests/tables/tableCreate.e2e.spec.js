@@ -13,6 +13,7 @@
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
+    const RECORD_TITLE_FIELD_NAME = '* Record title';
 
 
     describe('Tables - Create a table via builder tests: ', function() {
@@ -96,6 +97,11 @@
 
             //Click OK button on create table dialogue
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+
+            //Verify the record title field is visible for a table created via UI.
+            let fieldsOnForm = formBuilderPO.getFieldLabels();
+            //Verify 1st field on the page is 'record title'
+            expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
