@@ -76,7 +76,9 @@ class StandardGrid extends Component {
                                      shouldSearch={this.props.shouldSearch}
                                      facetFields={this.props.facetFields}
                                      itemTypePlural={this.props.itemTypePlural}
-                                     itemTypeSingular={this.props.itemTypeSingular}/>
+                                     itemTypeSingular={this.props.itemTypeSingular}
+                                     itemsPerPage={this.props.itemsPerPage}
+                />
                 <div className="gridContainer">
                     <Table.Provider
                         className="qbGrid"
@@ -155,7 +157,12 @@ StandardGrid.propTypes = {
     /**
      * if should facet then the Facet Fields to display needs to be passed
      */
-    facetFields: PropTypes.array
+    facetFields: PropTypes.array,
+
+    /**
+     *  Number of items to be displayed in a page in the grid
+     */
+    itemsPerPage: PropTypes.number
 };
 
 

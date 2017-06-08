@@ -13,7 +13,7 @@ import Locale from '../locales/locales';
 let logger = new Logger();
 
 /**
- * Construct reports store redux store payload
+ * Construct automation store redux store payload
  *
  * @param context - report context id (nav, embedded report, etc)
  * @param type - event type
@@ -63,6 +63,41 @@ export const loadAutomations = (context, appId) => {
     };
 };
 
+/**
+ * Retrieve an automation.
+ *
+ * @param appId - app id
+ * @param automationId - automation id
+ */
+export const loadAutomation = (appId, automationId) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && automationId) {
+                logger.debug(`AutomationsAction.loadAutomation: loading automation for appId: ${appId} and automationId: ${automationId}`);
+
+                dispatch(event(null, types.LOAD_AUTOMATION, {appId: appId, automationId: automationId}));
+
+                let automationService = new AutomationService();
+                automationService.getAutomation(appId, automationId)
+                    .then((response) => {
+                        logger.debug('AutomationService getAutomation success');
+                        dispatch(event(null, types.LOAD_AUTOMATION_SUCCESS, response.data));
+                        resolve();
+                    })
+                    .catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'automationService.getAutomation:');
+                        dispatch(event(null, types.LOAD_AUTOMATION_FAILED, error));
+                        reject();
+                    });
+            } else {
+                logger.error(`automationService.getAutomation: Missing required input parameters.  appId: ${appId}, automationId: ${automationId}`);
+                dispatch(event(null, types.LOAD_AUTOMATION_FAILED, 500));
+                reject();
+            }
+        });
+    };
+};
+
 export const testAutomation = (automationName, appId) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -92,3 +127,5 @@ export const testAutomation = (automationName, appId) => {
         });
     };
 };
+
+
