@@ -97,6 +97,27 @@ const automation = (
             error: undefined
         };
     }
+    case types.SAVE_AUTOMATION: {
+        return {
+            ...state,
+            appId: action.content.appId,
+            automationId: action.content.automationId,
+            automation: action.content.automation
+        };
+    }
+    case types.SAVE_AUTOMATION_FAILED: {
+        return {
+            ...state,
+            error: action.content
+        };
+    }
+    case types.SAVE_AUTOMATION_SUCCESS: {
+        return {
+            ...state,
+            automation: action.content,
+            error: undefined
+        };
+    }
     case types.CHANGE_AUTOMATION_EMAIL_SUBJECT: {
         let newState = _.cloneDeep(state);
         emailAutomationSetSubject(newState.automation, action.content.newSubject);

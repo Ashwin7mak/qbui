@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
 import {I18nMessage} from "../../../utils/i18nMessage";
-import {loadAutomation, changeAutomationEmailSubject} from "../../../actions/automationActions";
+import {loadAutomation, saveAutomation, changeAutomationEmailSubject} from "../../../actions/automationActions";
 import {getAutomation, emailAutomationGetTo, emailAutomationGetSubject, emailAutomationGetBody} from "../../../reducers/automation";
 import TextFieldValueEditor from "../../fields/textFieldValueEditor";
 import SaveOrCancelFooter from '../../saveOrCancelFooter/saveOrCancelFooter';
@@ -70,7 +70,12 @@ export class AutomationBuilderContainer extends Component {
         this.props.changeAutomationEmailSubject(value);
     };
 
-    onSave = () => { };
+    onSave = () => {
+        this.props.saveAutomation(this.getAppId(), this.getAutomationId(), this.props.automation);
+
+        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}/${this.getAutomationId()}/${UrlConsts.AUTOMATION.VIEW}`;
+        NavigationUtils.goBackToPreviousLocation(link);
+    };
 
     onCancel = () => {
         let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}/${this.getAutomationId()}/${UrlConsts.AUTOMATION.VIEW}`;
@@ -129,6 +134,7 @@ export class AutomationBuilderContainer extends Component {
 AutomationBuilderContainer.protoTypes = {
     automation: React.PropTypes.object,
     loadAutomation: React.PropTypes.func,
+    saveAutomation: React.PropTypes.func,
     changeAutomationEmailSubject: React.PropTypes.func
 };
 
@@ -140,6 +146,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     loadAutomation,
+    saveAutomation,
     changeAutomationEmailSubject
 };
 

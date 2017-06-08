@@ -234,9 +234,13 @@ export default {
                 success: "Rekord genehmigt.",
                 error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automatisierungstest erfolgreich.",
                 error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
+            },
+            saveAutomation: {
+                success: "Automatisierung wurde erfolgreich.",
+                error: "Beim Speichern dieser Automatisierung ist ein Fehler aufgetreten."
             },
             automationList: {
                 nameHeader: "Name",

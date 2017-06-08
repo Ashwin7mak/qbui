@@ -233,9 +233,13 @@ export default {
                 success: "Enregistrement approuvé.",
                 error: "Une erreur s'est produite lors de l'approbation de ce document."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Test d'automatisation réussi.",
                 error: "Une erreur s'est produite lors du test de cette automatisation."
+            },
+            saveAutomation: {
+                success: "Automatisation enregistrée réussie.",
+                error: "Une erreur s'est produite lors de la sauvegarde de cette automatisation."
             },
             automationList: {
                 nameHeader: "Prénom",

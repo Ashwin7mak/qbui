@@ -237,9 +237,13 @@ export default {
                 success: "Record Approved.",
                 error: "An error occured when approving this record."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automation Test Successful.",
                 error: "An error occured when testing this automation."
+            },
+            saveAutomation: {
+                success: "Automation Saved Successful.",
+                error: "An error occured when saving this automation."
             },
             automationList: {
                 nameHeader: "Name",
