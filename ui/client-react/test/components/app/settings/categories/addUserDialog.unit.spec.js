@@ -134,7 +134,7 @@ describe('AddUserDialog', () => {
         component = shallow(<AddUserDialog realmUsers={realmUsers}
                        searchUsers={mockParentFunctions.searchUsers}
                        appRoles={appRoles}
-                                           assignUserToApp={mockParentFunctions.assignUserToApp}
+                       assignUserToApp={mockParentFunctions.assignUserToApp}
                        setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
                        userRoleIdToAdd={userRoleIdToAdd}
                        appId={appId}

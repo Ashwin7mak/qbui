@@ -14,6 +14,12 @@ import jasmineEnzyme from 'jasmine-enzyme';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
+class BreakpointMock {
+    static isSmallBreakpoint() {
+        return true;
+    }
+}
+
 describe('RecordRoute', () => {
     'use strict';
 
@@ -23,8 +29,6 @@ describe('RecordRoute', () => {
     //TODO: to use enzyme
     let flux = {};
     flux.actions = {
-        hideTopNav() {return;},
-        setTopTitle() {return;},
         selectTableId() {return;}
     };
 
@@ -33,6 +37,7 @@ describe('RecordRoute', () => {
         loadForm: () => {},
         openRecord: () => {},
         clearSearchInput: () => {},
+        showTopNav: () => {},
         record: {
             recordIdBeingEdited: 2,
             records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
@@ -46,6 +51,7 @@ describe('RecordRoute', () => {
         spyOn(reduxProps, 'loadForm').and.callThrough();
         spyOn(reduxProps, 'openRecord').and.callThrough();
         spyOn(reduxProps, 'clearSearchInput').and.callThrough();
+        spyOn(reduxProps, 'showTopNav').and.callThrough();
     });
 
     afterEach(() => {
@@ -60,7 +66,7 @@ describe('RecordRoute', () => {
         it('test render of component with missing url params', () => {
             let params = {appId: 1, tblId: 2};
 
-            component = TestUtils.renderIntoDocument(<RecordRoute match={{params}} flux={flux}/>);
+            component = TestUtils.renderIntoDocument(<RecordRoute {...reduxProps} match={{params}} flux={flux}/>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
@@ -324,7 +330,7 @@ describe('RecordRoute', () => {
             expect(drawerContainer.length).toBe(1);
         });
 
-        it('tests navigating records in drawer', () => {
+        it('next/prev buttons exist  in a drawer and open record action called on clicking them', () => {
 
             const uniqueId = "EMBEDDED123";
             const embeddedReports = {[uniqueId] : embeddedReport};
@@ -382,5 +388,65 @@ describe('RecordRoute', () => {
             expect(flux.actions.selectTableId).not.toHaveBeenCalled();
         });
 
+        it('small breakpoints has drawer transition from bottom', () => {
+            recordRouteRewire.__Rewire__('Breakpoints', BreakpointMock);
+
+            const uniqueId = "EMBEDDED734";
+            const matchParams = {params: {appId: '1', tblId: '2', rptId: uniqueId, recordId: '2'}};
+
+            let history = [];
+
+            component = mount(
+                <MemoryRouter>
+                    <Provider store={store}>
+                        <RecordRoute
+                            match={matchParams}
+                            flux={flux}
+                            history={history}
+                            {...reduxProps}
+                            reportData={reportData}
+                            uniqueId={uniqueId}
+                            isDrawerContext={false}
+                            location={{pathname: "sr_app"}}
+                        />
+                    </Provider>
+                </MemoryRouter>
+            );
+
+            //drawer container sliding up
+            let drawerContainer = component.find('.drawerContainer.bottom');
+            expect(drawerContainer.length).toBe(2);
+            recordRouteRewire.__ResetDependency__('Breakpoints');
+
+        });
+
+        it('large breakpoints has drawer transition from right', () => {
+            const uniqueId = "EMBEDDED356";
+            const matchParams = {params: {appId: '1', tblId: '2', rptId: uniqueId, recordId: '2'}};
+
+            let history = [];
+
+            component = mount(
+                <MemoryRouter>
+                    <Provider store={store}>
+                        <RecordRoute
+                            match={matchParams}
+                            flux={flux}
+                            history={history}
+                            {...reduxProps}
+                            reportData={reportData}
+                            uniqueId={uniqueId}
+                            isDrawerContext={true}
+                            location={{pathname: "sr_app"}}
+                        />
+                    </Provider>
+                </MemoryRouter>
+            );
+
+            //drawer container is sliding from right
+            let drawerContainer = component.find('.drawerContainer.right');
+            expect(drawerContainer.length).toBe(1);
+
+        });
     });
 });

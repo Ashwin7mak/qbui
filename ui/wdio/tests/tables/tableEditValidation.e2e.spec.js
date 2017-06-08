@@ -47,9 +47,7 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            //wait until loading screen disappear in leftnav
-            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
         });
 
         /**
@@ -61,7 +59,7 @@
                     message: 'with empty table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -71,8 +69,7 @@
                     message: 'with empty required fields',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -83,8 +80,7 @@
                     message: 'with duplicate table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
@@ -111,11 +107,12 @@
                 //Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify Apply button is enabled
-                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBe(true);
-                    //Verify Reset button is enabled
-                    expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
                 });
+
+                //Verify Apply button is disabled
+                expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBe(false);
+                //Verify Reset button is enabled
+                expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
 
                 //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
                 expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
@@ -125,6 +122,9 @@
 
                 //Verify bck to app link is enabled
                 expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBe(true);
+
+                //Click on reset at the end
+                tableCreatePO.clickOnEditTableResetBtn();
 
             });
         });

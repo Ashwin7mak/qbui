@@ -63,7 +63,7 @@ const OPEN_APPS_LIST = true;
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 export const Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -72,7 +72,6 @@ export const Nav = React.createClass({
     getStateFromFlux() {
         let flux = this.getFlux();
         return {
-            nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState()
         };
     },
@@ -448,7 +447,7 @@ export const Nav = React.createClass({
             <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                   history={this.props.history}
                                   selectedTable={this.getSelectedTable(reportsList.tblId)}
-                                  filterReportsName={this.state.nav.filterReportsName}
+                                  filterReportsName={this.props.shell.filterReportsName}
                                   reportsData={reportsList}
                                   onHideTrowser={this.hideTrowser}/>
             }
@@ -469,11 +468,9 @@ export const Nav = React.createClass({
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
-                <TopNav title={this.state.nav.topTitle}
-                        // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
+                <TopNav // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.routes &&
                 <div className="mainContent" >
@@ -496,14 +493,14 @@ export const Nav = React.createClass({
                                 appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
                                 appRoles: this.state.apps.appRoles,
                                 appOwner: this.state.apps.appOwner,
-                                locale: this.state.nav.locale,
+                                locale: this.props.shell.locale,
                                 isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                                 selectedApp: this.getSelectedApp(),
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 selectedUserRows: this.state.apps.selectedUserRows,
                                 realmUsers: this.state.apps.realmUsers,
                                 addUserToAppDialogOpen: this.state.apps.addUserToAppDialogOpen,
-                                scrollingReport: this.state.nav.scrollingReport,
+                                scrollingReport: this.props.shell.scrollingReport,
                                 flux: flux,
                                 userRoleIdToAdd: this.state.apps.userRoleIdToAdd,
                             };

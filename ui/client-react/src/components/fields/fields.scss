@@ -285,6 +285,11 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
     }
 }
 
-.textLink {
-    @include text-link($link-normal-color, $link-hover-color, $link-hover-decoration, $cursor-pointer);
+.textField {
+    &.textLink {
+        @include text-link($link-normal-color, $link-hover-color, $link-hover-decoration, $cursor-pointer);
+    }
+    &.italicize {
+        font-style: italic;
+    }
 }

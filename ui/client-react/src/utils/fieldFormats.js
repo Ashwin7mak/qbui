@@ -14,6 +14,13 @@ class FieldFormats {
 
 
         if (fieldDef && fieldDef.datatypeAttributes) {
+            if (_.has(fieldDef, 'parentTableId')) {
+                return FieldFormats.LINK_TO_RECORD;
+            }
+
+            if (_.has(fieldDef, 'parentTableId')) {
+                return FieldFormats.LINK_TO_RECORD;
+            }
 
             switch (fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
@@ -83,10 +90,6 @@ class FieldFormats {
                 }
                 if (numLines > 1) {
                     return FieldFormats.MULTI_LINE_TEXT_FORMAT;
-                }
-
-                if (_.has(fieldDef, 'parentTableId')) {
-                    return FieldFormats.LINK_TO_RECORD;
                 }
                 return FieldFormats.TEXT_FORMAT;
 

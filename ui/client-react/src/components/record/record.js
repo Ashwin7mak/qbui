@@ -15,7 +15,8 @@ export const Record = React.createClass({
     componentWillReceiveProps(nextProps) {
         let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && this.props.pendEdits.recordEditOpen === false;
         let shouldRecordEditOpen = _.has(nextProps, 'pendEdits.recordEditOpen') && !nextProps.pendEdits.recordEditOpen;
-        if (wasRecordEditOpen !== shouldRecordEditOpen && _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges)) {
+        let noPendingChanges = _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges);
+        if ((wasRecordEditOpen !== shouldRecordEditOpen && noPendingChanges) || (_.get(this.props, 'location.query.detailKeyValue', undefined) !== undefined  && noPendingChanges)) {
             this.handleEditRecordStart(this.props.recId);
         }
     },
@@ -71,7 +72,7 @@ export const Record = React.createClass({
                     let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
                     // fieldId is a numeric and params from url are strings so +parentFid for type equality test
                     if (parentFid && +parentFid === fieldId) {
-                        value =  _.get(queryParams, 'detailKeyValue', '');
+                        value =  _.get(queryParams, 'detailKeyValue', null);
                     } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         // if there is a default value use that as new record changes
                         value = fieldDef.defaultValue.coercedValue.value;

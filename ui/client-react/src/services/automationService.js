@@ -9,6 +9,7 @@ class AutomationService extends BaseService {
         //  Record service API endpoints
         this.API = {
             GET_AUTOMATIONS  : `${constants.BASE_URL.AUTOMATION}/${constants.AUTOMATION.API}/${constants.APPS}/{0}/${constants.AUTOMATION.FLOWS}/`,
+            GET_AUTOMATION  : `${constants.BASE_URL.AUTOMATION}/${constants.AUTOMATION.API}/${constants.APPS}/{0}/${constants.AUTOMATION.FLOWS}/{1}`,
             AUTOMATION_INVOKE  : `${constants.BASE_URL.AUTOMATION}/${constants.AUTOMATION.INVOKE}/${constants.APPS}/{0}/api/{1}`
         };
     }
@@ -24,9 +25,16 @@ class AutomationService extends BaseService {
         return super.get(url);
     }
 
+    getAutomation(appId, automationId) {
+        let url = super.constructUrl(this.API.GET_AUTOMATION, [appId, automationId]);
+        return super.get(url);
+    }
+
     invokeAutomation(appId, wfId, payload)  {
         let url = super.constructUrl(this.API.AUTOMATION_INVOKE, [appId, wfId]);
-        return super.post(url, payload, {});
+
+        return super.post(url, payload || {}, {});
+
 
     }
 }

@@ -4,11 +4,15 @@ import {connect} from "react-redux";
 import Loader from "react-loader";
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
+import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from "../../../utils/i18nMessage";
-import {loadAutomations} from "../../../actions/automationActions";
+import {loadAutomations, testAutomation} from "../../../actions/automationActions";
 import {getAutomationList} from "../../../reducers/automation";
+import UrlUtils from '../../../utils/urlUtils';
+import {Link} from 'react-router-dom';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
+
 
 import "./automationList.scss";
 import {CONTEXT} from "../../../actions/context";
@@ -54,15 +58,26 @@ export class AutomationListRoute extends Component {
                 .filter((automation) => {
                     return "EMAIL" === automation.type;
                 })
-                .map((automation, index) => (
-                    <tr><td>{automation.name}</td><td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td></tr>
-                ));
+                .map((automation, index) => {
+                    let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
+                    return (
+                        <tr>
+                            <td><Link to={link} onClick={this.onClick} onKeyDown={this.onClick}>{automation.name}</Link></td>
+                            <td>{automation.active ? <I18nMessage message="automation.automationList.activeYes"/> : <I18nMessage message="automation.automationList.activeNo"/>}</td>
+                            <td><Button className="finishedButton" bsStyle="primary" onClick={() => this.testButtonClicked(automation.name)}><I18nMessage message="automation.automationList.actionButton"/></Button></td>
+                        </tr>
+                    );
+                });
         }
         return [];
     }
 
+    testButtonClicked(automationName) {
+        this.props.testAutomation(automationName, this.getAppId());
+    }
+
     render() {
-        let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.automations));
+        let loaded = !(_.isUndefined(this.props.automations));
         let automationRows = this.renderAutomations();
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
@@ -72,8 +87,9 @@ export class AutomationListRoute extends Component {
                         <Table hover className="automationSettings--table">
                           <thead>
                             <tr>
-                                <th><I18nMessage message="automationList.nameHeader"/></th>
-                                <th><I18nMessage message="automationList.activeHeader"/></th>
+                                <th><I18nMessage message="automation.automationList.nameHeader"/></th>
+                                <th><I18nMessage message="automation.automationList.activeHeader"/></th>
+                                <th><I18nMessage message="automation.automationList.actionHeader"/></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -91,7 +107,8 @@ AutomationListRoute.protoTypes = {
     /** The list of automations to display. */
     automations: React.PropTypes.array,
     /** Get the list of automations for the app. */
-    loadAutomations: React.PropTypes.func
+    loadAutomations: React.PropTypes.func,
+    testAutomation: React.PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
@@ -101,7 +118,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    loadAutomations
+    loadAutomations,
+    testAutomation
 };
 
 export default connect(

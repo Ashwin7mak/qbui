@@ -1,0 +1,106 @@
+@import '../../../../assets/css/_qbVariables';
+
+@include not-small-breakpoint {
+
+    .multiStepModal.userSuccessDialog .modal-dialog .modal-content {
+
+        .multiStepDialogRightIcons {
+            z-index: 1;
+            color: $color-black-100;
+            &:hover {
+                color: $color-black-200;
+            }
+        }
+        .modal-body {
+            padding: 0;
+
+            > *:first-child {
+                height: 300px;
+            }
+
+            .userSuccessContent {
+
+                .topTitle {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    height: 120px;
+                    color: $color-black-100;
+                    background-color: $newTableDialog-highlight-color;
+
+                    @include correctFontWeightForLightTextOnDarkBackground;
+                    font-size: $font-size-h2;
+
+                    .addUserIcon {
+                        width: 60px;
+                        height: 60px;
+                        font-size: 60px;
+                        text-align: center;
+                        color: $color-black-100;
+                        margin-left: 30px;
+                        margin-right: 31px;
+                    }
+                }
+
+                .userSuccessText {
+                    margin: 30px 29.1px 0 50px;
+
+                    p {
+                        font-size: $font-size-dialog-text;
+                        color: $add-user-dialog-modal;
+                    }
+                }
+                .userSuccessDetails {
+                    display: flex;
+                    max-height: 200px;
+                    .flexChild {
+                        margin-right: 10px;
+                        text-decoration: none;
+                    }
+                    .url {
+                        width: 100%;
+                    }
+
+                    .cellEditIcon {
+                        border: 1px solid $add-user-button;
+                        border-radius: 3px;
+                        width: 160px;
+                        height: 45px;
+                        text-align: center;
+                        align-content: center;
+                        align-items: center;
+                        padding: 10px;
+                        cursor: pointer;
+
+                        .qbIcon {
+                            font-size: x-large;
+                            margin-right: 10px;
+                        }
+                        span {
+                            color: $add-user-button;
+                        }
+                    }
+                    .fieldValueEditor input[type="text"] {
+                        height: 45px;
+                        padding-left: 10px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+        }
+        .modal-footer {
+            padding: 15px 30px 30px;
+            .finishedText {
+                font-size: 16px;
+                cursor: pointer;
+                color: $add-user-button;
+                background-color: $add-user-dialog-border-button-color;
+                border: none;
+                &:hover {
+                    color: $add-user-button;
+                }
+            }
+        }
+        width: 580px;
+    }
+}

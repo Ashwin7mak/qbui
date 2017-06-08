@@ -456,13 +456,14 @@ export const QBForm = React.createClass({
         // the field id is specified as 'masterFieldId' in the relationship object.
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
-        const detailKeyValue = _.get(fieldRecord, 'value');
+        const detailKeyValue = _.get(fieldRecord, 'value', null);
 
         // Find the child table's name.
         const tables = _.get(this, 'props.selectedApp.tables');
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
         const childTableNoun = childTable.tableNoun;
+        const parentIsBeingEdited = this.props.edit;
 
         // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
         // child record in a drawer.
@@ -485,6 +486,7 @@ export const QBForm = React.createClass({
                     relationship={relationship}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
+                    parentIsBeingEdited={parentIsBeingEdited}
                     handleDrillIntoChild={handleDrillIntoChild}
                 />
             </div>

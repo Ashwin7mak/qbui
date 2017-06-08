@@ -217,7 +217,8 @@ const FieldValueRenderer = React.createClass({
         default: {
             return (
                     <TextFieldValueRenderer {...commonProperties}
-                                            value={this.props.display ? this.props.display : this.props.value}
+                                            value={this.props.value}
+                                            display={this.props.display}
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
                                             goToParent={this.props.goToParent}

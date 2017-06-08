@@ -17,12 +17,15 @@ describe('ReportToolsAndContent functions', () => {
 
     let component;
 
+    const props = {
+        hideTopNav: () => {}
+    };
+
     const flux = {
         actions:{
             selectTableId() {return;},
             loadReport() {return;},
             loadFields() {return;},
-            hideTopNav() {return;},
             getFilteredRecords() {return;},
             filterSearchPending() {return;},
             filterSelectionsPending() {return;},
@@ -95,7 +98,7 @@ describe('ReportToolsAndContent functions', () => {
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'loadFields');
-        spyOn(flux.actions, 'hideTopNav');
+        spyOn(props, 'hideTopNav');
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'filterSearchPending');
         spyOn(flux.actions, 'filterSelectionsPending');
@@ -109,7 +112,6 @@ describe('ReportToolsAndContent functions', () => {
         flux.actions.selectTableId.calls.reset();
         flux.actions.loadReport.calls.reset();
         flux.actions.loadFields.calls.reset();
-        flux.actions.hideTopNav.calls.reset();
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.filterSearchPending.calls.reset();
         flux.actions.filterSelectionsPending.calls.reset();
@@ -119,7 +121,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('test render of report widget', () => {
         const div = document.createElement('div');
-        component = shallow(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
+        component = shallow(<ReportToolsAndContent {...props} flux={flux} params={reportParams} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
         expect(component.find(ReportContentMock).length).toBe(1);
@@ -128,7 +130,7 @@ describe('ReportToolsAndContent functions', () => {
     it('test report is not rendered with missing app data', () => {
         const div = document.createElement('div');
         const reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {params: {appId: undefined}});
-        component = shallow(<ReportToolsAndContent flux={flux} params={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
+        component = shallow(<ReportToolsAndContent {...props} flux={flux} params={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
         expect(component.find(ReportContentMock).length).toBe(1);
@@ -136,7 +138,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('passes the primaryKeyName to child components', () => {
         const result = shallow(
-                <ReportToolsAndContent rptId={rptId} fields={fields} flux={flux} params={reportParams} {...reportDataParams}/>
+                <ReportToolsAndContent {...props} rptId={rptId} fields={fields} flux={flux} params={reportParams} {...reportDataParams}/>
             );
 
         const reportContent = result.find(ReportContentMock);
@@ -148,6 +150,7 @@ describe('ReportToolsAndContent functions', () => {
     it('invoke editNewRecord and verify pushWithQuery method gets called', () => {
         component = shallow(
             <ReportToolsAndContent
+                {...props}
                 flux={flux}
                 params={reportParams}
                 {...reportDataParams}
@@ -166,7 +169,7 @@ describe('ReportToolsAndContent functions', () => {
 
             const modifiedReport = Object.assign({}, reportDataParams);
             modifiedReport.reportData.isRecordDeleted = true;
-            component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux}
+            component = shallow(<ReportToolsAndContent {...props} loadDynamicReport={loadDynamicReportSpy} flux={flux}
                                                        params={reportParams} {...reportDataParams} {...modifiedReport} />);
 
             expect(loadDynamicReportSpy).toHaveBeenCalledWith(
@@ -184,7 +187,7 @@ describe('ReportToolsAndContent functions', () => {
 
             const modifiedReport = Object.assign({}, reportDataParams);
             modifiedReport.reportData.isRecordDeleted = false;
-            component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux} params={reportParams} {...reportDataParams} {...modifiedReport} />);
+            component = shallow(<ReportToolsAndContent {...props} loadDynamicReport={loadDynamicReportSpy} flux={flux} params={reportParams} {...reportDataParams} {...modifiedReport} />);
 
             expect(loadDynamicReportSpy).not.toHaveBeenCalled();
         });
@@ -206,6 +209,7 @@ describe('ReportToolsAndContent functions', () => {
             };
             component = shallow(
                 <ReportToolsAndContent
+                    {...props}
                     searchInput={searchInput}
                     clearSearchInput={clearSearchInput} flux={flux}
                     params={reportParams}
@@ -270,6 +274,7 @@ describe('ReportToolsAndContent functions', () => {
             };
             component = shallow(
                 <ReportToolsAndContent
+                    {...props}
                     flux={flux}
                     params={reportParams}
                     {...reportDataParams}
@@ -301,6 +306,7 @@ describe('ReportToolsAndContent functions', () => {
 
             component = shallow(
                 <ReportToolsAndContent
+                    {...props}
                     flux={flux}
                     params={reportParams}
                     {...reportDataParams}

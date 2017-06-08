@@ -40,9 +40,8 @@
         });
 
         beforeEach(function() {
-            e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
-            //wait until loading screen disappear in leftnav
-            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            //Navigate to apps page in an realm
+            return e2ePageBase.loadAppsInBrowser(realmName);
         });
 
         it('Verify leftNav in apps page', function() {

@@ -56,6 +56,12 @@ describe('Apps Actions functions with Tables', () => {
         unassignUsersFromRole(appId, roleId, userIds) {
             return Promise.reject(null);
         }
+        assignUserToApp(appId, roleId, userIds) {
+            return Promise.reject(null);
+        }
+        searchRealmUsers(searchTerm) {
+            return Promise.reject(null);
+        }
     }
 
     class mockUserService {
@@ -112,12 +118,10 @@ describe('Apps Actions functions with Tables', () => {
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_SUCCESS, responseData]);
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -140,12 +144,10 @@ describe('Apps Actions functions with Tables', () => {
                         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     }
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -160,12 +162,10 @@ describe('Apps Actions functions with Tables', () => {
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_SUCCESS, {appId:test.appId, roleId:test.roleId, userIds:test.userIds}]);
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -179,13 +179,11 @@ describe('Apps Actions functions with Tables', () => {
                 () => {
                     expect(false).toBe(true);
                     done();
-                },
-                () => {
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_FAILED]);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    done();
-                }
-            );
+                }, () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                done();
+            });
         });
     });
 
@@ -204,12 +202,10 @@ describe('Apps Actions functions with Tables', () => {
                         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_SUCCESS, responseData]);
                     }
                     done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
+                }, () => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 
@@ -223,13 +219,11 @@ describe('Apps Actions functions with Tables', () => {
                 () => {
                     expect(false).toBe(true);
                     done();
-                },
-                () => {
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_FAILED]);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    done();
-                }
-            );
+                }, () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                done();
+            });
         });
     });
 
@@ -273,8 +267,22 @@ describe('Apps Actions functions with Tables', () => {
             }, () => {
                 expect(false).toBe(true);
                 done();
-            }
-			);
+            });
+        });
+    });
+
+    const searchRealmUsersFailed = [{name:'search Realm Users failed', searchTerm: 'la'}];
+    searchRealmUsersFailed.forEach(function(test) {
+        it(test.name, function(done) {
+            appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
+            flux.actions.searchRealmUsers(test.searchTerm).then(() => {
+                expect(false).toBe(true);
+                done();
+            }, () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SEARCH_ALL_USERS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                done();
+            });
         });
     });
 
@@ -289,12 +297,11 @@ describe('Apps Actions functions with Tables', () => {
             }, () => {
                 expect(false).toBe(true);
                 done();
-            }
-			);
+            });
         });
     });
 
-    const assignUserToApp = [{name:'get App User', appId: 123, userId: 1, roleId: 123}];
+    const assignUserToApp = [{name:'Assign User To App', appId: 123, userId: 1, roleId: 123}];
     assignUserToApp.forEach(function(test) {
         it(test.name, function(done) {
             flux.actions.assignUserToApp(test.appId, test.userId, test.roleId).then(() => {
@@ -306,8 +313,22 @@ describe('Apps Actions functions with Tables', () => {
             }, () => {
                 expect(false).toBe(true);
                 done();
-            }
-			);
+            });
+        });
+    });
+
+    const assignUserToAppFailed = [{name:'Assign User To App Failed', appId: 123, userId: 1, roleId: 123}];
+    assignUserToAppFailed.forEach(function(test) {
+        it(test.name, function(done) {
+            appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
+            flux.actions.assignUserToApp(test.appId, test.roleId, test.userIds).then(() => {
+                expect(false).toBe(true);
+                done();
+            }, () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_USER_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                done();
+            });
         });
     });
 

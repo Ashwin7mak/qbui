@@ -12,7 +12,7 @@ class RelationshipUtils {
      */
     static canCreateNewParentRelationship(tableId, tables, relationships) {
 
-        const validParentTables = tables.filter(table => table.recordTitleFieldId && table.fields && table.fields.find(field => field.id === table.recordTitleFieldId));
+        const validParentTables = tables.filter(table => table.id !== tableId);
         if (tableId && validParentTables.length) {
 
             let parentTables = [];
@@ -20,9 +20,9 @@ class RelationshipUtils {
                 parentTables = relationships.filter(rel => rel.detailTableId === tableId);
             }
 
-            // enable new relationships to be created if we have multiple tables with recordTitleFieldId and at least
+            // enable new relationships to be created if we have multiple tables and at least
             // one of those tables is not already a parent table
-            if (validParentTables.length > 1 && (parentTables.length < validParentTables.length - 1)) {
+            if (validParentTables.length > 0 && (parentTables.length < validParentTables.length)) {
                 return true;
             }
         }

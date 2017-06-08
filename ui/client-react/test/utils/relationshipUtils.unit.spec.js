@@ -12,12 +12,16 @@ describe('RelationshipUtils', () => {
         let tables = [
             {id: "t1", recordTitleFieldId: 1, fields}, // only valid parent table
             {id: "t2", recordTitleFieldId: 1, fields}, // existing relationship to parent
-            {id: "t3", recordTitleFieldId: 999, fields}, // non-existing record title field
-            {id: "t4", fields}, // no record id field
+            {id: "t3", fields}, // no record title field
         ];
 
         let relationships = [
             {masterTableId: "t1", detailTableId: "t2"}
+        ];
+
+        let allRelationships = [
+            {masterTableId: "t1", detailTableId: "t2"},
+            {masterTableId: "t3", detailTableId: "t2"}
         ];
 
         let testCases = [
@@ -39,7 +43,7 @@ describe('RelationshipUtils', () => {
                 description: 'returns false if no parent is available due to existing relationship',
                 tableId: "t2",
                 tables: tables,
-                relationships,
+                relationships: allRelationships,
                 expectation: false
             },
             {
@@ -50,11 +54,11 @@ describe('RelationshipUtils', () => {
                 expectation: false
             },
             {
-                description: 'returns false if no parent is available due to no valid parent',
+                description: 'returns true if parent is available without having a recordTitleFieldId',
                 tableId: "t2",
                 tables: tables,
                 relationships,
-                expectation: false
+                expectation: true
             },
 
         ];

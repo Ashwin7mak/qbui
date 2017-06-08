@@ -21,7 +21,7 @@ describe('ReportRoute', () => {
     'use strict';
     const pendEdits = {};
     let component;
-    let mockNavStore = Fluxxor.createStore({
+    let mockFluxStore = Fluxxor.createStore({
         getState() {
             return {};
         }
@@ -37,7 +37,8 @@ describe('ReportRoute', () => {
             isCollapsed: true,
             addBeforeColumn: null,
             availableColumns: []
-        }
+        },
+        hideTopNav: () => {}
     };
 
     let appId = 1;
@@ -52,13 +53,12 @@ describe('ReportRoute', () => {
     let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}, pageOffset: offset, numRows: numRows}};
 
     let stores = {
-        NavStore: new mockNavStore()
+        FluxStore: new mockFluxStore()
     };
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
-        selectTableId() {return;},
-        hideTopNav() {return;}
+        selectTableId() {return;}
     };
 
     const StageMock = React.createClass({

@@ -410,7 +410,8 @@ const props = {
     addBlankRecordToReport: () => {},
     deleteRecord: () => {},
     updateRecord: () => {return Promise.resolve();},
-    createRecord: () => {return Promise.resolve();}
+    createRecord: () => {return Promise.resolve();},
+    scrollingReport: () => {}
 };
 
 const fakeReportGroupDataTemplate = {
@@ -1099,14 +1100,14 @@ describe('ReportContent functions', () => {
     });
 
     it('test onScrollRecords', () => {
-        spyOn(flux.actions, 'scrollingReport');
+        spyOn(props, 'scrollingReport');
         component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={fakeReportDataEmpty}
                                                                 reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.onScrollRecords();
-        expect(flux.actions.scrollingReport).toHaveBeenCalled();
+        expect(props.scrollingReport).toHaveBeenCalled();
     });
 
     it('test isNumericDataType returns true', () => {

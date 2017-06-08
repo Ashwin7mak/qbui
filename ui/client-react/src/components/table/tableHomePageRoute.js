@@ -27,6 +27,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 import './tableHomePage.scss';
 import '../report/report.scss';
+import {hideTopNav} from '../../actions/shellActions';
 
 /**
  * table homepage route
@@ -77,8 +78,7 @@ export const TableHomePageRoute = React.createClass({
         }
     },
     componentDidMount() {
-        const flux = this.getFlux();
-        flux.actions.hideTopNav();
+        this.props.hideTopNav();
 
         if (this.props.match.params) {
             this.loadHomePageForParams(this.props.match.params);
@@ -201,7 +201,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         showTableCreationDialog: () => {
             dispatch(showTableCreationDialog());
-        }
+        },
+        hideTopNav: () => dispatch(hideTopNav())
+
     };
 };
 

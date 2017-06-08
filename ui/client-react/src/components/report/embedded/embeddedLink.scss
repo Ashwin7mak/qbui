@@ -16,6 +16,11 @@
         color: $button-lightbg-text-color;
         background-color: $color-black-200;
 
+
+        &.disabled {
+            color: $link-button-disabled-color;
+        }
+
         .qbIcon {
             font-size: $size-iconfont-small;
             vertical-align: middle;

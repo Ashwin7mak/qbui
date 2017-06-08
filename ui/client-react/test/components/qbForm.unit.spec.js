@@ -1,4 +1,5 @@
 import React from 'react';
+import {MemoryRouter} from 'react-router-dom';
 import {Provider} from "react-redux";
 import configureMockStore from "redux-mock-store";
 import {shallow, mount} from 'enzyme';
@@ -217,12 +218,16 @@ describe('QBForm', () => {
         const store = mockS({
             fields: {},
             isTokenInMenuDragging: false,
+            //form: {}
         });
 
         const component = mount(
-            <Provider store={store}>
-                 <QBForm activeTab="0" formData={testFormDataWithRelationship}/>
-            </Provider>);
+            <MemoryRouter>
+                <Provider store={store}>
+                     <QBForm activeTab="0" formData={testFormDataWithRelationship}/>
+                </Provider>
+            </MemoryRouter>);
+
         const childReport = component.find('.referenceElement');
         const childReportComponent = component.find(ChildReport);
 

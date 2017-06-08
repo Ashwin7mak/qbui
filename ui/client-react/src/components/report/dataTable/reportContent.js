@@ -28,6 +28,8 @@ import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
 import {getPendEdits} from '../../../reducers/record';
+import {scrollingReport} from '../../../actions/shellActions';
+
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
@@ -544,7 +546,7 @@ export const ReportContent = React.createClass({
         const createTimeout = () => {
             this.scrollTimer = setTimeout(() => {
                 this.scrollTimer = null;
-                flux.actions.scrollingReport(false);
+                this.props.scrollingReport(false);
             }, 1000);
         };
 
@@ -553,7 +555,7 @@ export const ReportContent = React.createClass({
             clearTimeout(this.scrollTimer);
             createTimeout();
         } else {
-            flux.actions.scrollingReport(true);
+            this.props.scrollingReport(true);
             createTimeout();
         }
 
@@ -1084,7 +1086,8 @@ const mapDispatchToProps = (dispatch) => {
             //  inline edit row is updated and the new row is added to the grid. So, the
             //  new row is added after the record save reducer event is executed but before
             //  the grid is refreshed.  See record save reducer for more info..
-        }
+        },
+        scrollingReport
     };
 };
 

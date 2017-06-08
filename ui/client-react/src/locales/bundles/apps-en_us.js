@@ -230,10 +230,32 @@ export default {
                     error: "Error saving form"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Record Approved.",
-                    error: "An error occured when approving this record."
+            noParentRecordSelected: "No record selected"
+        },
+        automation: {
+            approverecord: {
+                success: "Record Approved.",
+                error: "An error occured when approving this record."
+            },
+            testautomation: {
+                success: "Automation Test Successful.",
+                error: "An error occured when testing this automation."
+            },
+            automationList: {
+                nameHeader: "Name",
+                activeHeader: "Active",
+                actionHeader: "Action",
+                actionButton: "Test",
+                activeYes: "Yes",
+                activeNo: "No"
+            },
+            automationView: {
+                stageHeading: "Automation: {automationName}",
+                nameHeader: "Name",
+                triggerHeader: "Trigger",
+                actionHeader: "Action",
+                actions: {
+                    email: "Send an email"
                 }
             }
         },
@@ -591,7 +613,8 @@ export default {
             required: "Must be filled in",
             multiChoice: "Choices",
             unique: "Must have unique values",
-            linkToRecord: "Link to a record in the table"
+            linkToRecord: "Link to a record in the table",
+            connectedTo: "Connected on {fieldName} field"
         },
         builder: {
             tabs: {
@@ -654,7 +677,9 @@ export default {
                 dialogTitle: "Get another record",
                 addToForm: "Add to form",
                 tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
-                tableChooserHeading: "Where is the record you want to get?"
+                tableChooserHeading: "Where is the record you want to get?",
+                advancedSettingsHeading: "Advanced Settings",
+                fieldChooserDescription: "To get a record in the {tableName} table, an automatic association is made using a unique and required field.  To select another field, you can choose from the list below.  You can't change this field once you add it to your form."
             }
         },
         featureSwitchAdmin: {
@@ -760,16 +785,20 @@ export default {
             },
             YES: "YES"
         },
-        automationList: {
-            nameHeader: "Name",
-            activeHeader: "Active",
-            activeYes: "Yes",
-            activeNo: "No"
-        },
         addUserToApp: {
             title: "Add users to",
             description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
-            searching: "Searching..."
+            searching: "Searching...",
+            userSuccessTitle: "Your app has new user!",
+            userSuccessText: "Let them know they have access to your app by sharing the link with them.",
+            copy: "Copy",
+            email: "Email",
+            toCopy: "Click to Copy to Clipboard",
+            toEmail: "Click to send an Email",
+            userSuccessDialogOK: "No thanks",
+            copied: "Link copied",
+            messageSubject:"Link to the {appName} app",
+            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
         }
     }
 };

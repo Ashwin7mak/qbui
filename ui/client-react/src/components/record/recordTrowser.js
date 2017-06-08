@@ -290,7 +290,10 @@ export const RecordTrowser = React.createClass({
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+
+        //get the fields for the currently edited app/table
+        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields) &&
+            (this.props.reportData.tblId === this.props.editingTblId) && (this.props.reportData.appId === this.props.editingAppId)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
