@@ -70,7 +70,7 @@ class StandardGrid extends Component {
     }
 
     /**
-     *  Renders the StandardGridToolBar component using this.props
+     *  Renders the StandardGridToolBar component
      **/
     standardGridToolBar = () => {
         return(
@@ -87,7 +87,6 @@ class StandardGrid extends Component {
 
     /**
      * Renders the 'no records' UI
-     * @returns {XML}
      */
     renderNoItemsExist() {
         return (
@@ -106,7 +105,6 @@ class StandardGrid extends Component {
 
     /**
      * The main render function for the StandardGrid component
-     * @returns {XML}
      */
     render() {
         // if there are results to show on the grid, show the normal grid UI
