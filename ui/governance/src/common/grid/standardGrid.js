@@ -72,7 +72,7 @@ class StandardGrid extends Component {
     /**
      * Render the grid when items exist
      */
-    renderItemsExist() {
+    renderItemsExist = () => {
         return (
             <div className="gridContainer">
                 <Table.Provider
@@ -98,7 +98,7 @@ class StandardGrid extends Component {
     /**
      * Renders the no items found UI
      */
-    renderNoItemsExist() {
+    renderNoItemsExist = () => {
         return (
             <div className="noItemsExist">
                 <div className="noItemsIconLine">
