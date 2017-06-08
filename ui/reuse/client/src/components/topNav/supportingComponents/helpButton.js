@@ -3,6 +3,8 @@ import NotificationManager from 'REUSE/scripts/notificationManager';
 import Icon from 'REUSE/components/icon/icon';
 import {I18nMessage} from 'REUSE/utils/i18nMessage';
 import Locale from 'REUSE/locales/locale';
+import UrlUtils from '../../../../../../client-react/src/utils/urlUtils';
+import Tooltip from '../../tooltip/tooltip';
 
 // IMPORTS FROM CLIENT REACT
 import Device from 'APP/utils/device';
@@ -34,10 +36,12 @@ function getHelpWalkme() {
  * Which WalkMe starts is configured within the Walkme system based the current URL.
  */
 const ReHelpButton = () => (
-    <a className="dropdownToggle globalActionLink reHelpButton" onClick={getHelpWalkme}>
+    <Tooltip bsRole="toggle" tipId="help" i18nMessageKey="header.menu.helpTooltip" key="help" location="bottom">
+    <a href={UrlUtils.getHelpLink()} target="_blank" className="globalActionLink reHelpButton">
         <Icon icon="help" />
         <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
     </a>
+    </Tooltip>
 );
 
 export default ReHelpButton;
