@@ -189,15 +189,11 @@
 
         it('Verify that only ADMIN can add a new table', function() {
 
-            browser.call(function() {
-                //get the user authentication
-                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-            });
+            //get user authentication
+            e2ePageBase.getUserAuthentication(realmName, realmId, userId);
 
-            browser.call(function() {
-                // Load the app in the realm
-                return e2ePageBase.loadAppsInBrowser(realmName);
-            });
+            // Load the app in the realm
+            e2ePageBase.loadAppsInBrowser(realmName);
 
             //Select app
             RequestAppsPage.selectApp(testApp.name);
