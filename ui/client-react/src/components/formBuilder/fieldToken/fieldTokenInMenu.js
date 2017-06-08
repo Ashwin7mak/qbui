@@ -10,7 +10,7 @@ import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import _ from 'lodash';
-import DraggableField from '../draggableField';
+import DraggableElement from '../draggableElement';
 import fieldFormats from '../../../utils/fieldFormats';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 
@@ -35,7 +35,7 @@ export class FieldTokenInMenu extends Component {
     }
 }
 
-const Element = DraggableField(FieldTokenInMenu, false);
+const Element = DraggableElement(FieldTokenInMenu, false);
 
 /**
  * A component which allows the field token to be clicked and dragged. The click and drag cannot be on the same element because drag

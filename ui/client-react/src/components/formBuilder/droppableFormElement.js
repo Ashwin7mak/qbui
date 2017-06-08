@@ -45,11 +45,6 @@ const formTarget = {
         if (dragItemProps.onHover) {
             dragItemProps.onHover(dropTargetProps, dragItemProps);
         }
-
-        // Don't allow dropping an element on itself (determined by the unique id attached to each element)
-        if (!dragItemProps.containingElement || dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
-            dropTargetProps.handleFormReorder(dropTargetProps.location, dragItemProps);
-        }
     }
 };
 

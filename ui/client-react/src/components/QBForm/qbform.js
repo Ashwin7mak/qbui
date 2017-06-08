@@ -8,7 +8,6 @@ import FieldElement from './fieldElement';
 import Locale from '../../locales/locales';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
-import DragAndDropField from '../formBuilder/dragAndDropField';
 import ChildReport from './childReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
@@ -22,8 +21,6 @@ import {connect} from 'react-redux';
 
 import './qbform.scss';
 import './tabs.scss';
-
-const DragDropFieldElement = DragAndDropField(FieldElement);
 
 /*
  Custom QuickBase Form component that has 1 property.
@@ -60,7 +57,14 @@ export const QBForm = React.createClass({
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
         hasAnimation: PropTypes.bool,
-        goToParent: React.PropTypes.func, //handles drill down to parent
+
+        /**
+         * By default, the form uses FieldElement to render each field. You can optionally pass in a different renderer. */
+        alternateFieldRenderer: PropTypes.object,
+
+        /** handles drill down to parent */
+        goToParent: React.PropTypes.func,
+
         uniqueId: React.PropTypes.string
     },
 
@@ -381,7 +385,7 @@ export const QBForm = React.createClass({
         }
         */
 
-        let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
+        let CurrentFieldElement = this.props.alternateFieldRenderer || FieldElement;
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -391,14 +395,7 @@ export const QBForm = React.createClass({
         return (
             <div key={containingElement.id} className="formElementContainer">
                 <CurrentFieldElement
-                    selectedField={this.props.selectedField}
                     tabIndex={tabIndex}
-                    location={location}
-                    orderIndex={FormFieldElement.orderIndex}
-                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
-                    beginDrag={this.props.beginDrag}
-                    handleFormReorder={this.props.handleFormReorder}
-                    containingElement={containingElement}
                     element={FormFieldElement}
                     key={`fieldElement-${containingElement.id}`}
                     idKey={"fe-" + this.props.idKey}
@@ -417,12 +414,16 @@ export const QBForm = React.createClass({
                     tblId={this.props.tblId}
                     appUsers={this.props.appUsers}
                     recId={recId}
-                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
                     goToParent={goToParent}
                     masterTableId={masterTableId}
                     masterAppId={masterAppId}
                     masterFieldId={masterFieldId}
+                    location={location}
+
+                    selectedField={this.props.selectedField}
+                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
+                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
+                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                 />
             </div>
         );

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
-import DraggableField from './draggableField';
+import DraggableElement from './draggableElement';
 import DroppableFormElement from './droppableFormElement';
 
 /**
@@ -23,7 +23,7 @@ export default (FieldComponent, showFieldEditingTools) => {
     }
 
     return _.flow([
-        DraggableField,
+        DraggableElement,
         DroppableFormElement
     ])(DragDropFieldComponent, showFieldEditingTools);
 };
