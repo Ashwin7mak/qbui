@@ -1,6 +1,22 @@
 import * as types from "../actions/types";
 import _ from "lodash";
 
+
+/*
+    Methods for accessing particular parts of auomtations of type email.
+    There are a number things we need to access that are particular to how we
+    set up the email templated automations. These methods assure one place
+    to change if the template changes.
+*/
+export const emailAutomationGetTo = (anAutomation) => anAutomation.inputs[0].defaultValue;
+export const emailAutomationSetTo = (anAutomation, value) => anAutomation.inputs[0].defaultValue = value;
+
+export const emailAutomationGetSubject = (anAutomation) => anAutomation.inputs[3].defaultValue;
+export const emailAutomationSetSubject = (anAutomation, value) => anAutomation.inputs[3].defaultValue = value;
+
+export const emailAutomationGetBody = (anAutomation) => anAutomation.inputs[4].defaultValue;
+export const emailAutomationSetBody = (anAutomation, value) => anAutomation.inputs[4].defaultValue = value;
+
 /**
  * Manage automation states
  *
@@ -105,12 +121,3 @@ export const testAutomation = (state) => {
 export const getAutomation = (state) => {
     return state.automation.automation;
 };
-
-export const emailAutomationGetTo = (automation) => automation.inputs[0].defaultValue;
-export const emailAutomationSetTo = (automation, value) => automation.inputs[0].defaultValue = value;
-
-export const emailAutomationGetSubject = (automation) => automation.inputs[3].defaultValue;
-export const emailAutomationSetSubject = (automation, value) => automation.inputs[3].defaultValue = value;
-
-export const emailAutomationGetBody = (automation) => automation.inputs[4].defaultValue;
-export const emailAutomationSetBody = (automation, value) => automation.inputs[4].defaultValue = value;
