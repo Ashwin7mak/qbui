@@ -16,7 +16,7 @@
     .deleteFieldIcon {
         font-size: $size-iconfont-large2;
         position: absolute;
-        bottom: 15%;
+        bottom: 14%;
         padding-left: 295px;
 
         .qbIcon {
@@ -84,6 +84,8 @@
         border: $stroke-width-thin solid $input-text-focus-border-color;
         .deleteFieldIcon {
             opacity: 1;
+            bottom: calc(14% + 1px);
+
             .qbIcon {
                 opacity: 1;
             }
