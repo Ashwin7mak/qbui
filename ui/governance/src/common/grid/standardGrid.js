@@ -12,6 +12,7 @@ import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
+import Locale from "../../../../reuse/client/src/locales/locale";
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -104,7 +105,7 @@ class StandardGrid extends Component {
                     <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
                 </div>
                 <div className="noRowsText">
-                    {this.props.noItemsFound}
+                    {Locale.getPluralizedMessage(`${this.props.noItemsFound}`, {items: this.props.itemTypePlural})}
                 </div>
             </div>
         );

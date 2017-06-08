@@ -57,7 +57,7 @@ export default {
                         appManager: "APP MANAGER",
                         inRealmDirectory: "IN REALM DIRECTORY?",
                         realmApproved: "REALM APPROVED?",
-                        noItemsFound: "No users match what you're looking for."
+                        noItemsFound: "No {items} match what you're looking for."
                     }
                 }
             }
