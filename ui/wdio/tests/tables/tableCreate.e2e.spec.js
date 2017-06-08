@@ -8,6 +8,7 @@
     let formsPO = requirePO('formsPage');
     let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
+    let RequestAppsPage = requirePO('requestApps');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
@@ -195,8 +196,11 @@
 
             browser.call(function() {
                 // Load the app in the realm
-                return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+                return e2ePageBase.loadAppsInBrowser(realmName);
             });
+
+            //Select app
+            RequestAppsPage.selectApp(testApp.name);
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page
             tableCreatePO.selectTable('Table 1');
