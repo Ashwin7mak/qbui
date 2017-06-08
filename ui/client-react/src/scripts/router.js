@@ -23,6 +23,7 @@ import AppPropertiesRoute from "../components/app/settings/categories/appPropert
 import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
 import AutomationListRoute from "../components/automation/settings/automationListRoute";
 import AutomationViewRoute from "../components/automation/settings/automationViewRoute";
+import AutomationEditRoute from "../components/automation/settings/automationEditRoute";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
@@ -213,6 +214,10 @@ const routes = [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId/${AUTOMATION.VIEW}`,
                 component: AutomationViewRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId/${AUTOMATION.EDIT}`,
+                component: AutomationEditRoute
             },
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION.PATH}`,

@@ -257,6 +257,10 @@ export default {
                 actions: {
                     email: "Send an email"
                 }
+            },
+            automationEdit: {
+                stageHeading: "Automation: {automationName}",
+                nameHeader: "Name"
             }
         },
         relationship: {
