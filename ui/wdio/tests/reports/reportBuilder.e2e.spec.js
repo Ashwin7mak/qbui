@@ -76,7 +76,7 @@
                 expect(isReportBuilderContainerPresent1).toEqual(false);
             });
 
-            it('drag/drop a column & verify move', function() {
+            it('drag/drop a column & verify move and CANCEL', function() {
                 let originalColumns = reportBuilderPO.getHeaderLabels();
 
                 let source = reportBuilderPO.getReportLocator(1);
@@ -126,7 +126,7 @@
         }
 
         if (browserName !== 'safari') {
-            it('verify add column and click cancel', function() {
+            it('verify add column and click CANCEL', function() {
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column
@@ -141,7 +141,7 @@
                 expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
             });
 
-            it('verify add column by add before', function() {
+            it('verify add column by add before and CANCEL', function() {
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column by clicking on AddColumnBefore from headerMenu dropdown
@@ -160,7 +160,7 @@
                 expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
             });
 
-            it('verify add column by add after', function() {
+            it('verify add column by add after and CANCEL', function() {
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column by clicking on AddColumnAfter from headerMenu dropdown
@@ -264,6 +264,85 @@
                 expect(columnsAfterSave).toContain(addedColumnLabel);
                 expect(columnsAfterSave[1]).toEqual(newColumnLabels[3]);
                 expect(columnsAfterSave[2]).toEqual(newColumnLabels[2]);
+            });
+        }
+
+        if (browserName !== 'safari') {
+            it('verify add column SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column
+                reportBuilderPO.clickFieldToken();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+                // clicks on save
+                reportBuilderPO.clickSave();
+                // column label list must be equal to the initial list with the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+            });
+
+            it('verify add column by add before and SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnBefore from headerMenu dropdown
+                reportBuilderPO.clickHeaderMenu();
+                reportBuilderPO.clickAddColumnBeforeMenuOption();
+                reportBuilderPO.clickFieldToken();
+
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                // clicks on save
+                reportBuilderPO.clickSave();
+
+                // column label list must be equal to the initial list with the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+            });
+
+            it('verify add column by add after and SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnAfter from headerMenu dropdown
+                reportBuilderPO.clickHeaderMenu();
+                reportBuilderPO.clickAddColumnAfterMenuOption();
+                reportBuilderPO.clickFieldToken();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                // clicks on save
+                reportBuilderPO.clickSave();
+
+                // column label list must be equal to the initial list without the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+            });
+        }
+
+        if (browserName !== 'safari') {
+            it('hide a column and verify it is hidden and SAVED', () => {
+                // store the list of columns before hiding
+                let originalColumns = reportBuilderPO.getHeaderLabels();
+                // store the first column label
+                let toBeHiddenColumnLabel = originalColumns[0];
+                // open the first headerMenu
+                reportBuilderPO.clickHeaderMenu();
+                // click hide option on menu
+                reportBuilderPO.clickHideMenuOption();
+                // store the list of columns after hiding
+                let hiddenColumns = reportBuilderPO.getHeaderLabels();
+                // verify that the hidden columns has one less column that original
+                expect(originalColumns.length - 1).toEqual(hiddenColumns.length);
+                // verify that the correct hidden column was removed
+                expect(hiddenColumns).not.toContain(toBeHiddenColumnLabel);
+                // click save
+                reportBuilderPO.clickSave();
+                // store the list of columns after hiding and canceling
+                let columnsAfterHideAndSave = reportBuilderPO.getHeaderLabels();
+                // verify that columns are the same length
+                expect(originalColumns.length).toEqual(columnsAfterHideAndSave.length + 1);
             });
         }
     });
