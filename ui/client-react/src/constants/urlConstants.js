@@ -53,4 +53,7 @@ export const DRAWER = Object.assign(drawer, {
     REPORT_SEGMENT_PATH: `/sr_report_app_${drawer.MATCHER.APP_ID}_table_${drawer.MATCHER.TABLE_ID}_report_${drawer.MATCHER.REPORT_ID}_dtFid_${drawer.MATCHER.DETAIL_KEY_FID}_dtVal_${drawer.MATCHER.DETAIL_KEY_VALUE}`
 });
 
-export const AUTOMATION_PATH = 'automation';
+export const AUTOMATION = Object.freeze({
+    PATH : 'automation',
+    VIEW : 'view'
+});

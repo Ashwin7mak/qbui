@@ -8,6 +8,7 @@
     var formsPO = requirePO('formsPage');
     let ReportContentPO = requirePO('reportContent');
     let modalDialog = requirePO('/common/modalDialog');
+    let RequestAppsPage = requirePO('requestApps');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
@@ -240,15 +241,14 @@
         });
 
         it('Verify that only ADMIN can edit a new table', function() {
-            browser.call(function() {
-                //get the user authentication
-                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-            });
+            //get user authentication
+            e2ePageBase.getUserAuthentication(realmName, realmId, userId);
 
-            browser.call(function() {
-                // Load the app in the realm
-                return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-            });
+            // Load the app in the realm
+            e2ePageBase.loadAppsInBrowser(realmName);
+
+            //Select app
+            RequestAppsPage.selectApp(testApp.name);
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page
             tableCreatePO.selectTable('Table 1');
