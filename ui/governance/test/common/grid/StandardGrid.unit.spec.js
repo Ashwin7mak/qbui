@@ -54,7 +54,7 @@ describe('StandardGrid', () => {
         expect(StandardGridShallow.find('.noItemsExist')).not.toBePresent();
     });
 
-    it('should not render the grid with no items', () => {
+    it('should not render the grid when no items exist', () => {
         let columns = [{
             property: 'firstName',
             header: {
