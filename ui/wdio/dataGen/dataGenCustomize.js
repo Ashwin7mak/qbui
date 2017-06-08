@@ -70,34 +70,79 @@ projRecs.init(projGen);
     var table13StateName = 'State';
     var table14CityName = 'City';
 
-    // use this array to limit which tables to create or set tablesToCreate to null to create all
-    var tablesToCreate = [
-        // table1Name,
-        // table2Name,
-        // table3Name,
-        // table4Name,
-        // table5ReqName,
-        // table6DurName,
+    const allTables = [
+        table1Name,
+        table2Name,
+        table3Name,
+        table4Name,
+        table5ReqName,
+        table6DurName,
+        table7UniqName,
 
-        // table7UniqName,
-        // table8Par1Name,
-        // table9Ch1Name,
-        // table10Par1Name,
-        // table11Ch2Name,
+        table8Par1Name,
+        table9Ch1Name,
+        table10Par1Name,
+        table11Ch2Name,
 
-        // table12CntryName,
-        // table13StateName,
-        // table14CityName,
-        //
-        // projGen.tableCompaniesName,
-        // projGen.tableProjectsName,
-        // projGen.tableTasksName,
-        // projGen.tablePeopleName,
-        // projGen.tableAssignmentsName,
-        // projGen.tableCommentsName
+        table12CntryName,
+        table13StateName,
+        table14CityName,
+
+        projGen.tableCompaniesName,
+        projGen.tableProjectsName,
+        projGen.tableTasksName,
+        projGen.tablePeopleName,
+        projGen.tableAssignmentsName,
+        projGen.tableCommentsName
     ];
-    // or use null to create all the tables
-    tablesToCreate = null;
+    const companiesTables = [
+        projGen.tableCompaniesName,
+        projGen.tableProjectsName,
+        projGen.tableTasksName,
+        projGen.tablePeopleName,
+        projGen.tableAssignmentsName,
+        projGen.tableCommentsName
+    ];
+    const basicsOnly = [
+        table1Name,
+        table2Name,
+        table3Name,
+        table4Name,
+        table5ReqName,
+        table6DurName
+    ];
+    const fieldTypesOnly = [
+        table1Name,
+        table2Name,
+        table3Name,
+        table4Name,
+        table5ReqName,
+        table6DurName,
+        table7UniqName
+    ];
+    const countryStateCityOnly = [
+        table12CntryName,
+        table13StateName,
+        table14CityName
+    ];
+    const plainParentChildOnly = [
+        table8Par1Name,
+        table9Ch1Name,
+        table10Par1Name,
+        table11Ch2Name,
+    ];
+
+    // use tablesToCreate null or allTables to create all the tables
+    let tablesToCreate = null;
+
+    // uncomment ONE of these to create a just a subset,
+    // tablesToCreate list limits which tables to create
+
+    //tablesToCreate = companiesTables;
+    //tablesToCreate = basicsOnly;
+    //tablesToCreate = countryStateCityOnly;
+    //tablesToCreate = fieldTypesOnly;
+    //tablesToCreate = plainParentChildOnly;
 
     log.debug('dataGenCustomize seed: ' + seed);
 
@@ -633,6 +678,8 @@ projRecs.init(projGen);
 
 
         // App setup //
+        //use the envvar appName if there is one otherwise generate a single word capitalized appname
+        let appName = _.get(config, 'appName', chance.capitalize(chance.word()));
         let tablesMap = makeAppMap();
         if (tablesToCreate) {
             // only create the tables in tablesToCreate if specified
@@ -640,7 +687,7 @@ projRecs.init(projGen);
             tablesMap = _.pick(tablesMap, tablesToCreate);
         }
 
-        e2eBase.appService.createAppSchema(tablesMap)
+        e2eBase.appService.createNamedAppSchema(tablesMap, appName)
         .then(function(appResponse) {
             createdApp = appResponse;
 
@@ -809,7 +856,7 @@ projRecs.init(projGen);
                     projGen.getPeopleFid('companyName'),
                     projGen.getPeopleFid('department'),
                     projGen.getPeopleFid('title'),
-                    projGen.getPeopleFid('manager')
+                    //projGen.getPeopleFid('manager')
                 ],
                 sortFids: [
                     projGen.getPeopleFid('companyName'),
@@ -817,6 +864,28 @@ projRecs.init(projGen);
                     projGen.getPeopleFid('title')
                 ],
                 reportName:'Employee Report with ID field'}, 2);
+
+            createReportExtended(rptPromises, createdApp, projGen.tablePeopleName, {
+                fids:[3,
+                    projGen.getPeopleFid('fullName'),
+                    projGen.getPeopleFid('title'),
+                    projGen.getPeopleFid('birthday'),
+                    projGen.getPeopleFid('manager'),
+                    projGen.getPeopleFid('companyName'),
+                    projGen.getPeopleFid('department')
+                ],
+                facetFids: [
+                    projGen.getPeopleFid('companyName'),
+                    projGen.getPeopleFid('department'),
+                    projGen.getPeopleFid('title'),
+                    projGen.getPeopleFid('manager')
+                ],
+                sortFids: [
+                    projGen.getPeopleFid('companyName'),
+                    projGen.getPeopleFid('department'),
+                    projGen.getPeopleFid('title')
+                ],
+                reportName:'Employee Report render error too many facets'});
 
             createSetDefaultHome(rptPromises, createdApp, projGen.tableAssignmentsName, [
                 3,
@@ -846,7 +915,10 @@ projRecs.init(projGen);
             // Forms Setup //
 
             // Create a default form for each table (uses the app JSON)
-            return e2eBase.formService.createDefaultForms(createdApp);
+            let allFormPromises =  e2eBase.formService.createDefaultForms(createdApp);
+            return promise.each(allFormPromises, function(queueItem) {
+                return queueItem;
+            });
         }).then(function() {
             //// Relationships Setup //
 
