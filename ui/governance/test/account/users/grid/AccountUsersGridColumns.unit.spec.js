@@ -39,14 +39,16 @@ describe('AccountUsersGridColumns', () => {
     };
 
     describe("Permissions", () => {
+        const data = [{realmDirectoryFlags: 1, uid:0}];
+        const mockS = configureMockStore();
+        const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
         it("should show all the headers", ()=> {
-
             let props = {...baseProps,
                 columns: GetAccountUsersGridColumns(true, true)};
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
+                <Provider store={store}>
                     <StandardGrid  {...props}/>
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
@@ -60,7 +62,7 @@ describe('AccountUsersGridColumns', () => {
                 columns: GetAccountUsersGridColumns(false, true),
             };
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
+                <Provider store={store}>
                     <StandardGrid {...props} />
                 </Provider>);
 
@@ -76,7 +78,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
+                <Provider store={store}>
                     <StandardGrid {...props} />
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
