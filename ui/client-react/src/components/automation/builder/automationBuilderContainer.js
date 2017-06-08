@@ -2,20 +2,22 @@ import React, {Component} from "react";
 import {Table} from "react-bootstrap";
 import {connect} from "react-redux";
 import Loader from "react-loader";
+import Button from 'react-bootstrap/lib/Button';
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
 import {I18nMessage} from "../../../utils/i18nMessage";
 import {loadAutomation, changeAutomationEmailSubject} from "../../../actions/automationActions";
 import {getAutomation, emailAutomationGetTo, emailAutomationGetSubject, emailAutomationGetBody} from "../../../reducers/automation";
 import TextFieldValueEditor from "../../fields/textFieldValueEditor";
+import SaveOrCancelFooter from '../../saveOrCancelFooter/saveOrCancelFooter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
 
 
-import "./automationEdit.scss";
+import "./automationBuilderContainer.scss";
 
 
-export class AutomationEditRoute extends Component {
+export class AutomationBuilderContainer extends Component {
 
     getInitialState() {
         return {
@@ -66,6 +68,18 @@ export class AutomationEditRoute extends Component {
         this.props.changeAutomationEmailSubject(value);
     };
 
+    onSave = () => { };
+    onCancel = () => { };
+
+    getRightAlignedButtons() {
+        return (
+            <div>
+                <Button bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button bsStyle="primary" onClick={this.onSave} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
+            </div>
+        );
+    }
+
     render() {
         let loaded = !(_.isUndefined(this.props.automation));
         let to = this.props.automation ? emailAutomationGetTo(this.props.automation) : '';
@@ -91,12 +105,15 @@ export class AutomationEditRoute extends Component {
                         </div>
                     </div>
                 </div>
+                <SaveOrCancelFooter
+                    rightAlignedButtons={this.getRightAlignedButtons()}
+                />
             </Loader>
         );
     }
 }
 
-AutomationEditRoute.protoTypes = {
+AutomationBuilderContainer.protoTypes = {
     automation: React.PropTypes.object,
     loadAutomation: React.PropTypes.func,
     changeAutomationEmailSubject: React.PropTypes.func
@@ -116,4 +133,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(AutomationEditRoute);
+)(AutomationBuilderContainer);
