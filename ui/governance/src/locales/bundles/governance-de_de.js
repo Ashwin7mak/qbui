@@ -50,9 +50,9 @@ export default {
                         quickbaseAccessStatus: "QUICK BASE ZUGANGSSTATUS",
                         inactive: "INAKTIV?",
                         inAnyGroup: "IN EINER GRUPPE?",
-                        groupManager: "GRUPPENLEITER",
-                        canCreateApps: "KANN APPS SCHAFFEN",
-                        appManager: "APP MANAGER",
+                        groupManager: "GRUPPENLEITER?",
+                        canCreateApps: "KANN APPS SCHAFFEN?",
+                        appManager: "APP MANAGER?",
                         inRealmDirectory: "IM REALM VERZEICHNIS?",
                         realmApproved: "REALM GENEHMIGT?",
                         noItemsFound: "Keine Benutzer passen zu dem, was du suchst."

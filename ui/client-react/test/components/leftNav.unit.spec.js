@@ -2,6 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import LeftNav from '../../src/components/nav/leftNav';
 import {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
+import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import {MemoryRouter} from 'react-router-dom';
 
 var I18nMessageMock = React.createClass({
@@ -141,5 +142,30 @@ describe('LeftNav', () => {
 
         expect(component.find('.appsList').length).toEqual(1);
         expect(component.find('.tablesList').length).toEqual(0);
+    });
+
+
+    it('reloads the applist clicking on the brand ', () => {
+        let wentTo = '';
+        spyOn(WindowLocationUtils, 'getOrigin').and.returnValue('http://roothost');
+        spyOn(WindowLocationUtils, 'update').and.callFake(function(url) {
+            wentTo = url;
+        });
+        let expectedAppsURL = 'http://roothost/qbase/apps';
+        component = mount(
+            <MemoryRouter>
+                <LeftNav open={true}
+                         appsListOpen={false}
+                         apps={appsTestData}
+                         selectedAppId={validAppId}
+                         items={navItemsTestData}/>
+            </MemoryRouter>);
+
+        console.log(component.html());
+        expect(component.find('.branding').length).toEqual(1);
+        component.find('.branding').simulate('click');
+        expect(WindowLocationUtils.getOrigin).toHaveBeenCalled();
+        expect(WindowLocationUtils.update).toHaveBeenCalledWith(expectedAppsURL);
+        expect(wentTo).toEqual(expectedAppsURL);
     });
 });

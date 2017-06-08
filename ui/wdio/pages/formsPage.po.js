@@ -36,7 +36,7 @@
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
         //cancel form button
-        formCancelBtn: {get: function() {return browser.element('.mainTrowserFooterButton');}},
+        formCancelBtn: {get: function() {return browser.element('.alternativeTrowserFooterButton');}},
 
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.element('div.qbErrorMessage.qbErrorMessageVisible');}},
