@@ -29,12 +29,7 @@
              * @returns {Promise}
              */
             getContext: function(req, accountId) {
-                let opts = requestHelper.setOptions(req, false, true);
-                let host = requestHelper.getLegacyRealmBase(req, false);
-
-                opts.headers.host = host;
-                opts.url = (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getGovernanceContextLegacyStackRoute(accountId);
-
+                let opts = requestHelper.setLegacyOptions(req, routeHelper.getGovernanceContextLegacyStackRoute(accountId));
                 return requestHelper
                     .executeRequest(req, opts)
                     .then((response) => {
