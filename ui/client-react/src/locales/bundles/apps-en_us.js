@@ -200,7 +200,8 @@ export default {
                 feedbackMenuButton: "Give feedback",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
-                feedbackTooltip: "Share ideas and issues"
+                feedbackTooltip: "Share ideas and issues",
+                helpTooltip: "Help",
             }
         },
         fields: {
