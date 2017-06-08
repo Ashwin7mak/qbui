@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 
 import Nav from './nav';
 import * as ReportActions from '../../actions/reportActions';
@@ -63,7 +64,7 @@ export const NavWrapper = React.createClass({
 
             this.props.getFeatureSwitchStates(paramVals.appId);
 
-            if (paramVals.tblId) {
+            if (paramVals.tblId && !this.isUsersRoute(this.props.match.url)) {
                 this.props.selectTable(paramVals.appId, paramVals.tblId);
                 this.props.loadReports(CONTEXT.REPORT.NAV_LIST, paramVals.appId, paramVals.tblId);
             } else {
@@ -75,6 +76,17 @@ export const NavWrapper = React.createClass({
             this.props.loadApps();
         }
     },
+
+    /**
+     * Is this a 'users' route..
+     *
+     * @returns {boolean}
+     */
+    isUsersRoute(url) {
+        const REGEX_USERS_ROUTE = /^\/qbase\/app\/.*\/users$/i;
+        return REGEX_USERS_ROUTE.test(url);
+    },
+
     /**
      * force re-render since breakpoint may have changed
      */
@@ -102,7 +114,7 @@ export const NavWrapper = React.createClass({
         }
 
         if (incomingProps.match.params.tblId) {
-            if (this.props.match.params.tblId !== incomingProps.match.params.tblId) {
+            if ((this.props.match.params.tblId !== incomingProps.match.params.tblId) && !this.isUsersRoute(incomingProps.match.url)) {
                 const appId = incomingProps.match.params.appId || this.props.match.params.appId;
                 this.props.selectTable(appId, incomingProps.match.params.tblId);
                 this.props.loadReports(CONTEXT.REPORT.NAV_LIST, appId, incomingProps.match.params.tblId);
@@ -138,7 +150,11 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavWrapper);
+//export default connect(mapStateToProps, mapDispatchToProps)(NavWrapper);
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(NavWrapper));
 
 
 
