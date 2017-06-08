@@ -267,57 +267,59 @@
             });
         }
 
-        it('verify add column SAVE', function() {
-            // gets the column list before adding a column
-            let columnsListInitial = reportBuilderPO.getHeaderLabels();
-            // adds a column
-            reportBuilderPO.clickFieldToken();
-            // gets the updated column labels after adding the new column
-            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
-            // clicks on save
-            reportBuilderPO.clickSave();
-            // column label list must be equal to the initial list with the added column
-            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
-        });
+        if (browserName !== 'safari') {
+            it('verify add column SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column
+                reportBuilderPO.clickFieldToken();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+                // clicks on save
+                reportBuilderPO.clickSave();
+                // column label list must be equal to the initial list with the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+            });
 
-        it('verify add column by add before and SAVE', function() {
-            // gets the column list before adding a column
-            let columnsListInitial = reportBuilderPO.getHeaderLabels();
-            // adds a column by clicking on AddColumnBefore from headerMenu dropdown
-            reportBuilderPO.clickHeaderMenu();
-            reportBuilderPO.clickAddColumnBeforeMenuOption();
-            reportBuilderPO.clickFieldToken();
+            it('verify add column by add before and SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnBefore from headerMenu dropdown
+                reportBuilderPO.clickHeaderMenu();
+                reportBuilderPO.clickAddColumnBeforeMenuOption();
+                reportBuilderPO.clickFieldToken();
 
-            // gets the updated column labels after adding the new column
-            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
-            // clicks on save
-            reportBuilderPO.clickSave();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                // clicks on save
+                reportBuilderPO.clickSave();
 
-            // column label list must be equal to the initial list with the added column
-            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
-        });
+                // column label list must be equal to the initial list with the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+            });
 
-        it('verify add column by add after and SAVE', function() {
-            // gets the column list before adding a column
-            let columnsListInitial = reportBuilderPO.getHeaderLabels();
-            // adds a column by clicking on AddColumnAfter from headerMenu dropdown
-            reportBuilderPO.clickHeaderMenu();
-            reportBuilderPO.clickAddColumnAfterMenuOption();
-            reportBuilderPO.clickFieldToken();
-            // gets the updated column labels after adding the new column
-            let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-            expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
-            // clicks on save
-            reportBuilderPO.clickSave();
+            it('verify add column by add after and SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnAfter from headerMenu dropdown
+                reportBuilderPO.clickHeaderMenu();
+                reportBuilderPO.clickAddColumnAfterMenuOption();
+                reportBuilderPO.clickFieldToken();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                // clicks on save
+                reportBuilderPO.clickSave();
 
-            // column label list must be equal to the initial list without the added column
-            let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-            expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
-        });
+                // column label list must be equal to the initial list without the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+            });
+        }
 
         if (browserName !== 'safari') {
             it('hide a column and verify it is hidden and SAVED', () => {
