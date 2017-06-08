@@ -4,6 +4,8 @@
     opacity: 0;
     transition: opacity 0.4s;
     border-radius: $border-radius-base;
+    padding-top: 1px;
+    padding-left: 2px;
     //By giving it a border the same size as the focus border and a transparent background,
     //it keeps the container from 'jumping' on focus
     border: $stroke-width-thick solid transparent;
@@ -77,8 +79,10 @@
     }
 
     &:hover {
-        transition: 0.4s;
+        transition: 0s;
         opacity: 1;
+        padding-top: 2px;
+        padding-left: 3px;
         border: $stroke-width-thin solid $input-text-focus-border-color;
         .deleteFieldIcon {
             opacity: 1;
