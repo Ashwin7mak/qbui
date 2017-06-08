@@ -12,6 +12,7 @@ import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
+import Locale from "../../../../reuse/client/src/locales/locale"
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -69,42 +70,49 @@ class StandardGrid extends Component {
     }
 
     /**
+     *  Renders the StandardGridToolBar component using this.props
+     **/
+    standardGridToolBar = () => {
+        return(
+            <StandardGridToolbar id={this.props.id}
+                                 doUpdate={this.props.doUpdate}
+                                 shouldFacet={this.props.shouldFacet}
+                                 shouldSearch={this.props.shouldSearch}
+                                 facetFields={this.props.facetFields}
+                                 itemTypePlural={this.props.itemTypePlural}
+                                 itemTypeSingular={this.props.itemTypeSingular}/>
+        )
+    };
+
+    /**
      * Renders the 'no records' UI
      * @returns {XML}
      */
-    renderNoRowsExist() {
+    renderNoItemsExist() {
         return (
             <div className="gridWrapper">
-                <StandardGridToolbar id={this.props.id}
-                                     doUpdate={this.props.doUpdate}
-                                     shouldFacet={this.props.shouldFacet}
-                                     shouldSearch={this.props.shouldSearch}
-                                     facetFields={this.props.facetFields}
-                                     itemTypePlural={this.props.itemTypePlural}
-                                     itemTypeSingular={this.props.itemTypeSingular}/>
-                <div className="noRowsExist">
-                    <div className="noRowsIconLine">
+                {this.standardGridToolBar()}
+                <div className="noItemsExist">
+                    <div className="noItemsIconLine">
                         <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
                     </div>
-
                     <div className="noRowsText">
-                        No users match what you're looking for.
+                        {Locale.getMessage('governance.account.users.grid.noItemsFound')}
                     </div>
                 </div>
             </div>);
     }
 
+    /**
+     * The main render function for the StandardGrid component
+     * @returns {XML}
+     */
     render() {
+        // if there are results to show on the grid, show the normal grid UI
         if (!_.isEmpty(this.props.items)) {
             return (
                 <div className="gridWrapper">
-                    <StandardGridToolbar id={this.props.id}
-                                         doUpdate={this.props.doUpdate}
-                                         shouldFacet={this.props.shouldFacet}
-                                         shouldSearch={this.props.shouldSearch}
-                                         facetFields={this.props.facetFields}
-                                         itemTypePlural={this.props.itemTypePlural}
-                                         itemTypeSingular={this.props.itemTypeSingular}/>
+                    {this.standardGridToolBar()}
                     <div className="gridContainer">
                         <Table.Provider
                             className="qbGrid"
@@ -112,7 +120,6 @@ class StandardGrid extends Component {
                             onScroll={this.handleScroll}
                             components={tableSubComponents}
                         >
-
                             <Table.Header className="qbHeader"/>
 
                             <Table.Body
@@ -128,8 +135,8 @@ class StandardGrid extends Component {
             );
 
         } else {
-            // instead of grid, render a "no users" UI
-            return this.renderNoRowsExist();
+            // instead of grid, render a "no users" UI if no results
+            return this.renderNoItemsExist();
         }
 
     }

@@ -56,7 +56,8 @@ export default {
                         canCreateApps: "CAN CREATE APPS",
                         appManager: "APP MANAGER",
                         inRealmDirectory: "IN REALM DIRECTORY?",
-                        realmApproved: "REALM APPROVED?"
+                        realmApproved: "REALM APPROVED?",
+                        noItemsFound: "No users match what you're looking for."
                     }
                 }
             }

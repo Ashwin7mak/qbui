@@ -1,4 +1,5 @@
-@import '../../../../client-react/src/assets/css/_qbVariables.scss';
+@import '../../../../reuse/client/src/assets/css/_qbVariables.scss';
+@import '../../../../client-react/src/assets/css/animate.min.css';
 
 .gridWrapper {
     display: flex;
@@ -20,7 +21,7 @@
     min-height: 0;
 }
 
-.noRowsExist {
+.noItemsExist {
     color: $color-black-700;
     display: flex;
     flex-direction: column;
@@ -32,7 +33,7 @@
     border: 1px dashed $color-black-400;
     padding: $spacing-medium1;
 
-    .noRowsIconLine {
+    .noItemsIconLine {
         margin-bottom: $spacing-medium1;
     }
 }
