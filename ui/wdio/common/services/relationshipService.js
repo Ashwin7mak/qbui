@@ -88,7 +88,7 @@
             /**
              * Retrieves the relationships created for the sample app.
              */
-            retrieveSavedRelationships: function (createdApp) {
+            retrieveSavedRelationships: function(createdApp) {
                 let appId = createdApp.id;
                 let relationshipEndpoint = recordBase.apiBase.resolveRelationshipsEndpoint(appId);
                 return recordBase.apiBase.executeRequest(relationshipEndpoint, consts.GET).then(function(result) {
@@ -104,7 +104,7 @@
              * in the app
              * @param savedRelationships
              */
-            addChildReportsToTableForms: function (createdApp, savedRelationships) {
+            addChildReportsToTableForms: function(createdApp, savedRelationships) {
                 let appId = createdApp.id;
                 let addChildReportElements = [];
 

@@ -95,6 +95,11 @@
                 var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
                 return requestReportsPageEndPoint;
             },
+            // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
+            getRequestRecordsPageEndpoint: function(realmName, appId, tableId, reportId) {
+                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
+                return requestReportsPageEndPoint;
+            },
             // Get the proper URL for loading the session ticket page in the browser
             getSessionTicketRequestEndpoint: function(realmName, realmId, ticketEndpoint) {
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);

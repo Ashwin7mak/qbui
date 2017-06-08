@@ -124,5 +124,6 @@
     PageBase.prototype.navigateTo = function(url) {
         return browser.url(url);
     };
+
     module.exports = new PageBase();
 }());
