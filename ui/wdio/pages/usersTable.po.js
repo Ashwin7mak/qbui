@@ -5,9 +5,11 @@
 (function() {
     'use strict';
     // Import the base page object
-    var e2ePageBase = requirePO('./e2ePageBase');
+    let e2ePageBase = requirePO('./e2ePageBase');
+    let formsPO = requirePO('formsPage');
 
-    var UsersTablePage = Object.create(e2ePageBase, {
+
+    let UsersTablePage = Object.create(e2ePageBase, {
 
         // Container for just the field column headers
         userContainerEl: {get: function() {return browser.elements('.userManagementReport .qbGrid .qbHeader');}},
@@ -31,7 +33,7 @@
         searchNewUser: {get: function() {return browser.element('.modal-dialog .Select-multi-value-wrapper');}},
 
         // Select user role container
-        userRoleSelection: {get: function() {return browser.element('.modal-dialog .Select-value-label');}},
+        userRoleSelection: {get: function() {return browser.element('.assignRole .Select-arrow-zone');}},
 
         // Select user option
         userSelectSearch: {get: function() {return browser.element('.Select-input .Select-value-label span');}},
@@ -91,7 +93,7 @@
          * Method to search for a user.
          *@param searchUser name
          */
-        searchUser: {value: function(searchUser) {
+        selecthUser: {value: function(searchUser) {
 
             //Wait until you see open User search
             this.searchNewUser.waitForVisible();
@@ -104,21 +106,20 @@
         }},
 
         /**
-         * Method to select user.
-         *@param selectUser name
+         * Method to select a role.
+         *@param selectRole
          */
-        selectUserFromSearch: {value: function(selectText) {
+        selectRole: {value: function(element, searchRole) {
 
-            //Wait until you see open User search
-            this.userSelectSearch.waitForVisible();
+            //Wait until you see open roles
+            element.waitForVisible();
 
-            //Click in search
-            this.userSelectSearch.click();
+            //Click in role list
+            element.click();
 
-            //Enter search value
-            return browser.keys(selectText);
+            //Select role
+            return formsPO.selectFromList(searchRole);
         }},
     });
-
     module.exports = UsersTablePage;
 }());
