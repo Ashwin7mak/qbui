@@ -5,8 +5,9 @@ import Loader from "react-loader";
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
 import {I18nMessage} from "../../../utils/i18nMessage";
-import {loadAutomation} from "../../../actions/automationActions";
+import {loadAutomation, changeAutomationEmailSubject} from "../../../actions/automationActions";
 import {getAutomation} from "../../../reducers/automation";
+import TextFieldValueEditor from "../../fields/textFieldValueEditor";
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
 
@@ -61,17 +62,32 @@ export class AutomationEditRoute extends Component {
         return this.props.automation ? this.props.automation.name : '';
     }
 
+    updateSubject = (value) => {
+        this.props.changeAutomationEmailSubject(value);
+    };
+
     render() {
         let loaded = !(_.isUndefined(this.props.automation));
+        let to = this.props.automation ? this.props.automation.inputs[0].defaultValue : '';
+        let subject = this.props.automation ? this.props.automation.inputs[3].defaultValue : '';
+        let body = this.props.automation ? this.props.automation.inputs[4].defaultValue : '';
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
                 <div className="automationEdit">
                     <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions()}/>
                     <div className="automationEdit--container">
-                        EDIT:
+                        <span className="automationEdit--sectionHeader"><I18nMessage message="automation.automationEdit.emailSectionHeader"/></span>
                         <div className="automationEditName automationEdit--section">
-                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.nameHeader"/>:</span> <br/>
-                            <span className="value">{this.getAutomationName()}</span>
+                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.toHeader"/>:</span> <br/>
+                            <span className="value">{to}</span>
+                        </div>
+                        <div className="automationEditName automationEdit--section">
+                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.subjectHeader"/>:</span> <br/>
+                            <TextFieldValueEditor inputType="text" value={subject} onChange={this.updateSubject}/>
+                        </div>
+                        <div className="automationEditName automationEdit--section">
+                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.bodyHeader"/>:</span> <br/>
+                            <span className="value">{body}</span>
                         </div>
                     </div>
                 </div>
@@ -81,10 +97,9 @@ export class AutomationEditRoute extends Component {
 }
 
 AutomationEditRoute.protoTypes = {
-    /** The automation to display. */
     automation: React.PropTypes.object,
-    /** Get an automation to view. */
-    loadAutomation: React.PropTypes.func
+    loadAutomation: React.PropTypes.func,
+    changeAutomationEmailSubject: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -94,7 +109,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    loadAutomation
+    loadAutomation,
+    changeAutomationEmailSubject
 };
 
 export default connect(

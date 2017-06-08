@@ -81,6 +81,11 @@ const automation = (
             error: undefined
         };
     }
+    case types.CHANGE_AUTOMATION_EMAIL_SUBJECT: {
+        let newState = _.cloneDeep(state);
+        newState.automation.inputs[3].defaultValue = action.content.newSubject;
+        return newState;
+    }
     default:
         // by default, return existing state
         return state;

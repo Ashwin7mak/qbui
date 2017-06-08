@@ -128,4 +128,6 @@ export const testAutomation = (automationName, appId) => {
     };
 };
 
-
+export const changeAutomationEmailSubject = (newSubject) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_SUBJECT, {newSubject}));
+};

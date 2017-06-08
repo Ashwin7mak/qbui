@@ -255,8 +255,12 @@ export default {
                 }
             },
             automationEdit: {
-                stageHeading: "Automatisation: {automationName}",
-                nameHeader: "Prénom"
+                stageHeading: "Modifier l'automatisation: {automationName}",
+                nameHeader: "Prénom",
+                emailSectionHeader: "Envoyer un e-mail",
+                toHeader: "Notifier à qui",
+                subjectHeader: "Assujettir",
+                bodyHeader: "Message"
             }
         },
         relationship: {
