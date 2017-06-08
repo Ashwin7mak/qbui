@@ -112,16 +112,6 @@ const routes = [
             }
         ]
     },
-    //{
-    //    path: `${APP_ROUTE}/:appId/users`,
-    //    component: ConnectedNav,
-    //    routes: [
-    //        {
-    //            path: `${APP_ROUTE}/:appId/users`,
-    //            component: AppUsersRoute
-    //        }
-    //    ]
-    //},
     {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
         component: ConnectedNav,
