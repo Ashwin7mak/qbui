@@ -245,6 +245,15 @@ export default {
                 actionButton: "Test",
                 activeYes: "Ja",
                 activeNo: "Nein"
+            },
+            automationView: {
+                stageHeading: "Automatisierung: {automationName}",
+                nameHeader: "Name",
+                triggerHeader: "Auslöser",
+                actionHeader: "Aktion",
+                actions: {
+                    email: "Eine E-Mail senden"
+                }
             }
         },
         relationship: {

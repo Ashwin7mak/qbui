@@ -26,6 +26,15 @@ describe('AutomationService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 
+    it('test getAutomation function', () => {
+        let appId = "testApp";
+        let automationId = "testAuto";
+        let url = StringUtils.format(automationService.API.GET_AUTOMATION, [appId, automationId]);
+
+        automationService.getAutomation(appId, automationId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    });
+
     it('test invokeAutomation function', () => {
         let appId = "testApp";
         let wfId = "testAutmation";

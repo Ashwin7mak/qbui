@@ -98,6 +98,40 @@
                 //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
             });
 
+
+            xit('add a new field & verify that it does not appear in the existing fields list', function() {
+                // MC-3100: New fields appear immediately in Existing field tab
+                // open existing fields tab
+                formBuilderPO.tab_Existing.click();
+                // verify that the existing fields list is empty
+                expect(formBuilderPO.getExistingFieldLabels()).toEqual([]);
+                // open new fields tab
+                formBuilderPO.tab_New.click();
+                // add new field
+                formBuilderPO.listOfElementsItem.click();
+                // open existing fields tab
+                formBuilderPO.tab_Existing.click();
+                // verify that the existing fields list is empty
+                expect(formBuilderPO.getExistingFieldLabels()).toEqual([]);
+            });
+
+            xit('remove field & verify that # of fields in existing tab label increments.  & v.v.', function() {
+                // MC-3102: The tab button for Existing should show a count of existing fields
+                // open existing fields tab
+                formBuilderPO.tab_Existing.click();
+                // verify that the existing fields list is empty
+                expect(formBuilderPO.getExistingFieldLabels()).toEqual([]);
+                // verify that '0' appears in the tab label?
+
+                // remove the first field
+                formBuilderPO.removeField(1);
+                // verify that '1' appears in the tab label?
+
+                // add the first existing field (the one we just removed)
+                formBuilderPO.tab_firstField.click();
+                // verify that '0' appears in the tab label?
+            });
+
             // one-offs
             it('select a field, add a new field, verify new field is added directly below selection', function() {
                 // store the list of fields before adding
@@ -223,6 +257,53 @@
                 // get back to form builder so afterEach doesn't fail on Cancel
                 reportContentPO.clickOnRecordInReportTable(1);
                 formBuilderPO.open();
+            });
+
+            it('remove existing field & re-add it, verify field presence (or not) of field in existing field list at each step', function() {
+                // open existing fields tab
+                formBuilderPO.tab_Existing.click();
+                // store the name of the first field on the form
+                let firstField = formBuilderPO.getFieldLabels()[0];
+                // verify that the existing fields list is empty
+                formBuilderPO.tab_firstField.waitForExist(null, true);
+                // remove the first field
+                formBuilderPO.removeField(1);
+                // verify that the removed field now appears in the existing fields list
+                expect(formBuilderPO.getNewFieldLabels()).toContain(firstField);
+                // add the first existing field (the one we just removed)
+                formBuilderPO.tab_firstField.click();
+                // verify that the existing fields list is empty
+                formBuilderPO.tab_firstField.waitForExist(null, true);
+                // verify that the SECOND field in the form is now the former FIRST field
+                // (because the removal of the first field left the second field selected
+                // so 'new' field additions go below that selection)
+                expect(formBuilderPO.getFieldLabels()[1]).toBe(firstField);
+            });
+
+            it('remove existing field, save & reopen form, verify that field persists in existing field list', function() {
+                // store the name of the first field on the form
+                let firstField = formBuilderPO.getFieldLabels()[0];
+                // remove the first field
+                formBuilderPO.removeField(1);
+                // save & reopen
+                formBuilderPO.save().open();
+                // open existing fields tab
+                formBuilderPO.tab_Existing.click();
+                // verify that the removed field still appears in the existing fields list
+                expect(formBuilderPO.getNewFieldLabels()).toContain(firstField);
+            });
+
+            it('select existing fields tab, then collapse & expand left panel & verify that the existing tab is still selected', function() {
+                // unfortunately there's no convenient way to verify that the inkbar is under the active tab
+                // MC-3101: The tab button for New is selected after Fields panel is collapsed and expanded
+                // open existing fields tab
+                formBuilderPO.tab_Existing.click();
+                // collapse left panel
+                topNavPO.topNavToggleHamburgerEl.click();
+                // expand left panel
+                topNavPO.topNavToggleHamburgerEl.click();
+                // verify existing fields tab is still selected
+                expect(formBuilderPO.tab_Active.getText()).toBe("Existing");
             });
         }
     });

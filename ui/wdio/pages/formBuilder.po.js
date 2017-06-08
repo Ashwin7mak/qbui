@@ -2,6 +2,7 @@
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
 
 class formBuilderPage {
@@ -58,7 +59,7 @@ class formBuilderPage {
 
     get listOfElementsItemGroup() {
         // The FIRST group in the list of NEW FIELDs (left panel)
-        return browser.element('.listOfElementsItemGroup');
+        return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
     }
 
     get listOfElementsItem() {
@@ -104,6 +105,40 @@ class formBuilderPage {
     get success() {
         // FORM SUCCESSFULLY SAVED growl msg
         return browser.element('.notification-success');
+    }
+
+    get tabbedSideNav() {
+        // parent of the tabbed field lists in leftNav
+        return browser.element('.tabbedSideNav div div');
+    }
+
+    get tab_Existing() {
+        // The EXISTING tab in leftNav
+        // return this.tabbedSideNav.element('div:contains("Existing")'); // invalid selector...?
+        // return this.tabbedSideNav.element('//div[contains(text(), "Existing"]'); // not found...?
+        // return this.tabbedSideNav.element('//div[contains(getAttribute("innerHTML"), "Existing")]'); // invalid xpath...?
+        // ask Brandon to add a descriptive class name or id!
+        // return this.tabbedSideNav.element('div:nth-child(3) div'); // clicks on the bar, i.e. nth-child(1)...?
+        return browser.element(".tabbedSideNav div div div:nth-child(3) div");
+    }
+
+    get tab_New() {
+        // The NEW FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav div div div:nth-child(2) div");
+    }
+
+    get tab_Bar() {
+        // The EXISTING FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav div div div:nth-child(1)");
+    }
+
+    get tab_Active() {
+        // The active FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav .rc-tabs-tab-active");
+    }
+
+    get tab_firstField() {
+        return browser.element(tab_Field);
     }
 
     get addAnotherRecordDialogTitle() {
@@ -168,11 +203,19 @@ class formBuilderPage {
 
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
-        browser.element('.rc-tabs-tabpane-active .listOfElementsItem').waitForVisible();
-        let labelEls = browser.elements('.rc-tabs-tabpane-active .listOfElementsItem');
+        this.tab_firstField.waitForVisible();
+        let labelEls = browser.elements(tab_Field);
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
         });
+    }
+
+    getExistingFieldLabels() {
+        // Gets the list of field labels from the EXISTING FIELD panel
+        // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
+        // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
+        // this lets the message include the contents of the unexpectedly present list.
+        return this.tab_firstField.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getSelectedFieldLabel() {

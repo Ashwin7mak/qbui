@@ -6,6 +6,7 @@
     var consts = require('../../../common/src/constants');
     var log = require('../../src/logger').getLogger();
     var requestUtils = require('../../src/utility/requestUtils');
+    var crypto = require('crypto');
     var _ = require('lodash');
     //This is the url that will be used for making requests to the node server or the java server
     var baseUrl;
@@ -40,6 +41,7 @@
         var RECORDS_ENDPOINT = '/records/';
         var RECORDS_BULK = '/records/bulk';
         var REALMS_ENDPOINT = '/realms/';
+        var PRIVATE_USERS_ENDPOINT = '/private/users/';
         var USERS_ENDPOINT = '/users/';
         var BULK_USERS_ENDPOINT = '/users/bulk';
         var ROLES_ENDPOINT = '/roles/';
@@ -54,8 +56,15 @@
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
         var TICKET_HEADER_KEY = 'ticket';
+        var PRIVATE_API_AUTH_HEADER = 'Authorization';
+        var PRIVATE_API_SALT_HEADER = 'Authorization-Salt';
         var DEFAULT_HEADERS = {};
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
+        var PRIVATE_API_HEADERS = {};
+        var apiSalt = generateSalt();
+        PRIVATE_API_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
+        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode('e4d1d39f-3352-474e-83bb-74dda6c4d8d7', apiSalt);
+        PRIVATE_API_HEADERS[PRIVATE_API_SALT_HEADER] = apiSalt;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
         var TABLES_PROPERTIES = '/tableproperties/';
@@ -99,6 +108,24 @@
         //Generates and returns a psuedo-random email string
         function generateEmail() {
             return generateString(10) + '_' + generateString(10) + '@quickbase.com';
+        }
+
+        // generates a salt for use with private apis (these should only be used in testing)
+        function generateSalt() {
+            var prime_length = 32;
+            var diffHell = crypto.createDiffieHellman(prime_length);
+            diffHell.generateKeys('base64');
+            return diffHell;
+        }
+
+        // hashes + encodes secret and salt for use with private apis (these should only be used in testing)
+        function hashAndEncode(secret, salt) {
+            var saltedSecret = secret + salt;
+
+            var sha256 = crypto.createHash("sha256");
+            sha256.update(saltedSecret);
+            var result = sha256.digest("base64");
+            return result;
         }
 
         var apiBase = {
@@ -202,8 +229,8 @@
             resolveHealthEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + HEALTH_ENDPOINT;
             },
-            resolveUsersEndpoint        : function(userId) {
-                var endpoint = JAVA_BASE_ENDPOINT + USERS_ENDPOINT;
+            resolvePrivateUsersEndpoint        : function(userId) {
+                var endpoint = JAVA_BASE_ENDPOINT + PRIVATE_USERS_ENDPOINT;
                 if (userId) {
                     endpoint = endpoint + userId;
                 }
@@ -440,7 +467,7 @@
             },
             //Create user helper method generates an specific user, calls execute request and returns a promise
             createSpecificUser: function(userToMake) {
-                return this.executeRequest(this.resolveUsersEndpoint(), consts.POST, userToMake, DEFAULT_HEADERS);
+                return this.executeRequest(this.resolvePrivateUsersEndpoint(), consts.POST, userToMake, PRIVATE_API_HEADERS);
             },
             //Create user helper method generates an arbitrary user, calls execute request and returns a promise
             createUser        : function() {

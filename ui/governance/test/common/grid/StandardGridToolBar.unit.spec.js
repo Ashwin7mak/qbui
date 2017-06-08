@@ -4,7 +4,7 @@ import jasmineEnzyme from "jasmine-enzyme";
 import * as Actions from "../../../src/account/users/AccountUsersActions";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import StandardGridNavigation from "../../../src/common/grid/toolbar/StandardGridNavigation";
-import StandardGridItemsCount from "../../../src/common/grid/toolbar/StandardGridItemsCount";
+import StandardGridItemsCount from "../../../../reuse/client/src/components/itemsCount/StandardGridItemsCount";
 import GenericFilterSearchBox from "../../../../reuse/client/src/components/facets/genericFilterSearchBox";
 import {Provider} from "react-redux";
 import configureMockStore from "redux-mock-store";
