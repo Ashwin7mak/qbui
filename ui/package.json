@@ -96,6 +96,7 @@
     "chance": "^1.0.8",
     "connect-livereload": "~0.4.0",
     "core-js": "^1.2.0",
+    "crypto": "0.0.3",
     "css-loader": "^0.26.1",
     "deep-diff": "^0.3.4",
     "enzyme": "^2.7.0",
