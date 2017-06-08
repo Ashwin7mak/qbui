@@ -83,7 +83,7 @@ const automation = (
     }
     case types.CHANGE_AUTOMATION_EMAIL_SUBJECT: {
         let newState = _.cloneDeep(state);
-        newState.automation.inputs[3].defaultValue = action.content.newSubject;
+        emailAutomationSetSubject(newState.automation, action.content.newSubject);
         return newState;
     }
     default:
@@ -105,3 +105,12 @@ export const testAutomation = (state) => {
 export const getAutomation = (state) => {
     return state.automation.automation;
 };
+
+export const emailAutomationGetTo = (automation) => automation.inputs[0].defaultValue;
+export const emailAutomationSetTo = (automation, value) => automation.inputs[0].defaultValue = value;
+
+export const emailAutomationGetSubject = (automation) => automation.inputs[3].defaultValue;
+export const emailAutomationSetSubject = (automation, value) => automation.inputs[3].defaultValue = value;
+
+export const emailAutomationGetBody = (automation) => automation.inputs[4].defaultValue;
+export const emailAutomationSetBody = (automation, value) => automation.inputs[4].defaultValue = value;

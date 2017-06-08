@@ -6,7 +6,7 @@ import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
 import {I18nMessage} from "../../../utils/i18nMessage";
 import {loadAutomation, changeAutomationEmailSubject} from "../../../actions/automationActions";
-import {getAutomation} from "../../../reducers/automation";
+import {getAutomation, emailAutomationGetTo, emailAutomationGetSubject, emailAutomationGetBody} from "../../../reducers/automation";
 import TextFieldValueEditor from "../../fields/textFieldValueEditor";
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
@@ -68,9 +68,9 @@ export class AutomationEditRoute extends Component {
 
     render() {
         let loaded = !(_.isUndefined(this.props.automation));
-        let to = this.props.automation ? this.props.automation.inputs[0].defaultValue : '';
-        let subject = this.props.automation ? this.props.automation.inputs[3].defaultValue : '';
-        let body = this.props.automation ? this.props.automation.inputs[4].defaultValue : '';
+        let to = this.props.automation ? emailAutomationGetTo(this.props.automation) : '';
+        let subject = this.props.automation ? emailAutomationGetSubject(this.props.automation) : '';
+        let body = this.props.automation ? emailAutomationGetBody(this.props.automation) : '';
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
                 <div className="automationEdit">
