@@ -9,6 +9,7 @@ export default {
 
     messages: {
         governance: {
+            noItemsFound: "No {items} match what you're looking for. Try looking for a different {item}.",
             leftNav: {
                 myApps: "back to My Apps",
                 manageBilling: "Manage Billing",
@@ -56,8 +57,7 @@ export default {
                         canCreateApps: "CAN CREATE APPS?",
                         appManager: "APP MANAGER?",
                         inRealmDirectory: "IN REALM DIRECTORY?",
-                        realmApproved: "REALM APPROVED?",
-                        noItemsFound: "No {items} match what you're looking for."
+                        realmApproved: "REALM APPROVED?"
                     }
                 }
             }

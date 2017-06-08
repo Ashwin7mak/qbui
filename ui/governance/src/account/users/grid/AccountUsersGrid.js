@@ -23,7 +23,7 @@ class AccountUsersGrid extends Component {
                 itemTypePlural="users"
                 itemTypeSingular="user"
                 itemsPerPage={constants.USERS_GRID_ITEMSPERPAGE}
-                noItemsFound={'governance.account.users.grid.noItemsFound'}
+                noItemsFound={'governance.noItemsFound'}
             />
         );
     }

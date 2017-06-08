@@ -9,6 +9,7 @@ export default {
 
     messages: {
         governance: {
+            noItemsFound: "Aucun {items} ne correspond à ce que vous recherchez. Essayez de chercher un {item} différent.",
             leftNav: {
                 myApps: "retour à Mes Applications",
                 manageBilling: "Gestion de facturation",
@@ -54,8 +55,7 @@ export default {
                         canCreateApps: "POUVEZ CRÉER DES APPS?",
                         appManager: "APP MANAGER?",
                         inRealmDirectory: "DANS LE REALM DE RÉPERTOIRE?",
-                        realmApproved: "REALM APPROUVÉ?",
-                        noItemsFound: "Aucun utilisateur ne correspond à ce que vous recherchez."
+                        realmApproved: "REALM APPROUVÉ?"
                     }
                 }
             }
