@@ -4,6 +4,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import HelpButton, {__RewireAPI__ as HelpButtonRewireAPI} from 'REUSE/components/topNav/supportingComponents/helpButton';
 import Icon from 'REUSE/components/icon/icon';
+import UrlUtils from '../../../../client-react/src/utils/urlUtils';
 
 const mockWalkme = {toggleMenu() {}};
 const mockDevice = {isTouch() {return false;}};
@@ -34,14 +35,11 @@ describe('HelpButton', () => {
         expect(component.find(Icon)).toHaveProp('icon', 'help');
     });
 
-    it('shows a notification that help is not currently available', () => {
+    it('has the correct href', () => {
         spyOn(mockNotificationManager, 'info');
-
         component = shallow(<HelpButton/>);
-
-        component.find('.reHelpButton').simulate('click');
-
-        expect(mockNotificationManager.info).toHaveBeenCalled();
+        let helpButton = component.find('.reHelpButton').html();
+        expect(helpButton.includes(UrlUtils.getHelpLink()));
     });
 
     // The following 3 tests are disabled because the help button has
