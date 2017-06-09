@@ -36,32 +36,6 @@ function userEvent(type, content) {
     };
 }
 
-export const loadAppOwner = (appId, userId) => {
-    //  promise is returned in support of unit testing only
-    return (dispatch) => getAppOwnerData(dispatch, appId, userId);
-};
-
-/**
- * Can load the app and the appOwner in a single action. If the app is available at the time,
- * this function is called then only the appOwner api is called. Otherwise, it will load the app,
- * and then get the appOwner.
- * @param appId
- * @returns {function(*=, *)}
- */
-export const loadAppAndOwner = appId => {
-    return (dispatch, getState) => {
-        let app = getApp(getState().app, appId);
-        if (app) {
-            return getAppOwnerData(dispatch, appId, app.ownerId);
-        } else {
-            return loadAppData(dispatch, appId).then(() => {
-                app = getApp(getState().app, appId);
-                getAppOwnerData(dispatch, appId, app.ownerId);
-            });
-        }
-    };
-};
-
 /**
  * Calls the APIs to get the appOwner information from the userService.
  * @param dispatch
@@ -96,6 +70,32 @@ const getAppOwnerData = (dispatch, appId, userId) => {
             reject();
         }
     });
+};
+
+/**
+ * Can load the app and the appOwner in a single action. If the app is available at the time,
+ * this function is called then only the appOwner api is called. Otherwise, it will load the app,
+ * and then get the appOwner.
+ * @param appId
+ * @returns {function(*=, *)}
+ */
+export const loadAppAndOwner = appId => {
+    return (dispatch, getState) => {
+        let app = getApp(getState().app, appId);
+        if (app) {
+            return getAppOwnerData(dispatch, appId, app.ownerId);
+        } else {
+            return loadAppData(dispatch, appId).then(() => {
+                app = getApp(getState().app, appId);
+                getAppOwnerData(dispatch, appId, app.ownerId);
+            });
+        }
+    };
+};
+
+export const loadAppOwner = (appId, userId) => {
+    //  promise is returned in support of unit testing only
+    return (dispatch) => getAppOwnerData(dispatch, appId, userId);
 };
 
 /**
