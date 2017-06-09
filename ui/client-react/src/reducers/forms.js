@@ -5,6 +5,7 @@ import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 import fieldFormats from '../utils/fieldFormats';
 import {getFields} from '../reducers/fields';
+import Locale from '../../../reuse/client/src/locales/locale';
 
 const forms = (
 
@@ -547,7 +548,7 @@ export const getExistingFields = (state, id, appId, tblId) => {
                 type: fieldFormats.getFormatType(field),
                 relatedField: field,
                 title: field.name,
-                tooltipText: `Add ${field.name} to the form`
+                tooltipText: Locale.getMessage('builder.Existing', {fieldName: field.name})
             }
         ];
     }, []);
