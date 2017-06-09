@@ -81,4 +81,36 @@ describe('StandardGridToolBar', () => {
 
         expect(component.find(StandardGridItemsCount)).toBePresent();
     });
+
+    it('should not render with navigation and itemsCount but render with search component', () => {
+
+        let mockSearchTerm = "test search";
+
+        let component = mount(
+            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 0}, searchTerm: mockSearchTerm}}})}>
+                <StandardGridToolBar
+                    doUpdate={Actions.doUpdate}
+                    doFacet={false}
+                    id={"accountUsers"}
+                    rowKey={"uid"}
+                    itemTypePlural= "users"
+                    itemTypeSingular="user"
+                    itemsPerPage={0}
+                />
+            </Provider>);
+
+        expect(component).toBeDefined();
+        expect(component.length).toBeTruthy();
+
+        let StandardGridNavigationComponent = component.find(StandardGridNavigation);
+        expect(StandardGridNavigationComponent).not.toBePresent();
+
+        let StandardGridSearchComponent = component.find(GenericFilterSearchBox);
+        expect(StandardGridSearchComponent).toBeDefined();
+        expect(StandardGridSearchComponent.length).toBeTruthy();
+        expect(StandardGridSearchComponent.props().placeholder).toEqual("Search users");
+        expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
+
+        expect(component.find(StandardGridItemsCount)).not.toBePresent();
+    });
 });

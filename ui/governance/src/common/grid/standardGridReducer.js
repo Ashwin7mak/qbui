@@ -3,7 +3,7 @@ import FacetSelections from "../../../../reuse/client/src/components/facets/face
 
 export const defaultGridState = {
     // the items currently displayed on the grid
-    items: [],
+    items: null,
     // the sort field IDs that is currently applied to the grid
     sortFids: [],
     // the pagination to apply to the grid
