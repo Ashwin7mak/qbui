@@ -43,14 +43,6 @@ export const loadApps = () => {
     };
 };
 
-export const loadApp = (appId) => {
-    // we're returning a promise to the caller (not a Redux action) since this is an async action
-    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-    return (dispatch) => {
-        return loadAppData(dispatch, appId);
-    };
-};
-
 /**
  * Calls the API to load the app. In most cases, you want to use the `loadApp` action above.
  * This action is used to load apps in other actions, when having the app data is a pre-requisite for later actions.
@@ -77,6 +69,14 @@ export const loadAppData = (dispatch, appId) => {
             }
         );
     });
+};
+
+export const loadApp = (appId) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        return loadAppData(dispatch, appId);
+    };
 };
 
 export const clearSelectedApp = () => {

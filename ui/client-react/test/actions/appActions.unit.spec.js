@@ -110,6 +110,17 @@ describe('App Actions success workflow functions', () => {
     it('create clear selected app table event', () => {
         expect(AppActions.clearSelectedAppTable()).toEqual(event(types.CLEAR_SELECTED_APP_TABLE));
     });
+
+    it('toggle add to app success dialog event', () => {
+        const isOpen = false;
+        const email = 'test@test.com';
+        expect(AppActions.toggleAddToAppSuccessDialog(isOpen, email)).toEqual(event(types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, {isOpen, email}));
+    });
+
+    it('update add table properties event', () => {
+        const tableInfo = {'id':1};
+        expect(AppActions.updateAppTableProperties(appId, tblId, tableInfo)).toEqual(event(types.UPDATE_APP_TABLE_PROPS, {appId, tblId, tableInfo}));
+    });
 });
 
 describe('App Actions error workflow functions', () => {
