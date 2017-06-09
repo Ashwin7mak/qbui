@@ -127,13 +127,16 @@ const app = (
             // find the table and replace
             let tableToUpdateIdx = _.findIndex(appToUpdate.tables, (t) => t.id === action.content.tblId);
             if (tableToUpdateIdx !== -1) {
-                appToUpdate.tables[tableToUpdateIdx] = action.content.tableData;
+                appToUpdate.tables[tableToUpdateIdx] = action.content.tableInfo;
             }
+            return {
+                ...state,
+                app: appToUpdate,
+                apps: setAppInApps(appToUpdate)
+            };
         }
-        return {
-            ...state,
-            apps: appsClone
-        };
+        return state;
+
     case types.LOAD_APP:
         let appId = action.content.appId;
         return {

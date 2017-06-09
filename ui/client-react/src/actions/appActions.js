@@ -87,3 +87,6 @@ export const toggleAddToAppSuccessDialog = (isOpen, email) => {
     return event(types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG, {isOpen, email});
 };
 
+export const updateAppTableProperties = (appId, tblId, tableInfo) => {
+    return event(types.UPDATE_APP_TABLE_PROPS, {appId, tblId, tableInfo});
+};

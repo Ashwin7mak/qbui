@@ -16,11 +16,13 @@ class AppModel {
             this.setUnfilteredUsers(appData.users[1]);
             this.app.link = `${APP_ROUTE}/${this.app.id}`;
 
-            //  set the table icons
+            //  set the table icons if one is not already set
             let tables = this.app.tables;
             if (tables) {
                 tables.forEach((table) => {
-                    table.tableIcon = TableIconUtils.getTableIcon(table.name);
+                    if (!table.tableIcon) {
+                        table.tableIcon = TableIconUtils.getTableIcon(table.name);
+                    }
                 });
             }
         }
