@@ -42,10 +42,10 @@ class RelationshipUtils {
      * @returns {*|boolean}
      */
     static isValidRelationshipKeyField(field) {
-        let isTextOfNumeric = field.datatypeAttributes && field.datatypeAttributes.type === constants.TEXT || field.datatypeAttributes.type === constants.NUMERIC;
+        let isTextOrNumeric = field.datatypeAttributes && field.datatypeAttributes.type === constants.TEXT || field.datatypeAttributes.type === constants.NUMERIC;
         let isMultiChoice = field.multipleChoice;
         let isMultiline = field.datatypeAttributes && field.datatypeAttributes.clientSideAttributes && field.datatypeAttributes.clientSideAttributes.num_lines ? field.datatypeAttributes.clientSideAttributes.num_lines > 1 : false;
-        return field.unique && field.required && isTextOfNumeric && !isMultiChoice && !isMultiline;
+        return field.unique && field.required && isTextOrNumeric && !isMultiChoice && !isMultiline;
     }
 }
 
