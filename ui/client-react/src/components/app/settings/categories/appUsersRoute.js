@@ -12,7 +12,7 @@ import Locale from '../../../../../../reuse/client/src/locales/locale';
 import {connect} from 'react-redux';
 import UserActions from '../../../actions/userActions';
 import {loadAppAndOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows, clearSelectedUserRows} from '../../../../actions/userActions';
-import {loadApp, toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
+import {toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
 import {getSelectedAppId, getApp, getAppOwner, getAppUsers, getAppUnfilteredUsers} from '../../../../reducers/app';

@@ -135,7 +135,7 @@ describe('Test app reducer - update app table properties', () => {
                 }]
             }];
 
-            const state = reducer(storeState, {type: types.UPDATE_APP_TABLE_PROPS, content:{appId: testCase.appId, tblId: testCase.tblId, tableData: testCase.table}});
+            const state = reducer(storeState, {type: types.UPDATE_APP_TABLE_PROPS, content:{appId: testCase.appId, tblId: testCase.tblId, tableInfo: testCase.table}});
 
             //  find the app in the new state
             const app = AppReducer.getApp(state, testCase.appId);

@@ -18,7 +18,7 @@ describe('AppUsersRoute functions', () => {
     const nextMatch = {params: {appId: 2}};
 
     const props = {
-        loadAppOwner() {return appOwner;},
+        loadAppAndOwner() {return appOwner;},
         loadAppRoles() {return appRoles;},
         searchUsers() {},
         setUserRoleToAdd() {},
@@ -52,7 +52,7 @@ describe('AppUsersRoute functions', () => {
 
     beforeEach(() => {
         AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
-        spyOn(props, 'loadAppOwner');
+        spyOn(props, 'loadAppAndOwner');
         spyOn(props, 'loadAppRoles');
         spyOn(props, 'searchUsers');
         spyOn(props, 'setUserRoleToAdd');
@@ -63,7 +63,7 @@ describe('AppUsersRoute functions', () => {
 
     afterEach(() => {
         AppUsersRouteAPI.__ResetDependency__('IconActions');
-        props.loadAppOwner.calls.reset();
+        props.loadAppAndOwner.calls.reset();
         props.loadAppRoles.calls.reset();
         props.searchUsers.calls.reset();
         props.setUserRoleToAdd.calls.reset();
@@ -79,12 +79,6 @@ describe('AppUsersRoute functions', () => {
         instance.selectAllRows();
     });
 
-    it('test component will receive props', () => {
-        let component = shallow(<AppUsersRoute {...props}/>);
-        let instance = component.instance();
-        instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, selectedApp, selectedUserRows: [], params:{appId:2}, appUsers:[]});
-        instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, selectedApp: {}, selectedUserRows: [], params:{appId:2}, appUsers:[]});
-    });
     it('test Selections', () => {
         let component = shallow(<AppUsersRoute {...props}/>);
         let instance = component.instance();
