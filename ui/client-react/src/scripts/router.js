@@ -62,26 +62,6 @@ let storeFunc = {
 //  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;
 
-const mapStateToProps = (state) => {
-    return {
-        qbui: state
-    };
-};
-
-const connectedWrapper = (ComponentToWrap) => {
-    class WrappedComponent extends React.Component {
-        render() {
-            const {...props} = this.props;
-            return <ComponentToWrap {...props}/>;
-        }
-    }
-    return WrappedComponent;
-};
-
-const ConnectedNav = connectedWrapper(NavWrapper);
-const ConnectedBuilderNav = connectedWrapper(BuilderWrapper);
-const ConnectedSettingsNav = connect(mapStateToProps)(connectedWrapper(SettingsWrapper)); // pass Redux state as qbui prop
-
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
 
@@ -100,7 +80,7 @@ store.dispatch(FeatureSwitchActions.getStates());
 const routes = [
     {
         path: ADMIN_ROUTE,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes: [
             {
                 path: `${ADMIN_ROUTE}/featureSwitches/:id`,
@@ -114,7 +94,7 @@ const routes = [
     },
     {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes:  [
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/(report)?/:rptId?/record/:recordId`,
@@ -151,7 +131,7 @@ const routes = [
     {
         path: APPS_ROUTE,
         exact: true,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes: [
             {
                 path: APPS_ROUTE,
@@ -161,7 +141,7 @@ const routes = [
     },
     {
         path: `${BUILDER_ROUTE}/app/:appId`,
-        component: ConnectedBuilderNav,
+        component: BuilderWrapper,
         routes: [
             {
                 path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
@@ -175,7 +155,7 @@ const routes = [
     },
     {
         path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId`,
-        component: ConnectedSettingsNav,
+        component: SettingsWrapper,
         routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
@@ -186,7 +166,7 @@ const routes = [
     },
     {
         path: `${SETTINGS_ROUTE}/app/:appId/`,
-        component: ConnectedSettingsNav,
+        component: SettingsWrapper,
         routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/properties`,
@@ -209,10 +189,9 @@ const routes = [
     }
 ];
 
-const createElement = (Component, props) => <Component {...props}/>;
 render((
     <Provider store={store}>
-        <Router history={history} createElement={createElement} >
+        <Router history={history}>
                 {/*  within Switch 1st match wins
                     includes all the above top level routes and passes on the child routes in the properties
                     note if an entry it is without a path to match it matches all

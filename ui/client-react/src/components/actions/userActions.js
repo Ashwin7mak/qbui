@@ -59,8 +59,12 @@ export class UserActions extends React.Component {
         const selectedRows = this.props.selectedUserRows;
         this.props.removeUsersFromAppRole(this.props.appId, this.props.roleId, selectedRows).then(
             (userIds) => {
-                const msg = selectedRows.length > 1 ?
-                    Locale.getMessage('app.users.usersRemovedFromAppRole', {numOfUsers:selectedRows.length}) : Locale.getMessage('app.users.userRemovedFromAppRole');
+                let msg;
+                if (selectedRows.length > 1) {
+                    msg = Locale.getMessage('app.users.usersRemovedFromAppRole', {numOfUsers: selectedRows.length});
+                } else {
+                    msg = Locale.getMessage('app.users.userRemovedFromAppRole');
+                }
                 NotificationManager.success(msg);
 
                 //  clear out the selected user rows..
@@ -107,16 +111,16 @@ export class UserActions extends React.Component {
      * render the actions
      */
     render() {
-        const selectedRows = this.props.selectedUserRows.length;
+        const numSelectedRows = this.props.selectedUserRows.length;
         return (
             <div className={'reportActions'}>
                 <div className={'reportActionsBlock'}>
-                    {<span className="selectedRowsLabel">{selectedRows}</span>}
+                    {<span className="selectedRowsLabel">{numSelectedRows}</span>}
                     <div className="actionIcons">
                         <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true} identifier="mail"/>
                         {this.getEmailAction()}
                         <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true} identifier="settings"/>
-                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(selectedRows > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
+                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(numSelectedRows > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
                     </div>
                 </div>
                 {this.getConfirmDialog()}

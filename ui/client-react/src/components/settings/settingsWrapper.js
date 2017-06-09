@@ -121,7 +121,7 @@ export const SettingsWrapper = React.createClass({
                 contextHeaderIconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                 contextHeaderTitle={selectedTable ? selectedTable.name : ""}
                 navItems={[
-                {title: <I18nMessage message={"nav.backToApp"}/>, isPrimaryAction: true, secondaryIcon: 'caret-left', link:appLink},
+                {title: <I18nMessage message={"nav.backToApp"}/>, isPrimaryAction: true, secondaryIcon: 'caret-left', link: appLink},
                 ]}
             >
                 <TopNav onNavClick={this.props.toggleNav}/>

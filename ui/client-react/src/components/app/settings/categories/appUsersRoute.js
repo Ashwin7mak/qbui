@@ -28,12 +28,12 @@ export const AppUsersRoute = React.createClass({
     },
     componentDidMount() {
         const appId = this.props.match.params.appId;
-        if (!this.props.selectedApp) {
-            this.props.loadApp(appId);
-        } else {
+        if (this.props.selectedApp) {
             this.props.loadAppRoles(appId);
             this.props.loadAppOwner(appId, this.props.selectedApp.ownerId);
             this.props.searchUsers();
+        } else {
+            this.props.loadApp(appId);
         }
     },
 
