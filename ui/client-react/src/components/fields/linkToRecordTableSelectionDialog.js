@@ -115,7 +115,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         const fields = selectedTable ? selectedTable.fields : [];
 
-        const fieldChoices = _.filter(fields, field => field.required && field.unique);
+        const fieldChoices = _.filter(fields, field => RelationshipUtils.isValidRelationshipKeyField(field));
 
         const choices = fieldChoices.map(field => {
 

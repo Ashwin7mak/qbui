@@ -1,10 +1,8 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 
 import './report.scss';
 
 import ReportNavigation from './reportNavigation';
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * A footer for a table report. This footer contains the report page navigation links.
@@ -12,8 +10,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * of records in the report exceeds the set page size.
  */
 const ReportFooter = React.createClass({
-    mixins: [FluxMixin],
-
     propTypes: {
         /**
          *  Takes in for properties the reportData which includes the list of facets

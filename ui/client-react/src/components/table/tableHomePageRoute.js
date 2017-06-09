@@ -7,7 +7,6 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 
-import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
 import {connect} from 'react-redux';
@@ -16,14 +15,13 @@ import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
 import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
+import {selectAppTable} from '../../actions/appActions';
 import {CONTEXT} from '../../actions/context';
 import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import Breakpoints from '../../utils/breakpoints';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import _ from 'lodash';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 import './tableHomePage.scss';
 import '../report/report.scss';
@@ -35,7 +33,6 @@ import {hideTopNav} from '../../actions/shellActions';
  * Note: this component has been partially migrated to Redux
  */
 export const TableHomePageRoute = React.createClass({
-    mixins: [FluxMixin],
     nameForRecords: "Records",
 
     getHeader() {
@@ -53,8 +50,7 @@ export const TableHomePageRoute = React.createClass({
     },
 
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
-        const flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
+        this.props.selectTable(appId, tblId);
 
         //  redux actions..
         this.props.clearSearchInput();
@@ -202,8 +198,8 @@ const mapDispatchToProps = (dispatch) => {
         showTableCreationDialog: () => {
             dispatch(showTableCreationDialog());
         },
+        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId)),
         hideTopNav: () => dispatch(hideTopNav())
-
     };
 };
 
