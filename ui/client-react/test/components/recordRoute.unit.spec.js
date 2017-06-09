@@ -35,7 +35,8 @@ describe('RecordRoute', () => {
         record: {
             recordIdBeingEdited: 2,
             records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
-        }
+        },
+        appUsers: []
     };
 
     beforeEach(() => {
@@ -76,7 +77,8 @@ describe('RecordRoute', () => {
                 record: {
                     recordIdBeingEdited: 2,
                     records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
-                }
+                },
+                app: {}
             };
             const store = mockStore(initialState);
 
@@ -112,7 +114,8 @@ describe('RecordRoute', () => {
                 record: {
                     recordIdBeingEdited: 2,
                     records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
-                }
+                },
+                app: {}
             };
             const store = mockStore(initialState);
 
@@ -140,7 +143,9 @@ describe('RecordRoute', () => {
         });
 
         it('test correct state is pushed to history', () => {
-            const initialState = {};
+            const initialState = {
+                app: {}
+            };
             const store = mockStore(initialState);
 
             let params = {appId: '1', tblId: '2', rptId: '3', recordId: '2'};
@@ -273,7 +278,10 @@ describe('RecordRoute', () => {
                 ]
             }
         };
-        const initialState = {embeddedReports: {[embedPrefix] : {reportData}}};
+        const initialState = {
+            embeddedReports: {[embedPrefix] : {reportData}},
+            app: {}
+        };
         const store = mockStore(initialState);
 
         let router = [];
