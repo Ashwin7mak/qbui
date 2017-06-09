@@ -202,7 +202,7 @@ function flattenRecordGroup(record, transformedRecords, fields, info) {
     transformedRecords.push({
         isSubHeader: true,
         subHeaderLevel: currentSubHeaderLevel,
-        subHeaderLabel: record.group.replace(/&amp;/g, '&'),
+        subHeaderLabel: record.group,
         localized: record.localized,
         id: groupHeaderId,
         parentId: info.parentId
