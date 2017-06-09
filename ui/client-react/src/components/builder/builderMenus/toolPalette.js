@@ -21,7 +21,8 @@ class ToolPalette extends Component {
         const tables = _.get(this.props, "app.tables", []);
         const tableId = _.get(this.props, "formMeta.tableId", null);
         const relationships = _.get(this.props, "formMeta.relationships", []);
-        const includeNewRelationship = RelationshipUtils.canCreateNewParentRelationship(tableId, tables, relationships);
+        const relationshipFieldIds = _.get(this.props, "relationshipFieldIds", []);
+        const includeNewRelationship = RelationshipUtils.canCreateNewParentRelationship(tableId, tables, relationships, relationshipFieldIds);
 
         return (
             <NewFieldsMenu isCollapsed={this.props.isCollapsed}
@@ -87,6 +88,8 @@ ToolPalette.propTypes = {
     /**
      * Display the menu is an open state (only affects small breakpoint) */
     isOpen: PropTypes.bool,
+
+    relationshipFieldIds: PropTypes.array
 };
 
 export default ToolPalette;

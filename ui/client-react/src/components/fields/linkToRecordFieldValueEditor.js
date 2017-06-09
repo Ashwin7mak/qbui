@@ -4,7 +4,7 @@ import {CONTEXT} from "../../actions/context";
 import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
 import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
-import Select from '../select/reactSelectWrapper';
+import {getFieldsByType} from '../../reducers/fields';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
 import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
@@ -27,6 +27,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         tblId: PropTypes.string,
         tables: PropTypes.array,
         formId: PropTypes.string,
+        fieldDef: PropTypes.object
     },
 
     getDefaultProps() {
@@ -99,6 +100,16 @@ export const LinkToRecordFieldValueEditor = React.createClass({
     },
 
     /**
+     * get the array of available parent tables to pick
+     */
+    getAvailableParentTables() {
+        const fieldsList = _.find(this.props.fields, fieldList => fieldList.appId === this.props.appId && fieldList.tblId === this.props.tblId);
+        const linkToRecordFields = _.filter(fieldsList.fields, field => this.props.relationshipFieldIds.indexOf(field.id) !== -1);
+
+        return _.reject(this.props.tables, table => _.find(linkToRecordFields, field => field.parentTableId === table.id));
+    },
+
+    /**
      *
      * @returns {*}
      */
@@ -107,7 +118,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
             return (
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
-                                                  tables={this.props.tables}
+                                                  tables={this.getAvailableParentTables()}
                                                   tableSelected={this.relationshipSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {
@@ -120,6 +131,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 const mapStateToProps = (state) => {
     return {
         newFormFieldId: getDroppedNewFormFieldId(state),
+        relationshipFieldIds: state.relationshipBuilder.relationshipFieldIds,
+        fields: state.fields
     };
 };
 

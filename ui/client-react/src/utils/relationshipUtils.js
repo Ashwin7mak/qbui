@@ -10,19 +10,19 @@ class RelationshipUtils {
      * @param relationships existing app relationships
      * @returns {boolean}
      */
-    static canCreateNewParentRelationship(tableId, tables, relationships) {
+    static canCreateNewParentRelationship(tableId, tables, relationships, newRelationshipFieldIds) {
 
-        const validParentTables = tables.filter(table => table.id !== tableId);
-        if (tableId && validParentTables.length) {
+        const otherTables = tables.filter(table => table.id !== tableId);
+        if (tableId && otherTables.length) {
 
-            let parentTables = [];
+            let relatedParentTables = [];
             if (Array.isArray(relationships) && relationships.length > 0) {
-                parentTables = relationships.filter(rel => rel.detailTableId === tableId);
+                relatedParentTables = relationships.filter(rel => rel.detailTableId === tableId);
             }
 
             // enable new relationships to be created if we have multiple tables and at least
             // one of those tables is not already a parent table
-            if (validParentTables.length > 0 && (parentTables.length < validParentTables.length)) {
+            if (relatedParentTables.length + newRelationshipFieldIds.length < otherTables.length ) {
                 return true;
             }
         }
