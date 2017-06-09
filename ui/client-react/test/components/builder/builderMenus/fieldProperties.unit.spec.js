@@ -17,7 +17,7 @@ let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type
 let multiChoiceField = {id: 7, required: false, unique: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
     multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
         {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
-let linkToRecordField = {id: 8, required: false, name: "get parent record", parentTableId: "parentId", parentFieldId: 1, datatypeAttributes: {type: "LINK_TO_RECORD"}};
+let linkToRecordField = {id: 8, required: false, unique: false, name: "get parent record", parentTableId: "parentId", parentFieldId: 1, datatypeAttributes: {type: "LINK_TO_RECORD"}};
 let formElement = {FormFieldElement: {fieldId: 6}};
 let formElementMultiChoice = {FormFieldElement: {fieldId: 7}};
 let formElementLinkToRecord = {FormFieldElement: {fieldId: 8}};
@@ -91,7 +91,8 @@ describe('FieldProperties', () => {
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
             expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
-            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(linkToRecordField.required);
+            expect(component.find('CheckBoxFieldValueEditor').at(0)).toHaveValue(linkToRecordField.required);
+            expect(component.find('CheckBoxFieldValueEditor').at(1)).toHaveValue(linkToRecordField.required);
             expect(component.find('.textPropertyTitle')).toBePresent();
             expect(component.find('.textPropertyValue')).toHaveValue(linkToRecordField.name);
             expect(component.find('.linkToRecordLinkedToValue')).toBePresent();
@@ -104,7 +105,7 @@ describe('FieldProperties', () => {
             component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId}
                                                selectedField={field} formElement={formElement}
                                                updateField={mockActions.updateField}/>);
-            let checkBox = component.find('CheckBoxFieldValueEditor');
+            let checkBox = component.find('CheckBoxFieldValueEditor').at(0);
             checkBox.simulate('click');
             expect(mockActions.updateField).toHaveBeenCalled();
         });
