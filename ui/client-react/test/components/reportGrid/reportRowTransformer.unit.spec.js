@@ -271,6 +271,31 @@ describe('ReportRowTransformer', () => {
             expect(ReportRowTransformer.transformRecordForGrid.calls.count()).toEqual(1);
         });
 
+        it('flattens grouped records with &amp;', () => {
+            spyOn(ReportRowTransformer, 'transformRecordForGrid').and.returnValue('transformed');
+
+            let groupName = 'j&amp;z';
+            let groupNameDecoded = 'j&z';
+            let groupedRecord = {group: groupName, children: [testApiRecord], localized: true};
+
+            let actualResult = ReportRowTransformer.transformRecordsForGrid([groupedRecord], testFields);
+
+            expect(actualResult).toEqual([
+                // The group header
+                {
+                    isSubHeader: true,
+                    subHeaderLevel: 0,
+                    subHeaderLabel: groupNameDecoded,
+                    localized: true,
+                    id: `groupHeader_${groupName}`,
+                    parentId: null
+                },
+
+                // The record that belongs to that group
+                'transformed'
+            ]);
+        });
+
         it('flattens grouped records that are nested more than 1 level deep', () => {
             const level1GroupName = 'level 1';
             const level2GroupName = 'level 2';
