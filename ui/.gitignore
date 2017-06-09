@@ -34,6 +34,8 @@ node_modules/
 # don't want local configs accidentally checked in
 wdio/config/wdio.conf.js
 wdio/config/wdioMobile.conf.js
+governance/tests.custom.webpack.js
+reuse/tests.custom.webpack.js
 tests.custom.webpack.js
 
 # generated error screenshots shouldn't be tracked either
