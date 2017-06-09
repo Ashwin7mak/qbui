@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 
 import user from '../../../reuse/client/src/reducers/userReducer';
+import app from './app';
 import fields from './fields';
 import forms from './forms';
 import relationshipBuilder from './relationshipBuilder';
@@ -19,12 +20,15 @@ import facets from '../../../reuse/client/src/components/facets/facetMenuReducer
 import automation from './automation';
 import appRoles from './appRoles';
 import appUsers from './appUsers';
+import users from './users';
 
 // combine individual reducers into a single root reducer (qbui)
 export default combineReducers({
+    app,
     user,
     animation,
     appRoles,
+    appUsers,
     automation,
     featureSwitches,
     fields,
@@ -40,5 +44,5 @@ export default combineReducers({
     tableProperties,
     builderNav: commonNavReducer('builder'),
     facets,
-    appUsers,
+    users
 });
