@@ -118,9 +118,19 @@ const automation = (
             error: undefined
         };
     }
+    case types.CHANGE_AUTOMATION_EMAIL_TO: {
+        let newState = _.cloneDeep(state);
+        emailAutomationSetTo(newState.automation, action.content.newTo);
+        return newState;
+    }
     case types.CHANGE_AUTOMATION_EMAIL_SUBJECT: {
         let newState = _.cloneDeep(state);
         emailAutomationSetSubject(newState.automation, action.content.newSubject);
+        return newState;
+    }
+    case types.CHANGE_AUTOMATION_EMAIL_BODY: {
+        let newState = _.cloneDeep(state);
+        emailAutomationSetBody(newState.automation, action.content.newBody);
         return newState;
     }
     default:

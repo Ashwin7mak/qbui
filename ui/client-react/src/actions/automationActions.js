@@ -167,6 +167,14 @@ export const testAutomation = (automationName, appId) => {
     };
 };
 
+export const changeAutomationEmailTo = (newTo) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_TO, {newTo}));
+};
+
 export const changeAutomationEmailSubject = (newSubject) => {
     return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_SUBJECT, {newSubject}));
+};
+
+export const changeAutomationEmailBody = (newBody) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_BODY, {newBody}));
 };

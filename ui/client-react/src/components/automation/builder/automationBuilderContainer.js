@@ -6,9 +6,13 @@ import Button from 'react-bootstrap/lib/Button';
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
 import {I18nMessage} from "../../../utils/i18nMessage";
-import {loadAutomation, saveAutomation, changeAutomationEmailSubject} from "../../../actions/automationActions";
+import {loadAutomation, saveAutomation, changeAutomationEmailTo, changeAutomationEmailSubject, changeAutomationEmailBody} from "../../../actions/automationActions";
 import {getAutomation, emailAutomationGetTo, emailAutomationGetSubject, emailAutomationGetBody} from "../../../reducers/automation";
 import TextFieldValueEditor from "../../fields/textFieldValueEditor";
+import MultiLineTextFieldValueEditor from "../../fields/multiLineTextFieldValueEditor";
+import EmailFieldValueEditor from "../../fields/emailFieldValueEditor";
+import EmailValidator from "../../../../../common/src/validator/emailValidator";
+import EmailFormatter from "../../../../../common/src/formatter/emailFormatter";
 import SaveOrCancelFooter from '../../saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../../utils/navigationUtils';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
@@ -66,8 +70,21 @@ export class AutomationBuilderContainer extends Component {
         return this.props.automation ? this.props.automation.name : '';
     }
 
+    updateTo = (value) => {
+        this.props.changeAutomationEmailTo(value);
+    };
+
     updateSubject = (value) => {
         this.props.changeAutomationEmailSubject(value);
+    };
+
+    updateBody = (value) => {
+        this.props.changeAutomationEmailBody(value);
+    };
+
+    isEmailInvalid = (emails) => {
+        console.info("Check valid: " + emails);
+        return EmailValidator.validateArrayOfEmails(EmailFormatter.splitEmails(emails)).isInvalid;
     };
 
     onSave = () => {
@@ -109,7 +126,7 @@ export class AutomationBuilderContainer extends Component {
                         <span className="automationEdit--sectionHeader"><I18nMessage message="automation.automationEdit.emailSectionHeader"/></span>
                         <div className="automationEditName automationEdit--section">
                             <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.toHeader"/>:</span> <br/>
-                            <span className="value">{to}</span>
+                            <EmailFieldValueEditor value={to} onChange={this.updateTo} invalid={this.isEmailInvalid(to)}/>
                         </div>
                         <div className="automationEditName automationEdit--section">
                             <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.subjectHeader"/>:</span> <br/>
@@ -117,7 +134,7 @@ export class AutomationBuilderContainer extends Component {
                         </div>
                         <div className="automationEditName automationEdit--section">
                             <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.bodyHeader"/>:</span> <br/>
-                            <span className="value">{body}</span>
+                            <MultiLineTextFieldValueEditor value={body} onChange={this.updateBody}/>
                         </div>
                     </div>
                 </div>
@@ -135,7 +152,9 @@ AutomationBuilderContainer.protoTypes = {
     automation: React.PropTypes.object,
     loadAutomation: React.PropTypes.func,
     saveAutomation: React.PropTypes.func,
-    changeAutomationEmailSubject: React.PropTypes.func
+    changeAutomationEmailTo: React.PropTypes.func,
+    changeAutomationEmailSubject: React.PropTypes.func,
+    changeAutomationEmailBody: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -147,7 +166,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     loadAutomation,
     saveAutomation,
-    changeAutomationEmailSubject
+    changeAutomationEmailTo,
+    changeAutomationEmailSubject,
+    changeAutomationEmailBody
 };
 
 export default connect(
