@@ -1,5 +1,7 @@
 @import "../../../assets/css/qbVariables";
 
+$delete-button-position: 14%;
+
 .fieldEditingTools {
     opacity: 0;
     transition: opacity 0.4s;
@@ -16,7 +18,7 @@
     .deleteFieldIcon {
         font-size: $size-iconfont-large2;
         position: absolute;
-        bottom: 14%;
+        bottom: $delete-button-position;
         padding-left: 295px;
 
         .qbIcon {
@@ -84,7 +86,7 @@
         border: $stroke-width-thin solid $input-text-focus-border-color;
         .deleteFieldIcon {
             opacity: 1;
-            bottom: calc(14% + 1px);
+            bottom: calc(#{$delete-button-position} + 1px);
 
             .qbIcon {
                 opacity: 1;
