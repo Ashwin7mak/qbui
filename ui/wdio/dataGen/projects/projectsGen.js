@@ -24,18 +24,18 @@ module.exports = function(chance) {
     const tablePeopleName = 'Employees';
     const tableAssignmentsName = 'Assignments';
 
-    const defaultMinNumOfCompanies = 4;
-    const defaultMaxNumOfCompanies = 7;
+    const defaultMinNumOfCompanies = 21;
+    const defaultMaxNumOfCompanies = 21;
     const defaultMinNumOfPeople = 25;
-    const defaultMaxNumOfPeople = 100;
-    const defaultMinNumOfProjects = 10;
-    const defaultMaxNumOfProjects = 20;
+    const defaultMaxNumOfPeople = 50;
+    const defaultMinNumOfProjects = 2;
+    const defaultMaxNumOfProjects = 4;
     const defaultMinNumOfTasks = 1;
     const defaultMaxNumOfTasks = 4;
     const defaultMinNumOfAssignees = 2;
-    const defaultMaxNumOfAssignees = 6;
+    const defaultMaxNumOfAssignees = 2;
     const defaultMinNumOfComments = 1;
-    const defaultMaxNumOfComments = 3;
+    const defaultMaxNumOfComments = 2;
 
     const minMaxToGen = {
         minCompany: defaultMinNumOfCompanies,

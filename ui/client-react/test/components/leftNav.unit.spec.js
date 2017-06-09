@@ -161,7 +161,6 @@ describe('LeftNav', () => {
                          items={navItemsTestData}/>
             </MemoryRouter>);
 
-        console.log(component.html());
         expect(component.find('.branding').length).toEqual(1);
         component.find('.branding').simulate('click');
         expect(WindowLocationUtils.getOrigin).toHaveBeenCalled();
