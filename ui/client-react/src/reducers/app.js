@@ -128,15 +128,14 @@ const app = (
             let tableToUpdateIdx = _.findIndex(appToUpdate.tables, (t) => t.id === action.content.tblId);
             if (tableToUpdateIdx !== -1) {
                 appToUpdate.tables[tableToUpdateIdx] = action.content.tableInfo;
+                return {
+                    ...state,
+                    app: appToUpdate,
+                    apps: setAppInApps(appToUpdate)
+                };
             }
-            return {
-                ...state,
-                app: appToUpdate,
-                apps: setAppInApps(appToUpdate)
-            };
         }
         return state;
-
     case types.LOAD_APP:
         let appId = action.content.appId;
         return {
