@@ -5,6 +5,7 @@ import "./AccountUsersGrid.scss";
 import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
 import * as Actions from "../AccountUsersActions";
 import constants from "../../../app/constants";
+import Locale from "../../../../../reuse/client/src/locales/locale";
 
 /**
  * Renders the Grid portion of the AccountUsers view
@@ -22,6 +23,7 @@ class AccountUsersGrid extends Component {
                 itemTypePlural="users"
                 itemTypeSingular="user"
                 itemsPerPage={constants.USERS_GRID_ITEMSPERPAGE}
+                noItemsFound={'governance.noItemsFound'}
             />
         );
     }
