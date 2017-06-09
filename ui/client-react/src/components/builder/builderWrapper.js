@@ -9,7 +9,6 @@ import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import TableReadyDialog from '../table/tableReadyDialog';
 import Locale from '../../locales/locales';
-
 import {loadApp, loadApps} from '../../actions/appActions';
 import {getApp, getApps, getSelectedAppId} from '../../reducers/app';
 import _ from 'lodash';
@@ -102,8 +101,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
-        loadApps: () => dispatch(AppActions.loadApps())
+        loadApp: (appId) => dispatch(loadApp(appId)),
+        loadApps: () => dispatch(loadApps())
     };
 };
 
