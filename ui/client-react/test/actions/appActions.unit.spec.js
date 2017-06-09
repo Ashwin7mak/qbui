@@ -82,7 +82,7 @@ describe('App Actions success workflow functions', () => {
         // the mock store makes the actions dispatched available via getActions()
         // so we don't need to spy on the dispatcher etc.
         const expectedActions = [
-            event(types.LOAD_APP, appId),
+            event(types.LOAD_APP, {appId: appId}),
             event(types.LOAD_APP_SUCCESS, responseData.data)
         ];
 
@@ -167,7 +167,7 @@ describe('App Actions error workflow functions', () => {
         // the mock store makes the actions dispatched available via getActions()
         // so we don't need to spy on the dispatcher etc.
         const expectedActions = [
-            event(types.LOAD_APP, appId),
+            event(types.LOAD_APP, {appId: appId}),
             event(types.LOAD_APP_ERROR, errorData)
         ];
 
