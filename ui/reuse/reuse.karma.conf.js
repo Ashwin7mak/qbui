@@ -9,6 +9,7 @@ let profilePath = path.resolve(__dirname, '../build/chromeDebugPath'); //use to 
 
 // Please copy "tests.custom.webpack.js.sample" from the UI directory to the reuse folder
 // and rename it to "tests.custom.webpack.js".
+// PLEASE MAKE SURE NOT TO COMMIT THE COPIED FILE TO MASTER OR TO YOUR BRANCH
 // Focus on the particular test before running the karma server.
 // To load the karma server, cd into reuse directory and run `karma start reuse.karma.conf.js`
 // You should get the url in the terminal through which you can debug your tests in your browser console.
