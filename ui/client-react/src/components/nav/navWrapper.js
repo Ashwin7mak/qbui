@@ -105,7 +105,6 @@ export const NavWrapper = React.createClass({
         if (incomingProps.match.params.appId) {
             if (this.props.match.params.appId !== incomingProps.match.params.appId) {
                 this.props.loadApp(incomingProps.match.params.appId);
-                this.props.getFeatureSwitchStates(incomingProps.match.params.appId);
             }
         } else {
             if (this.props.selectedAppId !== null) {

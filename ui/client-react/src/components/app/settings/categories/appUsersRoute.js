@@ -27,7 +27,6 @@ export const AppUsersRoute = React.createClass({
         };
     },
     componentDidMount() {
-        //  TODO: look at service performance..frequency of rendering...this component/route loads slow..
         const appId = this.props.match.params.appId;
         if (!this.props.selectedApp) {
             this.props.loadApp(appId);
@@ -39,18 +38,20 @@ export const AppUsersRoute = React.createClass({
     },
 
     componentWillReceiveProps(props) {
-        //  TODO: look at service performance..frequency of rendering...this component/route loads slow..
-        const selectedApp = this.props.selectedApp || {};
+        //  TODO: have a race condition when loading from a bookmarked route.  The component requires the app to be loaded
+        //  TODO: and there is no guarantee that the left nav will complete before this lifecycle event is triggered.  THis
+        //  TODO: needs to be re-worked..
+        const selectedApp = props.selectedApp || {};
         if (props.match.params.appId && selectedApp.ownerId) {
             if (this.props.match.params.appId !== props.match.params.appId) {
-                this.props.loadAppRoles(this.props.match.params.appId);
-                this.props.loadAppOwner(selectedApp.ownerId);
+                this.props.loadAppRoles(props.match.params.appId);
+                this.props.loadAppOwner(props.match.params.appId, selectedApp.ownerId);
             }
         } else {
-            const propsSelectedApp = props.selectedApp || {};
+            const propsSelectedApp = this.props.selectedApp || {};
             if (this.props.match.params.appId !== props.match.params.appId && selectedApp.ownerId !== propsSelectedApp.ownerId) {
                 this.props.loadAppRoles(this.props.match.params.appId);
-                this.props.loadAppOwner(selectedApp.ownerId);
+                this.props.loadAppOwner(this.props.match.params.appId, selectedApp.ownerId);
             }
         }
     },

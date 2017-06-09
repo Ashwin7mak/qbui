@@ -53,7 +53,7 @@ export const loadApp = (appId) => {
         return new Promise((resolve, reject) => {
             let logger = new Logger();
             logger.debug('AppActions loadApp');
-            dispatch(event(types.LOAD_APP, appId));
+            dispatch(event(types.LOAD_APP, {appId}));
 
             let appService = new AppService();
             appService.getAppComponents(appId).then(
