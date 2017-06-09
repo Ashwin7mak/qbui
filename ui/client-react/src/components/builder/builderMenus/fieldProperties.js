@@ -12,6 +12,7 @@ import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import _ from 'lodash';
+import serverTypeConsts from '../../../../../common/src/constants';
 import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './fieldProperties.scss';
@@ -37,18 +38,6 @@ const mapDispatchToProps = dispatch => {
 export class FieldProperties extends Component {
     constructor(props) {
         super(props);
-
-        this.createPropertiesTitle = this.createPropertiesTitle.bind(this);
-        this.createTextPropertyContainer = this.createTextPropertyContainer.bind(this);
-        this.createCheckBoxPropertyContainer = this.createCheckBoxPropertyContainer.bind(this);
-        this.createMultiChoiceTextPropertyContainer = this.createMultiChoiceTextPropertyContainer.bind(this);
-        this.createNameProperty = this.createNameProperty.bind(this);
-        this.createRequiredProperty = this.createRequiredProperty.bind(this);
-        this.findFieldProperties = this.findFieldProperties.bind(this);
-        this.updateFieldProps = this.updateFieldProps.bind(this);
-        this.updateMultiChoiceFieldProps = this.updateMultiChoiceFieldProps.bind(this);
-        this.buildMultiChoiceDisplayList = this.buildMultiChoiceDisplayList.bind(this);
-        this.createLinkToRecordPropertyContainer = this.createLinkToRecordPropertyContainer.bind(this);
     }
 
     /**
@@ -56,7 +45,7 @@ export class FieldProperties extends Component {
      * @param fieldName
      * @returns {XML}
      */
-    createPropertiesTitle(key) {
+    createPropertiesTitle = (key) => {
         return (
             <div key={key} className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
         );
@@ -70,7 +59,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-    createTextPropertyContainer(propertyTitle, propertyValue, key) {
+    createTextPropertyContainer = (propertyTitle, propertyValue, key) => {
         return (
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
@@ -94,7 +83,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-    createCheckBoxPropertyContainer(propertyTitle, propertyValue, propertyName, key, isDisabled = false) {
+    createCheckBoxPropertyContainer = (propertyTitle, propertyValue, propertyName, key, isDisabled = false) => {
         return (
             <div key={key} className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
@@ -115,7 +104,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-    createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue, key) {
+    createMultiChoiceTextPropertyContainer = (propertyTitle, propertyValue, key) => {
         return (
             <div key={key} className="multiChoicePropertyContainer">
                 <div className="multiChoicePropertyTitle">{propertyTitle}</div>
@@ -134,7 +123,7 @@ export class FieldProperties extends Component {
      * @param key
      * @returns {XML}
      */
-    createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key) {
+    createLinkToRecordPropertyContainer = (propertyTitle, propertyValue, key) => {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
         const field = table && _.find(table.fields, {id: this.props.selectedField.parentFieldId});
@@ -154,7 +143,7 @@ export class FieldProperties extends Component {
      * @param choices
      * @returns empty string OR string with each choice newline separated
      */
-    buildMultiChoiceDisplayList(choices) {
+    buildMultiChoiceDisplayList = (choices) => {
         let list = "";
         if (choices.length > 0) {
             let choiceArr = choices.map(choice => choice.displayValue);
@@ -169,7 +158,7 @@ export class FieldProperties extends Component {
      * @param name
      * @returns {XML}
      */
-    createNameProperty(name, key) {
+    createNameProperty = (name, key) => {
         return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name, key));
     }
 
@@ -179,7 +168,7 @@ export class FieldProperties extends Component {
      * @param required
      * @returns {XML}
      */
-    createRequiredProperty(required, key, isDisabled) {
+    createRequiredProperty = (required, key, isDisabled) => {
         return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, 'required', key, isDisabled));
     }
 
@@ -189,7 +178,7 @@ export class FieldProperties extends Component {
      * @param required
      * @returns {XML}
      */
-    createUniqueProperty(unique, key, isDisabled) {
+    createUniqueProperty= (unique, key, isDisabled) => {
         return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.unique'), unique, 'unique', key, isDisabled));
     }
 
@@ -201,10 +190,11 @@ export class FieldProperties extends Component {
      * TODO:: Currently the key iterators are hardcoded. Once this comes from a json object, set keys to unique id or index in array
      * @returns {Array}
      */
-    findFieldProperties() {
+    findFieldProperties = () => {
         let key = 0;
 
         let isRecordTitleField = false;
+        let checkBox = _.get(this.props, 'selectedField.datatypeAttributes.type');
         const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
         if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
             isRecordTitleField = true;
@@ -218,6 +208,9 @@ export class FieldProperties extends Component {
         if (isRecordTitleField) {
             fieldPropContainers.push(this.createRequiredProperty(true, key++, true));
             fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
+        } else if (checkBox !== serverTypeConsts.CHECKBOX) {
+            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
+            fieldPropContainers.push(this.createUniqueProperty(this.props.selectedField.unique, key++));
         } else {
             fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
         }
@@ -241,9 +234,13 @@ export class FieldProperties extends Component {
      * @param newValue
      * @param propertyName
      */
-    updateFieldProps(newValue, propertyName) {
+    updateFieldProps = (newValue, propertyName) => {
         let field = this.props.selectedField;
         field[propertyName] = newValue;
+        if (propertyName === 'unique') {
+            //indexed needs to be set to true if 'unique' is set to true;
+            field.indexed = newValue;
+        }
         this.props.updateField(field, this.props.appId, this.props.tableId);
     }
 
@@ -253,7 +250,7 @@ export class FieldProperties extends Component {
      * TODO: figure out how to handle bad user data for Number Multi Choice fields
      * @param newValues
      */
-    updateMultiChoiceFieldProps(newValues) {
+    updateMultiChoiceFieldProps = (newValues) => {
         let field = this.props.selectedField;
         let choices = newValues.split("\n");
         let newChoices = [];
