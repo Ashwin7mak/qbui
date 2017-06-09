@@ -159,7 +159,7 @@ describe('AddUserDialog', () => {
         />);
         let content = component.find('MultiStepDialog');
         expect(component.length).toEqual(1);
-        component.instance().isValid(false);
+        component.instance().setValid(false);
         expect(component.state().isValid).toEqual(false);
     });
 

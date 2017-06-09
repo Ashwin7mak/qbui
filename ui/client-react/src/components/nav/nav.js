@@ -193,9 +193,9 @@ export const Nav = React.createClass({
 
         if (this.props.location.query[UrlConsts.DETAIL_APPID]) {
             const childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
-            return _.find(appsList, (a) => a.id === childAppId);
+            return _.find(appsList, {id: childAppId});
         } else if (selectedAppId) {
-            return _.find(appsList, (a) => a.id === selectedAppId);
+            return _.find(appsList, {id: selectedAppId});
         }
         return null;
     },

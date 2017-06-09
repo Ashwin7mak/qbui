@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-
 import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {assignUserToAppRole} from '../../../../actions/appRoleActions';
 import {NotificationManager} from 'react-notifications';
@@ -17,11 +16,11 @@ export class AddUserDialog extends React.Component {
         // bind to fix context for event handlers
         this.onFinished = this.onFinished.bind(this);
         this.onCancel = this.onCancel.bind(this);
-        this.isValid = this.isValid.bind(this);
+        this.setValid = this.setValid.bind(this);
     }
 
     componentWillMount() {
-        this.isValid(false);
+        this.setValid(false);
     }
 
     /**
@@ -29,7 +28,7 @@ export class AddUserDialog extends React.Component {
      * @returns void
      */
     onCancel() {
-        this.isValid(false);
+        this.setValid(false);
         this.props.hideDialog(false);
     }
 
@@ -51,10 +50,9 @@ export class AddUserDialog extends React.Component {
                     });
                     let userEmail = assignedUser ? assignedUser.email : '';
 
-                    this.isValid(false);
+                    this.setValid(false);
                     this.props.hideDialog(false);
                     this.props.showSuccessDialog(true, userEmail);
-                    //NotificationManager.success(Locale.getMessage('app.users.userAdded'));
                 },
                 () => {
                     // leave the dialog open but issue a growl indicating an error
@@ -68,7 +66,7 @@ export class AddUserDialog extends React.Component {
      * sets Modal input valid state
      * @returns void
      */
-    isValid(validState) {
+    setValid(validState) {
         this.setState({
             isValid: validState
         });
@@ -94,7 +92,7 @@ export class AddUserDialog extends React.Component {
                 <AddUserPanel appRoles={this.props.appRoles}
                               realmUsers={this.props.realmUsers}
                               searchUsers={this.props.searchUsers}
-                              isValid={this.isValid}
+                              isValid={this.setValid}
                               existingUsers={this.props.existingUsers}
                               setUserRoleToAdd={this.props.setUserRoleToAdd}
                               ref={(userPanel)=>{this.userPanel = userPanel;}}
