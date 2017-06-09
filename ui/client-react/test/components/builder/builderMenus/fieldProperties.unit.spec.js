@@ -14,7 +14,7 @@ let appId = 1;
 let tableId = 2;
 let formId = "view";
 let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type: "TEXT"}};
-let multiChoiceField = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
+let multiChoiceField = {id: 7, required: false, unique: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
     multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
         {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
 let linkToRecordField = {id: 8, required: false, name: "get parent record", parentTableId: "parentId", parentFieldId: 1, datatypeAttributes: {type: "LINK_TO_RECORD"}};
@@ -68,7 +68,8 @@ describe('FieldProperties', () => {
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
             expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
-            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(multiChoiceField.required);
+            expect(component.find('CheckBoxFieldValueEditor').at(0)).toHaveValue(multiChoiceField.required);
+            expect(component.find('CheckBoxFieldValueEditor').at(1)).toHaveValue(multiChoiceField.unique);
             expect(component.find('.textPropertyTitle')).toBePresent();
             expect(component.find('.textPropertyValue')).toHaveValue(multiChoiceField.name);
             expect(component.find('MultiLineTextFieldValueEditor')).toBePresent();
