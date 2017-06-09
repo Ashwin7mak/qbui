@@ -102,8 +102,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
-        loadApps: () => dispatch(AppActions.loadApps())
+        loadApp: (appId) => dispatch(loadApp(appId)),
+        loadApps: () => dispatch(loadApps())
     };
 };
 
