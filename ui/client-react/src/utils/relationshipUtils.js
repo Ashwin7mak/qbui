@@ -1,3 +1,4 @@
+import * as constants from '../../../common/src/constants';
 /**
  * relationship utils
  */
@@ -27,6 +28,24 @@ class RelationshipUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Given a field object figure out whether this field is allowed as a relationship key field or not
+     * The decision is based on following constraints
+     * - Must be unique
+     * - Must be required
+     * - Must be data type Text or Numeric
+     *      -- No multi choice field (checked by field.multipleChoice)
+     *      -- No multi line text field (checked by num_lines = 1)
+     * @param field
+     * @returns {*|boolean}
+     */
+    static isValidRelationshipKeyField(field) {
+        let isTextOfNumeric = field.datatypeAttributes ? field.datatypeAttributes.type === constants.TEXT || field.datatypeAttributes.type === constants.NUMERIC : false;
+        let isMultiChoice = field.multipleChoice;
+        let isMultiline = field.datatypeAttributes && field.datatypeAttributes.clientSideAttributes && field.datatypeAttributes.clientSideAttributes.num_lines ? field.datatypeAttributes.clientSideAttributes.num_lines > 1 : false;
+        return field.unique && field.required && isTextOfNumeric && !isMultiChoice && !isMultiline;
     }
 }
 

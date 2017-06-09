@@ -5,6 +5,7 @@ import Select from '../select/reactSelectWrapper';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import FieldUtils from '../../utils/fieldUtils';
+import RelationshipUtils from '../../utils/relationshipUtils';
 import FieldFormats from '../../utils/fieldFormats';
 import _ from 'lodash';
 import './linkToRecordTableSelectionDialog.scss';
@@ -113,7 +114,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         const fields = selectedTable ? selectedTable.fields : [];
 
-        const fieldChoices = _.filter(fields, field => field.required && field.unique);
+        const fieldChoices = _.filter(fields, field => RelationshipUtils.isValidRelationshipKeyField(field));
 
         const choices = fieldChoices.map(field => {
 
