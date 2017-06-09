@@ -113,7 +113,7 @@ const routes = [
         ]
     },
     {
-        path: `${APP_ROUTE}/:appId`,
+        path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
         component: ConnectedNav,
         routes:  [
             {
