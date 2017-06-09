@@ -9,6 +9,7 @@ export default {
 
     messages: {
         governance: {
+            noItemsFound: "Aucun {items} ne correspond à ce que vous recherchez. Essayez de chercher un {item} différent.",
             leftNav: {
                 myApps: "retour à Mes Applications",
                 manageBilling: "Gestion de facturation",

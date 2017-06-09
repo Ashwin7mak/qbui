@@ -80,13 +80,16 @@ export const loadFormSuccess = (id, formData, appId, tblId) => {
 };
 
 /**
- * UI is syncing the view form to the saved version
- * @returns {{type}}
+ * UI should refresh the view form to the saved version
+ * @param id
+ * @param recordId newly saved record ID
+ * @returns {{id: *, type, recordId: *}}
  */
-export const syncForm = (id) => {
+export const syncForm = (id, recordId) => {
     return {
         id,
-        type: types.SYNC_FORM
+        type: types.SYNC_FORM,
+        recordId
     };
 };
 
