@@ -11,7 +11,7 @@ import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import {connect} from 'react-redux';
 import UserActions from '../../../actions/userActions';
-import {loadAppOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows, clearSelectedUserRows} from '../../../../actions/userActions';
+import {loadAppAndOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows, clearSelectedUserRows} from '../../../../actions/userActions';
 import {loadApp, toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
@@ -26,34 +26,11 @@ export const AppUsersRoute = React.createClass({
             roleId: ''
         };
     },
+
     componentDidMount() {
         const appId = this.props.match.params.appId;
-        if (this.props.selectedApp) {
-            this.props.loadAppRoles(appId);
-            this.props.loadAppOwner(appId, this.props.selectedApp.ownerId);
-            this.props.searchUsers();
-        } else {
-            this.props.loadApp(appId);
-        }
-    },
-
-    componentWillReceiveProps(props) {
-        //  TODO: have a race condition when loading from a bookmarked route.  The component requires the app to be loaded
-        //  TODO: and there is no guarantee that the left nav will complete before this lifecycle event is triggered.  THis
-        //  TODO: needs to be re-worked..
-        const selectedApp = props.selectedApp || {};
-        if (props.match.params.appId && selectedApp.ownerId) {
-            if (this.props.match.params.appId !== props.match.params.appId) {
-                this.props.loadAppRoles(props.match.params.appId);
-                this.props.loadAppOwner(props.match.params.appId, selectedApp.ownerId);
-            }
-        } else {
-            const propsSelectedApp = this.props.selectedApp || {};
-            if (this.props.match.params.appId !== props.match.params.appId && selectedApp.ownerId !== propsSelectedApp.ownerId) {
-                this.props.loadAppRoles(this.props.match.params.appId);
-                this.props.loadAppOwner(this.props.match.params.appId, selectedApp.ownerId);
-            }
-        }
+        this.props.loadAppRoles(appId);
+        this.props.loadAppAndOwner(appId);
     },
 
     componentWillUnmount() {
@@ -170,7 +147,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     render() {
-        if (this.props.appRoles && this.props.selectedApp) {
+        if (this.props.appRoles && this.props.selectedApp && this.props.appOwner) {
             const unfilteredAppUsers = this.props.unfilteredAppUsers;
             const appId = this.props.match.params.appId;
             return (
@@ -241,13 +218,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));},
-        loadAppOwner: (appId, userId) => {dispatch(loadAppOwner(appId, userId));},
+        loadAppAndOwner: (appId) => {dispatch(loadAppAndOwner(appId));},
         searchUsers: (searchTerm) => {return dispatch(searchUsers(searchTerm));},
         setUserRoleToAdd: (roleId) => {dispatch(setUserRoleToAdd(roleId));},
         openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));},
         selectUserRows: (selected) => {dispatch(selectUserRows(selected));},
         clearUserRows: () => {dispatch(clearSelectedUserRows());},
-        loadApp: (appId) => dispatch(loadApp(appId)),
         showSuccessDialog: (isOpen, email) => {
             dispatch(toggleAddToAppSuccessDialog(isOpen, email));
         }

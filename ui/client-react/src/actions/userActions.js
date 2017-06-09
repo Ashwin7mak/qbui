@@ -3,6 +3,8 @@ import UserService from '../services/userService';
 import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import {loadAppData} from './appActions';
+import {getApp} from '../reducers/app';
 
 /**
  * Construct app store payload
@@ -36,34 +38,64 @@ function userEvent(type, content) {
 
 export const loadAppOwner = (appId, userId) => {
     //  promise is returned in support of unit testing only
-    return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            let logger = new Logger();
-            logger.debug('UserActions loadAppOwner');
-            if (userId) {
-                let userService = new UserService();
-                userService.getUser(userId).then(
-                    response => {
-                        dispatch(event(types.LOAD_APP_OWNER_SUCCESS, appId, response.data));
-                        resolve();
-                    },
-                    error => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'userActions.loadAppOwner:');
-                        dispatch(event(types.LOAD_APP_OWNER_ERROR, appId, error));
-                        reject();
-                    }
-                );
-            } else {
-                logger.error('userService.loadAppOwner: Missing required input parameters.');
-                let error = {
-                    statusText:'Missing required input parameters to load app owner',
-                    status:500
-                };
-                dispatch(event(types.LOAD_APP_OWNER_ERROR, appId, error));
-                reject();
-            }
-        });
+    return (dispatch) => getAppOwnerData(dispatch, appId, userId);
+};
+
+/**
+ * Can load the app and the appOwner in a single action. If the app is available at the time,
+ * this function is called then only the appOwner api is called. Otherwise, it will load the app,
+ * and then get the appOwner.
+ * @param appId
+ * @returns {function(*=, *)}
+ */
+export const loadAppAndOwner = appId => {
+    return (dispatch, getState) => {
+        let app = getApp(getState().app, appId);
+        if (app) {
+            return getAppOwnerData(dispatch, appId, app.ownerId);
+        } else {
+            return loadAppData(dispatch, appId).then(() => {
+                app = getApp(getState().app, appId);
+                getAppOwnerData(dispatch, appId, app.ownerId);
+            });
+        }
     };
+};
+
+/**
+ * Calls the APIs to get the appOwner information from the userService.
+ * @param dispatch
+ * @param appId
+ * @param userId
+ * @returns {bluebird}
+ */
+const getAppOwnerData = (dispatch, appId, userId) => {
+    return new Promise((resolve, reject) => {
+        let logger = new Logger();
+        logger.debug('UserActions loadAppOwner');
+        if (userId) {
+            let userService = new UserService();
+            userService.getUser(userId).then(
+                response => {
+                    dispatch(event(types.LOAD_APP_OWNER_SUCCESS, appId, response.data));
+                    resolve();
+                },
+                error => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'userActions.loadAppOwner:');
+                    dispatch(event(types.LOAD_APP_OWNER_ERROR, appId, error));
+                    reject();
+                }
+            );
+        } else {
+            logger.error('userService.loadAppOwner: Missing required input parameters.');
+            let error = {
+                statusText:'Missing required input parameters to load app owner',
+                status:500
+            };
+            dispatch(event(types.LOAD_APP_OWNER_ERROR, appId, error));
+            reject();
+        }
+    });
 };
 
 /**

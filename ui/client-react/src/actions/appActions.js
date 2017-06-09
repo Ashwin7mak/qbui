@@ -1,11 +1,8 @@
 import AppService from '../services/appService';
-import RoleService from '../services/roleService';
 import Promise from 'bluebird';
 import * as types from '../actions/types';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-
-import Locale from '../../../reuse/client/src/locales/locale';
 
 /**
  * Construct apps store redux store payload
@@ -50,25 +47,36 @@ export const loadApp = (appId) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            let logger = new Logger();
-            logger.debug('AppActions loadApp');
-            dispatch(event(types.LOAD_APP, {appId}));
-
-            let appService = new AppService();
-            appService.getAppComponents(appId).then(
-                response => {
-                    dispatch(event(types.LOAD_APP_SUCCESS, response.data));
-                    resolve();
-                },
-                error => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.loadApp:');
-                    dispatch(event(types.LOAD_APP_ERROR, error));
-                    reject();
-                }
-            );
-        });
+        return loadAppData(dispatch, appId);
     };
+};
+
+/**
+ * Calls the API to load the app. In most cases, you want to use the `loadApp` action above.
+ * This action is used to load apps in other actions, when having the app data is a pre-requisite for later actions.
+ * @param dispatch
+ * @param appId
+ * @returns {bluebird}
+ */
+export const loadAppData = (dispatch, appId) => {
+    return new Promise((resolve, reject) => {
+        let logger = new Logger();
+        logger.debug('AppActions loadApp');
+        dispatch(event(types.LOAD_APP, {appId}));
+
+        let appService = new AppService();
+        appService.getAppComponents(appId).then(
+            response => {
+                dispatch(event(types.LOAD_APP_SUCCESS, response.data));
+                resolve(response.data);
+            },
+            error => {
+                logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.loadApp:');
+                dispatch(event(types.LOAD_APP_ERROR, error));
+                reject();
+            }
+        );
+    });
 };
 
 export const clearSelectedApp = () => {
