@@ -19,14 +19,18 @@ describe('columns', () => {
         }
     }];
 
+    it('test the constructor function', () => {
+        let testColumnTransform = new ColumnTransform();
+        testColumnTransform.constructor('mockGrid', 'mockProp');
+        expect(testColumnTransform.grid).toEqual('mockGrid');
+        expect(testColumnTransform.props).toEqual('mockProp');
+    });
+
     it('returns columns to the instance of the ColumnTransform', () => {
 
         let testColumnTransform = new ColumnTransform();
-        spyOn(testColumnTransform, 'apply');
-        // expect(testColumnTransform.apply).toBeDefined();
         let result = testColumnTransform.apply(mockColumns);
-        console.log(result);
-        expect(testColumnTransform.apply).toHaveBeenCalled();
         expect(result).toEqual(mockColumns);
     });
+
 });
