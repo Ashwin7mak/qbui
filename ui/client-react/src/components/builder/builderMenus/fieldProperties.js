@@ -38,6 +38,9 @@ const mapDispatchToProps = dispatch => {
 export class FieldProperties extends Component {
     constructor(props) {
         super(props);
+
+        this.unique = 'unique';
+        this.required = 'required';
     }
 
     /**
@@ -169,7 +172,7 @@ export class FieldProperties extends Component {
      * @returns {XML}
      */
     createRequiredProperty = (required, key, isDisabled) => {
-        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, 'required', key, isDisabled));
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, this.required, key, isDisabled));
     }
 
     /**
@@ -179,7 +182,7 @@ export class FieldProperties extends Component {
      * @returns {XML}
      */
     createUniqueProperty= (unique, key, isDisabled) => {
-        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.unique'), unique, 'unique', key, isDisabled));
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.unique'), unique, this.unique, key, isDisabled));
     }
 
 
@@ -237,7 +240,7 @@ export class FieldProperties extends Component {
     updateFieldProps = (newValue, propertyName) => {
         let field = this.props.selectedField;
         field[propertyName] = newValue;
-        if (propertyName === 'unique') {
+        if (propertyName === this.unique) {
             //indexed needs to be set to true if 'unique' is set to true;
             field.indexed = newValue;
         }
