@@ -137,8 +137,8 @@ class ReportModelHelper {
 
     /**
      * Format the group data.
-     * @param groupData
-     * @returns {Array}
+     * @param groupData escaped data
+     * @returns the groupData unescaped
      */
     static getGroupedReportData(groupData) {
         if (groupData) {
