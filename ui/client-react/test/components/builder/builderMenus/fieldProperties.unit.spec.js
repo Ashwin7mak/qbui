@@ -165,6 +165,59 @@ describe('FieldProperties', () => {
         });
     });
 
+    describe('createUniqueProperty', () => {
+        it('renders with proper property name, title, and value', () => {
+            component = shallow(<FieldProperties />);
+
+            let name = Locale.getMessage('fieldPropertyLabels.unique');
+            let value = true;
+
+            instance = component.instance();
+            let requiredProperty = mount(instance.createUniqueProperty(value));
+            expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveValue(value);
+            expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveText(name);
+        });
+    });
+
+    describe('updateFieldProps', () => {
+        it('will update property name and indexed if field is unique', () => {
+            component = shallow(<FieldProperties updateField={mockActions.updateField}
+                                                 appId={appId}
+                                                 tableId={tableId}
+                                                 selectedField={{}}/>);
+
+            let propertyName = 'unique';
+            let value = true;
+            let expectedResult = {
+                unique: value,
+                indexed: value
+            };
+
+            instance = component.instance();
+            instance.updateFieldProps(value, propertyName);
+
+            expect(mockActions.updateField).toHaveBeenCalledWith(expectedResult, appId, tableId);
+        });
+
+        it('will update property name and NOT indexed if field is required', () => {
+            component = shallow(<FieldProperties updateField={mockActions.updateField}
+                                                 appId={appId}
+                                                 tableId={tableId}
+                                                 selectedField={{}}/>);
+
+            let propertyName = 'required';
+            let value = true;
+            let expectedResult = {
+                required: value
+            };
+
+            instance = component.instance();
+            instance.updateFieldProps(value, propertyName);
+
+            expect(mockActions.updateField).toHaveBeenCalledWith(expectedResult, appId, tableId);
+        });
+    });
+
     describe('createPropertiesTitle', () => {
         it('renders with title container with proper name', () => {
             component = shallow(<FieldProperties />);
