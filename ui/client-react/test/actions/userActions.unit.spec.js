@@ -54,16 +54,23 @@ describe('App Actions success workflow functions', () => {
         }
     }
 
+    const mockApp = {id:'1', ownerId:'1000'};
+    let mockGetApp = () => {
+        {return mockApp;}
+    };
+
     beforeEach(() => {
         spyOn(mockUserService.prototype, 'searchUsers').and.callThrough();
         spyOn(mockUserService.prototype, 'getUser').and.callThrough();
         UserActionsRewireAPI.__Rewire__('UserService', mockUserService);
         UserActionsRewireAPI.__Rewire__('Logger', mockLogger);
+        UserActionsRewireAPI.__Rewire__('getApp', mockGetApp);
     });
 
     afterEach(() => {
         UserActionsRewireAPI.__ResetDependency__('UserService');
         UserActionsRewireAPI.__ResetDependency__('Logger');
+        UserActionsRewireAPI.__ResetDependency__('getApp');
     });
 
     it('test load app owner', (done) => {
@@ -77,6 +84,26 @@ describe('App Actions success workflow functions', () => {
         return store.dispatch(UserActions.loadAppOwner(appId, userId)).then(
             () => {
                 expect(mockUserService.prototype.getUser).toHaveBeenCalledWith(userId);
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toEqual(true);
+                done();
+            });
+    });
+
+    it('test load app and owner', (done) => {
+        // the mock store makes the actions dispatched available via getActions()
+        // so we don't need to spy on the dispatcher etc.
+        const expectedActions = [
+            event(types.LOAD_APP_OWNER_SUCCESS, appId, responseData.data)
+        ];
+
+        const store = mockStore({});
+        return store.dispatch(UserActions.loadAppAndOwner(appId)).then(
+            () => {
+                expect(mockUserService.prototype.getUser).toHaveBeenCalledWith(mockApp.ownerId);
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
             },
