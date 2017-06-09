@@ -1,3 +1,4 @@
+import _ from 'lodash';
 /**
  * relationship utils
  */
@@ -27,6 +28,32 @@ class RelationshipUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * For a set of relationships and a list of tables, find the list of parents allowed for a new relationship to the given detailTable
+     * @param existingRelationships
+     * @param appTables
+     * @param detailTable
+     * @returns {Array}
+     */
+    static getValidParentTablesForRelationship(existingRelationships, appTables, detailTable) {
+        if (!detailTable || !Array.isArray(appTables) || !appTables.length) {
+            return [];
+        }
+
+        let validParentTables = [];
+
+        //remove the currentTable from the list -- cant create relationship to self.
+        validParentTables = _.reject(appTables, table => table.id === detailTable.id);
+
+        //remove tables that are already parents for the currentTable
+        validParentTables = _.reject(validParentTables, table => _.find(existingRelationships, relation => (relation.masterTableId === table.id) && (relation.detailTableId === detailTable.id)));
+
+        //remove tables that already are in a relationship with detailTable as master to avoid circular relationships
+        validParentTables = _.reject(validParentTables, table => _.find(existingRelationships, relation => (relation.masterTableId === detailTable.id) && (relation.detailTableId === table.id)));
+
+        return validParentTables;
     }
 }
 
