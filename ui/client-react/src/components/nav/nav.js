@@ -28,7 +28,7 @@ import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
-import * as AppActions from '../../actions/appActions';
+import {loadApp, loadApps} from '../../actions/appActions';
 
 import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
 import {getAppRoles} from '../../reducers/appRoles';
@@ -379,7 +379,6 @@ export const Nav = React.createClass({
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
 
-        let viewingRecordId = null;
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
@@ -404,7 +403,6 @@ export const Nav = React.createClass({
                 table={this.getSelectedTable(reportsData.tblId)}
                 report={this.getSelectedReport()}
                 editingRecordId={editRecordIdForPageTitle}
-                selectedRecordId={viewingRecordId}
             />
 
             <Analytics dataset={Config.evergageDataset} app={selectedApp} />
@@ -427,7 +425,6 @@ export const Nav = React.createClass({
                 editingTblId={editingTblId}
                 editingRecId={editingRecId}
                 recId={editRecordId}
-                viewingRecordId={viewingRecordId}
                 pendEdits={pendEdits}
                 appUsers={this.props.selectedAppUsers}
                 selectedApp={selectedApp}
@@ -516,7 +513,8 @@ export const Nav = React.createClass({
      * new table was created, ensure it is displayed available in the UI
      */
     tableCreated(tblId) {
-        this.props.loadApps();
+        const selectedAppId = this.props.selectedAppId;
+        this.props.loadApp(selectedAppId);
 
         // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {
@@ -599,7 +597,8 @@ const mapDispatchToProps = (dispatch) => {
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
         enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
-        loadApps: () => dispatch(AppActions.loadApps()),
+        loadApps: () => dispatch(loadApps()),
+        loadApp: (appId) => dispatch(loadApp(appId)),
         updateReportRedirectRoute: (context, route) => dispatch(updateReportRedirectRoute(context, route))
     };
 };

@@ -66,6 +66,7 @@ describe('Nav Unit tests', () => {
         showTableReadyDialog: () => {},
         enterBuilderMode: (context) => {},
         loadApps: () => {},
+        loadApp: () => {},
         updateReportRedirectRoute: (ctx, route) => {},
         getApp: (appId) => {},
         getApps: () => {},
