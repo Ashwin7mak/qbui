@@ -131,7 +131,7 @@ export const NavWrapper = React.createClass({
 });
 
 const mapStateToProps = (state) => ({
-    locales: state.shell.locales,
+    locales: state.shell.locale,
     selectedAppId: getSelectedAppId(state.app),
     selectedTableId: getSelectedTableId(state.app),
     getApp: (appId) => getApp(state.app, appId)
