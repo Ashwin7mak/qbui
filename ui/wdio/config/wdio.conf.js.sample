@@ -27,7 +27,6 @@ exports.config = {
     exclude: [
         // Forms Tests
         // Stabilize in CI before enabling
-        './ui/wdio/tests/forms/formDragDrop.e2e.spec.js',
         //TODO MC-2105 needs to be fixed to enable permissions on forms
         // disabling formPermissions tests as after moving to ExperienceEngine,
         // permissions for viewer and participant are not working correctly
@@ -49,10 +48,14 @@ exports.config = {
         forms: [
             './ui/wdio/tests/forms/formAdd.e2e.spec.js',
             './ui/wdio/tests/forms/formAddValidation.e2e.spec.js',
+            './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
+            './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
+            './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
             './ui/wdio/tests/forms/formEdit.e2e.spec.js',
             './ui/wdio/tests/forms/formEditValidation.e2e.spec.js'
         ],
         reports: [
+            './ui/wdio/tests/reports/reportBuilder.e2e.spec.js',
             './ui/wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
             './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
             './ui/wdio/tests/reports/reportNavigation.e2e.spec.js',
@@ -75,9 +78,11 @@ exports.config = {
         ],
         users: [
             './ui/wdio/tests/users/usersTable.e2e.spec.js',
+            './ui/wdio/tests/users/usersRemove.e2e.spec.js'
         ],
         global: [
             './ui/wdio/tests/global/globalTopNav.e2e.spec.js',
+            './ui/wdio/tests/global/globalLeftNav.e2e.spec.js',
         ]
     },
     //

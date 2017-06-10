@@ -19,7 +19,10 @@ const FieldToken = (props) => {
         classes = [...classes, ...props.classes];
     }
 
-    if (props.isDragging) {
+    let selectedId = _.get(props, 'selectedFormElement.id');
+    let fieldId = _.get(props, 'containingElement.FormFieldElement.id');
+
+    if (props.isDragging && fieldId === selectedId) {
         classes.push('fieldTokenDragging');
     }
 

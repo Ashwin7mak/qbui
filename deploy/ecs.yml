@@ -1,35 +1,42 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: QBUI ECS Deployment
+Description: QBUI ECS Deployment # CUSTOMIZE
 Parameters:
+  ServiceName:
+    Type: String
+    Default: coreui # CUSTOMIZE
+  Path:
+    Type: String
+    Default: "/*" # CUSTOMIZE
+  HealthCheckPath:
+    Type: String
+    Default: /qbui/health # CUSTOMIZE
+  Priority:
+    Type: String
+    Default: 200 # CUSTOMIZE
+  ContainerMemory:
+    Type: String
+    Default: 2048
+  ContainerPort:
+    Type: String
+    Default: 9443
+  LegacyBase:
+    Type: String
+    Default: "NO_DEFAULT"
+  # You probably shouldn't change any of the following parameters
+  ContainerImage:
+    Type: String
+  DesiredCount:
+    Type: String
+    Default: 3
   VPCStackName:
     Type: String
     Default: general-vpc
-  Path:
-    Type: String
-    Default: "/*"
   SwimlaneID:
     Type: String
   Environment:
     Type: String
-  ServiceName:
-    Type: String
-    Default: coreui
-  DesiredCount:
-    Type: String
-    Default: 3
-  ContainerPort:
-    Type: String
-    Default: 9443
-  ContainerImage:
-    Type: String
-    Default: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/ui:latest
-  ContainerMemory:
-    Type: String
-    Default: 2048
-  LegacyBase:
-    Type: String
-    Default: "NO_DEFAULT"
+
 Mappings:
   # 3381 = pre-prod
   # 1063 = prod
@@ -99,7 +106,7 @@ Resources:
     Properties:
       ListenerArn:
         "Fn::ImportValue": !Sub "${SwimlaneID}-ecs-ALBListenerARN"
-      Priority: 200
+      Priority: !Ref Priority
       Conditions:
         - Field: path-pattern
           Values:
@@ -117,7 +124,7 @@ Resources:
       Matcher:
         HttpCode: 200-299
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /qbui/health
+      HealthCheckPath: !Ref HealthCheckPath
       HealthCheckProtocol: HTTPS
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
@@ -179,7 +186,10 @@ Resources:
               Effect: Allow
               Action:
                 - ssm:GetParameters
-              Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-${Environment}-${ServiceName}-db.*"
+              Resource:
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-${Environment}-${ServiceName}.*"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-ecs-SHARED.*"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/GLOBAL-${Environment}-SHARED.*"
             -
               Effect: Allow
               Action:

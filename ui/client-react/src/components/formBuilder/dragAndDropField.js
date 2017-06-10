@@ -6,16 +6,16 @@ import DroppableFormElement from './droppableFormElement';
 /**
  * This HOC is a convenience method to wrap a field in both a drag and drop source.
  * @param FieldComponent
+ * @param showFieldEditingTools
  * @returns {*}
  */
-export default (FieldComponent) => {
+export default (FieldComponent, showFieldEditingTools) => {
     // This must be a component that could have state to work with drag/drop animations.
     // It cannot be a stateless component built with a function.
     class DragDropFieldComponent extends Component {
         render() {
-            let key = (_.has(this.props, 'element.id') ? this.props.element.id : _.uniqueId());
             return (
-                <div key={`dragDropField-${key}`} className="dragAndDropField">
+                <div className="dragAndDropField">
                     <FieldComponent {...this.props} />
                 </div>
             );
@@ -25,5 +25,5 @@ export default (FieldComponent) => {
     return _.flow([
         DraggableField,
         DroppableFormElement
-    ])(DragDropFieldComponent);
+    ])(DragDropFieldComponent, showFieldEditingTools);
 };

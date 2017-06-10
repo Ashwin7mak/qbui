@@ -7,7 +7,8 @@ import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import {connect} from 'react-redux';
-import {loadDynamicReport, hideColumn, openFieldSelectMenu} from '../../../actions/reportActions';
+import {loadDynamicReport} from '../../../actions/reportActions';
+import {hideColumn, insertPlaceholderColumn} from '../../../actions/reportBuilderActions';
 import _ from 'lodash';
 
 import ReportUtils from '../../../utils/reportUtils';
@@ -221,18 +222,18 @@ export class ReportColumnHeaderMenu extends Component {
         this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id);
     };
 
-    openFieldSelector(before) {
+    showAColumn(before) {
         if (!this.hasRequiredIds()) {return;}
 
-        this.props.openFieldSelectMenu(CONTEXT.REPORT.NAV, this.props.fieldDef.id, before);
+        this.props.insertPlaceholderColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id, before);
     }
 
-    openFieldSelectorBefore = () => {
-        this.openFieldSelector(true);
+    showAColumnBefore = () => {
+        this.showAColumn(true);
     };
 
-    openFieldSelectorAfter = () => {
-        this.openFieldSelector(false);
+    showAColumnAfter = () => {
+        this.showAColumn(false);
     };
 
     render() {
@@ -244,11 +245,11 @@ export class ReportColumnHeaderMenu extends Component {
             builderMenus = [
                 <MenuItem key="1" divider/>,
 
-                <MenuItem key="2" onSelect={this.openFieldSelectorBefore}>
+                <MenuItem key="2" onSelect={this.showAColumnBefore}>
                     <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
                 </MenuItem>,
 
-                <MenuItem key="3" onSelect={this.openFieldSelectorAfter}>
+                <MenuItem key="3" onSelect={this.showAColumnAfter}>
                     <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
                 </MenuItem>,
 
@@ -315,8 +316,8 @@ const mapDispatchToProps = (dispatch) => {
         hideColumn: (context, clickedId) => {
             dispatch(hideColumn(context, clickedId));
         },
-        openFieldSelectMenu: (context, clickedColumn, addBeforeColumn) => {
-            dispatch(openFieldSelectMenu(context, clickedColumn, addBeforeColumn));
+        insertPlaceholderColumn: (context, clickedColumn, addBeforeColumn) => {
+            dispatch(insertPlaceholderColumn(context, clickedColumn, addBeforeColumn));
         }
     };
 };

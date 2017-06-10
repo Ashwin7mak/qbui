@@ -195,7 +195,7 @@ $left-nav-heading-color: $badcolor9-color29;
 
 // Stage - This is the area below the top nav and above the page contents that the user cares about.
 $stage-background-color:                $color-black-100;
-$stage-headline-icon-color:             $color-purple-600;
+$stage-headline-icon-color:             $color-black-700;
 $stage-headline-color:                  $color-black-700;
 $stage-breadcrumb-separator-color:      $color-black-400;
 $stage-border-color:                    $color-black-300;
@@ -361,6 +361,7 @@ $menu-header-color:         $color-black-800;
 $menu-item-disabled-color:  $color-black-400;
 
 // dialogs
+$link-button-disabled-color:  $color-black-400;
 
 $newTableDialog-highlight-color: $color-purple-600;
 
@@ -440,7 +441,15 @@ $propertyvalue-border-color: $color-black-400;
 
 // App Users Management
 $add-user-button: $color-cyan-500;
+$add-user-button-hover-color: $color-cyan-300;
+$add-user-button-color: $color-cyan-400;
 $app-role-divider: $color-yellow-500;
+$add-user-dialog-modal : $color-black-700;
+$add-user-dialog-focus-border-color : $color-purple-600;
+$add-user-dialog-border-button-color :$color-black-100;
+
+//this is used on all "Add a record" in both reference field and report link
+$button-lightbg-text-color: $color-indigo-800;
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES

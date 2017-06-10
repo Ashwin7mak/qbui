@@ -13,10 +13,6 @@ import _ from "lodash";
  */
 const fieldDragSource = {
     beginDrag(props, monitor, component) {
-        if (props.cacheDragElement) {
-            props.cacheDragElement(component);
-        }
-
         if (props.beginDrag) {
             props.beginDrag(props);
         }
@@ -67,9 +63,6 @@ const fieldDragSource = {
             props.endDrag();
         }
 
-        if (props.clearDragElementCache) {
-            props.clearDragElementCache();
-        }
         if (props.endDraggingState) {
             props.endDraggingState(props.formId);
         }
@@ -121,7 +114,17 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement}/>}
+                        {showFieldEditingTools &&
+                        <FieldEditingTools
+                            location={location}
+                            isDragging={isDragging}
+                            formBuilderContainerContentElement={formBuilderContainerContentElement}
+                            relatedField={this.props.relatedField}
+                            app={this.props.app}
+                            tblId={this.props.tblId}
+                            fieldId={this.props.fieldId}
+                        />
+                        }
                         <FieldComponent {...this.props} />
                     </div>
                 </div>

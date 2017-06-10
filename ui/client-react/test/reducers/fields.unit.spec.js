@@ -1,4 +1,4 @@
-import {tableFieldsObj, tableFieldsReportDataObj, getField} from '../../src/reducers/fields';
+import {tableFieldsObj, tableFieldsReportDataObj, getField, isFieldDeletable} from '../../src/reducers/fields';
 import reducer from '../../src/reducers/fields';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 import * as types from '../../src/actions/types';
@@ -84,7 +84,7 @@ describe('Test fields reducer', () => {
             appId: appId,
             tblId: tblId,
             content: {
-                newField: {}
+                field: {}
             }
         };
         const fieldsWithNewFieldAddedOn = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {
@@ -98,6 +98,36 @@ describe('Test fields reducer', () => {
         expect(currentField.appId).toEqual(appId);
         expect(currentField.tblId).toEqual(tblId);
         expect(currentField.fields).toEqual(fieldsWithNewFieldAddedOn);
+    });
+
+    it('will not add a newField if the field has a new field Id', () => {
+        const newState = [{
+            appId: appId,
+            tblId: tblId,
+            fields: [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}]
+        }];
+        const actionPayload = {
+            type: types.ADD_FIELD,
+            appId: appId,
+            tblId: tblId,
+            content: {
+                //A field with a newFieldId will not be added by the reducer
+                //New fields are only added when a user saves the form on formBuilder
+                field: {id: 'newFieldID'}
+            }
+        };
+        //Since a new field will not be added, the expectation is that it will not equal fieldsWithNewFieldAddedOn
+        const fieldsWithNewFieldAddedOn = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {
+            builtIn: false,
+            keyField: true,
+            id: 10
+        }, {}];
+        const state = reducer(newState, actionPayload, {type: types.ADD_FIELD});
+        const currentField = tableFieldsObj(state, appId, tblId);
+
+        expect(currentField.fields).not.toEqual(fieldsWithNewFieldAddedOn);
+        expect(currentField.appId).toEqual(appId);
+        expect(currentField.tblId).toEqual(tblId);
     });
 
     it('updates a field', () => {
@@ -125,5 +155,37 @@ describe('Test fields reducer', () => {
     it('sets isPendingEdit to false', () => {
         const state = reducer([], event(appId, tblId, types.SAVING_FORM));
         expect(state[0].isPendingEdit).toEqual(false);
+    });
+
+    describe('isFieldDeletable', () => {
+        const testState = {}; // App store is not in redux yet. Refactor once app can be obtained from state.
+
+        it('returns true if there is no app', () => {
+            expect(isFieldDeletable(testState, null, 1, 2)).toEqual(true);
+        });
+
+        it('returns true if there is no table on the app', () => {
+            const testApp = {tables: [{id: 3}]};
+
+            expect(isFieldDeletable(testState, testApp, 1, 2)).toEqual(true);
+        });
+
+        it('returns true if there is no record title on the table', () => {
+            const testApp = {tables: [{id: 1}]};
+
+            expect(isFieldDeletable(testState, testApp, 1, 2)).toEqual(true);
+        });
+
+        it('returns true if the current fieldId does not match the title field id for the table', () => {
+            const testApp = {tables: [{id: 1, recordTitleFieldId: 3}]};
+
+            expect(isFieldDeletable(testState, testApp, 1, 2)).toEqual(true);
+        });
+
+        it('returns false if the current fieldId matches the title field id for the table', () => {
+            const testApp = {tables: [{id: 1, recordTitleFieldId: 2}]};
+
+            expect(isFieldDeletable(testState, testApp, 1, 2));
+        });
     });
 });

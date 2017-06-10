@@ -72,16 +72,16 @@
 
         //Assert three buttons not to be present
         assertInlineEditMenuButtonsTobeTrue:{value: function() {
-            expect(browser.isVisible(saveRecordInlineEdit)).toBeTruthy();
-            expect(browser.isVisible(cancelRecordInlineEdit)).toBeTruthy();
-            expect(browser.isVisible(addRecordInlineEdit)).toBeTruthy();
+            expect(browser.isVisible(saveRecordInlineEdit)).toBe(true);
+            expect(browser.isVisible(cancelRecordInlineEdit)).toBe(true);
+            expect(browser.isVisible(addRecordInlineEdit)).toBe(true);
         }},
 
         //Assert three buttons to be present
         assertInlineEditMenuButtonsTobeFalse:{value: function() {
-            expect(browser.isVisible(saveRecordInlineEdit)).toBeFalse();
-            expect(browser.isVisible(cancelRecordInlineEdit)).toBeFalse();
-            expect(browser.isVisible(addRecordInlineEdit)).toBeFalse();
+            expect(browser.isVisible(saveRecordInlineEdit)).toBe(false);
+            expect(browser.isVisible(cancelRecordInlineEdit)).toBe(false);
+            expect(browser.isVisible(addRecordInlineEdit)).toBe(false);
         }},
 
         /**

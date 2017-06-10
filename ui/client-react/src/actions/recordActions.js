@@ -1,3 +1,4 @@
+
 /**
  * Any actions related to Record model are defined here. This is responsible for making calls to Node layer api based on the action.
  */
@@ -608,4 +609,19 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
             }
         });
     };
+};
+
+
+/**
+ * Add a child record for a parent record with related value
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param detailFid
+ * @param parentValue
+ * @returns {{id: *, type: *, content: *}}
+ */
+export const addChildRecord = (context, appId, tblId, rptId, detailFid, parentValue)=> {
+    return event(context, types.ADD_CHILD_RECORD, {appId, tblId, rptId, detailFid, parentValue});
 };

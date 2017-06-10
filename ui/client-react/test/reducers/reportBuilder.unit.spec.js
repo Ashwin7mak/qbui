@@ -3,12 +3,15 @@ import * as types from '../../src/actions/types';
 
 let initialState = {};
 
+const route = 'new/route/';
+
 function initializeState() {
     initialState = {
+        redirectRoute: null,
+        isPendingEdit: false,
         isInBuilderMode: false,
-        isCollapsed: true,
-        addBeforeColumn: null,
-        availableColumns: []
+        availableColumns: [],
+        addBeforeColumn: false
     };
 }
 
@@ -22,8 +25,16 @@ describe('Test initial state of reportBuilder reducer', () => {
     });
 });
 
-describe('reportBuilder reducer functions for refreshing fields', () => {
-    it('returns correct state with the correct fields', () => {
+describe('reportBuilder reducer', () => {
+    it('UPDATE_REPORT_REDIRECT_ROUTE sets redirectRoute to the route', () => {
+        let content = {
+            route: route
+        };
+        const state = reducer(initialState, {type: types.UPDATE_REPORT_REDIRECT_ROUTE, content: content});
+        expect(state.redirectRoute).toEqual(route);
+    });
+
+    it('REFRESH_FIELD_SELECT_MENU sets availableColumns to the response columns', () => {
         let content = {
             response: {
                 data: [
@@ -50,40 +61,14 @@ describe('reportBuilder reducer functions for refreshing fields', () => {
         expect(state.availableColumns.length).toEqual(1);
     });
 
-    it('returns correct state with the menu open', () => {
-        const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: {}});
-        expect(state.isCollapsed).toEqual(false);
-    });
-
-    it('returns correct state with the menu closed', () => {
-        const state = reducer(initialState, {type: types.CLOSE_FIELD_SELECT_MENU, content: {}});
-        expect(state.isCollapsed).toEqual(true);
-    });
-
-    it('returns correct state with addBeforeColumn set to true', () => {
-        let content = {
-            addBeforeColumn: true
-        };
-        const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: content});
-        expect(state.addBeforeColumn).toEqual(true);
-    });
-
-    it('returns correct state with addBeforeColumn set to true', () => {
-        let content = {
-            addBeforeColumn: false
-        };
-        const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: content});
-        expect(state.addBeforeColumn).toEqual(false);
-    });
-
-    it('enter builder mode', () => {
+    it('ENTER_BUILDER_MODE sets isInBuilderMode to true', () => {
         const state = reducer(initialState, {type: types.ENTER_BUILDER_MODE});
         expect(state.isInBuilderMode).toEqual(true);
     });
 
-    it('exit builder mode', () => {
-        let openState = {isInBuilderMode: true};
-        const state = reducer(openState, {type: types.EXIT_BUILDER_MODE});
+    it('EXIT_BUILDER_MODE sets isInBuilderMode to false', () => {
+        let inBuilderModeState = {isInBuilderMode: true};
+        const state = reducer(inBuilderModeState, {type: types.EXIT_BUILDER_MODE});
         expect(state.isInBuilderMode).toEqual(false);
     });
 });

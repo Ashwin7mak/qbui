@@ -17,9 +17,10 @@ let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type
 let multiChoiceField = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
     multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
         {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
+let linkToRecordField = {id: 8, required: false, name: "get parent record", parentTableId: "parentId", parentFieldId: 1, datatypeAttributes: {type: "LINK_TO_RECORD"}};
 let formElement = {FormFieldElement: {fieldId: 6}};
 let formElementMultiChoice = {FormFieldElement: {fieldId: 7}};
-
+let formElementLinkToRecord = {FormFieldElement: {fieldId: 8}};
 
 const mockActions = {
     updateField() {},
@@ -72,6 +73,28 @@ describe('FieldProperties', () => {
             expect(component.find('.textPropertyValue')).toHaveValue(multiChoiceField.name);
             expect(component.find('MultiLineTextFieldValueEditor')).toBePresent();
             expect(component.find('MultiLineTextFieldValueEditor')).toHaveValue(instance.buildMultiChoiceDisplayList(multiChoiceField.multipleChoice.choices));
+        });
+
+        it('with selectedField prop that is linkToRecord', () => {
+            let app = {
+                tables: [
+                    {tableIcon: "icon1", name: "child table", id: "2"},
+                    {tableIcon: "icon2", name: "parent table", id: "parentId", fields: [{id:1, name:"recordTitleField"}]}
+                ]
+            };
+            component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId} app={app}
+                                               selectedField={linkToRecordField} formElement={formElementLinkToRecord}/>);
+
+            expect(component).toBePresent();
+            instance = component.instance();
+            expect(component.find('.fieldPropertiesTitle')).toBePresent();
+            expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
+            expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
+            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(linkToRecordField.required);
+            expect(component.find('.textPropertyTitle')).toBePresent();
+            expect(component.find('.textPropertyValue')).toHaveValue(linkToRecordField.name);
+            expect(component.find('.linkToRecordLinkedToValue')).toBePresent();
+            expect(component.find('.linkToRecordConnectedOnValue')).toBePresent();
         });
     });
 

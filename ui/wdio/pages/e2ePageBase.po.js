@@ -5,6 +5,7 @@
 (function() {
     'use strict';
     var reportContentPO = requirePO('reportContent');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     function PageBase() {
         // Define common locators that all pages share here
@@ -55,6 +56,42 @@
         //TODO Need to implement, use waitUntil method
     };
 
+    PageBase.prototype.getUserAuthentication = function(realmName, realmId, userId) {
+        //get the user authentication
+        return this.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+    };
+
+    /**
+     * Helper method that will load an apps page for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadAppsInBrowser = function(realmName) {
+        this.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
+        //wait until loading screen disappear in leftNav
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        //wait until loading screen disappear in report Content
+        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //wait until apps home page is visible
+        return browser.waitForVisible('.myappsBody');
+    };
+
+    /**
+     * Helper method that will load an particular app by ID for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadAppByIdInBrowser = function(realmName, appId) {
+        this.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, appId));
+        //wait until loading screen disappear in leftNav
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        //wait until loading screen disappear in report Content
+        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //wait until apps home page is visible
+        return browser.waitForVisible('.appHomePageBody');
+    };
+
     /**
      * Helper method that will load a report for you in your browser by directly hitting a generated URL
      * @param realmName
@@ -64,70 +101,33 @@
      * @returns A promise that will resolve after loading the generated URL
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
-        browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        this.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        //wait until loading screen disappear in leftNav
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        //wait until loading screen disappear in report Content
+        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
     };
 
-    //TODO: Refactor these if needed
-    //// Verify the element is located on top of the other
-    //this.isElementOnTop = function(element1, element2) {
-    //    var self = this;
-    //    // First check that both elements are being displayed
-    //    return self.waitForElements(element1, element2).then(function() {
-    //        // Get element1 location
-    //        element1.getLocation().then(function(navDivLocation) {
-    //            var element1xPosition = navDivLocation.x;
-    //            var element1yPosition = navDivLocation.y;
-    //            // Get element2 location
-    //            element2.getLocation().then(function(navDivLocation2) {
-    //                var element2xPosition = navDivLocation2.x;
-    //                var element2yPosition = navDivLocation2.y;
-    //                // Compare element2 coordinates to be greater than element1
-    //                expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
-    //                expect(element2yPosition > element1yPosition).toBeTruthy();
-    //            });
-    //        });
-    //    });
-    //};
+    /**
+     * Helper method that will load users for an app for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadUsersInAnAppInBrowser = function(realmName, appId) {
+        this.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, appId));
+        //wait until loading screen disappear in leftNav
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        //wait until loading screen disappear in report Content
+        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //wait until apps home page is visible
+        return browser.waitForVisible('.iconActionButton.addRecord');
+    };
 
-    //// Resize the browser window to the given pixel width and height. Returns a promise
-    //resizeBrowser: function(width, height) {
-    //    var deferred = Promise.pending();
-    //    // Define the window size if there is a browser object
-    //    if (typeof browser !== 'undefined') {
-    //        browser.driver.manage().window().getSize().then(function(dimension) {
-    //            // Currently our breakpoints only change when browser width is changed so don't need to check height (yet)
-    //            if (dimension.width === width) {
-    //                // Do nothing because we are already at the current width
-    //                deferred.resolve();
-    //            } else {
-    //                // Resize browser if not at same width
-    //                browser.driver.manage().window().setSize(width, height).then(function() {
-    //                    e2eBase.sleep(browser.params.mediumSleep).then(function() {
-    //                        deferred.resolve();
-    //                    });
-    //                });
-    //            }
-    //        });
-    //        return deferred.promise;
-    //    } else {
-    //        return deferred.resolve();
-    //    }
-    //},
-
-    //// Helper method to sleep a specified number of seconds
-    //sleep: function(ms) {
-    //    var deferred = Promise.pending();
-    //    try {
-    //        browser.driver.sleep(ms);
-    //        deferred.resolve();
-    //    } catch (error) {
-    //        console.error(JSON.stringify(error));
-    //        deferred.reject(error);
-    //    }
-    //    return deferred.promise;
-    //}
-
+    PageBase.prototype.navigateTo = function(url) {
+        return browser.url(url);
+    };
     module.exports = new PageBase();
 }());

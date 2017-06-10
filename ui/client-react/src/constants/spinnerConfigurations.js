@@ -86,4 +86,7 @@ export const INLINE_UPDATING = SMALL_SPINNER;
 // Use on next swipe area in CARD_VIEW
 export const CARD_VIEW_NAVIGATION =  SMALL_PALE_SPINNER;
 
+// Use on automation list screen
+export const AUTOMATION_LIST_LOADING = LARGE_ABSOLUTE_CENTERED_SPINNER;
+
 

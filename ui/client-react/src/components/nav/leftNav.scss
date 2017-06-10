@@ -509,12 +509,6 @@ div.leftNavTooltip {
             }
         }
     }
-
-    .loader {
-        position: absolute;
-        right: 20px;
-        top: 20px;
-    }
 }
 
 .leftNav.expanded li.horizontal ul li {
@@ -684,6 +678,9 @@ $travel-distance: 15;
 }
 
 .leftNav .loader {
+    flex-grow: 1;
+    right: 20px;
+    top: 20px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;

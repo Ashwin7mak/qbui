@@ -66,21 +66,21 @@
              * @param tableId
              * @returns {Promise}
              */
-            _createTableProperties: function(req, tableId) {
+            _createTableProperties: function(req, table) {
                 return new Promise((resolve, reject) =>{
                     let opts = requestHelper.setOptions(req);
-                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, table.id);
 
                     requestHelper.executeRequest(req, opts).then(
                         (eeResponse) =>{
                             resolve(JSON.parse(eeResponse.body));
                         },
                         (error) =>{
-                            log.error({req: req}, "tablesApi.createTableProperties(): Error creating table properties on EE");
-                            reject(error);
+                            requestHelper.logUnexpectedError('appsApi._createTableProperties(): error creating table properties', error, true);
+                            resolve();
                         }).catch((ex) =>{
                             requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties', ex, true);
-                            reject(ex);
+                            resolve();
                         });
                 });
             },
@@ -91,46 +91,22 @@
              * @param table
              * @returns {Promise}
              */
-            getTableProperties: function(req, table) {
+            getTablePropertiesList: function(req) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
-                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, table.id);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url);
 
                     requestHelper.executeRequest(req, opts).then(
                         (eeResponse) => {
                             resolve(JSON.parse(eeResponse.body));
                         },
                         (error) => {
-                            log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties from EE");
-                            // If the table properties object is not in ee, create one with table noun in it.
-                            if (error.statusCode === 404) {
-                                let tableProperReq = _.clone(req);
-
-                                tableProperReq.method = 'POST';
-                                tableProperReq.rawBody = JSON.stringify({"tableNoun": table.name});
-                                tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
-
-                                this._createTableProperties(tableProperReq, table.id).then(
-                                    (eeResponse) => {
-                                        resolve(JSON.parse(eeResponse.body));
-                                    },
-                                    (eeError) => {
-                                        //resolve - we do not want to block the get Apps call on this failure
-                                        log.error({req: req}, "appsApi._createTableProperties(): Error creating table properties on EE");
-                                        resolve({});
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties on EE', ex, true);
-                                    //always resolve - we do not want to block the get Apps call on this failure
-                                    resolve({});
-                                });
-                            }                            else {
-                                //resolve - we do not want to block the get Apps call on this failure
-                                resolve({});
-                            }
+                            log.error({req: req}, "appsApi.getTablePropertiesList(): Error getting table properties list from EE");
+                            //resolve - we do not want to block the get Apps call on this failure
+                            resolve({});
                         }).catch((ex) => {
-                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties from EE', ex, true);
-                        //always resolve - we do not want to block the get Apps call on this failure
+                            requestHelper.logUnexpectedError('appsApi.getTablePropertiesList(): unexpected error getting table properties list from EE', ex, true);
+                            //always resolve - we do not want to block the get Apps call on this failure
                             resolve({});
                         });
                 });
@@ -139,10 +115,10 @@
             /**
              * Helper method to update the app's tables after table properties have been retrieved
              * @param app
-             * @param tables
+             * @param tablePropsArray
              * @private
              */
-            _mergeTableProps(app, tablePropsArray) {
+            _mergeTableProps(app, tablePropsArray, tablesWithoutProps) {
                 //ideally there should be same number of responses as tables but just to be sure look up which response corresponds to which table
                 app.tables.map((table) => {
                     let idx = _.findIndex(tablePropsArray, function(props) {return props.tableId === table.id;});
@@ -150,6 +126,9 @@
                         Object.keys(tablePropsArray[idx]).forEach(function(key, index) {
                             table[key] = tablePropsArray[idx][key];
                         });
+                    } else if (tablesWithoutProps) {
+                        //no props found - maybe this table was created through api so populate values into the tableProperties object for the benefit of UI
+                        tablesWithoutProps.push(table);
                     }
                 });
             },
@@ -160,36 +139,45 @@
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppsRoute(req.url, appId);
 
-                    //  make the api request to get the app
-                    requestHelper.executeRequest(req, opts).then(
-                        (response) => {
-                            let app = JSON.parse(response.body);
-                            if (Array.isArray(app.tables)) {
-                                let tablePromises = [];
-                                app.tables.map((table) => {
-                                    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
-                                    let tableReq = _.clone(req);
-                                    tableReq.url = tablesRootUrl;
-                                    tablePromises.push(this.getTableProperties(tableReq, table));
-                                });
-                                Promise.all(tablePromises).then(
-                                    (responses) => {
-                                        this._mergeTableProps(app, responses);
+                    let appPromises = [];
+                    appPromises.push(requestHelper.executeRequest(req, opts));
+                    //also get the table properties list for the app
+                    let propsReq = _.clone(req);
+                    appPromises.push(this.getTablePropertiesList(propsReq));
+
+                    Promise.all(appPromises).then(
+                        (responses) => {
+                            let app = JSON.parse(responses[0].body);
+                            if (responses.length > 1) {
+                                let tablesWithoutProps = [];
+                                this._mergeTableProps(app, responses[1], tablesWithoutProps);
+                                if (tablesWithoutProps.length > 0) {
+                                    let tablePromises = [];
+                                    tablesWithoutProps.forEach(table => {
+                                        let tablePropsReq = _.clone(req);
+                                        tablePropsReq.method = 'POST';
+                                        tablePropsReq.rawBody = JSON.stringify({"tableNoun": table.name});
+                                        tablePropsReq.headers[constants.CONTENT_LENGTH] = tablePropsReq.rawBody.length;
+                                        tablePromises.push(this._createTableProperties(tablePropsReq, table));
+                                    });
+                                    Promise.all(tablePromises).then(
+                                        (propsResponses) => {
+                                            this._mergeTableProps(app, propsResponses);
+                                            resolve(app);
+                                        },
+                                        () => {
+                                            resolve(app);
+                                        }
+                                    ).catch((ex) => {
+                                        requestHelper.logUnexpectedError('appsApi.getApp(): unexpected error creating table props for tables missing props in EE', ex, true);
                                         resolve(app);
-                                    },
-                                    (error) => {
-                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
-                                        resolve(app);
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                    });
+                                } else {
                                     resolve(app);
-                                });
+                                }
+                            } else {
+                                resolve(app);
                             }
-                        },
-                        (error) => {
-                            log.error({req: req}, "appsApi.getApp(): Error retrieving app.");
-                            reject(error);
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsApi.getApp(): unexpected error fetching app', ex, true);

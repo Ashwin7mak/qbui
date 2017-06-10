@@ -9,8 +9,9 @@ export default {
 
     messages: {
         governance: {
+            noItemsFound: "Keine {items} passen zu dem, was du suchst. Versuchen Sie, nach einem anderen {item} zu suchen.",
             leftNav: {
-                myApps: "MEINE APPLIKATIONEN",
+                myApps: "zurück zu Meinen Apps",
                 manageBilling: "Verwaltung",
                 contactSupport: "Kontakt Unterstützung",
                 manageUsers: "Benutzer Verwalten",
@@ -50,9 +51,9 @@ export default {
                         quickbaseAccessStatus: "QUICK BASE ZUGANGSSTATUS",
                         inactive: "INAKTIV?",
                         inAnyGroup: "IN EINER GRUPPE?",
-                        groupManager: "GRUPPENLEITER",
-                        canCreateApps: "KANN APPS SCHAFFEN",
-                        appManager: "APP MANAGER",
+                        groupManager: "GRUPPENLEITER?",
+                        canCreateApps: "KANN APPS SCHAFFEN?",
+                        appManager: "APP MANAGER?",
                         inRealmDirectory: "IM REALM VERZEICHNIS?",
                         realmApproved: "REALM GENEHMIGT?"
                     }

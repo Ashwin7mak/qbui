@@ -3,16 +3,22 @@
  */
 import React from 'react';
 import UserManagement from './userManagement';
+import AddUserDialog from './addUserDialog';
 import Stage from '../../../../../../reuse/client/src/components/stage/stage';
 import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
-import UserActions from '../../../actions/userActions';
 import {connect} from 'react-redux';
+import UserActions from '../../../actions/userActions';
+import {loadAppAndOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows, clearSelectedUserRows} from '../../../../actions/userActions';
+import {toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
+import {getSelectedAppId, getApp, getAppOwner, getAppUsers, getAppUnfilteredUsers} from '../../../../reducers/app';
+import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
 import './appUsersRoute.scss';
+import UserSuccessDialog from './userSuccessDialog.js';
 
 export const AppUsersRoute = React.createClass({
     getInitialState() {
@@ -20,35 +26,20 @@ export const AppUsersRoute = React.createClass({
             roleId: ''
         };
     },
+
     componentDidMount() {
-        this.props.loadAppRoles(this.props.match.params.appId);
-        this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
-    },
-
-    componentWillReceiveProps(props) {
-        if (props.match.params.appId && props.selectedApp.ownerId) {
-            if (this.props.match.params.appId !== props.match.params.appId) {
-                this.props.loadAppRoles(this.props.match.params.appId);
-                this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
-            }
-        } else {
-            this.props.loadAppRoles(null);
-            this.props.flux.actions.loadAppOwner(null);
-        }
-
-        if (this.props.match.params.appId !== props.match.params.appId && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
-            this.props.loadAppRoles(this.props.match.params.appId);
-            this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
-        }
+        const appId = this.props.match.params.appId;
+        this.props.loadAppRoles(appId);
+        this.props.loadAppAndOwner(appId);
     },
 
     componentWillUnmount() {
-        this.selectRows([]);
+        this.deselectAllRows();
     },
 
     getPageActions() {
         const actions = [
-            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', disabled: true},
+            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', onClick: this.toggleAddUserDialog},
             {msg: 'unimplemented.makeFavorite', icon: 'star', disabled: true},
             {msg: 'unimplemented.email', icon: 'mail', disabled: true},
             {msg: 'unimplemented.print', icon: 'print', disabled: true}
@@ -56,6 +47,13 @@ export const AppUsersRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={4}/>);
     },
 
+    toggleAddUserDialog(state = true) {
+        this.props.openAddUserDialog(state);
+    },
+
+    setUserRoleToAdd(roleId) {
+        this.props.setUserRoleToAdd(roleId);
+    },
 
     getStageHeadline() {
         const userHeadLine = `${this.props.selectedApp.name} : ${Locale.getMessage('app.users.users')}`;
@@ -71,7 +69,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     getSelectionActions() {
-        return (<UserActions selection={this.props.selectedUserRows} actions={this.props.flux.actions} appId={this.props.match.params.appId} roleId={this.state.roleId}/>);
+        return (<UserActions appId={this.props.appId} roleId={this.state.roleId} />);
     },
 
     getTableActions() {
@@ -88,7 +86,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     selectRows(selectedRows) {
-        this.props.flux.actions.selectUsersRows(selectedRows);
+        this.props.selectUserRows(selectedRows);
     },
 
     toggleSelectedRow(id, roleId) {
@@ -106,7 +104,7 @@ export const AppUsersRoute = React.createClass({
         }
         this.setState({roleId:roleId});
 
-        this.props.flux.actions.selectUsersRows(selectedRows);
+        this.props.selectUserRows(selectedRows);
     },
 
     /**
@@ -115,17 +113,14 @@ export const AppUsersRoute = React.createClass({
 
     selectAllRows() {
         let roleId = this.state.roleId;
-        let appUsers = this.props.appUsersUnfiltered;
+        let appUsers = this.props.unfilteredAppUsers;
         let selected = [];
         // Transform the records first so that subHeaders (grouped records) can be handled appropriately
         this.props.appRoles.map(role => {
-
             if (appUsers[role.id]) {
-
-                selected = appUsers[role.id].map(user => {
+                appUsers[role.id].map(user => {
                     roleId = user.roleId;
-                    return user.userId;
-
+                    selected.push(user.userId);
                 });
             }
         });
@@ -133,35 +128,58 @@ export const AppUsersRoute = React.createClass({
     },
 
     deselectAllRows() {
-        this.selectRows([]);
+        if (this.props.clearUserRows) {
+            this.props.clearUserRows();
+        }
     },
 
     toggleSelectAllRows() {
-        if (this.props.selectedUserRows.length === this.props.appUsers.length) {
-            this.deselectAllRows();
-        } else {
+        const selectedUserRows = this.props.selectedUserRows.length;
+        if (selectedUserRows === 0 || (selectedUserRows !== this.props.appUsers.length)) {
             this.selectAllRows();
+        } else {
+            this.deselectAllRows();
         }
     },
     areAllRowsSelected() {
-        return this.props.selectedUserRows.length === this.props.appUsers.length;
+        const selectedUserRows = this.props.selectedUserRows.length;
+        return selectedUserRows > 0 && (selectedUserRows === this.props.appUsers.length);
     },
 
     render() {
-        if (this.props.appRoles) {
+        if (this.props.appRoles && this.props.selectedApp && this.props.appOwner) {
+            const unfilteredAppUsers = this.props.unfilteredAppUsers;
+            const appId = this.props.match.params.appId;
             return (
-                <div>
-                    <Stage stageHeadline={this.getStageHeadline()}
-                           pageActions={this.getPageActions()}>
+            <div>
+                <Stage stageHeadline={this.getStageHeadline()}
+                       pageActions={this.getPageActions()}>
 
-                        <AppSettingsStage appUsers={this.props.appUsersUnfiltered}
+                        <AppSettingsStage appUsers={unfilteredAppUsers}
                                           appRoles={this.props.appRoles}
                                           appOwner={this.props.appOwner}/>
                     </Stage>
+                <AddUserDialog realmUsers={this.props.realmUsers}
+                               searchUsers={this.props.searchUsers}
+                               appRoles={this.props.appRoles}
+                               setUserRoleToAdd={this.setUserRoleToAdd}
+                               userRoleIdToAdd={this.props.roleIdToAdd}
+                               appId={appId}
+                               selectedApp={this.props.selectedApp}
+                               existingUsers={unfilteredAppUsers}
+                               addUserToAppDialogOpen={this.props.openDialogStatus}
+                               hideDialog={this.toggleAddUserDialog}
+                               showSuccessDialog={this.props.showSuccessDialog}
+                />
+                <UserSuccessDialog successDialogOpen={this.props.successDialogOpen}
+                                   addedAppUser={this.props.addedAppUser}
+                                   showSuccessDialog={this.props.showSuccessDialog}
+                                   selectedAppName={this.props.selectedApp.name}
+                />
                     {this.getTableActions()}
                     <div className="userManagementContainer">
-                        <UserManagement appId={this.props.match.params.appId}
-                                        appUsers={this.props.appUsersUnfiltered}
+                        <UserManagement appId={appId}
+                                        appUsers={unfilteredAppUsers}
                                         appRoles={this.props.appRoles}
                                         onClickToggleSelectedRow={this.toggleSelectedRow}
                                         onClickToggleSelectAllRows={this.toggleSelectAllRows}
@@ -180,14 +198,35 @@ export const AppUsersRoute = React.createClass({
 });
 
 const mapStateToProps = (state, ownProps) => {
+    let selectedAppId = getSelectedAppId(state.app);
     return {
-        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId)
+        unfilteredAppUsers: getAppUnfilteredUsers(state.app),
+        appUsers: getAppUsers(state.app),
+        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
+        appId: selectedAppId,
+        selectedApp: getApp(state.app, selectedAppId),
+        appOwner: getAppOwner(state.app),
+        realmUsers: getSearchedUsers(state.users),
+        openDialogStatus: getDialogStatus(state.users),
+        roleIdToAdd: getRoleIdToAdd(state.users),
+        selectedUserRows: getSelectedUsers(state.users),
+        successDialogOpen: state.appUsers.successDialogOpen,
+        addedAppUser: state.appUsers.addedAppUser
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));}
+        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));},
+        loadAppAndOwner: (appId) => {dispatch(loadAppAndOwner(appId));},
+        searchUsers: (searchTerm) => {return dispatch(searchUsers(searchTerm));},
+        setUserRoleToAdd: (roleId) => {dispatch(setUserRoleToAdd(roleId));},
+        openAddUserDialog: (status) => {dispatch(openAddUserDialog(status));},
+        selectUserRows: (selected) => {dispatch(selectUserRows(selected));},
+        clearUserRows: () => {dispatch(clearSelectedUserRows());},
+        showSuccessDialog: (isOpen, email) => {
+            dispatch(toggleAddToAppSuccessDialog(isOpen, email));
+        }
     };
 };
 

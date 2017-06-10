@@ -8,7 +8,6 @@
     //Load the page Objects
     let e2ePageBase = requirePO('e2ePageBase');
     let RequestAppsPage = requirePO('requestApps');
-    let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
     let newStackAuthPO = requirePO('newStackAuth');
     let tableCreatePO = requirePO('tableCreate');
@@ -166,12 +165,12 @@
 
                 browser.call(function() {
                     //get the user authentication
-                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                    return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
 
                 browser.call(function() {
                     // Load the requestAppsPage (shows a list of all the apps in a realm)
-                    return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                    return e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
                 });
 
                 //select the App
@@ -221,13 +220,13 @@
 
             browser.call(function() {
                 //get the user authentication
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
 
             //test that admin have access to admin report
             //Load the admin report
             browser.call(function() {
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
+                return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
             });
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
@@ -239,7 +238,7 @@
             //test that admin have access to participant report
             //Load the participant report
             browser.call(function() {
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
+                return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
             });
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
@@ -251,7 +250,7 @@
             //test that admin have access to viewer report
             //Load the viewer report
             browser.call(function() {
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
+                return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
             });
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();

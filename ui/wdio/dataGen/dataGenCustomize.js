@@ -64,40 +64,85 @@ projRecs.init(projGen);
     var table7UniqName = 'Unique Fields';
     var table8Par1Name = 'Parent Table 1';
     var table9Ch1Name = 'Child Table 1';
-    var table10Par1Name = 'Parent Table 2';
+    var table10Par2Name = 'Parent Table 2';
     var table11Ch2Name = 'Child Table 2';
     var table12CntryName = 'Country';
     var table13StateName = 'State';
     var table14CityName = 'City';
 
-    // use this array to limit which tables to create or set tablesToCreate to null to create all
-    var tablesToCreate = [
-        // table1Name,
-        // table2Name,
-        // table3Name,
-        // table4Name,
-        // table5ReqName,
-        // table6DurName,
+    const allTables = [
+        table1Name,
+        table2Name,
+        table3Name,
+        table4Name,
+        table5ReqName,
+        table6DurName,
+        table7UniqName,
 
-        // table7UniqName,
-        // table8Par1Name,
-        // table9Ch1Name,
-        // table10Par1Name,
-        // table11Ch2Name,
+        table8Par1Name,
+        table9Ch1Name,
+        table10Par2Name,
+        table11Ch2Name,
 
-        // table12CntryName,
-        // table13StateName,
-        // table14CityName,
-        //
-        // projGen.tableCompaniesName,
-        // projGen.tableProjectsName,
-        // projGen.tableTasksName,
-        // projGen.tablePeopleName,
-        // projGen.tableAssignmentsName,
-        // projGen.tableCommentsName
+        table12CntryName,
+        table13StateName,
+        table14CityName,
+
+        projGen.tableCompaniesName,
+        projGen.tableProjectsName,
+        projGen.tableTasksName,
+        projGen.tablePeopleName,
+        projGen.tableAssignmentsName,
+        projGen.tableCommentsName
     ];
-    // or use null to create all the tables
-    tablesToCreate = null;
+    const companiesTables = [
+        projGen.tableCompaniesName,
+        projGen.tableProjectsName,
+        projGen.tableTasksName,
+        projGen.tablePeopleName,
+        projGen.tableAssignmentsName,
+        projGen.tableCommentsName
+    ];
+    const basicsOnly = [
+        table1Name,
+        table2Name,
+        table3Name,
+        table4Name,
+        table5ReqName,
+        table6DurName
+    ];
+    const fieldTypesOnly = [
+        table1Name,
+        table2Name,
+        table3Name,
+        table4Name,
+        table5ReqName,
+        table6DurName,
+        table7UniqName
+    ];
+    const countryStateCityOnly = [
+        table12CntryName,
+        table13StateName,
+        table14CityName
+    ];
+    const plainParentChildOnly = [
+        table8Par1Name,
+        table9Ch1Name,
+        table10Par2Name,
+        table11Ch2Name,
+    ];
+
+    // use tablesToCreate null or allTables to create all the tables
+    let tablesToCreate = null;
+
+    // uncomment ONE of these to create a just a subset,
+    // tablesToCreate list limits which tables to create
+
+    //tablesToCreate = companiesTables;
+    //tablesToCreate = basicsOnly;
+    //tablesToCreate = countryStateCityOnly;
+    //tablesToCreate = fieldTypesOnly;
+    //tablesToCreate = plainParentChildOnly;
 
     log.debug('dataGenCustomize seed: ' + seed);
 
@@ -471,9 +516,9 @@ projRecs.init(projGen);
         addColumn(tableToFieldToFieldTypeMap[table9Ch1Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table9Ch1Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
         // Parent table 2 is a parent to Child table 2
-        tableToFieldToFieldTypeMap[table10Par1Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table10Par1Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table10Par1Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
+        tableToFieldToFieldTypeMap[table10Par2Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table10Par2Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table10Par2Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
         // Child table 2 is a child of Parent table 1 and Parent table 2
         tableToFieldToFieldTypeMap[table11Ch2Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table11Ch2Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
@@ -589,13 +634,13 @@ projRecs.init(projGen);
         }
     }
 
-    function setupRelationship(promises, app, parentTableName, childTableName, childFieldId, masterFieldId) {
+    function setupRelationship(promises, app, parentTableName, childTableName, childFieldId, masterFieldId, description) {
         let parentTable = getTable(app, parentTableName);
         let childTable = getTable(app, childTableName);
         if (parentTable && childTable) {
             promises.push(function() {
                 return e2eBase.relationshipService.createOneToOneRelationship(
-                    app, parentTable, childTable, childFieldId, masterFieldId);
+                    app, parentTable, childTable, childFieldId, masterFieldId, description);
             });
         }
     }
@@ -633,6 +678,8 @@ projRecs.init(projGen);
 
 
         // App setup //
+        //use the envvar appName if there is one otherwise generate a single word capitalized appname
+        let appName = _.get(config, 'appName', chance.capitalize(chance.word()));
         let tablesMap = makeAppMap();
         if (tablesToCreate) {
             // only create the tables in tablesToCreate if specified
@@ -640,7 +687,7 @@ projRecs.init(projGen);
             tablesMap = _.pick(tablesMap, tablesToCreate);
         }
 
-        e2eBase.appService.createAppSchema(tablesMap)
+        e2eBase.appService.createNamedAppSchema(tablesMap, appName)
         .then(function(appResponse) {
             createdApp = appResponse;
 
@@ -690,7 +737,7 @@ projRecs.init(projGen);
 
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table8Par1Name, numRecords:5}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table9Ch1Name, numRecords:6}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table10Par1Name, numRecords:6}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table10Par2Name, numRecords:6}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table11Ch2Name, numRecords:6}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table12CntryName, numRecords:31}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table13StateName, numRecords:31}));
@@ -809,7 +856,7 @@ projRecs.init(projGen);
                     projGen.getPeopleFid('companyName'),
                     projGen.getPeopleFid('department'),
                     projGen.getPeopleFid('title'),
-                    projGen.getPeopleFid('manager')
+                    //projGen.getPeopleFid('manager') // don't include as there is new bug in reuse facets when too many
                 ],
                 sortFids: [
                     projGen.getPeopleFid('companyName'),
@@ -817,6 +864,7 @@ projRecs.init(projGen);
                     projGen.getPeopleFid('title')
                 ],
                 reportName:'Employee Report with ID field'}, 2);
+
 
             createSetDefaultHome(rptPromises, createdApp, projGen.tableAssignmentsName, [
                 3,
@@ -846,7 +894,10 @@ projRecs.init(projGen);
             // Forms Setup //
 
             // Create a default form for each table (uses the app JSON)
-            return e2eBase.formService.createDefaultForms(createdApp);
+            let allFormPromises =  e2eBase.formService.createDefaultForms(createdApp);
+            return promise.each(allFormPromises, function(queueItem) {
+                return queueItem;
+            });
         }).then(function() {
             //// Relationships Setup //
 
@@ -905,43 +956,43 @@ projRecs.init(projGen);
 
             // Table 11 is a child of both Table 8 and Table 10
             setupRelationship(addRelationshipPromises, createdApp, table8Par1Name, table11Ch2Name, 7);
-            setupRelationship(addRelationshipPromises, createdApp, table10Par1Name, table11Ch2Name, 8);
+            setupRelationship(addRelationshipPromises, createdApp, table10Par2Name, table11Ch2Name, 8);
 
             // Create table relationship, Table 14(City) is a child of Table 13(State)
-            setupRelationship(addRelationshipPromises, createdApp, table13StateName, table14CityName, 7, 6);
+            setupRelationship(addRelationshipPromises, createdApp, table13StateName, table14CityName, 7, 6, "State parent to City");
 
             // Create table relationship, Table 13(State) is a child of Table 12(Country)
-            setupRelationship(addRelationshipPromises, createdApp, table12CntryName, table13StateName, 7, 6);
+            setupRelationship(addRelationshipPromises, createdApp, table12CntryName, table13StateName, 7, 6, "Country parent to State");
 
             // Create table relationship, Companies(parent) have many Projects(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tableProjectsName,
-                projGen.getProjectFid('companyName'), projGen.getCompanyFid('name'));
+        projGen.getProjectFid('companyName'), projGen.getCompanyFid('name'), "Company parent to Project");
 
             // Create table relationship, Company(Parent) has many People(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tablePeopleName,
-                projGen.getPeopleFid('companyName'), projGen.getCompanyFid('name'));
+        projGen.getPeopleFid('companyName'),  projGen.getCompanyFid('name'), "Company parent to Project");
 
 
             // Create table relationship, Projects(Parent) have many Tasks(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableProjectsName, projGen.tableTasksName,
-                projGen.getTaskFid('projectName'), projGen.getProjectFid('name'));
+        projGen.getTaskFid('projectName'),  projGen.getProjectFid('name'), "Project parent to Task");
 
             // Create table relationship, Tasks(Parent) have many Assignments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableTasksName, projGen.tableAssignmentsName,
-                projGen.getAssigneeFid('taskId'), projGen.getTaskFid('taskId'));
+        projGen.getAssigneeFid('taskId'), projGen.getTaskFid('taskId'), "Task parent to Assignment");
 
             // Create table relationship, Assignments(Parent) have many Comments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableAssignmentsName, projGen.tableCommentsName,
-                projGen.getCommentFid('topicId'), projGen.getAssigneeFid('assignmentId'));
+        projGen.getCommentFid('topicId'), projGen.getAssigneeFid('assignmentId'), "Assignment parent to Comment");
 
 
             // Create table relationship, People(Parent) have many Assignments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tableAssignmentsName,
-                projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullName'));
+        projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullName'), "Project Mgr parent to Assignment");
 
             // Create table relationship, People Managers(Parent) lead many People(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tablePeopleName,
-                projGen.getPeopleFid('manager'), projGen.getPeopleFid('fullName'));
+        projGen.getPeopleFid('manager'), projGen.getPeopleFid('fullName'), "Employee (Managers) parent to Employee(subordinates)");
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(addRelationshipPromises, function(queueItem) {

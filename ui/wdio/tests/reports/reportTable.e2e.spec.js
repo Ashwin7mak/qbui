@@ -6,17 +6,17 @@
     'use strict';
 
     //Load the page Objects
-    var e2ePageBase = requirePO('e2ePageBase');
-    var NewStackAuthPO = requirePO('newStackAuth');
-    var ReportContentPO = requirePO('reportContent');
-    var FormsPO = requirePO('formsPage');
-    var ReportTableActionsPO = requirePO('reportTableActions');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let NewStackAuthPO = requirePO('newStackAuth');
+    let ReportContentPO = requirePO('reportContent');
+    let FormsPO = requirePO('formsPage');
+    let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Reports - Table report tests: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
-        var RECORD_COUNT = 20;
+        let realmName;
+        let realmId;
+        let testApp;
+        let RECORD_COUNT = 5;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -66,13 +66,13 @@
          */
         it('Should load all the table report actions', function() {
             // Assert search box is visible
-            expect(browser.isVisible('.filterSearchBoxContainer .searchInput')).toBe(true);
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(true);
 
             // Assert sort by / group by button is visible
-            expect(browser.isVisible('.sortAndGroupButton')).toBe(true);
+            expect(ReportTableActionsPO.reportSortAndGroupButton.isVisible()).toBe(true);
 
             // Assert records count total
-            expect(ReportTableActionsPO.getReportRecordsCount()).toBe("20 records");
+            expect(ReportTableActionsPO.getReportRecordsCount()).toBe("5 records");
         });
 
         /**
@@ -84,10 +84,10 @@
             ReportTableActionsPO.selectAllRecordsCheckbox();
 
             // Assert Search Box is invisible
-            expect(browser.isVisible('.filterSearchBoxContainer .searchInput')).toBe(false);
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(false);
 
             // Assert records selected count
-            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("20");
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
@@ -99,7 +99,7 @@
             ReportTableActionsPO.selectRecordRowCheckbox(1);
 
             // Assert Search Box is invisible
-            expect(browser.isVisible('.filterSearchBoxContainer .searchInput')).toBe(false);
+            expect(ReportTableActionsPO.reportSearchBox.isVisible()).toBe(false);
 
             // Assert records selected count
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("1");

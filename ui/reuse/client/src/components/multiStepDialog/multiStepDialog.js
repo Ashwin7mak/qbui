@@ -5,10 +5,13 @@ import Button from 'react-bootstrap/lib/Button';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Icon from 'REUSE/components/icon/icon';
 import Loader from 'react-loader';
+import KeyboardShortcuts from '../../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import {I18nMessage} from 'REUSE/utils/i18nMessage';
 import Locale from 'REUSE/locales/locale';
+import Tooltip from 'REUSE/components/tooltip/tooltip';
 
 import './multiStepDialog.scss';
+import '../../../../../reuse/client/src/components/iconActions/iconActions.scss';
 
 /**
  * # Multi-step Dialog
@@ -74,18 +77,28 @@ class MultiStepDialog extends React.Component {
         const showPrevious = this.props.pageIndex > 0;
         const showNext = this.props.pageIndex < numPages - 1;
         const showFinished = this.props.pageIndex === numPages - 1;
+        const showFinishedText = this.props.showFinishedText;
         return (
             <Modal.Footer>
                 <div className="buttons">
                     <span className="spacer"/>
                     {this.props.showCancelButton &&
                         <Button className="cancelButton" onClick={this.cancelClicked}><I18nMessage message="nav.cancel"/></Button>}
+                    {this.props.show ? <KeyboardShortcuts id="modalDialog"
+                                                             shortcutBindingsPreventDefault={[
+                                                                 {key: 'esc', callback: () => {this.cancelClicked(); return false;}}
+                                                             ]} /> : null}
                     {showPrevious &&
                         <Button className="previousButton" onClick={this.previousClicked}><I18nMessage message="nav.previous"/></Button>}
                     {showNext &&
                         <Button className="nextButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}><I18nMessage message="nav.next"/></Button>}
                     {showFinished &&
-                        <Button className="finishedButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}>{this.props.finishedButtonLabel}</Button>}
+                        <Button className={showFinishedText ? "finishedText" : "finishedButton"} bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}>
+                            {(this.props.finishedTooltip && !this.props.canProceed) ?
+                            <Tooltip plainMessage={this.props.finishedTooltip} placement="top">
+                                {this.props.finishedButtonLabel}
+                            </Tooltip> : this.props.finishedButtonLabel}
+                        </Button>}
                 </div>
             </Modal.Footer>
         );
@@ -109,6 +122,10 @@ class MultiStepDialog extends React.Component {
 
     render() {
         let classes = ['multiStepModal'];
+
+        if (this.props.fixedHeight) {
+            classes.push('absolutePageContainer');
+        }
         if (this.props.classes) {
             classes = [...classes, this.props.classes];
         }
@@ -189,7 +206,11 @@ MultiStepDialog.propTypes = {
     /**
      *
      */
-    finishedButtonLabel: PropTypes.string
+    finishedButtonLabel: PropTypes.string,
+    /**
+     *
+     */
+    fixedHeight: PropTypes.bool,
 };
 
 MultiStepDialog.defaultProps = {
@@ -197,7 +218,8 @@ MultiStepDialog.defaultProps = {
     canProceed: true,
     isLoading: false,
     showCancelButton: true,
-    finishedButtonLabel: Locale.getMessage("nav.finished")
+    finishedButtonLabel: Locale.getMessage("nav.finished"),
+    fixedHeight: true
 };
 
 export default MultiStepDialog;

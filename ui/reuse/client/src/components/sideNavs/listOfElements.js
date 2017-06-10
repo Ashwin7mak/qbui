@@ -69,7 +69,6 @@ class ListOfElements extends Component {
             if (!_.isString(element.title)) {
                 return false;
             }
-
             return element.title.toLowerCase().indexOf(this.state.activeFieldFilter.toLowerCase()) >= 0;
         });
 
@@ -93,13 +92,17 @@ class ListOfElements extends Component {
     renderElements = (fieldTypes) => {
         //Tokens are being passed in as a renderer to reduce dependency on client-react
         let TokenInMenu = this.props.renderer;
-        return fieldTypes.map((fieldType, index) => (
-            <li key={fieldType.key || index} className="listOfElementsItem">
-                <TokenInMenu {...fieldType}
-                             isCollapsed={this.props.isCollapsed}
-                             tabIndex={this.props.childrenTabIndex} />
-            </li>
-        ));
+        if (fieldTypes) {
+            return fieldTypes.map((fieldType, index) => (
+                <li key={fieldType.key || index} className="listOfElementsItem">
+                    <TokenInMenu {...fieldType}
+                                 beginDrag={this.props.beginDrag}
+                                 endDrag={this.props.endDrag}
+                                 isCollapsed={this.props.isCollapsed}
+                                 tabIndex={this.props.childrenTabIndex}/>
+                </li>
+            ));
+        }
     };
 
     /**
@@ -111,21 +114,28 @@ class ListOfElements extends Component {
         if (this.state.activeFieldFilter) {
             return this.renderFilteredFieldsList();
         }
-        return this.props.elements.map((element, index) => {
-            if (element.children) {
-                return (
-                    <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
-                        {this.props.hideTitle ? null : <h6 className="listOfElementsItemHeader">{element.title}</h6>}
+        if (this.props.elements) {
+            return this.props.elements.map((element, index) => {
+                if (element.children) {
+                    return (
+                        <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
+                            {this.props.hideTitle ? null :
+                                <h6 className="listOfElementsItemHeader">{element.title}</h6>}
+                            {this.props.animateChildren ?
+                                <FlipMove typeName="ul" className="animatedListOfElementsItemList">
+                                    {this.renderElements(element.children)}
+                                </FlipMove> :
+                                <ul className="listOfElementsItemList">
+                                    {this.renderElements(element.children)}
+                                </ul>
+                            }
+                        </li>
+                    );
+                }
 
-                        <ul className="listOfElementsItemList">
-                            {this.renderElements(element.children)}
-                        </ul>
-                    </li>
-                );
-            }
-
-            return this.renderElements([element]);
-        });
+                return this.renderElements([element]);
+            });
+        }
     };
 
     componentDidUpdate = () => {
@@ -161,10 +171,17 @@ class ListOfElements extends Component {
     }
 }
 
+ListOfElements.defaultProps = {
+    animateChildren: false
+};
+
 ListOfElements.propTypes = {
     /**
      * Show the list of elements in a collapsed state */
     isCollapsed: PropTypes.bool,
+    /**
+     * Wraps children in flipmove it is true */
+    animateChildren: PropTypes.bool,
 
     /**
      * Show the list of elements in an open state */

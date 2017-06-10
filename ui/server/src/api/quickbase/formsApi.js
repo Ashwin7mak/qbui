@@ -51,6 +51,7 @@
                         //  each section may have elements (text, header, field, etc)
                         let section = tab.sections[sectionKey];
                         if (section.elements) {
+                            let elementsToRemove = [];
                             for (let elementKey in section.elements) {
                                 //  is this a form field element
                                 let element = section.elements[elementKey];
@@ -82,11 +83,16 @@
                                             let required = element.FormFieldElement.required;
                                             fidList.push({id: fieldId, required: required});
                                         } else {
+                                            elementsToRemove.push(elementKey);
                                             log.warn("Fid " + fieldId + " defined on form " + form.formId + " but not found in table (app:" + form.appId + ";table:" + form.tableId + "). Skipping..");
                                         }
                                     }
                                 }
                             }
+                            // remove elements with fields not found in table
+                            section.elements = lodash.omitBy(section.elements, (val, key) => {
+                                return elementsToRemove.indexOf(key) !== -1;
+                            });
                         }
                     }
                 }

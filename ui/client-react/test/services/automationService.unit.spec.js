@@ -18,11 +18,28 @@ describe('AutomationService functions', () => {
         automationService = new AutomationService();
     });
 
+    it('test getAutomations function', () => {
+        let appId = "testApp";
+        let url = StringUtils.format(automationService.API.GET_AUTOMATIONS, [appId]);
+
+        automationService.getAutomations(appId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    });
+
+    it('test getAutomation function', () => {
+        let appId = "testApp";
+        let automationId = "testAuto";
+        let url = StringUtils.format(automationService.API.GET_AUTOMATION, [appId, automationId]);
+
+        automationService.getAutomation(appId, automationId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    });
+
     it('test invokeAutomation function', () => {
         let appId = "testApp";
         let wfId = "testAutmation";
         let url = StringUtils.format(automationService.API.AUTOMATION_INVOKE, [appId, wfId]);
-        let host = "testHost";
+
         automationService.invokeAutomation(appId, wfId, {});
         expect(BaseService.prototype.post).toHaveBeenCalledWith(url, {}, {});
     });

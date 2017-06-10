@@ -5,7 +5,8 @@ import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import _ from 'lodash';
-
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
@@ -346,96 +347,4 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
             return new Promise.reject();
         }
     };
-};
-
-/**
- * Refresh the fields for the field select menu.
- * @param context
- * @param appId
- * @param tblId
- */
-export const refreshFieldSelectMenu = (context, appId, tblId) => {
-    return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            let fieldsService = new FieldsService();
-            fieldsService.getFields(appId, tblId)
-                .then(response => {
-                    logger.debug('FieldsService getFields success');
-                    dispatch(event(context, types.REFRESH_FIELD_SELECT_MENU, {response}));
-                    resolve();
-                }).catch(error => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
-                    reject();
-                });
-        });
-    };
-};
-/**
- * Enter Builder Mode
- * @returns {{type}}
- */
-export const enterBuilderMode = (context) => {
-    return event(context, types.ENTER_BUILDER_MODE, {});
-};
-
-/**
- * Exit Builder Mode
- * @returns {{type: *}}
- */
-export const exitBuilderMode = (context) => {
-    return event(context, types.EXIT_BUILDER_MODE, {});
-};
-
-/** Toggle the field select menu open.
- * @param context
- * @param clickedColumnId
- * @param addBeforeColumn
- */
-export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) => {
-    return event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn});
-};
-
-/**
- * Toggle the field select menu closed.
- * @param context
- */
-export const closeFieldSelectMenu = (context) => {
-    return event(context, types.CLOSE_FIELD_SELECT_MENU, {});
-};
-
-/**
- * Add the selected field to the report table.
- * @param context
- * @param requestedColumn
- * @param addBefore
- */
-export const addColumnFromExistingField = (context, requestedColumn, addBefore) => {
-    return event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, {requestedColumn, addBefore});
-};
-
-/**
- * Hide a column based on the column id given.
- * @param context
- * @param clickedId
- */
-export const hideColumn = (context, clickedId) => {
-    return event(context, types.HIDE_COLUMN, {clickedId});
-};
-
-/**
- * Move a column based on the source and target ids given.
- * @param context
- * @param sourceIndex and targetIndex
- */
-export const moveColumn = (context, params) => {
-    return event(context, types.MOVE_COLUMN, params);
-};
-
-/**
- * Change the reportName of the report
- * @param context
- * @param newName - the new report name
- */
-export const changeReportName = (context, newName) => {
-    return event(context, types.CHANGE_REPORT_NAME, {newName});
 };

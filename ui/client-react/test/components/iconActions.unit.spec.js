@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import QbIconActions from '../../src/components/actions/iconActions';
+import {QbIconActions} from '../../src/components/actions/iconActions';
 import {__RewireAPI__ as IconActionsRewireAPI} from '../../../reuse/client/src/components/iconActions/iconActions';
 
 const I18nMessageMock = React.createClass({
@@ -32,12 +32,12 @@ describe('QbIconActions functions', () => {
 
     it('test render of empty component', () => {
         const emptyActions = [];
-        component = TestUtils.renderIntoDocument(<QbIconActions flux={{}} actions={emptyActions} />);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={emptyActions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of no-menu component', () => {
-        component = TestUtils.renderIntoDocument(<QbIconActions flux={{}} actions={actions} />);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={actions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
@@ -48,7 +48,7 @@ describe('QbIconActions functions', () => {
     });
 
     it('test render of all-menu component', () => {
-        component = TestUtils.renderIntoDocument(<QbIconActions flux={{}} actions={actions} maxButtonsBeforeMenu={0}/>);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={actions} maxButtonsBeforeMenu={0}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
@@ -59,7 +59,7 @@ describe('QbIconActions functions', () => {
     });
 
     it('test render of menu after 1st component', () => {
-        component = TestUtils.renderIntoDocument(<QbIconActions flux={{}} actions={actions} maxButtonsBeforeMenu={1}/>);
+        component = TestUtils.renderIntoDocument(<QbIconActions actions={actions} maxButtonsBeforeMenu={1}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");

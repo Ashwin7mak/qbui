@@ -9,10 +9,12 @@ import Locale from '../locales/locales';
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as types from '../actions/types';
 import NavigationUtils from '../utils/navigationUtils';
+import FieldUtils from '../utils/fieldUtils';
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
 import _ from 'lodash';
-import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
-import {saveAllNewFields, updateAllFieldsWithEdits} from './fieldsActions';
+import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from './actionHelpers/transformFormData';
+import {saveAllNewFields, updateAllFieldsWithEdits, deleteField} from './fieldsActions';
+
 
 let logger = new Logger();
 
@@ -33,6 +35,7 @@ export const updateFormRedirectRoute = route => {
         redirectRoute: route
     };
 };
+
 
 /**
  * form load in progress
@@ -77,13 +80,16 @@ export const loadFormSuccess = (id, formData, appId, tblId) => {
 };
 
 /**
- * UI is syncing the view form to the saved version
- * @returns {{type}}
+ * UI should refresh the view form to the saved version
+ * @param id
+ * @param recordId newly saved record ID
+ * @returns {{id: *, type, recordId: *}}
  */
-export const syncForm = (id) => {
+export const syncForm = (id, recordId) => {
     return {
         id,
-        type: types.SYNC_FORM
+        type: types.SYNC_FORM,
+        recordId
     };
 };
 
@@ -99,7 +105,8 @@ export const saveForm = (id) => {
         type: types.SAVE_FORM
     };
 };
-/*
+
+/**
  * hide the 'modal working' spinner/window when completing a form save request.
  */
 export const saveFormComplete = (id) => {
@@ -108,6 +115,7 @@ export const saveFormComplete = (id) => {
         type: types.SAVE_FORM_COMPLETE
     };
 };
+
 
 /**
  * load a form, optionally with record data
@@ -155,6 +163,8 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
                         response.data.recordId = recordId;
                     }
 
+                    addRelationshipFieldProps(appId, tblId, response.data.formMeta, response.data.fields);
+
                     dispatch(loadFormSuccess(context, response.data, appId, tblId));
                     resolve(response.data);
                 },
@@ -191,35 +201,31 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
 };
 
 /**
- * Private function for addNewFieldToForm, not exported
+ * Private function for addFieldToForm, not exported
  * */
-const buildNewField = (newField) => {
-    let newId = _.uniqueId('newField_');
-    let displayText = 'New Text Field';
-
+const buildField = (field, id) => {
+    id = id || _.uniqueId('newField_');
+    //FormFieldElement is needed for both existing fields and new fields for experience engine
     return _.merge({}, {
-        id: newId,
+        id: id,
         edit: true,
         FormFieldElement: {
             positionSameRow: false,
-            fieldId: newId,
-            displayText
+            fieldId: id
         }
-    }, newField);
+    }, field);
 };
 
 /**
- * Move a field from one position on a form to a different position
+ * Adds a field to the form
  * @param formId
  * @param appId
  * @param tblId
  * @param newLocation
- * @param newField
+ * @param field
  * @returns {{id, type, content}|*}
  */
-export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) => {
-    newField = buildNewField(newField);
-
+export const addFieldToForm = (formId, appId, tblId, newLocation, field) => {
     return {
         type: types.ADD_FIELD,
         id: formId,
@@ -227,7 +233,7 @@ export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) =
         tblId,
         content: {
             newLocation,
-            newField,
+            field: buildField(field, field.id)
         }
     };
 };
@@ -269,13 +275,12 @@ export const deselectField = (formId, location) => {
 /**
  * Removes a field from the form
  * @param formId
+ * @param field
  * @param location
  * @returns {{id, type, content}|*}
  */
-export const removeFieldFromForm = (formId, location) => {
-    return event(formId, types.REMOVE_FIELD, {
-        location
-    });
+export const removeFieldFromForm = (formId, field, location) => {
+    return {id: formId, type: types.REMOVE_FIELD, field, location};
 };
 
 /**
@@ -363,6 +368,24 @@ export const createForm = (appId, tblId, formType, form) => {
     return saveTheForm(appId, tblId, formType, form, true);
 };
 
+export const deleteMarkedFields = (appId, tblId, formMeta) => {
+    return (dispatch, getState) => {
+        let fields = formMeta.fieldsToDelete;
+
+        const fieldPromises = formMeta.fieldsToDelete ? fields.map(field => dispatch(deleteField(appId, tblId, field))) : [];
+        if (fieldPromises.length === 0) {
+            logger.info('No fields deleted with deleteMarkedFields for : `{appId}`, tbl: `{tblId}`');
+            return Promise.resolve();
+        }
+
+        return Promise.all(fieldPromises).then(() => {
+            logger.debug('All promises processed in deleteMarkedFields against app: `{appId}`, tbl: `{tblId}`');
+        }).catch(error => {
+            logger.error(error);
+        });
+    };
+};
+
 /**
  * Update an existing form layout
  *
@@ -385,6 +408,7 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, sho
 
         return dispatch(saveAllNewFields(appId, tblId, formType))
             .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
+            .then(() => dispatch(deleteMarkedFields(appId, tblId, formMeta)))
             .then(() => {
                 return new Promise((resolve, reject) => {
                     if (appId && tblId) {

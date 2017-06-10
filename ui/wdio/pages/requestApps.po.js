@@ -4,6 +4,7 @@
 (function() {
     'use strict';
     var e2ePageBase = require('./e2ePageBase.po');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     var RequestAppsPage = Object.create(e2ePageBase, {
         // Page Elements using Locators
@@ -17,9 +18,13 @@
          * @returns Array of apps links
          */
         getAllAppLeftNavLinksList: {get: function() {
-            browser.element('.appsList').waitForVisible();
-            browser.element('.leftNavLabel').waitForVisible();
-            return browser.elements('.leftNavLabel');
+            //wait until loading screen disappear in leftNav
+
+            loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+            //wait until loading screen disappear in report Content
+            loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+            browser.element('.appsList .leftNavLabel').waitForVisible();
+            return browser.elements('.appsList .leftNavLabel');
         }},
 
         /**
@@ -27,8 +32,6 @@
          * @params appName
          */
         selectApp: {value: function(appName) {
-            //wait until you see tableLists got loaded
-            browser.waitForExist('.appsList .leftNavLabel');
             //filter table names from leftNav links
             var results = this.getAllAppLeftNavLinksList.value.filter(function(app) {
                 return app.getAttribute('textContent') === appName;
@@ -37,8 +40,11 @@
             if (results !== []) {
                 //Click on filtered table name
                 results[0].click();
-                //wait until you see tableLists got loaded
-                return browser.waitForExist('.tablesList .leftNavLabel');
+                //wait until loading screen disappear in leftNav
+
+                loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+                //wait until loading screen disappear in report Content
+                return loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
             }
         }},
 

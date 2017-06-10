@@ -16,7 +16,7 @@
 
     var client = clientConsts.REACT;
 
-    module.exports = {
+    let baseVars = {
 
         //  Logging configuration
         LOG: {
@@ -38,8 +38,8 @@
         // folder.. comment this out if don't want to offer ssl support.
 
         //SSL_KEY: {
-        //    private: path.normalize(__dirname + '/keys/private.pem'),
-        //    cert: path.normalize(__dirname + '/keys/cert.pem'),
+        //    private: path.join(__dirname, '/keys/private.pem'),
+        //    cert: path.join(__dirname, '/keys/cert.pem'),
         //    requireCert: false  // set to false for self signed certs
         //},
 
@@ -111,4 +111,6 @@
          */
         //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
     };
+module.exports = Object.assign({}, baseVars, process.env);
+
 }());

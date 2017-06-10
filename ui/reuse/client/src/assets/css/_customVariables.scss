@@ -1,3 +1,19 @@
+/**
+ * WARNING WARNING WARNING
+ *
+ * Bootstrap initialization
+ *
+ * This file initializes variables to style Bootstrap. We don't use much from bootstrap
+ * and are looking to potentially remove it altogether to improve page load performance.
+ * This file is a mess and does not properly reflect Quick Base branding. Our CSS inconsistently
+ * uses variables from our files (the qbXXXX ones) and this Bootstrap file.
+ *
+ * The strategy moving forward is to eliminate all use of these Bootstrap variables in Quick Base styling.
+ * We should have our own variable names for everything and if we continue to use Bootstrap,
+ * we should define the required Bootstrap variables to be initialized to our variable values.
+ * This ensures a clean separation between our CSS and Bootstrap and will make it easier to remove
+ * when we decide to do so.
+ */
 $bootstrap-sass-asset-helper: false !default;
 //
 // Variables
@@ -213,6 +229,7 @@ $input-group-addon-bg: $gray-lighter !default;
 //** Border color for textual input addons
 $input-group-addon-border-color: $input-border !default;
 
+$cursor-pointer: pointer;
 //** Disabled cursor for form controls and buttons.
 $cursor-disabled: not-allowed !default;
 

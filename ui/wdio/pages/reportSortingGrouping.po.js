@@ -40,13 +40,26 @@
          * Method to Select record ID# from field panels
          */
         sortByRecordID: {value: function() {
+            this.reportSortGrpBtnOnReportsPage.waitForVisible();
             this.reportSortGrpBtnOnReportsPage.click();
             this.sortBySettings.waitForVisible();
             this.clickInEmptyFieldInSortGrpDlg(this.sortBySettings, 'Choose a field to sort by');
             this.ClickMoreFieldsLinkInFieldsPanel();
-            this.recordID.waitForExist();
-            this.recordID.click();
-            reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
+            // this.recordID.waitForExist();
+            if (browserName === 'safari') {
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    document.getElementsByClassName('list-group')[0].getElementsByClassName('notInReport')[1].dispatchEvent(event);
+                });
+            } else {
+                this.recordID.click();
+            }
+            return reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
         }},
 
         /**
@@ -263,7 +276,7 @@
             //wait until you see field panel
             this.fieldsPanel.waitForVisible();
             //Verify cancel button is enabled
-            return expect(browser.isEnabled('.fieldsPanel .cancel')).toBeTruthy();
+            return expect(browser.isEnabled('.fieldsPanel .cancel')).toBe(true);
             //TODO Element fieldsPanelTitle not getting identified
             //Verify the title of the field panel
             //expect(this.fieldsPanelTitle.getAttribute('textContent')).toBe(title);
@@ -274,12 +287,26 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
-            //Directly clicking on the element rather than scrolling to the element and waiting for it to be visible
-            //Element already loaded in the DOM
-            this.fieldsPanel.element('.list-group .moreFields').click();
             //TODO Scroll function disabled until it is fixed to work in Safari(mobile): MC-2598
             //this.fieldsPanel.element('.list-group .moreFields').scroll();
-            //Need this to wait for more fields to load
+            //Click on more fields using JS click since scroll is not working on safari
+            if (browserName === 'safari') {
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    document.getElementsByClassName('list-group')[0].getElementsByClassName('moreFields')[0].dispatchEvent(event);
+                });
+            } else {
+                //scroll to an element
+                this.fieldsPanel.element('.list-group .moreFields').scroll();
+                //Click on more fields
+                this.fieldsPanel.element('.list-group .moreFields').click();
+            }
+            ////Need this to wait for more fields to load
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
@@ -547,7 +574,7 @@
 
             if (items !== []) {
                 //verify the check mark beside the item selected
-                expect(items[0].element('.iconUISturdy-checkmarkincircle-outline').isVisible()).toBeTruthy();
+                expect(items[0].element('.iconUISturdy-checkmarkincircle-outline').isVisible()).toBe(true);
             } else {
                 browser.logger.error('Item with name ' + itemToVerify + ' not found under column header menu');
                 throw new Error('Item with name ' + itemToVerify + ' not found under column header menu');

@@ -15,5 +15,9 @@ export const CONTEXT = {
         VIEW: 'view',
         EDIT: 'edit',
         DRAWER: 'DRAWER'
+    },
+
+    AUTOMATION: {
+        GRID: 'GRID'
     }
 };

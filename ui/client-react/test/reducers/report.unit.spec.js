@@ -1119,8 +1119,8 @@ describe('Report reducer functions', () => {
 
     });
 
-    describe('Report reducer OPEN_FIELD_SELECT_MENU test correct state', () => {
-        let contextId = "OPEN_FIELD_SELECT_MENU";
+    describe('Report reducer INSERT_PLACEHOLDER_COLUMN test correct state', () => {
+        let contextId = "INSERT_PLACEHOLDER_COLUMN";
         let initialStateWithoutPlaceholder = [
             {
                 id: contextId,
@@ -1247,106 +1247,7 @@ describe('Report reducer functions', () => {
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 let testState = testCase.initialState;
-                actionObj.type = types.OPEN_FIELD_SELECT_MENU;
-                actionObj.id = contextId;
-                if (testCase.content) {
-                    actionObj.content = testCase.content;
-                }
-                testState = reducer(testState, actionObj);
-
-                testCase.expects(testState);
-            });
-        });
-    });
-
-    describe('Report reducer CLOSE_FIELD_SELECT_MENU test correct state', () => {
-        let contextId = "CLOSE_FIELD_SELECT_MENU";
-        let initialStateWithoutPlaceholder = [
-            {
-                id: contextId,
-                data: {
-                    columns: [
-                        {
-                            fieldDef: {
-                                id: 6
-                            },
-                            isHidden: false,
-                            isPlaceholder: false,
-                            id: 6
-                        },
-                        {
-                            fieldDef: {
-                                id: 7
-                            },
-                            isHidden: false,
-                            isPlaceholder: false,
-                            id: 7
-                        }
-                    ],
-                    fids: [6, 7],
-                    metaData: {
-                        fids: [6, 7]
-                    }
-                }
-            }
-        ];
-        let initialStateWithPlaceholder = [
-            {
-                id: contextId,
-                data: {
-                    columns: [
-                        {
-                            fieldDef: {
-                                id: 6
-                            },
-                            isHidden: false,
-                            isPlaceholder: false,
-                            id: 6
-                        },
-                        {
-                            fieldDef: {
-                                id: 7
-                            },
-                            isHidden: false,
-                            isPlaceholder: true,
-                            id: 7
-                        }
-                    ],
-                    fids: [6, 7],
-                    metaData: {
-                        fids: [6, 7]
-                    }
-                }
-            }
-        ];
-        let testCases = [
-            {
-                description: 'when placeholder does not exist in the columns the state remains the same',
-                initialState: initialStateWithoutPlaceholder,
-                content : {},
-                expects : (testState) => {
-                    expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns.length).toEqual(2);
-                    expect(testState[0].data.columns[0].id).toEqual(6);
-                    expect(testState[0].data.columns[1].id).toEqual(7);
-                }
-            },
-            {
-                description: 'when placeholder does exist in the columns that column is removed',
-                initialState: initialStateWithPlaceholder,
-                content : {},
-                expects : (testState) => {
-                    expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns.length).toEqual(1);
-                    expect(testState[0].data.columns[0].id).toEqual(6);
-                }
-            }
-        ];
-
-        testCases.forEach(testCase => {
-            it(testCase.description, () => {
-                let testState = testCase.initialState;
-                actionObj.type = types.CLOSE_FIELD_SELECT_MENU;
+                actionObj.type = types.INSERT_PLACEHOLDER_COLUMN;
                 actionObj.id = contextId;
                 if (testCase.content) {
                     actionObj.content = testCase.content;

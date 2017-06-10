@@ -9,9 +9,9 @@ module.exports = function(chance) {
     let usedName = 0;
     const companies = [
         "Apple", "Microsoft", "AT&T", "Xerox", "Johnson & Johnson", "J.Deere",
-        "Time", "Intuit", "QuickBase", "Walgreens", "Black & Decker", "Tesla",
+        "Time", "Intuit", "Quick Base", "Walgreens", "Black & Decker", "Tesla",
         "Ford", "Staples", "Boeing", "Intel", "Motorola", "FedEx", "Cisco", "Rutoxio Energy",
-        "Gartner",
+        "Gartner"
     ];
 
     function init() {
@@ -21,11 +21,16 @@ module.exports = function(chance) {
         return usedName < companies.length ? companies[usedName++] : chance.capitalize(chance.word());
     }
     chance.mixin({
+        companyUrl: function(name = 'example') {
+            if (name) {
+                return ('http://' + (name.replace(/ /g, '')).replace(/&/g, 'And') + '.com').toLowerCase();
+            }
+        },
         company: function(options) {
             let name = options && options.name ? options.name : getNextName();
             let rank = chance.integer(RANK_RANGE);
             let email = options && options.email ? options.email : chance.email(options);
-            let url = options && options.url ? options.url : chance.url(options);
+            let url = options && options.url ? options.url : chance.companyUrl(name);
             let phone = chance.phone(Object.assign({formatted: false}, options));
 
             return {

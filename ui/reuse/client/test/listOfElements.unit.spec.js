@@ -96,7 +96,16 @@ describe('ListOfElements', () => {
             component.setState({activeFieldFilter: 'elementa'});
 
             expect(component.find('.listOfElementsItem').length).toEqual(2);
+            expect(component.find('.animatedListOfElementsItemList').length).toEqual(0);
             expect(component.find('.emptySearchResult')).not.toBePresent();
+        });
+
+
+        it('will animate children if animateChildren is set to true', () => {
+            component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock} elements={testElements} />);
+
+            expect(component.find('.listOfElementsItemList').length).toEqual(0);
+            expect(component.find('.animatedListOfElementsItemList').length).toEqual(2);
         });
 
         it('shows a message if no fields match the filter text', () => {

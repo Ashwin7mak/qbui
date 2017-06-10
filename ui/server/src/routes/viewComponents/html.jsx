@@ -24,7 +24,9 @@ var Html = React.createClass({
         let components = [];
         let nodeConfig = this.renderNodeConfig();
 
-        if (this.props.isClientPerfTrackingEnabled) {
+        //  suspending client perf tracking until migrated to redux on client
+        const isClientPerfTracking = false; //this.props.isClientPerfTrackingEnabled
+        if (isClientPerfTracking) {
             let scriptKey = 1;
             let initialUrl = _.has(this.props, 'req.url') ? this.props.req.url : 'undefined';
             components.push(<script key={"s" + scriptKey++}  dangerouslySetInnerHTML={{__html:`
@@ -104,7 +106,7 @@ var Html = React.createClass({
                 <head>
                     <meta charSet="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                     <link rel="stylesheet" href="/qbase/css/loadingScreen.css" />
-                    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
+                    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i" rel="stylesheet" />
                     {this.renderReactRouter4ErrorHandler()}
                     {this.renderPerfList()}
 

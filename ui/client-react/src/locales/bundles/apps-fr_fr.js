@@ -38,21 +38,24 @@ export default {
             },
             settings: "Paramètres",
             users: {
-                addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
+                addUser: "Ajouter un nouvel utilisateur",
                 users: "Utilisateurs",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
-                unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
+                unAssignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
                 deleteUser: "Retirer {valeur} utilisateur",
                 deleteUsers: "Retirer {valeur} utilisateurs",
                 removeButton: "Retirer",
                 cancel: "Annuler",
-                singular: "utilisateur",
                 plural: "utilisateurs",
-                usersRemoved: " Les utilisateurs ont été enlevés",
-                userRemoved: " L'utilisateur a été supprimé"
-
+                usersRemovedFromAppRole: "{numOfUsers} utilisateurs ont été supprimés du rôle de l'application",
+                userRemovedFromAppRole: "Utilisateur supprimé du rôle de l'application",
+                userAdded: "Utilisateur ajouté",
+                userAddError: "Erreur d'ajout d'utilisateur",
+                userRemovingError: "Erreur lors de l'enlever",
+                emailBody: "Le corps du courrier électronique va ici",
+                emailSubject: "Le sujet de l'email va ici"
             }
         },
         appMenu: {
@@ -93,6 +96,7 @@ export default {
             deleteTheseOverrides: "Supprimer ces annule?",
             more: "Plus...",
             placeholder: "Sélectionner...",
+            tablesPlaceholder: "Sélectionnez une table...",
             notFound: "Pas trouvé"
         },
         footer: {
@@ -129,7 +133,8 @@ export default {
         },
         field: {
             search: "Chercher",
-            searchNoMatch: "Personne ne correspond à"
+            searchNoMatch: "Personne ne correspond à",
+            searchNoMatchAddUser: "Aucun utilisateur ne correspond à ce que vous recherchez"
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher.",
@@ -223,15 +228,38 @@ export default {
                     error: "Erreur lors de l'enregistrement du formulaire"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Enregistrement approuvé.",
-                    error: "Une erreur s'est produite lors de l'approbation de ce document."
+            noParentRecordSelected: "Aucun enregistrement sélectionné"
+        },
+        automation: {
+            approverecord: {
+                success: "Enregistrement approuvé.",
+                error: "Une erreur s'est produite lors de l'approbation de ce document."
+            },
+            testautomation: {
+                success: "Test d'automatisation réussi.",
+                error: "Une erreur s'est produite lors du test de cette automatisation."
+            },
+            automationList: {
+                nameHeader: "Prénom",
+                activeHeader: "Actif",
+                actionHeader: "action",
+                actionButton: "Tester",
+                activeYes: "Oui",
+                activeNo: "Non"
+            },
+            automationView: {
+                stageHeading: "Automatisation: {automationName}",
+                nameHeader: "Prénom",
+                triggerHeader: "Gâchette",
+                actionHeader: "action",
+                actions: {
+                    email: "Envoyer un e-mail"
                 }
             }
         },
         relationship: {
-            childTable: "Table Enfant"
+            childTable: "Table Enfant",
+            addChildRecord: "Ajouter {tableNoun}"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",
@@ -282,6 +310,12 @@ export default {
                 clearFacet: "Enlever le filtre {facet}",
                 clearFacetSelection: "Cliquez pour désactiver ce filtre",
                 filter: "Filtre"
+            },
+            notification: {
+                save: {
+                    success: "Rapport enregistré",
+                    error: "Impossible d'enregistrer le rapport"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -557,6 +591,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Évaluation",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formule",
+            [FieldFormats.LINK_TO_RECORD]: "Obtenir un autre disque",
+            LINK_TO_RECORD_FROM: "Obtenez un autre enregistrement de {parentTable}",
             FORMULA: "Formule",
             SCALAR: "Scalaire",
             CONCRETE: "Béton",
@@ -569,14 +605,21 @@ export default {
             title: "Propriétés du champ",
             name: "prénom",
             required: "Doit être rempli",
-            multiChoice: "Les choix"
+            multiChoice: "Les choix",
+            unique: "Doit avoir des valeurs uniques",
+            linkToRecord: "Lien vers un enregistrement dans la table",
+            connectedTo: "Connecté sur le champ {fieldName}"
         },
         builder: {
             tabs: {
                 existingFields: 'Ajouter un champ existant',
                 newFields:  'Créer un nouveau champ',
             },
+            reportBuilder: {
+                modify: 'Modifiez rapport'
+            },
             formBuilder: {
+                modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
                 newFieldsMenuTitle: 'Nouveau',
@@ -607,6 +650,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Créer une liste de choix numérique et l'ajouter au formulaire",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Créez des boutons radio numériques et ajoutez-les au formulaire",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Créer les boutons radio des champs et les ajouter au formulaire",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
             fieldGroups: {
@@ -614,14 +658,22 @@ export default {
                 numeric: "Nombre",
                 date: "Date",
                 other: "Autre",
-                relationships: "Des relations"
+                relationships: "Des relations",
+                tableDataConnections: "Connexions de données de table"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
             },
-            modify: 'Modifier formulaire'
+            linkToRecord: {
+                dialogTitle: "Obtenir un autre disque",
+                addToForm: "Ajouter au formulaire",
+                tableChooserDescription: "Lorsque vous créez ou mettez à jour un {tableNoun}, vous pouvez rechercher et obtenir des informations à partir d'un enregistrement dans un autre tableau",
+                tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?",
+                advancedSettingsHeading: "Réglages avancés",
+                fieldChooserDescription: "Pour obtenir un enregistrement dans la table {tableName}, une association automatique est réalisée à l'aide d'un champ unique et obligatoire. Pour sélectionner un autre champ, vous pouvez choisir parmi la liste ci-dessous. Vous ne pouvez pas modifier ce champ une fois que vous l'avez ajouté à votre formulaire."
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",
@@ -702,8 +754,9 @@ export default {
         },
         settings: {
             header: "Paramètres",
+            appHeader: "App",
+            automationSettings: "Paramètres d'automatisation",
             tablesHeader: "Table",
-            appsHeader: "App",
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
             configureFormBuilder: 'Modifiez ce formulaire',
@@ -723,6 +776,21 @@ export default {
                 prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
             },
             YES: "OUI"
+        },
+        addUserToApp: {
+            title: "Ajouter des utilisateurs à",
+            description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle",
+            searching: "Recherche...",
+            userSuccessTitle: "Votre application a un nouvel utilisateur!",
+            userSuccessText: "Faites-leur savoir qu'ils ont accès à votre application en partageant le lien avec eux.",
+            copy: "Copie",
+            email: "Email",
+            toCopy: "Cliquez pour copier dans le presse-papiers",
+            toEmail: "Cliquez pour envoyer un courriel",
+            userSuccessDialogOK: "Non merci",
+            copied: "Lien copié",
+            messageSubject:"Lien vers le {nom de l'application} Application",
+            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
         }
     }
 };

@@ -1,6 +1,39 @@
-@import '../../../../reuse/client/src/assets/css/qbVariables';
+@import '../../../../reuse/client/src/assets/css/_qbVariables.scss';
+@import '../../../../client-react/src/assets/css/animate.min.css';
 
 .gridWrapper {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    min-height: 0;
     margin-left: 10px;
     margin-right:10px;
+}
+
+.gridContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    position: relative;
+    min-height: 0;
+}
+
+.noItemsExist {
+    color: $color-black-700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    font-size: $font-size-large;
+    margin: $spacing-xxx-small;
+    border: 1px dashed $color-black-400;
+    padding: $spacing-medium1;
+
+    .noItemsIconLine {
+        margin-bottom: $spacing-medium1;
+    }
 }

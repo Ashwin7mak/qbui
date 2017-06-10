@@ -2,14 +2,11 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
-import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import TableHomePageInitial from './tableHomePageInitial';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
-import ReportFieldSelectMenu from '../report/reportFieldSelectMenu';
 
-import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
 import {connect} from 'react-redux';
@@ -18,6 +15,7 @@ import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
 import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
+import {selectAppTable} from '../../actions/appActions';
 import {CONTEXT} from '../../actions/context';
 import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import Breakpoints from '../../utils/breakpoints';
@@ -25,9 +23,9 @@ import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import _ from 'lodash';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
 import '../report/report.scss';
+import {hideTopNav} from '../../actions/shellActions';
 
 /**
  * table homepage route
@@ -35,7 +33,6 @@ import '../report/report.scss';
  * Note: this component has been partially migrated to Redux
  */
 export const TableHomePageRoute = React.createClass({
-    mixins: [FluxMixin],
     nameForRecords: "Records",
 
     getHeader() {
@@ -53,8 +50,7 @@ export const TableHomePageRoute = React.createClass({
     },
 
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
-        const flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
+        this.props.selectTable(appId, tblId);
 
         //  redux actions..
         this.props.clearSearchInput();
@@ -78,8 +74,7 @@ export const TableHomePageRoute = React.createClass({
         }
     },
     componentDidMount() {
-        const flux = this.getFlux();
-        flux.actions.hideTopNav();
+        this.props.hideTopNav();
 
         if (this.props.match.params) {
             this.loadHomePageForParams(this.props.match.params);
@@ -135,7 +130,6 @@ export const TableHomePageRoute = React.createClass({
     },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
@@ -168,23 +162,13 @@ export const TableHomePageRoute = React.createClass({
 
         return (
             <div className={classNames.join(' ')}>
-                <ReportFieldSelectMenu
-                    appId={this.props.match.params.appId}
-                    tblId={this.props.match.params.tblId}
-                    reportData={this.props.reportData}
-                    pullRight>
+                <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                    <ReportStage reportData={this.props.reportData}/>
+                </Stage>
 
-                    <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                        <ReportStage reportData={this.props.reportData}/>
-                    </Stage>
+                {this.getHeader()}
 
-                    {this.getHeader()}
-
-                    {mainContent}
-
-                </ReportFieldSelectMenu>
-
-                {inBuilderMode && <ReportSaveOrCancelFooter />}
+                {mainContent}
             </div>
         );
     }
@@ -195,7 +179,6 @@ export const TableHomePageRoute = React.createClass({
 const mapStateToProps = (state) => {
     return {
         report: state.report,
-        reportBuilder: state.reportBuilder
     };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -214,7 +197,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         showTableCreationDialog: () => {
             dispatch(showTableCreationDialog());
-        }
+        },
+        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId)),
+        hideTopNav: () => dispatch(hideTopNav())
     };
 };
 

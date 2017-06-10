@@ -1,0 +1,118 @@
+@import "../../assets/css/_qbVariables";
+@import "../../../../reuse/client/src/components/sideMenuBase/sideMenuMixins";
+
+/*
+    A note on all the first-child selectors (">"):
+    The frequent first-child selectors are required here to successfully handle
+    multiple side navs on the page (e.g., a left side trowser and a right trowser).
+    We only want to select the first child so styles for the current instance do not affect
+    other navs that may be on the page as these components get nested.
+ */
+
+.reportFieldSelectMenuBase {
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    .header {
+        font-size: 20px;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .info {
+        margin-left: 10px;
+    }
+
+    &:not(.reportFieldSelectMenuDocked) > .reportFieldSelectMenuContent.reportFieldSelectMenuOpen {
+        @include menuShadow;
+    }
+
+    &.reportFieldSelectMenuDocked {
+        display: flex;
+
+        &.reportFieldSelectMenuPullRight {
+            flex-direction: row-reverse;
+        }
+
+        > .reportFieldSelectMenuMain {
+            position: relative;
+            flex: 1 auto;
+            height: 100%;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+
+            .smallBreakPoint & {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+        }
+
+        > .reportFieldSelectMenuContent {
+            position: relative;
+            flex: 0;
+        }
+    }
+
+    .reportFieldSelectMenuMain {
+        width: 100%;
+    }
+
+    > .reportFieldSelectMenuContent {
+        border-right: $stroke-width-thin  solid $trowser-right-trowser-nav-border-color;
+        border-left: $stroke-width-thin  solid $trowser-left-trowser-nav-border-color;
+        position: absolute;
+        top: 0;
+
+        overflow: auto;
+        background-color: $leftnav-background-color;
+        z-index: $zindex-trowser;
+        height: 100%;
+
+        @include baseMenuWidths;
+
+        &.reportFieldSelectMenuCollapsed {
+            min-width: $leftNav-width-collapsed;
+            // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
+            max-width: $leftNav-width-collapsed;
+        }
+
+        // Styling when the side trowser is on the left
+        &:not(.reportFieldSelectMenuPullRight):not(.reportFieldSelectMenuDocked) {
+            left: 0;
+
+            // Hide menu by default
+            @include moveMenuToRight;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(-100%);
+            }
+
+            &.reportFieldSelectMenuOpen {
+                transform: translateX(0);
+            }
+        }
+
+        // Styling when side trowser is on the right
+        &.reportFieldSelectMenuPullRight:not(.reportFieldSelectMenuDocked) {
+            left: auto;
+            right: 0;
+
+            // Hide menu by default
+            @include moveMenuToLeft;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(100%);
+            }
+
+            &.reportFieldSelectMenuOpen {
+                transform: translateX(0);
+            }
+        }
+
+        transition: transform 0.5s, min-width 0.5s, max-width 0.5s;
+    }
+}

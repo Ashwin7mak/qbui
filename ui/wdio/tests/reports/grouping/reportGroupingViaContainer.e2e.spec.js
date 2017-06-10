@@ -311,7 +311,7 @@
             reportSortingPO.clickSortGroupIconOnReportsPage();
 
             //Step 4 - Verify you cannot select more than 3 items.
-            expect(browser.isVisible('.groupBySettings .fieldSelectorContainer .empty')).toBeFalsy();
+            expect(browser.isVisible('.groupBySettings .fieldSelectorContainer .empty')).toBe(false);
         });
 
         it("Verify more fields and Cancel functionality in field panel of groupSettings", function() {
@@ -333,13 +333,13 @@
             var allFieldFromFieldsPanel = reportSortingPO.getAllFieldsFromFieldPanelValues();
 
             //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields variable values
-            expect(_.intersection(allFieldFromFieldsPanel, expectedMoreFields).length > 0).toBeTruthy();
+            expect(_.intersection(allFieldFromFieldsPanel, expectedMoreFields).length > 0).toBe(true);
 
             //Step 7 - Click cancel button
             reportSortingPO.fieldsPanelCancel.click();
 
             //Step 8 - Verify panel not visible
-            expect(browser.isVisible('.fieldsPanel')).toBeFalsy();
+            expect(browser.isVisible('.fieldsPanel')).toBe(false);
         });
 
         it("Verify 3 level deep grouping", function() {
@@ -465,7 +465,7 @@
             var allFieldFromFieldsPanel = reportSortingPO.getAllFieldsFromFieldPanelValues();
 
             //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields variable values
-            expect(_.every(groupFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) === -1;})).toBeTruthy();
+            expect(_.every(groupFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) === -1;})).toBe(true);
         });
     });
 }());

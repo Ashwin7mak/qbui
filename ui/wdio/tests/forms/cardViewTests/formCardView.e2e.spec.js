@@ -5,7 +5,6 @@
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
     var reportContentPO = requirePO('reportContent');
-    var reportContentMobilePO = requireMobilePO('reportContent');
     var formsPO = requirePO('formsPage');
 
     describe('Add and Edit a record via Form in mobile view', function() {
@@ -41,7 +40,7 @@
          */
         beforeEach(function() {
             // Load the List All report on Table 1
-            return reportContentMobilePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            return reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         it('Add a record from the form', function() {
@@ -51,7 +50,7 @@
             browser.context(['WEBVIEW']);
 
             //Step 2 - Click on Add Record Button on the report Stage
-            reportContentMobilePO.clickAddRecordBtn();
+            reportContentPO.clickAddRecordBtnSB();
 
             //Step 3 - enter form values
             fieldTypes.forEach(function(fieldType) {
@@ -61,7 +60,7 @@
             //Step 4 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
-            reportContentMobilePO.waitForReportContent();
+            reportContentPO.waitForReportContentSB();
 
             //Step 5 - Verify new record got added on the top of the table and verify the expected field values
             var recordValues = reportContentPO.getRecordValues(0);

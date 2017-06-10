@@ -45,7 +45,7 @@ services:
     ports:
       - "8299:8443"
   ee-db:
-    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/ee-db
+    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/experienceengine-db
     ports:
       - "5533:5432"
   ui:

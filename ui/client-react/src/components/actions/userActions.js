@@ -1,14 +1,19 @@
 import React, {PropTypes} from 'react';
-import Locale from '../../locales/locales';
+import {connect} from 'react-redux';
+import Locale from '../../../../reuse/client/src/locales/locale';
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
+import {removeUsersFromAppRole} from '../../actions/appRoleActions';
+import {clearSelectedUserRows} from '../../actions/userActions';
+import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
+import {getSelectedUsers} from '../../reducers/users';
 import './reportActions.scss';
 
 /**
  * User-level actions
  *
  */
-class UserActions extends React.Component {
+export class UserActions extends React.Component {
 
     constructor(props) {
         super(props);
@@ -23,15 +28,15 @@ class UserActions extends React.Component {
         this.getEmailAction = this.getEmailAction.bind(this);
     }
     getEmailSubject() {
-        return "Email subject goes here";
+        return Locale.getMessage('app.users.emailSubject');
     }
 
     getEmailBody() {
-        return "Email body goes here";
+        return Locale.getMessage('app.users.emailBody');
     }
 
     getSelectionTip(actionMsg) {
-        return Locale.getPluralizedMessage(actionMsg, {value: this.props.selection.length});
+        return Locale.getPluralizedMessage(actionMsg, {value: this.props.selectedUserRows.length});
     }
 
     /**
@@ -48,10 +53,27 @@ class UserActions extends React.Component {
         this.setState({confirmDeletesDialogOpen: false});
     }
     /**
-     * this.props.selection has the current selected rows with the unique identifier as the value in the array
+     * this.props.selectedUserRows has the current selected rows with the unique identifier as the value in the array
      */
     handleBulkDelete() {
-        this.props.actions.unassignUsers(this.props.appId, this.props.roleId, this.props.selection);
+        const selectedRows = this.props.selectedUserRows;
+        this.props.removeUsersFromAppRole(this.props.appId, this.props.roleId, selectedRows).then(
+            (userIds) => {
+                let msg;
+                if (selectedRows.length > 1) {
+                    msg = Locale.getMessage('app.users.usersRemovedFromAppRole', {numOfUsers: selectedRows.length});
+                } else {
+                    msg = Locale.getMessage('app.users.userRemovedFromAppRole');
+                }
+                NotificationManager.success(msg);
+
+                //  clear out the selected user rows..
+                this.props.clearSelectedUserRows();
+            },
+            () => {
+                NotificationManager.error(Locale.getMessage('app.users.userRemovingError'));
+            }
+        );
         this.setState({confirmDeletesDialogOpen: false});
     }
 
@@ -62,12 +84,12 @@ class UserActions extends React.Component {
     getConfirmDialog() {
 
         let msg;
-        if (this.props.selection.length > 1) {
+        if (this.props.selectedUserRows.length > 1) {
             msg = this.getSelectionTip("app.users.deleteUsers") + '?';
         } else {
             msg = Locale.getMessage('app.users.removeUser');
         }
-        const bodymsg  = Locale.getMessage('app.users.unassignUser');
+        const bodyMsg  = Locale.getMessage('app.users.unAssignUser');
 
         return (
             <QBModal
@@ -76,7 +98,7 @@ class UserActions extends React.Component {
                 primaryButtonOnClick={this.handleBulkDelete}
                 leftButtonName={Locale.getMessage('app.users.cancel')}
                 leftButtonOnClick={this.cancelBulkDelete}
-                bodyMessage={bodymsg}
+                bodyMessage={bodyMsg}
                 type="delete"
                 title={msg}/>);
     }
@@ -89,15 +111,16 @@ class UserActions extends React.Component {
      * render the actions
      */
     render() {
+        const numSelectedRows = this.props.selectedUserRows.length;
         return (
             <div className={'reportActions'}>
                 <div className={'reportActionsBlock'}>
-                    {<span className="selectedRowsLabel">{this.props.selection.length}</span>}
+                    {<span className="selectedRowsLabel">{numSelectedRows}</span>}
                     <div className="actionIcons">
                         <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true} identifier="mail"/>
                         {this.getEmailAction()}
                         <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true} identifier="settings"/>
-                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(this.props.selection.length > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
+                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(numSelectedRows > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
                     </div>
                 </div>
                 {this.getConfirmDialog()}
@@ -107,10 +130,27 @@ class UserActions extends React.Component {
 }
 
 UserActions.propTypes = {
-    selection: PropTypes.array,
-    roleId: PropTypes.string,
     appId: PropTypes.string,
-    onEditSelected: PropTypes.func
+    roleId: PropTypes.string,
+    removeUsersFromAppRole: PropTypes.func,
+    selectedUserRows: PropTypes.array,
+    clearSelectedUserRows: PropTypes.func
 };
 
-export default UserActions;
+const mapStateToProps = (state) => {
+    return {
+        selectedUserRows: getSelectedUsers(state.users)
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        removeUsersFromAppRole: (appId, roleId, userIds) => {return dispatch(removeUsersFromAppRole(appId, roleId, userIds));},
+        clearSelectedUserRows: () => {dispatch(clearSelectedUserRows());}
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserActions);

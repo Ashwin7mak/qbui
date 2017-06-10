@@ -6,7 +6,8 @@ import TabMenu from '../../../../../reuse/client/src/components/sideNavs/tabbedS
 import NewFieldsMenu from '../../formBuilder/menus/newFieldsMenu';
 import ExistingFieldsMenu from '../../formBuilder/menus/existingFieldsMenu';
 import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
-
+import RelationshipUtils from '../../../utils/relationshipUtils';
+import _ from 'lodash';
 import './toolPalette.scss';
 
 /**
@@ -15,21 +16,35 @@ import './toolPalette.scss';
  */
 class ToolPalette extends Component {
 
-    renderNewFieldsMenu = () => (
-        <NewFieldsMenu isCollapsed={this.props.isCollapsed}
-                       isOpen={this.props.isOpen}
-                       toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
-                       toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
-                       toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
-                       toolPaletteFocus={this.props.toolPaletteFocus} />
-    );
+    renderNewFieldsMenu = () => {
 
-    renderExistingFieldsMenu = () => (<ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
-                                                          isOpen={this.props.isOpen}
-                                                          toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
-                                                          toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
-                                                          toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
-                                                          toolPaletteFocus={this.props.toolPaletteFocus} />);
+        const tables = _.get(this.props, "app.tables", []);
+        const tableId = _.get(this.props, "formMeta.tableId", null);
+        const relationships = _.get(this.props, "formMeta.relationships", []);
+        const includeNewRelationship = RelationshipUtils.canCreateNewParentRelationship(tableId, tables, relationships);
+
+        return (
+            <NewFieldsMenu isCollapsed={this.props.isCollapsed}
+                           beginDrag={this.props.beginDrag}
+                           endDrag={this.props.endDrag}
+                           isOpen={this.props.isOpen}
+                           toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                           toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                           toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                           toolPaletteFocus={this.props.toolPaletteFocus}
+                           includeNewRelationship={includeNewRelationship}/>);
+    };
+
+    renderExistingFieldsMenu = () => (
+        <ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
+                            isOpen={this.props.isOpen}
+                            toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                            toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                            toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                            toolPaletteFocus={this.props.toolPaletteFocus}
+                            appId={_.get(this.props, 'app.id', null)}
+                            tblId={_.get(this.props, 'formMeta.tableId', null)}/>
+    );
 
     renderToolPalette = () => (
         <div className="toolPaletteContainer">

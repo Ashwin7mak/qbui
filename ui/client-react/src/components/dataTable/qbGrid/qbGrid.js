@@ -12,7 +12,7 @@ import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 import TouchBackend from 'react-dnd-touch-backend';
-import {moveColumn} from '../../../actions/reportActions';
+import {moveColumn} from '../../../actions/reportBuilderActions';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
 
@@ -131,7 +131,7 @@ export const QbGrid = React.createClass({
         menuProps: PropTypes.object,
 
         /**
-         * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
+         * Flag to include the first column that includes row specific actions.*/
         showRowActionsColumn: PropTypes.bool,
 
         // relationship phase-1, will need remove when we allow editing
@@ -205,12 +205,22 @@ export const QbGrid = React.createClass({
         };
     },
 
+    /**
+     * A placeholder cell (to indicate columns can be added there) will get the correct styling.
+     * This function adds the isPlaceholderCell:true prop to qbHeaderCell/qbCell
+     * @returns {{isPlaceholderCell: boolean}}
+     */
     getPlaceholderCellProps() {
         return {
             isPlaceholderCell: true
         };
     },
 
+    /**
+     * If the grid is draggable, header cells need to show a move cursor.
+     * This function adds the isDraggable:true prop to qbHeaderCell
+     * @returns {{isDraggable: boolean}}
+     */
     getDraggableCellProps() {
         return {
             isDraggable: true
@@ -383,13 +393,15 @@ export const QbGrid = React.createClass({
             // move the sticky cells (1st col) right to their original positions
             let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
-            stickyCells[0].style.left = currentLeftScroll + 'px';
-            stickyCells[0].style.right = 0;
-            stickyCells[0].style.bottom = 0;
+            if (stickyCells.length !== 0) {
+                stickyCells[0].style.left = currentLeftScroll + 'px';
+                stickyCells[0].style.right = 0;
+                stickyCells[0].style.bottom = 0;
 
-            for (let i = 1; i < stickyCells.length; i++) {
-                let translate = "translate(" + currentLeftScroll + "px,0)";
-                stickyCells[i].style.transform = translate;
+                for (let i = 1; i < stickyCells.length; i++) {
+                    let translate = "translate(" + currentLeftScroll + "px,0)";
+                    stickyCells[i].style.transform = translate;
+                }
             }
         }
     },

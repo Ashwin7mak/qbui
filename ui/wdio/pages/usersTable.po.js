@@ -22,7 +22,7 @@
         appRolesPodCount: {get: function() {return browser.elements('.appRolesPod .appRolesPodCount');}},
 
         // Add new user button
-        newUserBtn: {get: function() {return browser.element('.iconActionButton.disabled.addRecord');}},
+        newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
@@ -51,12 +51,6 @@
 
         // Remove user button on user report
         userRemoveIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-errorincircle-fill');}},
-
-        // Remove user button in modal
-        userRemoveButton: {get: function() {return browser.element('.modal-dialog .primaryButton');}},
-
-        // Cancel remove user button in modal
-        userCancelButton: {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
 
         // User action icon elements
         userActionsListUlEl: {get: function() {return browser.element('.reportActionsBlock .actionIcons');}},

@@ -54,4 +54,23 @@ describe('AppService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 
+    it('test createRelationship function', () => {
+        let appId = "0duiiaaaaab";
+        let relationship = {
+            masterAppId: "0duiiaaaaab",
+            masterTableId: "0duiiaaaaaj",
+            masterFieldId: 3,
+            detailAppId: "0duiiaaaaab",
+            detailTableId: "0duiiaaaaak",
+            detailFieldId: 7,
+            appId,
+            description: "Referential integrity relationship between Master / Child Tables",
+            referentialIntegrity: false,
+            cascadeDelete: false
+        };
+        let url = StringUtils.format(appService.API.GET_APP_RELATIONSHIPS, [appId]);
+
+        appService.createRelationship(appId, relationship);
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, relationship);
+    });
 });

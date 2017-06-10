@@ -914,3 +914,20 @@ describe('update Record Actions -- getRecord error workflow', () => {
     });
 });
 
+
+describe('addChildRecord', () => {
+    it('creates an action that will add a child record in specified app, table, report with parent value', () => {
+        let params = {
+            appId : "appId",
+            tblId : "tblId",
+            rptId : "rptId",
+            detailFid : "detailFid",
+            parentValue : "parentValue",
+        };
+        expect(recordActions.addChildRecord("context", params.appId, params.tblId, params.rptId, params.detailFid, params.parentValue)).toEqual({
+            id: "context",
+            type: types.ADD_CHILD_RECORD,
+            content: params
+        });
+    });
+});

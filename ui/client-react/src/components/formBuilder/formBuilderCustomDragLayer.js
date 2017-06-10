@@ -49,7 +49,7 @@ function getItemStyles(props) {
     // field token icon
     const shiftTokenX = (Device.isTouch() ? (TOKEN_WIDTH / 2) : (TOKEN_ICON_WIDTH / 2));
     const shiftTokenY = TOKEN_HEIGHT / 2;
-    const transform = `translate(${x - shiftTokenX}px, ${y - shiftTokenY}px)`;
+    const transform = `translate3d(${x - shiftTokenX}px, ${y - shiftTokenY}px, 0px)`;
 
     return {
         transform,

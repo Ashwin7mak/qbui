@@ -1,12 +1,16 @@
 import React from 'react';
+import {MemoryRouter} from 'react-router-dom';
+import {Provider} from "react-redux";
+import configureMockStore from "redux-mock-store";
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import _ from 'lodash';
 
 import {QBForm, __RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
-import {TabPane} from 'rc-tabs';
-import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
+
+import {ChildReport} from '../../src/components/QBForm/childReport';
+import thunk from 'redux-thunk';
 
 import {
     buildTestArrayBasedFormData,
@@ -208,10 +212,24 @@ describe('QBForm', () => {
 
     it('renders relationship elements if relationships exist', () => {
         const actualRelationship = testFormDataWithRelationship.formMeta.relationships[0];
+        const middlewares = [thunk];
 
-        const component = mount(<QBForm activeTab="0" formData={testFormDataWithRelationship}/>);
+        const mockS = configureMockStore(middlewares);
+        const store = mockS({
+            fields: {},
+            isTokenInMenuDragging: false,
+            //form: {}
+        });
+
+        const component = mount(
+            <MemoryRouter>
+                <Provider store={store}>
+                     <QBForm activeTab="0" formData={testFormDataWithRelationship}/>
+                </Provider>
+            </MemoryRouter>);
+
         const childReport = component.find('.referenceElement');
-        const childReportComponent = component.find(RelatedChildReport);
+        const childReportComponent = component.find(ChildReport);
 
         expect(childReport).toBePresent();
         expect(childReportComponent).toHaveProp('appId', actualRelationship.appId);

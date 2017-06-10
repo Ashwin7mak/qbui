@@ -11,6 +11,8 @@ import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
+import EmptyImage from 'APP/assets/images/empty box graphic.svg';
+import Locale from "../../../../reuse/client/src/locales/locale";
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -44,6 +46,80 @@ class StandardGrid extends Component {
         return `${this.props.id}-row-${rowData[this.props.rowKey]}`;
     }
 
+    /**
+     * stick the header and sticky first column when the grid scrolls
+     * If the sticky column needs to be implemented, check out the code from qbGrid.js in client-react
+     */
+    handleScroll = () => {
+
+        let scrolled = this.tableRef;
+        if (scrolled) {
+            let currentTopScroll = scrolled.scrollTop;
+
+            // move the headers down to their original positions
+            let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
+            for (let i = 0; i < stickyHeaders.length; i++) {
+                let translate = "translate(0," + currentTopScroll + "px)";
+                stickyHeaders[i].style.transform = translate;
+            }
+        }
+    }
+
+    bodyRef = (body) => {
+        this.tableRef = body && body.getRef().parentNode;
+    }
+
+    /**
+     * Render the grid when items exist
+     */
+    renderItemsExist = () => {
+        return (
+            <div className="gridContainer">
+                <Table.Provider
+                    className="qbGrid"
+                    columns={this.getColumns()}
+                    onScroll={this.handleScroll}
+                    components={tableSubComponents}
+                >
+                    <Table.Header className="qbHeader"/>
+
+                    <Table.Body
+                        className="qbTbody"
+                        rows={this.props.items}
+                        rowKey={this.getUniqueRowKey.bind(this)}
+                        onRow={onRowFn}
+                        ref={this.bodyRef}
+                    />
+                </Table.Provider>
+            </div>
+        );
+    }
+
+    /**
+     * Renders the no items found UI
+     */
+    renderNoItemsExist = () => {
+        return (
+            <div className="noItemsExist">
+                <div className="noItemsIconLine">
+                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
+                </div>
+                <div className="noRowsText">
+                    {Locale.getMessage(
+                        `${this.props.noItemsFound}`, {
+                            items: this.props.itemTypePlural,
+                            item: this.props.itemTypeSingular
+                        })}
+                </div>
+            </div>
+        );
+    }
+
+    /**
+     * The main render function for the StandardGrid component
+     * - Show the grid if items exist
+     * - else... show the noItemsExist UI
+     */
     render() {
         return (
             <div className="gridWrapper">
@@ -53,24 +129,10 @@ class StandardGrid extends Component {
                                      shouldSearch={this.props.shouldSearch}
                                      facetFields={this.props.facetFields}
                                      itemTypePlural={this.props.itemTypePlural}
-                                     itemTypeSingular={this.props.itemTypeSingular}/>
-                <div className="gridContainer">
-                    <Table.Provider
-                        className="qbGrid"
-                        columns={this.getColumns()}
-                        components={tableSubComponents}
-                        >
-
-                        <Table.Header className="qbHeader" />
-
-                        <Table.Body
-                            className="qbTbody"
-                            rows={this.props.items}
-                            rowKey={this.getUniqueRowKey.bind(this)}
-                            onRow={onRowFn}
-                            />
-                    </Table.Provider>
-                </div>
+                                     itemTypeSingular={this.props.itemTypeSingular}
+                                     itemsPerPage={this.props.itemsPerPage}
+                />
+                {!_.isEmpty(this.props.items) ? this.renderItemsExist() : this.renderNoItemsExist()}
             </div>
         );
     }
@@ -130,7 +192,17 @@ StandardGrid.propTypes = {
     /**
      * if should facet then the Facet Fields to display needs to be passed
      */
-    facetFields: PropTypes.array
+    facetFields: PropTypes.array,
+
+    /**
+     *  Number of items to be displayed in a page in the grid
+     */
+    itemsPerPage: PropTypes.number,
+
+    /**
+     *  The text to display if there are no items found
+     */
+    noItemsFound: PropTypes.string
 };
 
 

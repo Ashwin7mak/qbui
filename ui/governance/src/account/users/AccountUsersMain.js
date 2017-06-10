@@ -9,6 +9,8 @@ import * as SpinnerConfigurations from "../../../../client-react/src/constants/s
 import {isFetching} from "./AccountUsersReducer";
 import constants from "../../app/constants";
 
+import './accountUsersMain.scss';
+
 /**
  * Represents the top level page that contains top level components
  */
@@ -39,15 +41,17 @@ class AccountUsers extends Component {
         }
 
         return (
-            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
-                <div className="accountUsersContainer">
-                    <AccountUsersStage users={this.props.users}/>
-                    {/* This is the main grid that shows the users */}
-                    <AccountUsersGrid id={this.USERS_GRID_ID}
-                                      showAccountColumns={canSeeAccountColumns}
-                                      showRealmColumns={canSeeRealmColumns}/>
-                </div>
-            </Loader>
+            <div className="accountUsersMain">
+                <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
+                    <div className="accountUsersContainer">
+                        <AccountUsersStage users={this.props.users}/>
+                        {/* This is the main grid that shows the users */}
+                        <AccountUsersGrid id={this.USERS_GRID_ID}
+                                          showAccountColumns={canSeeAccountColumns}
+                                          showRealmColumns={canSeeRealmColumns}/>
+                    </div>
+                </Loader>
+            </div>
         );
     }
 }

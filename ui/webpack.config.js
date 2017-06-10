@@ -67,7 +67,7 @@ class MyNotifyPlugin {
                 //notify watched update is done
                 process.stdout.write('\x07');
                 if (stats.hasErrors()) {
-                    exec('growlnotify -n "Build" -m "Failed"');
+                    exec('growlnotify -n "BuildFailed" -m "Failed"');
                 } else {
                     exec('growlnotify -n "Build" -m "Built"');
                 }
@@ -76,11 +76,15 @@ class MyNotifyPlugin {
     }
 }
 
+// A plugin that prints timestamp to the console when webpack bundles update.
+const WatchTimePlugin = require('webpack-watch-time-plugin');
+
 // ------ START CONFIG ------
 const config = {
     // devtool Makes sure errors in console map to the correct file
     // and line number
     // eval-source-map is faster than 'source-map' for dev but eval is not supported for prod
+    //devtool: PROD ? 'source-map' : 'eval',
     devtool: PROD ? 'source-map' : 'eval-source-map',
     watchDelay: 50,
 
@@ -135,7 +139,6 @@ const config = {
             'bigdecimal',
             'bluebird',
             'cookie-parser',
-            'fluxxor',
             'intl',
             'intl/locale-data/jsonp/en',
             'intl/locale-data/jsonp/de',
@@ -338,7 +341,10 @@ const config = {
         }),
 
         // Optionally run the analyzer.
-        ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : [])
+        ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : []),
+
+        // Print timestamp on each webpack build
+        ...(LOCAL ? [WatchTimePlugin] : [])
     ]
 };
 

@@ -52,16 +52,32 @@ const reactSelectWrapper = React.createClass({
     },
 
     render() {
-        return (
-            <Select
-                onOpen={this.onOpen}
-                onClose={this.onClose}
-                {...this.props}
-                tabIndex={this.props.tabIndex}
-                disabled={this.props.isDisabled}
-            >
-                {this.props.children}
-            </Select>
+        return (this.props.isAddUser) ?
+             (<Select.Async
+                multi={false}
+                value={this.props.value}
+                onChange={this.props.onChange}
+                loadOptions={this.props.loadAsyncOptions}
+                ignoreCase={false}
+                cache={false}
+                optionRenderer={this.props.optionRenderer}
+                placeholder={this.props.placeholder}
+                onBlur={this.props.onBlur}
+                autoload={false}
+                loadingPlaceholder="Searching..."
+                filterOption={this.props.filterOption}
+                noResultsText={this.props.noResultsText}
+             />) :
+         (
+             <Select
+                 onOpen={this.onOpen}
+                 onClose={this.onClose}
+                 {...this.props}
+                 tabIndex={this.props.tabIndex}
+                 disabled={this.props.isDisabled}
+             >
+                 {this.props.children}
+             </Select>
         );
     }
 });

@@ -7,7 +7,6 @@
     //Load the page Objects
     let NewStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let RequestAppsPage = requirePO('requestApps');
     let UsersTablePage = requirePO('usersTable');
     let ReportContentPO = requirePO('reportContent');
     let ReportTableActionsPO = requirePO('reportTableActions');
@@ -42,11 +41,8 @@
          */
         beforeEach(function() {
             //load the users page
-            RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
-            //Wait until user table rows are loaded
-            ReportContentPO.waitForReportContent();
-            //Wait until you see new User button
-            return UsersTablePage.newUserBtn.waitForVisible();
+            //load the users page
+            return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });
 
         /**
@@ -67,7 +63,7 @@
             UsersTablePage.userStageContent.waitForVisible();
             browser.pause(e2eConsts.shortWaitTimeMs);
             // Verify the app owner name is linked
-            expect(browser.isEnabled('.appOwnerName')).toBeTruthy();
+            expect(browser.isEnabled('.appOwnerName')).toBe(true);
             // Click on the user Stage button to collapse the stage
             UsersTablePage.userStageBtn.click();
             browser.pause(e2eConsts.shortWaitTimeMs);
@@ -109,7 +105,7 @@
          */
         it('Should verify all the users emails are linked', function() {
             // Verify the user emails are linked
-            expect(UsersTablePage.userEmailUlEl.isExisting()).toBeTruthy();
+            expect(UsersTablePage.userEmailUlEl.isExisting()).toBe(true);
         });
     });
 }());

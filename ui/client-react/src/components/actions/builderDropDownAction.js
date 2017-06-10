@@ -1,8 +1,7 @@
 import React from 'react';
-import {MenuItem, Dropdown} from 'react-bootstrap';
+import {Dropdown} from 'react-bootstrap';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
-import * as UrlConsts from "../../constants/urlConstants";
 import URLUtils from '../../utils/urlUtils';
 import './builderDropDown.scss';
 
@@ -19,11 +18,11 @@ let BuilderDropDownAction = React.createClass({
         icon: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired,
         recId: React.PropTypes.string,
-        navigateToBuilder: React.PropTypes.func.isRequired,
+        navigateToFormBuilder: React.PropTypes.func.isRequired,
+        navigateToReportBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
         selectedApp: React.PropTypes.object,
         selectedTable: React.PropTypes.object,
-        navigateToBuilderReport: React.PropTypes.func,
         rptId: React.PropTypes.string
     },
 
@@ -32,12 +31,19 @@ let BuilderDropDownAction = React.createClass({
         this.props.history.push(link);
     },
 
+    getAutomationSettingsLink() {
+        let link = URLUtils.getAutomationSettingsLink(this.props.selectedApp.id);
+        this.props.history.push(link);
+    },
+
     getConfigOptions() {
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
         let isFormView = (isTableView && this.props.recId);
-        let isReportView = (isTableView && !this.props.recId && this.props.rptId);
-        let classes = "dropdownToggle globalActionLink";
+        // rptId > 0 are all reportRoute reports
+        let isReportView = (isTableView && !this.props.recId && this.props.rptId > 0);
+        let hasContextView = isFormView || isReportView;
+        let classes = "dropdownToggle globalActionLink" + (hasContextView ? " hasContextView" : "");
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >
             <a bsRole="toggle"
@@ -47,28 +53,62 @@ let BuilderDropDownAction = React.createClass({
             </a>
 
             <Dropdown.Menu>
-                <div className="configurationMenu">
+                <div className="configMenu">
+                    {isAppView ?
+                    <div className="configMenu--configSet configMenu__App">
+                        <h3 className="menuHeader"><I18nMessage message="settings.header"/></h3>
+                        <ul>
+                            <li>
+                                <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
+                                <span><I18nMessage message="settings.appHeader"/></span>
+                            </li>
+                            <li>
+                                <a onClick={this.getAutomationSettingsLink} className="modifyAutomationSettings">
+                                    <I18nMessage message="settings.automationSettings"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </div> : null}
                     {isTableView ?
-                    <div className="configSet withIcon">
-                        <li className="menuHeader heading"><I18nMessage message={"settings.header"}/></li>
-                        <li className="heading"><a>{this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
-                            <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
-                        <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
+                    <div className="configMenu--configSet configMenu__Table">
+                        <ul>
+                            <li>
+                                {this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
+                                <span><I18nMessage message="settings.tablesHeader"/></span>
+                            </li>
+                            <li>
+                                <a onClick={this.getTableSettingsLink} className="modifyTableSettings">
+                                    <I18nMessage message="settings.tableSettings"/>
+                                </a>
+                            </li>
+                        </ul>
                     </div> : null}
 
                     {isReportView &&
-                        <div className="configSet currentContext">
-                            <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
-                            <li><a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
-                                <I18nMessage message={"settings.configureReportBuilder"}/></a></li>
+                        <div className="configMenu--configSet configMenu__currentContext">
+                            <li className="heading">
+                                <span><I18nMessage message="settings.reportsHeader"/></span>
+                            </li>
+                            <li>
+                                <a className="modifyForm" onClick={this.props.navigateToReportBuilder}>
+                                    <I18nMessage message="settings.configureReportBuilder"/>
+                                </a>
+                            </li>
                         </div>
                     }
 
                     {isFormView ?
-                    <div className="configSet currentContext">
-                        <li className="heading"><a><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>
-                        <li><a className="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
-                            message={"settings.configureFormBuilder"}/></a></li>
+                    <div className="configMenu--configSet configMenu__currentContext">
+                        <ul>
+                            <li>
+                                <span><I18nMessage message="settings.formsHeader"/></span>
+                            </li>
+                            <li>
+                                <a onClick={this.props.navigateToFormBuilder} className="modifyForm">
+                                    <I18nMessage message="settings.configureFormBuilder"/>
+                                </a>
+                            </li>
+                        </ul>
                     </div> : null}
                 </div>
             </Dropdown.Menu>
@@ -79,9 +119,8 @@ let BuilderDropDownAction = React.createClass({
     },
 
     render() {
-        let isTableView = this.props.selectedApp && this.props.selectedTable ? true : false;
-        //For now this menu only shows for table/form view. Eventually this should show for all views with content dependent on the route.
-        return (isTableView ? <li className="link globalAction withDropdown builder">{this.getConfigOptions()}</li> : null);
+        let isAppView = !!this.props.selectedApp; // !! converts to boolean
+        return (isAppView ? <li className="link globalAction withDropdown builder">{this.getConfigOptions()}</li> : null);
     }
 });
 

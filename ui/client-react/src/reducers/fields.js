@@ -29,6 +29,21 @@ export const getFields = (state, appId, tblId) => {
     return fieldsList ? fieldsList.fields : [];
 };
 
+/**
+ * Determines if a particular field can be deleted from a form
+ * TODO:: Remove app argument and instead access current app from state once apps store is refactored to redux.
+ * @param state
+ * @param app
+ * @param tblId
+ * @param fieldId
+ * @returns {null|*|number|boolean}
+ */
+export const isFieldDeletable = (state, app, tblId, fieldId) => {
+    const currentTable = app ? _.find(app.tables, {id: tblId}) : null;
+
+    return !currentTable || !currentTable.recordTitleFieldId || currentTable.recordTitleFieldId !== fieldId;
+};
+
 const fieldsStore = (state = [], action) => {
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
@@ -63,9 +78,15 @@ const fieldsStore = (state = [], action) => {
     }
 
     case types.ADD_FIELD: {
-        let newField = _.cloneDeep(action.content.newField);
+        // New fields have a string id so we can detect a new vs existing field by checking if the id is a number or string.
+        // If a number, it is existing and we don't want to add it again.
+        if (Number.isInteger(action.content.field.id)) {
+            return state;
+        }
+
+        let field = _.cloneDeep(action.content.field);
         // Removes the FormFieldElement key which is not applicable to fields store, only matters on forms.
-        delete newField.FormFieldElement;
+        delete field.FormFieldElement;
 
         let {appId, tblId} = action;
 
@@ -75,10 +96,10 @@ const fieldsStore = (state = [], action) => {
             currentState = {
                 appId: appId,
                 tblId: tblId,
-                fields: [newField]
+                fields: [field]
             };
         } else {
-            currentState.fields.push(newField);
+            currentState.fields.push(field);
         }
 
         newState.push(currentState);

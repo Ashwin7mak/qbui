@@ -38,21 +38,24 @@ export default {
             },
             settings: "Einstellungen",
             users: {
-                addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
+                addUser: "Hinzufügen ein neu Benutzer",
                 users: "Benutzer",
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
-                unassignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
+                unAssignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
                 deleteUser: "Entfernen {Wert} Benutzer",
                 deleteUsers: "Entfernen {Wert} Benutzer",
                 removeButton: "Entfernen",
                 cancel: "Stornieren",
-                singular: "Benutzer",
                 plural: "Benutzer",
-                usersRemoved: " Benutzer wurden entfernt",
-                userRemoved: " Benutzer wurde entfernt"
-
+                usersRemovedFromAppRole: "{numOfUsers} Benutzer aus der App-Rolle entfernt",
+                userRemovedFromAppRole: "Benutzer aus der App-Rolle entfernt",
+                userAdded: "Benutzer hinzugefügt",
+                userAddError: "Fehler beim Hinzufügen von Benutzer",
+                userRemovingError: "Fehler beim Entfernen des Benutzers",
+                emailBody: "Email Körper geht hier",
+                emailSubject: "E-Mail-Thema geht hier"
             }
         },
         appMenu: {
@@ -93,6 +96,7 @@ export default {
             deleteTheseOverrides: "Löschen sie diesen Überschreibt?",
             more: "Mehr...",
             placeholder: 'Wählen...',
+            tablesPlaceholder: "Wählen Sie eine Tabelle aus...",
             notFound: "Nicht gefunden"
         },
         footer: {
@@ -129,7 +133,8 @@ export default {
         },
         field: {
             search: "Suche",
-            searchNoMatch: "Keiner stimmt mit"
+            searchNoMatch: "Keiner stimmt mit",
+            searchNoMatchAddUser: "Keine Benutzer passen zu dem, was du suchst"
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen.",
@@ -224,15 +229,38 @@ export default {
                     error: "Fehler beim Speichern des Formulars"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Rekord genehmigt.",
-                    error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
+            noParentRecordSelected: "Kein Datensatz ausgewählt"
+        },
+        automation: {
+            approverecord: {
+                success: "Rekord genehmigt.",
+                error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
+            },
+            testautomation: {
+                success: "Automatisierungstest erfolgreich.",
+                error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
+            },
+            automationList: {
+                nameHeader: "Name",
+                activeHeader: "Aktiv",
+                actionHeader: "Aktion",
+                actionButton: "Test",
+                activeYes: "Ja",
+                activeNo: "Nein"
+            },
+            automationView: {
+                stageHeading: "Automatisierung: {automationName}",
+                nameHeader: "Name",
+                triggerHeader: "Auslöser",
+                actionHeader: "Aktion",
+                actions: {
+                    email: "Eine E-Mail senden"
                 }
             }
         },
         relationship: {
-            childTable: "Kind Tisch"
+            childTable: "Kind Tisch",
+            addChildRecord: "{tableNoun} hinzufügen"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",
@@ -283,6 +311,12 @@ export default {
                 clearFacet: "Filter {facet} zurücksetzen",
                 clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
                 filter: "Filter"
+            },
+            notification: {
+                save: {
+                    success: "Bericht gespeichert",
+                    error: "Fehler beim Speichern des Berichts"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
@@ -558,6 +592,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Bewertung",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formel",
+            [FieldFormats.LINK_TO_RECORD]: "Erhalten Sie einen anderen Rekord",
+            LINK_TO_RECORD_FROM: "Erhalten Sie einen anderen Rekord von {parentTable}",
             FORMULA: "Formel",
             SCALAR: "Skalar",
             CONCRETE: "Beton",
@@ -570,14 +606,21 @@ export default {
             title: "Felderigenschaften",
             name: "Name",
             required: "Muss ausgefüllt werden",
-            multiChoice: "Wahlen"
+            multiChoice: "Wahlen",
+            unique: "Muss einmalige Werte haben",
+            linkToRecord: "Link zu einem Datensatz in der Tabelle",
+            connectedTo: "Auf {fieldName}-Feld verbunden"
         },
         builder: {
             tabs: {
                 existingFields: 'Fügen Sie ein vorhandenes Feld hinzu',
                 newFields: 'Erstellen Sie ein neues Feld',
             },
+            reportBuilder: {
+                modify: 'Bericht ändern'
+            },
             formBuilder: {
+                modify: 'Formular ändern',
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
                 newFieldsMenuTitle: 'Neu',
@@ -608,6 +651,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Erstellen Sie eine numerische Auswahlliste und fügen Sie sie dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Erstellen Sie numerische Optionsfelder und fügen Sie sie dem Formular hinzu",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Radio-Optionsfeld erstellen und sie dem Formular hinzufügen",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
             fieldGroups: {
@@ -615,14 +659,22 @@ export default {
                 numeric: "Nummer",
                 date: "Datum",
                 other: "Andere",
-                relationships: "Beziehungen"
+                relationships: "Beziehungen",
+                tableDataConnections: "Tabellendatenverbindungen"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
             },
-            modify: 'Formular ändern'
+            linkToRecord: {
+                dialogTitle: "Erhalten Sie einen anderen Rekord",
+                addToForm: "Fügen Sie hinzu",
+                tableChooserDescription: "Wenn Sie ein {tableNoun} erstellen oder aktualisieren, können Sie nachschlagen und Informationen aus einem Datensatz in einer anderen Tabelle erhalten.",
+                tableChooserHeading: "Wo ist die Platte, die du bekommen willst?",
+                advancedSettingsHeading: "Erweiterte Einstellungen",
+                fieldChooserDescription: "Um einen Datensatz in der {tableName} Tabelle zu erhalten, wird eine automatische Zuordnung mit einem eindeutigen und erforderlichen Feld erstellt. Um ein anderes Feld auszuwählen, kannst du aus der folgenden Liste auswählen. Sie können dieses Feld nicht ändern, sobald Sie es Ihrem Formular hinzufügen."
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -703,8 +755,9 @@ export default {
         },
         settings: {
             header: "Einstellungen",
+            appHeader: "App",
+            automationSettings: "Automatisierungseinstellungen",
             tablesHeader: "Tabelle",
-            appsHeader: "Table",
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
@@ -725,6 +778,21 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
+        },
+        addUserToApp: {
+            title: "Benutzer hinzufügen",
+            description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
+            searching: "Suchen...",
+            userSuccessTitle: "Deine App hat neuen Benutzer!",
+            userSuccessText: "Lassen Sie sie wissen, dass sie Zugang zu Ihrer App haben, indem Sie den Link mit ihnen teilen.",
+            copy: "Kopieren",
+            email: "Email",
+            toCopy: "Klicken Sie auf Kopieren in die Zwischenablage",
+            toEmail: "Klicken Sie hier, um eine E-Mail zu senden",
+            userSuccessDialogOK: "Nein Danke",
+            copied: "Link kopiert",
+            messageSubject:"Link zum {App Name} App",
+            messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}"
         }
     }
 };

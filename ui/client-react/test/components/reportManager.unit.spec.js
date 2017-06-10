@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import ReportManager from '../../src/components/report/reportManager';
+import {ReportManager} from '../../src/components/report/reportManager';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -32,22 +32,20 @@ describe('Report Manager functions', () => {
 
     let component;
 
-    const flux = {
-        actions: {
-            filterReportsByName: () => {return;}
-        }
+    let props = {
+        filterReportsByName: () => {}
     };
 
     beforeEach(() => {
-        spyOn(flux.actions, 'filterReportsByName');
+        spyOn(props, 'filterReportsByName');
     });
 
     afterEach(() => {
-        flux.actions.filterReportsByName.calls.reset();
+        props.filterReportsByName.calls.reset();
     });
 
     it('test render opened with report list', () => {
-        component = TestUtils.renderIntoDocument(<ReportManager flux={flux}
+        component = TestUtils.renderIntoDocument(<ReportManager {...props}
                                                                 reportsData={reportsTestData}
                                                                 onSelectReport={()=>{}} />);
 
@@ -60,7 +58,7 @@ describe('Report Manager functions', () => {
     });
 
     it('test searching report list', () => {
-        component = TestUtils.renderIntoDocument(<ReportManager flux={flux}
+        component = TestUtils.renderIntoDocument(<ReportManager {...props}
                                                                 filterReportsName="Changes"
                                                                 reportsData={reportsTestData}
                                                                 onSelectReport={()=>{}} />);
@@ -76,6 +74,6 @@ describe('Report Manager functions', () => {
         searchInputBox.value = "Changes";
         TestUtils.Simulate.change(searchInputBox);
 
-        expect(flux.actions.filterReportsByName).toHaveBeenCalledWith("Changes");
+        expect(props.filterReportsByName).toHaveBeenCalledWith("Changes");
     });
 });

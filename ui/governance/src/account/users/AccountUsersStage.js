@@ -7,6 +7,8 @@ import Locale from "../../../../reuse/client/src/locales/locale";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import lodash from "lodash";
 
+import "./AccountUsersStage.scss";
+
 /**
  * The stage for the AccountUsers page
  */
@@ -46,7 +48,7 @@ class AccountUsersStage extends React.Component {
             <Stage stageHeadline={
                 <StageHeader
                     title={Locale.getMessage("governance.account.users.stageTitle")}
-                    icon="users"
+                    icon="settings"
                     iconClassName="governanceAccountUsersStageIcon"
                     description={
                         <p>

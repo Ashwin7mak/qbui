@@ -6,9 +6,11 @@
     var consts = require('../../../common/src/constants');
     var log = require('../../src/logger').getLogger();
     var requestUtils = require('../../src/utility/requestUtils');
+    var crypto = require('crypto');
     var _ = require('lodash');
     //This is the url that will be used for making requests to the node server or the java server
     var baseUrl;
+    var confTicket;
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -26,10 +28,6 @@
 
     module.exports = function(config) {
         //Module constants
-        var HTTPS_REGEX = /https:\/\/.*/;
-
-        var HTTP = 'http://';
-        var HTTPS = 'https://';
         var QBUI_BASE_ENDPOINT = '/qbui';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
@@ -44,6 +42,7 @@
         var RECORDS_ENDPOINT = '/records/';
         var RECORDS_BULK = '/records/bulk';
         var REALMS_ENDPOINT = '/realms/';
+        var PRIVATE_USERS_ENDPOINT = '/private/users/';
         var USERS_ENDPOINT = '/users/';
         var BULK_USERS_ENDPOINT = '/users/bulk';
         var ROLES_ENDPOINT = '/roles/';
@@ -58,8 +57,15 @@
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
         var TICKET_HEADER_KEY = 'ticket';
+        var PRIVATE_API_AUTH_HEADER = 'Authorization';
+        var PRIVATE_API_SALT_HEADER = 'Authorization-Salt';
         var DEFAULT_HEADERS = {};
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
+        var PRIVATE_API_HEADERS = {};
+        var apiSalt = generateSalt();
+        PRIVATE_API_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
+        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode('e4d1d39f-3352-474e-83bb-74dda6c4d8d7', apiSalt);
+        PRIVATE_API_HEADERS[PRIVATE_API_SALT_HEADER] = apiSalt;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
         var TABLES_PROPERTIES = '/tableproperties/';
@@ -67,84 +73,20 @@
         var REQ_USER = 'reqUser';
         //add comment about this usage
         baseUrl = config === undefined ? '' : config.DOMAIN;
+        confTicket = config === undefined ? '' : config.ticket;
 
-        //Resolves a full URL using the instance subdomain and the configured javaHost
         function resolveFullUrl(realmSubdomain, path) {
-            var fullPath;
-            var protocol = HTTP;
-            log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain);
+            log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain + ' for base url: ' + baseUrl);
 
-            var methodLess;
-            if (HTTPS_REGEX.test(baseUrl)) {
-                protocol = HTTPS;
-                methodLess = baseUrl.replace(HTTPS, '');
-            } else {
-                methodLess = baseUrl.replace(HTTP, '');
-            }
-
-            log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
-            //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
-            //This is required for actions like ticket creation and realm creation
-            //Both of these requests must now hit localhost.<javaHostUrl> to create the admin ticket and new realm
             if (realmSubdomain === '') {
-                fullPath = protocol + ADMIN_REALM + '.' + methodLess + path;
-                log.debug('resulting fullpath: ' + fullPath);
-            } else {
-                fullPath = protocol + realmSubdomain + '.' + methodLess + path;
-                log.debug('resulting fullpath: ' + fullPath);
+                realmSubdomain = ADMIN_REALM;
             }
 
-            return fullPath;
-        }
+            let url = baseUrl.replace('://', '://' + realmSubdomain + '.') + path;
+            log.info('Full URL: ' + url);
+            log.debug('resulting fullpath: ' + url);
 
-
-        //Resolves a full EE URL using the instance subdomain and the configured javaHost
-        function resolveEEFullUrl(realmSubdomain, path) {
-            var fullPath;
-            var protocol = HTTP;
-
-            if (path) {
-                path = path.replace('/api/api/', '/ee/');
-            }
-
-            log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain);
-
-            var methodLess;
-            if (HTTPS_REGEX.test(baseUrl)) {
-                protocol = HTTPS;
-                methodLess = baseUrl.replace(HTTPS, '');
-            } else {
-                methodLess = baseUrl.replace(HTTP, '');
-            }
-
-            log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
-            //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
-            //This is required for actions like ticket creation and realm creation
-            //Both of these requests must now hit localhost.<javaHostUrl> to create the admin ticket and new realm
-            if (realmSubdomain === '') {
-                fullPath = protocol + ADMIN_REALM + '.' + methodLess + path;
-                log.debug('resulting fullpath: ' + fullPath);
-            } else {
-                fullPath = protocol + realmSubdomain + '.' + methodLess + path;
-                log.debug('resulting fullpath: ' + fullPath);
-            }
-
-            return fullPath;
-        }
-
-        //Private helper method to generate a request options object
-        function generateRequestOpts(stringPath, method, realmSubdomain) {
-            return {
-                url   : resolveFullUrl(realmSubdomain, stringPath),
-                method: method
-            };
-        }
-
-        function generateEERequestOpts(stringPath, method, realmSubdomain) {
-            return {
-                url   : resolveEEFullUrl(realmSubdomain, stringPath),
-                method: method
-            };
+            return url;
         }
 
         //Generates and returns a psuedo-random 32 char string that is URL safe
@@ -167,7 +109,25 @@
 
         //Generates and returns a psuedo-random email string
         function generateEmail() {
-            return generateString(10) + '_' + generateString(10) + '@intuit.com';
+            return generateString(10) + '_' + generateString(10) + '@quickbase.com';
+        }
+
+        // generates a salt for use with private apis (these should only be used in testing)
+        function generateSalt() {
+            var prime_length = 32;
+            var diffHell = crypto.createDiffieHellman(prime_length);
+            diffHell.generateKeys('base64');
+            return diffHell;
+        }
+
+        // hashes + encodes secret and salt for use with private apis (these should only be used in testing)
+        function hashAndEncode(secret, salt) {
+            var saltedSecret = secret + salt;
+
+            var sha256 = crypto.createHash("sha256");
+            sha256.update(saltedSecret);
+            var result = sha256.digest("base64");
+            return result;
         }
 
         var apiBase = {
@@ -271,8 +231,8 @@
             resolveHealthEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + HEALTH_ENDPOINT;
             },
-            resolveUsersEndpoint        : function(userId) {
-                var endpoint = JAVA_BASE_ENDPOINT + USERS_ENDPOINT;
+            resolvePrivateUsersEndpoint        : function(userId) {
+                var endpoint = JAVA_BASE_ENDPOINT + PRIVATE_USERS_ENDPOINT;
                 if (userId) {
                     endpoint = endpoint + userId;
                 }
@@ -336,40 +296,39 @@
                     params = temp.params;
                 }
 
-                //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
-                var subdomain = '';
+                let path = isEE ? stringPath.replace('/api/api/', '/ee/') : stringPath;
+                return apiBase.executeRequestToPath(path, method, body, headers, params);
+            },
+
+            executeRequestToPath:function(path, method, body, headers, parameters) {
+                let subdomain = '';
                 if (this.realm) {
                     subdomain = this.realm.subdomain;
                 }
-                var opts;
-                if (isEE) {
-                    opts = generateEERequestOpts(stringPath, method, subdomain);
-                } else {
-                    opts = generateRequestOpts(stringPath, method, subdomain);
-                }
+
+                let requestOptions = {
+                    url: resolveFullUrl(subdomain, path),
+                    method: method,
+                    headers: headers ? headers : DEFAULT_HEADERS
+                };
+
                 if (body) {
-                    opts.body = jsonBigNum.stringify(body);
+                    requestOptions.body = jsonBigNum.stringify(body);
                 }
+
                 // if we have a GET request and have params to add (since GET requests don't use JSON body values)
                 // we have to add those to the end of the generated URL as ?param=value
-                if (params) {
+                if (parameters) {
                     // remove the trailing slash and add the parameters
-                    opts.url = opts.url.substring(0, opts.url.length - 1) + params;
+                    requestOptions.url = requestOptions.url.substring(0, requestOptions.url.length - 1) + parameters;
                 }
-                //Setup headers
-                if (headers) {
-                    opts.headers = headers;
-                } else {
-                    opts.headers = DEFAULT_HEADERS;
-                }
-                if (this.authTicket) {
-                    opts.headers[TICKET_HEADER_KEY] = this.authTicket;
-                }
-                var reqInfo = opts.url;
-                log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
 
-                //Make request and return promise
-                return apiBase.executeRequestRetryable(opts, 3);
+                if (this.authTicket) {
+                    requestOptions.headers[TICKET_HEADER_KEY] = this.authTicket;
+                }
+
+                log.debug('About to execute the request: ' + jsonBigNum.stringify(requestOptions));
+                return apiBase.executeRequestRetryable(requestOptions, 3);
             },
 
             executeRequestRetryable: function(opts, numRetries) {
@@ -416,11 +375,14 @@
             //Creates a REST request Object against the instance's realm using the configured javaHost
             createRequestObject              : function(stringPath, method, body, headers, params) {
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
-                var subdomain = '';
+                let subdomain = '';
                 if (this.realm) {
                     subdomain = this.realm.subdomain;
                 }
-                var opts = generateRequestOpts(stringPath, method, subdomain);
+                let opts = {
+                    url   : resolveFullUrl(subdomain, stringPath),
+                    method: method
+                };
                 if (body) {
                     opts.body = jsonBigNum.stringify(body);
                 }
@@ -507,7 +469,7 @@
             },
             //Create user helper method generates an specific user, calls execute request and returns a promise
             createSpecificUser: function(userToMake) {
-                return this.executeRequest(this.resolveUsersEndpoint(), consts.POST, userToMake, DEFAULT_HEADERS);
+                return this.executeRequest(this.resolvePrivateUsersEndpoint(), consts.POST, userToMake, PRIVATE_API_HEADERS);
             },
             //Create user helper method generates an arbitrary user, calls execute request and returns a promise
             createUser        : function() {
@@ -516,9 +478,8 @@
                     lastName         : generateString(10),
                     screenName       : generateString(10),
                     email            : generateEmail(),
-                    password         : 'quickbase',
-                    challengeQuestion: 'who is your favorite scrum team?',
-                    challengeAnswer  : 'blue'
+                    deactivated      : false,
+                    administrator    : false
                 };
                 return this.createSpecificUser(userToMake);
             },
@@ -581,7 +542,11 @@
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket      : function(realmId) {
-                return this.executeRequest(this.resolveTicketEndpoint() + realmId, consts.GET, '', DEFAULT_HEADERS);
+                if (confTicket) {
+                    return promise.resolve({body:confTicket});
+                } else {
+                    return this.executeRequest(this.resolveTicketEndpoint() + realmId, consts.GET, '', DEFAULT_HEADERS);
+                }
             },
             //Deletes a realm, if one is set on the instance, returns a promise
             cleanup           : function() {

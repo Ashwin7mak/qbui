@@ -11,11 +11,10 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/compon
 import TableCreationPanel from '../tableCreationPanel';
 import QBModal from '../../qbModal/qbModal';
 import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable} from '../../../actions/tablePropertiesActions';
+import {updateAppTableProperties} from '../../../actions/appActions';
 import _ from 'lodash';
 
 import './tableProperties.scss';
-
-
 
 export const TablePropertiesRoute = React.createClass({
 
@@ -27,9 +26,8 @@ export const TablePropertiesRoute = React.createClass({
         };
     },
     getExistingTableNames() {
-        if (this.props.app && this.props.app.tables) {
+        if (_.has(this.props, 'app.tables') &&  _.has(this.props, 'table.name')) {
             const tableNames = this.props.app.tables.map((table) => table.name);
-
             return _.without(tableNames, this.props.table.name);
         }
         return [];
@@ -49,12 +47,14 @@ export const TablePropertiesRoute = React.createClass({
         }
     },
     componentWillReceiveProps(nextProps) {
-        if ((nextProps.table && this.props.table && this.props.table.id !== nextProps.table.id) || (!this.props.table && nextProps.table)) {
+        if (!_.isEqual(nextProps.table, this.props.table)) {
             nextProps.loadTableProperties(nextProps.table);
         }
     },
     updateTable() {
-        this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
+        if (_.has(this.props, 'app.id') && _.has(this.props, 'table.id') && _.has(this.props, 'tableProperties.tableInfo')) {
+            this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
+        }
     },
     handleDeletePrompt(event) {
         if (event.target.value === Locale.getMessage('tableEdit.YES')) {
@@ -87,7 +87,9 @@ export const TablePropertiesRoute = React.createClass({
         this.setState({confirmDeletesDialogOpen: false});
     },
     handleTableDelete() {
-        this.props.deleteTable(this.props.app.id, this.props.table.id);
+        if (_.has(this.props, 'app.id') && _.has(this.props, 'table.id')) {
+            this.props.deleteTable(this.props.app.id, this.props.table.id);
+        }
     },
     updateTableProperties(appId, tableId, tableInfo) {
         this.props.updateTable(appId, tableId, tableInfo).then(
@@ -99,7 +101,7 @@ export const TablePropertiesRoute = React.createClass({
                     tableInfoObj[key] = updatedTableInfo[key].value;
                 });
 
-                this.props.flux.actions.updateTableProps(this.props.table.id, tableInfoObj);
+                this.props.updateAppTableProperties(appId, tableId, tableInfoObj);
             },
             (error) => {
                 NotificationManager.error(Locale.getMessage('tableEdit.tableUpdateFailed'), Locale.getMessage('failed'));
@@ -162,7 +164,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable
+    updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable, updateAppTableProperties
 };
 
 export default connect(

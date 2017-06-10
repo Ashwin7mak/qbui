@@ -76,15 +76,19 @@ $edit-icon-font-size: 18px;
         z-index: $zindex-qbGrid-th;
 
         &.placeholderCell {
-            background-color: $color-orange-100;
-            border-left: 1px dashed $color-black-600;
-            border-right: 1px dashed $color-black-600;
+            background-color: $color-purple-100;
+            border-left: 1px dashed $color-purple-600;
+            border-right: 1px dashed $color-purple-600;
             border-bottom: none;
-            border-top: 1px dashed $color-black-600;
+            border-top: 1px dashed $color-purple-600;
 
             &:last-of-type {
-                border-right: 1px dashed $color-black-600;
+                border-right: 1px dashed $color-purple-600;
             }
+        }
+
+        &.isDraggable {
+            cursor: move;
         }
 
         // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
@@ -100,11 +104,6 @@ $edit-icon-font-size: 18px;
             border-right: 1px solid $grid-column-header-border-color;
             width: 100%;
         }
-
-        &:hover {
-            cursor: move;
-        }
-
     }
 
     // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
@@ -143,6 +142,7 @@ $edit-icon-font-size: 18px;
             font-size: $font-size-h6;
             font-weight: 400;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .qbIcon {
@@ -217,14 +217,14 @@ $edit-icon-font-size: 18px;
         max-width: 80px;
         position: relative;
         vertical-align: top;
-        background-color: $color-orange-100;
-        border-left: 1px dashed $color-black-600;
-        border-right: 1px dashed $color-black-600;
+        background-color: $color-purple-100;
+        border-left: 1px dashed $color-purple-600;
+        border-right: 1px dashed $color-purple-600;
         border-bottom: none;
         border-top: none;
 
         &:last-of-type {
-            border-right: 1px dashed $color-black-600;
+            border-right: 1px dashed $color-purple-600;
         }
     }
 

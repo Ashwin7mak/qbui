@@ -26,7 +26,7 @@ $toolpalette-header-font-size: 10px;
         cursor: pointer;
     }
 
-    .listOfElementsMainList, .listOfElementsItemList {
+    .listOfElementsMainList, .listOfElementsItemList, .animatedListOfElementsItemList {
         list-style-type: none;
         padding: 0;
     }
@@ -38,7 +38,7 @@ $toolpalette-header-font-size: 10px;
         }
     }
 
-    .listOfElementsItemList {
+    .listOfElementsItemList, .animatedListOfElementsItemList {
         padding-left: 0;
         padding-right: 0;
         padding-top: 0;

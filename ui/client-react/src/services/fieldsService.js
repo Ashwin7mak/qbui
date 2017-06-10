@@ -13,7 +13,8 @@ class FieldsService extends BaseService {
         //  Fields Service API endpoints.
         this.API = {
             GET_FIELD     : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}/{2}`,
-            GET_FIELDS    : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}`
+            GET_FIELDS    : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}`,
+            DELETE_FIELD  : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}/{2}`,
         };
     }
 
@@ -62,6 +63,10 @@ class FieldsService extends BaseService {
         return super.patch(url, field);
     }
 
+    deleteField(appId, tableId, fieldId) {
+        let url = super.constructUrl(this.API.DELETE_FIELD, [appId, tableId, fieldId]);
+        return super.delete(url);
+    }
 }
 
 export default FieldsService;

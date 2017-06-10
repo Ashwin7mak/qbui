@@ -1,24 +1,19 @@
 import React from 'react';
 import PageTitle from '../pageTitle/pageTitle';
-import Fluxxor from 'fluxxor';
 import Stage from '../../../../reuse/client/src/components/stage/stage';
 import Locale from '../../locales/locales';
 import MyAppsPage from './myAppsPage';
+import {connect} from 'react-redux';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
+import {showTopNav} from '../../actions/shellActions';
 
 /**
  * placeholder for my apps route
  */
-let AppsRoute = React.createClass({
-    mixins: [FluxMixin],
-
+export const AppsRoute = React.createClass({
     componentDidMount() {
         // no title for now...
-        let flux = this.getFlux();
-        flux.actions.showTopNav();
-        flux.actions.setTopTitle();
-
+        this.props.showTopNav();
     },
 
     getStageHeadline() {
@@ -46,4 +41,12 @@ let AppsRoute = React.createClass({
     }
 });
 
-export default AppsRoute;
+
+const mapDispatchToProps = (dispatch) => {
+    return {showTopNav};
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(AppsRoute);

@@ -199,6 +199,7 @@ export function buildTestArrayBasedFormData() {
             tableId: 2,
             appId: 3,
             name: 'Test Form',
+            fields: [],
             tabs: [
                 {
                     orderIndex: 0,

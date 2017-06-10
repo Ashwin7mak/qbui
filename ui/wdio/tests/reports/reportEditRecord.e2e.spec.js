@@ -95,9 +95,9 @@
                 ReportInLineEditPO.clickSaveChangesButton();
                 //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
                 //ReportInLineEditPO.assertSuccessMessage(successMessage);
-                expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
-                expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
-                expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
+                expect(browser.isVisible('.qbRow.editing .saveRecord')).toBe(false);
+                expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBe(false);
+                expect(browser.isVisible('.qbRow.editing .addRecord')).toBe(false);
 
                 // Step 5 - Reload the report after saving
                 e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
@@ -137,9 +137,9 @@
                     ReportInLineEditPO.clickCancelButton();
 
                     //Step 5 - Extra Assertions for inline Edit to be invisible
-                    expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
-                    expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
-                    expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
+                    expect(browser.isVisible('.qbRow.editing .saveRecord')).toBe(false);
+                    expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBe(false);
+                    expect(browser.isVisible('.qbRow.editing .addRecord')).toBe(false);
 
                     // Check that the edit was not persisted on report
                     var fieldValues2 = ReportContentPO.getRecordValues(1);

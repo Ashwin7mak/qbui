@@ -10,7 +10,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './../record/record';
 import {Link, withRouter} from 'react-router-dom';
 import simpleStringify from '../../../../common/src/simpleStringify';
-import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
@@ -27,19 +26,20 @@ import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
+import {selectAppTable} from '../../actions/appActions';
+import {showTopNav} from '../../actions/shellActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
 import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
-
+import RecordService from '../../services/recordService';
 import RecordInDrawer from '../drawer/recordInDrawer';
 import ReportInDrawer from '../drawer/reportInDrawer';
 import {getRecordTitle} from '../../utils/formUtils';
-
+import QueryUtils from '../../utils/queryUtils';
 let logger = new Logger();
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * record route component
@@ -47,7 +47,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * Note: this component has been partially migrated to Redux
  */
 export const RecordRoute = React.createClass({
-    mixins: [FluxMixin],
 
     // TODO: remove
     getInitialState() {
@@ -55,11 +54,9 @@ export const RecordRoute = React.createClass({
     },
 
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
-        const flux = this.getFlux();
-
-        //selected table does not chane when in a drawer
+        //selected table does not change when in a drawer
         if (!this.props.isDrawerContext) {
-            flux.actions.selectTableId(tblId);
+            this.props.selectTable(appId, tblId);
         }
 
         // ensure the search input is empty
@@ -94,10 +91,7 @@ export const RecordRoute = React.createClass({
         }
     },
     componentDidMount() {
-        let flux = this.getFlux();
-        flux.actions.hideTopNav();
-        flux.actions.setTopTitle();
-
+        this.props.showTopNav();
         this.loadRecordFromParams();
     },
 
@@ -108,7 +102,7 @@ export const RecordRoute = React.createClass({
         if (this.props.match.params.appId !== prev.match.params.appId ||
             this.props.match.params.tblId !== prev.match.params.tblId ||
             this.props.match.params.recordId !== prev.match.params.recordId ||
-            (viewData && viewData.syncLoadedForm)) {
+            (viewData && viewData.syncFormForRecordId === this.props.match.params.recordId)) {
 
             this.loadRecordFromParams();
         }
@@ -308,7 +302,7 @@ export const RecordRoute = React.createClass({
             const showBack = _.get(record, 'previousRecordId') && _.get(reportData, 'data.keyField.name');
             const showNext = _.get(record, 'nextRecordId') && _.get(reportData, 'data.keyField.name');
             if (this.props.isDrawerContext) {
-                recordIdTitle = this.props.match.params.drawerRecId;
+                recordIdTitle = this.props.match.params.recordId;
             }
             const selectedTable = this.getSelectedTable(this.props.match.params.tblId);
             const tableName = _.get(selectedTable, 'name') || '';
@@ -420,6 +414,7 @@ export const RecordRoute = React.createClass({
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
                 match={this.props.match}
+                direction={Breakpoints.isSmallBreakpoint() ? 'bottom' : 'right'}
                 />);
     },
 
@@ -480,7 +475,7 @@ export const RecordRoute = React.createClass({
 
         return !viewData ||
             !_.isEqual(viewData.formData, nextData.formData) ||
-            !_.isEqual(viewData.syncLoadedForm, nextData.syncLoadedForm) ||
+            !_.isEqual(viewData.syncFormForRecordId, nextData.syncFormForRecordId) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
             !_.isEqual(viewData.loading, nextData.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
@@ -507,6 +502,34 @@ export const RecordRoute = React.createClass({
         if (this.props.history) {
             this.props.history.push(link);
         }
+    },
+
+    /***
+     * handles clicking on parent from a record
+     * @param appId master app id
+     * @param tblId master table id
+     * @param fieldId master table field id to specify the column in the master table
+     * @param value record in the particular column specified by the field id
+     */
+    goToParent(appId, tblId, fieldId, value) {
+        const defaultReportId = '0';
+        const recordService = new RecordService();
+        const queryParams = {
+            query: QueryUtils.parseStringIntoExactMatchExpression(fieldId, value)
+        };
+        let promise = recordService.getRecords(appId, tblId, queryParams);
+        promise.then((data) => {
+            //retrieve the rec id from response data
+            const recId = data.data.records[0][0].value;
+            const existingPath = this.props.location.pathname;
+            const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, defaultReportId, recId);
+            const link = existingPath + recordDrawerSegment;
+            if (this.props.history) {
+                this.props.history.push(link);
+            }
+        }).catch((recordResponseError) => {
+            logger.parseAndLogError(LogLevel.ERROR, recordResponseError.response, 'recordService.getRecords:');
+        });
     },
 
     /**
@@ -561,7 +584,8 @@ export const RecordRoute = React.createClass({
                                     formData={viewData ? viewData.formData : null}
                                     appUsers={this.props.appUsers}
                                     handleDrillIntoChild={this.handleDrillIntoChild}
-                                    />
+                                    goToParent={this.goToParent}
+                                    uniqueId={this.props.uniqueId}/>
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
@@ -613,7 +637,11 @@ const mapDispatchToProps = (dispatch) => {
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
-        }
+        },
+        selectTable: (appId, tableId) => {
+            dispatch(selectAppTable(appId, tableId));
+        },
+        showTopNav
     };
 };
 
