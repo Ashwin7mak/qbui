@@ -7,14 +7,12 @@ import {connect} from "react-redux";
 import FacetSelections from "../../../../../reuse/client/src/components/facets/facetSelections";
 import StandardGridFacetsMenu from "./StandardGridFacetsMenu";
 import _ from "lodash";
-import constants from "../../../app/constants";
-
 import "./StandardGridToolBar.scss";
 
 /**
  * The toolbar for Standard Grid
  */
-class StandardGridToolBar extends Component {
+export class StandardGridToolBar extends Component {
 
     handleFacetSelect = (facet, value) => {
         let newSelections = _.isEmpty(this.props.facetSelections) ? new FacetSelections() : this.props.facetSelections.copy();
@@ -86,11 +84,6 @@ class StandardGridToolBar extends Component {
     }
 }
 
-StandardGridToolBar.defaultProps = {
-    shouldFacet: true,
-    shouldSearch: true
-};
-
 StandardGridToolBar.propTypes = {
     /**
      * ID of the Grid
@@ -134,6 +127,11 @@ StandardGridToolBar.propTypes = {
     itemsPerPage: PropTypes.number
 };
 
+StandardGridToolBar.defaultProps = {
+    shouldFacet: true,
+    shouldSearch: true
+};
+
 const mapStateToProps = (state, ownProps) => {
     let facetInfo = (state.Grids[ownProps.id] || {}).facets || {};
     let paginationInfo = (state.Grids[ownProps.id] || {}).pagination || {};
@@ -144,7 +142,6 @@ const mapStateToProps = (state, ownProps) => {
         searchTerm: (state.Grids[ownProps.id] || {}).searchTerm || '',
     };
 };
-
 
 /**
  * Every one of these actions have the pattern of Setting the State and Informing an Update
@@ -182,7 +179,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
     };
 };
-
-export {StandardGridToolBar};
 
 export default connect(mapStateToProps, mapDispatchToProps)(StandardGridToolBar);

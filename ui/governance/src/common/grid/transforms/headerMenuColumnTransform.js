@@ -31,7 +31,7 @@ class HeaderMenuColumnTransform extends ColumnTransform {
      * @param extra - Data from react tabular.
      * @returns JSX describing the header content for the given column
      */
-    headerFormatter(value, extra) {
+    headerFormatter = (value, extra) => {
         return (
             <span className="gridHeaderCell">
                 <span className="gridHeaderLabel">{value}</span>
@@ -50,15 +50,15 @@ class HeaderMenuColumnTransform extends ColumnTransform {
                 </div>
             </span>
         );
-    }
+    };
 
     /**
      * Adds the formatter to the column's definition
      * @param column - the original columns
      * @returns [*] : a new column definition
      */
-    apply(columns) {
-        let boundFormatterFn = this.headerFormatter.bind(this);
+    apply = (columns) => {
+        let boundFormatterFn = this.headerFormatter;
 
         return columns.map(column => ({
             ...column,
@@ -67,7 +67,7 @@ class HeaderMenuColumnTransform extends ColumnTransform {
                 formatters: [...(column.header.formatters || []), boundFormatterFn]
             }
         }));
-    }
+    };
 }
 
 export default HeaderMenuColumnTransform;
