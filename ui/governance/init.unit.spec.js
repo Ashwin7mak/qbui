@@ -15,7 +15,7 @@ console.log("All 'Failed Context Types' warning messages logged by the use of Re
     " temporarily disabled from printing to the console until React is upgraded to v15.3.0" +
     " see http://fb.me/use-check-prop-types");
 jasmine.getEnv().topSuite().beforeEach({fn: function() {
-    var error = console.error;
+    let error = console.error;
     console.error = function() {
         if (arguments && arguments[0] && !arguments[0].includes("Warning: Failed Context Types: Calling PropTypes validators directly is not supported by the \`prop-types\` package.")) {
             error.apply(console, arguments);

@@ -30,8 +30,8 @@ class AccountUsers extends Component {
     }
 
     render() {
-        var canSeeAccountColumns = false;
-        var canSeeRealmColumns = false;
+        let canSeeAccountColumns = false;
+        let canSeeRealmColumns = false;
 
         if (this.props.requestUser && this.props.requestRealm) {
             canSeeAccountColumns = this.props.requestUser.isAccountAdmin || this.props.requestUser.isCSR;

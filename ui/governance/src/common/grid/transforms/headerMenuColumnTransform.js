@@ -58,7 +58,7 @@ class HeaderMenuColumnTransform extends ColumnTransform {
      * @returns [*] : a new column definition
      */
     apply(columns) {
-        var boundFormatterFn = this.headerFormatter.bind(this);
+        let boundFormatterFn = this.headerFormatter.bind(this);
 
         return columns.map(column => ({
             ...column,

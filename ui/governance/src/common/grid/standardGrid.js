@@ -157,7 +157,7 @@ StandardGrid.defaultProps = {
 export {StandardGrid};
 
 const mapStateToProps = (state, props) => {
-    var gridState = state.Grids[props.id] || {};
+    let gridState = state.Grids[props.id] || {};
     return {
         sortFids: gridState.sortFids || [],
         items : gridState.items
