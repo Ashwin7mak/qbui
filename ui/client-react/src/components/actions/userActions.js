@@ -27,6 +27,7 @@ export class UserActions extends React.Component {
         this.getConfirmDialog = this.getConfirmDialog.bind(this);
         this.getEmailAction = this.getEmailAction.bind(this);
     }
+
     getEmailSubject() {
         return Locale.getMessage('app.users.emailSubject');
     }

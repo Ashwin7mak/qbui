@@ -32,6 +32,7 @@ class UserManagement extends React.Component {
         this.getActionCellProps = this.getActionCellProps.bind(this);
         this.getCheckboxHeader = this.getCheckboxHeader.bind(this);
         this.onClickToggleSelectedRow = this.onClickToggleSelectedRow.bind(this);
+        this.userIsSelected = this.userIsSelected.bind(this);
     }
 
     createUserColumns(cellFormatter) {
@@ -69,17 +70,23 @@ class UserManagement extends React.Component {
         return columns;
     }
 
+    userIsSelected(selectedRows, userId) {
+        return _.find(selectedRows, (user)=>{
+            return user.id === userId;
+        });
+    }
     createUserRows() {
         let appUsersFiltered = [];
         let appUsers = this.props.appUsers;
         let selectedRows = this.props.selectedRows;
+        let self = this;
         this.props.appRoles.forEach(function(role) {
             if (appUsers[role.id]) {
                 appUsers[role.id].forEach(function(user) {
                     user.roleName = role.name;
                     user.name = (user.firstName ? `${user.firstName} ` : "") + (user.lastName ? user.lastName : "");
                     user.roleId = role.id;
-                    user.isSelected = selectedRows.indexOf(user.userId) > -1 ;
+                    user.isSelected = self.userIsSelected(selectedRows, user.userId);
                     appUsersFiltered.push(user);
                 });
             }

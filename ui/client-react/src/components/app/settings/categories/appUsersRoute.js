@@ -96,14 +96,17 @@ export const AppUsersRoute = React.createClass({
             selectedRows = [];
         }
         // add to selectedRows if id is not in the list
-        if (selectedRows.indexOf(id) === -1) {
-            selectedRows.push(id);
+        let isAlreadySelected = _.find(selectedRows, (selectedRow)=>{
+            return selectedRow.id === id && selectedRow.roleId === roleId;
+        });
+
+        if (!isAlreadySelected) {
+            selectedRows.push({id, roleId});
         } else {
             // id is in the list, remove it
-            selectedRows = _.without(selectedRows, id);
+            selectedRows = _.without(selectedRows, isAlreadySelected);
         }
         this.setState({roleId:roleId});
-
         this.props.selectUserRows(selectedRows);
     },
 
@@ -119,11 +122,12 @@ export const AppUsersRoute = React.createClass({
         this.props.appRoles.map(role => {
             if (appUsers[role.id]) {
                 appUsers[role.id].map(user => {
-                    roleId = user.roleId;
-                    selected.push(user.userId);
+                    // roleId = user.roleId;
+                    selected.push({id: user.userId, roleId: role.id});
                 });
             }
         });
+        console.log(selected)
         this.selectRows(selected);
     },
 
