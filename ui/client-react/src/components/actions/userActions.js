@@ -5,8 +5,10 @@ import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
 import {removeUsersFromAppRole} from '../../actions/appRoleActions';
 import {clearSelectedUserRows} from '../../actions/userActions';
+import {toggleChangeUserRoleDialog} from '../../actions/appActions';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import {getSelectedUsers} from '../../reducers/users';
+import UserRoleChange from '../app/settings/categories/userRoleChange';
 import './reportActions.scss';
 
 /**
@@ -119,11 +121,18 @@ export class UserActions extends React.Component {
                     <div className="actionIcons">
                         <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true} identifier="mail"/>
                         {this.getEmailAction()}
-                        <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true} identifier="settings"/>
+                        <ActionIcon icon="change-user-role" tip={this.getSelectionTip(numSelectedRows > 1 ? "app.users.settingsRoles" : "app.users.settingsRole")} onClick={()=>{this.props.toggleChangeUserRoleDialog(true);}} identifier="change-user-role"/>
                         <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(numSelectedRows > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
-                    </div>
+                   </div>
                 </div>
                 {this.getConfirmDialog()}
+                <UserRoleChange
+                    appRoles={this.props.appRoles}
+                    appId={this.props.appId}
+                    roleId={this.props.roleId}
+                    selectedUserRows={this.props.selectedUserRows}
+                    getSelectionTip={this.getSelectionTip}
+                />
             </div>
         );
     }
@@ -146,7 +155,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         removeUsersFromAppRole: (appId, userIds) => {return dispatch(removeUsersFromAppRole(appId, userIds));},
-        clearSelectedUserRows: () => {dispatch(clearSelectedUserRows());}
+        clearSelectedUserRows: () => {dispatch(clearSelectedUserRows());},
+        toggleChangeUserRoleDialog: (isOpen)=> {dispatch(toggleChangeUserRoleDialog(isOpen));}
     };
 };
 

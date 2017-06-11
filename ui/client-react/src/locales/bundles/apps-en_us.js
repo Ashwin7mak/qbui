@@ -58,7 +58,9 @@ export default {
                 userAddError: "Error adding user",
                 userRemovingError: "Error removing user",
                 emailBody: "Email body goes here",
-                emailSubject: "Email subject goes here"
+                emailSubject: "Email subject goes here",
+                settingsRole: "Change {value} role",
+                settingsRoles: "Change {value} roles"
             }
         },
         appMenu: {
@@ -824,6 +826,14 @@ export default {
             copied: "Link copied",
             messageSubject:"Link to the {appName} app",
             messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
+        },
+        changeUserRole: {
+            change: "Change",
+            userRoleTitle: "Change Role",
+            userRoleText: "Change the role for {value} selected user",
+            pluralUserRoleText: "Change the role for {value} selected users",
+            success: "You changed {value} role successfully!",
+            pluralSuccess: "You changed {value} roles successfully!",
         }
     }
 };
