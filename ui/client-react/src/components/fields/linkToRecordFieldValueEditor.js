@@ -22,6 +22,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
     propTypes: {
         hideRelationshipDialog: PropTypes.func,
         newFormFieldId: PropTypes.string,
+        relationshipFieldIds: PropTypes.array,
         updateField: PropTypes.func,
         removeFieldFromForm: PropTypes.func,
         tblId: PropTypes.string,
@@ -32,7 +33,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            formId: CONTEXT.FORM.VIEW
+            formId: CONTEXT.FORM.VIEW,
+            relationshipFieldIds: []
         };
     },
     getInitialState() {
@@ -104,7 +106,10 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      */
     getAvailableParentTables() {
         const fieldsList = _.find(this.props.fields, fieldList => fieldList.appId === this.props.appId && fieldList.tblId === this.props.tblId);
-        const linkToRecordFields = _.filter(fieldsList.fields, field => this.props.relationshipFieldIds.indexOf(field.id) !== -1);
+        let linkToRecordFields = [];
+        if (fieldsList) {
+            linkToRecordFields = _.filter(fieldsList.fields, field => this.props.relationshipFieldIds.indexOf(field.id) !== -1);
+        }
 
         return _.reject(this.props.tables, table => _.find(linkToRecordFields, field => field.parentTableId === table.id));
     },

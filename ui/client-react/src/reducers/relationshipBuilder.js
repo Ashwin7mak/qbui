@@ -16,7 +16,7 @@ const relationshipBuilder = (
         return {
             relationshipFieldIds: [],
             newFormFieldId: null
-        }
+        };
     }
     case types.ADD_FIELD: {
 
@@ -28,7 +28,7 @@ const relationshipBuilder = (
                 ...state,
                 relationshipFieldIds: [...state.relationshipFieldIds, newFormFieldId],
                 newFormFieldId
-            }
+            };
         }
         return {
             ...state,
