@@ -14,12 +14,6 @@ const ReportManagerMock = React.createClass({
 describe('ReportManagerTrowser functions', () => {
     'use strict';
 
-    let flux = {
-        actions: {
-            hideTrowser() {}
-        }
-    };
-
     let props = {
         filterReportsByName : () => {}
     };

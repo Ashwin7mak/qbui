@@ -84,6 +84,7 @@ const config = {
     // devtool Makes sure errors in console map to the correct file
     // and line number
     // eval-source-map is faster than 'source-map' for dev but eval is not supported for prod
+    //devtool: PROD ? 'source-map' : 'eval',
     devtool: PROD ? 'source-map' : 'eval-source-map',
     watchDelay: 50,
 
@@ -138,7 +139,6 @@ const config = {
             'bigdecimal',
             'bluebird',
             'cookie-parser',
-            'fluxxor',
             'intl',
             'intl/locale-data/jsonp/en',
             'intl/locale-data/jsonp/de',

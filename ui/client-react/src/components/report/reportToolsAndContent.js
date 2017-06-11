@@ -6,7 +6,6 @@ import ReportContent from './dataTable/reportContent';
 import ReportFooter from './reportFooter';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
-import Fluxxor from 'fluxxor';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import _ from 'lodash';
 import FacetSelections from '../facet/facetSelections';
@@ -27,8 +26,6 @@ import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 let logger = new Logger();
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-
 let AddRecordButton = React.createClass({
 
     render() {
@@ -44,7 +41,7 @@ let AddRecordButton = React.createClass({
  * Note: this component has been partially migrated to Redux
  */
 export const UnconnectedReportToolsAndContent = React.createClass({
-    mixins: [FluxMixin],
+
     //facetFields : {},
     debounceInputMillis: 700, // a key send delay
     // TODO: the tablePropertiesEndpoint on EE has the noun for records
@@ -92,7 +89,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
             isSortAndGroupVisible: true,
             isFacetMenuVisible: true,
             isRightToolbarVisible: true,
-            isSearchBoxVisible: true,
+            isSearchBoxVisible: true
         };
     },
     getInitialState: function() {
@@ -108,44 +105,6 @@ export const UnconnectedReportToolsAndContent = React.createClass({
     },
     componentWillReceiveProps() {
         ///this.mapFacetFields();
-    },
-
-    //when report changed from not loading to loading start measure of components performance
-    startPerfTiming(nextProps) {
-        if (_.has(this.props, 'reportData.loading') &&
-            !this.props.reportData.loading &&
-            nextProps.reportData.loading) {
-            let flux = this.getFlux();
-            flux.actions.mark('component-ReportToolsAndContent start');
-        }
-    },
-
-    //when report changed from loading to loaded finish measure of components performance
-    capturePerfTiming(prevProps) {
-        let timingContextData = {numReportCols:0, numReportRows:0};
-        let flux = this.getFlux();
-        if (_.has(this.props, 'reportData.loading') &&
-            !this.props.reportData.loading &&
-            prevProps.reportData.loading) {
-            flux.actions.measure('component-ReportToolsAndContent', 'component-ReportToolsAndContent start');
-            // note the size of the report with the measure
-            if (_.has(this.props, 'reportData.data.columns.length')) {
-                let reportData = this.props.reportData.data;
-                timingContextData.numReportCols = reportData.columns.length;
-                timingContextData.numReportRows = reportData.filteredRecordsCount ?
-                    reportData.filteredRecordsCount : reportData.recordsCount;
-            }
-            flux.actions.logMeasurements(timingContextData);
-            flux.actions.doneRoute();
-        }
-    },
-
-    componentWillUpdate(nextProps) {
-        this.startPerfTiming(nextProps);
-    },
-
-    componentDidUpdate(prevProps) {
-        this.capturePerfTiming(prevProps);
     },
 
     mapFacetFields() {
@@ -166,7 +125,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add-new-filled', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star', disabled: true},
-            {msg: 'pageActions.print', icon:'print', disabled: true},
+            {msg: 'pageActions.print', icon:'print', disabled: true}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
@@ -339,11 +298,6 @@ export const UnconnectedReportToolsAndContent = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        // need to dispatch to Fluxxor since report store handles this too...
-        //const flux = this.getFlux();
-        //flux.actions.editNewRecord();
-
-        //this.props.dispatch(editNewRecord(false));
         WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
@@ -417,7 +371,6 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                                    reportFooter={reportFooter}
                                    cardViewPagination={cardViewPagination }
                                    primaryKeyName={primaryKeyName}
-                                   flux={this.getFlux()}
                                    gridOptions={this.props.gridOptions}
                                    onAddNewRecord={this.editNewRecord}
                                    {...this.props}
