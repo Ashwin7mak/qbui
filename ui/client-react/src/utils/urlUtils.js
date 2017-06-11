@@ -59,7 +59,7 @@ const UrlUtils = {
         return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${URL.SUPPORT_LINK_PATH}`;
     },
     getHelpLink() {
-        return `http://${URL.HELP_LINK_PATH}`;
+        return `https://${URL.HELP_LINK_PATH}`;
     },
 
     /**

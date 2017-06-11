@@ -10,10 +10,10 @@ import Tooltip from '../../tooltip/tooltip';
  */
 const ReHelpButton = () => (
     <Tooltip bsRole="toggle" tipId="help" i18nMessageKey="header.menu.helpTooltip" key="help" location="bottom">
-    <a href={UrlUtils.getHelpLink()} target="_blank" className="globalActionLink reHelpButton">
-        <Icon icon="help" />
-        <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
-    </a>
+        <a href={UrlUtils.getHelpLink()} target="_blank" className="globalActionLink reHelpButton">
+            <Icon icon="help" />
+            <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
+        </a>
     </Tooltip>
 );
 
