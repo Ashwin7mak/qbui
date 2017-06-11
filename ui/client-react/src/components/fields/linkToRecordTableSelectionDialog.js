@@ -111,7 +111,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
      */
     getFieldSelect() {
 
-        const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.state.selectedTableId}): null;
+        const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.state.selectedTableId}) : null;
 
         const fields = selectedTable ? selectedTable.fields : [];
 
