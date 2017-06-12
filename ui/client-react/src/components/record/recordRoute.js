@@ -10,7 +10,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './../record/record';
 import {Link, withRouter} from 'react-router-dom';
 import simpleStringify from '../../../../common/src/simpleStringify';
-import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
@@ -27,8 +26,8 @@ import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
+import {selectAppTable} from '../../actions/appActions';
 import {showTopNav} from '../../actions/shellActions';
-
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
@@ -41,7 +40,6 @@ import ReportInDrawer from '../drawer/reportInDrawer';
 import {getRecordTitle} from '../../utils/formUtils';
 import QueryUtils from '../../utils/queryUtils';
 let logger = new Logger();
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * record route component
@@ -49,7 +47,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * Note: this component has been partially migrated to Redux
  */
 export const RecordRoute = React.createClass({
-    mixins: [FluxMixin],
 
     // TODO: remove
     getInitialState() {
@@ -57,11 +54,9 @@ export const RecordRoute = React.createClass({
     },
 
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
-        const flux = this.getFlux();
-
-        //selected table does not chane when in a drawer
+        //selected table does not change when in a drawer
         if (!this.props.isDrawerContext) {
-            flux.actions.selectTableId(tblId);
+            this.props.selectTable(appId, tblId);
         }
 
         // ensure the search input is empty
@@ -107,7 +102,7 @@ export const RecordRoute = React.createClass({
         if (this.props.match.params.appId !== prev.match.params.appId ||
             this.props.match.params.tblId !== prev.match.params.tblId ||
             this.props.match.params.recordId !== prev.match.params.recordId ||
-            (viewData && viewData.syncLoadedForm)) {
+            (viewData && viewData.syncFormForRecordId === this.props.match.params.recordId)) {
 
             this.loadRecordFromParams();
         }
@@ -480,7 +475,7 @@ export const RecordRoute = React.createClass({
 
         return !viewData ||
             !_.isEqual(viewData.formData, nextData.formData) ||
-            !_.isEqual(viewData.syncLoadedForm, nextData.syncLoadedForm) ||
+            !_.isEqual(viewData.syncFormForRecordId, nextData.syncFormForRecordId) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
             !_.isEqual(viewData.loading, nextData.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
@@ -642,6 +637,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
+        },
+        selectTable: (appId, tableId) => {
+            dispatch(selectAppTable(appId, tableId));
         },
         showTopNav
     };

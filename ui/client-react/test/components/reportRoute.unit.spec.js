@@ -1,6 +1,5 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
-import Fluxxor from 'fluxxor';
 import {MemoryRouter} from 'react-router-dom';
 
 import ReportRoute, {
@@ -21,17 +20,14 @@ describe('ReportRoute', () => {
     'use strict';
     const pendEdits = {};
     let component;
-    let mockFluxStore = Fluxxor.createStore({
-        getState() {
-            return {};
-        }
-    });
 
     let props = {
         clearSearchInput: () => {},
         loadFields: (app, tbl) => {},
         loadReport: (context, appId, tblId, rptId, format, offset, rows) => {},
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {},
+        selectTable: (appId, tblId) => {},
+
         reportBuilder: {
             isInBuilderMode: true,
             isCollapsed: true,
@@ -51,15 +47,6 @@ describe('ReportRoute', () => {
         params: {appId, tblId, rptId, format: true}
     };
     let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}, pageOffset: offset, numRows: numRows}};
-
-    let stores = {
-        FluxStore: new mockFluxStore()
-    };
-    let flux = new Fluxxor.Flux(stores);
-
-    flux.actions = {
-        selectTableId() {return;}
-    };
 
     const StageMock = React.createClass({
         render() {
@@ -86,11 +73,11 @@ describe('ReportRoute', () => {
     }
 
     beforeEach(() => {
-        spyOn(flux.actions, 'selectTableId');
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadReport');
         spyOn(props, 'loadDynamicReport');
+        spyOn(props, 'selectTable');
         ReportRouteRewireAPI.__Rewire__('Stage', StageMock);
         ReportRouteRewireAPI.__Rewire__('ReportToolsAndContent', ReportToolsAndContentMock);
         ReportRouteRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
@@ -98,11 +85,11 @@ describe('ReportRoute', () => {
     });
 
     afterEach(() => {
-        flux.actions.selectTableId.calls.reset();
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();
         props.loadReport.calls.reset();
         props.loadDynamicReport.calls.reset();
+        props.selectTable.calls.reset();
         ReportRouteRewireAPI.__ResetDependency__('Stage');
         ReportRouteRewireAPI.__ResetDependency__('ReportToolsAndContent');
         ReportRouteRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
@@ -116,7 +103,7 @@ describe('ReportRoute', () => {
         component = mount(
             <Provider store={store}>
                 <MemoryRouter>
-                    <ReportRoute {...props} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute {...props} reportData={reportDataParams.reportData} pendEdits={pendEdits}/>
                 </MemoryRouter>
             </Provider>);
         expect(component.find(ReportRoute).length).toEqual(1);
@@ -132,7 +119,6 @@ describe('ReportRoute', () => {
                     {...props}
                     match={routeParams}
                     reportData={reportDataParams.reportData}
-                    flux={flux}
                     pendEdits={pendEdits}
                 />
             </Provider>);
@@ -149,26 +135,31 @@ describe('ReportRoute', () => {
         it('loadReport is called with app data on mount', () => {
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).toHaveBeenCalledWith(jasmine.any(String), appId, tblId, rptId, true, offset, numRows);
-
+            expect(props.selectTable).toHaveBeenCalledWith(appId, tblId);
+            expect(props.clearSearchInput).toHaveBeenCalled();
+            expect(props.loadFields).toHaveBeenCalledWith(appId, tblId);
         });
 
         it('loadReport is not called when appId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {appId: null}});
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).not.toHaveBeenCalled();
+            expect(props.selectTable).not.toHaveBeenCalled();
+            expect(props.clearSearchInput).not.toHaveBeenCalled();
+            expect(props.loadFields).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when tblId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {tblId: null}});
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).not.toHaveBeenCalled();
         });
@@ -177,7 +168,7 @@ describe('ReportRoute', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {rptId: null}});
             component = mount(
                 <Provider store={store}>
-                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData}pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).not.toHaveBeenCalled();
         });
@@ -199,7 +190,6 @@ describe('ReportRoute', () => {
                         {...props}
                         match={{params: paramsWithChildTable}}
                         reportData={reportDataParams.reportData}
-                        flux={flux}
                         pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadDynamicReport).toHaveBeenCalledWith(
@@ -215,6 +205,9 @@ describe('ReportRoute', () => {
                     numRows
                 })
             );
+            expect(props.selectTable).toHaveBeenCalledWith(appId, tblId);
+            expect(props.clearSearchInput).toHaveBeenCalled();
+            expect(props.loadFields).toHaveBeenCalledWith(appId, tblId);
         });
 
         it(`is not called if 'detailKeyFid' and 'detailKeyValue' are not defined`, () => {
@@ -224,7 +217,6 @@ describe('ReportRoute', () => {
                         {...props}
                         match={routeParams}
                         reportData={reportDataParams.reportData}
-                        flux={flux}
                         pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadDynamicReport).not.toHaveBeenCalled();
