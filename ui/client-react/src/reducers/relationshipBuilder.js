@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 const relationshipBuilder = (
     state = {
-        relationshipFieldIds: [],
+        newRelationshipFieldIds: [],
         newFormFieldId: null
     }, action) => {
     // reducer - no mutations!
@@ -14,7 +14,7 @@ const relationshipBuilder = (
 
     case types.LOAD_FORM_SUCCESS: {
         return {
-            relationshipFieldIds: [],
+            newRelationshipFieldIds: [],
             newFormFieldId: null
         };
     }
@@ -26,7 +26,7 @@ const relationshipBuilder = (
 
             return {
                 ...state,
-                relationshipFieldIds: [...state.relationshipFieldIds, newFormFieldId],
+                newRelationshipFieldIds: [...state.newRelationshipFieldIds, newFormFieldId],
                 newFormFieldId
             };
         }
@@ -38,7 +38,7 @@ const relationshipBuilder = (
     case types.REMOVE_FIELD: {
         return {
             ...state,
-            relationshipFieldIds: _.without(state.relationshipFieldIds, action.field.id),
+            newRelationshipFieldIds: _.without(state.newRelationshipFieldIds, action.field.id),
         };
     }
     case types.HIDE_RELATIONSHIP_DIALOG: {
