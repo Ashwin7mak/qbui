@@ -90,6 +90,7 @@ const DraggableElementHoc = (ReactComponent, itemType = DraggableItemTypes.FIELD
 
             /**
              * A component that will render the field editing tools. It receives all props passed into the DraggableElement.
+             * See formBuilder/fieldEditingTools/fieldEditingTools.js in client-react for an example.
              * Optional. */
             fieldEditingTools: PropTypes.func
         };
