@@ -374,10 +374,16 @@ const report = (state = [], action) => {
             }
             // searches through the current columns to find the index of the placeholder
             let placeholderIndex = _.findIndex(currentColumns, (col) => {return col.isPlaceholder;});
-            let fidInsertionIndex = placeholderIndex;
-            // when adding after, account for the index of the placeholder by adding 1
-            if (!addBefore) {
-                placeholderIndex++;
+            let fidInsertionIndex;
+            if (placeholderIndex === -1) {
+                placeholderIndex = 0;
+                fidInsertionIndex = 0;
+            } else {
+                fidInsertionIndex = placeholderIndex;
+                // when adding after, account for the index of the placeholder by adding 1
+                if (!addBefore) {
+                    placeholderIndex++;
+                }
             }
             // insert the requested column in the correct place in the columns list
             currentColumns.splice(placeholderIndex, 0, columnMoving);

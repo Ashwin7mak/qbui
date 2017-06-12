@@ -16,7 +16,7 @@
 
     var client = clientConsts.REACT;
 
-    module.exports = {
+    let baseVars = {
 
         //  Logging configuration
         LOG: {
@@ -111,4 +111,6 @@
          */
         //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
     };
+module.exports = Object.assign({}, baseVars, process.env);
+
 }());

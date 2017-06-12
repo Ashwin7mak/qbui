@@ -29,4 +29,11 @@ describe('UserService functions', () => {
         userService.getUser(userId);
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
+
+    it('test searchRealmUsers function', () => {
+        let searchTerm = 'la';
+        let url = StringUtils.format(userService.API.SEARCH_USERS, [searchTerm]);
+        userService.searchUsers(searchTerm);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    });
 });

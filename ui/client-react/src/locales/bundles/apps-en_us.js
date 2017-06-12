@@ -46,16 +46,19 @@ export default {
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
                 manager: "Application Manager",
                 removeUser: "Remove this user?",
-                unassignUser: "Users will no longer be able to access this application. Any data they have previously entered will remain in the application.",
+                unAssignUser: "Users will no longer be able to access this application. Any data they have previously entered will remain in the application.",
                 deleteUser: "Remove {value} user",
                 deleteUsers: "Remove {value} users",
                 removeButton: "Remove",
                 cancel: "Cancel",
-                singular: "user",
                 plural: "users",
-                usersRemoved: " users have been removed",
-                userRemoved: " user has been removed",
-                userAdded: "You added"
+                usersRemovedFromAppRole: "{numOfUsers} users removed from the app role",
+                userRemovedFromAppRole: "User removed from the app role",
+                userAdded: "User added",
+                userAddError: "Error adding user",
+                userRemovingError: "Error removing user",
+                emailBody: "Email body goes here",
+                emailSubject: "Email subject goes here"
             }
         },
         appMenu: {

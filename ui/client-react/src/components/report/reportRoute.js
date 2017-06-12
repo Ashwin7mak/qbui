@@ -14,7 +14,6 @@ import Breakpoints from '../../utils/breakpoints';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import withUniqueId from '../hoc/withUniqueId';
-import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
@@ -23,6 +22,7 @@ import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
 import {loadFields} from '../../actions/fieldsActions';
+import {selectAppTable} from '../../actions/appActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 import {hideTopNav} from '../../actions/shellActions';
@@ -31,7 +31,6 @@ import * as FieldsReducer from '../../reducers/fields';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 
 let logger = new Logger();
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * report route
@@ -40,12 +39,10 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  */
 // export for unit tests
 export const ReportRoute = React.createClass({
-    mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
 
     loadReport(appId, tblId, rptId, offset, numRows) {
-        const flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
+        this.props.selectTable(appId, tblId);
 
         // ensure the search box is cleared for the new report
         this.props.clearSearchInput();
@@ -69,8 +66,7 @@ export const ReportRoute = React.createClass({
      * Load a report with query parameters.
      */
     loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
-        const flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
+        this.props.selectTable(appId, tblId);
 
         // ensure the search box is cleared for the new report
         this.props.clearSearchInput();
@@ -253,7 +249,9 @@ const mapDispatchToProps = (dispatch) => {
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         },
+        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId)),
         hideTopNav: () => dispatch(hideTopNav())
+
     };
 };
 
