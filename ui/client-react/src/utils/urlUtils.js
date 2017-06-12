@@ -58,6 +58,9 @@ const UrlUtils = {
         let hostname = WindowLocationUtils.getHostname();
         return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${URL.SUPPORT_LINK_PATH}`;
     },
+    getHelpLink() {
+        return `http://${URL.HELP_LINK_PATH}`;
+    },
 
     /**
      * Build client url link to render a report
