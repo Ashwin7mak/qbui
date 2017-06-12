@@ -70,7 +70,15 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         if (table.value !== this.state.selectedTableId) {
             const selectedTable = _.find(this.props.tables, {id: table.value});
-            this.setState({selectedTableId: table.value, selectedFieldId: selectedTable.recordTitleFieldId});
+
+            this.setState({selectedTableId: table.value});
+            if (selectedTable.recordTitleFieldId) {
+                this.setState({selectedFieldId: selectedTable.recordTitleFieldId});
+            } else {
+                // no record title field ID, pick first field (record ID will always be an option)
+                const fieldChoices = this.getFieldChoices(selectedTable);
+                this.setState({selectedFieldId: fieldChoices[0].id});
+            }
         }
     },
 
@@ -105,6 +113,16 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     },
 
     /**
+     * get valid parent table fields
+     * @param table
+     */
+    getFieldChoices(table) {
+        const fields = table ? table.fields : [];
+
+        return _.filter(fields, field => RelationshipUtils.isValidRelationshipKeyField(field));
+    },
+
+    /**
      * get react-select for master table field
      * @returns {XML}
      */
@@ -112,9 +130,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
 
-        const fields = selectedTable ? selectedTable.fields : [];
-
-        const fieldChoices = _.filter(fields, field => RelationshipUtils.isValidRelationshipKeyField(field));
+        const fieldChoices =this.getFieldChoices(selectedTable);
 
         const choices = fieldChoices.map(field => {
 
