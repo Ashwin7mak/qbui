@@ -76,6 +76,19 @@
             return this.slideyRightyEl.waitForVisible();
         }},
 
+
+        /**
+         * clicks on add child button and opens the trowser.
+         * @param
+         */
+        clickAddChildButton: {
+            value: function () {
+                browser.waitForVisible('.addChildBtn');
+                browser.element('.addChildBtn').click();
+                expect(browser.isVisible('.recordTrowser')).toBe(true);
+            }
+        },
+
         /**
          * While viewing a parent record on a form get the values of each record in the child table
          * @returns An array of record values for all child records

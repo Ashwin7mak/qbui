@@ -145,6 +145,33 @@ describe('Relationships - View child table on form tests: ', () => {
             relationshipsPO.closeSlideyRighty();
         });
 
+        it('Test that the Add Child button opens a trouser, adds a row to the embedded report', () => {
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
+            const origRecordCount = formsPagePO.getRecordsCountInATable();
+
+            //Variable declarations
+            var textToEnter = 'My new text';
+
+            // Click on add child button on embedded table opens trowser
+            relationshipsPO.clickAddChildButton();
+            var fieldTypes = ['allTextFields', 'allParentRecordFields'];
+
+            browser.waitForVisible('form.editForm');
+            // enter form values
+            fieldTypes.forEach(function (fieldType) {
+                formsPagePO.enterFormValues(fieldType);
+            });
+
+            // Click Save on the form
+            formsPagePO.clickFormSaveBtn();
+            // wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
+
+            // Verify the records count got increased by 1
+            expect(formsPagePO.getRecordsCountInATable()).toBe(origRecordCount + 1);
+
+        });
         /**
          * Navigate to a record (view form) and assert that the section containing an empty child table is displayed
          */
