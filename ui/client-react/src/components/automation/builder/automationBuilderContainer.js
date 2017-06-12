@@ -15,7 +15,11 @@ import EmailValidator from "../../../../../common/src/validator/emailValidator";
 import EmailFormatter from "../../../../../common/src/formatter/emailFormatter";
 import SaveOrCancelFooter from '../../saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../../utils/navigationUtils';
+
+import FieldValueEditor from '../../fields/fieldValueEditor';
 import FieldLabelElement from '../../QBForm/fieldLabelElement';
+import '../../QBForm/qbform.scss';
+
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import * as UrlConsts from "../../../constants/urlConstants";
 import _ from "lodash";
@@ -26,8 +30,9 @@ import "./automationBuilderContainer.scss";
 
 export class AutomationBuilderContainer extends Component {
 
-    getInitialState() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             confirmInputValue: ""
         };
     }
@@ -120,20 +125,32 @@ export class AutomationBuilderContainer extends Component {
         let body = this.props.automation ? emailAutomationGetBody(this.props.automation) : '';
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
-                <div className="automationEdit">
-                    <div className="automationEdit--container">
-                        <h3><I18nMessage message="automation.automationEdit.emailSectionHeader"/></h3>
-                        <div className="automationEditName automationEdit--section">
-                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.toHeader"/></span> <br/>
-                            <EmailFieldValueEditor value={to} onChange={this.updateTo} invalid={this.isEmailInvalid(to)}/>
-                        </div>
-                        <div className="automationEditName automationEdit--section">
-                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.subjectHeader"/></span> <br/>
-                            <TextFieldValueEditor inputType="text" value={subject} onChange={this.updateSubject}/>
-                        </div>
-                        <div className="automationEditName automationEdit--section">
-                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.bodyHeader"/></span> <br/>
-                            <MultiLineTextFieldValueEditor value={body} onChange={this.updateBody}/>
+                <div className="automationEdit formContainer">
+                    <div className="automationEdit--container editForm formSection">
+                        <div className="sectionColumn">
+                            <h3><I18nMessage message="automation.automationEdit.emailSectionHeader"/></h3>
+
+                            <div className="formElementContainer">
+                                <div className="formElement field">
+                                    <FieldLabelElement label="Notify Whom" />
+                                    <FieldValueEditor type={15} onChange={this.updateTo} value={to} appUsers={[]} />
+                                </div>
+                            </div>
+
+                            <div className="formElementContainer">
+                                <div className="formElement field">
+                                    <FieldLabelElement label="Subject" />
+                                    <FieldValueEditor onChange={this.updateSubject} value={subject} appUsers={[]} />
+                                </div>
+                            </div>
+
+                            <div className="formElementContainer">
+                                <div className="formElement field">
+                                    <FieldLabelElement label="Message" />
+                                    <MultiLineTextFieldValueEditor value={body} onChange={this.updateBody}/>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

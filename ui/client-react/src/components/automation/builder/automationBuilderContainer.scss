@@ -2,37 +2,44 @@
 
 $table-properties-panel-width: 776px;
 
-.settingsAppShell {
-    .pageActions {
-        .deleteTable {
-            color: $color-red-700;
-        }
-    }
-    .automationEditSettingsStage {
-        font-size: 24px;
-        color: $stage-headline-color;
-        padding-top: 30px;
-        .qbIcon {
-            font-size: 28px;
-            margin-right: 10px;
-        }
-        & > * {
-            vertical-align: middle;
-        }
+.automationEdit.formContainer .fieldValueEditor {
+    width: 400px;
+    textarea {
+        height: 300px;
     }
 }
 
-.automationEdit--container {
-    // margin: 32px;
-    padding: 10px 10px 10px 44px;
-}
+// .settingsAppShell {
+//     .pageActions {
+//         .deleteTable {
+//             color: $color-red-700;
+//         }
+//     }
+//     .automationEditSettingsStage {
+//         font-size: 24px;
+//         color: $stage-headline-color;
+//         padding-top: 30px;
+//         .qbIcon {
+//             font-size: 28px;
+//             margin-right: 10px;
+//         }
+//         & > * {
+//             vertical-align: middle;
+//         }
+//     }
+// }
 
-.automationEdit--section {
-    margin-bottom: 24px;
-}
+// .automationEdit--container {
+//     // margin: 32px;
+//     padding: 10px 10px 10px 44px;
+// }
 
-.automationEdit--header {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: inline-block;
-}
+// .automationEdit--section {
+//     margin-bottom: 24px;
+// }
+
+// .automationEdit--header {
+//     font-weight: bold;
+//     margin-bottom: 5px;
+//     display: inline-block;
+// }
