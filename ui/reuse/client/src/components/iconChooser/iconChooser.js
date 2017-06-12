@@ -82,6 +82,20 @@ class IconChooser extends React.Component {
     }
 
     /**
+     * rendering all the icons is actually fairly slow so do it only when necessary
+     * @param nextProps
+     * @param nextState
+     * @returns {boolean}
+     */
+    shouldComponentUpdate(nextProps, nextState) {
+
+        return nextProps.isOpen !== this.props.isOpen ||
+            nextProps.selectedIcon !== this.props.selectedIcon ||
+            nextProps.isOpen !== this.props.isOpen ||
+            nextState.filterText !== this.state.filterText;
+    }
+
+    /**
      * render icon chooser
      * @returns {XML}
      */

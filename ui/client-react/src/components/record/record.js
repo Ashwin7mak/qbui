@@ -6,6 +6,7 @@ import * as SchemaConsts from "../../constants/schema";
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {editRecordStart, editRecordChange} from '../../actions/recordActions';
+import {getAppUsers} from '../../reducers/app';
 import {UNSAVED_RECORD_ID} from "../../constants/schema";
 
 export const Record = React.createClass({
@@ -124,6 +125,7 @@ export const Record = React.createClass({
 
     render() {
         return <QBForm {...this.props}
+                    appUsers={this.props.appUsers}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
                     onFieldChange={this.handleFieldChange}
@@ -135,7 +137,8 @@ export const Record = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        record: state.record
+        record: state.record,
+        appUsers: getAppUsers(state.app)
     };
 };
 const mapDispatchToProps = (dispatch) => {

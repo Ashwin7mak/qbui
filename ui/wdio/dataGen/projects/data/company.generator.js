@@ -9,7 +9,7 @@ module.exports = function(chance) {
     let usedName = 0;
     const companies = [
         "Apple", "Microsoft", "AT&T", "Xerox", "Johnson & Johnson", "J.Deere",
-        "Time", "Intuit", "QuickBase", "Walgreens", "Black & Decker", "Tesla",
+        "Time", "Intuit", "Quick Base", "Walgreens", "Black & Decker", "Tesla",
         "Ford", "Staples", "Boeing", "Intel", "Motorola", "FedEx", "Cisco", "Rutoxio Energy",
         "Gartner"
     ];

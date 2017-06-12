@@ -52,7 +52,7 @@ describe('Form Actions', () => {
 
         it('creates an action to indicate the view form needs to be reloaded', () => {
 
-            expect(formActions.syncForm("view")).toEqual({type: types.SYNC_FORM, id: "view"});
+            expect(formActions.syncForm("view", 123)).toEqual({type: types.SYNC_FORM, id: "view", recordId: 123});
         });
     });
 

@@ -41,7 +41,7 @@ const forms = (
             id,
             loading: true,
             errorStatus: null,
-            syncLoadedForm: false
+            syncFormForRecordId: null
         });
 
         return newState;
@@ -91,7 +91,7 @@ const forms = (
     case types.SYNC_FORM: {
         newState[id] = ({
             ...currentForm,
-            syncLoadedForm: true
+            syncFormForRecordId: action.recordId
         });
         return newState;
     }
