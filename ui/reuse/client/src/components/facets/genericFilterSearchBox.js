@@ -21,16 +21,13 @@ class GenericFilterSearchBox extends Component {
     }
 
     render() {
-
-        let placeMsg = Locale.getMessage("report.searchPlaceHolder") + " " + Locale.getMessage("records.plural");
-
         return (<div className="filterSearchBoxContainer">
                     <IconInputBox className="filterSearchBox"
                                   iconInputBoxKey={"filterSearchBox_" + this.props.searchBoxKey}
-                                  value={this.props.search.searchInput}
+                                  value={this.props.searchTerm}
                                   onChange={this.props.onChange}
-                                  onClear={this.props.clearSearchString}
-                                  placeholder={placeMsg}
+                                  onClear={this.props.clearSearchTerm}
+                                  placeholder={this.props.placeholder}
                     />
                 </div>
         );
@@ -45,7 +42,19 @@ GenericFilterSearchBox.propTypes = {
     /**
      *  Function that clears the data entered in the IconInputBox
      */
-    clearSearchString : React.PropTypes.func
+    clearSearchTerm : React.PropTypes.func,
+    /**
+     *   Value inside the search box
+     */
+    searchTerm: React.PropTypes.string,
+    /**
+     *   Describes where the genericFilterSearchBox component is being used
+     */
+    searchBoxKey: React.PropTypes.string,
+    /**
+     *   Text which is a placeholder for the searchBox component
+     */
+    placeholder: React.PropTypes.string
 };
 
 export default GenericFilterSearchBox;

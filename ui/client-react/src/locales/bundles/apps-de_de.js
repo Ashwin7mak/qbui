@@ -43,17 +43,19 @@ export default {
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
-                unassignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
+                unAssignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
                 deleteUser: "Entfernen {Wert} Benutzer",
                 deleteUsers: "Entfernen {Wert} Benutzer",
                 removeButton: "Entfernen",
                 cancel: "Stornieren",
-                singular: "Benutzer",
                 plural: "Benutzer",
-                usersRemoved: " Benutzer wurden entfernt",
-                userRemoved: " Benutzer wurde entfernt",
-                userAdded: "Sie hinzugefügt"
-
+                usersRemovedFromAppRole: "{numOfUsers} Benutzer aus der App-Rolle entfernt",
+                userRemovedFromAppRole: "Benutzer aus der App-Rolle entfernt",
+                userAdded: "Benutzer hinzugefügt",
+                userAddError: "Fehler beim Hinzufügen von Benutzer",
+                userRemovingError: "Fehler beim Entfernen des Benutzers",
+                emailBody: "Email Körper geht hier",
+                emailSubject: "E-Mail-Thema geht hier"
             }
         },
         appMenu: {
@@ -227,10 +229,32 @@ export default {
                     error: "Fehler beim Speichern des Formulars"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Rekord genehmigt.",
-                    error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
+            noParentRecordSelected: "Kein Datensatz ausgewählt"
+        },
+        automation: {
+            approverecord: {
+                success: "Rekord genehmigt.",
+                error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
+            },
+            testautomation: {
+                success: "Automatisierungstest erfolgreich.",
+                error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
+            },
+            automationList: {
+                nameHeader: "Name",
+                activeHeader: "Aktiv",
+                actionHeader: "Aktion",
+                actionButton: "Test",
+                activeYes: "Ja",
+                activeNo: "Nein"
+            },
+            automationView: {
+                stageHeading: "Automatisierung: {automationName}",
+                nameHeader: "Name",
+                triggerHeader: "Auslöser",
+                actionHeader: "Aktion",
+                actions: {
+                    email: "Eine E-Mail senden"
                 }
             }
         },
@@ -584,7 +608,8 @@ export default {
             required: "Muss ausgefüllt werden",
             multiChoice: "Wahlen",
             unique: "Muss einmalige Werte haben",
-            linkToRecord: "Link zu einem Datensatz in der Tabelle"
+            linkToRecord: "Link zu einem Datensatz in der Tabelle",
+            connectedTo: "Auf {fieldName}-Feld verbunden"
         },
         builder: {
             tabs: {
@@ -646,7 +671,9 @@ export default {
                 dialogTitle: "Erhalten Sie einen anderen Rekord",
                 addToForm: "Fügen Sie hinzu",
                 tableChooserDescription: "Wenn Sie ein {tableNoun} erstellen oder aktualisieren, können Sie nachschlagen und Informationen aus einem Datensatz in einer anderen Tabelle erhalten.",
-                tableChooserHeading: "Wo ist die Platte, die du bekommen willst?"
+                tableChooserHeading: "Wo ist die Platte, die du bekommen willst?",
+                advancedSettingsHeading: "Erweiterte Einstellungen",
+                fieldChooserDescription: "Um einen Datensatz in der {tableName} Tabelle zu erhalten, wird eine automatische Zuordnung mit einem eindeutigen und erforderlichen Feld erstellt. Um ein anderes Feld auszuwählen, kannst du aus der folgenden Liste auswählen. Sie können dieses Feld nicht ändern, sobald Sie es Ihrem Formular hinzufügen."
             }
         },
         featureSwitchAdmin: {
@@ -752,16 +779,20 @@ export default {
             },
             YES: "JA"
         },
-        automationList: {
-            nameHeader: "Name",
-            activeHeader: "Aktiv",
-            activeYes: "Ja",
-            activeNo: "Nein"
-        },
         addUserToApp: {
             title: "Benutzer hinzufügen",
             description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
-            searching: "Suchen..."
+            searching: "Suchen...",
+            userSuccessTitle: "Deine App hat neuen Benutzer!",
+            userSuccessText: "Lassen Sie sie wissen, dass sie Zugang zu Ihrer App haben, indem Sie den Link mit ihnen teilen.",
+            copy: "Kopieren",
+            email: "Email",
+            toCopy: "Klicken Sie auf Kopieren in die Zwischenablage",
+            toEmail: "Klicken Sie hier, um eine E-Mail zu senden",
+            userSuccessDialogOK: "Nein Danke",
+            copied: "Link kopiert",
+            messageSubject:"Link zum {App Name} App",
+            messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}"
         }
     }
 };

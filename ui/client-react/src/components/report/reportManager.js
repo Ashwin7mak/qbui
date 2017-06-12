@@ -1,15 +1,13 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 import Locale from '../../locales/locales';
 import ReportGroup from './reportGroup';
 import './reportManager.scss';
 import SearchBox from '../search/searchBox';
 import _ from 'lodash';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
+import {filterReportsByName} from '../../actions/shellActions';
+import {connect} from 'react-redux';
 
 let ReportManager = React.createClass({
-    mixins: [FluxMixin],
 
     propTypes: {
         onSelectReport: React.PropTypes.func,
@@ -20,12 +18,10 @@ let ReportManager = React.createClass({
         return {filterReportsName:""};
     },
     onChangeSearch(ev) {
-        const flux = this.getFlux();
-        flux.actions.filterReportsByName(ev.target.value);
+        this.props.filterReportsByName(ev.target.value);
     },
     clearSearch() {
-        const flux = this.getFlux();
-        flux.actions.filterReportsByName("");
+        this.props.filterReportsByName("");
     },
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.props.filterReportsName.toLowerCase()) !== -1;
@@ -68,4 +64,13 @@ let ReportManager = React.createClass({
     }
 });
 
-export default ReportManager;
+const mapDispatchToProps = (dispatch) => {
+    return {filterReportsByName};
+};
+
+export {ReportManager};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(ReportManager);

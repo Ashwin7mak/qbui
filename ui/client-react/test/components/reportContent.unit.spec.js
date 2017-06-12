@@ -376,25 +376,10 @@ const selectedRowIds = [
     2
 ];
 
-let doneFunction = null; // Holds the done function for an asynchronous test so it can be called in the mock flux
-const flux = {
-    actions: {
-        scrollingReport(scrolling) {
-        },
-        mark: ()=> {
-        },
-        measure: ()=> {
-        },
-        logMeasurements : ()=> {
-        }
-    }
-};
-
 //  redux dispatch methods
 const props = {
     appId: '1',
     tblId: '2',
-    flux: flux,
     record: {
         records: [
             {pendEdits: {}}
@@ -410,7 +395,8 @@ const props = {
     addBlankRecordToReport: () => {},
     deleteRecord: () => {},
     updateRecord: () => {return Promise.resolve();},
-    createRecord: () => {return Promise.resolve();}
+    createRecord: () => {return Promise.resolve();},
+    scrollingReport: () => {}
 };
 
 const fakeReportGroupDataTemplate = {
@@ -1099,14 +1085,14 @@ describe('ReportContent functions', () => {
     });
 
     it('test onScrollRecords', () => {
-        spyOn(flux.actions, 'scrollingReport');
+        spyOn(props, 'scrollingReport');
         component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={fakeReportDataEmpty}
                                                                 reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.onScrollRecords();
-        expect(flux.actions.scrollingReport).toHaveBeenCalled();
+        expect(props.scrollingReport).toHaveBeenCalled();
     });
 
     it('test isNumericDataType returns true', () => {
@@ -1540,34 +1526,6 @@ describe('ReportContent functions', () => {
         grid = grid[0];
         expect(grid.props.records.length).toEqual(fakeReportDataSimple.data.filteredRecords.length);
         expect(_.intersection(grid.props.columns, fakeReportDataSimple.data.columns).length).toEqual(fakeReportDataSimple.data.columns.length);
-    });
-
-    it('test startPerfTiming', () => {
-        props.report[0] = fakeReportDataSimple;
-        component = TestUtils.renderIntoDocument(<ReportContent {...props}
-                                                                reportData={fakeReportDataSimple}
-                                                                reportHeader={headerEmpty}
-                                                                reportFooter={fakeReportFooter}/>);
-        spyOn(flux.actions, 'mark');
-        component.startPerfTiming({reportData: {
-            loading : true
-        }});
-        expect(flux.actions.mark).toHaveBeenCalled();
-    });
-
-    it('test capturePerfTiming', () => {
-        props.report[0] = fakeReportDataSimple;
-        component = TestUtils.renderIntoDocument(<ReportContent {...props}
-                                                                reportData={fakeReportDataSimple}
-                                                                reportHeader={headerEmpty}
-                                                                reportFooter={fakeReportFooter}/>);
-        spyOn(flux.actions, 'measure');
-        spyOn(flux.actions, 'logMeasurements');
-        component.capturePerfTiming({reportData: {
-            loading : true
-        }});
-        expect(flux.actions.measure).toHaveBeenCalled();
-        expect(flux.actions.logMeasurements).toHaveBeenCalled();
     });
 
     describe('handleRecordDelete', () => {

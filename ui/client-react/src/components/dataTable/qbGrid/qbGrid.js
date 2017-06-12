@@ -131,7 +131,7 @@ export const QbGrid = React.createClass({
         menuProps: PropTypes.object,
 
         /**
-         * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
+         * Flag to include the first column that includes row specific actions.*/
         showRowActionsColumn: PropTypes.bool,
 
         // relationship phase-1, will need remove when we allow editing
@@ -205,12 +205,22 @@ export const QbGrid = React.createClass({
         };
     },
 
+    /**
+     * A placeholder cell (to indicate columns can be added there) will get the correct styling.
+     * This function adds the isPlaceholderCell:true prop to qbHeaderCell/qbCell
+     * @returns {{isPlaceholderCell: boolean}}
+     */
     getPlaceholderCellProps() {
         return {
             isPlaceholderCell: true
         };
     },
 
+    /**
+     * If the grid is draggable, header cells need to show a move cursor.
+     * This function adds the isDraggable:true prop to qbHeaderCell
+     * @returns {{isDraggable: boolean}}
+     */
     getDraggableCellProps() {
         return {
             isDraggable: true

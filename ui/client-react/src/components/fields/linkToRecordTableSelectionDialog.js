@@ -4,6 +4,9 @@ import Locale from "../../locales/locales";
 import Select from '../select/reactSelectWrapper';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
+import FieldUtils from '../../utils/fieldUtils';
+import RelationshipUtils from '../../utils/relationshipUtils';
+import FieldFormats from '../../utils/fieldFormats';
 import _ from 'lodash';
 import './linkToRecordTableSelectionDialog.scss';
 
@@ -16,12 +19,19 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         tableSelected: PropTypes.func
     },
 
+    getInitialState() {
+        return {
+            selectedTableId: null,
+            selectedFieldId: null,
+            advancedSettingsOpen: false};
+    },
+
     /**
      * render a table name with an icon
      * @param option
      * @returns {XML}
      */
-    renderOption(option) {
+    renderTableOption(option) {
 
         return (<div className="tableOption">
                 <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={option.icon}/>
@@ -30,28 +40,50 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     },
 
     /**
+     * render a table name with an icon
+     * @param option
+     * @returns {XML}
+     */
+    renderFieldOption(option) {
+
+        return (
+            <div className="fieldOption">
+                <div className="fieldIconContainer">
+                    <Icon icon={option.icon}/>
+                </div>
+                <div className="fieldLabel">{option.label}</div>
+            </div>);
+    },
+    /**
      * select a table
      * @param choice
      */
-    selectChoice(choice) {
-        this.setState({selectedValue: choice});
+    selectField(field) {
+        this.setState({selectedFieldId: field.value});
     },
 
-    getInitialState() {
-        return {selectedValue: null};
+    /**
+     * select a table
+     * @param choice
+     */
+    selectTable(table) {
+
+        if (table.value !== this.state.selectedTableId) {
+            const selectedTable = _.find(this.props.tables, {id: table.value});
+            this.setState({selectedTableId: table.value, selectedFieldId: selectedTable.recordTitleFieldId});
+        }
     },
 
     /**
      * get react-select containing possible parent tables with icons
      * @returns {XML}
      */
-    getReactSelect() {
+    getTableSelect() {
         const placeHolderMessage = Locale.getMessage("selection.tablesPlaceholder");
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
-        let selectedValue = _.get(this, 'state.selectedValue');
 
-        let tableChoices = _.reject(this.props.tables, (table) => table.id === this.props.childTableId || !table.recordTitleFieldId);
-        let choices = tableChoices.map(table => {
+        const tableChoices = _.reject(this.props.tables, table => table.id === this.props.childTableId);
+        const choices = tableChoices.map(table => {
             return {
                 value: table.id,
                 icon: table.tableIcon,
@@ -61,10 +93,10 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         return <Select
             className="tableSelector"
-            value={selectedValue}
-            optionRenderer={this.renderOption}
+            value={this.state.selectedTableId}
+            optionRenderer={this.renderTableOption}
             options={choices}
-            onChange={this.selectChoice}
+            onChange={this.selectTable}
             placeholder={placeHolderMessage}
             noResultsText={notFoundMessage}
             autosize={false}
@@ -73,33 +105,100 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     },
 
     /**
+     * get react-select for master table field
+     * @returns {XML}
+     */
+    getFieldSelect() {
+
+        const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
+
+        const fields = selectedTable ? selectedTable.fields : [];
+
+        const fieldChoices = _.filter(fields, field => RelationshipUtils.isValidRelationshipKeyField(field));
+
+        const choices = fieldChoices.map(field => {
+
+            return {
+                value: field.id,
+                icon: FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType(field)),
+                label: field.name
+            };
+        });
+
+        return <Select
+            className="fieldSelector"
+            value={this.state.selectedFieldId}
+            optionRenderer={this.renderFieldOption}
+            options={choices}
+            onChange={this.selectField}
+            autosize={false}
+            clearable={false}
+        />;
+    },
+    /**
      * parent table was chosen
      */
     addToForm() {
-        this.props.tableSelected(this.state.selectedValue.value);
+        const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
+        const selectedField = _.find(selectedTable.fields, {id: this.state.selectedFieldId});
+
+        this.props.tableSelected(this.state.selectedTableId, selectedField);
+    },
+
+    /**
+     * show/hide advanced settings (field selection)
+     */
+    toggleAdvancedSettings() {
+
+        this.setState({advancedSettingsOpen: !this.state.advancedSettingsOpen});
     },
 
     render() {
 
         const table = _.find(this.props.tables, {id: this.props.childTableId});
+        const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
         const tableChooserDescription = Locale.getMessage("builder.linkToRecord.tableChooserDescription", {tableNoun: table.tableNoun});
+
+        const advancedSettingsClasses = ["advancedSettings"];
+        if (this.state.selectedTableId) {
+            advancedSettingsClasses.push("advancedSettingsEnabled");
+        }
+
+        if (this.state.advancedSettingsOpen) {
+            advancedSettingsClasses.push("advancedSettingsInfoEnabled");
+        }
         return (
             <MultiStepDialog show={this.props.show}
-                             canProceed={this.state.selectedValue !== null}
+                             canProceed={this.state.selectedTableId !== null}
                              onCancel={this.props.onCancel}
                              onFinished={this.addToForm}
                              finishedButtonLabel={Locale.getMessage("builder.linkToRecord.addToForm")}
                              classes={"tableDataConnectionDialog allowOverflow"}
+                             fixedHeight={false}
                              titles={[Locale.getMessage("builder.linkToRecord.dialogTitle")]}>
                 <div>
                     <div className="tableChooserDescription">{tableChooserDescription}</div>
 
                     <div className="tableChooserHeading"><I18nMessage message="builder.linkToRecord.tableChooserHeading"/></div>
-                    {this.getReactSelect()}
+                    {this.getTableSelect()}
+
+                    <div className={advancedSettingsClasses.join(" ")}>
+                        <div className="advancedSettingsToggle" >
+                            <span className="advancedSettingsToggleClickable" onClick={this.toggleAdvancedSettings}>
+                                <Icon icon="caret-down" className="toggleAdvancedIcon"/> <I18nMessage message="builder.linkToRecord.advancedSettingsHeading"/>
+                            </span>
+                        </div>
+                        <div className="advancedSettingsInfo">
+                            <div className="advancedSettingsDescription">
+                                <I18nMessage message="builder.linkToRecord.fieldChooserDescription" tableName={selectedTable && selectedTable.name}/>
+                            </div>
+
+                            {this.getFieldSelect()}
+                        </div>
+                    </div>
                 </div>
             </MultiStepDialog>);
     }
-
 });
 
 export default LinkToRecordTableSelectionDialog;

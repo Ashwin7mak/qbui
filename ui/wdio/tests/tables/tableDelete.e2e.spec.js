@@ -11,7 +11,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let tableCreatePO = requirePO('tableCreate');
     let ReportContentPO = requirePO('reportContent');
-    let leftNavPO = requirePO('leftNav');
+    let modalDialog = requirePO('/common/modalDialog');
 
     describe('Tables - delete table tests: ', function() {
         let realmName;
@@ -19,7 +19,6 @@
         let testApp;
         let EXISTING_TABLE_NAME_1 = 'Table 1';
         let EXISTING_TABLE_NAME_2 = 'Table 2';
-        let userId;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -47,10 +46,7 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            //wait until loading screen disappear in leftnav
-            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
         });
 
 
@@ -77,7 +73,7 @@
             tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Click don't delete table button
-            tableCreatePO.clickDontDeleteTableButton();
+            modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
 
             //Click on go back to apps Link
             tableCreatePO.clickBackToAppsLink();
@@ -86,6 +82,48 @@
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
             //Verify the table links count is same as original
             expect(newTableLinksCount).toBe(originalTableLinksCount);
+        });
+
+        it('Delete table', function()   {
+
+            //get the original count of table links in the left nav
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+
+            //Select table to delete ('Table 2' here) and make sure it lands in reports page
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_2);
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
+
+            //Click table settings Icon
+            ReportContentPO.clickSettingsIcon();
+
+            //Go to 'Table properties & settings'
+            ReportContentPO.clickModifyTableSettings();
+
+            //Click delete table action button
+            tableCreatePO.clickDeleteTableActionButton();
+
+            //Set the deletePromtTextField value to 'YES'
+            tableCreatePO.setDeletePromtTextFieldValue('YES');
+
+            //Click on Delete table. Need to use JS click because sometimes this button is not getting clicked intermittently
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 2
+                });
+                document.getElementsByClassName('modal-content')[0].getElementsByClassName('modal-footer')[0].querySelector('.primaryButton').dispatchEvent(event);
+            });
+
+            //Wait until new table button visible
+            tableCreatePO.newTableBtn.waitForVisible();
+
+            //Make sure table is actually deleted
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            //Verify the table links count decreased by 1
+            expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
         });
 
         /**
@@ -112,46 +150,10 @@
             ];
         }
 
-        deletePromtTextFieldTestCases().forEach(function(testCase) {
+        it('Delete table negative test cases with deletePrompt set to lowerCase yes, lowercase no,Mix of upper and lowerCase and empty', function()   {
 
-            it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
-                //Load the app
-                browser.call(function() {
-                    return e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-                });
-
-                //Select table to delete ('Table 1' here) and make sure it lands in reports page
-                tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
-                // wait for the report content to be visible
-                ReportContentPO.waitForReportContent();
-
-                //Click table settings Icon
-                ReportContentPO.clickSettingsIcon();
-
-                //Go to 'Table properties & settings'
-                ReportContentPO.clickModifyTableSettings();
-
-                //Click delete table action button
-                tableCreatePO.clickDeleteTableActionButton();
-
-                //Set the deletePromtTextField value
-                tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
-
-                //Make sure delete table button is disabled
-                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
-
-                //Click on don't Delete finally to make the dialogue to dissapear
-                tableCreatePO.clickDontDeleteTableButton();
-            });
-        });
-
-        it('Delete table', function()   {
-
-            //get the original count of table links in the left nav
-            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-            //Select table to delete ('Table 2' here) and make sure it lands in reports page
-            tableCreatePO.selectTable(EXISTING_TABLE_NAME_2);
+            //Select table to delete ('Table 1' here) and make sure it lands in reports page
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
 
@@ -164,19 +166,15 @@
             //Click delete table action button
             tableCreatePO.clickDeleteTableActionButton();
 
-            //Set the deletePromtTextField value to 'YES'
-            tableCreatePO.setDeletePromtTextFieldValue('YES');
+            deletePromtTextFieldTestCases().forEach(function(testCase) {
 
-            //Delete table
-            tableCreatePO.clickDeleteTableButton();
+                //Set the deletePromtTextField value
+                tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
-            //Wait until new table button visible
-            tableCreatePO.newTableBtn.waitForVisible();
+                //Make sure delete table button is disabled
+                expect(modalDialog.modalDialogPrimaryButton.isEnabled()).toBe(false);
+            });
 
-            //Make sure table is actually deleted
-            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-            //Verify the table links count decreased by 1
-            expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
         });
 
     });

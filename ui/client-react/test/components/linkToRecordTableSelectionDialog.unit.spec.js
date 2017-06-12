@@ -43,8 +43,15 @@ describe('LinkToRecordTableSelectionDialog', () => {
         component = mount(<LinkToRecordTableSelectionDialog {...props} />);
 
         domComponent = document.querySelector('.tableDataConnectionDialog');
-
         expect(domComponent).not.toBeNull();
+
+        // advanced settings toggle should be hidden
+        domComponent = document.querySelector('.tableDataConnectionDialog .advancedSettingsEnabled');
+        expect(domComponent).toBeNull();
+
+        // field picker should be hidden
+        domComponent = document.querySelector('.tableDataConnectionDialog .advancedSettingsInfoEnabled');
+        expect(domComponent).toBeNull();
 
         domComponent = document.querySelector('.tableDataConnectionDialog .finishedButton:disabled');
         expect(domComponent).not.toBeNull();
@@ -71,6 +78,22 @@ describe('LinkToRecordTableSelectionDialog', () => {
         expect(tableOption).not.toBeNull();
 
         TestUtils.SimulateNative.mouseDown(tableOption, {button: 0});
+
+        // advanced settings toggle should be available
+        domComponent = document.querySelector('.tableDataConnectionDialog .advancedSettingsEnabled');
+        expect(domComponent).not.toBeNull();
+
+        // but not the field picker yet...
+        domComponent = document.querySelector('.tableDataConnectionDialog .advancedSettingsInfoEnabled');
+        expect(domComponent).toBeNull();
+
+        // toggle the field picker
+        domComponent = document.querySelector('.tableDataConnectionDialog .toggleAdvancedIcon');
+        TestUtils.Simulate.click(domComponent);
+
+        // field picker should be available
+        domComponent = document.querySelector('.tableDataConnectionDialog .advancedSettingsInfoEnabled');
+        expect(domComponent).not.toBeNull();
 
         let finishedButton = document.querySelector('.tableDataConnectionDialog .finishedButton');
         expect(finishedButton).not.toBeNull();
