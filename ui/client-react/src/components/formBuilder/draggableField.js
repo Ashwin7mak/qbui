@@ -99,7 +99,7 @@ class DraggableField extends Component {
             onHover={this.onHover}
             checkIsDragging={this.isDragging}
             endDrag={this.endDrag}
-        />
+        />;
     }
 }
 
@@ -108,7 +108,7 @@ const mapStateToProps = (state, ownProps) => {
 
     return {
         selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined)
-    }
+    };
 };
 
 const mapDispatchToProps = {

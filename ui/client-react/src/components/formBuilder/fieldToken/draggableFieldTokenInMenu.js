@@ -39,7 +39,7 @@ export class DraggableFieldTokenInMenu extends Component {
             location: dragItemProps.location,
             relatedField: dragItemProps.relatedField,
             onHover: dragItemProps.onHover
-        }
+        };
     };
 
     /**

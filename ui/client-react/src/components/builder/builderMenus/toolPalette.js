@@ -50,7 +50,7 @@ class ToolPalette extends Component {
                                 toolPaletteFocus={this.props.toolPaletteFocus}
                                 appId={this.props.appId}
                                 tblId={this.props.tableId} />
-        )
+        );
     };
 
     renderToolPalette = () => (
