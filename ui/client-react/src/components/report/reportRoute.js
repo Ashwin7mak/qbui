@@ -118,14 +118,19 @@ export const ReportRoute = React.createClass({
     handleDrillIntoChild(tblId, recId) {
         let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, this.props.uniqueId);
 
+        let link;
         if (embeddedReport) {
             const existingPath = this.props.match.url;
             const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
             const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
-            const link = existingPath + recordDrawerSegment;
-            if (this.props.history) {
-                this.props.history.push(link);
-            }
+            link = existingPath + recordDrawerSegment;
+        } else {
+            let {appId, rptId} = this.props.reportData;
+            link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        }
+
+        if (this.props.history) {
+            this.props.history.push(link);
         }
     },
 
