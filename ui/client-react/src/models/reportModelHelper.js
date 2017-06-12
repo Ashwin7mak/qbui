@@ -143,7 +143,9 @@ class ReportModelHelper {
     static getGroupedReportData(groupData) {
         if (groupData) {
             groupData.forEach(data => {
-                data.group = data.group.replace('&amp;', '&');
+                if (data.group) {
+                    data.group = data.group.replace('&amp;', '&');
+                }
                 return data;
             });
         }

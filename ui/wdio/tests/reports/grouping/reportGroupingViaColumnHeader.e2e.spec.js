@@ -174,7 +174,7 @@
 
                     ]
                 },
-                /*{ //TODO: this test fails because it cannot find .qbTbody because the report never loads - need to investigate
+                {
                     message: 'NUMERIC FIELD: Duration field lowest to highest',
                     fieldName: 'DURATION TAKEN',
                     groupDirection: 'Group lowest to highest',
@@ -185,7 +185,7 @@
                         ['Chris Baker', 'Development', 'Upgrade DBMS', '03-19-2009', '04-28-2009', '9900%'],
                         ['Jon Neil', 'Development', 'Install latest software', '03-31-2009', '04-28-2009', '10000%']
                     ]
-                },*/
+                },
             ];
         }
 
