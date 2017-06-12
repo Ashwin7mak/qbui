@@ -118,19 +118,14 @@ export const ReportRoute = React.createClass({
     handleDrillIntoChild(tblId, recId) {
         let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, this.props.uniqueId);
 
-        let link;
         if (embeddedReport) {
             const existingPath = this.props.match.url;
             const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
             const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
-            link = existingPath + recordDrawerSegment;
-        } else {
-            let {appId, rptId} = this.props.reportData;
-            link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        }
-
-        if (this.props.history) {
-            this.props.history.push(link);
+            const link = existingPath + recordDrawerSegment;
+            if (this.props.history) {
+                this.props.history.push(link);
+            }
         }
     },
 
@@ -230,7 +225,7 @@ export const ReportRoute = React.createClass({
                         scrollingReport={this.props.scrollingReport}
                         loadDynamicReport={this.loadDynamicReport}
                         noRowsUI={true}
-                        handleDrillIntoChild={this.handleDrillIntoChild}
+                        handleDrillIntoChild={this.props.uniqueId && this.handleDrillIntoChild}
                     />
 
                     {this.props.isDrawerContext && this.getDrawerContainer()}
