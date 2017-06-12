@@ -15,6 +15,7 @@ import EmailValidator from "../../../../../common/src/validator/emailValidator";
 import EmailFormatter from "../../../../../common/src/formatter/emailFormatter";
 import SaveOrCancelFooter from '../../saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../../utils/navigationUtils';
+import FieldLabelElement from '../../QBForm/fieldLabelElement';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import * as UrlConsts from "../../../constants/urlConstants";
 import _ from "lodash";
@@ -83,7 +84,6 @@ export class AutomationBuilderContainer extends Component {
     };
 
     isEmailInvalid = (emails) => {
-        console.info("Check valid: " + emails);
         return EmailValidator.validateArrayOfEmails(EmailFormatter.splitEmails(emails)).isInvalid;
     };
 
@@ -121,19 +121,18 @@ export class AutomationBuilderContainer extends Component {
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
                 <div className="automationEdit">
-                    <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions()}/>
                     <div className="automationEdit--container">
-                        <span className="automationEdit--sectionHeader"><I18nMessage message="automation.automationEdit.emailSectionHeader"/></span>
+                        <h3><I18nMessage message="automation.automationEdit.emailSectionHeader"/></h3>
                         <div className="automationEditName automationEdit--section">
-                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.toHeader"/>:</span> <br/>
+                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.toHeader"/></span> <br/>
                             <EmailFieldValueEditor value={to} onChange={this.updateTo} invalid={this.isEmailInvalid(to)}/>
                         </div>
                         <div className="automationEditName automationEdit--section">
-                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.subjectHeader"/>:</span> <br/>
+                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.subjectHeader"/></span> <br/>
                             <TextFieldValueEditor inputType="text" value={subject} onChange={this.updateSubject}/>
                         </div>
                         <div className="automationEditName automationEdit--section">
-                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.bodyHeader"/>:</span> <br/>
+                            <span className="automationEdit--header"><I18nMessage message="automation.automationEdit.bodyHeader"/></span> <br/>
                             <MultiLineTextFieldValueEditor value={body} onChange={this.updateBody}/>
                         </div>
                     </div>
