@@ -7,6 +7,7 @@ import {findFormElementKey} from '../../utils/formUtils';
 import {CONTEXT} from '../../actions/context';
 import DragAndDrop from './dragAndDropField';
 import FieldElement from '../QBForm/fieldElement';
+import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 import _ from 'lodash';
 
 const DRAG_PREVIEW_TIMEOUT = 30;
@@ -99,6 +100,7 @@ class DraggableField extends Component {
             onHover={this.onHover}
             checkIsDragging={this.isDragging}
             endDrag={this.endDrag}
+            fieldEditingTools={FieldEditingTools}
         />;
     }
 }

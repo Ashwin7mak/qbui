@@ -9,7 +9,7 @@ import DroppableFormElement from './droppableFormElement';
  * @param showFieldEditingTools
  * @returns {*}
  */
-export default (FieldComponent, showFieldEditingTools) => {
+export default (FieldComponent) => {
     // This must be a component that could have state to work with drag/drop animations.
     // It cannot be a stateless component built with a function.
     class DragDropFieldComponent extends Component {
@@ -25,5 +25,5 @@ export default (FieldComponent, showFieldEditingTools) => {
     return _.flow([
         DraggableElement,
         DroppableFormElement
-    ])(DragDropFieldComponent, showFieldEditingTools);
+    ])(DragDropFieldComponent);
 };

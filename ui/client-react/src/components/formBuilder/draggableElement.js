@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from 'react';
 import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
-import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 import _ from 'lodash';
 
 /**
@@ -76,19 +75,23 @@ function collect(connect, monitor) {
 /**
  * A higher order component that accepts a field which will become draggable
  * @param ReactComponent
- * @param showFieldEditingTools
  * @param itemType The type of draggable element. Can only be dropped on targets that accept the same type.
  * @returns {*}
  * @constructor
  */
-const DraggableElementHoc = (ReactComponent, showFieldEditingTools = true, itemType = DraggableItemTypes.FIELD) => {
+const DraggableElementHoc = (ReactComponent, itemType = DraggableItemTypes.FIELD) => {
 
     class DraggableElement extends Component {
         static propTypes = {
             id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             beginDrag: PropTypes.func,
             checkIsDragging: PropTypes.func,
-            endDrag: PropTypes.func
+            endDrag: PropTypes.func,
+
+            /**
+             * A component that will render the field editing tools. It receives all props passed into the DraggableElement.
+             * Optional. */
+            fieldEditingTools: PropTypes.func
         };
 
         componentDidMount() {
@@ -98,7 +101,7 @@ const DraggableElementHoc = (ReactComponent, showFieldEditingTools = true, itemT
         }
 
         render() {
-            const {connectDragSource, isDragging, location, formBuilderContainerContentElement, relatedField} = this.props;
+            const {connectDragSource, isDragging} = this.props;
 
             let classNames = ['draggableField'];
             let draggableFieldWrapper = ['draggableFieldWrapper'];
@@ -108,10 +111,12 @@ const DraggableElementHoc = (ReactComponent, showFieldEditingTools = true, itemT
                 classNames.push('notDragging');
             }
 
+            const FieldEditingTools = this.props.fieldEditingTools;
+
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-                        {showFieldEditingTools && <FieldEditingTools relatedField={relatedField} location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement}/>}
+                        {FieldEditingTools && <FieldEditingTools {...this.props} />}
                         <ReactComponent {...this.props} />
                     </div>
                 </div>

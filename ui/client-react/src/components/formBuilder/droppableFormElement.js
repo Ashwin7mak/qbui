@@ -62,12 +62,13 @@ function collect(connectDropSource, monitor) {
 
 /**
  * A higher order component that will return a droppable version of the element passed in.
- * @param FieldComponent
+ * @param ReactComponent
  * @param connected Whether or not to connect this component to the redux state. Pass in false to help with unit testing.
+ * @param types The types of elements this droppable field will accept.
  * @returns {*}
  * @constructor
  */
-const DroppableElement = (FieldComponent, connected = true) => {
+const DroppableElement = (ReactComponent, connected = true, types = [DraggableItemTypes.FIELD]) => {
     class component extends React.Component {
         render() {
             const {connectDropTarget, isOver, canDrop} = this.props;
@@ -77,14 +78,14 @@ const DroppableElement = (FieldComponent, connected = true) => {
 
             return connectDropTarget(
                 <div className={classNames.join(' ')}>
-                    <FieldComponent {...this.props} />
+                    <ReactComponent {...this.props} />
                 </div>
             );
         }
     }
 
     // The first argument could be an array of draggable types (e.g., could add tabs and sections here)
-    let wrappedComponent = DropTarget(DraggableItemTypes.FIELD, formTarget, collect)(component);
+    let wrappedComponent = DropTarget(types, formTarget, collect)(component);
 
     if (connected) {
         return connect(mapStateToProps)(wrappedComponent);
