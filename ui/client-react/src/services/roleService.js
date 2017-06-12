@@ -12,8 +12,7 @@ class RoleService extends BaseService {
         //  App Service API endpoints
         this.API = {
             GET_APP_ROLES       : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.ROLES}`,
-            APP_ROLE_USERS      : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.ROLES}/{1}/${constants.USERS}`,
-            GET_REALM_USERS       : `${constants.BASE_URL.PROXY}/${constants.USERS}/${constants.SEARCH}/?value={0}`,
+            APP_ROLE_USERS      : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.ROLES}/{1}/${constants.USERS}`
         };
     }
 
@@ -27,48 +26,25 @@ class RoleService extends BaseService {
     }
 
     /**
-     * unassign users from app role
+     * remove users from app role
      * @param appId
      * @param roleId
+     * @param userIds - list of user ids
      */
-    unassignUsersFromRole(appId, roleId, userIds) {
-
+    removeUsersFromAppRole(appId, roleId, userIds) {
         let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-
         return super.delete(url, {data: userIds});
     }
 
-
     /**
-     * assign users to an app role
+     * Assign an app role to a list of users
      * @param appId
      * @param roleId
-     */
-    assignUsersToRole(appId, roleId) {
-        let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-        return super.post(url);
-    }
-
-    /**
-     * gets all Realm users based on the search term
-     * @param searchTerm
+     * @param userIds - list of userids
      * @returns {*}
      */
-    searchRealmUsers(searchTerm) {
-        let url = super.constructUrl(this.API.GET_REALM_USERS, [searchTerm]);
-        return super.get(url);
-    }
-
-    /**
-     * Adds a User to an App
-     * @param appId
-     * @param userInfo
-     * @returns {*}
-     */
-    assignUserToApp(appId, userId, roleId) {
+    assignUsersToAppRole(appId, roleId, userIds) {
         let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-        let userIds = [];
-        userIds.push(userId);
         return super.post(url, userIds);
     }
 }

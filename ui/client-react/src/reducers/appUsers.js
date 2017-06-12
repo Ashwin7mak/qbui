@@ -4,7 +4,7 @@ const appUser = (
 	state = {
 	//  default states
     successDialogOpen: false,
-    addedAppUser: [],
+    addedAppUser: []
 },
 	action) => {
 
@@ -12,8 +12,8 @@ const appUser = (
     case types.TOGGLE_ADD_TO_APP_SUCCESS_DIALOG: {
         return {
             ...state,
-            successDialogOpen: action.isOpen,
-            addedAppUser: [action.email]
+            successDialogOpen: action.content.isOpen,
+            addedAppUser: [action.content.email]
         };
     }
 
