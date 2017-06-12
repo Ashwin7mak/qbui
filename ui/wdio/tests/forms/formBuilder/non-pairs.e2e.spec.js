@@ -59,45 +59,7 @@
             });
 
             // disabled
-            xit('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
-                //TODO: disabled pending MC-1424: Keyboard Nav for Adding New Field & ESC key enhancements
-                let selectedField = formBuilderPO.KB_selectField(2);
-                browser.keys([
-                    'Escape', // deselect field
-                    'Escape', // focus form builder
-                    'Shift', 'Tab', // focus NEW FIELD panel
-                    'Shift'] // release mod key
-                );
-                // verify that the field is still selected
-                expect(formBuilderPO.getSelectedFieldLabel()).toEqual(selectedField);
-                // TODO: select/add a new field via keyboard & verify that is inserted directly below the selected field
-            });
-
-            xit('check the REQUIRED checkbox, cancel & verify not checked', function() {
-                //TODO: disabled pending MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
-                let originalFields = formBuilderPO.getFieldLabels();
-                browser.moveToObject(formBuilderPO.getFieldLocator(1) + ' .draggableField', 1, 1);
-                browser.buttonDown();
-                browser.buttonUp();
-                // verify initial state of checkbox
-                // I had to define separate elements for checked & non-checked states, which is not ideal
-                formBuilderPO.fieldProperty_Required.waitForExist();
-                expect(formBuilderPO.requiredCheckboxChecked.isExisting()).toBe(false);
-                expect(formBuilderPO.requiredCheckboxNotChecked.isExisting()).toBe(true);
-                // revise the REQUIRED property (i.e. click the checkbox to make it checked)
-                formBuilderPO.fieldProperty_Required.click();
-                // this line fails even though the checkbox has been checked, so I logged the issue & disabled the test
-                formBuilderPO.requiredCheckboxChecked.waitForExist();
-                // cancel & reopen
-                formBuilderPO.cancel().open();
-                // verify REQUIRED checkbox is not checked
-                expect(formBuilderPO.requiredCheckboxChecked.isExisting()).toBe(false);
-            });
-
-            xit('check the REQUIRED checkbox, save & verify checked', function() {
-                //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
-            });
-
+            //Add drag new field to form?
 
             xit('add a new field & verify that it does not appear in the existing fields list', function() {
                 // MC-3100: New fields appear immediately in Existing field tab
@@ -133,6 +95,25 @@
             });
 
             // one-offs
+
+            it('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
+                let newField = formBuilderPO.fieldTokenTitle.getText();
+                // verify (hope) that the 2nd field (where new field will be inserted) doesn't already match new field label
+                expect(formBuilderPO.getFieldLabels()[1]).not.toEqual(newField);
+                formBuilderPO.KB_selectField(1);
+                browser.keys([
+                    'Escape', // focus form container
+                    'Shift', 'Tab', 'Shift', // focus new field container & release mod key
+                    'Enter', // focus new field content
+                    'Tab', // focus search
+                    'Tab', // focus first new field
+                    'Enter', // add new field
+                ]);
+                // verify that the new field is selected & appears below the previous selection
+                expect(formBuilderPO.getSelectedFieldLabel()).toEqual(newField);
+                expect(formBuilderPO.getFieldLabels()[1]).toEqual(newField);
+            });
+
             it('select a field, add a new field, verify new field is added directly below selection', function() {
                 // store the list of fields before adding
                 let origFields = formBuilderPO.getFieldLabels();

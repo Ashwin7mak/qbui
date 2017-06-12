@@ -31,6 +31,11 @@ class formBuilderPage {
         return browser.element('.checkboxPropertyContainer .checkbox');
     }
 
+    get fieldProperty_Required_Input() {
+        // REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
+        return browser.element('.checkboxPropertyContainer .checkbox input');
+    }
+
     get fieldPropertiesTitle() {
         // TITLE in the FIELD PROPERTIES panel (when a field is selected)
         return browser.element('.fieldPropertiesTitle');
@@ -69,16 +74,6 @@ class formBuilderPage {
     get modalDismiss() {
         // DON'T SAVE button in the SAVE CHANGES? dlg
         return browser.element('.modal-dialog .middleButton');
-    }
-
-    get requiredCheckboxChecked() {
-        // The MUST BE FILLED IN checkbox in its CHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:checked');
-    }
-
-    get requiredCheckboxNotChecked() {
-        // The MUST BE FILLED IN checkbox in its UNCHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
     }
 
     get saveBtn() {
@@ -217,6 +212,11 @@ class formBuilderPage {
         return this.selectedField.element('./..').getText();
     }
 
+    getRequiredCheckboxState() {
+        // gets checked status of the MUST BE FILLED IN checkbox ('checked' attribute is either NULL or TRUE)
+        return this.fieldProperty_Required_Input.getAttribute('checked') !== null;
+    }
+
     moveByName(source, target) {
         // Clicks on the specified source field label and drags it to the specified target field label
         let labels = this.getFieldLabels();
@@ -298,6 +298,14 @@ class formBuilderPage {
         browser.buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
+    }
+
+    setRequiredCheckboxState(state) {
+        // Clicks on the MUST BE FILLED IN checkbox IF NECESSARY to make the checked state match the specified value
+        if (this.getRequiredCheckboxState() !== state) {
+            this.fieldProperty_Required.click();
+        }
+        return this;
     }
 
     setViewportSize(size, resizeViewport) {
@@ -398,10 +406,10 @@ class formBuilderPage {
 
     KB_save(index) {
         // save form via keyboard
-        //browser.keys(['Command', 's', 'Command']);
+        browser.keys(['Command', 's', 'Command']);
         // cmd above doesn't work on EDGE...
         // todo: figure out this problem; not reproducible manually
-        this.save();
+        // this.save();
         return this;
     }
 
