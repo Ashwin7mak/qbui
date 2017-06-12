@@ -10,7 +10,8 @@
     var formsPO = requirePO('formsPage');
     var tablesPO = requirePO('tableCreate');
     let loadingSpinner = requirePO('/common/loadingSpinner');
-
+    const sText = 'testTextValue';
+    const sNumeric = 1;
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
         recordCheckBoxes: {
@@ -221,6 +222,22 @@
                 return this.formatRecordValue(cellValue2);
             }
         }},
+
+        /**
+         * Method to verify cell values in the embedded report for table child table A under parent table A -> report1 -> ListAll report
+         */
+        verifyFieldValuesInEmbeddedReportTable: {
+            value: function (expectedRecordValues) {
+                for (var i = 0; i < expectedRecordValues.length; i++) {
+                    console.log("The expected values are: " + JSON.stringify(expectedRecordValues));
+                    //text field
+                    expect(expectedRecordValues[0]).toBe(sText.toString());
+                    //numeric field
+                    expect(expectedRecordValues[1]).toBe(sNumeric.toString());
+                }
+            }
+        },
+
         /**
          * Strip the data from the first column of the table row
          * @param: recordIndex, recordCellIndex

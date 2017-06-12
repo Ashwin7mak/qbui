@@ -153,12 +153,9 @@ describe('Relationships - View child table on form tests: ', () => {
             reportContentPO.waitForReportContent();
             const origRecordCount = formsPagePO.getRecordsCountInATable();
 
-            //Variable declarations
-            var textToEnter = 'My new text';
-
             // Click on add child button on embedded table opens trowser
             relationshipsPO.clickAddChildButton();
-            var fieldTypes = ['allTextFields', 'allParentRecordFields'];
+            const fieldTypes = ['allTextFields', 'allParentRecordFields'];
 
             browser.waitForVisible('form.editForm');
             // enter form values
@@ -170,6 +167,10 @@ describe('Relationships - View child table on form tests: ', () => {
             formsPagePO.clickFormSaveBtn();
             // wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
+
+            // Verify new record got added to the end of the embedded table and verify the expected field values
+            const recordValues = reportContentPO.getRecordValues(origRecordCount);
+            reportContentPO.verifyFieldValuesInEmbeddedReportTable(recordValues);
 
             // Verify the records count got increased by 1
             expect(formsPagePO.getRecordsCountInATable()).toBe(origRecordCount + 1);

@@ -334,7 +334,6 @@
 
             if (option !== []) {
                 //Click on filtered option
-                option[0].waitForVisible();
                 option[0].element('div div').click();
                 //wait until loading screen disappear
                 return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
