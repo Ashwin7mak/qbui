@@ -149,9 +149,18 @@ const fieldsStore = (state = [], action) => {
             fieldList = _.cloneDeep(fieldList);
 
             let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
+            let {field, propertyName, newValue} = action;
 
-            fieldList.fields[fieldIndex] = {...action.field, isPendingEdit: true};
+            field[propertyName] = newValue;
+
+            if (propertyName === 'unique') {
+                //indexed needs to be set to true if 'unique' is set to true;
+                field.indexed = newValue;
+            }
+
+            fieldList.fields[fieldIndex] = {...field, isPendingEdit: true};
             fieldList.isPendingEdit = true;
+
             newState.push(fieldList);
             return newState;
 

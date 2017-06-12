@@ -29,8 +29,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateField: (field, appId, tableId) => {
-            dispatch(updateField(field, appId, tableId));
+        updateField: (field, propertyName, newValue, appId, tableId) => {
+            dispatch(updateField(field, propertyName, newValue, appId, tableId));
         }
     };
 };
@@ -238,12 +238,8 @@ export class FieldProperties extends Component {
      */
     updateFieldProps = (newValue, propertyName) => {
         let field = this.props.selectedField;
-        field[propertyName] = newValue;
-        if (propertyName === this.unique) {
-            //indexed needs to be set to true if 'unique' is set to true;
-            field.indexed = newValue;
-        }
-        this.props.updateField(field, this.props.appId, this.props.tableId);
+
+        this.props.updateField(field, propertyName, newValue, this.props.appId, this.props.tableId);
     }
 
     /**
