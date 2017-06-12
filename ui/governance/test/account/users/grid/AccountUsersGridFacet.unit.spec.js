@@ -67,35 +67,35 @@ describe('Facet Fields Permissions', () => {
         GovernanceBundleLoader.changeLocale('en-us');
     });
 
-    const PERM_AGNOSTIC_FACETS = [
+    const PERM_AGNOSTIC_FACETS = () => [
         Locale.getMessage("governance.account.users.userStatus"),
         Locale.getMessage("governance.account.users.accessStatus"),
         Locale.getMessage("governance.account.users.paidSeatSingular"),
         Locale.getMessage("governance.account.users.quickbaseStaff")];
 
-    const ACCOUNT_ONLY_FACETS = [
+    const ACCOUNT_ONLY_FACETS = () => [
         Locale.getMessage("governance.account.users.inactive"),
         Locale.getMessage("governance.account.users.inGroup"),
         Locale.getMessage("governance.account.users.groupManager"),
         Locale.getMessage("governance.account.users.canCreateApps"),
         Locale.getMessage("governance.account.users.appManager")];
 
-    const REALM_ONLY_FACETS = [
+    const REALM_ONLY_FACETS = () => [
         Locale.getMessage("governance.account.users.realmDirectoryUsers"),
         Locale.getMessage("governance.account.users.realmApproved")];
 
     it("should get ONLY the Realm fields", ()=> {
         let realmAdminFacets = GetFacetFields(false, true);
-        expect([...PERM_AGNOSTIC_FACETS, ...REALM_ONLY_FACETS]).toEqual(_.map(realmAdminFacets, (facet) => facet.name));
+        expect([...PERM_AGNOSTIC_FACETS(), ...REALM_ONLY_FACETS()]).toEqual(_.map(realmAdminFacets, (facet) => facet.name));
     });
 
     it("should get ONLY the Account fields", ()=> {
         let accountFacets = GetFacetFields(true, false);
-        expect([...PERM_AGNOSTIC_FACETS, ...ACCOUNT_ONLY_FACETS]).toEqual(_.map(accountFacets, (facet) => facet.name));
+        expect([...PERM_AGNOSTIC_FACETS(), ...ACCOUNT_ONLY_FACETS()]).toEqual(_.map(accountFacets, (facet) => facet.name));
     });
 
     it("should get ALL the fields", ()=> {
-        const ALL_FACETS = [...PERM_AGNOSTIC_FACETS, ...ACCOUNT_ONLY_FACETS, ...REALM_ONLY_FACETS];
+        const ALL_FACETS = [...PERM_AGNOSTIC_FACETS(), ...ACCOUNT_ONLY_FACETS(), ...REALM_ONLY_FACETS()];
         let allFacets = GetFacetFields(true, true);
         expect(ALL_FACETS).toEqual(_.map(allFacets, (facet) => facet.name));
     });
