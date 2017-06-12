@@ -14,7 +14,7 @@ export default (FieldComponent) => {
     class DragDropFieldComponent extends Component {
         render() {
             return (
-                <div className="dragAndDropField">
+                <div className="dragAndDropElement">
                     <FieldComponent {...this.props} />
                 </div>
             );

@@ -15,7 +15,7 @@
         height: 150px !important;
     }
 
-    .dragAndDropField {
+    .dragAndDropElement {
         max-width: $form-edit-input-width;
 
         @include small-breakpoint {
