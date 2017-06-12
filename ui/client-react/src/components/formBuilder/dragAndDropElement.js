@@ -5,17 +5,17 @@ import DroppableFormElement from './droppableElement';
 
 /**
  * This HOC is a convenience method to wrap a field in both a drag and drop source.
- * @param FieldComponent
  * @returns {*}
+ * @param ReactComponent
  */
-export default (FieldComponent) => {
+export default (ReactComponent) => {
     // This must be a component that could have state to work with drag/drop animations.
     // It cannot be a stateless component built with a function.
-    class DragDropFieldComponent extends Component {
+    class DragDropReactComponent extends Component {
         render() {
             return (
                 <div className="dragAndDropElement">
-                    <FieldComponent {...this.props} />
+                    <ReactComponent {...this.props} />
                 </div>
             );
         }
@@ -24,5 +24,5 @@ export default (FieldComponent) => {
     return _.flow([
         DraggableElement,
         DroppableFormElement
-    ])(DragDropFieldComponent);
+    ])(DragDropReactComponent);
 };
