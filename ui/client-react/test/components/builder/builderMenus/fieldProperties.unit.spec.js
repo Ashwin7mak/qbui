@@ -218,24 +218,6 @@ describe('FieldProperties', () => {
         });
     });
 
-    // describe('findFieldProperties', () => {
-    //     it('will update field properties', () => {
-    //         let selectedField = {
-    //
-    //         }
-    //         component = shallow(<FieldProperties app={}
-    //                                              selectedField={{}}/>);
-    //
-    //         let propertyName = 'mockPropertyName';
-    //         let value = true;
-    //
-    //         instance = component.instance();
-    //         instance.updateFieldProps(value, propertyName);
-    //
-    //         expect(mockActions.updateField).toHaveBeenCalledWith({}, propertyName, value, appId, tableId);
-    //     });
-    // });
-
     describe('createPropertiesTitle', () => {
         it('renders with title container with proper name', () => {
             component = shallow(<FieldProperties />);
