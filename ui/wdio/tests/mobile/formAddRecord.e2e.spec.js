@@ -67,7 +67,7 @@
             expect(newRecordCount).toBe(origRecordCount + 1);
         });
 
-        it('Click on cancel button on form', function() {
+        it('Click on close button on form', function() {
 
             // Open table home page
             e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
