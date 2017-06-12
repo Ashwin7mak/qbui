@@ -145,7 +145,10 @@ describe('Relationships - View child table on form tests: ', () => {
             relationshipsPO.closeSlideyRighty();
         });
 
-        it('Test that the Add Child button opens a trouser, adds a row to the embedded report', () => {
+        /**
+         *  Add Child button opens a trowser, adds a row to the embedded report
+         */
+        it('Test that the Add Child button opens a trowser, adds a row to the embedded report', () => {
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
             const origRecordCount = formsPagePO.getRecordsCountInATable();
@@ -172,6 +175,7 @@ describe('Relationships - View child table on form tests: ', () => {
             expect(formsPagePO.getRecordsCountInATable()).toBe(origRecordCount + 1);
 
         });
+
         /**
          * Navigate to a record (view form) and assert that the section containing an empty child table is displayed
          */
