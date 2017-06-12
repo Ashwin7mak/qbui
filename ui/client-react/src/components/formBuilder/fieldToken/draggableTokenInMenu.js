@@ -3,11 +3,13 @@ import FieldTokenInMenu from './fieldTokenInMenu';
 import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import DraggableElement from '../draggableElement';
 
+const FieldToken = DraggableElement(FieldTokenInMenu, false);
+
 /**
  * This is a base component that can be composed into custom implementations for dragging specific types of elements
  * on to the form.
  *
- * See DefaultDraggableFieldTokenInMenu for the most common implementation for dragging most fields onto a form.
+ * See DraggableFieldTokenInMenu for the most common implementation for dragging most fields onto a form.
  *
  * A component which allows the field token to be clicked and dragged. The click and drag cannot be on the same element because drag
  * will take precedence over click, making the element un-clickable.
@@ -77,8 +79,6 @@ export class DraggableTokenInMenu extends Component {
     };
 
     render() {
-        const FieldToken = DraggableElement(FieldTokenInMenu, false);
-
         return (
             <div className="fieldTokenInMenuWrapper"
                  onClick={this.clickToAddToForm}
