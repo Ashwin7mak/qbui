@@ -210,11 +210,12 @@ export class FieldProperties extends Component {
         if (isRecordTitleField) {
             fieldPropContainers.push(this.createRequiredProperty(true, key++, true));
             fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
-        } else if (fieldType !== serverTypeConsts.CHECKBOX) {
-            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
-            fieldPropContainers.push(this.createUniqueProperty(this.props.selectedField.unique, key++));
         } else {
             fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
+        }
+
+        if (fieldType !== serverTypeConsts.CHECKBOX) {
+            fieldPropContainers.push(this.createUniqueProperty(this.props.selectedField.unique, key++));
         }
 
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
