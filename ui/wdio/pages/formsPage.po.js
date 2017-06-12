@@ -8,7 +8,6 @@
     // Import the base page object
 
     var e2ePageBase = requirePO('e2ePageBase');
-    var reportContentPO = requirePO('reportContent');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
 
     var sText = 'testTextValue';
@@ -37,7 +36,7 @@
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
         //cancel form button
-        formCancelBtn: {get: function() {return browser.element('.mainTrowserFooterButton');}},
+        formCancelBtn: {get: function() {return browser.element('.alternativeTrowserFooterButton');}},
 
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.element('div.qbErrorMessage.qbErrorMessageVisible');}},
@@ -46,11 +45,6 @@
         //close btn on error container
         formErrorMessageContainerCloseBtn : {get: function() {return this.formErrorMessageContainerEl.element('.iconUISturdy-x-secondary');}},
         formErrorMessageContent : {get: function() {return this.formErrorMessageContainerEl.element('.qbErrorMessageContent');}},
-
-        //Save changes before leaving dialogue
-        formsSaveChangesDialog : {get: function() {return browser.element('.modal-dialog');}},
-        formsSaveChangesDialogHeader : {get: function() {return this.formsSaveChangesDialog.element('.modal-body');}},
-        formsSaveChangesDialogFooter : {get: function() {return this.formsSaveChangesDialog.element('.modal-footer');}},
 
         // Notification Container for form actions
         notificationContainerEl: {get: function() {return browser.element('.notification-container');}},
@@ -453,39 +447,6 @@
             expect(this.formErrorMessageHeader.getText()).toBe(errorHeader);
             //Close the error container
             this.clickCloseBtnOnErrorContainer();
-        }},
-
-        /**
-         * Method to click a button on Save changes dialogue box
-         */
-        clickButtonOnSaveChangesDialog : {value: function(btnName) {
-            //get all save buttons on the form
-            var btns = this.formsSaveChangesDialogFooter.elements('button').value.filter(function(button) {
-                return button.getAttribute('textContent') === btnName;
-            });
-
-            if (btns !== []) {
-                //Click on filtered save button
-                return btns[0].click();
-            } else {
-                throw new Error('button with name ' + btnName + " not found on the Save Changes Dialogue box");
-            }
-        }},
-
-        /**
-         * Method to close save changes dialogue box by clicking on 'Dont save' button
-         */
-        closeSaveChangesDialogue : {value: function() {
-            //Need this for notifications to slide away
-            browser.pause(5000);
-            //click on form close button
-            this.clickFormCloseBtn();
-            //wait until save changes dialogue popups
-            this.formsSaveChangesDialog.waitForVisible();
-            //come out of dirty form state
-            expect(this.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
-            //close the dialogue by clicking on don't save
-            return this.clickButtonOnSaveChangesDialog("Don't save");
         }},
 
         /**

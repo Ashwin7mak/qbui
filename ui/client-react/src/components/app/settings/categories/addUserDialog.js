@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
 import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
+import {assignUserToAppRole} from '../../../../actions/appRoleActions';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from "../../../../utils/i18nMessage";
 import AddUserPanel from './addUserPanel';
@@ -11,13 +13,14 @@ export class AddUserDialog extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            isValid: false
-        };
         // bind to fix context for event handlers
         this.onFinished = this.onFinished.bind(this);
         this.onCancel = this.onCancel.bind(this);
-        this.isValid = this.isValid.bind(this);
+        this.setValid = this.setValid.bind(this);
+    }
+
+    componentWillMount() {
+        this.setValid(false);
     }
 
     /**
@@ -25,7 +28,7 @@ export class AddUserDialog extends React.Component {
      * @returns void
      */
     onCancel() {
-        this.state.isValid = false;
+        this.setValid(false);
         this.props.hideDialog(false);
     }
 
@@ -34,35 +37,36 @@ export class AddUserDialog extends React.Component {
      * @returns void
      */
     onFinished() {
-        const userInfo = {
-            // refs is used here to get the instance of
-            // AddUserPanel, as opposed to using redux/flux actions
-            userId: this.userPanel.getSelectedUser(),
-            roleId: this.props.userRoleIdToAdd,
-        };
-        const responsePromise = this.props.assignUserToApp(this.props.appId, userInfo);
+        if (this.props.assignUserToAppRole) {
+            const userInfo = {
+                userId: this.userPanel.getSelectedUser(),
+                roleId: this.props.userRoleIdToAdd
+            };
 
-        if (responsePromise) {
-            responsePromise.then(
-            (response) => {
-                this.state.isValid = false;
-                this.props.hideDialog(false);
-                this.props.onAddedUser(userInfo.userId);
-            },
-            (error) => {
-                // leave the dialog open but issue a growl indicating an error
-                NotificationManager.error(Locale.getMessage('users.addUser'), Locale.getMessage('failed'));
-            }
-        );
+            this.props.assignUserToAppRole(this.props.appId, userInfo.roleId, userInfo.userId).then(
+                () => {
+                    let assignedUser = _.find(this.props.realmUsers, (realmUser)=>{
+                        return realmUser.id === userInfo.userId;
+                    });
+                    let userEmail = assignedUser ? assignedUser.email : '';
+
+                    this.setValid(false);
+                    this.props.hideDialog(false);
+                    this.props.showSuccessDialog(true, userEmail);
+                },
+                () => {
+                    // leave the dialog open but issue a growl indicating an error
+                    NotificationManager.error(Locale.getMessage('app.users.userAddError'), Locale.getMessage('failed'));
+                }
+            );
         }
-
     }
 
     /**
      * sets Modal input valid state
      * @returns void
      */
-    isValid(validState) {
+    setValid(validState) {
         this.setState({
             isValid: validState
         });
@@ -88,7 +92,7 @@ export class AddUserDialog extends React.Component {
                 <AddUserPanel appRoles={this.props.appRoles}
                               realmUsers={this.props.realmUsers}
                               searchUsers={this.props.searchUsers}
-                              isValid={this.isValid}
+                              isValid={this.setValid}
                               existingUsers={this.props.existingUsers}
                               setUserRoleToAdd={this.props.setUserRoleToAdd}
                               ref={(userPanel)=>{this.userPanel = userPanel;}}
@@ -102,7 +106,7 @@ AddUserDialog.propTypes = {
     realmUsers: PropTypes.arrayOf(PropTypes.object),
     searchUsers: PropTypes.func,
     appRoles: PropTypes.arrayOf(PropTypes.object),
-    assignUserToApp: PropTypes.func,
+    assignUserToAppRole: PropTypes.func,
     setUserRoleToAdd: PropTypes.func,
     userRoleIdToAdd: PropTypes.number,
     appId: PropTypes.string,
@@ -111,4 +115,13 @@ AddUserDialog.propTypes = {
     hideDialog: PropTypes.func
 };
 
-export default AddUserDialog;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        assignUserToAppRole: (appId, roleId, userId) => {return dispatch(assignUserToAppRole(appId, roleId, userId));}
+    };
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(AddUserDialog);

@@ -38,8 +38,7 @@ class TopNav extends Component {
                             <Button tabIndex="1"  className="iconLink toggleNavButton" onClick={onNavClick}>
                                 <Icon icon="hamburger" />
                             </Button>
-
-                            {this.getTopTitle()}
+                             {this.getTopTitle()}
                         </ButtonGroup>
                     </div> }
 

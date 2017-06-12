@@ -65,11 +65,14 @@
             });
         });
 
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            return e2ePageBase.loadAppByIdInBrowser(realmName, app.id);
+        });
+
         it('should contain a list of only EMAIL automations for application', function() {
-            //navigate to Automations list in Application setting through 'Application Settings -> Automations' menu
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
-            //wait until loading screen disappear in leftnav
-            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
 
             //click 'Settings' button and validate that the 'Automation' item is available on the setting list
             appToolbar.appSettingsBtn.click();

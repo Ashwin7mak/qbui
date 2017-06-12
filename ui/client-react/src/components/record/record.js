@@ -6,6 +6,7 @@ import * as SchemaConsts from "../../constants/schema";
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {editRecordStart, editRecordChange} from '../../actions/recordActions';
+import {getAppUsers} from '../../reducers/app';
 import {UNSAVED_RECORD_ID} from "../../constants/schema";
 
 export const Record = React.createClass({
@@ -15,7 +16,8 @@ export const Record = React.createClass({
     componentWillReceiveProps(nextProps) {
         let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && this.props.pendEdits.recordEditOpen === false;
         let shouldRecordEditOpen = _.has(nextProps, 'pendEdits.recordEditOpen') && !nextProps.pendEdits.recordEditOpen;
-        if (wasRecordEditOpen !== shouldRecordEditOpen && _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges)) {
+        let noPendingChanges = _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges);
+        if ((wasRecordEditOpen !== shouldRecordEditOpen && noPendingChanges) || (_.get(this.props, 'location.query.detailKeyValue', undefined) !== undefined  && noPendingChanges)) {
             this.handleEditRecordStart(this.props.recId);
         }
     },
@@ -71,7 +73,7 @@ export const Record = React.createClass({
                     let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
                     // fieldId is a numeric and params from url are strings so +parentFid for type equality test
                     if (parentFid && +parentFid === fieldId) {
-                        value =  _.get(queryParams, 'detailKeyValue', '');
+                        value =  _.get(queryParams, 'detailKeyValue', null);
                     } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         // if there is a default value use that as new record changes
                         value = fieldDef.defaultValue.coercedValue.value;
@@ -123,6 +125,7 @@ export const Record = React.createClass({
 
     render() {
         return <QBForm {...this.props}
+                    appUsers={this.props.appUsers}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
                     onFieldChange={this.handleFieldChange}
@@ -134,7 +137,8 @@ export const Record = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        record: state.record
+        record: state.record,
+        appUsers: getAppUsers(state.app)
     };
 };
 const mapDispatchToProps = (dispatch) => {

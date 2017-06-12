@@ -4,16 +4,14 @@
     //Load the page Objects
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
-    let RequestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
-    let formsPO = requirePO('formsPage');
-    let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let leftNavPO = requirePO('leftNav');
-    let rawValueGenerator = require('../../../test_generators/rawValue.generator');
-    let ReportContentPO = requirePO('reportContent');
+    let modalDialog = requirePO('/common/modalDialog');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
+    const CREATE_TABLE_DLG_TITLE = 'New Table';
+    const CANCEL_BTN = 'Cancel';
 
     describe('Tables - Create table validation tests: ', function() {
         let realmName;
@@ -47,10 +45,7 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
-            //wait until loading screen disappear in leftnav
-            return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
         });
 
         /**
@@ -62,7 +57,7 @@
                     message: 'with empty table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -73,7 +68,6 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -85,7 +79,6 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
@@ -111,12 +104,13 @@
                 //Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify create table button is not enabled since there is error in field values
-                    expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
                 });
 
+                //Verify create table button is not enabled since there is error in field values
+                expect(browser.isEnabled('.modal-footer .finishedButton')).toBe(false);
+
                 //Cancel table dialogue
-                tableCreatePO.clickCancelBtn();
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
 
                 //Get the new count of table links in the left nav
                 let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;

@@ -4,7 +4,7 @@
 (function() {
     'use strict';
     var e2ePageBase = require('./e2ePageBase.po');
-    let leftNavPO = requirePO('leftNav');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     var RequestAppsPage = Object.create(e2ePageBase, {
         // Page Elements using Locators
@@ -18,8 +18,11 @@
          * @returns Array of apps links
          */
         getAllAppLeftNavLinksList: {get: function() {
-            //wait until loading screen disappear in leftnav
-            leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+            //wait until loading screen disappear in leftNav
+
+            loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+            //wait until loading screen disappear in report Content
+            loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
             browser.element('.appsList .leftNavLabel').waitForVisible();
             return browser.elements('.appsList .leftNavLabel');
         }},
@@ -37,8 +40,11 @@
             if (results !== []) {
                 //Click on filtered table name
                 results[0].click();
-                //wait until loading screen disappear in leftnav
-                return leftNavPO.waitUntilSpinnerGoesAwayInLeftNav();
+                //wait until loading screen disappear in leftNav
+
+                loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+                //wait until loading screen disappear in report Content
+                return loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
             }
         }},
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import AddUserDialog from '../../../../../src/components/app/settings/categories/addUserDialog';
+import {AddUserDialog, __RewireAPI__ as AddUserDialogAPI} from '../../../../../src/components/app/settings/categories/addUserDialog';
 import {shallow} from 'enzyme';
 import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 
@@ -97,7 +97,7 @@ const selectedApp = {
     name: 'Moz'
 };
 const userPanel =  {
-    getSelectedUser: ()=>{}
+    getSelectedUser: ()=>{return 1;}
 };
 
 const mockParentFunctions = {
@@ -107,13 +107,7 @@ const mockParentFunctions = {
     setRole() {},
     setUserRoleToAdd() {},
     toggleAddUserDialog() {},
-    assignUserToApp() {
-        return new Promise((resolve)=>{
-            resolve('response');
-        });
-    },
-
-
+    assignUserToAppRole() {return Promise.resolve("response");}
 };
 
 describe('AddUserDialog', () => {
@@ -134,7 +128,7 @@ describe('AddUserDialog', () => {
         component = shallow(<AddUserDialog realmUsers={realmUsers}
                        searchUsers={mockParentFunctions.searchUsers}
                        appRoles={appRoles}
-                                           assignUserToApp={mockParentFunctions.assignUserToApp}
+                       assignUserToApp={mockParentFunctions.assignUserToApp}
                        setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
                        userRoleIdToAdd={userRoleIdToAdd}
                        appId={appId}
@@ -165,16 +159,16 @@ describe('AddUserDialog', () => {
         />);
         let content = component.find('MultiStepDialog');
         expect(component.length).toEqual(1);
-        component.instance().isValid(false);
+        component.instance().setValid(false);
         expect(component.state().isValid).toEqual(false);
     });
 
     it('test onFinished function', ()=>{
-        spyOn(mockParentFunctions, 'assignUserToApp');
+        spyOn(mockParentFunctions, 'assignUserToAppRole').and.callThrough();
         component = shallow(<AddUserDialog realmUsers={realmUsers}
                                            searchUsers={mockParentFunctions.searchUsers}
                                            appRoles={appRoles}
-                                           assignUserToApp={mockParentFunctions.assignUserToApp}
+                                           assignUserToAppRole={mockParentFunctions.assignUserToAppRole}
                                            setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
                                            userRoleIdToAdd={userRoleIdToAdd}
                                            appId={appId}
@@ -186,6 +180,6 @@ describe('AddUserDialog', () => {
         expect(component.length).toEqual(1);
         component.instance().userPanel = userPanel;
         component.instance().onFinished();
-        expect(mockParentFunctions.assignUserToApp).toHaveBeenCalled();
+        expect(mockParentFunctions.assignUserToAppRole).toHaveBeenCalled();
     });
 });

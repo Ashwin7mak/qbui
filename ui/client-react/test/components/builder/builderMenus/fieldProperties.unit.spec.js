@@ -17,7 +17,7 @@ let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type
 let multiChoiceField = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
     multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
         {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
-let linkToRecordField = {id: 8, required: false, name: "get parent record", parentTableId: "parentId", datatypeAttributes: {type: "LINK_TO_RECORD"}};
+let linkToRecordField = {id: 8, required: false, name: "get parent record", parentTableId: "parentId", parentFieldId: 1, datatypeAttributes: {type: "LINK_TO_RECORD"}};
 let formElement = {FormFieldElement: {fieldId: 6}};
 let formElementMultiChoice = {FormFieldElement: {fieldId: 7}};
 let formElementLinkToRecord = {FormFieldElement: {fieldId: 8}};
@@ -79,7 +79,7 @@ describe('FieldProperties', () => {
             let app = {
                 tables: [
                     {tableIcon: "icon1", name: "child table", id: "2"},
-                    {tableIcon: "icon2", name: "parent table", id: "parentId"}
+                    {tableIcon: "icon2", name: "parent table", id: "parentId", fields: [{id:1, name:"recordTitleField"}]}
                 ]
             };
             component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId} app={app}
@@ -93,7 +93,8 @@ describe('FieldProperties', () => {
             expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(linkToRecordField.required);
             expect(component.find('.textPropertyTitle')).toBePresent();
             expect(component.find('.textPropertyValue')).toHaveValue(linkToRecordField.name);
-            expect(component.find('.linkToRecordPropertyValue')).toBePresent();
+            expect(component.find('.linkToRecordLinkedToValue')).toBePresent();
+            expect(component.find('.linkToRecordConnectedOnValue')).toBePresent();
         });
     });
 

@@ -13,9 +13,12 @@ function initializeState() {
         leftNavVisible: false,
         trowserOpen: false,
         trowserContent: null,
+        topNavVisible: true,
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
+        scrollingReport: false,
+        filterReportsName: ''
     };
 }
 
