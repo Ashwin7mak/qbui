@@ -203,6 +203,21 @@ describe('Record Model', () => {
         expect(reportData.length).toEqual(0);
     });
 
+    it('getGroupedReportData method', () => {
+        let gridData = [
+            {group: 'hello'},
+            {group: ''},
+            {group: '&amp;'}
+        ];
+        let expectedGridData = [
+            {group: 'hello'},
+            {group: ''},
+            {group: '&'}
+        ];
+        let groupedReportData = ReportModelHelper.getGroupedReportData(gridData);
+        expect(groupedReportData).toEqual(expectedGridData);
+
+    });
 
     it('add Report record method after specified row', () => {
         let currentReport = _.cloneDeep(testReport);
