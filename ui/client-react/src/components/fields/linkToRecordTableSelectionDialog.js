@@ -130,7 +130,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
 
-        const fieldChoices =this.getFieldChoices(selectedTable);
+        const fieldChoices = this.getFieldChoices(selectedTable);
 
         const choices = fieldChoices.map(field => {
 
