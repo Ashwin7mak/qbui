@@ -33,19 +33,19 @@ NewFieldsMenu.propTypes = {
     isOpen: PropTypes.bool,
 
     /**
-     * Sets the tabIndex for the listOfElement tab*/
+     * Sets the tabIndex for the listOfElement tab */
     toolPaletteTabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
-     * Sets the tabIndex for the listOfElement tab*/
+     * Sets the tabIndex for the listOfElement tab */
     toolPaletteChildrenTabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
-     * Toggles tool Palette children*/
+     * Toggles tool Palette children */
     toggleToolPaletteChildrenTabIndex: PropTypes.func,
 
     /**
-     * Focus for palette for keyboard nav*/
+     * Focus for palette for keyboard nav */
     toolPaletteFocus: PropTypes.bool,
 
     /**
