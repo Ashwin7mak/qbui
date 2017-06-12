@@ -42,7 +42,6 @@ export class FormBuilder extends Component {
                     edit={true}
                     editingForm={true}
                     formData={this.props.formData}
-                    updateAnimationState={this.props.updateAnimationState}
                     hasAnimation={true}
                     app={this.props.app}
                     tblId={this.props.tblId}

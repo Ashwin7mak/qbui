@@ -14,6 +14,7 @@ import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
 import {removeFieldFromForm} from '../../actions/formActions';
+import {updateFormAnimationState} from '../../actions/animationActions';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -646,5 +647,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export default connect(
-    mapStateToProps, {removeFieldFromForm}
+    mapStateToProps, {removeFieldFromForm, updateFormAnimationState}
 )(QBForm);
