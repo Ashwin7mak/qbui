@@ -56,6 +56,17 @@
         notificationContainerEl: {get: function() {return browser.element('.notification-container');}},
         notificationWindow: {get: function() {return this.notificationContainerEl.element('.notification-message .message');}},
 
+        // Add new record button on Small break point
+        addRecordOnSBP : {get: function() {return browser.element('.reportToolsAndContentContainer .addNewRecord .iconUISturdy-add-new-filled');}},
+
+        /**
+         * Method to click on add record button on small break point.
+         */
+        clickAddRecordOnSBP : {value: function() {
+            //Click on form add button
+            this.addRecordOnSBP.waitForVisible();
+            return this.addRecordOnSBP.click();
+        }},
 
         /**
          * Method for spinner to dissaper after hitting on any save buttons on edit forms
@@ -237,7 +248,7 @@
          */
         getRecordsCountInATable: {value: function() {
             //Get the count (eg: 25 records). Get just numbers from string and convert into Integer
-            return parseFloat(browser.element('.recordsCount').getText().replace(/[^0-9\.]/g, ''));
+            return parseFloat(browser.element('.reportToolbar .recordsCount').getText().replace(/[^0-9\.]/g, ''));
         }},
 
         /**
@@ -382,7 +393,7 @@
             } else if (fieldType === 'allTimeFields') {
                 this.setDropDownValue(this.getAllTimeInputFields(), sTime);
             } else if (fieldType === 'allDateFields') {
-                //get all date field input validators
+                 //get all date field input validators
                 var dateFields = this.getAllDateInputFields();
                 for (i = 0; i < dateFields.value.length; i++) {
                     if (browserName === 'safari') {
