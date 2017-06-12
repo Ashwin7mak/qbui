@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
-import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
+import DraggableFieldTokenInMenu from '../fieldToken/draggableFieldTokenInMenu';
 import {getFormByContext, getExistingFields} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
@@ -15,7 +15,7 @@ export class ExistingFieldsMenu extends Component {
                 childrenTabIndex={toolPaletteChildrenTabIndex}
                 toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
                 hasKeyBoardFocus={toolPaletteFocus}
-                renderer={FieldTokenInMenu}
+                renderer={DraggableFieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
                 elements={[{children: existingFields, key: 'existingFields', title: 'Existing Fields'}]}
@@ -52,4 +52,3 @@ ExistingFieldsMenu.propTypes = {
 };
 
 export default connect(mapStateToProps)(ExistingFieldsMenu);
-

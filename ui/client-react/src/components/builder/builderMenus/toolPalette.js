@@ -37,7 +37,7 @@ class ToolPalette extends Component {
 
     renderExistingFieldsMenu = () => {
         // Only can render the existing fields if an app is provided and form is loaded.
-        if (!this.props.appId || !this.prop.tableId) {
+        if (!this.props.appId || !this.props.tableId) {
             return null;
         }
 

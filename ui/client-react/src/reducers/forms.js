@@ -243,7 +243,7 @@ const forms = (
         let relatedRelationship = false;
         let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
 
-        if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
+        if (field.tableId && Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
             relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
         }
 
@@ -529,6 +529,11 @@ export const getExistingFields = (state, id, appId, tblId) => {
     let fields = getFields(state, appId, tblId).reduce((formFields, field) => {
         // Skip any built in fields
         if (_.includes(constants.BUILTIN_FIELD_ID_ARRAY, field.id)) {
+            return formFields;
+        }
+
+        // Skip any new fields
+        if (_.isString(field.id) && field.id.indexOf('new') >= 0) {
             return formFields;
         }
 

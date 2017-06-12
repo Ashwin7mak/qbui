@@ -87,21 +87,24 @@ class ListOfElements extends Component {
 
     /**
      * Displays the fields within a group in SUPPORTED_NEW_FIELD_TYPES
-     * @param fieldTypes
+     * @param childElements
      */
-    renderElements = (fieldTypes) => {
-        //Tokens are being passed in as a renderer to reduce dependency on client-react
-        let TokenInMenu = this.props.renderer;
-        if (fieldTypes) {
-            return fieldTypes.map((fieldType, index) => (
-                <li key={fieldType.key || index} className="listOfElementsItem">
-                    <TokenInMenu {...fieldType}
-                                 beginDrag={this.props.beginDrag}
-                                 endDrag={this.props.endDrag}
-                                 isCollapsed={this.props.isCollapsed}
-                                 tabIndex={this.props.childrenTabIndex}/>
-                </li>
-            ));
+    renderElements = (childElements) => {
+        if (childElements) {
+            return childElements.map((childElement, index) => {
+                // If the element has a specific renderer, use that. Otherwise, use the default renderer passed in.
+                let ElementRenderer = childElement.alternateRenderer || this.props.renderer;
+
+                return (
+                    <li key={childElement.key || index} className="listOfElementsItem">
+                        <ElementRenderer
+                            {...childElement}
+                            isCollapsed={this.props.isCollapsed}
+                            tabIndex={this.props.childrenTabIndex}
+                        />
+                    </li>
+                );
+            });
         }
     };
 
@@ -138,7 +141,7 @@ class ListOfElements extends Component {
         }
     };
 
-    componentDidUpdate = () => {
+    componentDidUpdate() {
         if (this.props.hasKeyBoardFocus &&
             document.activeElement.classList[0] !== "checkbox" &&
             document.activeElement.tagName !== "TEXTAREA" &&
@@ -196,28 +199,24 @@ ListOfElements.propTypes = {
     isFilterable: PropTypes.bool,
 
     /**
-     * Tokens are being passed in as a renderer to allow this component to be reusable
-     * */
+     * Tokens are being passed in as a renderer to allow this component to be reusable */
     renderer: PropTypes.func,
 
     /**
-     * For Keyboard Nav: tabIndex for listOfElements
-     * */
-    tabIndex: PropTypes.number,
+     * For Keyboard Nav: tabIndex for listOfElements */
+    tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
-     * For Keyboard Nav: if true it will set focus on listOfElements
-     * */
+     * For Keyboard Nav: if true it will set focus on listOfElements */
     hasKeyBoardFocus: PropTypes.bool,
 
     /**
-     * For Keyboard Nav: tabIndex for the children elements inside of listOfElements
-     * */
-    childrenTabIndex: PropTypes.number,
+     * For Keyboard Nav: tabIndex for the children elements inside of listOfElements*/
+    childrenTabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
-     * For Keyboard Nav: This functions toggles listOfElements children's tabIndices, to add or remove it form the tabbing flow
-     * */
+     * For Keyboard Nav: This functions toggles listOfElements children's tabIndices, to add or remove it
+     * from the tabbing flow. */
     toggleChildrenTabIndex: PropTypes.func,
 
     /**
@@ -238,6 +237,12 @@ ListOfElements.propTypes = {
         children: PropTypes.arrayOf(PropTypes.shape({
             key: PropTypes.string,
             title: PropTypes.string.isRequired,
+
+            /**
+             * Most items in the list will use the defaulter render (from renderer props). But some special types may need
+             * there own renderer. You can specify that renderer here and it will take precedence over the renderer prop. */
+            alternateRenderer: PropTypes.func,
+
             // Other props will be passed through the to the rendering component
         }))
     }))

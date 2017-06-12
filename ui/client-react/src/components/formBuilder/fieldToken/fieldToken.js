@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import FieldUtils from '../../../utils/fieldUtils';
-import FieldFormats from '../../../utils/fieldFormats';
 import Icon from '../../../../../reuse/client/src/components/icon/icon';
 
 import './fieldToken.scss';
@@ -13,14 +12,14 @@ import './fieldToken.scss';
  * @constructor
  */
 const FieldToken = (props) => {
+    let selectedId = _.get(props, 'selectedFormElement.id');
+    let fieldId = _.get(props, 'containingElement.FormFieldElement.id');
+
     let classes = ['fieldToken'];
 
     if (props.classes && props.classes.length > 0) {
         classes = [...classes, ...props.classes];
     }
-
-    let selectedId = _.get(props, 'selectedFormElement.id');
-    let fieldId = _.get(props, 'containingElement.FormFieldElement.id');
 
     if (props.isDragging && fieldId === selectedId) {
         classes.push('fieldTokenDragging');
@@ -30,11 +29,14 @@ const FieldToken = (props) => {
         classes.push('fieldTokenCollapsed');
     }
 
+    // Use the icon prop, otherwise, attempt to get the icon based on the field type
+    let icon = props.icon ? props.icon : FieldUtils.getFieldSpecificIcon(props.type);
+
     return (
         <div className={classes.join(' ')} onClick={props.onClick}>
             <div className="fieldTokenIconContainer">
                 <div className="fieldTokenIcon">
-                    <Icon icon={FieldUtils.getFieldSpecificIcon(props.type)} />
+                    <Icon icon={icon} />
                 </div>
             </div>
             <div className="fieldTokenTitle">
@@ -46,8 +48,15 @@ const FieldToken = (props) => {
 
 FieldToken.propTypes = {
     classes: PropTypes.array,
-    type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
+
+    /**
+    * The icon to display on the token. Provide either an icon or a field type. */
+    icon: PropTypes.string,
+
+    /**
+     * The field type (if this token represents a field). This is optional, but provide either an icon or type. */
+    type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     /**
      * Whether the field token should display with its dragging styles applied */

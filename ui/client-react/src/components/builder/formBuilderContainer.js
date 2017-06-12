@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addFieldToForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm} from '../../actions/formActions';
 import {draggingLinkToRecord} from '../../actions/relationshipBuilderActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
@@ -15,7 +15,6 @@ import FieldFormats from '../../utils/fieldFormats';
 import FormBuilder from '../formBuilder/formBuilder';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../utils/navigationUtils';
-import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
 import {getFormByContext, getFormRedirectRoute, getSelectedFormElement} from '../../reducers/forms';
@@ -32,7 +31,6 @@ import {CONTEXT} from '../../actions/context';
 
 import './formBuilderContainer.scss';
 
-let logger = new Logger();
 let formBuilderContainerContent = null;
 
 const mapStateToProps = state => {
@@ -64,7 +62,6 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    addFieldToForm,
     draggingLinkToRecord
 };
 
@@ -75,29 +72,10 @@ const mapDispatchToProps = {
  */
 export const FormBuilderContainer = React.createClass({
     propTypes: {
-        match: PropTypes.shape({
-            params: PropTypes.shape({
-                /**
-                 * the app id */
-                appId: PropTypes.string,
-
-                /**
-                 * the table id */
-                tblId: PropTypes.string,
-
-                /**
-                 * the form id */
-                formId: PropTypes.string,
-            })
-        }),
-
-        location: PropTypes.shape({
-            query: PropTypes.shape({
-                /**
-                 * the form type */
-                formType: PropTypes.string,
-            })
-        }),
+        // Three props typically received from the router
+        app: PropTypes.object,
+        appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        tableId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
         /**
          * A route that will be redirected to after a save/cancel action. Currently passed through mapState. */
@@ -297,7 +275,10 @@ export const FormBuilderContainer = React.createClass({
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                              toolPaletteFocus={this.props.toolPaletteFocus}
                              formMeta={formData ? formData.formMeta : null}
-                             app={this.props.app}>
+                             app={this.props.app}
+                             appId={this.props.appId}
+                             tableId={this.props.tableId}
+                >
                 <FieldProperties appId={this.props.match.params.appId} app={this.props.app} tableId={this.props.match.params.tblId} formId={formId}>
                         <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}
                              className="formBuilderContainerContent"
