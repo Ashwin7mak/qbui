@@ -45,26 +45,5 @@ describe('FormBuilder (drag/drop container)', () => {
         expect(qbForm).toHaveProp('edit', true);
         expect(qbForm).toHaveProp('editingForm', true);
         expect(qbForm).toHaveProp('formData', mockFormData);
-        expect(qbForm).toHaveProp('handleFormReorder', instance.handleFormReorder);
-    });
-
-    describe('handleFormReorder', () => {
-        it('calls the moveField function to initiate moving the field when dropped', () => {
-            let mockParent = {moveField(_formMeta, _newLocation, _draggedItemProps) {}};
-            spyOn(mockParent, 'moveField');
-
-            const newLocation = {location: 1};
-            const element = {id: 1, positionSameRow: false};
-            const containingElement = {FormFieldItem: element};
-            const draggedItemProps = {draggedItem: 5, containingElement};
-            const selectedFormElement = containingElement;
-
-            component = shallow(<FormBuilder formId={'view'} formData={mockFormData} moveFieldOnForm={mockParent.moveField} selectedFormElement={selectedFormElement}/>);
-            instance = component.instance();
-
-            instance.handleFormReorder(newLocation, draggedItemProps, true);
-
-            expect(mockParent.moveField).toHaveBeenCalledWith('view', newLocation, Object.assign({}, draggedItemProps, {element}));
-        });
     });
 });

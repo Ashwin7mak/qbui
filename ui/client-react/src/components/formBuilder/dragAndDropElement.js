@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 import DraggableElement from './draggableElement';
-import DroppableFormElement from './droppableElement';
+import DroppableElement from './droppableElement';
 
 /**
  * This HOC is a convenience method to wrap a field in both a drag and drop source.
@@ -23,6 +23,6 @@ export default (ReactComponent) => {
 
     return _.flow([
         DraggableElement,
-        DroppableFormElement
+        DroppableElement
     ])(DragDropReactComponent);
 };

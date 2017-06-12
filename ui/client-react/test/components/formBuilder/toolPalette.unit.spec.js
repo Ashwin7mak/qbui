@@ -11,8 +11,8 @@ let component;
 describe('ToolPalette', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        NewFieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
-        ExistingFieldsMenuMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
+        NewFieldsMenuRewireAPI.__Rewire__('DraggableFieldTokenInMenu', FieldTokenInMenu);
+        ExistingFieldsMenuMenuRewireAPI.__Rewire__('DraggableFieldTokenInMenu', FieldTokenInMenu);
         ToolPaletteRewireAPI.__Rewire__('ExistingFieldsMenu', ExistingFieldsMenu);
     });
 
@@ -28,7 +28,7 @@ describe('ToolPalette', () => {
     });
 
     it('displays existing fields', () => {
-        component = mount(<ToolPalette />);
+        component = mount(<ToolPalette appId="1" tableId="2" />);
         expect(component.find(ExistingFieldsMenu)).toBePresent();
     });
 });

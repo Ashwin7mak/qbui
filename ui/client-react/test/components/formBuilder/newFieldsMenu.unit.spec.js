@@ -12,7 +12,7 @@ let component;
 describe('NewFieldsMenu', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        NewsFieldsMenuRewireApi.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
+        NewsFieldsMenuRewireApi.__Rewire__('DraggableFieldTokenInMenu', FieldTokenInMenu);
     });
 
     afterEach(() => {

@@ -94,6 +94,11 @@ ToolPalette.propTypes = {
     /**
      * Display the menu is an open state (only affects small breakpoint) */
     isOpen: PropTypes.bool,
+
+    /**
+     * AppId and tableId are used to get the correct existing fields from the table for the loaded form. */
+    appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    tableId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default ToolPalette;

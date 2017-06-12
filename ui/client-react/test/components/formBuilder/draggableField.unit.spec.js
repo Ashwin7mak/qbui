@@ -1,29 +1,26 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {FieldEditingTools, __RewireAPI__ as FieldEditingToolsRewireAPI} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
-import DraggableField, {__RewireAPI__ as DraggableFieldRewireAPI} from '../../../src/components/formBuilder/draggableField';
+import DraggableElement, {__RewireAPI__ as DraggableElementRewireAPI} from '../../../src/components/formBuilder/draggableElement';
 
 const mockDragSource = (_types, _fieldDragSource, _collect) => component => component;
-const MockFieldComponent = props => <div className="mockField"></div>;
+const MockFieldComponent = props => <div className="mockField" />;
 const mockConnectDragSource = component => component;
 
 let DraggableComponent;
 let component;
 
-describe('DraggableField', () => {
+describe('DraggableElement', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
-        DraggableFieldRewireAPI.__Rewire__('DragSource', mockDragSource);
-        DraggableFieldRewireAPI.__Rewire__('FieldEditingTools', FieldEditingTools);
+        DraggableElementRewireAPI.__Rewire__('DragSource', mockDragSource);
 
-        DraggableComponent = DraggableField(MockFieldComponent);
+        DraggableComponent = DraggableElement(MockFieldComponent);
     });
 
     afterEach(() => {
-        DraggableFieldRewireAPI.__Rewire__('FieldEditingTools');
-        DraggableFieldRewireAPI.__ResetDependency__('DragSource');
+        DraggableElementRewireAPI.__ResetDependency__('DragSource');
     });
 
     it('wraps a FieldComponent in a DragSource to make it draggable', () => {
@@ -32,7 +29,7 @@ describe('DraggableField', () => {
         expect(component.find('.notDragging')).toBePresent();
         let parentDiv = component.find('.draggableField');
         expect(parentDiv).toBePresent();
-        expect(parentDiv.find(MockFieldComponent)).toBePresent();
+        expect(parentDiv.find('MockFieldComponent')).toBePresent();
     });
 
     it('adds a dragging class when the component is being dragged', () => {
@@ -43,7 +40,7 @@ describe('DraggableField', () => {
     });
 
     it('adds a dragging class when a left nav menu field token is being dragged', () => {
-        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isTokenInMenuDragging={true} location={{a: 'b'}} selectedField={{a: 'b'}} formBuilderChildrenTabIndex={[]}/>);
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={true} location={{a: 'b'}} selectedField={{a: 'b'}} formBuilderChildrenTabIndex={[]}/>);
 
         expect(component.find('.dragging')).toBePresent();
         expect(component.find('.notDragging')).not.toBePresent();

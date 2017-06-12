@@ -11,6 +11,7 @@ import {__RewireAPI__ as ToolPaletteRewireAPI} from '../../../src/components/bui
 import {ENTER_KEY, SPACE_KEY} from '../.././../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import Loader from 'react-loader';
+import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
 
 const appId = "1";
 const tblId = "2";
@@ -179,13 +180,13 @@ describe('FormBuilderContainer', () => {
     });
 
     describe('saving on FormBuilder', () => {
-        it('test saveButton on the formBuilder footer', () => {
-            component = mount(<FormBuilderContainer match={testParamsProp}
+        it('updates the form when the save button is clicked', () => {
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
                                                     updateForm={mockActions.updateForm} />);
 
-            let saveButton = component.find('.mainTrowserFooterButton');
+            let saveButton = component.find(SaveOrCancelFooter).dive().find('.mainTrowserFooterButton');
 
             saveButton.simulate('click');
 
@@ -197,10 +198,10 @@ describe('FormBuilderContainer', () => {
         it(`will toggle the children tab indices if space is pressed and the tab indices are not already ${tabIndexConstants.FORM_TAB_INDEX}`, () => {
             let e = {
                 which: 32,
-                preventDefault() {return;}
+                preventDefault() {}
             };
 
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     selectedField={selectedField}
                                                     loadForm={mockActions.loadForm}
@@ -217,10 +218,10 @@ describe('FormBuilderContainer', () => {
         it('will not toggle the children tab indices if space or enter are not pressed', () => {
             let e = {
                 which: 19,
-                preventDefault() {return;}
+                preventDefault() {}
             };
 
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
@@ -234,7 +235,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('escapeCurrentContext hotKey will invoke cancel if children tabindices do not equal parents tabindices and there is not a selected field', () => {
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
                                                     toolPaletteChildrenTabIndex={undefined}
@@ -252,7 +253,7 @@ describe('FormBuilderContainer', () => {
 
 
         it('escapeCurrentContext hotKey will invoke toggleFormBuilderChildrenTabIndex if formBuilderChildrenTabIndex has the same index as form tab index', () => {
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={tabIndexConstants.FORM_TAB_INDEX}
@@ -270,7 +271,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('escapeCurrentContext hotKey will invoke toggleToolPaletteChildrenTabIndex if toolPaletteChildrenTabIndex has the same index as tool palette tab index', () => {
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
@@ -292,7 +293,7 @@ describe('FormBuilderContainer', () => {
                 which: ENTER_KEY,
                 preventDefault() {}
             };
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
@@ -314,7 +315,7 @@ describe('FormBuilderContainer', () => {
                 which: SPACE_KEY,
                 preventDefault() {}
             };
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
@@ -336,7 +337,7 @@ describe('FormBuilderContainer', () => {
                 which: 'INVALID_KEY_BOARD_PRESS',
                 preventDefault() {}
             };
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
@@ -354,7 +355,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('escapeCurrentContext hotKey will invoke deselectField if a field is selected', () => {
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
@@ -377,7 +378,7 @@ describe('FormBuilderContainer', () => {
                 preventDefault() {return;}
             };
 
-            component = mount(<FormBuilderContainer match={testParamsProp}
+            component = shallow(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={tabIndexConstants.FORM_TAB_INDEX}
                                                     loadForm={mockActions.loadForm}
@@ -475,15 +476,17 @@ describe('FormBuilderContainer', () => {
 
     describe('formBuilderContainer save and cancel footer', () => {
         it('will return two right align buttons on the footer', () => {
-            component = mount(<FormBuilderContainer
+            component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
                 location={location}
                 loadForm={mockActions.loadForm}
                 keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
             />);
 
-            expect(component.find('.rightIcons .alternativeTrowserFooterButton').length).toEqual(1);
-            expect(component.find('.mainTrowserFooterButton').length).toEqual(1);
+            const saveOrCancelFooter = component.find(SaveOrCancelFooter).dive();
+
+            expect(saveOrCancelFooter.find({className: 'alternativeTrowserFooterButton'})).toBePresent();
+            expect(saveOrCancelFooter.find({className: 'mainTrowserFooterButton'})).toBePresent();
         });
     });
 });

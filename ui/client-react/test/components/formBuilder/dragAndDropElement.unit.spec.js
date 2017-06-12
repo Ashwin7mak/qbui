@@ -5,11 +5,11 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import DragAndDropElement, {__RewireAPI__ as DragAndDropElementRewireAPI} from '../../../src/components/formBuilder/dragAndDropElement';
 
 const MockDragDropHocs = {
-    DraggableField(component) {return component;},
-    DroppableFormElement(component) {return component;}
+    DraggableElement(component) {return component;},
+    DroppableElement(component) {return component;}
 };
 
-const MockFieldComponent = props => <div className="mockField"></div>;
+const MockFieldComponent = props => <div className="mockField" />;
 
 let component;
 
@@ -17,23 +17,23 @@ describe('DragAndDropElement', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
-        spyOn(MockDragDropHocs, 'DraggableField').and.callThrough();
-        spyOn(MockDragDropHocs, 'DroppableFormElement').and.callThrough();
+        spyOn(MockDragDropHocs, 'DraggableElement').and.callThrough();
+        spyOn(MockDragDropHocs, 'DroppableElement').and.callThrough();
 
-        DragAndDropElementRewireAPI.__Rewire__('DraggableField', MockDragDropHocs.DraggableField);
-        DragAndDropElementRewireAPI.__Rewire__('DroppableFormElement', MockDragDropHocs.DroppableFormElement);
+        DragAndDropElementRewireAPI.__Rewire__('DraggableElement', MockDragDropHocs.DraggableElement);
+        DragAndDropElementRewireAPI.__Rewire__('DroppableElement', MockDragDropHocs.DroppableElement);
     });
 
     afterEach(() => {
-        DragAndDropElementRewireAPI.__ResetDependency__('DraggableField');
-        DragAndDropElementRewireAPI.__ResetDependency__('DroppableFormElement');
+        DragAndDropElementRewireAPI.__ResetDependency__('DraggableElement');
+        DragAndDropElementRewireAPI.__ResetDependency__('DroppableElement');
     });
 
     it('connects and element to both a drag and drop source', () => {
         DragAndDropElement(MockFieldComponent);
 
-        expect(MockDragDropHocs.DraggableField).toHaveBeenCalled();
-        expect(MockDragDropHocs.DroppableFormElement).toHaveBeenCalled();
+        expect(MockDragDropHocs.DraggableElement).toHaveBeenCalled();
+        expect(MockDragDropHocs.DroppableElement).toHaveBeenCalled();
     });
 
     it('contains the passed in FieldComponent', () => {
