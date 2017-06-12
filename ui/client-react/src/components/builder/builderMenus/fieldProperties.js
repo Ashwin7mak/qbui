@@ -196,7 +196,7 @@ export class FieldProperties extends Component {
         let key = 0;
 
         let isRecordTitleField = false;
-        let checkBox = _.get(this.props, 'selectedField.datatypeAttributes.type');
+        let fieldType = _.get(this.props, 'selectedField.datatypeAttributes.type');
         const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
         if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
             isRecordTitleField = true;
@@ -210,7 +210,7 @@ export class FieldProperties extends Component {
         if (isRecordTitleField) {
             fieldPropContainers.push(this.createRequiredProperty(true, key++, true));
             fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
-        } else if (checkBox !== serverTypeConsts.CHECKBOX) {
+        } else if (fieldType !== serverTypeConsts.CHECKBOX) {
             fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
             fieldPropContainers.push(this.createUniqueProperty(this.props.selectedField.unique, key++));
         } else {
