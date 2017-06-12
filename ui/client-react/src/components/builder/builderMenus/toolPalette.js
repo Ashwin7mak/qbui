@@ -35,16 +35,23 @@ class ToolPalette extends Component {
                            includeNewRelationship={includeNewRelationship}/>);
     };
 
-    renderExistingFieldsMenu = () => (
-        <ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
-                            isOpen={this.props.isOpen}
-                            toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
-                            toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
-                            toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
-                            toolPaletteFocus={this.props.toolPaletteFocus}
-                            appId={_.get(this.props, 'app.id', null)}
-                            tblId={_.get(this.props, 'formMeta.tableId', null)}/>
-    );
+    renderExistingFieldsMenu = () => {
+        // Only can render the existing fields if an app is provided and form is loaded.
+        if (!this.props.appId || !this.prop.tableId) {
+            return null;
+        }
+
+        return (
+            <ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
+                                isOpen={this.props.isOpen}
+                                toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                                toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                                toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                                toolPaletteFocus={this.props.toolPaletteFocus}
+                                appId={this.props.appId}
+                                tblId={this.props.tableId} />
+        )
+    };
 
     renderToolPalette = () => (
         <div className="toolPaletteContainer">

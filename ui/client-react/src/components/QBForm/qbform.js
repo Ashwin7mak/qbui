@@ -61,7 +61,7 @@ export const QBForm = React.createClass({
 
         /**
          * By default, the form uses FieldElement to render each field. You can optionally pass in a different renderer. */
-        alternateFieldRenderer: PropTypes.object,
+        alternateFieldRenderer: PropTypes.func,
 
         /** handles drill down to parent */
         goToParent: React.PropTypes.func,
@@ -256,11 +256,11 @@ export const QBForm = React.createClass({
     },
 
     setAnimationRunning() {
-        return this.props.updateAnimationState(true);
+        return this.props.updateFormAnimationState(true);
     },
 
     setAnimationStopped() {
-        return this.props.updateAnimationState(false);
+        return this.props.updateFormAnimationState(false);
     },
 
     /**

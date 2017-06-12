@@ -25,10 +25,7 @@ const mapStateToProps = state => {
  */
 const formTarget = {
     drop(props) {
-        return {
-            containingElement: props.containingElement,
-            location: props.location
-        };
+        return props;
     },
 
     hover(dropTargetProps, monitor) {
@@ -85,11 +82,6 @@ const DroppableElement = (FieldComponent, connected = true) => {
             );
         }
     }
-
-    component.propTypes = {
-        location: PropTypes.object.isRequired,
-        containingElement: PropTypes.object.isRequired
-    };
 
     // The first argument could be an array of draggable types (e.g., could add tabs and sections here)
     let wrappedComponent = DropTarget(DraggableItemTypes.FIELD, formTarget, collect)(component);

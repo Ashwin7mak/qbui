@@ -22,7 +22,7 @@ const DurationFieldValueEditor = React.createClass({
     propTypes: {
         /**
          * the raw value to be saved */
-        value: React.PropTypes.number,
+        value: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
         /**
          * the display to render */
         display: React.PropTypes.any,
