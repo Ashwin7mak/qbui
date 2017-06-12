@@ -23,7 +23,7 @@ import UserSuccessDialog from './userSuccessDialog.js';
 export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
-            roleId: ''
+            roleId: true
         };
     },
 
@@ -106,7 +106,7 @@ export const AppUsersRoute = React.createClass({
             // id is in the list, remove it
             selectedRows = _.without(selectedRows, isAlreadySelected);
         }
-        this.setState({roleId:roleId});
+        this.setState({roleId:!this.state.roleId});
         this.props.selectUserRows(selectedRows);
     },
 
@@ -127,7 +127,6 @@ export const AppUsersRoute = React.createClass({
                 });
             }
         });
-        console.log(selected)
         this.selectRows(selected);
     },
 
