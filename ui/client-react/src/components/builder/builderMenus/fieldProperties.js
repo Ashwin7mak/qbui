@@ -176,8 +176,7 @@ export class FieldProperties extends Component {
     }
 
     /**
-     * hard coded required property creation since we know EVERY field type has a required property
-     * this could be refactored out if the next iteration wants to go super generic
+     * unique property creation for every field type except for checkboxes
      * @param required
      * @returns {XML}
      */
