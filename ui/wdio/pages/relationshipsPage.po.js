@@ -24,7 +24,7 @@
         iconActionsRightButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-right');}},
         iconActionsLeftButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-left');}},
         iconActionsCloseDrawerButtonEl: {get: function() {return this.slideyRightyEl.element('.iconActionButton.closeDrawer');}},
-
+        parentRecordLinkEl: {get: function() {return browser.element('.numericField .viewElement');}},
         // Page Object functions
         /**
          * Returns form section containing the child table for a relationship
