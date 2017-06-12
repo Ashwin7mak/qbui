@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
+import './leftNav.scss';
+import {I18nMessage} from '../../utils/i18nMessage';
+import QBicon from '../qbIcon/qbIcon';
 
 let AppsList = React.createClass({
 
@@ -49,6 +52,23 @@ let AppsList = React.createClass({
         }
     },
 
+    /**
+     * render fixed footer (new table link)
+     * @returns {XML}
+     */
+    getNewTableItem() {
+
+        return (
+            <li className="newTableItem link" key="newTable">
+                <a className="newTable leftNavLink">
+                    <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message="tableCreation.newTablePageTitle"/></span>
+                    <div className="hoverComponent">
+                        <I18nMessage message="tableCreation.newTablePageTitle"/>
+                    </div>
+                </a>
+            </li>);
+    },
+
     render() {
         return (
             <ul className={"appsList"} >
@@ -67,6 +87,7 @@ let AppsList = React.createClass({
                 </li>
 
                 {this.appList()}
+                {this.getNewTableItem()}
             </ul>
 
         );
