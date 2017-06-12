@@ -135,7 +135,7 @@ class ReportModel {
                 // Note the reference to this.model.fids, this.model.groupEls...you'll want to ensure setMetaData() has
                 // already been called as that method sets those properties.
                 data.columns = ReportModelHelper.getReportColumns(reportData.groups.gridColumns, this.model.data.fids, this.model.data.groupEls);
-                data.records = reportData.groups.gridData;
+                data.records = ReportModelHelper.getGroupedReportData(reportData.groups.gridData);
                 data.filteredRecords = data.records;
                 data.filteredRecordsCount = reportData.groups.totalRows;
                 data.groupFields = reportData.groups.fields;
