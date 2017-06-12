@@ -71,9 +71,10 @@ class UserManagement extends React.Component {
     }
 
     userIsSelected(selectedRows, userId) {
-        return _.find(selectedRows, (user)=>{
+        const rows = _.find(selectedRows, (user)=>{
             return user.id === userId;
         });
+        return Boolean(rows);
     }
     createUserRows() {
         let appUsersFiltered = [];

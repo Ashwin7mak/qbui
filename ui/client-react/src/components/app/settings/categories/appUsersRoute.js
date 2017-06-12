@@ -122,7 +122,6 @@ export const AppUsersRoute = React.createClass({
         this.props.appRoles.map(role => {
             if (appUsers[role.id]) {
                 appUsers[role.id].map(user => {
-                    // roleId = user.roleId;
                     selected.push({id: user.userId, roleId: role.id});
                 });
             }
