@@ -46,16 +46,16 @@ describe('Forms reducer functions', () => {
         let syncFormState = {
             'view': {
                 id:'view',
-                syncLoadedForm: false,
+                syncFormForRecordId: null,
                 formData: 'someData'
             }
         };
 
-        it('returns correct syncLoadedForm state', () => {
-            expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM})).toEqual({
+        it('returns correct syncFormForRecordId state', () => {
+            expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM, recordId: 123})).toEqual({
                 'view': {
                     id:'view',
-                    syncLoadedForm: true,
+                    syncFormForRecordId: 123,
                     formData:'someData'
                 }
             });
@@ -71,7 +71,7 @@ describe('Forms reducer functions', () => {
             expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual({
                 'view': {
                     id: 'view',
-                    syncLoadedForm: false,
+                    syncFormForRecordId: null,
                     loading: true,
                     errorStatus: null
                 }

@@ -1,10 +1,9 @@
 import * as types from '../actions/types';
+import AppService from '../services/appService';
 import RoleService from '../services/roleService';
 import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-
-let logger = new Logger();
 
 /**
  * Construct appRole store payload
@@ -26,6 +25,7 @@ export const loadAppRoles = (appId) => {
     return (dispatch) => {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
+            let logger = new Logger();
             if (appId) {
                 dispatch(event(appId, types.LOAD_APP_ROLES));
                 let roleService = new RoleService();
@@ -51,6 +51,62 @@ export const loadAppRoles = (appId) => {
                 dispatch(event(appId, types.LOAD_APP_ROLES_FAILED, {error: error}));
                 reject();
             }
+        });
+    };
+};
+
+export const assignUsersToAppRole = (appId, roleId, userIds) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            let logger = new Logger();
+            let roleService = new RoleService();
+            roleService.assignUsersToAppRole(appId, roleId, userIds).then(
+                () => {
+                    let appService = new AppService();
+                    appService.getAppUsers(appId).then(
+                        (response) => {
+                            dispatch(event(appId, types.ASSIGN_USERS_TO_APP_ROLE, {appUsers:response.data}));
+                            resolve();
+                        },
+                        (error) => {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.assignUsersToAppRole_getAppUsers:');
+                            // promise reject is handled by component to render appropriate messaging..
+                            reject();
+                        }
+                    );
+                },
+                err => {
+                    logger.parseAndLogError(LogLevel.ERROR, err.response, 'appActions.assignUsersToAppRole:');
+                    // promise reject is handled by component to render appropriate messaging..
+                    reject();
+                }
+            );
+        });
+    };
+};
+
+export const assignUserToAppRole = (appId, roleId, userId) => {
+    return assignUsersToAppRole(appId, roleId, [userId]);
+};
+
+export const removeUsersFromAppRole = (appId, roleId, userIds) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            let logger = new Logger();
+            let roleService = new RoleService();
+            roleService.removeUsersFromAppRole(appId, roleId, userIds).then(
+                () => {
+                    logger.debug('RoleService removeUsersFromAppRole success');
+                    dispatch(event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {roleId: roleId, userIds:userIds}));
+                    resolve(userIds);
+                },
+                (error) => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.removeUsersFromAppRole:');
+                    reject();
+                }
+            );
         });
     };
 };

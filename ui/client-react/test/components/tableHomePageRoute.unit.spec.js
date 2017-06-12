@@ -1,7 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import Fluxxor from 'fluxxor';
 import {
     TableHomePageRoute,
     __RewireAPI__ as TableHomePageRewireAPI
@@ -26,6 +25,7 @@ describe('TableHomePageRoute functions', () => {
         hideTopNav: () => {},
         loadFields: (app, tbl) => {},
         loadTableHomePage: () => {},
+        selectTable: () => {},
         reportBuilder: {
             isInBuilderMode: true,
             isCollapsed: true,
@@ -42,12 +42,6 @@ describe('TableHomePageRoute functions', () => {
         }
     };
 
-    let mockedStore = Fluxxor.createStore({
-        getState() {
-            return {};
-        }
-    });
-
     let reportDataParams = {
         reportData: {
             pageOffset:Constants.PAGE.DEFAULT_OFFSET,
@@ -59,14 +53,6 @@ describe('TableHomePageRoute functions', () => {
                 ]
             }
         }
-    };
-
-    let stores = {
-        MockStore: new mockedStore()
-    };
-    let flux = new Fluxxor.Flux(stores);
-    flux.actions = {
-        selectTableId() {return;},
     };
 
     class mockReportToolsAndContent extends React.Component {
@@ -82,20 +68,19 @@ describe('TableHomePageRoute functions', () => {
     }
 
     beforeEach(() => {
-        spyOn(flux.actions, 'selectTableId');
-        spyOn(props, 'hideTopNav');
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadTableHomePage');
+        spyOn(props, 'selectTable');
         TableHomePageRewireAPI.__Rewire__('ReportToolsAndContent', mockReportToolsAndContent);
         TableHomePageRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
     });
 
     afterEach(() => {
-        flux.actions.selectTableId.calls.reset();
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();
         props.loadTableHomePage.calls.reset();
+        props.selectTable.calls.reset();
         TableHomePageRewireAPI.__ResetDependency__('ReportToolsAndContent');
         TableHomePageRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
     });
@@ -132,22 +117,23 @@ describe('TableHomePageRoute functions', () => {
             }
         };
 
-        let wrapper = shallow(<TableHomePageRoute {...props} {...oldProps} flux={flux}/>);
+        let wrapper = shallow(<TableHomePageRoute {...props} {...oldProps}/>);
         expect(wrapper).toBeDefined();
     });
 
     it('test action loadTableHomePage is called with app data', () => {
         // we need to `mount` so componentDidMount will fire
-        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...props} reportData={reportDataParams.reportData} flux={flux} /></Provider>);
+        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...props} reportData={reportDataParams.reportData}/></Provider>);
         expect(props.clearSearchInput).toHaveBeenCalled();
         expect(props.loadFields).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
+        expect(props.selectTable).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
         expect(props.loadTableHomePage).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, props.match.params.appId, props.match.params.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
     });
 
-    it('test flux action loadTableHomePage is not called with missing app data', () => {
+    it('test action loadTableHomePage is not called with missing app data', () => {
         let propsCopy = _.clone(props);
         propsCopy.match.params.appId = null;
-        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...propsCopy} reportData={reportDataParams.reportData} flux={flux} /></Provider>);
+        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...propsCopy} reportData={reportDataParams.reportData}/></Provider>);
         expect(props.loadTableHomePage).not.toHaveBeenCalled();
     });
 });
