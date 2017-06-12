@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import DraggableTokenInMenu from './draggableTokenInMenu';
-import {addNewFieldToForm, endDraggingState, isInDraggingState, addFieldToForm} from '../../../actions/formActions';
+import {endDraggingState, isInDraggingState, addFieldToForm, selectFieldOnForm} from '../../../actions/formActions';
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
@@ -33,6 +33,8 @@ export class DraggableFieldTokenInMenu extends Component {
 
     beginDrag = (dragItemProps) => {
         this.props.isInDraggingState(this.props.formId);
+        // Deselect any selected fields on the form, because we are dragging from the menu.
+        this.props.selectFieldOnForm(this.props.formId, null);
 
         return {
             id: dragItemProps.containingElement.id,
@@ -100,11 +102,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    addNewFieldToForm,
     updateFormAnimationState,
     endDraggingState,
     isInDraggingState,
-    addFieldToForm
+    addFieldToForm,
+    selectFieldOnForm
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DraggableFieldTokenInMenu);
