@@ -178,6 +178,39 @@ describe('Relationships - View child table on form tests: ', () => {
         });
 
         /**
+         *  Add Child button opens a trowser, adds a row with a different parent Id so adding it to a different embedded report and so
+         *  row count does not increase for the current embedded report
+         */
+        it('Adding Child to a different parent,does not add a row to the embedded report currently viewed', () => {
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
+            const origRecordCount = formsPagePO.getRecordsCountInATable();
+
+            // Click on add child button on embedded table opens trowser
+            relationshipsPO.clickAddChildButton();
+            const fieldTypes = ['allTextFields', 'allParentRecordFields'];
+
+            browser.waitForVisible('form.editForm');
+            // enter form values
+            fieldTypes.forEach(function (fieldType) {
+                let parentReferenceFieldValue = null;
+                if (fieldType === 'allParentRecordFields') {
+                    parentReferenceFieldValue = 3;
+                }
+                formsPagePO.enterFormValues(fieldType, parentReferenceFieldValue);
+            });
+
+            // Click Save on the form
+            formsPagePO.clickFormSaveBtn();
+            // wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
+
+            // Verify the records count remained same
+            expect(formsPagePO.getRecordsCountInATable()).toBe(origRecordCount);
+
+        });
+
+        /**
          * Navigate to a record (view form) and assert that the section containing an empty child table is displayed
          */
         it('Empty child table is present when viewing a parent record with no children (so sad!)', () => {

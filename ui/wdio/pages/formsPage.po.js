@@ -367,10 +367,16 @@
 
         /**
          * Method to enter field values in the form.
+         * @param fieldType type of field to be filled in
+         * @param parentValue  parent record to be linked to
          */
-        enterFormValues : {value: function(fieldType) {
+        enterFormValues: {
+            value: function (fieldType, parentValue) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             var i;
+                if (!parentValue) {
+                    parentValue = 1;
+                }
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
                 this.setFormInputValue(this.getAllTextFields(), sText);
@@ -408,7 +414,7 @@
             } else if (fieldType === 'allUserField') {
                 this.setDropDownValue(this.getAllUserFields(), sUser);
             } else if (fieldType === 'allParentRecordFields') {
-                this.setDropDownValue(this.getAllParentRecordFields(), 1);
+                this.setDropDownValue(this.getAllParentRecordFields(), parentValue);
             }
         }},
 
