@@ -55,7 +55,8 @@ FieldToken.propTypes = {
     icon: PropTypes.string,
 
     /**
-     * The field type (if this token represents a field). This is optional, but provide either an icon or type. */
+     * The field type (if this token represents a field). This is optional, but provide either an icon or type.
+     * Use constants from FieldFormats to specify type. */
     type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     /**
