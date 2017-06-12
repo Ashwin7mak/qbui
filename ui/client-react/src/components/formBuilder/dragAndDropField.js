@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 import DraggableElement from './draggableElement';
-import DroppableFormElement from './droppableFormElement';
+import DroppableFormElement from './droppableElement';
 
 /**
  * This HOC is a convenience method to wrap a field in both a drag and drop source.
  * @param FieldComponent
- * @param showFieldEditingTools
  * @returns {*}
  */
 export default (FieldComponent) => {
