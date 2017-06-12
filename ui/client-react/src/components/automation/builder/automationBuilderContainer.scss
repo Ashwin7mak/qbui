@@ -23,10 +23,8 @@ $table-properties-panel-width: 776px;
 }
 
 .automationEdit--container {
-    margin: 32px;
-    padding: 24px;
-    background-color: $panel-background-color;
-    border: solid 1px $panel-border-color;
+    // margin: 32px;
+    padding: 10px 10px 10px 44px;
 }
 
 .automationEdit--section {
@@ -35,4 +33,6 @@ $table-properties-panel-width: 776px;
 
 .automationEdit--header {
     font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
 }

@@ -664,6 +664,9 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
+            automationBuilder: {
+                modify: 'Automatisierung ändern'
+            },
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",

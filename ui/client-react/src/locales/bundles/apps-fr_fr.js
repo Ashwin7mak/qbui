@@ -663,6 +663,9 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
+            automationBuilder: {
+                modify: 'Modifier l\'automatisation'
+            },
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",

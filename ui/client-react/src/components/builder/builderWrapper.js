@@ -64,6 +64,8 @@ export const BuilderWrapper = React.createClass({
             title = `${Locale.getMessage('builder.formBuilder.modify')}`;
         } else if (this.props.location.pathname.includes('report')) {
             title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
+        } else if (this.props.location.pathname.includes('automation')) {
+            title = `${Locale.getMessage('builder.automationBuilder.modify')}`;
         }
 
         const app = this.getCurrentApp();

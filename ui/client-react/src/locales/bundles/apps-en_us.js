@@ -672,6 +672,9 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Create link to a record in another table",
                 }
             },
+            automationBuilder: {
+                modify: 'Modify automation'
+            },
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",

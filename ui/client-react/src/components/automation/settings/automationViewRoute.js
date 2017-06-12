@@ -17,8 +17,9 @@ import "./automationView.scss";
 
 export class AutomationViewRoute extends Component {
 
-    getInitialState() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             confirmInputValue: ""
         };
     }
@@ -97,7 +98,7 @@ export class AutomationViewRoute extends Component {
     }
 }
 
-AutomationViewRoute.protoTypes = {
+AutomationViewRoute.propTypes = {
     /** The automation to display. */
     automation: React.PropTypes.object,
     /** Get an automation to view. */
