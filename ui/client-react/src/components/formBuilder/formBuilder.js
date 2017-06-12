@@ -1,11 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import QbForm from '../QBForm/qbform';
 import DraggableField from './draggableField';
-import {findFormElementKey} from '../../utils/formUtils';
 
 import './formBuilder.scss';
-
-const DRAG_PREVIEW_TIMEOUT = 20;
 
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.

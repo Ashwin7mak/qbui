@@ -1,8 +1,11 @@
 import React, {PropTypes} from 'react';
-import FieldUtils from '../../../utils/fieldUtils';
-import Icon from '../../../../../reuse/client/src/components/icon/icon';
+import Icon from '../../icon/icon';
 
-import './fieldToken.scss';
+// IMPORTS FROM CLIENT-REACT
+import FieldUtils from '../../../../../../client-react/src/utils/fieldUtils';
+// IMPORTS FROM CLIENT-REACT
+
+import './elementToken.scss';
 
 /**
  * This token represents fields while they are in a dragging state.
@@ -11,7 +14,7 @@ import './fieldToken.scss';
  * @returns {XML}
  * @constructor
  */
-const FieldToken = (props) => {
+const ElementToken = (props) => {
     let selectedId = _.get(props, 'selectedFormElement.id');
     let fieldId = _.get(props, 'containingElement.FormFieldElement.id');
 
@@ -46,7 +49,7 @@ const FieldToken = (props) => {
     );
 };
 
-FieldToken.propTypes = {
+ElementToken.propTypes = {
     classes: PropTypes.array,
     title: PropTypes.string,
 
@@ -72,8 +75,8 @@ FieldToken.propTypes = {
     onClick: PropTypes.func
 };
 
-FieldToken.defaultProps = {
+ElementToken.defaultProps = {
     isDragging: false
 };
 
-export default FieldToken;
+export default ElementToken;

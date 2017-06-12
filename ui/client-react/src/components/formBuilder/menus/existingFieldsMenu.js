@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
-import DraggableFieldTokenInMenu from '../fieldToken/draggableFieldTokenInMenu';
+import DraggableFieldTokenInMenu from '../draggableFieldTokenInMenu';
 import {getFormByContext, getExistingFields} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';

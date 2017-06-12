@@ -1,10 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
-import DraggableTokenInMenu from './draggableTokenInMenu';
-import {endDraggingState, isInDraggingState, addFieldToForm, selectFieldOnForm} from '../../../actions/formActions';
-import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
-import {updateFormAnimationState} from '../../../actions/animationActions';
-import {CONTEXT} from '../../../actions/context';
+import DraggableTokenInMenu from '../../../../reuse/client/src/components/dragAndDrop/elementToken/draggableTokenInMenu';
+import {endDraggingState, isInDraggingState, addFieldToForm, selectFieldOnForm} from '../../actions/formActions';
+import {getFormByContext, getSelectedFormElement} from '../../reducers/forms';
+import {updateFormAnimationState} from '../../actions/animationActions';
+import {CONTEXT} from '../../actions/context';
 import _ from 'lodash';
 
 /**

@@ -1,9 +1,9 @@
 import React, {PropTypes, Component} from 'react';
-import FieldTokenInMenu from './fieldTokenInMenu';
-import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
+import TokenInMenu from './tokenInMenu';
+import {ENTER_KEY, SPACE_KEY} from '../../keyboardShortcuts/keyCodeConstants';
 import DraggableElement from '../draggableElement';
 
-const FieldToken = DraggableElement(FieldTokenInMenu);
+const FieldToken = DraggableElement(TokenInMenu);
 
 /**
  * This is a base component that can be composed into custom implementations for dragging specific types of elements

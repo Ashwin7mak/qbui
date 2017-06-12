@@ -1,14 +1,14 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
 import {DragLayer} from 'react-dnd';
 import FieldFormats from '../../utils/fieldFormats';
-import draggableItemTypes from './draggableItemTypes';
-import FieldToken from './fieldToken/fieldToken';
+import draggableItemTypes from '../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
+import FieldToken from '../../../../reuse/client/src/components/dragAndDrop/elementToken/elementToken';
 import Locale from '../../locales/locales';
 import consts from '../../../../common/src/constants';
 import Device from '../../utils/device';
 import _ from 'lodash';
 
-// Values from fieldToken.scss
+// Values from elementToken.scss
 export const TOKEN_WIDTH = 250;
 export const TOKEN_HEIGHT = 30;
 export const TOKEN_ICON_WIDTH = 35;

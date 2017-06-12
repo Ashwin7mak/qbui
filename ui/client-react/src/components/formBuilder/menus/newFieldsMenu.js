@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {supportedNewFieldTypesWithProperties} from '../newFieldTypes';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
-import DraggableFieldTokenInMenu from '../fieldToken/draggableFieldTokenInMenu';
+import DraggableFieldTokenInMenu from '../draggableFieldTokenInMenu';
 
 const NewFieldsMenu = (props) => {
 

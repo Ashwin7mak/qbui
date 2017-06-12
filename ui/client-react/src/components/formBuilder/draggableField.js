@@ -5,7 +5,7 @@ import {updateFormAnimationState} from '../../actions/animationActions';
 import {getFormByContext, getSelectedFormElement} from '../../reducers/forms';
 import {findFormElementKey} from '../../utils/formUtils';
 import {CONTEXT} from '../../actions/context';
-import DragAndDrop from './dragAndDropElement';
+import DragAndDrop from '../../../../reuse/client/src/components/dragAndDrop/dragAndDropElement';
 import FieldElement from '../QBForm/fieldElement';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 import _ from 'lodash';

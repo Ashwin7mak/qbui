@@ -1,29 +1,29 @@
 import React, {PropTypes, Component} from 'react';
-import FieldToken from './fieldToken';
-import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
+import ElementToken from './elementToken';
+import Tooltip from '../../tooltip/tooltip';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
  */
-export class FieldTokenInMenu extends Component {
+export class TokenInMenu extends Component {
     render() {
-        const fieldToken = <FieldToken isDragging={false} {...this.props} />;
+        const elementToken = <ElementToken isDragging={false} {...this.props} />;
 
         if (this.props.tooltipText) {
             return (
                 <div >
                     <Tooltip location="right" plainMessage={this.props.tooltipText}>
-                        {fieldToken}
+                        {elementToken}
                     </Tooltip>
                 </div>
             );
         }
 
-        return fieldToken;
+        return elementToken;
     }
 }
 
-FieldTokenInMenu.propTypes = {
+TokenInMenu.propTypes = {
     /**
      * What field type does this token represent? */
     type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -45,4 +45,4 @@ FieldTokenInMenu.propTypes = {
     toolPaletteChildrenTabIndex: PropTypes.number
 };
 
-export default FieldTokenInMenu;
+export default TokenInMenu;
