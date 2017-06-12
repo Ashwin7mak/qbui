@@ -76,7 +76,7 @@
             expect(TopNavPO.signOutButton.isExisting()).toBe(true);
 
             //Verify the help button is clickable
-            TopNavPO.helpButton.click();
+            expect(TopNavPO.helpButton.isExisting()).toBe(true);
         });
 
         /**
