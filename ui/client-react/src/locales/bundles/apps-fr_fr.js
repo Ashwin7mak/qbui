@@ -270,6 +270,9 @@ export default {
                 bodyHeader: "Message"
             }
         },
+        automationBuilder: {
+            modify: 'Modifier l\'automatisation'
+        },
         relationship: {
             childTable: "Table Enfant",
             addChildRecord: "Ajouter {tableNoun}"
@@ -667,9 +670,6 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
-            automationBuilder: {
-                modify: 'Modifier l\'automatisation'
-            },
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",

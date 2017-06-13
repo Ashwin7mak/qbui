@@ -240,9 +240,13 @@ export default {
                 success: "Record Approved.",
                 error: "An error occured when approving this record."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automation Test Successful.",
                 error: "An error occured when testing this automation."
+            },
+            saveAutomation: {
+                success: "Automation Saved Successful.",
+                error: "An error occured when saving this automation."
             },
             automationList: {
                 nameHeader: "Name",
@@ -260,7 +264,18 @@ export default {
                 actions: {
                     email: "Send an email"
                 }
+            },
+            automationEdit: {
+                stageHeading: "Modify Automation: {automationName}",
+                nameHeader: "Name",
+                emailSectionHeader: "Send an Email",
+                toHeader: "Notify Whom",
+                subjectHeader: "Subject",
+                bodyHeader: "Message"
             }
+        },
+        automationBuilder: {
+            modify: 'Modify automation'
         },
         relationship: {
             childTable: "Child Table",
@@ -664,9 +679,6 @@ export default {
                 }
             },
             existingFieldsToolTip: "Add {fieldName} to the form",
-            automationBuilder: {
-                modify: 'Modify automation'
-            },
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",
