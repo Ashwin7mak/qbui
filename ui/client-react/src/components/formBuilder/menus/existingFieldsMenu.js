@@ -11,7 +11,8 @@ export class ExistingFieldsMenu extends Component {
 
     noExistingFields = () => {
         if (_.isEmpty(this.props.existingFields)) {
-            return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: this.props.tblId});
+            let tableName = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId});
+            return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName});
         }
     };
 
@@ -31,12 +32,14 @@ export class ExistingFieldsMenu extends Component {
                 isFilterable={true}
                 hideTitle={true}
                 emptyMessage={this.noExistingFields()}
+                app={this.props.app}
             />
         );
     }
 }
 
 const mapStateToProps = (state, ownProps) => {
+
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [];
     return {
@@ -59,7 +62,6 @@ ExistingFieldsMenu.propTypes = {
      * */
     appId: PropTypes.string.isRequired,
     tblId: PropTypes.string.isRequired,
-    //tblName: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(ExistingFieldsMenu);
