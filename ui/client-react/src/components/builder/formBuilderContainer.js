@@ -49,7 +49,8 @@ const mapStateToProps = state => {
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed,
-        newRelationshipFieldIds: state.relationshipBuilder.newRelationshipFieldIds
+        newRelationshipFieldIds: state.relationshipBuilder.newRelationshipFieldIds,
+        fields: state.fields
     };
 };
 
@@ -304,6 +305,7 @@ export const FormBuilderContainer = React.createClass({
                              toolPaletteFocus={this.props.toolPaletteFocus}
                              formMeta={formData ? formData.formMeta : null}
                              newRelationshipFieldIds={this.props.newRelationshipFieldIds}
+                             fields={this.props.fields}
                              app={this.props.app}>
                 <FieldProperties appId={this.props.match.params.appId} app={this.props.app} tableId={this.props.match.params.tblId} formId={formId}>
                         <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}

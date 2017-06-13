@@ -4,7 +4,6 @@ import {CONTEXT} from "../../actions/context";
 import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
 import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
-import {getFieldsByType} from '../../reducers/fields';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
 import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
@@ -102,19 +101,6 @@ export const LinkToRecordFieldValueEditor = React.createClass({
     },
 
     /**
-     * get the array of available parent tables to pick
-     */
-    getAvailableParentTables() {
-        const fieldsList = _.find(this.props.fields, fieldList => fieldList.appId === this.props.appId && fieldList.tblId === this.props.tblId);
-        let linkToRecordFields = [];
-        if (fieldsList) {
-            linkToRecordFields = _.filter(fieldsList.fields, field => this.props.newRelationshipFieldIds.indexOf(field.id) !== -1);
-        }
-
-        return _.reject(this.props.app.tables, table => _.find(linkToRecordFields, field => field.parentTableId === table.id));
-    },
-
-    /**
      *
      * @returns {*}
      */
@@ -125,7 +111,9 @@ export const LinkToRecordFieldValueEditor = React.createClass({
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
                                                   app={this.props.app}
-                                                  parentTables={this.getAvailableParentTables()}
+                                                  fields={this.props.fields}
+                                                  newRelationshipFields={this.props.newRelationshipFieldIds}
+                                                  fieldsToDelete={this.props.fieldsToDelete}
                                                   tableSelected={this.relationshipSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {

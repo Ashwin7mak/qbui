@@ -22,10 +22,12 @@ class ToolPalette extends Component {
         const tableId = _.get(this.props, "formMeta.tableId", null);
         const relationships = _.get(this.props, "formMeta.relationships", []);
         const newRelationshipFieldIds = _.get(this.props, "newRelationshipFieldIds", []);
-        const includeNewRelationship = RelationshipUtils.canCreateNewParentRelationship(tableId, tables, relationships, newRelationshipFieldIds);
-        const markedForDeletion = _.get(this.props, "formMeta.fieldsToDelete", []);
-        const deletedRelationship = _.find(relationships, rel => markedForDeletion.indexOf(rel.detailFieldId) !== -1);
 
+        const fieldsToDelete = _.get(this.props, "formMeta.fieldsToDelete", []);
+
+        const table = _.find(this.props.app.tables, {id: tableId});
+
+        const validParentTables = RelationshipUtils.getValidParentTablesForRelationship(this.props.app, table, this.props.fields, newRelationshipFieldIds, fieldsToDelete);
 
         return (
             <NewFieldsMenu isCollapsed={this.props.isCollapsed}
@@ -36,7 +38,7 @@ class ToolPalette extends Component {
                            toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                            toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                            toolPaletteFocus={this.props.toolPaletteFocus}
-                           includeNewRelationship={deletedRelationship || includeNewRelationship}/>);
+                           includeNewRelationship={validParentTables.length > 0}/>);
     };
 
     renderExistingFieldsMenu = () => (
@@ -95,7 +97,12 @@ ToolPalette.propTypes = {
     /**
      * newly added relationship field IDs
      */
-    newRelationshipFieldIds: PropTypes.array
+    newRelationshipFieldIds: PropTypes.array,
+
+    /**
+     * fields
+     */
+    fields: PropTypes.array
 };
 
 export default ToolPalette;
