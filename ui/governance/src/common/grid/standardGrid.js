@@ -83,7 +83,7 @@ export class StandardGrid extends Component {
                 >
                     <Table.Header className="qbHeader"/>
 
-                    {/*If there is no data at all, render an empty array else render this.props.items*/}
+                    {/*If there is no data at all, render an empty grid, else render this.props.items*/}
                     <Table.Body
                         className="qbTbody"
                         rows={_.isNull(this.props.items) ? [] : this.props.items}
@@ -133,7 +133,7 @@ export class StandardGrid extends Component {
                                      itemTypeSingular={this.props.itemTypeSingular}
                                      itemsPerPage={this.props.itemsPerPage}
                 />
-                {/*If the array is empty(no data) and not null, we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
+                {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
                 {!_.isNull(this.props.items) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
             </div>
         );
