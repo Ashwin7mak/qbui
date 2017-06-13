@@ -793,7 +793,7 @@ export default {
             title: "Add users to",
             description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
             searching: "Searching...",
-            userSuccessTitle: "Your app has new user!",
+            userSuccessTitle: "Your app has a new user!",
             userSuccessText: "Let them know they have access to your app by sharing the link with them.",
             copy: "Copy",
             email: "Email",

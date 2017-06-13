@@ -784,7 +784,7 @@ export default {
             title: "Benutzer hinzufügen",
             description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
             searching: "Suchen...",
-            userSuccessTitle: "Deine App hat neuen Benutzer!",
+            userSuccessTitle: "Deine App hat einen neuen Benutzer!",
             userSuccessText: "Lassen Sie sie wissen, dass sie Zugang zu Ihrer App haben, indem Sie den Link mit ihnen teilen.",
             copy: "Kopieren",
             email: "Email",

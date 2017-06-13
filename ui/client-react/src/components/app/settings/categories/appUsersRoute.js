@@ -23,7 +23,7 @@ import UserSuccessDialog from './userSuccessDialog.js';
 export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
-            roleId: true
+            updateRowCount: true
         };
     },
 
@@ -69,7 +69,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     getSelectionActions() {
-        return (<UserActions appId={this.props.appId} roleId={this.state.roleId} />);
+        return (<UserActions appId={this.props.appId} updateRowCount={this.state.updateRowCount} />);
     },
 
     getTableActions() {
@@ -106,7 +106,7 @@ export const AppUsersRoute = React.createClass({
             // id is in the list, remove it
             selectedRows = _.without(selectedRows, isAlreadySelected);
         }
-        this.setState({roleId:!this.state.roleId});
+        this.setState({updateRowCount:!this.state.updateRowCount});
         this.props.selectUserRows(selectedRows);
     },
 
@@ -115,7 +115,6 @@ export const AppUsersRoute = React.createClass({
      */
 
     selectAllRows() {
-        let roleId = this.state.roleId;
         let appUsers = this.props.unfilteredAppUsers;
         let selected = [];
         // Transform the records first so that subHeaders (grouped records) can be handled appropriately

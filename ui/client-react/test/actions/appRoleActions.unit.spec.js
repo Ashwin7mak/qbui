@@ -143,7 +143,7 @@ describe('App Role Actions success workflow tests', () => {
             event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {roleId:roleId, userIds:userIds})
         ];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, roleId, userDetails)).then(
+        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, userDetails)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 expect(mockRoleService.prototype.removeUsersFromAppRole).toHaveBeenCalled();
@@ -253,7 +253,7 @@ describe('App Role Actions failure workflow', () => {
     it('verify removeUsersFromAppRole reject response', (done) => {
         const expectedActions = [];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, roleId, userIds)).then(
+        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, userIds)).then(
             () => {
                 expect(false).toBe(true);
                 done();

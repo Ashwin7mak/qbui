@@ -131,7 +131,7 @@ export class UserActions extends React.Component {
 
 UserActions.propTypes = {
     appId: PropTypes.string,
-    roleId: PropTypes.string,
+    updateRowCount: PropTypes.bool,
     removeUsersFromAppRole: PropTypes.func,
     selectedUserRows: PropTypes.array,
     clearSelectedUserRows: PropTypes.func
