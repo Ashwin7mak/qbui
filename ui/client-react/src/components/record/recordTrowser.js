@@ -48,7 +48,6 @@ export const RecordTrowser = React.createClass({
         editingRecId: React.PropTypes.number,
         editingApp: React.PropTypes.object,
         editingTable: React.PropTypes.object,
-        viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
         editForm: React.PropTypes.object,
         reportData: React.PropTypes.object,
@@ -256,9 +255,8 @@ export const RecordTrowser = React.createClass({
                 //  need to call as the form.saving attribute is used to determine when to
                 //  open/close the 'modal working' spinner/window..
                 this.props.saveFormComplete(formType);
-                if (this.props.viewingRecordId === obj.recId) {
-                    this.props.syncForm(CONTEXT.FORM.VIEW);
-                }
+                this.props.syncForm(CONTEXT.FORM.VIEW, obj.recId);
+
 
                 if (next) {
                     this.nextRecord();
@@ -309,9 +307,7 @@ export const RecordTrowser = React.createClass({
         this.props.dispatch(createRecord(this.props.editingAppId, this.props.editingTblId, params)).then(
             (obj) => {
                 this.props.saveFormComplete(formType);
-                if (this.props.viewingRecordId === obj.recId) {
-                    this.props.syncForm(CONTEXT.FORM.VIEW);
-                }
+                this.props.syncForm(CONTEXT.FORM.VIEW, obj.recId);
 
                 //refresh the embedded report,after a child record is added to the embedded report
                 this.props.unloadEmbeddedReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT]);
@@ -562,8 +558,8 @@ const mapDispatchToProps = (dispatch) => {
         //saveFormError: (formType, errorStatus) => {
         //    dispatch(saveFormError(formType, errorStatus));
         //},
-        syncForm: (formType) => {
-            dispatch(syncForm(formType));
+        syncForm: (formType, recordId) => {
+            dispatch(syncForm(formType, recordId));
         },
         hideErrorMsgDialog: () => {
             dispatch(hideErrorMsgDialog());

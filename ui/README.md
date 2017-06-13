@@ -529,6 +529,15 @@ hotloader only opens up node on port 9000 to other devices. Other services
 (such as core on port 8080 or Experience Engine on port 8081) are always open to
 all devices on the network and aren't affected by the hotloader settings.
 
+## Performance Logging
+Performance logging using EPISODES has not been migrated to redux.  The code was removed from the source branch as only 3 components
+generated performance statistics.  If there is a need re-activate performance logging on the client, a new redux store/actions should
+get created.  Reference to the old flux implementation code:
+
+    * branch: mc-2703-migrate-loadApp-actions-redux
+    * sha: cf51f74e3fae2aa710562d8f47666e0d4203f167
+
+
 ## Troubleshooting
 POSSIBLE ISSUES -- and how to resolve
 
