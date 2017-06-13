@@ -13,8 +13,10 @@ const headerSource = {
         return {label};
     },
 
-    isDragging(sourceProps) {
+    isDragging(sourceProps, monitor) {
         sourceProps.beginDrag(CONTEXT.REPORT.NAV, sourceProps.label);
+
+        return sourceProps.label === monitor.getItem().label;
     }
 };
 
