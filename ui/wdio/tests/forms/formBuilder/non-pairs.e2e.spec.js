@@ -299,7 +299,8 @@
                     ['Number', 'Currency', 'Percentage'],
                     ['Date', 'Time stamp', 'Time of day', 'Duration'],
                     ['Checkbox', 'User', 'URL', 'Email', 'Phone'],
-                    ['Get another record']]);
+                    ['Get another record']]
+                );
             });
         }
     });
