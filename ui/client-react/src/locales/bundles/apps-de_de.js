@@ -198,7 +198,8 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen"
+                feedbackTooltip: "Teilen Sie Ideen und Fragen",
+                helpTooltip: "Hilfe",
             }
 
         },
@@ -654,6 +655,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
+            existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",

@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from "react";
 import _ from "lodash";
-import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
-import "./standardGrid.scss";
 import * as Table from "reactabular-table";
 import {connect} from "react-redux";
 import QbHeaderCell from "../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell";
@@ -13,6 +11,8 @@ import * as StandardGridActions from "./standardGridActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
+import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
+import "./standardGrid.scss";
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -32,19 +32,19 @@ const onRowFn = (row) => {
     };
 };
 
-class StandardGrid extends Component {
+export class StandardGrid extends Component {
     constructor(props) {
         super(props);
         this.transforms = this.props.columnTransformsClasses.map((transformClass, index) => new transformClass(this, this.props.columnTransformProps[index]));
     }
 
-    getColumns() {
+    getColumns = () => {
         return _.reduce(this.transforms, (columns, transform) => transform.apply(columns), this.props.columns);
-    }
+    };
 
-    getUniqueRowKey({rowData}) {
+    getUniqueRowKey = ({rowData}) => {
         return `${this.props.id}-row-${rowData[this.props.rowKey]}`;
-    }
+    };
 
     /**
      * stick the header and sticky first column when the grid scrolls
@@ -63,11 +63,11 @@ class StandardGrid extends Component {
                 stickyHeaders[i].style.transform = translate;
             }
         }
-    }
+    };
 
     bodyRef = (body) => {
         this.tableRef = body && body.getRef().parentNode;
-    }
+    };
 
     /**
      * Render the grid when items exist
@@ -94,7 +94,7 @@ class StandardGrid extends Component {
                 </Table.Provider>
             </div>
         );
-    }
+    };
 
     /**
      * Renders the no items found UI
@@ -114,7 +114,7 @@ class StandardGrid extends Component {
                 </div>
             </div>
         );
-    }
+    };
 
     /**
      * The main render function for the StandardGrid component
@@ -224,10 +224,8 @@ StandardGrid.defaultProps = {
     shouldSearch: true
 };
 
-export {StandardGrid};
-
 const mapStateToProps = (state, props) => {
-    var gridState = state.Grids[props.id] || {};
+    let gridState = state.Grids[props.id] || {};
     return {
         sortFids: gridState.sortFids || [],
         items : gridState.items

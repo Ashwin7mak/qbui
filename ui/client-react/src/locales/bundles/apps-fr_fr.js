@@ -198,7 +198,8 @@ export default {
                 feedbackMenuButton: "Donnez votre avis",
                 feedbackMenuTitle: "Retour d'information",
                 reportFeedBackButton: "Signaler un problème",
-                feedbackTooltip: "Partagez des idées et des problèmes"
+                feedbackTooltip: "Partagez des idées et des problèmes",
+                helpTooltip: "Aidez-moi",
             }
         },
         fields: {
@@ -653,6 +654,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
+            existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",

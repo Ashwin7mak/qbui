@@ -136,6 +136,23 @@ class ReportModelHelper {
     }
 
     /**
+     * Format the group data.
+     * @param groupData escaped data
+     * @returns the groupData unescaped
+     */
+    static getGroupedReportData(groupData) {
+        if (groupData) {
+            groupData.forEach(data => {
+                if (data.group) {
+                    data.group = data.group.replace('&amp;', '&');
+                }
+                return data;
+            });
+        }
+        return groupData;
+    }
+
+    /**
      *
      * @param currentReport
      * @param content
