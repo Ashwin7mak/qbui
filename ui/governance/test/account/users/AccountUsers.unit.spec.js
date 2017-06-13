@@ -7,7 +7,7 @@ import AccountUsersGrid from "../../../src/account/users/grid/AccountUsersGrid";
 import {Provider} from "react-redux";
 
 
-xdescribe('AccountUsers', () => {
+describe('AccountUsers', () => {
     beforeEach(() => {
         jasmineEnzyme();
         GovernanceBundleLoader.changeLocale('en-us');
