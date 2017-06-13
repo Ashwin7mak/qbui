@@ -3,11 +3,13 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 
+//newTableItem
+//newTable
 class CreateNewItemButton extends Component {
     render() {
         return (
-            <li className="newTableItem link" key="newTable">
-                <a className="newTable leftNavLink" onClick={this.props.handleOnClick}>
+            <li className="newItemButton link" key="newItem">
+                <a className="newItem leftNavLink" onClick={this.props.handleOnClick}>
                     <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message={this.props.message}/></span>
                     <div className="hoverComponent">
                         <I18nMessage message={this.props.message}/>

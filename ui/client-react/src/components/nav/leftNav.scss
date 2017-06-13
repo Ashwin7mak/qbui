@@ -382,14 +382,14 @@ div.leftNavTooltip {
             margin: 0;
             border-top: 1px solid $leftnav-background-stroke-color;
 
-            .newTableItem {
+            .newItemButton {
                 position: sticky;
                 position: -webkit-sticky;
                 bottom: 0;
                 background-color: $leftnav-background-color;
                 border-top: 1px solid $leftnav-background-stroke-color;
             }
-            .newTable {
+            .newItem {
                 cursor: pointer;
                 line-height: 40px;
 
@@ -627,7 +627,7 @@ div.leftNavTooltip {
 
     /* hide tables footer (add new table) for small */
 
-    .link.newTableItem {
+    .link.newItemButton {
         display: none;
     }
 

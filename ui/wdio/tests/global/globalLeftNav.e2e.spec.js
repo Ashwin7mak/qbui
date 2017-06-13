@@ -175,7 +175,7 @@
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
             //Verify new Table button displays in leftNav
-            expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
+            expect(browser.element('.newItemButton .newTable').isEnabled()).toBe(true);
         });
 
         it('Verify going to reports via left nav and verify left Nav in reports page', function() {
@@ -195,7 +195,7 @@
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
             //Verify new Table button displays in leftNav
-            expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
+            expect(browser.element('.newItemButton .newTable').isEnabled()).toBe(true);
 
         });
 

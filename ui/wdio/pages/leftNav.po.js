@@ -36,7 +36,7 @@
         // Left nav new table element
         leftNavNewTableEl:{
             get: function() {
-                return browser.element('.newTableItem .iconUISturdy-add-new-stroke');
+                return browser.element('.newItemButton .iconUISturdy-add-new-stroke');
             }
         },
         // Left nav new table cancle button
