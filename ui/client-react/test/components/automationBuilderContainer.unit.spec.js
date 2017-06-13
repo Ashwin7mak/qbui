@@ -1,9 +1,8 @@
-import React from 'react';
-import {shallow, mount} from 'enzyme';
-import jasmineEnzyme from 'jasmine-enzyme';
-import {AutomationBuilderContainer, __RewireAPI__ as AutomationBuilderContainerRewireAPI}  from '../../src/components/automation/builder/AutomationBuilderContainer';
-import {MemoryRouter, Link} from 'react-router-dom';
-import NavigationUtils from '../../src/utils/navigationUtils';
+import React from "react";
+import {mount, shallow} from "enzyme";
+import jasmineEnzyme from "jasmine-enzyme";
+import {AutomationBuilderContainer} from "../../src/components/automation/builder/automationBuilderContainer";
+import NavigationUtils from "../../src/utils/navigationUtils";
 import FieldValueEditor from "../../src/components/fields/fieldValueEditor";
 import MultiLineTextFieldValueEditor from "../../src/components/fields/multiLineTextFieldValueEditor";
 import EmailFieldValueEditor from "../../src/components/fields/emailFieldValueEditor";
