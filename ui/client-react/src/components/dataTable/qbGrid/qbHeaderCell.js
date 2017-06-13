@@ -11,15 +11,26 @@ const DragTypes = {
 const headerSource = {
     beginDrag({label}) {
         return {label};
+    },
+
+    isDragging(sourceProps, monitor) {
+        sourceProps.beginDrag(CONTEXT.REPORT.NAV, sourceProps.label);
+
+        return sourceProps.label === monitor.getItem().label;
     }
 };
 
 const headerTarget = {
-    hover(targetProps, monitor) {
+    hover(targetProps) {
+        targetProps.onHover(CONTEXT.REPORT.NAV, targetProps.label);
+    },
+
+    drop(targetProps, monitor) {
+        const targetLabel = targetProps.label;
         const sourceProps = monitor.getItem();
-        if (sourceProps.label !== targetProps.label) {
-            targetProps.onMove(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
-        }
+        const sourceLabel = sourceProps.label;
+
+        targetProps.onMove(CONTEXT.REPORT.NAV, sourceLabel, targetLabel);
     }
 };
 
