@@ -461,8 +461,7 @@ class formBuilderPage {
             // keyboard shortcut doesn't work on EDGE...
             // can't reproduce the problem manually, not sure why
             this.save();
-        }
-        else {
+        } else {
             browser.keys(['Command', 's', 'Command']);
         }
         return this;
