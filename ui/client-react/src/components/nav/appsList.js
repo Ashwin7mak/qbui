@@ -56,7 +56,7 @@ let AppsList = React.createClass({
      */
     getNewAppItem() {
         return <CreateNewItemButton handleOnClick={() => {console.log('clickety click click!');}}
-                                    message={"tableCreation.newTablePageTitle"} />;
+                                    message={"appCreation.newApp"} />;
     },
 
 
