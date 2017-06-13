@@ -148,6 +148,10 @@ class formBuilderPage {
 
     // methods
 
+    addNewField(label) {
+        browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
+    }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
@@ -343,10 +347,6 @@ class formBuilderPage {
             return browser.element(target).getText() === label;
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
         return this.getFieldLabels();
-    }
-
-    addNewField(label) {
-        browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
     }
 
     /**
