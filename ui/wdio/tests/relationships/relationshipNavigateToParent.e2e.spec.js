@@ -106,21 +106,29 @@ describe('Relationships - View child table on form tests: ', () => {
 
             // Verify link to parent is displayed in drawer
             let parentLinkText = relationshipsPO.parentRecordLinkEl;
-            console.log(parentLinkText.getText());
             expect(parentLinkText.getText()).toEqual('1');
-
         });
 
         /**
          *  Clicking on parent link in child form opens slidey-righty to parent
          */
         it('Clicking on parent link in child form opens slidey-righty to parent', () => {
-            // Check the table name
+            let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);
             let sectionText = relationshipsPO.qbPanelHeaderTitleTextEl(childTableFormSection).getText();
-            browser.debug();
-            expect(sectionText).toContain('Child Table A');
-
+            relationshipsPO.clickOnParentRecordLinkInForm();
+            relationshipsPO.slideyRightyEl.waitForVisible();
+            // Do I need to check expectation here?
         });
+
+        /**
+         *  Navigating to a child record without context of a parent, shows a link to parent record
+         */
+        it('Navigating to a child record directly will show a link to the parent record', () => {
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
+            let parentLinkText = relationshipsPO.parentRecordLinkEl;
+            expect(parentLinkText.getText()).toEqual('1');
+        });
+
     }
 });
 

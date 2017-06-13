@@ -102,7 +102,7 @@
             },
             // Helper method to get the proper URL for loading the user management page containing a list of users for an app
             getRequestUsersEndpoint: function(realmName, appId) {
-                var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users/');
+                var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users');
                 return requestUsersEndPoint;
             },
 

@@ -24,7 +24,7 @@
         iconActionsRightButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-right');}},
         iconActionsLeftButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-left');}},
         iconActionsCloseDrawerButtonEl: {get: function() {return this.slideyRightyEl.element('.iconActionButton.closeDrawer');}},
-        parentRecordLinkEl: {get: function() {return browser.element('.numericField .viewElement');}},
+        parentRecordLinkEl: {get: function() {return browser.element('.textField .viewElement .textLink');}},
         // Page Object functions
         /**
          * Returns form section containing the child table for a relationship
@@ -76,6 +76,14 @@
             return this.slideyRightyEl.waitForVisible();
         }},
 
+        /**
+         * Given a form that contains a link to a parent node, click on the link
+         */
+        clickOnParentRecordLinkInForm: {value: function(index) {
+            formsPO.viewFormContainerEl.waitForVisible();
+            let linkEl = this.parentRecordLinkEl;
+            linkEl.click();
+        }},
         /**
          * While viewing a parent record on a form get the values of each record in the child table
          * @returns An array of record values for all child records
