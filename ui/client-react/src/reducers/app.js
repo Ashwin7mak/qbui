@@ -224,6 +224,11 @@ const app = (
             };
         }
         return state;
+    case types.SHOW_APP_CREATION_DIALOG:
+        return {
+            ...state,
+            dialogOpen: true
+        };
     case types.REMOVE_USERS_FROM_APP_ROLE:
         const roleId = action.content.roleId;
         const userIds = action.content.userIds;

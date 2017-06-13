@@ -28,7 +28,7 @@ import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
-import {loadApp, loadApps} from '../../actions/appActions';
+import {loadApp, loadApps, showAppCreationDialog} from '../../actions/appActions';
 
 import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
 import {getAppRoles} from '../../reducers/appRoles';
@@ -458,6 +458,7 @@ export const Nav = React.createClass({
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
                 onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
+                onCreateNewApp={this.createNewApp}
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
@@ -559,7 +560,26 @@ export const Nav = React.createClass({
         setTimeout(() => {
             this.props.showTableCreationDialog();
         });
-    }
+    },
+
+    /**
+     * is user able to create a new table from the left nav
+     * @returns {*}
+     */
+    allowCreateNewApp() {
+        const app = this.getSelectedApp();
+        return app && AppUtils.hasAdminAccess(app.accessRights);
+    },
+
+    /**
+     * open the create table wizard
+     */
+    createNewApp() {
+        setTimeout(() => {
+            console.log('nav.js hit it!');
+            this.props.showAppCreationDialog();
+        });
+    },
 });
 
 const mapStateToProps = (state, ownProps) => {
@@ -595,6 +615,7 @@ const mapDispatchToProps = (dispatch) => {
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
+        showAppCreationDialog: () => dispatch(showAppCreationDialog()),
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
         enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
         loadApps: () => dispatch(loadApps()),

@@ -55,7 +55,7 @@ let AppsList = React.createClass({
      * @returns {XML}
      */
     getNewAppItem() {
-        return <CreateNewItemButton handleOnClick={() => {console.log('clickety click click!');}}
+        return <CreateNewItemButton handleOnClick={this.props.onCreateNewApp}
                                     message={"appCreation.newApp"} />;
     },
 
