@@ -113,7 +113,10 @@ describe('Relationships - View child table on form tests: ', () => {
          *  Clicking on parent link in child form opens slidey-righty to parent
          */
         it('Clicking on parent link in child form opens slidey-righty to parent', () => {
-            // open child record
+            let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);
+            // Check the displayed record count
+            childTableFormSection.waitForVisible();
+            //click on child record
             relationshipsPO.clickOnRecordInChildTable(0);
             // click on the parent link
             relationshipsPO.clickOnParentRecordLinkInForm();
