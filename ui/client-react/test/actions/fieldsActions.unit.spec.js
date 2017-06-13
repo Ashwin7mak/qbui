@@ -25,8 +25,61 @@ describe('Field Actions success workflow', () => {
 
     const appId = '1';
     const tblId = '2';
+    const childtblId = '3';
     const field = {id: 10};
     const newFieldId = 20;
+    const childFieldId = 20;
+    const relationshipid = 2;
+    const fieldWithRelationship = {
+        id: 25,
+        parentTableId:tblId,
+        parentFieldId: newFieldId,
+        childTableName:'childTableName'
+    };
+
+    let relationship = {
+        masterAppId: appId,
+        masterTableId: tblId,
+        masterFieldId: newFieldId,
+        detailAppId: appId,
+        detailTableId: childtblId,
+        detailFieldId: childFieldId,
+        id: relationshipid,
+        description: "Referential integrity relationship between Master / Child Tables",
+        referentialIntegrity: false,
+        cascadeDelete: false
+    };
+
+    let mockRelationshipResponse = {
+        data:  {relationship}
+    };
+
+    let mockFormResponse = {
+        data: {
+            formMeta: {
+                "tabs": {
+                    "0": {
+                        "fields": [6, 7],
+                        "sections": {
+                            "0": {
+                                "fields": [6, 7],
+                                "elements": {
+                                    "0": {
+                                        "FormFieldElement": {
+                                            "type": "FIELD",
+                                            "fieldId": 6,
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+
     let mockResponseGetFields = {
         data: [field]
     };
@@ -45,18 +98,48 @@ describe('Field Actions success workflow', () => {
         }
     }
 
+    class mockAppService {
+        createRelationship() {
+            return Promise.resolve(mockRelationshipResponse);
+        }
+    }
+
+    class mockFormService {
+        getForm() {
+            return Promise.resolve(mockFormResponse);
+        }
+        updateForm() {
+            return Promise.resolve(mockFormResponse);
+        }
+    }
+
     beforeEach(() => {
         spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
         spyOn(mockFieldService.prototype, 'createField').and.callThrough();
         spyOn(mockFieldService.prototype, 'updateField').and.callThrough();
+
+        spyOn(mockAppService.prototype, 'createRelationship').and.callThrough();
+        spyOn(mockFormService.prototype, 'getForm').and.callThrough();
+        spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
+
         FieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
+        FieldsActionsRewireAPI.__Rewire__('AppService', mockAppService);
+        FieldsActionsRewireAPI.__Rewire__('FormService', mockFormService);
+
+
     });
 
     afterEach(() => {
         FieldsActionsRewireAPI.__ResetDependency__('FieldsService');
+        FieldsActionsRewireAPI.__ResetDependency__('AppService', mockAppService);
+        FieldsActionsRewireAPI.__ResetDependency__('FormService', mockFormService);
         mockFieldService.prototype.getFields.calls.reset();
         mockFieldService.prototype.createField.calls.reset();
         mockFieldService.prototype.updateField.calls.reset();
+
+        mockAppService.prototype.createRelationship.calls.reset();
+        mockFormService.prototype.getForm.calls.reset();
+        mockFormService.prototype.updateForm.calls.reset();
     });
 
     it('verify saveNewField action', (done) => {
@@ -76,6 +159,30 @@ describe('Field Actions success workflow', () => {
                 done();
             });
     });
+
+
+    it('verify saveNewFieldWithRelationship action', (done) => {
+        const formId = null;
+        const expectedActions = [
+            {type: types.UPDATE_FIELD_ID, oldFieldId: fieldWithRelationship.id, newFieldId, formId, appId, tblId}
+        ];
+        const store = mockReportsStore({});
+        return store.dispatch(fieldActions.saveNewField(appId, tblId, fieldWithRelationship, formId)).then(
+            () => {
+                expect(mockFieldService.prototype.createField).toHaveBeenCalled();
+                expect(store.getActions()).toEqual(expectedActions);
+                expect(mockAppService.prototype.createRelationship).toHaveBeenCalled();
+                expect(mockFormService.prototype.getForm).toHaveBeenCalled();
+                expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
+
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+
 
     it('verify updateFieldProperties action', (done) => {
         const expectedActions = [];

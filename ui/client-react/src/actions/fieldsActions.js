@@ -8,6 +8,8 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import {getFields} from '../reducers/fields';
 import {transformFieldBeforeSave} from './actionHelpers/transformFormData';
+import FormService from '../services/formService';
+import Consts from '../../../common/src/constants';
 
 let logger = new Logger();
 
@@ -93,6 +95,37 @@ function createRelationship(appId, fieldId, detailTableId, parentTableId, parent
     return appService.createRelationship(appId, relationship);
 }
 
+/**
+ * Constant defining header element
+ * @param displayText
+ */
+const headerElement = (displayText = 'Tab1-Section1') =>({
+    FormHeaderElement: {
+        displayText: displayText,
+        type: 'HEADER'
+    }
+});
+
+/**
+ * Constant defining the childReportElement on a given form.
+ * @param relationshipId
+ */
+const childReportElement = (relationshipId = 0) => ({
+    ChildReportElement: {
+        displayOptions: [
+            "VIEW",
+            "ADD",
+            "EDIT"
+        ],
+        displayText:null,
+        reportType:"EMBED_TABLE_REPORT",
+        type: Consts.REPORT_FORM_TYPE.CHILD_REPORT,
+        orderIndex: 0,
+        positionSameRow: false,
+        relationshipId: relationshipId
+    }
+});
+
 export const saveNewField = (appId, tblId, field, formId = null) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -113,7 +146,49 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
 
                         if (field.parentTableId) {
                             createRelationship(appId, fieldId, tblId, field.parentTableId, field.parentFieldId).then(
-                                () => resolve()
+                                (relationshipResponse) => {
+                                    return relationshipResponse.data.id;
+                                }
+                            ).then(function(relationshipId) {
+                                let formService = new FormService();
+                                formService.getForm(appId, field.parentTableId).then(
+                                    (formResponse) =>{
+                                        let formMeta = formResponse.data.formMeta;
+                                        let sections = formMeta.tabs[0].sections;
+                                        let childReportExists = null;
+                                        Object.keys(sections).forEach((sectionKey) =>{
+                                            if (_.has(sections[sectionKey], 'headerElement.FormHeaderElement.displayText')) {
+                                                if (_.includes(_.map(sections[sectionKey], 'headerElement.FormHeaderElement.displayText'), field.childTableName)) {
+                                                    childReportExists = true;
+                                                }
+                                            }
+                                        });
+                                        if (childReportExists) {
+                                            return null;
+                                        } else {
+                                            let length = Object.keys(sections).length;
+                                            sections[length] = Object.assign(_.cloneDeep(sections[0]), {
+                                                headerElement: headerElement(field.childTableName),
+                                                elements: {0: childReportElement(relationshipId)},
+                                                fields:[],
+                                                orderIndex: length
+                                            });
+                                            return formMeta;
+                                        }
+                                    }
+                                ).then(function(updatedForm) {
+                                    if (updatedForm) {
+                                        formService.updateForm(appId, field.parentTableId, updatedForm).then(
+                                            () => resolve()
+                                        );
+                                    } else {
+                                        resolve();
+                                    }
+                                }).catch(error =>{
+                                    logger.parseAndLogError(LogLevel.ERROR, error, 'get/UpdateForm');
+                                    reject();
+                                });
+                            }
                             ).catch(error => {
                                 // unable to create a relationship, delete the field since it is not useful
                                 logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createRelationship:');

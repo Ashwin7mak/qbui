@@ -114,6 +114,17 @@ export const QBForm = React.createClass({
     },
 
     /**
+     * Retrieve relationship from list of relationships.
+     * @param relationshipId
+     * @returns {{}}
+     */
+    getRelationship(relationshipId) {
+        const relationships = _.get(this, `props.formData.formMeta.relationships`, {});
+        const relationship = _.find(relationships, rel => rel.id === relationshipId);
+        return relationship || {};
+    },
+
+    /**
      * get the form record
      * @param fieldId
      * @returns the record entry from formdata record array with the field ID
@@ -450,7 +461,7 @@ export const QBForm = React.createClass({
         // Find the relationship object for this element.
         // This element represents a single relationship from the `formMeta.relationships` array.
         // The `element.relationshipId` is the index offset within the relationship array.
-        const relationship = _.get(this, `props.formData.formMeta.relationships[${ReferenceElement.relationshipId}]`, {});
+        const relationship = this.getRelationship(ReferenceElement.relationshipId);
 
         // Find the foreign key value. This is the value stored in one of the master record's fields
         // the field id is specified as 'masterFieldId' in the relationship object.
