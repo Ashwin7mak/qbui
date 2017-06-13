@@ -76,15 +76,25 @@ $edit-icon-font-size: 18px;
         z-index: $zindex-qbGrid-th;
 
         &.placeholderCell {
-            background-color: rgba($color-purple-600, 0.08);
-            border-left: $stroke-width-thin dashed $color-black-300;
-            border-right: $stroke-width-thin dashed $color-black-300;
+            background-color: $color-purple-100;
+            border-left: 1px dashed $color-purple-600;
+            border-right: 1px dashed $color-purple-600;
             border-bottom: none;
-            border-top: $stroke-width-thin dashed $color-black-300;
+            border-top: 1px dashed $color-purple-600;
 
             &:last-of-type {
-                border-right: $stroke-width-thin dashed $color-black-300;
+                border-right: 1px dashed $color-purple-600;
             }
+        }
+
+        &.isDraggable {
+            cursor: move;
+        }
+
+        &.active {
+            box-shadow: none;
+            border: $stroke-width-thin dashed $color-black-300;
+            background-color: rgba($color-purple-600, 0.08);
 
             .gridHeaderLabel {
                 visibility: hidden;
@@ -93,10 +103,6 @@ $edit-icon-font-size: 18px;
             .headerMenu {
                 visibility: hidden;
             }
-        }
-
-        &.isDraggable {
-            cursor: move;
         }
 
         // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
@@ -225,9 +231,9 @@ $edit-icon-font-size: 18px;
         max-width: 80px;
         position: relative;
         vertical-align: top;
-        background-color: rgba($color-purple-600, 0.08);
-        border-left: $stroke-width-thin dashed $color-black-300;
-        border-right: $stroke-width-thin dashed $color-black-300;
+        background-color: $color-purple-100;
+        border-left: 1px dashed $color-purple-600;
+        border-right: 1px dashed $color-purple-600;
         border-bottom: none;
         border-top: none;
 
@@ -586,7 +592,7 @@ $edit-icon-font-size: 18px;
         border-bottom: 1px solid $grid-line-color;
     }
     .qbRow:last-of-type .placeholderCell {
-        border-bottom: $stroke-width-thin dashed $color-black-300;
+        border-bottom: 1px dashed $color-black-600;
     }
 
     // row hover highlighting - only done while not inline editing
