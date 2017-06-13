@@ -41,9 +41,6 @@ export class AutomationBuilderContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            confirmInputValue: ""
-        };
     }
 
     componentDidMount() {
@@ -133,19 +130,26 @@ export class AutomationBuilderContainer extends Component {
                             <div className="formElementContainer">
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.toHeader")} />
-                                    <EmailFieldValueEditor onChange={this.updateTo} value={to}
-                                                      invalid={this.isEmailInvalid(to)} />
+                                    <div className="fieldValueEditor">
+                                        <span className="inputDeleteIcon">
+                                            <EmailFieldValueEditor
+                                                onChange={this.updateTo}
+                                                value={to}
+                                                invalid={this.isEmailInvalid(to)} />
+                                            <div className="clearIcon">
+                                                <div className="tipChildWrapper" aria-describedby="qbtooltip_321">
+                                                    <span className="clearIconButton qbIcon iconUISturdy-clear-mini"></span>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="formElementContainer">
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.subjectHeader")} />
                                     <FieldValueEditor onChange={this.updateSubject} value={subject} appUsers={[]} />
                                 </div>
-                            </div>
 
-                            <div className="formElementContainer">
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.bodyHeader")} />
                                     <MultiLineTextFieldValueEditor value={body} onChange={this.updateBody}/>
