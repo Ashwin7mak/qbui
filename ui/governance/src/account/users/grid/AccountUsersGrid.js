@@ -1,11 +1,10 @@
 import React, {PropTypes, Component} from "react";
 import {GetAccountUsersGridColumns} from "./AccountUsersGridColumns";
 import {GetFacetFields} from "./AccountUsersGridFacet";
-import "./AccountUsersGrid.scss";
 import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
 import * as Actions from "../AccountUsersActions";
 import constants from "../../../app/constants";
-import Locale from "../../../../../reuse/client/src/locales/locale";
+import "./AccountUsersGrid.scss";
 
 /**
  * Renders the Grid portion of the AccountUsers view
