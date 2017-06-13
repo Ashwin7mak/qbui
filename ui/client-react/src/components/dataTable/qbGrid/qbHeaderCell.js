@@ -3,13 +3,16 @@ import {connect} from 'react-redux';
 import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
 import {CONTEXT} from '../../../actions/context';
+import {draggingColumn, draggingColumnStop} from '../../../actions/reportBuilderActions';
 
 const DragTypes = {
     HEADER: 'HEADER'
 };
 
 const headerSource = {
-    beginDrag({label}) {
+    beginDrag(props) {
+        let {label} = props;
+        props.onDrag(label);
         return {label};
     },
 
@@ -93,4 +96,15 @@ const dropTarget = DropTarget(
     })
 );
 
-export default dragSource(dropTarget(QbHeaderCell));
+const mapStateToProps = (state) => {
+    return {
+        /*columnIsDragging: state.reportBuilder.columnIsDragging*/
+    }
+};
+
+const mapDispatchToProps = {
+    draggingColumn,
+    draggingColumnStop
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(dragSource(dropTarget(QbHeaderCell)));

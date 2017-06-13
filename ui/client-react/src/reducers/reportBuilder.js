@@ -7,7 +7,8 @@ const reportBuilder = (
         isPendingEdit: false,
         isInBuilderMode: false,
         availableColumns: [],
-        addBeforeColumn: false
+        addBeforeColumn: false,
+        labelBeingDragged: ''
     }, action) => {
 
     switch (action.type) {
@@ -53,13 +54,26 @@ const reportBuilder = (
         };
     }
     case types.CHANGE_REPORT_NAME:
-    case types.MOVE_COLUMN:
     case types.HIDE_COLUMN:
     case types.ADD_COLUMN_FROM_EXISTING_FIELD: {
         return {
             ...state,
             isPendingEdit: true
         };
+    }
+    case types.DRAGGING_COLUMN: {
+        console.log(action.content.sourceLabel);
+        return {
+            ...state,
+            labelBeingDragged: action.content.sourceLabel
+        }
+    }
+    case types.MOVE_COLUMN: {
+        return {
+            ...state,
+            isPendingEdit: true,
+            labelBeingDragged: ''
+        }
     }
     default:
         // return existing state by default in redux
