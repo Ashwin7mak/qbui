@@ -1,21 +1,26 @@
 import React, {PropTypes, Component} from 'react';
+import {connect} from 'react-redux';
 import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
+import {CONTEXT} from '../../../actions/context';
 
 const DragTypes = {
     HEADER: 'HEADER'
 };
 
 const headerSource = {
-    beginDrag(props) {
-        console.log(props);
-        return {};
+    beginDrag({label}) {
+        return {label};
     }
 };
 
 const headerTarget = {
-    drop(props, monitor) {
-        console.log('dropped');
+    drop(targetProps, monitor) {
+        const targetLabel = targetProps.label;
+        const sourceProps = monitor.getItem();
+        const sourceLabel = sourceProps.label;
+
+        targetProps.onMove(CONTEXT.REPORT.NAV, sourceLabel, targetLabel);
     }
 };
 
