@@ -124,11 +124,17 @@ export const moveColumn = (context, sourceLabel, targetLabel) => {
     return event(context, types.MOVE_COLUMN, {sourceLabel, targetLabel});
 };
 
-export const draggingColumn = sourceLabel => {
+export const draggingColumnStart = sourceLabel => {
     return {
-        type: types.DRAGGING_COLUMN,
+        type: types.DRAGGING_COLUMN_START,
         content: {sourceLabel}
-    }
+    };
+};
+
+export const draggingColumnEnd = () => {
+    return {
+        type: types.DRAGGING_COLUMN_END
+    };
 };
 
 /**

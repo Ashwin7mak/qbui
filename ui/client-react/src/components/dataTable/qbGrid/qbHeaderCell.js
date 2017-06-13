@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
 import {CONTEXT} from '../../../actions/context';
-import {draggingColumn, draggingColumnStop} from '../../../actions/reportBuilderActions';
+import {draggingColumnStart, draggingColumnStop} from '../../../actions/reportBuilderActions';
 
 const DragTypes = {
     HEADER: 'HEADER'
@@ -12,12 +12,16 @@ const DragTypes = {
 const headerSource = {
     beginDrag(props) {
         let {label} = props;
-        props.onDrag(label);
+        props.onDragStart(label);
         return {label};
     },
 
     isDragging(sourceProps, monitor) {
         return sourceProps.label === monitor.getItem().label;
+    },
+
+    endDrag(props) {
+        props.onDragEnd();
     }
 };
 
@@ -103,7 +107,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    draggingColumn,
+    draggingColumnStart,
     draggingColumnStop
 };
 

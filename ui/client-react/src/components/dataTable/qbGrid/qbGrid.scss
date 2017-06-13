@@ -232,7 +232,11 @@ $edit-icon-font-size: 18px;
         border-top: none;
 
         &:last-of-type {
-            border-right: 1px dashed $color-purple-600;
+            border-right: $stroke-width-thin dashed $color-black-300;
+        }
+
+        .cellWrapper {
+            visibility: hidden;
         }
     }
 

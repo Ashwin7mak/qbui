@@ -54,6 +54,7 @@ const reportBuilder = (
         };
     }
     case types.CHANGE_REPORT_NAME:
+    case types.MOVE_COLUMN:
     case types.HIDE_COLUMN:
     case types.ADD_COLUMN_FROM_EXISTING_FIELD: {
         return {
@@ -61,17 +62,15 @@ const reportBuilder = (
             isPendingEdit: true
         };
     }
-    case types.DRAGGING_COLUMN: {
-        console.log(action.content.sourceLabel);
+    case types.DRAGGING_COLUMN_START: {
         return {
             ...state,
             labelBeingDragged: action.content.sourceLabel
         }
     }
-    case types.MOVE_COLUMN: {
+    case types.DRAGGING_COLUMN_END: {
         return {
             ...state,
-            isPendingEdit: true,
             labelBeingDragged: ''
         }
     }
