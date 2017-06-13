@@ -7,6 +7,11 @@ let modalDialog = requirePO('/common/modalDialog');
 
 class formBuilderPage {
 
+    get activePanel() {
+        // The active FIELDS panel
+        return browser.element(".tabbedSideNav .rc-tabs-tabpane-active");
+    }
+
     get cancelBtn() {
         // CANCEL (form) button in footer bar
         return browser.element('.alternativeTrowserFooterButton');
@@ -453,9 +458,6 @@ class formBuilderPage {
     KB_save(index) {
         // save form via keyboard
         browser.keys(['Command', 's', 'Command']);
-        // cmd above doesn't work on EDGE...
-        // todo: figure out this problem; not reproducible manually
-        // this.save();
         return this;
     }
 

@@ -285,6 +285,22 @@
                 // verify existing fields tab is still selected
                 expect(formBuilderPO.tab_Active.getText()).toBe("Existing");
             });
+
+            it('verify presence of all expected tokens & groups in new fields panel', function() {
+                // build an array of groups, each being an array of items within that group
+                // and compare that to the expected array
+                expect(
+                    formBuilderPO.activePanel.elements('.listOfElementsItemGroup').value.map(function(group) {
+                        return group.elements('.listOfElementsItem').value.map(function(item) {
+                            return item.getText();
+                        });
+                    })).toEqual([
+                    ['Text', 'Choice list'],
+                    ['Number', 'Currency', 'Percentage'],
+                    ['Date', 'Time stamp', 'Time of day', 'Duration'],
+                    ['Checkbox', 'User', 'URL', 'Email', 'Phone'],
+                    ['Get another record']]);
+            });
         }
     });
 }());
