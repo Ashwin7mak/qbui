@@ -25,7 +25,7 @@ class ToolPalette extends Component {
 
         const fieldsToDelete = _.get(this.props, "formMeta.fieldsToDelete", []);
 
-        const table = _.find(this.props.app.tables, {id: tableId});
+        const table = _.find(tables, {id: tableId});
 
         const validParentTables = RelationshipUtils.getValidParentTablesForRelationship(this.props.app, table, this.props.fields, newRelationshipFieldIds, fieldsToDelete);
 

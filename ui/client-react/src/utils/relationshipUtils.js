@@ -34,7 +34,7 @@ class RelationshipUtils {
         validParentTables = _.reject(validParentTables, table => _.find(app.relationships, relation => deletedFields.indexOf(relation.detailFieldId) === -1 && (relation.masterTableId === table.id) && (relation.detailTableId === detailTable.id)));
 
         //remove tables that already are in a relationship with detailTable as master to avoid circular relationships
-        validParentTables = _.reject(validParentTables, table => _.find(app.relationships, relation => (relation.masterTableId === detailTable.id) && (relation.detailTableId === detailTable.id)));
+        validParentTables = _.reject(validParentTables, table => _.find(app.relationships, relation => (relation.masterTableId === detailTable.id) && (relation.detailTableId === table.id)));
 
         return validParentTables;
     }
