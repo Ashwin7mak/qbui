@@ -114,7 +114,14 @@ describe('Relationships - View child table on form tests: ', () => {
          */
         it('Clicking on parent link in child form opens slidey-righty to parent', () => {
             let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);
-            let sectionText = relationshipsPO.qbPanelHeaderTitleTextEl(childTableFormSection).getText();
+            // Check the displayed record count
+            let recordCount = relationshipsPO.recordsCountEl(childTableFormSection).getText();
+            expect(recordCount).toContain('3 records');
+            // Check the number of created related records in the table
+            let rowCount = reportContentPO.getAllRows.value.length;
+            expect(rowCount).toEqual(3);
+            relationshipsPO.clickOnRecordInChildTable(0);
+            // click on the parent link
             relationshipsPO.clickOnParentRecordLinkInForm();
             relationshipsPO.slideyRightyEl.waitForVisible();
             // Do I need to check expectation here?
