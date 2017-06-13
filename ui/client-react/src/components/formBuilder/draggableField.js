@@ -109,7 +109,8 @@ const mapStateToProps = (state, ownProps) => {
     const currentForm = getFormByContext(state, ownProps.formId || CONTEXT.FORM.VIEW);
 
     return {
-        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined)
+        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
+        isAnimating: state.animation.isFormAnimating
     };
 };
 

@@ -1,20 +1,7 @@
-import React from 'react';
+import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import DraggableItemTypes from './draggableItemTypes';
 import {DropTarget} from 'react-dnd';
-
-/**
- * State is connected directly to this dragDrop component to improve performance of drag and drop animations.
- * If the animation state is passed from above, the whole screen re-renders on every reorder animation. This way, only
- * the affected DOM nodes are re-rendered.
- * @param state
- * @returns {{isAnimating: (boolean|*)}}
- */
-const mapStateToProps = state => {
-    return {
-        isAnimating: state.animation.isFormAnimating
-    };
-};
 
 /**
  * Describes what happens during drop events. The drop function returns an object that can be accessed in the EndDrag
@@ -68,8 +55,17 @@ function collect(connectDropSource, monitor) {
  * @returns {*}
  * @constructor
  */
-const DroppableElement = (ReactComponent, connected = true, types = [DraggableItemTypes.FIELD]) => {
-    class component extends React.Component {
+const DroppableElement = (ReactComponent, types = [DraggableItemTypes.FIELD]) => {
+    class component extends Component {
+        static propTypes = {
+            /**
+             * onHover will not be called if isAnimating is true. This can be helpful to prevent double onHovers while
+             * elments are animating to their new position. */
+            isAnimating: PropTypes.bool,
+
+            onHover: PropTypes.func
+        };
+
         render() {
             const {connectDropTarget, isOver, canDrop} = this.props;
 
@@ -85,13 +81,7 @@ const DroppableElement = (ReactComponent, connected = true, types = [DraggableIt
     }
 
     // The first argument could be an array of draggable types (e.g., could add tabs and sections here)
-    let wrappedComponent = DropTarget(types, formTarget, collect)(component);
-
-    if (connected) {
-        return connect(mapStateToProps)(wrappedComponent);
-    }
-
-    return wrappedComponent;
+    return DropTarget(types, formTarget, collect)(component);
 };
 
 export default DroppableElement;

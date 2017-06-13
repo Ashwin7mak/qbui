@@ -24,7 +24,7 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import _ from 'lodash';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
-import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
+import BuilderCustomDragLayer from '../../../../reuse/client/src/components/dragAndDrop/builderCustomDragLayer';
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import AppQbModal from '../qbModal/appQbModal';
 import {CONTEXT} from '../../actions/context';
@@ -253,7 +253,7 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
                 {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
                 <AppQbModal/>
-                <FormBuilderCustomDragLayer />
+                <BuilderCustomDragLayer />
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[
                                        {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},

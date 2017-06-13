@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import DragAndDropElement, {__RewireAPI__ as DragAndDropElementRewireAPI} from '../../../src/components/formBuilder/dragAndDropElement';
+import DragAndDropElement, {__RewireAPI__ as DragAndDropElementRewireAPI} from '../../../src/components/dragAndDrop/dragAndDropElement';
 
 const MockDragDropHocs = {
     DraggableElement(component) {return component;},

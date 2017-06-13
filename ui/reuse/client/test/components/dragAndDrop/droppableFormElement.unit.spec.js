@@ -2,10 +2,10 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import DroppableElement, {__RewireAPI__ as DroppableElementRewireAPI} from '../../../src/components/formBuilder/droppableElement';
+import DroppableElement, {__RewireAPI__ as DroppableElementRewireAPI} from '../../../src/components/dragAndDrop/droppableElement';
 
 const mockDropTarget = (_types, _formTarget, _collect) => component => component;
-const MockFieldComponent = props => <div className="mockField"></div>;
+const MockFieldComponent = props => <div className="mockField" />;
 const mockConnectDropTarget = component => component;
 
 let DroppableComponent;
@@ -17,7 +17,7 @@ describe('DroppableFormElement', () => {
 
         DroppableElementRewireAPI.__Rewire__('DropTarget', mockDropTarget);
 
-        DroppableComponent = DroppableElement(MockFieldComponent, false);
+        DroppableComponent = DroppableElement(MockFieldComponent);
     });
 
     afterEach(() => {
