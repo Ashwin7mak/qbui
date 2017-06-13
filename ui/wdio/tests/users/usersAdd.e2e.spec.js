@@ -82,16 +82,18 @@
 
             // Click on add a new user button
             UsersTablePage.newUserBtn.click();
+            expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+            var appName = testApp.name;
+            expect(modalDialog.modalDialogTitlex).toContain(appName);
             // Search for known user
             UsersTablePage.selecthUser(searchUserName);
             // Select user
             UsersTablePage.userAddSearcMenu.click();
             // Click add user
             UsersTablePage.addUserBtn.click();
-            // Share with user
-            // modalDialog.modalDialogCopyBtn.click();
-
-            // Verify user was added to report with correct role
+            // Click No Thanks to Share with User
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            modalDialog.modalDialogNoThanksButton.click();
         });
 
         /**
@@ -109,9 +111,8 @@
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
             // Click add user
             UsersTablePage.addUserBtn.click();
-            // Share with user
-
-            // Verify user was added to report with correct role
+            // Click to close the Share with User modal
+            modalDialog.modalDialogCloseBtn.click();
         });
 
         /**
@@ -129,9 +130,8 @@
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
             // Click add user
             UsersTablePage.addUserBtn.click();
-            // Share with user
-
-            // Verify user was added to report with correct role
+            // Click Copy link to Share with User
+            expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
         });
 
         /**
@@ -149,14 +149,13 @@
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
             // Click add user
             UsersTablePage.addUserBtn.click();
-            // Share with user
-
-            // Verify user was added to report with correct role
+            // Click Email to Share with User
+            expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
         });
 
-        /**
-         * Adds a new user by Username, assigns role and verifies the user was added.
-         */
+        // /**
+        //  * Adds a new user by Username, assigns role and verifies the user was added.
+        //  */
         // it('Add new user by invalid user to application', function() {
         //
         //     // Click on add a new user button

@@ -24,8 +24,14 @@ class modalDialogWindow {
 
     get modalDialogCopyBtn() {
         // modal dialog copy button
-        browser.element('.cellEditIcon.flexChild .tipChildWrapper.qbIcon.iconUISturdy-url').waitForVisible();
-        return browser.element('.cellEditIcon.flexChild .tipChildWrapper.qbIcon.iconUISturdy-url');
+        browser.element('.tipChildWrapper .qbIcon.iconUISturdy-url').waitForVisible();
+        return browser.element('.tipChildWrapper .qbIcon.iconUISturdy-url');
+    }
+
+    get modalDialogMailBtn() {
+        // modal dialog copy button
+        browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail').waitForVisible();
+        return browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail');
     }
 
     get modalDialogContainer() {
@@ -40,6 +46,12 @@ class modalDialogWindow {
         return this.modalDialogContainer.element('.modal-title').getAttribute('textContent');
     }
 
+    get modalDialogTitlex() {
+        // modal dialog title
+        this.modalDialogContainer.element('.title').waitForVisible();
+        return this.modalDialogContainer.element('.title').getAttribute('textContent');
+    }
+
     get modalDialogFooterButtons() {
         // modal dialog footer buttons
         this.modalDialog.element('.modal-footer .buttons button').waitForVisible();
@@ -50,6 +62,12 @@ class modalDialogWindow {
         // modal dialog footer primary button
         this.modalDialog.element('.modal-footer .buttons .primaryButton').waitForVisible();
         return this.modalDialog.element('.modal-footer .buttons .primaryButton');
+    }
+
+    get modalDialogNoThanksButton() {
+        // modal dialog footer primary button
+        this.modalDialog.element('.modal-footer .finishedText.btn.btn-primary').waitForVisible();
+        return this.modalDialog.element('.modal-footer .finishedText.btn.btn-primary');
     }
 
     get modalDialogSecondaryButton() {
