@@ -25,7 +25,7 @@
         iconActionsLeftButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-left');}},
         iconActionsCloseDrawerButtonEl: {get: function() {return this.slideyRightyEl.element('.iconActionButton.closeDrawer');}},
         parentRecordLinkEl: {
-            get: function () {
+            get: function() {
                 return browser.element('.textField.viewElement.textLink');
             }
         },
@@ -83,7 +83,7 @@
         /**
          * Given a form that contains a link to a parent node, click on the link
          */
-        clickOnParentRecordLinkInForm: {value: function(index) {
+        clickOnParentRecordLinkInForm: {value: function() {
             formsPO.viewFormContainerEl.waitForVisible();
             browser.waitForVisible('.textField.viewElement.textLink');
             let linkEl = this.parentRecordLinkEl;
