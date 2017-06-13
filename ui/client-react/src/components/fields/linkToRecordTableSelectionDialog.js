@@ -91,7 +91,6 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     getTableSelect() {
         const placeHolderMessage = Locale.getMessage("selection.tablesPlaceholder");
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
-
         const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.childTableId}) : null;
         const tableChoices = this.props.app ? RelationshipUtils.getValidParentTablesForRelationship(this.props.app.relationships, this.props.parentTables, selectedTable, this.props.deletedFields) : [];
 

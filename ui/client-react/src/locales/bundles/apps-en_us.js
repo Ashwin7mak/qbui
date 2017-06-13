@@ -203,7 +203,8 @@ export default {
                 feedbackMenuButton: "Give feedback",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
-                feedbackTooltip: "Share ideas and issues"
+                feedbackTooltip: "Share ideas and issues",
+                helpTooltip: "Help",
             }
         },
         fields: {
@@ -663,6 +664,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Create link to a record in another table",
                 }
             },
+            existingFieldsToolTip: "Add {fieldName} to the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",
