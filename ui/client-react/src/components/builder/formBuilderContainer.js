@@ -12,7 +12,8 @@ import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
 import FieldFormats from '../../utils/fieldFormats';
-import FormBuilder from '../formBuilder/formBuilder';
+import QbForm from '../QBForm/qbform';
+import DraggableField from '../formBuilder/draggableField';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../utils/navigationUtils';
 import AutoScroll from '../autoScroll/autoScroll';
@@ -288,20 +289,22 @@ export const FormBuilderContainer = React.createClass({
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                                        <FormBuilder
-                                            formBuilderContainerContentElement={formBuilderContainerContent}
-                                            selectedField={this.props.selectedField}
-                                            formId={formId}
-                                            app={this.props.app}
-                                            appId={this.props.match.params.appId}
-                                            tblId={this.props.match.params.tblId}
-                                            formData={formData}
-                                            moveFieldOnForm={this.props.moveFieldOnForm}
-                                            updateAnimationState={this.props.updateFormAnimationState}
-                                            selectedFormElement={this.props.selectedFormElement}
-                                            addFieldToForm={this.props.addFieldToForm}
-                                            selectFieldOnForm={this.props.selectFieldOnForm}
-                                        />
+                                        <div className="formBuilderContainer">
+                                            <QbForm
+                                                alternateFieldRenderer={DraggableField}
+                                                formBuilderContainerContentElement={formBuilderContainerContent}
+                                                formFocus={this.props.formFocus}
+                                                selectedField={this.props.selectedField}
+                                                formBuilderUpdateChildrenTabIndex={this.props.formBuilderUpdateChildrenTabIndex}
+                                                edit={true}
+                                                editingForm={true}
+                                                formData={formData}
+                                                hasAnimation={true}
+                                                app={this.props.app}
+                                                tblId={this.props.match.params.tblId}
+                                                appUsers={[]}
+                                            />
+                                        </div>
                                     </Loader>
                                 </div>
                             </AutoScroll>
