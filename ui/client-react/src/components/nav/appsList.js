@@ -51,7 +51,7 @@ let AppsList = React.createClass({
     },
 
     /**
-     * render fixed footer (new table link)
+     * render fixed footer (new app link)
      * @returns {XML}
      */
     getNewAppItem() {

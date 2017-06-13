@@ -458,7 +458,7 @@ export const Nav = React.createClass({
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
                 onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
-                onCreateNewApp={this.createNewApp}
+                onCreateNewApp={this.allowCreateNewApp() && this.createNewApp}
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
@@ -563,7 +563,7 @@ export const Nav = React.createClass({
     },
 
     /**
-     * is user able to create a new table from the left nav
+     * is user able to create a new app from the left nav
      * @returns {*}
      */
     allowCreateNewApp() {
@@ -572,11 +572,10 @@ export const Nav = React.createClass({
     },
 
     /**
-     * open the create table wizard
+     * open the create app wizard
      */
     createNewApp() {
         setTimeout(() => {
-            console.log('nav.js hit it!');
             this.props.showAppCreationDialog();
         });
     },
