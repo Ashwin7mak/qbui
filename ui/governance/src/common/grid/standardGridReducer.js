@@ -40,7 +40,7 @@ export const defaultGridState = {
  * @param action - the action to apply
  * @returns {*}
  */
-export function grid(state = defaultGridState, action) {
+export const grid = (state = defaultGridState, action) => {
     switch (action.type) {
     case types.SET_ITEMS:
         return {
@@ -94,7 +94,7 @@ export function grid(state = defaultGridState, action) {
     default:
         return state;
     }
-}
+};
 
 /**
  * All grid states will be held in an uber state object that will be indexed
@@ -118,7 +118,7 @@ export function grid(state = defaultGridState, action) {
  * @param action - the action to apply
  * @returns {{}}
  */
-export function gridById(state = {}, action) {
+export const gridById = (state = {}, action) => {
     switch (action.type) {
     case types.SET_SORT:
     case types.SET_ITEMS:
@@ -134,6 +134,6 @@ export function gridById(state = {}, action) {
     default:
         return state;
     }
-}
+};
 
 export default gridById;

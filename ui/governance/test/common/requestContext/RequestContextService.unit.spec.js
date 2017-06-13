@@ -4,7 +4,7 @@ import RequestContextService from "../../../src/common/requestContext/RequestCon
 
 describe('RequestContextService', () => {
 
-    var srv;
+    let srv;
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
