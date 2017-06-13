@@ -8,8 +8,10 @@ class CreateNewItemButton extends Component {
         return (
             <li className="newTableItem link" key="newTable">
                 <a className="newTable leftNavLink" onClick={this.props.handleOnClick}>
-                    <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage
-                    message={this.props.message}/></span>
+                    <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message={this.props.message}/></span>
+                    <div className="hoverComponent">
+                        <I18nMessage message={this.props.message}/>
+                    </div>
                 </a>
             </li>
         );
