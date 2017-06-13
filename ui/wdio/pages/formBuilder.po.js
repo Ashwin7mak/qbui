@@ -1,7 +1,7 @@
-'use strict';
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
+
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
@@ -139,6 +139,8 @@ class formBuilderPage {
         // The name of the form, as displayed at the top of the form builder
         return browser.element('.formContainer .qbPanelHeaderTitleText');
     }
+
+    // methods
 
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
