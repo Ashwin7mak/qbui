@@ -85,6 +85,7 @@
          */
         clickOnParentRecordLinkInForm: {value: function(index) {
             formsPO.viewFormContainerEl.waitForVisible();
+            browser.waitForVisible('.textField.viewElement.textLink');
             let linkEl = this.parentRecordLinkEl;
             linkEl.click();
         }},
