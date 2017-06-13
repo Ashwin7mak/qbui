@@ -57,7 +57,7 @@ export class UserActions extends React.Component {
      */
     handleBulkDelete() {
         const selectedRows = this.props.selectedUserRows;
-        this.props.removeUsersFromAppRole(this.props.appId, this.props.roleId, selectedRows).then(
+        this.props.removeUsersFromAppRole(this.props.appId, selectedRows).then(
             (userIds) => {
                 let msg;
                 if (selectedRows.length > 1) {
@@ -145,7 +145,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        removeUsersFromAppRole: (appId, roleId, userIds) => {return dispatch(removeUsersFromAppRole(appId, roleId, userIds));},
+        removeUsersFromAppRole: (appId, userIds) => {return dispatch(removeUsersFromAppRole(appId, userIds));},
         clearSelectedUserRows: () => {dispatch(clearSelectedUserRows());}
     };
 };

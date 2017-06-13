@@ -91,7 +91,7 @@ export const assignUserToAppRole = (appId, roleId, userId) => {
     return assignUsersToAppRole(appId, roleId, [userId]);
 };
 
-export const removeUsersFromAppRole = (appId, roleId, userDetails) => {
+export const removeUsersFromAppRole = (appId, userDetails) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             let logger = new Logger();

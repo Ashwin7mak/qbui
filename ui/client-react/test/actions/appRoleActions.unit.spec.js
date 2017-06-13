@@ -21,7 +21,6 @@ function event(appId, type, content) {
 }
 
 const appId = '1';
-// const roleId = 'VIEWER';
 const userIds = ['1', '2'];
 const userDetails = [{id: '1', roleId: 1}, {id: '2', roleId: 1}];
 const roleId = '1';
