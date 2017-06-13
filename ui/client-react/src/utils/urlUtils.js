@@ -58,6 +58,9 @@ const UrlUtils = {
         let hostname = WindowLocationUtils.getHostname();
         return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${URL.SUPPORT_LINK_PATH}`;
     },
+    getHelpLink() {
+        return `http://${URL.HELP_LINK_PATH}`;
+    },
 
     /**
      * Build client url link to render a report
@@ -150,7 +153,13 @@ const UrlUtils = {
      * Get the link for Automation Settings page
      */
     getAutomationSettingsLink(appId) {
-        return `${URL.SETTINGS_ROUTE}/app/${appId}/${URL.AUTOMATION_PATH}`;
+        return `${URL.SETTINGS_ROUTE}/app/${appId}/${URL.AUTOMATION.PATH}`;
+    },
+    /**
+     * Get the link for viewing an Automation
+     */
+    getAutomationViewLink(appId, automationId) {
+        return `${URL.SETTINGS_ROUTE}/app/${appId}/${URL.AUTOMATION.PATH}/${automationId}/${URL.AUTOMATION.VIEW}`;
     }
 };
 

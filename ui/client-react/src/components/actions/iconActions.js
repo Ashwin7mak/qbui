@@ -1,7 +1,7 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 import IconActions from '../../../../reuse/client/src/components/iconActions/iconActions';
-const FluxMixin = Fluxxor.FluxMixin(React);
+import {connect} from 'react-redux';
+import {toggleRowActionsMenu} from '../../actions/shellActions';
 
 /**
  * The original file in this location has moved to the reuse library.
@@ -11,13 +11,10 @@ const FluxMixin = Fluxxor.FluxMixin(React);
  * If you are building a new IconActions set, please use IconActions from the reuse library.
  **/
 const QbIconActions = React.createClass({
-    mixins: [FluxMixin],
-
     onDropDownToggle(open) {
         // This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
         // It will remove the white space if the menu is closed. The class is added in reportContent.js
-        // TODO: Convert to ShellAction (toggleRowActionsMenu) when reactabular work is done. It breaks with ag-grid.
-        this.getFlux().actions.onToggleRowPopUpMenu(open);
+        this.props.toggleRowActionsMenu(open);
     },
 
     render() {
@@ -37,4 +34,15 @@ const QbIconActions = React.createClass({
     }
 });
 
-export default QbIconActions;
+
+const mapDispatchToProps = (dispatch) => {
+    return {toggleRowActionsMenu};
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(QbIconActions);
+
+
+export {QbIconActions};

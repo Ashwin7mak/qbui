@@ -274,7 +274,7 @@ const FieldValueEditor = React.createClass({
             return <LinkToRecordFieldValueEditor {...commonProps}
                                                  appId={_.get(this.props, "app.id", null)}
                                                  tblId={this.props.tblId}
-                                                 tables={_.get(this.props, "app.tables", [])}
+                                                 app={this.props.app}
                                                  removeFieldFromForm={this.props.removeFieldFromForm}
                                                  classes="cellEdit"/>;
         }

@@ -131,7 +131,7 @@ export const QbGrid = React.createClass({
         menuProps: PropTypes.object,
 
         /**
-         * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
+         * Flag to include the first column that includes row specific actions.*/
         showRowActionsColumn: PropTypes.bool,
 
         // relationship phase-1, will need remove when we allow editing

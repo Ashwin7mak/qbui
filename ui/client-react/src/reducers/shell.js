@@ -12,9 +12,12 @@ const shell = (
         leftNavVisible: false,
         trowserOpen: false,
         trowserContent: null,
+        topNavVisible: true,
         openCount: 0,
         locale: Locale.getLocale(),
-        i18n: Locale.getI18nBundle()
+        i18n: Locale.getI18nBundle(),
+        scrollingReport: false,
+        filterReportsName: ''
     },
     action) => {
 
@@ -77,6 +80,26 @@ const shell = (
             ...state,
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
+        };
+    case types.SHOW_TOP_NAV:
+        return {
+            ...state,
+            topNavVisible: true
+        };
+    case types.HIDE_TOP_NAV:
+        return {
+            ... state,
+            topNavVisible: false
+        };
+    case types.SCROLLING_REPORT:
+        return {
+            ...state,
+            scrollingReport: action.isScrolling
+        };
+    case types.FILTER_REPORTS_BY_NAME:
+        return {
+            ...state,
+            filterReportsName: action.reportName
         };
     default:
         // return existing state by default in redux

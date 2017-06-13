@@ -43,17 +43,19 @@ export default {
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
-                unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
+                unAssignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
                 deleteUser: "Retirer {valeur} utilisateur",
                 deleteUsers: "Retirer {valeur} utilisateurs",
                 removeButton: "Retirer",
                 cancel: "Annuler",
-                singular: "utilisateur",
                 plural: "utilisateurs",
-                usersRemoved: " Les utilisateurs ont été enlevés",
-                userRemoved: " L'utilisateur a été supprimé",
-                userAdded: "Vous avez ajouté"
-
+                usersRemovedFromAppRole: "{numOfUsers} utilisateurs ont été supprimés du rôle de l'application",
+                userRemovedFromAppRole: "Utilisateur supprimé du rôle de l'application",
+                userAdded: "Utilisateur ajouté",
+                userAddError: "Erreur d'ajout d'utilisateur",
+                userRemovingError: "Erreur lors de l'enlever",
+                emailBody: "Le corps du courrier électronique va ici",
+                emailSubject: "Le sujet de l'email va ici"
             }
         },
         appMenu: {
@@ -196,7 +198,8 @@ export default {
                 feedbackMenuButton: "Donnez votre avis",
                 feedbackMenuTitle: "Retour d'information",
                 reportFeedBackButton: "Signaler un problème",
-                feedbackTooltip: "Partagez des idées et des problèmes"
+                feedbackTooltip: "Partagez des idées et des problèmes",
+                helpTooltip: "Aidez-moi",
             }
         },
         fields: {
@@ -244,6 +247,15 @@ export default {
                 actionButton: "Tester",
                 activeYes: "Oui",
                 activeNo: "Non"
+            },
+            automationView: {
+                stageHeading: "Automatisation: {automationName}",
+                nameHeader: "Prénom",
+                triggerHeader: "Gâchette",
+                actionHeader: "action",
+                actions: {
+                    email: "Envoyer un e-mail"
+                }
             }
         },
         relationship: {
@@ -642,6 +654,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
+            existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",

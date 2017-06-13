@@ -1,9 +1,8 @@
 import React from 'react';
-import TestUtils, {Simulate} from 'react-addons-test-utils';
+import {shallow, mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 import {AutomationListRoute, __RewireAPI__ as AutomationListRouteRewireAPI}  from '../../src/components/automation/settings/automationListRoute';
-import thunk from 'redux-thunk';
-import Promise from 'bluebird';
-import _ from 'lodash';
+import {MemoryRouter, Link} from 'react-router-dom';
 
 const sampleApp = {id: 'app1', tables: []};
 const sampleAuto1 = {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL"};
@@ -25,44 +24,49 @@ describe('AutomationListRoute', () => {
     let component;
 
     describe('AutomationListRoute with different props', () => {
+        beforeEach(() => {
+            jasmineEnzyme();
+        });
+
         it('test get app id from app in props', () => {
-            component = TestUtils.renderIntoDocument(<AutomationListRoute {...props}/>);
-            expect(component.getAppId()).toEqual("app1");
+            component = shallow(<AutomationListRoute {...props}/>);
+            expect(component.instance().getAppId()).toEqual("app1");
         });
 
         it('test get app id from app id in matches', () => {
             let localProps = {...props, app: undefined, match:{params:{appId: 'app2'}}};
-            component = TestUtils.renderIntoDocument(<AutomationListRoute {...localProps}/>);
-            expect(component.getAppId()).toEqual("app2");
+            component = shallow(<AutomationListRoute {...localProps}/>);
+            expect(component.instance().getAppId()).toEqual("app2");
         });
 
         it('test get app id with no matches', () => {
             let localProps = {...props, app: undefined, match: undefined};
-            component = TestUtils.renderIntoDocument(<AutomationListRoute {...localProps}/>);
-            expect(component.getAppId()).toBeUndefined();
+            component = shallow(<AutomationListRoute {...localProps}/>);
+            expect(component.instance().getAppId()).toBeUndefined();
         });
 
         it('test get app id with no params', () => {
             let localProps = {...props, app: undefined, match:{params:undefined}};
-            component = TestUtils.renderIntoDocument(<AutomationListRoute {...localProps}/>);
-            expect(component.getAppId()).toBeUndefined();
+            component = shallow(<AutomationListRoute {...localProps}/>);
+            expect(component.instance().getAppId()).toBeUndefined();
         });
     });
 
     describe('AutomationListRoute without automations', () => {
         beforeEach(() => {
-            component = TestUtils.renderIntoDocument(<AutomationListRoute {...props}/>);
+            jasmineEnzyme();
+            component = mount(<AutomationListRoute {...props}/>);
         });
 
         afterEach(() => {
         });
 
         it('test render of component with no automations', () => {
-            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+            expect(component).toBeDefined();
         });
 
         it('test list of automation names is blank', () => {
-            let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
+            let autoTDs = component.find("td");
             expect(autoTDs.length).toEqual(0);
         });
 
@@ -70,27 +74,28 @@ describe('AutomationListRoute', () => {
 
     describe('AutomationListRoute with automations', () => {
         beforeEach(() => {
-            component = TestUtils.renderIntoDocument(<AutomationListRoute {...propsWithAutos }/>);
+            jasmineEnzyme();
+            component = mount(<MemoryRouter><AutomationListRoute {...propsWithAutos}/></MemoryRouter>);
         });
 
         afterEach(() => {
         });
 
-        it('test list of automation names contains automations', () => {
-            let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
+        it('test table contains automations', () => {
+            let autoTDs = component.find("td");
             expect(autoTDs.length).toEqual(6);
         });
 
-        it('test list of automation names has the correct name first', () => {
-            let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
+        it('test names and active status of automations', () => {
+            let autoTDs = component.find("td");
 
             let i = 0;
-            expect(autoTDs[i++].innerText).toEqual("Auto 1");
-            expect(autoTDs[i++].innerText).toEqual("Yes");
-            expect(autoTDs[i++].innerText).toEqual("Test");
-            expect(autoTDs[i++].innerText).toEqual("Auto 2");
-            expect(autoTDs[i++].innerText).toEqual("No");
-            expect(autoTDs[i++].innerText).toEqual("Test");
+            expect(autoTDs.at(i++).find(Link)).toHaveText("Auto 1");
+            expect(autoTDs.at(i++)).toHaveText("Yes");
+            expect(autoTDs.at(i++)).not.toBeEmpty();
+            expect(autoTDs.at(i++).find(Link)).toHaveText("Auto 2");
+            expect(autoTDs.at(i++)).toHaveText("No");
+            expect(autoTDs.at(i++)).not.toBeEmpty();
         });
 
     });

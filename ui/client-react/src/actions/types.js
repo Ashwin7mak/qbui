@@ -3,7 +3,22 @@
  */
 
 //  **** App actions ****
-//      ...
+export const LOAD_APP = 'LOAD_APP';
+export const LOAD_APP_SUCCESS = 'LOAD_APP_SUCCESS';
+export const LOAD_APP_ERROR = 'LOAD_APP_ERROR';
+export const LOAD_APPS = 'LOAD_APPS';
+export const LOAD_APPS_SUCCESS = 'LOAD_APPS_SUCCESS';
+export const LOAD_APPS_ERROR = 'LOAD_APPS_ERROR';
+export const LOAD_APP_OWNER = 'LOAD_APP_OWNER';
+export const LOAD_APP_OWNER_SUCCESS = 'LOAD_APP_OWNER_SUCCESS';
+export const LOAD_APP_OWNER_ERROR = 'LOAD_APP_OWNER_ERROR';
+export const ASSIGN_USERS_TO_APP_ROLE = 'ASSIGN_USERS_TO_APP_ROLE';
+export const REMOVE_USERS_FROM_APP_ROLE = 'REMOVE_USERS_FROM_APP_ROLE';
+
+export const CLEAR_SELECTED_APP = 'CLEAR_SELECTED_APP';
+export const CLEAR_SELECTED_APP_TABLE = 'CLEAR_SELECTED_APP_TABLE';
+export const SELECT_APP_TABLE = 'SELECT_APP_TABLE';
+export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
 //  ******** App Role actions ********
 export const LOAD_APP_ROLES = 'LOAD_APP_ROLES';
@@ -50,6 +65,10 @@ export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_ERROR_MSG_DIALOG = 'SHOW_ERROR_MSG_DIALOG';
 export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
+export const SHOW_TOP_NAV = 'SHOW_TOP_NAV';
+export const HIDE_TOP_NAV = 'HIDE_TOP_NAV';
+export const SCROLLING_REPORT = "SCROLLING_REPORT";
+export const FILTER_REPORTS_BY_NAME = "FILTER_REPORTS_BY_NAME";
 
 //  ******** Field actions *********
 export const LOAD_FIELDS = 'LOAD_FIELDS';
@@ -112,6 +131,10 @@ export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
 //  ******** search actions ********
 export const SEARCH_INPUT = 'SEARCH_INPUT';
 
+//  ******** user actions **********
+export const SEARCH_USERS_SUCCESS = 'SEARCH_USERS_SUCCESS';
+export const SEARCH_USERS_FAIL = 'SEARCH_USERS_FAIL';
+
 // **** feature switches ****
 export const SET_FEATURE_SWITCH_STATES = 'SET_FEATURE_SWITCH_STATES';
 
@@ -162,7 +185,9 @@ export const NOTIFY_TABLE_DELETED = 'NOTIFY_TABLE_DELETED';
 
 // ************ Used for the Add User Dialog *************
 export const SHOW_ADD_USER_TO_APP_DIALOG = 'SHOW_ADD_USER_TO_APP_DIALOG';
-export const HIDE_ADD_USER_TO_DIALOG = 'HIDE_ADD_USER_TO_DIALOG';
+export const SET_USER_ROLE_TO_ADD = 'SET_USER_ROLE_TO_ADD';
+export const TOGGLE_ADD_USER_DIALOG = 'TOGGLE_ADD_USER_DIALOG';
+export const SELECT_USER_ROWS = 'SELECT_USER_ROWS';
 
 //  ******** automation actions ********
 export const LOAD_AUTOMATIONS = 'LOAD_AUTOMATIONS';
@@ -172,3 +197,6 @@ export const TEST_AUTOMATION = 'TEST_AUTOMATION';
 export const TEST_AUTOMATION_SUCCESS = 'TEST_AUTOMATION_SUCCESS';
 export const TEST_AUTOMATION_FAILED = 'TEST_AUTOMATION_FAILED';
 export const TOGGLE_ADD_TO_APP_SUCCESS_DIALOG = 'TOGGLE_ADD_TO_APP_SUCCESS_DIALOG';
+export const LOAD_AUTOMATION = 'LOAD_AUTOMATION';
+export const LOAD_AUTOMATION_SUCCESS = 'LOAD_AUTOMATION_SUCCESS';
+export const LOAD_AUTOMATION_FAILED = 'LOAD_AUTOMATION_FAILED';

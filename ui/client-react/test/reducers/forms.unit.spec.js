@@ -46,16 +46,16 @@ describe('Forms reducer functions', () => {
         let syncFormState = {
             'view': {
                 id:'view',
-                syncLoadedForm: false,
+                syncFormForRecordId: null,
                 formData: 'someData'
             }
         };
 
-        it('returns correct syncLoadedForm state', () => {
-            expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM})).toEqual({
+        it('returns correct syncFormForRecordId state', () => {
+            expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM, recordId: 123})).toEqual({
                 'view': {
                     id:'view',
-                    syncLoadedForm: true,
+                    syncFormForRecordId: 123,
                     formData:'someData'
                 }
             });
@@ -71,7 +71,7 @@ describe('Forms reducer functions', () => {
             expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual({
                 'view': {
                     id: 'view',
-                    syncLoadedForm: false,
+                    syncFormForRecordId: null,
                     loading: true,
                     errorStatus: null
                 }
@@ -570,7 +570,7 @@ describe('Forms reducer functions', () => {
         };
 
         beforeEach(() => {
-            spyOn(mockGetFields, 'getFields').and.returnValue([{id: 6}, {id: 7}, {id: 8}, {id: 9}]);
+            spyOn(mockGetFields, 'getFields').and.returnValue([{id: 6}, {id: 7}, {id: 8}, {id: 9, name: 'mockFieldName'}]);
             ReducerRewireAPI.__Rewire__('getFields', mockGetFields.getFields);
         });
 
@@ -598,14 +598,16 @@ describe('Forms reducer functions', () => {
                     id: 'view',
                     FormFieldElement:{
                         positionSameRow: false,
-                        id: 9
+                        id: 9,
+                        name: 'mockFieldName'
                     }
                 },
                 location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
                 key: 'existingField_9',
                 type: 1,
-                relatedField: {id: 9},
-                title: undefined
+                relatedField: {name: 'mockFieldName', id: 9},
+                title: 'mockFieldName',
+                tooltipText: `Add mockFieldName to the form`
             }];
 
             expect(result).toEqual(expectedResult);

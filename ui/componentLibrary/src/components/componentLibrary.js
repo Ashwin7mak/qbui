@@ -31,6 +31,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/sideMenuBase" activeClassName="active">SideMenuBase</Link></li>
                             <li><Link to="/qbase/components/sideTrowserBase" activeClassName="active">SideTrowserBase</Link></li>
                             <li><Link to="/qbase/components/stage" activeClassName="active">Stage</Link></li>
+                            <li><Link to="/qbase/components/standardGridItemsCount" activeClassName="active">StandardGridItemsCount</Link></li>
                             <li><Link to="/qbase/components/standardLeftNav" activeClassName="active">StandardLeftNav</Link></li>
                             <li><Link to="/qbase/components/tooltip" activeClassName="active">Tooltip</Link></li>
                             <li><Link to="/qbase/components/topNav" activeClassName="active">TopNav</Link></li>

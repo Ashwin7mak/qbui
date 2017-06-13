@@ -8,7 +8,6 @@ import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import ReportUtils from '../../../utils/reportUtils';
 import {WindowHistoryUtils} from '../../../utils/windowHistoryUtils';
-import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
@@ -28,13 +27,14 @@ import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
 import {getPendEdits} from '../../../reducers/record';
+import {scrollingReport} from '../../../actions/shellActions';
+
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 export const ReportContent = React.createClass({
-    mixins: [FluxMixin, IntlMixin],
+    mixins: [IntlMixin],
 
     getInitialState() {
         return {
@@ -539,12 +539,10 @@ export const ReportContent = React.createClass({
      * icon for a bit
      */
     onScrollRecords() {
-        const flux = this.getFlux();
-
         const createTimeout = () => {
             this.scrollTimer = setTimeout(() => {
                 this.scrollTimer = null;
-                flux.actions.scrollingReport(false);
+                this.props.scrollingReport(false);
             }, 1000);
         };
 
@@ -553,7 +551,7 @@ export const ReportContent = React.createClass({
             clearTimeout(this.scrollTimer);
             createTimeout();
         } else {
-            flux.actions.scrollingReport(true);
+            this.props.scrollingReport(true);
             createTimeout();
         }
 
@@ -852,52 +850,8 @@ export const ReportContent = React.createClass({
         }
     },
 
-    /**
-     * when report changed from not loading to loading start measure of components performance
-     *  @param nextProps
-     */
-    startPerfTiming(nextProps) {
-        if (_.has(this.props, 'reportData.loading') &&
-            !this.props.reportData.loading &&
-            nextProps.reportData.loading) {
-            let flux = this.getFlux();
-            flux.actions.mark('component-ReportContent start');
-        }
-    },
-
-    /**
-     * when report changed from loading to loaded finish measure of components performance
-     * @param prevProps
-     */
-    capturePerfTiming(prevProps) {
-        let timingContextData = {numReportCols:0, numReportRows:0};
-        let flux = this.getFlux();
-        if (_.has(this.props, 'reportData.loading') &&
-            !this.props.reportData.loading &&
-            prevProps.reportData.loading) {
-            flux.actions.measure('component-ReportContent', 'component-ReportContent start');
-
-            // note the size of the report with the measure
-            if (_.has(this.props, 'reportData.data.columns.length')) {
-                let reportData = this.props.reportData.data;
-                timingContextData.numReportCols = reportData.columns.length;
-                timingContextData.numReportRows = reportData.filteredRecordsCount ?
-                    reportData.filteredRecordsCount : reportData.recordsCount;
-            }
-            flux.actions.logMeasurements(timingContextData);
-        }
-    },
-
     getPendEdits() {
         return getPendEdits(this.props.record);
-    },
-
-    componentWillUpdate(nextProps) {
-        this.startPerfTiming(nextProps);
-    },
-
-    componentDidUpdate(prevProps) {
-        this.capturePerfTiming(prevProps);
     },
 
     render() {
@@ -1084,7 +1038,8 @@ const mapDispatchToProps = (dispatch) => {
             //  inline edit row is updated and the new row is added to the grid. So, the
             //  new row is added after the record save reducer event is executed but before
             //  the grid is refreshed.  See record save reducer for more info..
-        }
+        },
+        scrollingReport
     };
 };
 
