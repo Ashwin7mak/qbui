@@ -11,8 +11,8 @@ export class ExistingFieldsMenu extends Component {
 
     noExistingFields = () => {
         if (_.isEmpty(this.props.existingFields)) {
-            let tableName = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId});
-            return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName});
+            let table = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId}) || {};
+            return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
         }
     };
 
