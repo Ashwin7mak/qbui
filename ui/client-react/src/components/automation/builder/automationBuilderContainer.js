@@ -1,24 +1,33 @@
 import React, {Component} from "react";
-import {Table} from "react-bootstrap";
 import {connect} from "react-redux";
 import Loader from "react-loader";
-import Button from 'react-bootstrap/lib/Button';
-import Stage from "../../../../../reuse/client/src/components/stage/stage";
+import Button from "react-bootstrap/lib/Button";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
 import {I18nMessage} from "../../../utils/i18nMessage";
-import {loadAutomation, saveAutomation, changeAutomationEmailTo, changeAutomationEmailSubject, changeAutomationEmailBody} from "../../../actions/automationActions";
-import {getAutomation, emailAutomationGetTo, emailAutomationGetSubject, emailAutomationGetBody} from "../../../reducers/automation";
-import TextFieldValueEditor from "../../fields/textFieldValueEditor";
-import MultiLineTextFieldValueEditor from "../../fields/multiLineTextFieldValueEditor";
+import {
+    changeAutomationEmailBody,
+    changeAutomationEmailSubject,
+    changeAutomationEmailTo,
+    loadAutomation,
+    saveAutomation
+} from "../../../actions/automationActions";
+import {
+    emailAutomationGetBody,
+    emailAutomationGetSubject,
+    emailAutomationGetTo,
+    getAutomation
+} from "../../../reducers/automation";
 import EmailFieldValueEditor from "../../fields/emailFieldValueEditor";
+import MultiLineTextFieldValueEditor from "../../fields/multiLineTextFieldValueEditor";
 import EmailValidator from "../../../../../common/src/validator/emailValidator";
 import EmailFormatter from "../../../../../common/src/formatter/emailFormatter";
-import SaveOrCancelFooter from '../../saveOrCancelFooter/saveOrCancelFooter';
-import NavigationUtils from '../../../utils/navigationUtils';
+import SaveOrCancelFooter from "../../saveOrCancelFooter/saveOrCancelFooter";
+import NavigationUtils from "../../../utils/navigationUtils";
+import Locale from '../../../locales/locales';
 
-import FieldValueEditor from '../../fields/fieldValueEditor';
-import FieldLabelElement from '../../QBForm/fieldLabelElement';
-import '../../QBForm/qbform.scss';
+import FieldValueEditor from "../../fields/fieldValueEditor";
+import FieldLabelElement from "../../QBForm/fieldLabelElement";
+import "../../QBForm/qbform.scss";
 
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import * as UrlConsts from "../../../constants/urlConstants";
@@ -35,15 +44,6 @@ export class AutomationBuilderContainer extends Component {
         this.state = {
             confirmInputValue: ""
         };
-    }
-
-    getPageActions() {
-        const actions = [];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu="5"/>);
-    }
-
-    getStageHeadline() {
-        return <div className="automationEditSettingsStage stageHeadLine"><I18nMessage message="automation.automationEdit.stageHeading" automationName={this.getAutomationName()}/></div>;
     }
 
     componentDidMount() {
@@ -132,21 +132,22 @@ export class AutomationBuilderContainer extends Component {
 
                             <div className="formElementContainer">
                                 <div className="formElement field">
-                                    <FieldLabelElement label="Notify Whom" />
-                                    <FieldValueEditor type={15} onChange={this.updateTo} value={to} appUsers={[]} />
+                                    <FieldLabelElement label={Locale.getMessage("automation.automationEdit.toHeader")} />
+                                    <EmailFieldValueEditor onChange={this.updateTo} value={to}
+                                                      invalid={this.isEmailInvalid(to)} />
                                 </div>
                             </div>
 
                             <div className="formElementContainer">
                                 <div className="formElement field">
-                                    <FieldLabelElement label="Subject" />
+                                    <FieldLabelElement label={Locale.getMessage("automation.automationEdit.subjectHeader")} />
                                     <FieldValueEditor onChange={this.updateSubject} value={subject} appUsers={[]} />
                                 </div>
                             </div>
 
                             <div className="formElementContainer">
                                 <div className="formElement field">
-                                    <FieldLabelElement label="Message" />
+                                    <FieldLabelElement label={Locale.getMessage("automation.automationEdit.bodyHeader")} />
                                     <MultiLineTextFieldValueEditor value={body} onChange={this.updateBody}/>
                                 </div>
                             </div>
