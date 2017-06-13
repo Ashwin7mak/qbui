@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
-import {createNewItemButton} from './createNewItemButton';
+import CreateNewItemButton from './createNewItemButton';
 
 let AppsList = React.createClass({
 
@@ -55,7 +55,8 @@ let AppsList = React.createClass({
      * @returns {XML}
      */
     getNewAppItem() {
-        return createNewItemButton(() => {}, "tableCreation.newTablePageTitle");
+        return <CreateNewItemButton handleOnClick={() => {console.log('clickety click click!');}}
+                                    message={"tableCreation.newTablePageTitle"} />;
     },
 
 

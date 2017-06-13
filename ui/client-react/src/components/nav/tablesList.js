@@ -9,7 +9,7 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
-import {createNewItemButton} from './createNewItemButton';
+import CreateNewItemButton from './createNewItemButton';
 
 let TablesList = React.createClass({
 
@@ -143,7 +143,8 @@ let TablesList = React.createClass({
      * @returns {XML}
      */
     getNewTableItem() {
-        return createNewItemButton(this.props.onCreateNewTable, "tableCreation.newTablePageTitle");
+        return <CreateNewItemButton handleOnClick={this.props.onCreateNewTable}
+                                    message={"tableCreation.newTablePageTitle"} />;
     },
 
     render() {
