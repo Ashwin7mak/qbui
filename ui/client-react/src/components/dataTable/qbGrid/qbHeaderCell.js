@@ -50,7 +50,7 @@ class QbHeaderCell extends Component {
         if (this.props.isDraggable) {
             classes.push('isDraggable');
             if (isDragging) {
-                classes.push('active');
+                classes.push('placeholderCell');
             }
             return connectDragSource(connectDropTarget(<th className={classes.join(' ')} {...this.props} />));
         } else {
