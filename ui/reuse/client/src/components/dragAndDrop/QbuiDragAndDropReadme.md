@@ -20,6 +20,7 @@ behavior was difficult.
 4. Creating special cases was almost impossible without odd hacks. If one item in a list needed to be different, it was hard to intercept
 the methods in time to redirect the behavior.
 5. Testing was difficult and required extensive mocking.
+6. QbForm was very tied to FormBuilder functionality as many props were passed through QbForm to the draggable elements.
 
 Due to the problems outlined above, we refactored the drag and drop functionality to allow draggable elements to be connected to the store.
 This way, the behavior of a draggable element was defined close to the implementation of that element. This approach solved many of 

@@ -423,7 +423,6 @@ export const QBForm = React.createClass({
 
                     selectedField={this.props.selectedField}
                     isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, relatedField, location);}}
                     formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                 />
             </div>
@@ -435,7 +434,6 @@ export const QBForm = React.createClass({
      * @returns {XML}
      * @param id
      * @param FormTextElement
-     * @param style
      */
     createTextElement(id, FormTextElement) {
         return <div key={id} className="formElementContainer formElement text">{FormTextElement.displayText}</div>;
@@ -446,7 +444,6 @@ export const QBForm = React.createClass({
      * @returns {XML}
      * @param id
      * @param ReferenceElement
-     * @param style
      */
     createChildReportElement(id, ReferenceElement) {
         // Find the relationship object for this element.

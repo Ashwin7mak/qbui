@@ -89,8 +89,6 @@ export class DraggableTokenInMenu extends Component {
                     beginDrag={this.props.beginDrag}
                     onHover={this.onHover}
                     endDrag={this.endDrag}
-                    endDraggingState={this.props.endDraggingState}
-                    isInDraggingState={this.props.isInDraggingState}
                 />
             </div>
         );
