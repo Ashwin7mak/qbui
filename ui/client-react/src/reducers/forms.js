@@ -537,6 +537,11 @@ export const getExistingFields = (state, id, appId, tblId) => {
             return formFields;
         }
 
+        // Skip fields that are marked for deletion from schema
+        if (_.includes(currentForm.formData.formMeta.fieldsToDelete, field.id)) {
+            return formFields;
+        }
+
         // Otherwise, create a form friendly version of the field and append it to the list of fields in the  existing fields menu.
         return [
             ...formFields,
