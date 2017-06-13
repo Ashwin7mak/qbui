@@ -95,6 +95,14 @@ $edit-icon-font-size: 18px;
             box-shadow: none;
             border: $stroke-width-thin dashed $color-black-300;
             background-color: rgba($color-purple-600, 0.08);
+
+            .gridHeaderLabel {
+                visibility: hidden;
+            }
+
+            .headerMenu {
+                visibility: hidden;
+            }
         }
 
         // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
