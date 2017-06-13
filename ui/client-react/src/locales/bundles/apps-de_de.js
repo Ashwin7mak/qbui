@@ -268,10 +268,10 @@ export default {
                 toHeader: "Benachrichtige wer",
                 subjectHeader: "Fach",
                 bodyHeader: "Nachricht"
+            },
+            automationBuilder: {
+                modify: 'Automatisierung ändern'
             }
-        },
-        automationBuilder: {
-            modify: 'Automatisierung ändern'
         },
         relationship: {
             childTable: "Kind Tisch",

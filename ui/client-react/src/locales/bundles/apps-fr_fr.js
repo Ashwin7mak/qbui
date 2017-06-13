@@ -268,10 +268,10 @@ export default {
                 toHeader: "Notifier à qui",
                 subjectHeader: "Assujettir",
                 bodyHeader: "Message"
+            },
+            automationBuilder: {
+                modify: 'Modifier l\'automatisation'
             }
-        },
-        automationBuilder: {
-            modify: 'Modifier l\'automatisation'
         },
         relationship: {
             childTable: "Table Enfant",

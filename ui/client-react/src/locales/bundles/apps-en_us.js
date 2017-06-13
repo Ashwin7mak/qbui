@@ -272,10 +272,10 @@ export default {
                 toHeader: "Notify Whom",
                 subjectHeader: "Subject",
                 bodyHeader: "Message"
-            }
-        },
-        automationBuilder: {
-            modify: 'Modify automation'
+            },
+            automationBuilder: {
+                modify: 'Modify Automation'
+            },
         },
         relationship: {
             childTable: "Child Table",
