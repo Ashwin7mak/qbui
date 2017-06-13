@@ -12,7 +12,7 @@ import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 import TouchBackend from 'react-dnd-touch-backend';
-import {moveColumn} from '../../../actions/reportBuilderActions';
+import {moveColumn, columnIsDragging, columnIsHovering} from '../../../actions/reportBuilderActions';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
 
@@ -418,11 +418,11 @@ export const QbGrid = React.createClass({
     },
 
     onHover(context, targetLabel) {
-        console.log(targetLabel);
+        this.props.columnIsHovering(context, targetLabel);
     },
 
     beginDrag(context, sourceLabel) {
-        console.log(sourceLabel);
+        this.props.columnIsDragging(context, sourceLabel);
     },
 
     render() {
@@ -486,7 +486,9 @@ export const QbGrid = React.createClass({
 });
 
 const mapDispatchToProps = {
-    moveColumn
+    moveColumn,
+    columnIsDragging,
+    columnIsHovering
 };
 
 export default connect(null, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));

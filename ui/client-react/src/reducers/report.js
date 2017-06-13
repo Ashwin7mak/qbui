@@ -459,6 +459,14 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    case types.DRAGGING_COLUMN: {
+        console.log(action.content);
+        return state;
+    }
+    case types.HOVER_COLUMN: {
+        console.log(action.content);
+        return state;
+    }
     case types.CHANGE_REPORT_NAME: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
