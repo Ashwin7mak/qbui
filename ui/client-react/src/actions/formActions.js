@@ -1,3 +1,4 @@
+/* eslint-disable keyword-spacing */
 // Redux action creators for forms
 
 import FormService from '../services/formService';
@@ -372,7 +373,7 @@ export const deleteMarkedFields = (appId, tblId, formMeta) => {
     return (dispatch, getState) => {
         let fields = formMeta.fieldsToDelete;
 
-        const fieldPromises = formMeta.fieldsToDelete ? fields.map(field => dispatch(deleteField(appId, tblId, field))) : [];
+        const fieldPromises = formMeta.fieldsToDelete ? fields.map(field =>  dispatch(deleteDetailFieldUpdateParentForm(appId, tblId, field, formMeta))) : [];
         if (fieldPromises.length === 0) {
             logger.info('No fields deleted with deleteMarkedFields for : `{appId}`, tbl: `{tblId}`');
             return Promise.resolve();
@@ -464,3 +465,72 @@ export const unloadForm = (id) => {
         type: types.UNLOAD_FORM
     };
 };
+
+
+/**
+ *
+ * @param appId
+ * @param childTableId
+ * @param field
+ * @param formMeta
+ * @returns {function(*, *)}
+ */
+function deleteDetailFieldUpdateParentForm(appId, childTableId, fieldId, formMeta) {
+    return (dispatch, getState) => {
+        return new Promise((resolve, reject) => {
+            dispatch(deleteField(appId, childTableId, fieldId));
+
+            if (Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
+                let relatedRelationship = _.find(formMeta.relationships, (rel) => rel.detailTableId === childTableId  && rel.detailFieldId === fieldId);
+                if  (relatedRelationship) {
+                    removeRelationshipFromForm(relatedRelationship.masterAppId, relatedRelationship.id, childTableId, relatedRelationship.masterTableId, formMeta).then(
+                        () => resolve()
+                    ).catch(error => {
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'UpdateForm');
+                        reject();
+                    });
+                }
+            }
+            resolve();
+        });
+    };
+}
+
+/**
+ * when relationship is deleted, update parent form with a section for default report of the child table
+ * @param relationshipId
+ * @param childTableName
+ * @param parentTableId
+ */
+function removeRelationshipFromForm(appId, relationshipId, childTableName, parentTableId, formMeta) {
+    return new Promise((resolve, reject) => {
+        if (relationshipId) {
+            let sections = formMeta.tabs[0].sections;
+            let sectionToBeDeleted = null;
+            Object.keys(sections).forEach((sectionKey) => {
+                if (_.has(sections[sectionKey], 'headerElement.FormHeaderElement.displayText')) {
+                    if (_.includes(_.map(sections[sectionKey], 'headerElement.FormHeaderElement.displayText'), childTableName) &&
+                        _.includes(_.map(sections[sectionKey], 'elements.relationshipId'), relationshipId)) {
+                        sectionToBeDeleted = sectionKey;
+                    }
+                }
+            });
+            if (sectionToBeDeleted) {
+                sections[sectionToBeDeleted] = null;
+                formService.updateForm(appId, parentTableId, formMeta).then(
+                    () => resolve()
+                ).catch(error => {
+                    logger.parseAndLogError(LogLevel.ERROR, error, 'UpdateForm');
+                    reject();
+                });
+            } else {
+                esolve();
+            }
+        } else {
+            logger.parseAndLogError(LogLevel.ERROR, error, 'need a valid relationshipID for updating parent form with child table default report');
+            reject();
+        }
+    });
+}
+
+
