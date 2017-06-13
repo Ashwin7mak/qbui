@@ -10,9 +10,6 @@ class CreateNewItemButton extends Component {
                 <a className="newTable leftNavLink" onClick={this.props.handleOnClick}>
                     <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage
                     message={this.props.message}/></span>
-                    {/*<div className="hoverComponent">*/}
-                        {/*<I18nMessage message={this.props.message}/>*/}
-                    {/*</div>*/}
                 </a>
             </li>
         );
