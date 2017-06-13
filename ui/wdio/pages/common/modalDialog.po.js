@@ -34,6 +34,18 @@ class modalDialogWindow {
         return browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail');
     }
 
+    get modalDialogCancelBtn() {
+        // modal dialog copy button
+        browser.element('.modal-footer .buttons .cancelButton.btn.btn-default').waitForVisible();
+        return browser.element('.modal-footer .buttons .cancelButton.btn.btn-default');
+    }
+
+    get modalDialogAddUserBtn() {
+        // modal dialog footer primary button
+        this.modalDialog.element('.buttons .finishedButton.btn.btn-primary').waitForVisible();
+        return this.modalDialog.element('.buttons .finishedButton.btn.btn-primary');
+    }
+
     get modalDialogContainer() {
         //modal dialog container
         this.modalDialog.element('.bodyContainer').waitForVisible();

@@ -8,8 +8,6 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let NewStackAuthPO = requirePO('newStackAuth');
     let UsersTablePage = requirePO('usersTable');
-    let ReportContentPO = requirePO('reportContent');
-    let ReportTableActionsPO = requirePO('reportTableActions');
     let modalDialog = requirePO('/common/modalDialog');
 
     describe('Users - Add user(s) tests: ', function() {
@@ -90,7 +88,7 @@
             // Select user
             UsersTablePage.userAddSearcMenu.click();
             // Click add user
-            UsersTablePage.addUserBtn.click();
+            modalDialog.modalDialogAddUserBtn.click();
             // Click No Thanks to Share with User
             browser.pause(e2eConsts.shortWaitTimeMs);
             modalDialog.modalDialogNoThanksButton.click();
@@ -110,8 +108,9 @@
             // Select "Viewer" role
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
             // Click add user
-            UsersTablePage.addUserBtn.click();
+            modalDialog.modalDialogAddUserBtn.click();
             // Click to close the Share with User modal
+            browser.pause(e2eConsts.shortWaitTimeMs);
             modalDialog.modalDialogCloseBtn.click();
         });
 
@@ -129,9 +128,12 @@
             // Select "Viewer" role
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
             // Click add user
-            UsersTablePage.addUserBtn.click();
+            modalDialog.modalDialogAddUserBtn.click();
             // Click Copy link to Share with User
             expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
+            // Click to close the Share with User modal
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            modalDialog.modalDialogCloseBtn.click();
         });
 
         /**
@@ -148,23 +150,29 @@
             // Select "Viewer" role
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
             // Click add user
-            UsersTablePage.addUserBtn.click();
+            modalDialog.modalDialogAddUserBtn.click();
             // Click Email to Share with User
             expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
+            // Click to close the Share with User modal
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            modalDialog.modalDialogCloseBtn.click();
         });
 
-        // /**
-        //  * Adds a new user by Username, assigns role and verifies the user was added.
-        //  */
-        // it('Add new user by invalid user to application', function() {
-        //
-        //     // Click on add a new user button
-        //     UsersTablePage.newUserBtn.click();
-        //     // Search for known user
-        //     UsersTablePage.selecthUser(searchCrap);
-        //     expect(UsersTablePage.getNoUsersFound).toBe("No users match what you're looking for");
+        /**
+         * Attempts to add a invalid user and cancels
+         */
+        it('Add new user by invalid user to application and cancel', function() {
 
-        // });
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for known user
+            UsersTablePage.selecthUser(searchCrap);
+            // Verify Add new user button disabled
+            expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
+            // Click Cancel
+            modalDialog.modalDialogCancelBtn.click();
+
+        });
 
     });
 }());
