@@ -124,14 +124,6 @@ export const moveColumn = (context, sourceLabel, targetLabel) => {
     return event(context, types.MOVE_COLUMN, {sourceLabel, targetLabel});
 };
 
-export const columnIsDragging = (context, sourceLabel) => {
-    return event(context, types.DRAGGING_COLUMN, {sourceLabel});
-};
-
-export const columnIsHovering = (context, targetLabel) => {
-    return event(context, types.HOVER_COLUMN, {targetLabel});
-};
-
 /**
  * Change the reportName of the report
  * @param context
