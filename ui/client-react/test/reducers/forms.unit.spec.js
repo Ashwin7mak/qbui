@@ -599,7 +599,7 @@ describe('Forms reducer functions', () => {
                     FormFieldElement:{
                         positionSameRow: false,
                         id: 9,
-                        name: 'mockFieldName',
+                        name: 'mockFieldName'
                     }
                 },
                 location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
