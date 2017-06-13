@@ -8,7 +8,7 @@ import SortMenuItem from "./sortMenuItem";
  */
 class SortMenuItems extends HeaderMenuItem {
     getMenuItems(currentNumItems, columnDef, grid) {
-        var items = super.getMenuItems(currentNumItems, columnDef, grid);
+        let items = super.getMenuItems(currentNumItems, columnDef, grid);
 
         items.push(
             <SortMenuItem key="sortASC"

@@ -4,15 +4,15 @@ import StandardGridItemsCount from "../../../../../reuse/client/src/components/i
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import GenericFilterSearchBox from "../../../../../reuse/client/src/components/facets/genericFilterSearchBox";
 import {connect} from "react-redux";
-import "./StandardGridToolBar.scss";
 import FacetSelections from "../../../../../reuse/client/src/components/facets/facetSelections";
 import StandardGridFacetsMenu from "./StandardGridFacetsMenu";
 import _ from "lodash";
+import "./StandardGridToolBar.scss";
 
 /**
  * The toolbar for Standard Grid
  */
-class StandardGridToolBar extends React.Component {
+export class StandardGridToolBar extends Component {
 
     handleFacetSelect = (facet, value) => {
         let newSelections = _.isEmpty(this.props.facetSelections) ? new FacetSelections() : this.props.facetSelections.copy();
@@ -28,6 +28,7 @@ class StandardGridToolBar extends React.Component {
 
     render() {
         let hasFacets = this.props.shouldFacet;
+        let hasNavigation = (this.props.totalFilteredItems || this.props.totalItems) > this.props.itemsPerPage;
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
@@ -66,10 +67,15 @@ class StandardGridToolBar extends React.Component {
                                 }
                             </div>
                         </div>
-                        <StandardGridNavigation className="standardGridNavigation"
-                                                getPreviousPage={this.props.getPreviousPage}
-                                                getNextPage={this.props.getNextPage}
-                                                id={this.props.id}/>
+                        <div className="standardGridNavigation" >
+                            {hasNavigation &&
+                                <StandardGridNavigation className="standardGridNavigation"
+                                                        getPreviousPage={this.props.getPreviousPage}
+                                                        getNextPage={this.props.getNextPage}
+                                                        id={this.props.id}
+                                />
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,11 +83,6 @@ class StandardGridToolBar extends React.Component {
         );
     }
 }
-
-StandardGridToolBar.defaultProps = {
-    shouldFacet: true,
-    shouldSearch: true
-};
 
 StandardGridToolBar.propTypes = {
     /**
@@ -108,11 +109,6 @@ StandardGridToolBar.propTypes = {
     shouldFacet: PropTypes.bool,
 
     /**
-     * Whether to Facet in this grid or no
-     */
-    doFacet: PropTypes.bool,
-
-    /**
      * Navigation controls. What to do when a user presses next or previous
      */
     getPreviousPage: PropTypes.func.isRequired,
@@ -125,6 +121,15 @@ StandardGridToolBar.propTypes = {
     shouldSearch: PropTypes.bool,
     onSearchChange: PropTypes.func.isRequired,
     searchTerm: PropTypes.string,
+    /**
+     * Number of items to be displayed in a page in the grid
+     */
+    itemsPerPage: PropTypes.number
+};
+
+StandardGridToolBar.defaultProps = {
+    shouldFacet: true,
+    shouldSearch: true
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -137,7 +142,6 @@ const mapStateToProps = (state, ownProps) => {
         searchTerm: (state.Grids[ownProps.id] || {}).searchTerm || '',
     };
 };
-
 
 /**
  * Every one of these actions have the pattern of Setting the State and Informing an Update
@@ -175,7 +179,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
     };
 };
-
-export {StandardGridToolBar};
 
 export default connect(mapStateToProps, mapDispatchToProps)(StandardGridToolBar);

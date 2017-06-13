@@ -13,8 +13,6 @@ import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGri
 import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
 import Locale from "../../../../../reuse/client/src/locales/locale";
 
-const mockStore = configureMockStore();
-
 const GRID_COLUMN_LOCALE = 'governance.account.users.grid';
 
 describe('AccountUsersGridColumns', () => {
@@ -28,7 +26,7 @@ describe('AccountUsersGridColumns', () => {
     });
 
     const GRID_ID = 'accountUsers';
-    const baseProps = {
+    const baseProps = () => ({
         columns : GetAccountUsersGridColumns(true, true),
         getFacetFields : GetFacetFields(true, true),
         rowKey: 'uid',
@@ -36,17 +34,19 @@ describe('AccountUsersGridColumns', () => {
         columnTransformProps :[],
         columnTransformsClasses :[],
         doUpdate: Actions.doUpdate
-    };
+    });
 
     describe("Permissions", () => {
+        const data = [{realmDirectoryFlags: 1, uid:0}];
+        const mockGridStore = configureMockStore();
+        const store = mockGridStore({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
         it("should show all the headers", ()=> {
-
-            let props = {...baseProps,
+            let props = {...baseProps(),
                 columns: GetAccountUsersGridColumns(true, true)};
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
+                <Provider store={store}>
                     <StandardGrid  {...props}/>
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
@@ -56,11 +56,11 @@ describe('AccountUsersGridColumns', () => {
         it("should show the correct set of headers when not account admin", () => {
 
             let props = {
-                ...baseProps,
+                ...baseProps(),
                 columns: GetAccountUsersGridColumns(false, true),
             };
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
+                <Provider store={store}>
                     <StandardGrid {...props} />
                 </Provider>);
 
@@ -71,12 +71,12 @@ describe('AccountUsersGridColumns', () => {
         it("should show the correct set of headers when not a realm admin", ()=> {
 
             let props = {
-                ...baseProps,
+                ...baseProps(),
                 columns: GetAccountUsersGridColumns(true, false),
             };
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
+                <Provider store={store}>
                     <StandardGrid {...props} />
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
@@ -95,7 +95,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(0);
             expect(cell.text()).toEqual(data[0].firstName);
@@ -110,7 +110,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(1);
             expect(cell.text()).toEqual(data[0].lastName);
@@ -125,7 +125,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(2);
             expect(cell.text()).toEqual(data[0].email);
@@ -140,7 +140,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(3);
             expect(cell.text()).toEqual(data[0].userName);
@@ -155,7 +155,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(4);
             expect(cell.text()).toEqual("never");
@@ -168,7 +168,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(4);
             expect(cell.text()).toEqual("March 1 2017");
@@ -189,7 +189,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("No App Access");
@@ -208,7 +208,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("Deactivated");
@@ -227,7 +227,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("Denied");
@@ -246,7 +246,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("Quick Base Staff");
@@ -265,7 +265,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("Paid Seat");
@@ -280,7 +280,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
             expect(cell.text()).toEqual("--");
@@ -293,7 +293,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
             expect(cell.text()).toEqual("Y");
@@ -306,7 +306,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
             expect(cell.text()).toEqual("--");
@@ -322,7 +322,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(7);
             expect(cell.text()).toEqual("Y");
@@ -335,7 +335,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(7);
             expect(cell.text()).toEqual("--");
@@ -351,7 +351,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(8);
             expect(cell.text()).toEqual("Y");
@@ -364,7 +364,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(8);
             expect(cell.text()).toEqual("--");
@@ -380,7 +380,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(9);
             expect(cell.text()).toEqual("Y");
@@ -393,7 +393,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(9);
             expect(cell.text()).toEqual("--");
@@ -409,7 +409,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(10);
             expect(cell.text()).toEqual("--");
@@ -422,7 +422,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(10);
             expect(cell.text()).toEqual("Y");
@@ -438,7 +438,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(11);
             expect(cell.text()).toEqual("--");
@@ -451,7 +451,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(11);
             expect(cell.text()).toEqual("Y");
@@ -467,7 +467,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(12);
             expect(cell.text()).toEqual("Y");
@@ -480,7 +480,7 @@ describe('AccountUsersGridColumns', () => {
 
             let component = mount(
                 <Provider store={store}>
-                    <StandardGrid {...baseProps} />
+                    <StandardGrid {...baseProps()} />
                 </Provider>);
             let cell = component.find(QbCell).at(12);
             expect(cell.text()).toEqual("--");

@@ -1,9 +1,10 @@
 import React, {PropTypes, Component} from "react";
 import {GetAccountUsersGridColumns} from "./AccountUsersGridColumns";
 import {GetFacetFields} from "./AccountUsersGridFacet";
-import "./AccountUsersGrid.scss";
 import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
 import * as Actions from "../AccountUsersActions";
+import constants from "../../../app/constants";
+import "./AccountUsersGrid.scss";
 
 /**
  * Renders the Grid portion of the AccountUsers view
@@ -20,6 +21,8 @@ class AccountUsersGrid extends Component {
                 rowKey="uid"
                 itemTypePlural="users"
                 itemTypeSingular="user"
+                itemsPerPage={constants.USERS_GRID_ITEMSPERPAGE}
+                noItemsFound={'governance.noItemsFound'}
             />
         );
     }
