@@ -221,28 +221,28 @@ describe('Validate ReportsApi unit tests', function() {
                 done(new Error('unable to resolve test facets url: ' + JSON.stringify(errorMsg)));
             });
         });
-        // it('Test failure fetch facets', function(done) {
-        //     req.url = "/apps/1/tables/2/reports/1/reportResults";
-        //     let requestStub = sinon.stub();
-        //     requestHelper.setRequestObject(requestStub);
-        //     requestStub.yields(null, {body:'[{"code":' + errorCodes.UNKNOWN + '}]'});
-        //     let promise = reportsApi.fetchReportFacets(req, reportId);
-        //     promise.then(
-        //         function(response) {
-        //             done();
-        //             assert.equal(response.errorCode, errorCodes.UNKNOWN);
-        //             assert(executeReqSpy.called);
-        //             assert.equal(unexpectedSpy.called, false);
-        //             let opts = executeReqSpy.args[0][1];
-        //             assert.equal(opts.headers['Content-Type'], 'application/json');
-        //         },
-        //         function(response) {
-        //             done(new Error("Unexpected promise error returned with test failure"));
-        //         }
-        //     ).catch(function(errorMsg) {
-        //         done(new Error('unable to resolve test failure: ' + JSON.stringify(errorMsg)));
-        //     });
-        // });
+        it('Test failure fetch facets', function(done) {
+            req.url = "/apps/1/tables/2/reports/1/reportResults";
+            let requestStub = sinon.stub();
+            requestHelper.setRequestObject(requestStub);
+            requestStub.yields(null, {body:'[{"code":' + errorCodes.UNKNOWN + '}]'});
+            let promise = reportsApi.fetchReportFacets(req, reportId);
+            promise.then(
+                function(response) {
+                    done();
+                    assert.equal(response.errorCode, errorCodes.UNKNOWN);
+                    assert(executeReqSpy.called);
+                    assert.equal(unexpectedSpy.called, false);
+                    let opts = executeReqSpy.args[0][1];
+                    assert.equal(opts.headers['Content-Type'], 'application/json');
+                },
+                function(response) {
+                    done(new Error("Unexpected promise error returned with test failure"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve test failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
         it('Test unexpected exception fetch facets', function(done) {
             req.url = "/apps/1/tables/2/reports/1/reportResults";
             let requestStub = sinon.stub();
