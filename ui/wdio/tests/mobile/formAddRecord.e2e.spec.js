@@ -36,10 +36,12 @@
             });
         });
 
-        it('Add a record via form', function() {
+        beforeEach(function() {
+            //Navigate to tables home page
+            return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
+        });
 
-            // Open table home page
-            e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
+        it('Add a record via form', function() {
 
             let fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 
@@ -57,20 +59,12 @@
             // Click Save on the form
             formsPO.clickFormSaveBtn();
 
-            // Verify new record got added
+            // Verify new record got added and count got increased by 1
             let newRecordCount = formsPO.getRecordsCountInATable();
-
-            // Reload the report after saving row as the row is added
-            e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
-
-            // Verify the new record count got increased by 1
             expect(newRecordCount).toBe(origRecordCount + 1);
         });
 
         it('Click on close button on form', function() {
-
-            // Open table home page
-            e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
 
             // Get the original records count in a report
             let origRecordCount = formsPO.getRecordsCountInATable();
@@ -81,13 +75,8 @@
             // Click cancel on the form
             formsPO.clickFormCloseBtn();
 
-            // Verify new record got added
-            let newRecordCount = formsPO.getRecordsCountInATable();
-
-            // Reload the report after saving row as the row is added
-            e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
-
             // Verify the new record count is same as original record count
+            let newRecordCount = formsPO.getRecordsCountInATable();
             expect(newRecordCount).toBe(origRecordCount);
         });
     });

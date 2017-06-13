@@ -387,7 +387,7 @@
             } else if (fieldType === 'allTimeFields') {
                 this.setDropDownValue(this.getAllTimeInputFields(), sTime);
             } else if (fieldType === 'allDateFields') {
-                 //get all date field input validators
+                //get all date field input validators
                 var dateFields = this.getAllDateInputFields();
                 for (i = 0; i < dateFields.value.length; i++) {
                     if (browserName === 'safari') {
