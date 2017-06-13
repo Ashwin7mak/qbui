@@ -49,7 +49,7 @@ describe('StandardGridToolBar', () => {
         expect(component.find(StandardGridItemsCount)).toBePresent();
     });
 
-    it('should not render with navigation but render with search and itemsCount component', () => {
+    it('should render the search and itemsCount component but not the navigation component', () => {
 
         let mockSearchTerm = "test search";
 
@@ -81,7 +81,7 @@ describe('StandardGridToolBar', () => {
         expect(component.find(StandardGridItemsCount)).toBePresent();
     });
 
-    it('should not render with navigation and itemsCount but render with search component', () => {
+    it('should render with search component but not the navigation and itemsCount component', () => {
 
         let mockSearchTerm = "test search";
 
