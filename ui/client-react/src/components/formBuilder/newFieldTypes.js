@@ -90,7 +90,7 @@ export function createFieldTypeProps(fieldType, userDefaultProperties = null) {
     return {
         containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
         location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
-        key: `fieldType_${fieldType}`, // Key for react to use to identify it in the array
+        key: id, // Key for react to use to identify it in the array
         type: fieldType,
         relatedField: field,
         title,

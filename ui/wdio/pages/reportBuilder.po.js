@@ -31,6 +31,11 @@ class reportBuilderPage {
         return browser.element('.modal-dialog .middleButton');
     }
 
+    get fieldToken() {
+        // the field token from hidden fields
+        return browser.element('.fieldToken');
+    }
+
     get headerMenu() {
         // header menu in each column header cell
         return browser.element('.headerMenu');
@@ -39,6 +44,16 @@ class reportBuilderPage {
     get hideMenuOption() {
         // hide option from header menu
         return browser.element('.hideColumnText');
+    }
+
+    get addColumnAfterMenuOption() {
+        // add column after option from header menu
+        return browser.element('.addColumnAfterText');
+    }
+
+    get addColumnBeforeMenuOption() {
+        // add column before option from header menu
+        return browser.element('.addColumnBeforeText');
     }
 
     /**
@@ -63,23 +78,9 @@ class reportBuilderPage {
     clickCancel() {
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
-        browser.pause(fiveSeconds);
         this.dirtyForm_Dismiss();
         browser.pause(fiveSeconds);
         return this;
-    }
-
-    get fieldToken() {
-        // the field token from hidden fields
-        return browser.element('.fieldToken');
-    }
-
-    get addColumnBeforeText() {
-        return browser.element('.addColumnBeforeText');
-    }
-
-    get addColumnAfterText() {
-        return browser.element('.addColumnAfterText');
     }
 
     dirtyForm_Dismiss() {
@@ -106,6 +107,12 @@ class reportBuilderPage {
         return this;
     }
 
+    clickFieldToken() {
+        this.fieldToken.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
     clickHeaderMenu() {
         this.headerMenu.click();
         browser.pause(fiveSeconds);
@@ -113,12 +120,26 @@ class reportBuilderPage {
     }
 
     clickHideMenuOption() {
-        this.hideMenuOption.waitForVisible(5000);
         this.hideMenuOption.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
+    clickAddColumnBeforeMenuOption() {
+        this.addColumnBeforeMenuOption.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    clickAddColumnAfterMenuOption() {
+        this.addColumnAfterMenuOption.click();
+        browser.pause(fiveSeconds);
+        return this;
+    }
+
+    /**
+     * Enters into builder mode.
+     */
     enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
@@ -131,25 +152,9 @@ class reportBuilderPage {
         return this;
     }
 
-    clickAddColumnFromFieldsList() {
-        // Clicks on one of the hidden fields after entering builder mode
-        this.fieldToken.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    clickAddColumnBefore() {
-        this.addColumnBeforeText.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
-    clickAddColumnAfter() {
-        this.addColumnAfterText.click();
-        browser.pause(fiveSeconds);
-        return this;
-    }
-
+    /**
+     * Checks to see if you are in report builder.
+     */
     reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');

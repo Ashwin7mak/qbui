@@ -9,6 +9,7 @@ export default {
 
     messages: {
         governance: {
+            noItemsFound: "Aucun {items} ne correspond à ce que vous recherchez. Essayez de chercher un {item} différent.",
             leftNav: {
                 myApps: "retour à Mes Applications",
                 manageBilling: "Gestion de facturation",
@@ -49,10 +50,10 @@ export default {
                         lastAccess: "DERNIER ACCÈS",
                         quickbaseAccessStatus: "ÉTAT D'ACCÈS QUICK BASE",
                         inactive: "INACTIF?",
-                        inAnyGroup: "DANS TOUT GROUPE",
-                        groupManager: "CHEF DE GROUPE",
-                        canCreateApps: "POUVEZ CRÉER DES APPS",
-                        appManager: "APP MANAGER",
+                        inAnyGroup: "DANS TOUT GROUPE?",
+                        groupManager: "CHEF DE GROUPE?",
+                        canCreateApps: "POUVEZ CRÉER DES APPS?",
+                        appManager: "APP MANAGER?",
                         inRealmDirectory: "DANS LE REALM DE RÉPERTOIRE?",
                         realmApproved: "REALM APPROUVÉ?"
                     }

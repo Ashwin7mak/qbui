@@ -60,6 +60,15 @@ class WindowLocationUtils {
     }
 
     /**
+     * Function to returns a DOMString containing the canonical
+     * form of the origin of the current location.
+     * i.e. for url https://developer.mozilla.org/en-US/search?q=URL#search-results-close-container';
+     * origin is https://developer.mozilla.org
+     */
+    static getOrigin() {
+        return window.location.origin;
+    }
+    /**
      * Calls window.addEventListener. This is mostly for ease of testing.
      */
     static addEventListener(...args) {

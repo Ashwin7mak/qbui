@@ -43,17 +43,19 @@ export default {
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
-                unassignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
+                unAssignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
                 deleteUser: "Entfernen {Wert} Benutzer",
                 deleteUsers: "Entfernen {Wert} Benutzer",
                 removeButton: "Entfernen",
                 cancel: "Stornieren",
-                singular: "Benutzer",
                 plural: "Benutzer",
-                usersRemoved: " Benutzer wurden entfernt",
-                userRemoved: " Benutzer wurde entfernt",
-                userAdded: "Sie hinzugefügt"
-
+                usersRemovedFromAppRole: "{numOfUsers} Benutzer aus der App-Rolle entfernt",
+                userRemovedFromAppRole: "Benutzer aus der App-Rolle entfernt",
+                userAdded: "Benutzer hinzugefügt",
+                userAddError: "Fehler beim Hinzufügen von Benutzer",
+                userRemovingError: "Fehler beim Entfernen des Benutzers",
+                emailBody: "Email Körper geht hier",
+                emailSubject: "E-Mail-Thema geht hier"
             }
         },
         appMenu: {
@@ -234,13 +236,9 @@ export default {
                 success: "Rekord genehmigt.",
                 error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
             },
-            testAutomation: {
+            testautomation: {
                 success: "Automatisierungstest erfolgreich.",
                 error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
-            },
-            saveAutomation: {
-                success: "Automatisierung wurde erfolgreich.",
-                error: "Beim Speichern dieser Automatisierung ist ein Fehler aufgetreten."
             },
             automationList: {
                 nameHeader: "Name",
@@ -258,14 +256,6 @@ export default {
                 actions: {
                     email: "Eine E-Mail senden"
                 }
-            },
-            automationEdit: {
-                stageHeading: "Automatisierung ändern: {automationName}",
-                nameHeader: "Name",
-                emailSectionHeader: "Eine E-Mail senden",
-                toHeader: "Benachrichtige wer",
-                subjectHeader: "Fach",
-                bodyHeader: "Nachricht"
             }
         },
         relationship: {
@@ -664,6 +654,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
+            existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
             automationBuilder: {
                 modify: 'Automatisierung ändern'
             },

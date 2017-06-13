@@ -67,6 +67,13 @@
                     return promise.reject(error);
                 });
             },
+            deleteTable : function(appId, tableId) {
+                var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(appId, tableId, true);
+                return recordBase.apiBase.executeRequest(tablesEndpoint, consts.DELETE).catch(function(error) {
+                    log.error('Error deleting table');
+                    return promise.reject(error);
+                });
+            },
             /**
              * Given an appId, tableId, tableNoun initialize a table properties object in EE.
              */
