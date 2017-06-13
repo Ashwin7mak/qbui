@@ -19,8 +19,8 @@ class CreateNewItemButton extends Component {
 }
 
 CreateNewItemButton.propTypes = {
-    handleOnClick: PropTypes.func,
-    message: PropTypes.string,
+    handleOnClick: PropTypes.func.isRequired,
+    message: PropTypes.string.isRequired,
 };
 
 export default CreateNewItemButton;
