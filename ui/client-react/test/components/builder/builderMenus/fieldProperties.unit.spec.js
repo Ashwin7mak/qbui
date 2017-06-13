@@ -214,7 +214,7 @@ describe('FieldProperties', () => {
             instance = component.instance();
             instance.updateFieldProps(value, propertyName);
 
-            expect(mockActions.updateField).toHaveBeenCalledWith({}, propertyName, value, appId, tableId);
+            expect(mockActions.updateField).toHaveBeenCalledWith({},  appId, tableId, propertyName, value);
         });
     });
 
