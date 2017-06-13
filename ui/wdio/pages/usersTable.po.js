@@ -11,8 +11,6 @@
 
     let UsersTablePage = Object.create(e2ePageBase, {
 
-        // Container for just the field column headers
-        userContainerEl: {get: function() {return browser.elements('.userManagementReport .qbGrid .qbHeader');}},
 
         // List of all field column headers
         userHeaderElList: {get: function() {return browser.elements('.userManagementReport .qbGrid .qbHeader .qbHeaderCell');}},
@@ -41,13 +39,9 @@
         // Add new user menu
         userAddSearcMenu: {get: function() {return browser.element('.modal-dialog .Select-menu-outer');}},
 
-        // Add new user search select arrow
-        userAddSearchBoxSelect: {get: function() {return browser.element('.Select-arrow-zone .Select-arrow');}},
 
         // Add new user clear searchbox entry
         userAddSearchBoxClear: {get: function() {return browser.element('.Select-clear');}},
-
-        userSelectRole: {get: function() {return browser.element('.Select-value span')}},
 
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
@@ -103,22 +97,6 @@
 
             //Enter search value
             return browser.keys(searchUser);
-        }},
-
-        /**
-         * Method to select a role.
-         *@param selectRole
-         */
-        selectRole: {value: function(element, searchRole) {
-
-            //Wait until you see open roles
-            element.waitForVisible();
-
-            //Click in role list
-            element.click();
-
-            //Select role
-            return formsPO.selectFromList(searchRole);
         }},
     });
     module.exports = UsersTablePage;

@@ -7,10 +7,10 @@
     //Load the page Objects
     let e2ePageBase = requirePO('e2ePageBase');
     let NewStackAuthPO = requirePO('newStackAuth');
-    let RequestAppsPage = requirePO('requestApps');
     let UsersTablePage = requirePO('usersTable');
     let ReportContentPO = requirePO('reportContent');
     let ReportTableActionsPO = requirePO('reportTableActions');
+    let modalDialog = requirePO('/common/modalDialog');
 
     describe('Users - Add user(s) tests: ', function() {
         let realmName;
@@ -24,6 +24,8 @@
         let searchFirstName = "Steve";
         let searchEmail = "super";
         let searchLastName = "King Sr.";
+        let searchCrap = "asdfasdf";
+
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -70,73 +72,100 @@
          */
         beforeEach(function() {
             //load the users page
-            RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
-            //wait until user table rows are loaded
-            ReportContentPO.waitForReportContent();
-            //Wait until you see newUser button
-            return UsersTablePage.newUserBtn.waitForVisible();
+            return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });
+
         /**
          * Adds a new user by Username, assigns role and verifies the user was added.
          */
-        it('Add new user to application with default role "Participant', function() {
+        it('Add new user by "Screename" to application with default role "Participant" ', function() {
 
             // Click on add a new user button
             UsersTablePage.newUserBtn.click();
-
             // Search for known user
             UsersTablePage.selecthUser(searchUserName);
-
             // Select user
             UsersTablePage.userAddSearcMenu.click();
-
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
-            // Select role
-            UsersTablePage.selectRole(UsersTablePage.userRoleSelection, "Viewer");
-
-
-
-            // browser.selectByAttribute('id', 'react-select-7--value-item').click;
-            // var trial=browser.elements('.Select-arrow-zone');
-            // // browser.click(trial[1]);
-            // console.log(trial);
-            // console.log("qwerty")
-            // browser.click('#react-select-7--value-item')
-
-            // browser.selectByValue('.modal-dialog .Select-value-label, "Administrator"');
-            // browser.element('.selectUser .Select-arrow-zone').waitForVisible();
-            // browser.element('.selectUser .Select-arrow-zone').click();
-            // browser.element('.Select-outer-menu').waitForVisible();
-            // browser.keys(['admin'])
-            // browser.element('.modal-dialog').click();
-
-            // browser.element('.assignRole .Select-arrow-zone').waitForVisible();
-            // browser.element('.assignRole .Select-arrow-zone').click();
-            // browser.element('.Select-value').waitForVisible();
-            // browser.element('.Select-value .Select-value-label').click();
-
-
-            // console.log((results.getAttribute('index') == 1));
-            // console.log("qwerty");
-            // browser.click(results.getAttribute('index') == 1);
-
             // Click add user
             UsersTablePage.addUserBtn.click();
-
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
             // Share with user
-
+            // modalDialog.modalDialogCopyBtn.click();
 
             // Verify user was added to report with correct role
-
-
-
-
-
-
-
         });
+
+        /**
+         * Adds a new user by Username, assigns role and verifies the user was added.
+         */
+        it('Add new user by "First Name" to application with role "Viewer" ', function() {
+
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for known user
+            UsersTablePage.selecthUser(searchFirstName);
+            // Select user
+            UsersTablePage.userAddSearcMenu.click();
+            // Select "Viewer" role
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
+            // Click add user
+            UsersTablePage.addUserBtn.click();
+            // Share with user
+
+            // Verify user was added to report with correct role
+        });
+
+        /**
+         * Adds a new user by Username, assigns role and verifies the user was added.
+         */
+        it('Add new user by "Email" to application with role "Administrator" ', function() {
+
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for known user
+            UsersTablePage.selecthUser(searchEmail);
+            // Select user
+            UsersTablePage.userAddSearcMenu.click();
+            // Select "Viewer" role
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
+            // Click add user
+            UsersTablePage.addUserBtn.click();
+            // Share with user
+
+            // Verify user was added to report with correct role
+        });
+
+        /**
+         * Adds a new user by Username, assigns role and verifies the user was added.
+         */
+        it('Add new user by "Last Name" to application with role "none" ', function() {
+
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for known user
+            UsersTablePage.selecthUser(searchLastName);
+            // Select user
+            UsersTablePage.userAddSearcMenu.click();
+            // Select "Viewer" role
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
+            // Click add user
+            UsersTablePage.addUserBtn.click();
+            // Share with user
+
+            // Verify user was added to report with correct role
+        });
+
+        /**
+         * Adds a new user by Username, assigns role and verifies the user was added.
+         */
+        // it('Add new user by invalid user to application', function() {
+        //
+        //     // Click on add a new user button
+        //     UsersTablePage.newUserBtn.click();
+        //     // Search for known user
+        //     UsersTablePage.selecthUser(searchCrap);
+        //     expect(UsersTablePage.getNoUsersFound).toBe("No users match what you're looking for");
+
+        // });
+
     });
 }());

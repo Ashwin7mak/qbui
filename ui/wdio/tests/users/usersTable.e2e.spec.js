@@ -8,7 +8,6 @@
     let NewStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
     let UsersTablePage = requirePO('usersTable');
-    let ReportContentPO = requirePO('reportContent');
     let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Users - Application user management table tests: ', function() {
@@ -40,7 +39,6 @@
          * Before each it block reload the user table (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //load the users page
             //load the users page
             return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });

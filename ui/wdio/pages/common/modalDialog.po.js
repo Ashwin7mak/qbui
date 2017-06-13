@@ -1,5 +1,3 @@
-'use strict';
-
 class modalDialogWindow {
     //The methods below works for both qbModal dialog and also multiStepModal dialog.
     // Since the underlying className for both modal dialogs are 'modal-dialog'
@@ -22,6 +20,12 @@ class modalDialogWindow {
         // modal dialog
         browser.element('.modal-dialog .iconUISturdy-close').waitForVisible();
         return browser.element('.modal-dialog .iconUISturdy-close');
+    }
+
+    get modalDialogCopyBtn() {
+        // modal dialog copy button
+        browser.element('.cellEditIcon.flexChild .tipChildWrapper.qbIcon.iconUISturdy-url').waitForVisible();
+        return browser.element('.cellEditIcon.flexChild .tipChildWrapper.qbIcon.iconUISturdy-url');
     }
 
     get modalDialogContainer() {
@@ -64,6 +68,12 @@ class modalDialogWindow {
         //TableSelector drop down arrow to expand the list
         this.modalDialog.element('.tableSelector .Select-arrow-zone').waitForVisible();
         return this.modalDialog.element('.tableSelector .Select-arrow-zone');
+    }
+
+    get modalDialogRoleSelectorDropDownArrow() {
+        //TableSelector drop down arrow to expand the list
+        this.modalDialog.element('.assignRole .Select-arrow-zone').waitForVisible();
+        return this.modalDialog.element('.assignRole .Select-arrow-zone');
     }
 
     get modalDialogFieldSelectorDropDownArrow() {
@@ -112,13 +122,13 @@ class modalDialogWindow {
         browser.waitForVisible('.Select-menu-outer');
         //get all options from the list
         var option = browser.elements('.Select-option').value.filter(function(optionText) {
-            return optionText.element('div div').getText().includes(listOption);
+            return optionText.getAttribute('textContent').includes(listOption);
         });
 
         if (option !== []) {
             //Click on filtered option
-            option[0].element('div div').waitForVisible();
-            option[0].element('div div').click();
+            option[0].waitForVisible();
+            option[0].click();
             //wait until select menu outer
             return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
         } else {
