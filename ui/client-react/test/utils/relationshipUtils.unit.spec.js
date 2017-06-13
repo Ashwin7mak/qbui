@@ -11,7 +11,7 @@ describe('RelationshipUtils', () => {
 
         let existingRelationships = [
             {masterTableId: "t1", detailTableId: "t2"},
-            {masterTableId: "t3", detailTableId: "t2"}
+            {masterTableId: "t3", detailTableId: "t2", detailFieldId: 123}
         ];
         let testCases = [
             {
@@ -53,6 +53,23 @@ describe('RelationshipUtils', () => {
                 deletedFields: [],
                 newRelationshipFieldIds: [],
                 expectedList: []
+            },
+            {
+                description: 'test filter out existing masters unless deleted',
+                detailTable: tables[1],
+                app: {tables, relationships: existingRelationships},
+                deletedFields: [123],
+                newRelationshipFieldIds: [],
+                expectedList: [tables[2]]
+            },
+            {
+                description: 'test filter out new unsaved relationships',
+                detailTable: tables[0],
+                app: {id: 'appId', tables, relationships: []},
+                deletedFields: [],
+                fields: [{appId: 'appId', tblId: 't1', fields: [{id: 'new1', parentTableId: "t2"}]}],
+                newRelationshipFieldIds: ['new1'],
+                expectedList: [tables[2]]
             },
             {
                 description: 'test filter out circular relationships',
