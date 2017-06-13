@@ -14,7 +14,7 @@ import './accountUsersMain.scss';
 /**
  * Represents the top level page that contains top level components
  */
-class AccountUsers extends Component {
+export class AccountUsers extends Component {
 
     constructor(props) {
         super(props);
@@ -32,8 +32,8 @@ class AccountUsers extends Component {
     }
 
     render() {
-        var canSeeAccountColumns = false;
-        var canSeeRealmColumns = false;
+        let canSeeAccountColumns = false;
+        let canSeeRealmColumns = false;
 
         if (this.props.requestUser && this.props.requestRealm) {
             canSeeAccountColumns = this.props.requestUser.isAccountAdmin || this.props.requestUser.isCSR;
@@ -64,8 +64,6 @@ AccountUsers.propTypes = {
     users: PropTypes.array,
     loading: PropTypes.bool
 };
-
-export {AccountUsers};
 
 const mapDispatchToProps = (dispatch) => ({
     fetchData(accountID, gridID, itemsPerPage) {
