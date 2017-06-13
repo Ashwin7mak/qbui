@@ -11,6 +11,10 @@ const DragTypes = {
 const headerSource = {
     beginDrag({label}) {
         return {label};
+    },
+
+    isDragging(sourceProps, monitor) {
+        return sourceProps.label === monitor.getItem().label;
     }
 };
 
