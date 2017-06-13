@@ -2,7 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import "react-fastclick";
 import {GOVERNANCE_ACCOUNT_ROUTE, GOVERNANCE_ACCOUNT_USERS_ROUTE} from "./routes";
-import AppShell from "./appShell";
+import GovernanceAppShell from "./governanceAppShell";
 import AccountUsers from "../account/users/AccountUsersMain";
 import {BrowserRouter, Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
@@ -14,7 +14,7 @@ const store = createGovernanceStore();
 const routes = [
     {
         path: GOVERNANCE_ACCOUNT_ROUTE,
-        component: AppShell,
+        component: GovernanceAppShell,
         routes: [
             {
                 path: GOVERNANCE_ACCOUNT_USERS_ROUTE,
