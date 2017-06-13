@@ -345,20 +345,8 @@ class formBuilderPage {
         return this.getFieldLabels();
     }
 
-    addNewFieldToFormByDoubleClicking(fieldToSelect) {
-        //get all field tokens
-        var token = browser.elements('.fieldToken .fieldTokenTitle').value.filter(function(tokenTitle) {
-            return tokenTitle.getAttribute('textContent') === fieldToSelect;
-        });
-
-        if (token !== []) {
-            //scroll to a field.
-            browser.execute("return arguments[0].scrollIntoView(true);", token[0]);
-            //Click on filtered save button
-            return token[0].doubleClick();
-        } else {
-            throw new Error('field with name ' + fieldToSelect + " not found on the new list in form builder");
-        }
+    addNewField(label) {
+        browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
     }
 
     /**
