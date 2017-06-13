@@ -40,6 +40,32 @@ and state are at this level, it is trivial to pass things to the draggable or dr
 The elements in the reusable library consist of base and middle layers; although developers are encouraged to create base or 
 middle layers that meet the unique needs of their features if these elements do not have the required functionality.
 
+**Warning:** Do not put HOC functions inside of render methods (or functions that are called within a render method) because 
+this will cause the component to re-mount on every render.
+
+``` javascript
+// BAD!
+class MyComponent extends Component {
+    render() {
+        const DragDropComponent = DragAndDropElement(FieldElement);
+   
+        return <DragDropComponent {...props} />;
+    }
+}
+```
+
+``` javascript
+// GOOD
+const DragDropComponent = DragAndDropElement(FieldElement);
+
+class MyComponent extends Component {
+    render() {
+        return <DragDropComponent {...props} />;
+    }
+}
+ 
+```
+
 ### Setting up Drag & Drop for a new feature
 
 > A top level draggable component is a component that is, typically, connected to the store. More importantly it has methods
