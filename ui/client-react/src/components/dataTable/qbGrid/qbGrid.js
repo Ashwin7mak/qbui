@@ -258,7 +258,7 @@ export const QbGrid = React.createClass({
             if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            let c = column.getGridHeader(this.onMoveColumn);
+            let c = column.getGridHeader(this.onMoveColumn, this.onHover, this.beginDrag);
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
@@ -415,6 +415,14 @@ export const QbGrid = React.createClass({
      */
     onMoveColumn(context, sourceLabel, targetLabel) {
         this.props.moveColumn(context, sourceLabel, targetLabel);
+    },
+
+    onHover(context, targetLabel) {
+        console.log(targetLabel);
+    },
+
+    beginDrag(context, sourceLabel) {
+        console.log(sourceLabel);
     },
 
     render() {

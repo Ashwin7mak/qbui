@@ -60,7 +60,7 @@ class ColumnTransformer {
      * @params MenuComponent An optional React Element (e.g., menu dropdown) to display next to the header text
      * @returns {{property: *, header: {label: XML}}}
      */
-    getGridHeader(onMove) {
+    getGridHeader(onMove, onHover, beginDrag) {
         let transformedColumn = {
             property: this.cellIdentifierValue,
             header: {
@@ -68,7 +68,9 @@ class ColumnTransformer {
             },
             props: {
                 label: this.headerLabel,
-                onMove
+                onMove,
+                onHover,
+                beginDrag
             }
         };
 

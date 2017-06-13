@@ -11,10 +11,18 @@ const DragTypes = {
 const headerSource = {
     beginDrag({label}) {
         return {label};
+    },
+
+    isDragging(sourceProps) {
+        sourceProps.beginDrag(CONTEXT.REPORT.NAV, sourceProps.label);
     }
 };
 
 const headerTarget = {
+    hover(targetProps) {
+        targetProps.onHover(CONTEXT.REPORT.NAV, targetProps.label);
+    },
+
     drop(targetProps, monitor) {
         const targetLabel = targetProps.label;
         const sourceProps = monitor.getItem();
