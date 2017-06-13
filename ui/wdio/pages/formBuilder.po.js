@@ -1,9 +1,11 @@
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
+let modalDialog = requirePO('/common/modalDialog');
+let e2ePageBase = requirePO('e2ePageBase');
+let loadingSpinner = requirePO('/common/loadingSpinner');
 
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
-let modalDialog = requirePO('/common/modalDialog');
 
 class formBuilderPage {
 
@@ -455,7 +457,7 @@ class formBuilderPage {
         return deletedField;
     }
 
-    KB_save(index) {
+    KB_save() {
         // save form via keyboard
         if (browserName === 'MicrosoftEdge') {
             // keyboard shortcut doesn't work on EDGE...

@@ -58,6 +58,8 @@
 
             // pos/neg pairs
 
+            // todo: test KB_Save & KB_Cancel - save doesn't work on edge, can't repro manually
+
             xit('remove the selected field with BACKSPACE & verify presence after CANCEL', function() {
                 // MC-3053: regression: keyboard shortcut for delete field (shift-backspace) has no effect
                 let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
@@ -76,14 +78,12 @@
             it('move a field via keyboard & verify original order after CANCEL', function() {
                 let originalOrder = formBuilderPO.getFieldLabels();
                 formBuilderPO.KB_moveField(1, 2);
-                formBuilderPO.KB_cancel();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 expect(newFields).toEqual(originalOrder);
             });
             it('move a field via keyboard & verify revised order after SAVE', function() {
                 let revisedOrder = formBuilderPO.KB_moveField(1, 2);
-                formBuilderPO.KB_save();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 expect(newFields).toEqual(revisedOrder);
             });
 
