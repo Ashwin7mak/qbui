@@ -3,8 +3,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 
-//newTableItem
-//newTable
 class CreateNewItemButton extends Component {
     render() {
         return (
