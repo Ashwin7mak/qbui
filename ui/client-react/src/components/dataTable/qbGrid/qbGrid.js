@@ -12,7 +12,7 @@ import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 import TouchBackend from 'react-dnd-touch-backend';
-import {moveColumn, columnIsDragging, columnIsHovering} from '../../../actions/reportBuilderActions';
+import {moveColumn} from '../../../actions/reportBuilderActions';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
 
@@ -258,7 +258,7 @@ export const QbGrid = React.createClass({
             if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            let c = column.getGridHeader(this.onMoveColumn, this.onHover, this.beginDrag);
+            let c = column.getGridHeader(this.onMoveColumn);
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
@@ -417,14 +417,6 @@ export const QbGrid = React.createClass({
         this.props.moveColumn(context, sourceLabel, targetLabel);
     },
 
-    onHover(context, targetLabel) {
-        this.props.columnIsHovering(context, targetLabel);
-    },
-
-    beginDrag(context, sourceLabel) {
-        this.props.columnIsDragging(context, sourceLabel);
-    },
-
     render() {
         let columns;
         if (this.props.showRowActionsColumn) {
@@ -486,9 +478,7 @@ export const QbGrid = React.createClass({
 });
 
 const mapDispatchToProps = {
-    moveColumn,
-    columnIsDragging,
-    columnIsHovering
+    moveColumn
 };
 
 export default connect(null, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));
