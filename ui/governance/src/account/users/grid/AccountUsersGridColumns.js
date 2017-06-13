@@ -1,4 +1,4 @@
-import Locale from "../../../../../client-react/src/locales/locales";
+import Locale from "../../../../../reuse/client/src/locales/locale";
 import * as Formatters from "./AccountUsersGridFormatters";
 import _ from "lodash";
 import * as FieldConsts from "../../../../../client-react/src/constants/schema";
