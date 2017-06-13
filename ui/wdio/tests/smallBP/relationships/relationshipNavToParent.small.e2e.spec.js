@@ -11,8 +11,6 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let relationshipsPO = requirePO('relationshipsPage');
-    let reportInLineEditPO = requirePO('reportInLineEdit');
-    let formsPagePO = requirePO('formsPage');
 
     // Global vars used throughout the it blocks
     let realmName;
@@ -70,10 +68,6 @@
             let actualParentRecordValues = relationshipsPO.getValuesFromFormSection(relationshipsPO.getFormSectionEl(true));
             expect(actualParentRecordValues).toEqual(expectedParentRecordValues);
         });
-
-        // Test for arrow to take you to parent report
-
-        // Test for navigating between parent records in slidey-uppy
     });
 }());
 
