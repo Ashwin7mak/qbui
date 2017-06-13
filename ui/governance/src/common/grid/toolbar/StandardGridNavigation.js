@@ -48,7 +48,7 @@ StandardGridNavigation.propTypes = {
     /**
      * ID of the Grid
      */
-    id: PropTypes.string.required,
+    id: PropTypes.string.isRequired,
 
     firstItemIndexInCurrentPage: PropTypes.number,
     lastItemIndexInCurrentPage: PropTypes.number,
@@ -67,8 +67,8 @@ StandardGridNavigation.propTypes = {
     /**
      * Navigation to previous or next pages
      */
-    getPreviousPage :PropTypes.func.required,
-    getNextPage :PropTypes.func.required
+    getPreviousPage :PropTypes.func.isRequired,
+    getNextPage :PropTypes.func.isRequired
 };
 
 StandardGridNavigation.defaultProps = {

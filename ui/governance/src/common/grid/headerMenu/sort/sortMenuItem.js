@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import MenuItem from "react-bootstrap/lib/MenuItem";
-import Locale from "APP/locales/locales";
+import Locale from "REUSE/locales/locale";
 import * as FieldConsts from "APP/constants/schema";
 import Icon from "REUSE/components/icon/icon";
 
