@@ -4,8 +4,16 @@ import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 import {getFormByContext, getExistingFields} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
+import _ from "lodash";
+import Locale from "../../../../../reuse/client/src/locales/locale";
 
 export class ExistingFieldsMenu extends Component {
+
+    noExistingFields = () => {
+        if (_.isEmpty(this.props.existingFields)) {
+            return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: this.props.tblId});
+        }
+    };
 
     render = () => {
         let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
@@ -18,10 +26,11 @@ export class ExistingFieldsMenu extends Component {
                 renderer={FieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={[{children: existingFields, key: 'existingFields', title: 'Existing Fields'}]}
+                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'Existing Fields'}] : undefined}
                 isOpen={isOpen}
                 isFilterable={true}
                 hideTitle={true}
+                emptyMessage={this.noExistingFields()}
             />
         );
     }
@@ -31,7 +40,8 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [];
     return {
-        existingFields: getExistingFields(state, currentFormId, ownProps.appId, ownProps.tblId)
+        existingFields: getExistingFields(state, currentFormId, ownProps.appId, ownProps.tblId),
+        numberOfFieldsOnForm: (_.has(currentForm, "formData.formMeta.numberOfFieldsOnForm") ? currentForm.formData.formMeta.numberOfFieldsOnForm : 1),
     };
 };
 
@@ -49,6 +59,7 @@ ExistingFieldsMenu.propTypes = {
      * */
     appId: PropTypes.string.isRequired,
     tblId: PropTypes.string.isRequired,
+    //tblName: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(ExistingFieldsMenu);

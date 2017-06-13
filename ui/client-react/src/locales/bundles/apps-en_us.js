@@ -664,7 +664,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Create link to a record in another table",
                 }
             },
-            existingFieldsToolTip: "Add {fieldName} to the form",
+            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} are on the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",

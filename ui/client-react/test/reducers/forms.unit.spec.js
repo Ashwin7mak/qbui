@@ -599,7 +599,8 @@ describe('Forms reducer functions', () => {
                     FormFieldElement:{
                         positionSameRow: false,
                         id: 9,
-                        name: 'mockFieldName'
+                        name: 'mockFieldName',
+                        tooltipText: `Add mockFieldName to the form`
                     }
                 },
                 location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
