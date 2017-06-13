@@ -460,7 +460,6 @@ export const QBForm = React.createClass({
     createChildReportElement(id, ReferenceElement) {
         // Find the relationship object for this element.
         // This element represents a single relationship from the `formMeta.relationships` array.
-        // The `element.relationshipId` is the index offset within the relationship array.
         const relationship = this.getRelationship(ReferenceElement.relationshipId);
 
         // Find the foreign key value. This is the value stored in one of the master record's fields
