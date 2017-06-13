@@ -16,7 +16,9 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         show: PropTypes.bool,
         tables: PropTypes.array,
         childTableId: PropTypes.string,
-        tableSelected: PropTypes.func
+        tableSelected: PropTypes.func,
+        deletedFields: PropTypes.array,
+        parentTables: PropTypes.array
     },
 
     getInitialState() {
@@ -69,7 +71,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     selectTable(table) {
 
         if (table.value !== this.state.selectedTableId) {
-            const selectedTable = _.find(this.props.tables, {id: table.value});
+            const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: table.value}) : null;
 
             this.setState({selectedTableId: table.value});
             if (selectedTable.recordTitleFieldId) {
@@ -90,7 +92,9 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         const placeHolderMessage = Locale.getMessage("selection.tablesPlaceholder");
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
 
-        const tableChoices = _.reject(this.props.tables, table => table.id === this.props.childTableId);
+        const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.childTableId}) : null;
+        const tableChoices = this.props.app ? RelationshipUtils.getValidParentTablesForRelationship(this.props.app.relationships, this.props.parentTables, selectedTable, this.props.deletedFields) : [];
+
         const choices = tableChoices.map(table => {
             return {
                 value: table.id,
@@ -128,7 +132,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
      */
     getFieldSelect() {
 
-        const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
+        const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.state.selectedTableId}) : null;
 
         const fieldChoices = this.getFieldChoices(selectedTable);
 
@@ -155,7 +159,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
      * parent table was chosen
      */
     addToForm() {
-        const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
+        const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.state.selectedTableId}) : null;
         const selectedField = _.find(selectedTable.fields, {id: this.state.selectedFieldId});
 
         this.props.tableSelected(this.state.selectedTableId, selectedField);
@@ -171,8 +175,8 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
     render() {
 
-        const table = _.find(this.props.tables, {id: this.props.childTableId});
-        const selectedTable = _.find(this.props.tables, {id: this.state.selectedTableId});
+        const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.childTableId}) : null;
+        const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.state.selectedTableId}) : null;
         const tableChooserDescription = Locale.getMessage("builder.linkToRecord.tableChooserDescription", {tableNoun: table.tableNoun});
 
         const advancedSettingsClasses = ["advancedSettings"];

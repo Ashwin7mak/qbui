@@ -26,7 +26,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         updateField: PropTypes.func,
         removeFieldFromForm: PropTypes.func,
         tblId: PropTypes.string,
-        tables: PropTypes.array,
+        app: PropTypes.object,
         formId: PropTypes.string,
         fieldDef: PropTypes.object
     },
@@ -51,7 +51,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
         this.props.hideRelationshipDialog();
 
-        const parentTable = _.find(this.props.tables, {id: tableId});
+        const parentTable = this.props.app ? _.find(this.props.app.tables, {id: tableId}) : null;
 
         // update the field with the parent table ID and a name incorporating the selected table
         const field = _.cloneDeep(this.props.fieldDef);
@@ -111,7 +111,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
             linkToRecordFields = _.filter(fieldsList.fields, field => this.props.newRelationshipFieldIds.indexOf(field.id) !== -1);
         }
 
-        return _.reject(this.props.tables, table => _.find(linkToRecordFields, field => field.parentTableId === table.id));
+        return _.reject(this.props.app.tables, table => _.find(linkToRecordFields, field => field.parentTableId === table.id));
     },
 
     /**
@@ -119,11 +119,13 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      * @returns {*}
      */
     render() {
+
         if (this.props.newFormFieldId && this.props.newFormFieldId === this.props.fieldDef.id) {
             return (
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
-                                                  tables={this.getAvailableParentTables()}
+                                                  app={this.props.app}
+                                                  parentTables={this.getAvailableParentTables()}
                                                   tableSelected={this.relationshipSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {
@@ -137,7 +139,8 @@ const mapStateToProps = (state) => {
     return {
         newFormFieldId: getDroppedNewFormFieldId(state),
         newRelationshipFieldIds: state.relationshipBuilder.newRelationshipFieldIds,
-        fields: state.fields
+        fields: state.fields,
+        fieldsToDelete: _.get(state, "forms.view.formData.formMeta.fieldsToDelete", [])
     };
 };
 

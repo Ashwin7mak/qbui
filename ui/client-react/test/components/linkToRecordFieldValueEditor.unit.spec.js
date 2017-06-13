@@ -19,32 +19,38 @@ describe('LinkToRecordValueEditor functions', () => {
     const parentTableFields = {id: 1, datatypeAttributes: {type: 'TEXT'}};
     //common props
     const props = {
-        hideRelationshipDialog: () => {},
-        updateField: () => {},
-        removeFieldFromForm: () => {},
+        hideRelationshipDialog: () => {
+        },
+        updateField: () => {
+        },
+        removeFieldFromForm: () => {
+        },
         tblId: "childTableId",
-        tables: [
-            {
-                id: "childTableId",
-                name: "childTable",
-                tableIcon: "childIcon",
-                tableNoun: "child",
-                fields: []
-            },
-            {
-                id: "parentTableId",
-                name: "parentTable",
-                tableIcon: "parentIcon",
-                tableNoun: "parent",
-                fields: [
-                    parentTableFields
-                ]
-            }
-        ],
+        app: {
+            tables: [
+                {
+                    id: "childTableId",
+                    name: "childTable",
+                    tableIcon: "childIcon",
+                    tableNoun: "child",
+                    fields: []
+                },
+                {
+                    id: "parentTableId",
+                    name: "parentTable",
+                    tableIcon: "parentIcon",
+                    tableNoun: "parent",
+                    fields: [
+                        parentTableFields
+                    ]
+                }
+            ]
+        },
         childTableId: "childTableId",
         location: {},
         formId: 1,
         fieldDef: {id: 'newFieldId', parentFieldId: 'parentFieldId'}
+
     };
 
     beforeEach(() => {
