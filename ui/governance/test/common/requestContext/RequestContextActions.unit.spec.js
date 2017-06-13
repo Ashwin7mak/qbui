@@ -22,7 +22,7 @@ describe('RequestContextActions', () => {
         RequestContextActionsRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
     });
 
-    var middleware =  [thunk];
+    let middleware =  [thunk];
     const mockStore = configureMockStore(middleware);
 
     const defaultServiceData = {
