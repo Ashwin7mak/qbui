@@ -99,6 +99,6 @@ export const updateAppTableProperties = (appId, tblId, tableInfo) => {
     return event(types.UPDATE_APP_TABLE_PROPS, {appId, tblId, tableInfo});
 };
 
-export const showAppCreationDialog = (appId, tblId) => {
-    return event(types.SHOW_APP_CREATION_DIALOG, {appId, tblId});
+export const showAppCreationDialog = () => {
+    return event(types.SHOW_APP_CREATION_DIALOG);
 };

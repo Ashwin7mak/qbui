@@ -111,6 +111,10 @@ describe('App Actions success workflow functions', () => {
         expect(AppActions.clearSelectedAppTable()).toEqual(event(types.CLEAR_SELECTED_APP_TABLE));
     });
 
+    it('create showAppCreationDialog event', () => {
+        expect(AppActions.showAppCreationDialog()).toEqual(event(types.SHOW_APP_CREATION_DIALOG));
+    });
+
     it('toggle add to app success dialog event', () => {
         const isOpen = false;
         const email = 'test@test.com';
