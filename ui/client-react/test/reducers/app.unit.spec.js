@@ -384,3 +384,11 @@ describe('Test app reducer - add/remove users from app', () => {
         expect(AppReducer.getAppUnfilteredUsers(usersRemovedState)).toEqual(unfilteredRemoved);
     });
 });
+
+describe('Test App Creation', () => {
+    it('test show app creation dialog', () => {
+        const state = reducer(storeState, {type: types.SHOW_APP_CREATION_DIALOG});
+
+        expect(state.dialogOpen).toBe(true);
+    });
+});
