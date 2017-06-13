@@ -1,6 +1,6 @@
 import React from "react";
 import {shallow} from "enzyme";
-import {GovernanceAppShell} from "../../src/app/GovernanceAppShell";
+import {GovernanceAppShell} from "../../src/app/governanceAppShell";
 let component;
 describe('<GovernanceAppShell />', () => {
     let props = {
