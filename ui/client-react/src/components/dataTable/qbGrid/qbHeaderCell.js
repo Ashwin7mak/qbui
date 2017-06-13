@@ -1,12 +1,29 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
+import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
-import * as dnd from 'reactabular-dnd';
+
+const DragTypes = {
+    HEADER: 'HEADER'
+};
+
+const headerSource = {
+    beginDrag(props) {
+        console.log(props);
+        return {};
+    }
+};
+
+const headerTarget = {
+    drop(props, monitor) {
+        console.log('dropped');
+    }
+};
 
 /**
  * The header cell component used in the QbGrid
  * @type {__React.ClassicComponentClass<P>}
  */
-const QbHeaderCell = React.createClass({
+class QbHeaderCell extends Component {
     /**
      * Using shallow compare to reduce the change this simple component re-renders
      * @param nextProps
@@ -14,9 +31,11 @@ const QbHeaderCell = React.createClass({
      */
     shouldComponentUpdate(nextProps) {
         return shallowCompare(this, nextProps);
-    },
+    };
 
     render() {
+        const {connectDragSource, connectDropTarget, isDragging} = this.props;
+
         let classes = [...this.props.classes, 'qbHeaderCell'];
         if (this.props.isStickyCell) {
             classes.push(['stickyCell']);
@@ -26,12 +45,15 @@ const QbHeaderCell = React.createClass({
         }
         if (this.props.isDraggable) {
             classes.push('isDraggable');
-            return <dnd.Header className={classes.join(' ')} {...this.props} />;
+            if (isDragging) {
+                classes.push('active');
+            }
+            return connectDragSource(connectDropTarget(<th className={classes.join(' ')} {...this.props} />));
         } else {
             return <th className={classes.join(' ')} {...this.props} />;
         }
     }
-});
+}
 
 QbHeaderCell.propTypes = {
     classes: React.PropTypes.array,
@@ -50,4 +72,17 @@ QbHeaderCell.defaultProps = {
     classes: []
 };
 
-export default QbHeaderCell;
+const dragSource = DragSource(
+    DragTypes.HEADER, headerSource, (connect, monitor) => ({
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging()
+    })
+);
+
+const dropTarget = DropTarget(
+    DragTypes.HEADER, headerTarget, connect => ({
+        connectDropTarget: connect.dropTarget()
+    })
+);
+
+export default dragSource(dropTarget(QbHeaderCell));
