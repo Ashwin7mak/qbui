@@ -29,8 +29,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateField: (field, propertyName, newValue, appId, tableId) => {
-            dispatch(updateField(field, propertyName, newValue, appId, tableId));
+        updateField: (field, appId, tableId, propertyName, newValue) => {
+            dispatch(updateField(field, appId, tableId, propertyName, newValue));
         }
     };
 };
@@ -239,7 +239,7 @@ export class FieldProperties extends Component {
     updateFieldProps = (newValue, propertyName) => {
         let field = this.props.selectedField;
 
-        this.props.updateField(field, propertyName, newValue, this.props.appId, this.props.tableId);
+        this.props.updateField(field, this.props.appId, this.props.tableId, propertyName, newValue);
     }
 
     /**
