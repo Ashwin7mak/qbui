@@ -25,6 +25,17 @@
         iconActionsLeftButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-left');}},
         iconActionsCloseDrawerButtonEl: {get: function() {return this.slideyRightyEl.element('.iconActionButton.closeDrawer');}},
 
+
+        addChildButtonClass: {
+            get: function () {
+                return '.addChildBtn';
+            }
+        },
+        addChildButtonDisabledClass: {
+            get: function () {
+                return '.addChildBtn.disabled';
+            }
+        },
         // Page Object functions
         /**
          * Returns form section containing the child table for a relationship
@@ -83,8 +94,8 @@
          */
         clickAddChildButton: {
             value: function() {
-                browser.waitForVisible('.addChildBtn');
-                browser.element('.addChildBtn').click();
+                browser.waitForVisible(this.addChildButtonClass);
+                browser.element(this.addChildButtonClass).click();
                 browser.waitForVisible('.recordTrowser');
             }
         },

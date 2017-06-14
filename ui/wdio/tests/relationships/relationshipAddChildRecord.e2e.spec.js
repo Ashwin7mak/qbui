@@ -71,6 +71,30 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
             childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
             childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
             childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
+
+            //*********************
+            // Modify GrandChild table A's first three records to relate it to Child Table A's 1 record
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE5].id, 1);
+
+            // Edit the Numeric Field of the first record
+            reportInLineEditPO.openRecordEditMenu(0);
+            reportInLineEditPO.editNumericField(0, 1);
+            reportInLineEditPO.clickSaveChangesButton();
+
+            // Edit the Numeric Field of the second record
+            reportInLineEditPO.openRecordEditMenu(1);
+            reportInLineEditPO.editNumericField(0, 1);
+            reportInLineEditPO.clickSaveChangesButton();
+
+            // Edit the Numeric Field of the second record
+            reportInLineEditPO.openRecordEditMenu(2);
+            reportInLineEditPO.editNumericField(0, 1);
+            reportInLineEditPO.clickSaveChangesButton();
+
+            // Get values for text field of each record
+            childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
+            childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
+            childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
         });
 
         /**
@@ -111,6 +135,20 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
             relationshipsPO.addChildRecord(origRecordCount, 3);
             // Verify the records count remained same
             expect(formsPagePO.getRecordsCountInATable()).toBe(origRecordCount);
+
+        });
+
+        /**
+         *  Add child button disabled when adding a parent
+         */
+        it('Add child button disabled when adding a parent', () => {
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
+            const origRecordCount = formsPagePO.getRecordsCountInATable();
+            relationshipsPO.clickAddChildButton();
+            // Verify - when the trowser is opened for adding a child, you cannot add a child to this currently being added parent
+            // so if it has a relationship with a child , the add child record button is expected to be disable
+            browser.waitForVisible(relationshipsPO.addChildButtonDisabledClass);
 
         });
     }
