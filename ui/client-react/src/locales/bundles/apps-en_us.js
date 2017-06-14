@@ -721,7 +721,7 @@ export default {
             featureNameEmpty: "Feature names must not be blank"
         },
         appCreation: {
-            newApp: 'New App'
+            newApp: 'New app'
         },
         tableCreation: {
             newTablePageTitle: "New Table",
