@@ -600,8 +600,7 @@ module.exports = function(grunt) {
                     './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js'
                 ],
                 suites: {
-                    // Please
-                    // alphabetize these by folder level
+                    // Please alphabetize these by folder level
                     automations: [],
                     forms: [
                         './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
