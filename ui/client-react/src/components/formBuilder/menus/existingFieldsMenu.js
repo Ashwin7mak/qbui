@@ -38,12 +38,11 @@ export class ExistingFieldsMenu extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [];
     return {
         existingFields: getExistingFields(state, currentFormId, ownProps.appId, ownProps.tblId),
-        numberOfFieldsOnForm: (_.has(currentForm, "formData.formMeta.numberOfFieldsOnForm") ? currentForm.formData.formMeta.numberOfFieldsOnForm : 1),
+        numberOfFieldsOnForm: (_.get(currentForm, "formData.formMeta.numberOfFieldsOnForm") || 1)
     };
 };
 
