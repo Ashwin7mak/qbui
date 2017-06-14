@@ -210,6 +210,7 @@ export const ReportRoute = React.createClass({
                     {this.getHeader()}
 
                     <ReportToolsAndContent
+                        className="reportToolsAndContentContainer"
                         params={this.props.match.params}
                         reportData={reportData}
                         appUsers={this.props.appUsers}

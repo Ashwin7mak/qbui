@@ -54,11 +54,11 @@ describe('ReportRoute', () => {
         }
     });
 
-    const ReportToolsAndContentMock = React.createClass({
+    class ReportToolsAndContentMock extends React.Component {
         render() {
-            return <div className="report-mock" />;
+            return <div />;
         }
-    });
+    }
 
     class mockReportFieldSelectMenu extends React.Component {
         render() {
@@ -220,6 +220,33 @@ describe('ReportRoute', () => {
                         pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadDynamicReport).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('handleDrillIntoChild as a prop to ReportToolsAndContent', () => {
+        it ('is undefined when uniqueId does not exist', () => {
+            component = shallow(
+                    <UnconnectedReportRoute
+                        {...props}
+                        match={routeParams}
+                        reportData={reportDataParams.reportData}
+                        pendEdits={pendEdits}
+                    />);
+            expect(component.find('.reportToolsAndContentContainer'))
+                .toHaveProp('handleDrillIntoChild', undefined);
+        });
+
+        it ('is handleDrillIntoChild function when uniqueId does exist', () => {
+            component = shallow(
+                    <UnconnectedReportRoute
+                        {...props}
+                        uniqueId={1}
+                        match={routeParams}
+                        reportData={reportDataParams.reportData}
+                        pendEdits={pendEdits}/>);
+            let instance = component.instance();
+            expect(component.find('.reportToolsAndContentContainer'))
+                .toHaveProp('handleDrillIntoChild', instance.handleDrillIntoChild);
         });
     });
 });
