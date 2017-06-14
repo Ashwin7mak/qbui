@@ -185,34 +185,14 @@
 
         /**
          * Modify child records to link to one of the parent records
+         * @param app
+         * @param table
          */
-        modifyChildTableToRelateTpParent: {
-            value: function (realmName, app, table) {
-
-                // Modify child records to link to one of the parent records
-                // More efficient to do this via API but I wanted to exercise the UI in these tests
-                // Go to List All report
-                e2ePageBase.loadReportByIdInBrowser(realmName, app.id, table.id, 1);
-
-                // Edit the Numeric Field of the first record
-                reportInLineEditPO.openRecordEditMenu(0);
-                reportInLineEditPO.editNumericField(0, 1);
-                reportInLineEditPO.clickSaveChangesButton();
-
-                // Edit the Numeric Field of the second record
-                reportInLineEditPO.openRecordEditMenu(1);
-                reportInLineEditPO.editNumericField(0, 1);
-                reportInLineEditPO.clickSaveChangesButton();
-
-                // Edit the Numeric Field of the second record
-                reportInLineEditPO.openRecordEditMenu(2);
-                reportInLineEditPO.editNumericField(0, 1);
-                reportInLineEditPO.clickSaveChangesButton();
-
-                // Get values for text field of each record
-                childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
-                childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
-                childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
+        modifyChildTableToRelateToParent: {
+            value: function (app, table) {
+                const fieldToEdit = table.fields[6];
+                const editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
+                return e2eBase.recordService.editRecords(app.id, table.id, editRecords);
             }
         }
     });

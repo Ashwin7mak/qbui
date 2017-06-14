@@ -33,23 +33,18 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
             }).then(() => {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
+            }).then(() => {
+                // Modify Child table A's first three records to relate it to Parent Table A's 1 record
+                relationshipsPO.modifyChildTableToRelateToParent(testApp, testApp.tables[e2eConsts.TABLE4]);
+            }).then(() => {
+                // Modify GrandChild table A's first three records to relate it to Child Table A's 1 record
+                relationshipsPO.modifyChildTableToRelateToParent(testApp, testApp.tables[e2eConsts.TABLE5]);
             }).catch((error) => {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
-        });
-
-        /**
-         * Setup method. Edits child records in the UI to relate them to a parent record
-         */
-        beforeAll(() => {
-            // Modify Child table A's first three records to relate it to Parent Table A's 1 record
-            relationshipsPO.modifyChildTableToRelateTpParent(realmName, testApp, testApp.tables[e2eConsts.TABLE4]);
-
-            // Modify GrandChild table A's first three records to relate it to Child Table A's 1 record
-            relationshipsPO.modifyChildTableToRelateTpParent(realmName, testApp, testApp.tables[e2eConsts.TABLE5]);
         });
 
         /**
