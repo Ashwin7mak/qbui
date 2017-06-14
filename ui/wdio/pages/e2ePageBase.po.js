@@ -56,11 +56,6 @@
         //TODO Need to implement, use waitUntil method
     };
 
-    PageBase.prototype.getUserAuthentication = function(realmName, realmId, userId) {
-        //get the user authentication
-        return this.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-    };
-
     /**
      * Helper method that will load an apps page for you in your browser by directly hitting a generated URL
      * @param realmName

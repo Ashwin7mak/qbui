@@ -241,19 +241,14 @@
         });
 
         it('Verify that only ADMIN can edit a new table', function() {
-            //get user authentication
-            e2ePageBase.getUserAuthentication(realmName, realmId, userId);
-
-            // Load the app in the realm
-            e2ePageBase.loadAppsInBrowser(realmName);
+            //get user authentication and go to apps page
+            newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
 
             //Select app
             RequestAppsPage.selectApp(testApp.name);
 
-            //Select table to delete ('Table 1' here) and make sure it lands in reports page
+            //Select table Table 1
             tableCreatePO.selectTable('Table 1');
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
 
             //Verify settings icon not available for user other than ADMIN
             expect(browser.isExisting('.topNav .iconUISturdy-settings')).toBe(false);
