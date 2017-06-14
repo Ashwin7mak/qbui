@@ -2,7 +2,6 @@ import {__RewireAPI__ as FieldsActionsRewireAPI} from '../../src/actions/fieldsA
 import * as fieldActions from '../../src/actions/fieldsActions';
 import * as types from '../../src/actions/types';
 import Promise from 'bluebird';
-
 import mockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 const middlewares = [thunk];
@@ -166,14 +165,16 @@ describe('Field Actions success workflow', () => {
         const expectedActions = [
             {type: types.UPDATE_FIELD_ID, oldFieldId: fieldWithRelationship.id, newFieldId, formId, appId, tblId}
         ];
+        let mockUpdateParent = () => {
+            return Promise.resolve();
+        };
+        FieldsActionsRewireAPI.__Rewire__('updateParentFormForRelationship', mockUpdateParent);
         const store = mockReportsStore({});
         return store.dispatch(fieldActions.saveNewField(appId, tblId, fieldWithRelationship, formId)).then(
             () => {
                 expect(mockFieldService.prototype.createField).toHaveBeenCalled();
                 expect(store.getActions()).toEqual(expectedActions);
                 expect(mockAppService.prototype.createRelationship).toHaveBeenCalled();
-                expect(mockFormService.prototype.getForm).toHaveBeenCalled();
-                expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
 
                 done();
             },
@@ -182,7 +183,6 @@ describe('Field Actions success workflow', () => {
                 done();
             });
     });
-
 
     it('verify updateFieldProperties action', (done) => {
         const expectedActions = [];
