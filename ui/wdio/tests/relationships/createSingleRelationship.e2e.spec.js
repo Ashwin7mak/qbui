@@ -13,7 +13,7 @@
     const PARENT_TABLE = 'Table 1';
     const SELECT_RECORD_ID_AS_FIELD = 'Record ID#';
     let parentTableRecordValues = [];
-    const recordId = 2;
+    const recordId = '2';
     const GET_ANOTHER_RECORD = 'Get another record';
 
     describe('Relationships - Create single relationship Tests :', function() {
@@ -75,18 +75,17 @@
             //Select record from parent picker
             //click on the edit pencil on the child record
             formsPO.clickRecordEditPencilInViewForm();
-            ////TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
-            //formsPO.setFormInputValue(formsPO.getAllPhoneInputFields, '978-223-2112');
+
+            //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
+            formsPO.enterFormValues('allPhoneFields');
             //Select record Id 2 from parent picker
             relationshipsPO.selectFromParentPicker(recordId);
+
             //Click Save on the form
             formsPO.clickFormSaveBtn();
+
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
-
-
-            //TODO because of MC-1912 we need to reload page here to verify the results
-            browser.refresh();
             //verify You land in view form since you edited a record from View form after saving
             formsPO.waitForViewFormsTableLoad();
 

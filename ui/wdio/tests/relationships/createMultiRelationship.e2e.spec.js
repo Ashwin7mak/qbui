@@ -148,16 +148,14 @@
             //Select record from parent picker
             //click on the edit pencil on the child record
             formsPO.clickRecordEditPencilInViewForm();
+
             //Select titleField value from parent picker
             relationshipsPO.selectFromParentPicker(parentPickerTitleFieldValue);
+
             //Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
-
-
-            //TODO because of MC-1912 we need to reload page here to verify the results
-            browser.refresh();
             //verify You land in view form since you edited a record from View form after saving
             formsPO.waitForViewFormsTableLoad();
 
