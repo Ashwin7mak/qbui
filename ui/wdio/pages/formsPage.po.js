@@ -326,15 +326,17 @@
          */
         selectFromList : {value: function(listOption) {
             browser.waitForVisible('.Select-menu-outer');
+            //Need this to stabilize
+            browser.pause(e2eConsts.shortWaitTimeMs);
             //get all options from the list
-            browser.waitForVisible('.Select-option');
-            var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.element('div div').getText().includes(listOption);
+            let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
+                return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
             if (option !== []) {
                 //Click on filtered option
-                option[0].element('div div').click();
+                option[0].waitForVisible();
+                option[0].click();
                 //wait until loading screen disappear
                 return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
             } else {
@@ -372,12 +374,12 @@
          */
         enterFormValues: {
             value: function(fieldType, parentValue) {
-            //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
+                //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
                 var i;
                 if (!parentValue) {
                     parentValue = 1;
                 }
-            //get all input fields in the form
+                //get all input fields in the form
                 if (fieldType === 'allTextFields') {
                     this.setFormInputValue(this.getAllTextFields(), sText);
                 } else if (fieldType === 'allEmailFields') {
@@ -393,7 +395,7 @@
                 } else if (fieldType === 'allTimeFields') {
                     this.setDropDownValue(this.getAllTimeInputFields(), sTime);
                 } else if (fieldType === 'allDateFields') {
-                //get all date field input validators
+                    //get all date field input validators
                     var dateFields = this.getAllDateInputFields();
                     for (i = 0; i < dateFields.value.length; i++) {
                         if (browserName === 'safari') {
@@ -403,10 +405,10 @@
                         }
                     }
                 } else if (fieldType === 'allCheckboxFields') {
-                //get all checkbox fields on form
+                    //get all checkbox fields on form
                     var checkboxFields = this.getAllCheckboxFields();
                     for (i = 0; i < checkboxFields.value.length; i++) {
-                    //if checkbox not selected then check it.
+                        //if checkbox not selected then check it.
                         if (checkboxFields.value[i].element('input').isSelected() === false) {
                             checkboxFields.value[i].element('label').click();
                         }

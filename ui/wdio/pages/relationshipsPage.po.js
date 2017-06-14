@@ -10,8 +10,12 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
     let formsPagePO = requirePO('formsPage');
+    let formBuilderPO = requirePO('formBuilder');
+    let modalDialog = requirePO('/common/modalDialog');
+    let notificationContainer = requirePO('/common/notificationContainer');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
+    const GET_ANOTHER_RECORD = 'Get another record';
 
     var relationshipsPage = Object.create(e2ePageBase, {
         // Element locators
@@ -168,8 +172,62 @@
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
             this.tableHomePageLinkEl.click();
-        }}
-    });
+        }},
 
+        /**
+         * Method to create relationship using add another record button via form builder
+         */
+        createRelationshipToParentTable: {value: function(parentTable, selectField) {
+
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Click on add a new record button
+            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+
+            //Select table from table list of add a record dialog
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
+
+            //Select Field form field dropdown
+            if (selectField !== '') {
+                //Click on advanced settings of add a record dialog
+                modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                //Select field to link to parent table (This will be either titleField or recordId)
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+            }
+
+            //Click Add To form button
+            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+
+            //Verify the get another record got added to the form builder
+            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + parentTable);
+
+            //Save the form builder
+            formBuilderPO.save();
+            //wait until save success container goes away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
+            //verify You land in view form
+            formsPO.waitForViewFormsTableLoad();
+        }},
+
+        /**
+         * Method to select a record via parent picker
+         */
+        selectFromParentPicker: {
+            value: function(parentRecord) {
+                let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
+                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
+                });
+
+                if (fields !== []) {
+                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').waitForVisible();
+                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').click();
+                    return formsPO.selectFromList(parentRecord);
+                }
+
+            }},
+
+    });
     module.exports = relationshipsPage;
 }());
