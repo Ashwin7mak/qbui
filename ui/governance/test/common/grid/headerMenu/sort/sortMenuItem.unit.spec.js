@@ -9,6 +9,7 @@ import Locale from "../../../../../../reuse/client/src/locales/locale";
 describe('SortMenuItem', () => {
 
     let component;
+    let inst;
 
     beforeEach(() => {
         jasmineEnzyme();
@@ -75,7 +76,7 @@ describe('SortMenuItem', () => {
             expect(component.find(".sortDescendMenuText")).not.toBePresent();
         });
     });
-    
+
     it("checks all sorting messages for descending sorts ", () => {
         let loc;
         let fConsts = {
@@ -115,5 +116,59 @@ describe('SortMenuItem', () => {
             expect(component.find(".sortDescendMenuText")).toIncludeText(loc);
             expect(component.find('.sortAscendMenuText')).not.toBePresent();
         });
+    });
+
+    it("checks if the isSortedAsc returns false when no sortFids prop is given", () => {
+        component = shallow(<SortMenuItem />);
+        inst = component.instance();
+        expect(inst.isSortedAsc()).toBeFalsy();
+    });
+
+    it("checks if the isSortedAsc returns false when the sortFids is 0", () => {
+        component = shallow(<SortMenuItem sortFids={[0]} fieldDef={{id: 10}} />);
+        inst = component.instance();
+        expect(inst.isSortedAsc()).toBeFalsy();
+    });
+
+    it("checks if the isSortedAsc returns true when no sortFids prop is not 0 (positive) and matches fieldDef.id", () => {
+        component = shallow(<SortMenuItem sortFids={[3]} fieldDef={{id: 3}} />);
+        inst = component.instance();
+        expect(inst.isSortedAsc()).toBeTruthy();
+    });
+
+    it("checks if the isSortedAsc returns true when no sortFids prop is not 0 (positive) and contains fieldDef.id", () => {
+        component = shallow(<SortMenuItem sortFids={[9, 21, 3, 99]} fieldDef={{id: 3}} />);
+        inst = component.instance();
+        expect(inst.isSortedAsc()).toBeTruthy();
+    });
+
+    it("checks if the isSortedAsc returns false when sortFids is negative since it can't match a positive fieldDef.id", () => {
+        component = shallow(<SortMenuItem sortFids={[-3]} fieldDef={{id: 3}} />);
+        inst = component.instance();
+        expect(inst.isSortedAsc()).toBeFalsy();
+    });
+
+    it("checks if the isColumnSorted returns false when no sortFids are given", () => {
+        component = shallow(<SortMenuItem />);
+        inst = component.instance();
+        expect(inst.isColumnSorted()).toBeFalsy();
+    });
+
+    it("checks if the isColumnSorted returns false when the the sortedFids don't match the fieldDef.id", () => {
+        component = shallow(<SortMenuItem sortFids={[21]} fieldDef={{id: 2}}/>);
+        inst = component.instance();
+        expect(inst.isColumnSorted()).toBeFalsy();
+    });
+
+    it("checks if the isColumnSorted returns true when the the sortedFids match the fieldDef.id", () => {
+        component = shallow(<SortMenuItem sortFids={[2]} fieldDef={{id: 2}}/>);
+        inst = component.instance();
+        expect(inst.isColumnSorted()).toBeTruthy();
+    });
+
+    it("checks if the isColumnSorted returns true when the the sortedFids contain the fieldDef.id", () => {
+        component = shallow(<SortMenuItem sortFids={[9, 3, 2, 20]} fieldDef={{id: 2}}/>);
+        inst = component.instance();
+        expect(inst.isColumnSorted()).toBeTruthy();
     });
 });
