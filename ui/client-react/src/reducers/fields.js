@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 import Logger from '../utils/logger';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
+import {NEW_FIELD_PREFIX} from '../constants/schema';
 
 //  Return the table fields object for the given appId and tableId
 export const tableFieldsObj = (state, appId, tblId) => {
@@ -189,11 +190,15 @@ const fieldsStore = (state = [], action) => {
         return newState;
     }
     case types.REMOVE_FIELD : {
-        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
-        fieldList = _.cloneDeep(fieldList);
-        fieldList.fields = _.filter(fieldList.fields, field => field.id !== action.field.id);
-        newState.push(fieldList);
-        return newState;
+        // remove a field from the list only if this is not a saved field on the table schema
+        if (action.field && action.field.id && action.field.id.toString().indexOf(NEW_FIELD_PREFIX) !== -1) {
+            let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+            fieldList = _.cloneDeep(fieldList);
+            fieldList.fields = _.filter(fieldList.fields, field => field.id !== action.field.id);
+            newState.push(fieldList);
+            return newState;
+        }
+        return state;
     }
     default:
         return state;
