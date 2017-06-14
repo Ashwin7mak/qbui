@@ -167,8 +167,6 @@ let TablesList = React.createClass({
                 <ul className="tablesList">
                     {this.tablesList()}
                 </ul>
-
-
             </div>
         );
     }
