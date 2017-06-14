@@ -553,7 +553,6 @@ export const getExistingFields = (state, id, appId, tblId) => {
                 type: fieldFormats.getFormatType(field),
                 relatedField: field,
                 title: field.name,
-                tooltipText: Locale.getMessage('builder.existingFieldsToolTip', {fieldName: field.name})
             }
         ];
     }, []);

@@ -135,9 +135,9 @@ class ListOfElements extends Component {
                 return this.renderElements([element]);
             });
         } else {
-            return (<div>
+            return (<p className="emptySearchResult">
                 {this.props.emptyMessage}
-            </div>);
+            </p>);
         }
     };
 

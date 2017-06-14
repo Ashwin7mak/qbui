@@ -100,7 +100,6 @@ describe('ListOfElements', () => {
             expect(component.find('.emptySearchResult')).not.toBePresent();
         });
 
-
         it('will animate children if animateChildren is set to true', () => {
             component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock} elements={testElements} />);
 
