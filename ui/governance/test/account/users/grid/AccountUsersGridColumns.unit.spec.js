@@ -7,9 +7,9 @@ import QbCell from "../../../../../client-react/src/components/dataTable/qbGrid/
 import configureMockStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import StandardGrid from "../../../../src/common/grid/standardGrid";
-import * as Actions from "../../../../src/account/users/AccountUsersActions";
+import * as AccountUsersActions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
-import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
+import {GetAccountUsersFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
 import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
 import Locale from "../../../../../reuse/client/src/locales/locale";
 
@@ -28,12 +28,12 @@ describe('AccountUsersGridColumns', () => {
     const GRID_ID = 'accountUsers';
     const baseProps = () => ({
         columns : GetAccountUsersGridColumns(true, true),
-        getFacetFields : GetFacetFields(true, true),
+        GetAccountUsersFacetFields : GetAccountUsersFacetFields(true, true),
         rowKey: 'uid',
         id: GRID_ID,
         columnTransformProps :[],
         columnTransformsClasses :[],
-        doUpdate: Actions.doUpdate
+        doUpdate: AccountUsersActions.doUpdateUsers
     });
 
     describe("Permissions", () => {
