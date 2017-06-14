@@ -66,7 +66,6 @@ describe('FieldProperties', () => {
                                                selectedField={multiChoiceField} formElement={formElementMultiChoice}/>);
 
             expect(component).toBePresent();
-            instance = component.instance();
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
             expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
@@ -89,7 +88,6 @@ describe('FieldProperties', () => {
                                                selectedField={linkToRecordField} formElement={formElementLinkToRecord}/>);
 
             expect(component).toBePresent();
-            instance = component.instance();
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
             expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
@@ -112,7 +110,6 @@ describe('FieldProperties', () => {
                                                selectedField={fieldType} />);
 
             expect(component).toBePresent();
-            instance = component.instance();
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
             expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
