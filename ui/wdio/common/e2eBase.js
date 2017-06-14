@@ -164,7 +164,12 @@
                 }).then(function() {
                     // Create a relationship between the 3rd and 4th tables (Child Table's Numeric Field relates to Parent Table's Record ID)
                     if (createdApp.tables[2] && createdApp.tables[3]) {
-                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7);
+                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7).then(function (resp) {
+                            // Create a relationship between the 4th and 5th tables (Grand Child Table's Numeric Field relates to Child Table's Record ID)
+                            if (createdApp.tables[3] && createdApp.tables[4]) {
+                                return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[3], createdApp.tables[4], 7);
+                            }
+                        });
                     }
                 }).then(function() {
                     return e2eBase.relationshipService.retrieveSavedRelationships(createdApp);

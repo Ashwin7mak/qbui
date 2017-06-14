@@ -10,9 +10,10 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
     let formsPagePO = requirePO('formsPage');
+    let reportInLineEditPO = requirePO('reportInLineEdit');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
-
+    let childRecordsTextValues = [];
     var relationshipsPage = Object.create(e2ePageBase, {
         // Element locators
 
@@ -25,6 +26,17 @@
         iconActionsLeftButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-left');}},
         iconActionsCloseDrawerButtonEl: {get: function() {return this.slideyRightyEl.element('.iconActionButton.closeDrawer');}},
 
+
+        addChildButtonClass: {
+            get: function () {
+                return '.addChildBtn';
+            }
+        },
+        addChildButtonDisabledClass: {
+            get: function () {
+                return '.addChildBtn.disabled';
+            }
+        },
         // Page Object functions
         /**
          * Returns form section containing the child table for a relationship
@@ -83,8 +95,8 @@
          */
         clickAddChildButton: {
             value: function() {
-                browser.waitForVisible('.addChildBtn');
-                browser.element('.addChildBtn').click();
+                browser.waitForVisible(this.addChildButtonClass);
+                browser.element(this.addChildButtonClass).click();
                 browser.waitForVisible('.recordTrowser');
             }
         },
@@ -168,7 +180,41 @@
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
             this.tableHomePageLinkEl.click();
-        }}
+        }
+        },
+
+        /**
+         * Modify child records to link to one of the parent records
+         */
+        modifyChildTableToRelateTpParent: {
+            value: function (realmName, app, table) {
+
+                // Modify child records to link to one of the parent records
+                // More efficient to do this via API but I wanted to exercise the UI in these tests
+                // Go to List All report
+                e2ePageBase.loadReportByIdInBrowser(realmName, app.id, table.id, 1);
+
+                // Edit the Numeric Field of the first record
+                reportInLineEditPO.openRecordEditMenu(0);
+                reportInLineEditPO.editNumericField(0, 1);
+                reportInLineEditPO.clickSaveChangesButton();
+
+                // Edit the Numeric Field of the second record
+                reportInLineEditPO.openRecordEditMenu(1);
+                reportInLineEditPO.editNumericField(0, 1);
+                reportInLineEditPO.clickSaveChangesButton();
+
+                // Edit the Numeric Field of the second record
+                reportInLineEditPO.openRecordEditMenu(2);
+                reportInLineEditPO.editNumericField(0, 1);
+                reportInLineEditPO.clickSaveChangesButton();
+
+                // Get values for text field of each record
+                childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
+                childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
+                childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
+            }
+        }
     });
 
     module.exports = relationshipsPage;
