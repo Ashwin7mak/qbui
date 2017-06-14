@@ -32,7 +32,6 @@ export class ExistingFieldsMenu extends Component {
                 isFilterable={true}
                 hideTitle={true}
                 emptyMessage={this.noExistingFields()}
-                app={this.props.app}
             />
         );
     }
