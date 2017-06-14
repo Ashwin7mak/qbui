@@ -132,7 +132,7 @@ class ListOfElements extends Component {
                         </li>
                     );
                 }
-                //return this.renderElements([element]);
+                return this.renderElements([element]);
             });
         } else {
             return (<div>
