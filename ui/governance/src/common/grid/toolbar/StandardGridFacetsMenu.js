@@ -238,7 +238,4 @@ const mapDispatchToProps = {
     setFacetsMoreRevealed
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(StandardGridFacetsMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(StandardGridFacetsMenu);
