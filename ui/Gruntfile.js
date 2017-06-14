@@ -576,56 +576,60 @@ module.exports = function(grunt) {
         webdriver: {
             options: {
                 exclude: [
-                    // Forms Tests
-                    // Stabilize in CI before enabling
                     //TODO MC-2105 needs to be fixed to enable permissions on forms
                     // disabling formPermissions tests as after moving to ExperienceEngine,
                     // permissions for viewer and participant are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
 
-                    // Reports Tests
                     //TODO: MB-2115 this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
                     // reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
                     // because the save and add button is disabled we turned off the reportAddRecord test
                     // we will turn it back on once this button has been enabled again
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
+
                     // Stabilize in CI before enabling
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
-                    //failing in CI
-                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+
                     // Removed due to configuration issue
-                    './wdio/tests/automations/settingsMenu.e2e.spec.js',
                     './wdio/tests/automations/automationsList.e2e.spec.js',
-                    //failing in CI
-                    './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js'
+                    './wdio/tests/automations/settingsMenu.e2e.spec.js',
+
+                    // Failing in CI
+                    './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js',
+                    './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js'
                 ],
                 suites: {
-                    // Please alphabetize these by folder level
+                    // Please
+                    // alphabetize these by folder level
+                    automations: [],
                     forms: [
-                        './wdio/tests/forms/formAdd.e2e.spec.js',
-                        './wdio/tests/forms/formAddValidation.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
+                        './wdio/tests/forms/formAdd.e2e.spec.js',
+                        './wdio/tests/forms/formAddValidation.e2e.spec.js',
                         './wdio/tests/forms/formEdit.e2e.spec.js',
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
+                    global: [
+                        './wdio/tests/global/globalLeftNav.e2e.spec.js',
+                        './wdio/tests/global/globalTopNav.e2e.spec.js'
+                    ],
                     relationships: [
-                        './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js',
                         './wdio/tests/relationships/createRelationship.e2e.spec.js',
                         './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
                     ],
                     reports: [
-                        './wdio/tests/reports/reportBuilder.e2e.spec.js',
-                        './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
-                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
-                        './wdio/tests/reports/reportTable.e2e.spec.js',
-                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/reportBuilder.e2e.spec.js',
+                        './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        './wdio/tests/reports/reportTable.e2e.spec.js'
                     ],
                     tables: [
                         './wdio/tests/tables/tableCreate.e2e.spec.js',
@@ -636,16 +640,8 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     users: [
-                        './wdio/tests/users/usersTable.e2e.spec.js',
-                        './wdio/tests/users/usersRemove.e2e.spec.js'
-                    ],
-                    global: [
-                        './wdio/tests/global/globalTopNav.e2e.spec.js',
-                        './wdio/tests/global/globalLeftNav.e2e.spec.js'
-                    ],
-                    automations: [
-                        // './wdio/tests/automations/settingsMenu.e2e.spec.js',
-                        // './wdio/tests/automations/automationsList.e2e.spec.js'
+                        './wdio/tests/users/usersRemove.e2e.spec.js',
+                        './wdio/tests/users/usersTable.e2e.spec.js'
                     ]
                 }
             },

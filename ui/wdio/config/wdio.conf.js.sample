@@ -54,38 +54,39 @@ exports.config = {
     suites: {
         // Please alphabetize these by folder level
         automations: [
-            baseTestDir + '/automations/settingsMenu.e2e.spec.js',
-            baseTestDir + '/automations/automationsList.e2e.spec.js'
+            baseTestDir + '/automations/automationsList.e2e.spec.js',
+            baseTestDir + '/automations/settingsMenu.e2e.spec.js'
         ],
         forms: [
-            baseTestDir + '/forms/formAdd.e2e.spec.js',
-            baseTestDir + '/forms/formAddValidation.e2e.spec.js',
             baseTestDir + '/forms/formBuilder/non-pairs.e2e.spec.js',
             baseTestDir + '/forms/formBuilder/pairs-keyboard.e2e.spec.js',
             baseTestDir + '/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
+            baseTestDir + '/forms/formAdd.e2e.spec.js',
+            baseTestDir + '/forms/formAddValidation.e2e.spec.js',
             baseTestDir + '/forms/formEdit.e2e.spec.js',
             baseTestDir + '/forms/formEditValidation.e2e.spec.js'
         ],
         global: [
-            baseTestDir + '/global/globalTopNav.e2e.spec.js',
-            baseTestDir + '/global/globalLeftNav.e2e.spec.js'
+            baseTestDir + '/global/globalLeftNav.e2e.spec.js',
+            baseTestDir + '/global/globalTopNav.e2e.spec.js'
         ],
         relationships: [
             baseTestDir + '/relationships/createRelationship.e2e.spec.js',
             baseTestDir + '/relationships/createRelationshipNegativeTests.e2e.spec.js',
+            baseTestDir + '/relationships/relationshipAddChildRecord.e2e.spec.js',
             baseTestDir + '/relationships/relationshipNavToChild.e2e.spec.js'
         ],
         reports: [
+            baseTestDir + '/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseTestDir + '/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+            baseTestDir + '/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+            baseTestDir + '/reports/sorting/reportSortingViaContainer.e2e.spec.js',
             baseTestDir + '/reports/reportBuilder.e2e.spec.js',
             baseTestDir + '/reports/reportDeleteRecord.e2e.spec.js',
             baseTestDir + '/reports/reportEditRecord.e2e.spec.js',
             baseTestDir + '/reports/reportNavigation.e2e.spec.js',
             baseTestDir + '/reports/reportSearch.e2e.spec.js',
-            baseTestDir + '/reports/reportTable.e2e.spec.js',
-            baseTestDir + '/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-            baseTestDir + '/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-            baseTestDir + '/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-            baseTestDir + '/reports/sorting/reportSortingViaContainer.e2e.spec.js'
+            baseTestDir + '/reports/reportTable.e2e.spec.js'
         ],
         tables: [
             baseTestDir + '/tables/tableCreate.e2e.spec.js',
@@ -96,10 +97,9 @@ exports.config = {
             baseTestDir + '/tables/tableHomePage.e2e.spec.js'
         ],
         users: [
-            baseTestDir + '/users/usersTable.e2e.spec.js',
-            baseTestDir + '/users/usersRemove.e2e.spec.js'
-        ],
-
+            baseTestDir + '/users/usersRemove.e2e.spec.js',
+            baseTestDir + '/users/usersTable.e2e.spec.js'
+        ]
     },
     //
     // ============
