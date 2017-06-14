@@ -4,7 +4,7 @@ import jasmineEnzyme from "jasmine-enzyme";
 import AccountUsersGrid from "GOVERNANCE/account/users/grid/AccountUsersGrid";
 import {GetAccountUsersGridColumns} from "GOVERNANCE/account/users/grid/AccountUsersGridColumns";
 import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
-import * as Actions from "GOVERNANCE/account/users/AccountUsersActions";
+import * as AccountUsersActions from "GOVERNANCE/account/users/AccountUsersActions";
 
 describe('AccountUsersGrid', () => {
     beforeEach(() => {
@@ -26,7 +26,7 @@ describe('AccountUsersGrid', () => {
             let standardGrid = component.find(StandardGrid);
             expect(standardGrid.props().id).toEqual("accountUsers");
             expect(standardGrid.props().rowKey).toEqual("uid");
-            expect(standardGrid.props().doUpdate).toEqual(Actions.doUpdate);
+            expect(standardGrid.props().doUpdate).toEqual(AccountUsersActions.doUpdateUsers);
             expect(standardGrid.props().columns).toEqual(GetAccountUsersGridColumns(baseProps.showAccountColumns, baseProps.showRealmColumns));
         });
     });

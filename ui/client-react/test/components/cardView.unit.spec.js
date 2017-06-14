@@ -54,8 +54,6 @@ const fakeReportData_valid = {
     }
 };
 
-let flux = {};
-
 describe('Report Mobile View functions', () => {
     'use strict';
 

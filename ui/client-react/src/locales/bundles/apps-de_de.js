@@ -43,17 +43,19 @@ export default {
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
-                unassignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
+                unAssignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
                 deleteUser: "Entfernen {Wert} Benutzer",
                 deleteUsers: "Entfernen {Wert} Benutzer",
                 removeButton: "Entfernen",
                 cancel: "Stornieren",
-                singular: "Benutzer",
                 plural: "Benutzer",
-                usersRemoved: " Benutzer wurden entfernt",
-                userRemoved: " Benutzer wurde entfernt",
-                userAdded: "Sie hinzugefügt"
-
+                usersRemovedFromAppRole: "{numOfUsers} Benutzer aus der App-Rolle entfernt",
+                userRemovedFromAppRole: "Benutzer aus der App-Rolle entfernt",
+                userAdded: "Benutzer hinzugefügt",
+                userAddError: "Fehler beim Hinzufügen von Benutzer",
+                userRemovingError: "Fehler beim Entfernen des Benutzers",
+                emailBody: "Email Körper geht hier",
+                emailSubject: "E-Mail-Thema geht hier"
             }
         },
         appMenu: {
@@ -196,7 +198,8 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen"
+                feedbackTooltip: "Teilen Sie Ideen und Fragen",
+                helpTooltip: "Hilfe",
             }
 
         },
@@ -605,7 +608,7 @@ export default {
             name: "Name",
             required: "Muss ausgefüllt werden",
             multiChoice: "Wahlen",
-            unique: "Muss einmalige Werte haben",
+            unique: "Muss einzigartig sein",
             linkToRecord: "Link zu einem Datensatz in der Tabelle",
             connectedTo: "Auf {fieldName}-Feld verbunden"
         },
@@ -652,6 +655,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
+            existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",

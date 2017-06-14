@@ -30,7 +30,29 @@ module.exports = function(chance) {
         'Customer Care' :  {name: ['Director', 'Manager', 'Account Executive', 'Support Representative'],
             weight : [0, 0, 2, 10]},
     };
-
+    const companyCeos = {
+        "Apple": {realCeo: "Tim Cook"},
+        "Microsoft": {realCeo: "Satya Nadella"},
+        "AT&T": {realCeo: "Randall L. Stephenson"},
+        "Xerox": {realCeo: "Jeff Jacobson"},
+        "Johnson & Johnson": {realCeo: "Alex Gorsky"},
+        "J.Deere" : {realCeo: "Samuel R. Allen"},
+        "Time": {realCeo: "Joseph A Ripp"},
+        "Intuit": {realCeo: "Brad D. Smith"},
+        "Quick Base": {realCeo: "Rick Willett"},
+        "Walgreens": {realCeo: "Stefano Pessina"},
+        "Black & Decker": {realCeo: "James M. Loree"},
+        "Tesla": {realCeo: "Elon Musk"},
+        "Ford": {realCeo: "Mark Fields"},
+        "Staples": {realCeo: "Shira D. Goodman"},
+        "Boeing": {realCeo: "Dennis Muilenburg"},
+        "Intel": {realCeo: "Brian Krzanich"},
+        "Motorola": {realCeo: "Gregory Q. Brown"},
+        "FedEx": {realCeo: "Frederick W. Smith"},
+        "Cisco": {realCeo: "Chuck Robbins"},
+        "Rutoxio Energy": {realCeo: "John Doe"},
+        "Gartner": {realCeo: "Eugene A. Hall"},
+    };
     function init() {
         directors = [];
         managers = [];
@@ -124,13 +146,25 @@ module.exports = function(chance) {
         return  (!isDirector(title) && !isManager(title) && !isCEO(title));
     }
 
+    function getUniqueName(options) {
+        let answer = chance.name(options);
+        while (persons[answer] !== undefined) {
+            answer = chance.name(options);
+        }
+        return answer;
+    }
+
+    function getRealCEO(companyName) {
+        if (_.has(companyCeos, companyName + '.realCeo')) {
+            return _.get(companyCeos, companyName + '.realCeo');
+        } else {
+            return getUniqueName();
+        }
+    }
+
     chance.mixin({
         uniqueName: function(options) {
-            let answer = chance.name(options);
-            while (persons[answer] !== undefined) {
-                answer = chance.name(options);
-            }
-            return answer;
+            return getUniqueName(options);
         },
         person: function(options) {
             let fullName = options && options.fullName ? options.fullName : chance.uniqueName(options);
@@ -141,6 +175,12 @@ module.exports = function(chance) {
             let companyName = options && options.companyName ? options.companyName : '';
             let manager = options && options.manager ? options.manager : '';
 
+            if (isCEO(title)) {
+                let ceoName = getRealCEO(companyName);
+                if (ceoName) {
+                    fullName = ceoName;
+                }
+            }
 
             let newPerson = {
                 fullName,

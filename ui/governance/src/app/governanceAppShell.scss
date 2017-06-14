@@ -1,3 +1,5 @@
+@import "../../../reuse/client/src/assets/css/qbVariables";
+
 $topnav-icon-color: #ffffff;
 $topnav-header-background-color: #74489d;
 $leftnav-background-stroke-color: #ced0d0;
@@ -10,7 +12,7 @@ $topnav-hover-background-color: #40caf8;
 .standardLeftNav::after {
     content: "";
     border-left: 1px solid $leftnav-background-stroke-color;
-    height: calc(100% - 40px);
+    height: calc(100% - #{$top-nav-height});
     position: absolute;
     right: 0;
     bottom: 0;
@@ -19,6 +21,7 @@ $topnav-hover-background-color: #40caf8;
 .topNav {
     background-color: $topnav-header-background-color;
     border-bottom: none;
+    max-height: $top-nav-height;
     .top {
         .iconLink {
             font-size: 14px;

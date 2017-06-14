@@ -1,7 +1,6 @@
 import React from 'react';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
-import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import AppHomePage from './appHomePage';
 import PageTitle from '../pageTitle/pageTitle';
@@ -14,14 +13,12 @@ import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/
 import {showTopNav} from '../../actions/shellActions';
 import './appHomePage.scss';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
 
 /**
  * placeholder for app dashboard route
  */
 export const AppHomePageRoute = React.createClass({
-    mixins: [FluxMixin],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -72,8 +69,6 @@ export const AppHomePageRoute = React.createClass({
         // no title for now...
         this.props.showTopNav();
         this.selectAppFromParams(_.get(this.props, 'match.params'));
-        let flux = this.getFlux();
-        flux.actions.doneRoute();
         if (this.props.notifyTableDeleted) {
             NotificationManager.success(Locale.getMessage('tableEdit.tableDeleted', {tableName: this.props.tableJustDeleted}), Locale.getMessage('success'));
             this.props.resetTableDeleteNotification();

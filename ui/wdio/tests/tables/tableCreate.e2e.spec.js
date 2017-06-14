@@ -6,13 +6,15 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let tableCreatePO = requirePO('tableCreate');
     let formsPO = requirePO('formsPage');
-    let leftNavPO = requirePO('leftNav');
+    let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
+    let RequestAppsPage = requirePO('requestApps');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
+    const RECORD_TITLE_FIELD_NAME = '* Record title';
 
 
     describe('Tables - Create a table via builder tests: ', function() {
@@ -96,6 +98,11 @@
 
             //Click OK button on create table dialogue
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+
+            //Verify the record title field is visible for a table created via UI.
+            let fieldsOnForm = formBuilderPO.getFieldLabels();
+            //Verify 1st field on the page is 'record title'
+            expect(fieldsOnForm[0]).toBe(RECORD_TITLE_FIELD_NAME);
 
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
@@ -182,15 +189,14 @@
 
         it('Verify that only ADMIN can add a new table', function() {
 
-            browser.call(function() {
-                //get the user authentication
-                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-            });
+            //get user authentication
+            e2ePageBase.getUserAuthentication(realmName, realmId, userId);
 
-            browser.call(function() {
-                // Load the app in the realm
-                return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-            });
+            // Load the app in the realm
+            e2ePageBase.loadAppsInBrowser(realmName);
+
+            //Select app
+            RequestAppsPage.selectApp(testApp.name);
 
             //Select table to delete ('Table 1' here) and make sure it lands in reports page
             tableCreatePO.selectTable('Table 1');

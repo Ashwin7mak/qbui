@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from "react";
 import Stage from "../../../../reuse/client/src/components/stage/stage";
 import StageHeader from "../../../../reuse/client/src/components/stage/stageHeader";
 import StageHeaderCount from "../../../../reuse/client/src/components/stage/stageHeaderCounts";
-import {I18nMessage} from "../../../../reuse/client/src/utils/i18nMessage";
 import Locale from "../../../../reuse/client/src/locales/locale";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import lodash from "lodash";
@@ -12,11 +11,7 @@ import "./AccountUsersStage.scss";
 /**
  * The stage for the AccountUsers page
  */
-class AccountUsersStage extends React.Component {
-
-    constructor(...args) {
-        super(...args);
-    }
+class AccountUsersStage extends Component {
 
     /**
      * Paid users are any users that have access to the app and are not internal Quick Base users
@@ -52,9 +47,9 @@ class AccountUsersStage extends React.Component {
                     iconClassName="governanceAccountUsersStageIcon"
                     description={
                         <p>
-                            <I18nMessage message="governance.account.users.stageDescription"/>
+                            {Locale.getMessage("governance.account.users.stageDescription")}
                             <a target="_blank" href={Locale.getMessage('governance.account.users.feedbackLink')}>
-                                <I18nMessage message="governance.account.users.feedbackLinkText"/></a>.
+                                {Locale.getMessage("governance.account.users.feedbackLinkText")}</a>.
                         </p>
                     }
                 />
@@ -74,12 +69,12 @@ class AccountUsersStage extends React.Component {
     }
 }
 
-AccountUsersStage.defaultProps = {
-    users: []
-};
-
 AccountUsersStage.propTypes = {
     users: PropTypes.array,
+};
+
+AccountUsersStage.defaultProps = {
+    users: []
 };
 
 export default AccountUsersStage;

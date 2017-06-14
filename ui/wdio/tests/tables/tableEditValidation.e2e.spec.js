@@ -117,14 +117,8 @@
                 //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
                 expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
 
-                //Verify 'Back to app' link shows up in the left Nav
-                expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toContain('Back to app');
-
-                //Verify bck to app link is enabled
-                expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBe(true);
-
-                //Click on reset at the end
-                tableCreatePO.clickOnEditTableResetBtn();
+                //Click on back to apps link
+                tableCreatePO.clickBackToAppsLink();
 
             });
         });

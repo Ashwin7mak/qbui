@@ -47,24 +47,24 @@ var DisplayI18n = React.createClass({
     }
 });
 
-//  Instead of creating a mixin to handle the flux lifecycle events needed in each i18n component(Date, Number, etc),
+//  Instead of creating a mixin to handle the lifecycle events needed in each i18n component(Date, Number, etc),
 //  created a wrapper class to handle the events and render the component that is passed as a parameter.
-class I18nFlux {
+class I18nWrapper {
 
     static renderMessage(Component) {
 
-        const fluxState = React.createClass({
+        const wrapper = React.createClass({
             render() {
                 const i18n = Locale.getI18nBundle();
                 return (<Component {...i18n} {...this.props}/>);
             }
         });
-        return fluxState;
+        return wrapper;
     }
 }
 
 //  Render a date using current locale setting
-var I18nDate = I18nFlux.renderMessage(
+var I18nDate = I18nWrapper.renderMessage(
     React.createClass({
         render: function() {
             // convert dash delimited dates to slash delimited for FireFox
@@ -75,7 +75,7 @@ var I18nDate = I18nFlux.renderMessage(
 );
 
 //  Render a string message using current locale setting
-var I18nMessage = I18nFlux.renderMessage(
+var I18nMessage = I18nWrapper.renderMessage(
 
     React.createClass({
         render: function() {
@@ -85,7 +85,7 @@ var I18nMessage = I18nFlux.renderMessage(
 );
 
 //  Render a number using current locale setting
-var I18nNumber = I18nFlux.renderMessage(
+var I18nNumber = I18nWrapper.renderMessage(
     React.createClass({
         render: function() {
             return (<DisplayI18n {...this.props} type={I18N_NUMBER}/>);
@@ -94,7 +94,7 @@ var I18nNumber = I18nFlux.renderMessage(
 );
 
 //  Render time using current locale setting
-var I18nTime = I18nFlux.renderMessage(
+var I18nTime = I18nWrapper.renderMessage(
     React.createClass({
         render: function() {
             return (<DisplayI18n {...this.props} type={I18N_TIME}/>);
@@ -102,7 +102,7 @@ var I18nTime = I18nFlux.renderMessage(
     })
 );
 
-var I18nRelative = I18nFlux.renderMessage(
+var I18nRelative = I18nWrapper.renderMessage(
     React.createClass({
         render: function() {
             return (<DisplayI18n {...this.props} type={I18N_RELATIVE}/>);

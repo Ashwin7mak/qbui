@@ -16,7 +16,7 @@ class AppSettingsStage extends React.Component {
 
     getRoleTotals() {
         let usersRoleCount = [];
-        let appUsers = this.props.appUsers;
+        let appUsers = this.props.appUsers || [];
         this.props.appRoles.forEach(function(role) {
             if (appUsers[role.id]) {
                 //a local hack while we have no user defined roles, this is so we have pluralized role names
@@ -35,13 +35,16 @@ class AppSettingsStage extends React.Component {
     }
 
     getAppOwnerName() {
-        let appOwner = `${this.props.appOwner.firstName} ${this.props.appOwner.lastName}`;
-        if (this.props.appOwner.email) {
-            let mailTo = `mailto:${this.props.appOwner.email}`;
-            return (<a href={mailTo}>{appOwner}</a>);
-        } else {
-            return (appOwner);
+        if (this.props.appOwner) {
+            let appOwner = `${this.props.appOwner.firstName} ${this.props.appOwner.lastName}`;
+            if (this.props.appOwner.email) {
+                let mailTo = `mailto:${this.props.appOwner.email}`;
+                return (<a href={mailTo}>{appOwner}</a>);
+            } else {
+                return (appOwner);
+            }
         }
+        return '';
     }
 
     getAppOwnerSection() {

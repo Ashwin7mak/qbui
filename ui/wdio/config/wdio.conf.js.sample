@@ -67,7 +67,8 @@ exports.config = {
             './ui/wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
         ],
         relationships: [
-            './ui/wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
+            './ui/wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+            './ui/wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
         ],
         tables: [
             './ui/wdio/tests/tables/tableCreate.e2e.spec.js',
