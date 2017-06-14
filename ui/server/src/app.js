@@ -19,6 +19,13 @@
     //  Configure the Bunyan logger
     var log = require('./logger').getLogger();
 
+    // Configure tracing client
+    let trace;
+    if (config.tracingEnabled === "true") {
+        trace = require('./tracingProvider').getTracingMiddleware(config);
+        log.info("Tracing middleware enabled");
+    }
+
     // Setup the express server
     var app = module.exports = express();
 
@@ -89,8 +96,24 @@
         next();
     });
 
+    /**
+     * Open the tracing segment. * Only enable if the tracing filter is available.
+     * This should always be defined as the last middleware before the routing declaration.
+     */
+    if (config.tracingEnabled === "true") {
+        app.use(trace.express.openSegment('UI'));
+    }
 
     require('./routes')(app, config);
+
+    /**
+     * Close the tracing segment. Only enable if the tracing filter is available.
+     * This should always be defined as the first middleware after the routing declaration.
+     */
+    if (config.tracingEnabled === "true") {
+        app.use(trace.express.closeSegment());
+    }
+
     //  log some server config info.
     log.info('Express Server configuration:', JSON.stringify(config));
 
