@@ -171,19 +171,13 @@
             //Add to form now
             modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
 
-            ////Save form
-            ////Save the form builder
-            //formBuilderPO.save();
-            ////wait until save success container goes away
-            //notificationContainer.waitUntilNotificationContainerGoesAway();
-            ////verify You land in view form
-            //formsPO.waitForViewFormsTableLoad();
-
-        });
-
-
-        it('Verify deleting the relation on the )', function() {
-
+            //Save form
+            //Save the form builder
+            formBuilderPO.save();
+            //wait until save success container goes away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
+            //verify You land in view form
+            formsPO.waitForViewFormsTableLoad();
         });
 
     });
