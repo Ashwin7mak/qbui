@@ -2,7 +2,6 @@ let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
 let modalDialog = requirePO('/common/modalDialog');
-let e2ePageBase = requirePO('e2ePageBase');
 let loadingSpinner = requirePO('/common/loadingSpinner');
 
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
@@ -84,6 +83,16 @@ class formBuilderPage {
         return browser.element('.modal-dialog .middleButton');
     }
 
+    get requiredCheckboxChecked() {
+        // The MUST BE FILLED IN checkbox in its CHECKED state
+        return browser.element('.checkboxPropertyContainer .checkbox:checked');
+    }
+
+    get requiredCheckboxNotChecked() {
+        // The MUST BE FILLED IN checkbox in its UNCHECKED state
+        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
+    }
+=
     get saveBtn() {
         // SAVE (form) button in footer bar
         return browser.element('.mainTrowserFooterButton');

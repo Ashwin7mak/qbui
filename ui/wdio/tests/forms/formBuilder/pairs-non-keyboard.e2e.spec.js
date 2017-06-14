@@ -2,6 +2,7 @@
     'use strict';
 
     let newStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
     let formsPO = requirePO('formsPage');
@@ -91,7 +92,8 @@
                 // verify initial state of checkbox
                 expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
                 // revise the REQUIRED property (i.e. click the checkbox to make it checked)
-                formBuilderPO.setRequiredCheckboxState(true);
+                // formBuilderPO.setRequiredCheckboxState(true);
+                requiredCheckboxNotChecked.click();
                 // cancel, reopen, reselect
                 formBuilderPO.cancel().open().selectFieldByIndex(1);
                 // verify REQUIRED checkbox IS NOT checked
@@ -102,7 +104,8 @@
                 // verify initial state of checkbox
                 expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
                 // revise the REQUIRED property (i.e. click the checkbox to make it checked)
-                formBuilderPO.setRequiredCheckboxState(true);
+                // formBuilderPO.setRequiredCheckboxState(true);
+                requiredCheckboxNotChecked.click();
                 // save, reopen, reselect
                 formBuilderPO.save().open().selectFieldByIndex(1);
                 // verify REQUIRED checkbox IS checked
