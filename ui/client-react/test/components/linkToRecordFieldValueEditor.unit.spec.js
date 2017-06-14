@@ -23,7 +23,7 @@ describe('LinkToRecordValueEditor functions', () => {
         updateField: () => {},
         removeFieldFromForm: () => {},
         tblId: "childTableId",
-        tables: [
+        app: {tables: [
             {
                 id: "childTableId",
                 name: "childTable",
@@ -40,7 +40,7 @@ describe('LinkToRecordValueEditor functions', () => {
                     parentTableFields
                 ]
             }
-        ],
+        ]},
         childTableId: "childTableId",
         location: {},
         formId: 1,

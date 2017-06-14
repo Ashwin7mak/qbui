@@ -20,7 +20,7 @@ let tables = [
 
 let props = {
     show: true,
-    tables,
+    app: {tables},
     childTableId: "childTableId",
     onCancel: mockParentFunctions.cancel,
     tableSelected: mockParentFunctions.tableSelected
