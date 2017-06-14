@@ -50,7 +50,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
         this.props.hideRelationshipDialog();
 
-        const parentTable = _.find(this.props.tables, {id: tableId});
+        const parentTable = this.props.app ? _.find(this.props.app.tables, {id: tableId}) : null;
 
         // update the field with the parent table ID and a name incorporating the selected table
         const field = _.cloneDeep(this.props.fieldDef);
@@ -111,7 +111,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
             return (
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
-                                                  tables={this.props.tables}
+                                                  app={this.props.app}
                                                   tableSelected={this.relationshipSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {

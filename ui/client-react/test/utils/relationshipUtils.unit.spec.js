@@ -70,6 +70,70 @@ describe('RelationshipUtils', () => {
         });
     });
 
+    describe('getValidParentTablesForRelationship', () => {
+        let tables = [
+            {id: "t1"},
+            {id: "t2"},
+            {id: "t3"}
+        ];
+
+        let existingRelationships = [
+            {masterTableId: "t1", detailTableId: "t2"},
+            {masterTableId: "t3", detailTableId: "t2"}
+        ];
+        let testCases = [
+            {
+                description: 'test no current table',
+                existingRelationships: existingRelationships,
+                detailTable: null,
+                appTables: tables,
+                expectedList: []
+            },
+            {
+                description: 'test no app tables',
+                existingRelationships: existingRelationships,
+                detailTable: tables[0],
+                appTables: [],
+                expectedList: []
+            },
+            {
+                description: 'test null app tables',
+                existingRelationships: existingRelationships,
+                detailTable: tables[0],
+                appTables: null,
+                expectedList: []
+            },
+            {
+                description: 'test no existing relationship, filter out self',
+                existingRelationships: [],
+                detailTable: tables[0],
+                appTables: tables,
+                expectedList: [tables[1], tables[2]]
+            },
+            {
+                description: 'test filter out existing masters',
+                existingRelationships: existingRelationships,
+                detailTable: tables[1],
+                appTables: tables,
+                expectedList: []
+            },
+            {
+                description: 'test filter out circular relationships',
+                existingRelationships: [{masterTableId: "t1", detailTableId: "t2"}],
+                detailTable: tables[0],
+                appTables: tables,
+                expectedList: [tables[2]]
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                expect(RelationshipUtils.getValidParentTablesForRelationship(testCase.existingRelationships, testCase.appTables, testCase.detailTable)).toEqual(testCase.expectedList);
+            });
+        });
+    });
+
+
     describe('isValidRelationshipKeyField', () => {
 
         let validTextField = {required: true, unique: true, datatypeAttributes: {type: "TEXT"}};
