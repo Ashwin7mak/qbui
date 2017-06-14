@@ -229,7 +229,6 @@
         verifyFieldValuesInEmbeddedReportTable: {
             value: function (expectedRecordValues) {
                 for (var i = 0; i < expectedRecordValues.length; i++) {
-                    console.log("The expected values are: " + JSON.stringify(expectedRecordValues));
                     //text field
                     expect(expectedRecordValues[0]).toBe(sText.toString());
                     //numeric field

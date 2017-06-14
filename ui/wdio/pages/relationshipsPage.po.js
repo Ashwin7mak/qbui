@@ -9,7 +9,7 @@
     var e2ePageBase = requirePO('./e2ePageBase');
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
-
+    let formsPagePO = requirePO('formsPage');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -85,7 +85,36 @@
             value: function () {
                 browser.waitForVisible('.addChildBtn');
                 browser.element('.addChildBtn').click();
-                expect(browser.isVisible('.recordTrowser')).toBe(true);
+                browser.waitForVisible('.recordTrowser');
+            }
+        },
+
+
+        /***
+         * adds a child record to embedded table
+         * @param origRecordCount - original record counts in embedded table
+         * @param parentRefVal - parent record value
+         */
+        addChildRecord: {
+            value: function (origRecordCount, parentRefVal) {
+                // Click on add child button on embedded table opens trowser
+                this.clickAddChildButton();
+                const fieldTypes = ['allTextFields', 'allParentRecordFields'];
+
+                browser.waitForVisible('form.editForm');
+                // enter form values
+                fieldTypes.forEach(function (fieldType) {
+                    let parentReferenceFieldValue = null;
+                    if (fieldType === 'allParentRecordFields') {
+                        parentReferenceFieldValue = parentRefVal;
+                    }
+                    formsPagePO.enterFormValues(fieldType, parentReferenceFieldValue);
+                });
+
+                // Click Save on the form
+                formsPagePO.clickFormSaveBtn();
+                // wait until report rows in table are loaded
+                reportContentPO.waitForReportContent();
             }
         },
 
