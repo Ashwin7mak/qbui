@@ -468,7 +468,8 @@ export const unloadForm = (id) => {
 
 
 /**
- *
+ * Delete detail field from child table, find the relationship info associated with the detail field and
+ * update the parent form to remove the section that displays child report
  * @param appId
  * @param childTableId
  * @param field
@@ -483,15 +484,16 @@ function deleteDetailFieldUpdateParentForm(appId, childTableId, fieldId, formMet
             if (Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
                 let relatedRelationship = _.find(formMeta.relationships, (rel) => rel.detailTableId === childTableId  && rel.detailFieldId === fieldId);
                 if  (relatedRelationship) {
-                    removeRelationshipFromForm(relatedRelationship.masterAppId, relatedRelationship.id, childTableId, relatedRelationship.masterTableId, formMeta).then(
+                    removeRelationshipFromForm(relatedRelationship).then(
                         () => resolve()
                     ).catch(error => {
-                        logger.parseAndLogError(LogLevel.ERROR, error, 'UpdateForm');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'error deleting section from parent form');
                         reject();
                     });
                 }
+            }else {
+                resolve();
             }
-            resolve();
         });
     };
 }
@@ -502,35 +504,47 @@ function deleteDetailFieldUpdateParentForm(appId, childTableId, fieldId, formMet
  * @param childTableName
  * @param parentTableId
  */
-function removeRelationshipFromForm(appId, relationshipId, childTableName, parentTableId, formMeta) {
+function removeRelationshipFromForm(relationship) {
     return new Promise((resolve, reject) => {
-        if (relationshipId) {
-            let sections = formMeta.tabs[0].sections;
-            let sectionToBeDeleted = null;
-            Object.keys(sections).forEach((sectionKey) => {
-                if (_.has(sections[sectionKey], 'headerElement.FormHeaderElement.displayText')) {
-                    if (_.includes(_.map(sections[sectionKey], 'headerElement.FormHeaderElement.displayText'), childTableName) &&
-                        _.includes(_.map(sections[sectionKey], 'elements.relationshipId'), relationshipId)) {
-                        sectionToBeDeleted = sectionKey;
+        if (relationship) {
+
+            let formService = new FormService();
+            formService.getForm(relationship.masterAppId, relationship.masterTableId).then(
+                (formResponse) => {
+                    let formMeta = formResponse.data.formMeta;
+                    if (formMeta.tabs[0] && formMeta.tabs[0].sections) {
+                        let sections = formMeta.tabs[0].sections;
+                        let sectionToBeDeleted = null;
+                        Object.keys(sections).forEach((sectionKey) => {
+                            if(_.includes(_.map(_.map(_.get(sections[sectionKey], 'elements'),'ChildReportElement'),'relationshipId'), relationship.id)){
+                               sectionToBeDeleted = sectionKey;
+                            }
+                        });
+                        if (sectionToBeDeleted) {
+                            sections[sectionToBeDeleted] = undefined;
+                            formService.updateForm(relationship.masterAppId, relationship.masterTableId, formMeta).then(
+                                () => resolve()
+                            ).catch(error => {
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'Error updating form to delete section showing child report');
+                                reject();
+                            });
+                        } else {
+                            resolve();
+                        }
+                    }else{
+                        resolve();
                     }
                 }
+            ).catch(error => {
+                logger.parseAndLogError(LogLevel.ERROR, error, 'error trying to update forms');
+                reject();
             });
-            if (sectionToBeDeleted) {
-                sections[sectionToBeDeleted] = null;
-                formService.updateForm(appId, parentTableId, formMeta).then(
-                    () => resolve()
-                ).catch(error => {
-                    logger.parseAndLogError(LogLevel.ERROR, error, 'UpdateForm');
-                    reject();
-                });
-            } else {
-                esolve();
-            }
-        } else {
-            logger.parseAndLogError(LogLevel.ERROR, error, 'need a valid relationshipID for updating parent form with child table default report');
-            reject();
+        }else{
+            resolve();
         }
-    });
+    })
 }
+
+
 
 
