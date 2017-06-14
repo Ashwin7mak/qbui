@@ -82,7 +82,6 @@
          */
         getChildRecordValuesFromForm : {value: function() {
             this.slideyRightyEl.waitForVisible();
-            //this.viewFormTableEl.waitForVisible();
             let fieldElements = this.viewFormTableEl.elements('.viewElement');
             return fieldElements.value.map(function(element) {
                 return element.getAttribute('textContent');
@@ -196,10 +195,7 @@
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
             this.tableHomePageLinkEl.click();
-        }},
-
-
-
+        }}
     });
 
     module.exports = relationshipsPage;
