@@ -28,6 +28,7 @@ let AppsList = React.createClass({
         this.setState({searchText: ev.target.value});
     },
     searchMatches(name) {
+        debugger;
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
     appList() {
@@ -61,6 +62,7 @@ let AppsList = React.createClass({
 
 
     render() {
+        console.log('this.appList: ', this.appList());
         return (
             <ul className={"appsList"} >
 
