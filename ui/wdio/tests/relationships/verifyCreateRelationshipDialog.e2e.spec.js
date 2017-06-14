@@ -11,11 +11,16 @@
     let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
     let formsPO = requirePO('formsPage');
+    let rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
     let PARENT_TABLE;
     let PARENT_TABLE2 = 'Table 2';
+    let newFieldsOnForm;
     const SELECT_RECORD_ID_AS_FIELD = 'Record ID#';
     const GET_ANOTHER_RECORD = 'Get another record';
+    const tableNameFieldTitleText = '* Table name';
+    const recordNameFieldTitleText = '* A record in the table is called';
+    const descFieldTitleText = 'Description';
 
     describe('Relationships - Verify create relationship dialog Tests :', function() {
         let realmName;
@@ -52,14 +57,38 @@
         });
 
         beforeAll(function() {
+            PARENT_TABLE = rawValueGenerator.generateStringWithFixLength(5);
+            let tableFields = [
+                {fieldTitle: tableNameFieldTitleText, fieldValue: PARENT_TABLE},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(5)},
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(5)}
+            ];
             //Create a new parent table and single record into new table
             let formBuilderFields = ['Number'];
+            let fieldTypes = ['allTextFields', 'allNumericFields', 'allDateFields'];
 
             //go to appId page
             e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
 
             //create table via UI
-            PARENT_TABLE = tableCreatePO.createTable();
+            //Click on new table button
+            tableCreatePO.clickCreateNewTable();
+
+            //Enter table field values
+            tableFields.forEach(function(tableField) {
+                //Enter field values
+                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+            });
+
+            //Click on finished button and make sure it landed in edit Form container page
+            modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
+            tableCreatePO.waitUntilNotificationContainerGoesAway();
+
+            //Verify the create table dialogue
+            tableCreatePO.verifyNewTableCreateDialogue();
+
+            //Click OK button on create table dialogue
+            modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
 
             //Add fields to the form
             formBuilderFields.forEach(function(formBuilderField) {
@@ -78,12 +107,12 @@
          * Before each it block reload the 1st record of list all report in view form mode
          */
         beforeEach(function() {
-            //Load the child table 'Child Table A' -> record 1 in view mode
+            //Load the child table 'Table 1' -> record 1 in view mode
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
         });
 
 
-        it('Verify cancel and reAdd 2 relationships from childtable to 2 parent tables. This also includes verifying default fields and changing defaults)', function() {
+        it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults. )', function() {
             let expectedTableList1 = ['Table 2', PARENT_TABLE];
             let expectedTableList2 = ['Table 2'];
 
@@ -124,21 +153,37 @@
             //Verify the get another record got added to the form builder
             expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE2);
 
-            //Save form
-            //Save the form builder
-            formBuilderPO.save();
-            //wait until save success container goes away
-            notificationContainer.waitUntilNotificationContainerGoesAway();
-            //verify You land in view form
-            formsPO.waitForViewFormsTableLoad();
+            //Verify that the create relationship button is not visible since the child table has relationships to all tables in an app.
+            newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+
+            //Remove a field
+            let fieldsOnForm = formBuilderPO.getFieldLabels().value.length;
+            formBuilderPO.removeField(fieldsOnForm - 1);
+
+            //Verify add another record button becomes available since relationship got deleted
+            newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+
+            //add back the relationship and save
+            relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '');
+
+            //Add to form now
+            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+
+            ////Save form
+            ////Save the form builder
+            //formBuilderPO.save();
+            ////wait until save success container goes away
+            //notificationContainer.waitUntilNotificationContainerGoesAway();
+            ////verify You land in view form
+            //formsPO.waitForViewFormsTableLoad();
 
         });
 
 
-        xit('The table has titleField then verify change to recordId instead of titleField in createRelationship dialog )', function() {
+        it('Verify deleting the relation on the )', function() {
 
-            //Add another record to form and save. This verifies changing to recordId instead of default titleField in dialog
-            relationshipsPO.createRelationshipToParentTable(PARENT_TABLE2, SELECT_RECORD_ID_AS_FIELD);
         });
 
     });

@@ -150,6 +150,16 @@ class modalDialogWindow {
 
     }
 
+    /**
+     +     * Method for modal dialog to slide away
+     +     */
+    waitUntilModalDialogSlideAway() {
+       //wait until report loading screen disappear
+        browser.waitForVisible('.modal-dialog', e2eConsts.longWaitTimeMs, true);
+        //Need this to stabilize DOM
+        return browser.pause(e2eConsts.shortWaitTimeMs);
+    }
+
 
 }
 module.exports = new modalDialogWindow();

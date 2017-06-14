@@ -75,10 +75,10 @@
             //Select record from parent picker
             //click on the edit pencil on the child record
             formsPO.clickRecordEditPencilInViewForm();
+            ////TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
+            //formsPO.setFormInputValue(formsPO.getAllPhoneInputFields, '978-223-2112');
             //Select record Id 2 from parent picker
             relationshipsPO.selectFromParentPicker(recordId);
-            //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
-            formsPO.setFormInputValue(formsPO.getAllPhoneInputFields, '978-223-2112');
             //Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until save success container goes away

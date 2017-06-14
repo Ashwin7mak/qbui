@@ -232,28 +232,63 @@
          * Method to verify relationship link in view record mode
          */
         verifyParentRecordRelationship: {value: function(expectedParentRecordFieldValues) {
-                let getRecordValuesByClickingOnRelLink = [];
-                //verify You land in view form since you edited a record from View form after saving
-                formsPO.waitForViewFormsTableLoad();
-                let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
-                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
-                });
+            let getRecordValuesByClickingOnRelLink = [];
+            //verify You land in view form since you edited a record from View form after saving
+            formsPO.waitForViewFormsTableLoad();
+            let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
+                return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
+            });
 
-                if (fields !== []) {
-                    fields[0].element('.cellWrapper .textLink').waitForVisible();
-                    fields[0].element('.cellWrapper .textLink').click();
-                    //Wait until the view form drawer loads
-                    browser.element('.drawer .cellWrapper').waitForVisible();
-                    getRecordValuesByClickingOnRelLink = browser.element('.drawer').elements('.cellWrapper').getAttribute('textContent');
-                    expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
+            if (fields !== []) {
+                fields[0].element('.cellWrapper .textLink').waitForVisible();
+                fields[0].element('.cellWrapper .textLink').click();
+                //Wait until the view form drawer loads
+                browser.element('.drawer .cellWrapper').waitForVisible();
+                getRecordValuesByClickingOnRelLink = browser.element('.drawer').elements('.cellWrapper').getAttribute('textContent');
+                expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
 
-                    //close the View record drawer
-                    browser.element('.closeDrawer').click();
-                    //wait until drawer screen disappear
-                    browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+                //close the View record drawer
+                browser.element('.closeDrawer').click();
+                //wait until drawer screen disappear
+                browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+            }
+
+        }},
+
+        /**
+         * Verift the Get another record relationship dialog selectTables list and select the parentTable
+         * @param expectedTablesList to verify the select table drop down list
+         * @param parentTable table to select
+         */
+        verifyTablesAndFieldsFromCreateRelationshipDialog: {
+            value: function(expectedTablesList, selectParentTable, selectField) {
+                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                //Verify title
+                expect(modalDialog.modalDialogTitle).toContain('Get another record');
+                //Verify select tables drop down has all the tables except the one you're in
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+                let tableDropDownList = modalDialog.allDropDownListOptions;
+                expect(tableDropDownList).toEqual(expectedTablesList);
+                //click again on the arrow to collapse the outer menu
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+                //Select the table
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, selectParentTable);
+
+                //Select Field form field dropdown
+                if (selectField !== '') {
+                    //Click on advanced settings of add a record dialog
+                    modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                    //Select field to link to parent table (This will be either titleField or recordId)
+                    modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+                } else {
+                    //Click on advanced settings of add a record dialog
+                    modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                    //Verify the default field selected
+                    expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(selectField);
                 }
-
-            }},
+            }}
 
     });
     module.exports = relationshipsPage;
