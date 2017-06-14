@@ -8,14 +8,14 @@ import _ from "lodash";
     set up the email templated automations. These methods assure one place
     to change if the template changes.
 */
-export const emailAutomationGetTo = (anAutomation) => anAutomation.inputs[0].defaultValue;
-export const emailAutomationSetTo = (anAutomation, value) => anAutomation.inputs[0].defaultValue = value;
+export const emailAutomationGetTo = (anAutomation) => anAutomation.inputs.filter((input) => input.name === "toAddress")[0].defaultValue;
+export const emailAutomationSetTo = (anAutomation, value) => anAutomation.inputs.filter((input) => input.name === "toAddress")[0].defaultValue = value;
 
-export const emailAutomationGetSubject = (anAutomation) => anAutomation.inputs[3].defaultValue;
-export const emailAutomationSetSubject = (anAutomation, value) => anAutomation.inputs[3].defaultValue = value;
+export const emailAutomationGetSubject = (anAutomation) => anAutomation.inputs.filter((input) => input.name === "subject")[0].defaultValue;
+export const emailAutomationSetSubject = (anAutomation, value) => anAutomation.inputs.filter((input) => input.name === "subject")[0].defaultValue = value;
 
-export const emailAutomationGetBody = (anAutomation) => anAutomation.inputs[4].defaultValue;
-export const emailAutomationSetBody = (anAutomation, value) => anAutomation.inputs[4].defaultValue = value;
+export const emailAutomationGetBody = (anAutomation) => anAutomation.inputs.filter((input) => input.name === "body")[0].defaultValue;
+export const emailAutomationSetBody = (anAutomation, value) => anAutomation.inputs.filter((input) => input.name === "body")[0].defaultValue = value;
 
 /**
  * Manage automation states
