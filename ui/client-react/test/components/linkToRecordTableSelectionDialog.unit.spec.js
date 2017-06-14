@@ -23,7 +23,8 @@ let props = {
     app: {tables},
     childTableId: "childTableId",
     onCancel: mockParentFunctions.cancel,
-    tableSelected: mockParentFunctions.tableSelected
+    tableSelected: mockParentFunctions.tableSelected,
+    parentTables: [tables[1]]
 };
 
 describe('LinkToRecordTableSelectionDialog', () => {

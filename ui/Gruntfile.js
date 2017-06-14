@@ -614,6 +614,7 @@ module.exports = function(grunt) {
                     relationships: [
                         './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js',
                         './wdio/tests/relationships/createRelationship.e2e.spec.js',
+                        './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
                     ],
                     reports: [
                         './wdio/tests/reports/reportBuilder.e2e.spec.js',
