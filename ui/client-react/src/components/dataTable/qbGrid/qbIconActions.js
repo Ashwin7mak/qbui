@@ -25,8 +25,8 @@ const QbIconActions = React.createClass({
         if(this.props.onClickTestRowIcon) {
             // Remove 'print' and 'email' icons and replace 'copy' and 'delete' icons with  disabled icons
             actions.splice(1, 4);
-            actions.push({msg: Locale.getMessage('selection.copy')   + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate', tooltipMsg: 'unimplemented.copy', disabled:true});
-            actions.push({msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete', onClick: this.props.onClickDeleteRowIcon, disabled:true});
+            actions.push({msg: Locale.getMessage('selection.copyAutomation'), rawMsg: true, className:'duplicate', icon:'duplicate', tooltipMsg: 'unimplemented.copy', disabled:true});
+            actions.push({msg: Locale.getMessage('selection.deleteAutomation'), rawMsg: true, className:'delete', icon:'delete', onClick: this.props.onClickDeleteRowIcon, disabled:true});
             actions.push({msg: Locale.getMessage('selection.testAutomation'), rawMsg: true, className:'delete', icon:'meter', onClick: this.props.onClickTestRowIcon});
         }
         return <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />;

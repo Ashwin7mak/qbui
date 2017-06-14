@@ -89,6 +89,8 @@ export default {
             copy: "Kopieren",
             delete: "Löschen",
             testAutomation: "Testautomatisierung",
+            copyAutomation: "Kopiere Automation",
+            deleteAutomation: "Automatisierung löschen",
             dontDelete: "Nicht löschen",
             deleteThisRecord: "Löschen Sie diesen Datensatz?",
             deleteTheseSwitches: "Löschen sie diesen Schaltet?",

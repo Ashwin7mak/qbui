@@ -91,6 +91,8 @@ export default {
             copy: "Copy",
             delete: "Delete",
             testAutomation: "Test Automation",
+            copyAutomation: "Copy Automation",
+            deleteAutomation: "Delete Automation",
             dontDelete: "Don't delete",
             deleteThisRecord: "Delete this record?",
             deleteTheseSwitches: "Delete these feature switches?",
