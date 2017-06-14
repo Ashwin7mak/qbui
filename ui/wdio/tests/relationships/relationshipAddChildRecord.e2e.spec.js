@@ -16,8 +16,6 @@ let realmName;
 let realmId;
 let testApp;
 
-let childRecordsTextValues = [];
-
 describe('Relationships - Add child Record to embedded Table tests: ', () => {
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
         /**
@@ -47,54 +45,11 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
          * Setup method. Edits child records in the UI to relate them to a parent record
          */
         beforeAll(() => {
-            // Add child records to one of the parent records
-            // More efficient to do this via API but I wanted to exercise the UI in these tests
-            // Go to List All report
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1);
+            // Modify Child table A's first three records to relate it to Parent Table A's 1 record
+            relationshipsPO.modifyChildTableToRelateTpParent(realmName, testApp, testApp.tables[e2eConsts.TABLE4]);
 
-            // Edit the Numeric Field of the first record
-            reportInLineEditPO.openRecordEditMenu(0);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the second record
-            reportInLineEditPO.openRecordEditMenu(1);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the second record
-            reportInLineEditPO.openRecordEditMenu(2);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Get values for text field of each record
-            childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
-            childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
-            childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
-
-            //*********************
             // Modify GrandChild table A's first three records to relate it to Child Table A's 1 record
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE5].id, 1);
-
-            // Edit the Numeric Field of the first record
-            reportInLineEditPO.openRecordEditMenu(0);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the second record
-            reportInLineEditPO.openRecordEditMenu(1);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the second record
-            reportInLineEditPO.openRecordEditMenu(2);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Get values for text field of each record
-            childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
-            childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
-            childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
+            relationshipsPO.modifyChildTableToRelateTpParent(realmName, testApp, testApp.tables[e2eConsts.TABLE5]);
         });
 
         /**
