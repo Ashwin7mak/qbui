@@ -157,7 +157,7 @@ describe('Test fields reducer', () => {
         expect(state[0].isPendingEdit).toEqual(false);
     });
 
-    it('removing an existing table field', () => {
+    it('removing an existing field does not remove it from the field list', () => {
         const newState = [{
             appId: appId,
             tblId: tblId,
@@ -178,7 +178,7 @@ describe('Test fields reducer', () => {
         expect(currentFieldList.fields).toEqual(expectedFieldsWithRemoval);
     });
 
-    it('removing an existing table field', () => {
+    it('removing a new field removes it from the field list', () => {
         const newState = [{
             appId: appId,
             tblId: tblId,

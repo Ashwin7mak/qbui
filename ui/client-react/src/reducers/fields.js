@@ -192,11 +192,9 @@ const fieldsStore = (state = [], action) => {
     case types.REMOVE_FIELD : {
         // remove a field from the list only if this is not a saved field on the table schema
         if (action.field && action.field.id && action.field.id.toString().indexOf(NEW_FIELD_PREFIX) !== -1) {
-            let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
-            fieldList = _.cloneDeep(fieldList);
-            fieldList.fields = _.filter(fieldList.fields, field => field.id !== action.field.id);
-            newState.push(fieldList);
-            return newState;
+            let fieldList = _.find(state, {appId: action.appId, tblId: action.tblId});
+            let fields = _.filter(fieldList.fields, field => field.id !== action.field.id);
+            return [...newState, {...fieldList, fields}];
         }
         return state;
     }
