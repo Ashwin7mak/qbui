@@ -160,7 +160,7 @@
             RequestAppsPage.selectApp(testApp.name);
 
             //Select table Table 1
-            tableCreatePO.selectTable('Table 1');
+            e2ePageBase.loadTableByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id);
 
             //Verify settings icon not available for user other than ADMIN
             expect(browser.isExisting('.topNav .iconUISturdy-settings')).toBe(false);
