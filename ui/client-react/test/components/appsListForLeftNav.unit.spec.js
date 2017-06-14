@@ -14,7 +14,7 @@ describe('AppsListForLeftNav', () => {
     });
 
     it('renders a new app button', () => {
-        component = mount(<AppsList />);
+        component = shallow(<AppsList />);
 
         expect(component.find(SearchBox).length).toEqual(1);
         expect(component.find(NavItem).length).toEqual(1);
