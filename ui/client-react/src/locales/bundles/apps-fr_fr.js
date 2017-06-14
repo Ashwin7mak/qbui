@@ -654,7 +654,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
-            existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
+            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à {tableName} sont sur le formulaire",
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
