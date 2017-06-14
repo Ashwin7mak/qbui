@@ -30,7 +30,6 @@ class userFeedBack extends Component {
                 <Tooltip bsRole="toggle" tipId="feedback" i18nMessageKey="header.menu.feedbackTooltip" key="feedback" location="bottom">
                     <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
                         <Icon icon={dropDownIcon} iconFont="iconTableSturdy"/>
-                        <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
                     </a>
                 </Tooltip>
 

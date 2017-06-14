@@ -3,6 +3,9 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import DropDown from 'react-bootstrap/lib/Dropdown';
 import Icon from 'REUSE/components/icon/icon';
 import {I18nMessage} from 'REUSE/utils/i18nMessage';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {getLoggedInUserDropDownText} from '../../../reducers/userReducer';
 
 import './userDropDown.scss';
 
@@ -52,6 +55,8 @@ class UserDropDown extends Component {
         ];
     }
 
+    //new method to determine what should show?
+
     render() {
         const {startTabIndex, app, signOutUser} = this.props;
 
@@ -59,7 +64,7 @@ class UserDropDown extends Component {
             <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink" dropup={this.props.shouldOpenMenusUp}>
                 <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
                     <Icon icon={dropDownIcon}/>
-                    <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
+                    <span className="navLabel">{this.props.loggedInUserDisplay}</span>
                 </a>
 
                 <DropDown.Menu>
@@ -90,7 +95,14 @@ UserDropDown.propTypes = {
 
 UserDropDown.defaultPropTypes = {
     supportedLocales: [],
-    startTabIndex: 0,
+    startTabIndex: 0
 };
 
-export default UserDropDown;
+const mapStateToProps = (state) => ({
+    loggedInUserDisplay: getLoggedInUserDropDownText(state)
+});
+
+export default withRouter(connect(
+    mapStateToProps,
+    null
+)(UserDropDown));

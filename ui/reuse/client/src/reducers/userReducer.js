@@ -29,4 +29,14 @@ export const getLoggedInUserId = state => (state.user ? state.user.id : undefine
 
 export const getLoggedInUserAdminStatus = state => (state.user ? state.user.administrator : undefined);
 
+export const getLoggedInUserDropDownText = (state) => {
+    if (state.user && state.user.firstName) {
+        return state.user.firstName;
+    } else if (state.user && state.user.email) {
+        return state.user.email.split("@")[0];
+    } else {
+        return null;
+    }
+};
+
 export default user;

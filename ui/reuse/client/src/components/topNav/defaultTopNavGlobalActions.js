@@ -33,6 +33,7 @@ class DefaultTopNavGlobalActions extends Component {
         return (
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
+                    {this.props.children}
                     {this.props.hasFeedback &&
                     <li className="link globalAction withDropdown">
                         <UserFeedBack
@@ -41,7 +42,6 @@ class DefaultTopNavGlobalActions extends Component {
                         />
                     </li>
                     }
-                    {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
                             tabIndex={this.props.startTabIndex}
@@ -52,6 +52,7 @@ class DefaultTopNavGlobalActions extends Component {
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     ))}
+                    <li className="link globalAction"><HelpButton/></li>
                     <li className="link globalAction withDropdown">
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
@@ -63,8 +64,6 @@ class DefaultTopNavGlobalActions extends Component {
                             position = {"center"}
                         />
                     </li>
-
-                    <li className="link globalAction"><HelpButton/></li>
                 </ul>
             </div>
         );
