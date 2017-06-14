@@ -300,7 +300,9 @@
             //click on the edit pencil in view form actions
             this.editPencilBtnOnStageInViewForm.click();
             //wait until edit form is visible
-            return this.editFormContainerEl.waitForVisible();
+            this.editFormContainerEl.waitForVisible();
+            //Need this to stabilize container
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**

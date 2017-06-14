@@ -22,6 +22,7 @@
     const descFieldTitleText = 'Description';
 
     describe('Relationships - Create multiple relationship Tests :', function() {
+        // This app has 2 parent tables and 1 child table. A relationship already exists via API.
         let realmName;
         let realmId;
         let testApp;
@@ -126,7 +127,7 @@
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
         });
 
-        it('Verify able to create relationship even tough single relationship exists (only with the table that it is not already related to)', function() {
+        it('Verify able to create relationship even tough single relationship exists to 1 of the parent table', function() {
             //Select settings -> modify this form
             formBuilderPO.open();
 
@@ -149,8 +150,6 @@
             formsPO.clickRecordEditPencilInViewForm();
             //Select titleField value from parent picker
             relationshipsPO.selectFromParentPicker(parentPickerTitleFieldValue);
-            //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
-            formsPO.setFormInputValue(formsPO.getAllPhoneInputFields, '978-223-2112');
             //Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until save success container goes away
@@ -165,6 +164,18 @@
             //Verify the relationship by clicking on get another record from parent link in view record mode.
             //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
             relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues);
+        });
+
+        it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {
+            //Select settings -> modify this form
+            formBuilderPO.open();
+
+            //Verify that the create relationship button is not visible.
+            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+
+            //Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
         });
     });
 }());

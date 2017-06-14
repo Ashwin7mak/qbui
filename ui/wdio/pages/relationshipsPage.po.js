@@ -228,6 +228,33 @@
 
             }},
 
+        /**
+         * Method to verify relationship link in view record mode
+         */
+        verifyParentRecordRelationship: {value: function(expectedParentRecordFieldValues) {
+                let getRecordValuesByClickingOnRelLink = [];
+                //verify You land in view form since you edited a record from View form after saving
+                formsPO.waitForViewFormsTableLoad();
+                let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
+                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
+                });
+
+                if (fields !== []) {
+                    fields[0].element('.cellWrapper .textLink').waitForVisible();
+                    fields[0].element('.cellWrapper .textLink').click();
+                    //Wait until the view form drawer loads
+                    browser.element('.drawer .cellWrapper').waitForVisible();
+                    getRecordValuesByClickingOnRelLink = browser.element('.drawer').elements('.cellWrapper').getAttribute('textContent');
+                    expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
+
+                    //close the View record drawer
+                    browser.element('.closeDrawer').click();
+                    //wait until drawer screen disappear
+                    browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+                }
+
+            }},
+
     });
     module.exports = relationshipsPage;
 }());
