@@ -15,13 +15,28 @@ class RowActions extends Component {
             this.props.onClickDeleteRowIcon(this.props.rowId);
         }
     }
+    onClickTestRowIcon = () => {
+        if(this.props.onClickTestRowIcon) {
+            this.props.onClickTestRowIcon(this.props.rowId, this.props.currentAppId);
+        }
+    }
 
     render() {
-        return <RowActionsReuse iconActionsNode={<QbIconActions onClickEditRowIcon={this.onClickEditRowIcon}
-                                                                onClickDeleteRowIcon={this.onClickDeleteRowIcon}
-                                                />}
-                                                {...this.props}
-                />;
+        if(this.props.onClickTestRowIcon) {
+            return <RowActionsReuse iconActionsNode={<QbIconActions onClickEditRowIcon={this.onClickEditRowIcon}
+                                                                    onClickDeleteRowIcon={this.onClickDeleteRowIcon}
+                                                                    onClickTestRowIcon={this.onClickTestRowIcon}
+            />}
+                                    {...this.props}
+            />;
+        } else {
+            return <RowActionsReuse iconActionsNode={<QbIconActions onClickEditRowIcon={this.onClickEditRowIcon}
+                                                                    onClickDeleteRowIcon={this.onClickDeleteRowIcon}
+            />}
+                                    {...this.props}
+            />;
+
+        }
     }
 }
 
@@ -65,6 +80,9 @@ RowActions.propTypes = {
     /*
     * Icon through which the row can be deleted on click */
     onClickDeleteRowIcon: PropTypes.func,
+    /*
+    * Icon through which an automation row can be tested  */
+    onClickTestRowIcon: PropTypes.func,
     /*
     * Icon through which the row can be saved on click */
     onClickSaveRow: PropTypes.func.isRequired,

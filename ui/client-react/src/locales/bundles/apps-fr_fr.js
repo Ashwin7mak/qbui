@@ -88,6 +88,7 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            testAutomation: "Automatisation des tests",
             dontDelete: "Ne pas supprimer",
             deleteThisRecord: "Supprimer cet enregistrement?",
             deleteTheseSwitches: "Supprimer ces commutateurs?",

@@ -191,6 +191,7 @@ export const QbGrid = React.createClass({
             onClickAddNewRow={this.onClickAddNewRow}
             onClickSaveRow={this.props.onClickSaveRow}
             onClickToggleSelectedRow={this.onClickToggleSelectedRow}
+            onClickTestRowIcon={this.props.onClickTestRowIcon}
         />;
     },
 

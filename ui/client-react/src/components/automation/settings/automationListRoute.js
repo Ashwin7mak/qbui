@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {Table} from "react-bootstrap";
 import {connect} from "react-redux";
 import Loader from "react-loader";
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
@@ -12,27 +11,26 @@ import UrlUtils from '../../../utils/urlUtils';
 import {Link} from 'react-router-dom';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
-
-
+import QbGrid from '../../dataTable/qbGrid/qbGrid';
+import ReportCell from '../../dataTable/reportGrid/reportCell';
 import "./automationList.scss";
 import {CONTEXT} from "../../../actions/context";
+import AutomationListTransformer from '../../../utils/automationListTransformer';
+
+const CellRenderer = (props) => {return <div className="customCell">{props.text}</div>;};
+const cellFormatter = (cellData) => {return React.createElement(CellRenderer, cellData);};
 
 
 export class AutomationListRoute extends Component {
 
-    getInitialState() {
-        return {
-            confirmInputValue: ""
-        };
-    }
-
-    getExistingAutomationNames() {
-        return [];
+    constructor(props) {
+        super(props);
+        this.state = {appId: this.getAppId()}
     }
 
     getPageActions() {
         const actions = [];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu="5"/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={5}/>);
     }
 
     getStageHeadline() {
@@ -52,10 +50,26 @@ export class AutomationListRoute extends Component {
         return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
     }
 
+    transformColumns() {
+        return AutomationListTransformer.transformAutomationListColumnsForGrid(this.props.automations);
+    }
+
+    transformRows() {
+        if (this.props.automations) {
+            let displayList = this.props.automations.filter(
+                (automation) => {
+                    return "EMAIL" === automation.type;
+                }
+            );
+            let rows = AutomationListTransformer.transformAutomationListRowsForGrid(displayList);
+            return rows;
+        }
+        return [];
+    }
+
     renderAutomations() {
         if (this.props.automations && this.props.automations.length > 0) {
-            return this.props.automations
-                .filter((automation) => {
+            return this.props.automations.filter((automation) => {
                     return "EMAIL" === automation.type;
                 })
                 .map((automation, index) => {
@@ -72,8 +86,25 @@ export class AutomationListRoute extends Component {
         return [];
     }
 
-    testButtonClicked(automationName) {
-        this.props.testAutomation(automationName, this.getAppId());
+    editAutomation = (automationId) => {
+        let link = UrlUtils.getAutomationViewLink(this.getAppId(), automationId);
+        if (this.props.history) {
+            this.props.history.push(link);
+        }
+    }
+
+    deleteAutomation() {
+    }
+
+    clickSaverow() {
+    }
+
+    cancelEditingRow() {
+    }
+
+    handleTestAutomationClicked = (automationId) => {
+        let automation = _.find(this.props.automations, {id: automationId});
+        this.props.testAutomation(automation.name, this.getAppId());
     }
 
     render() {
@@ -84,19 +115,22 @@ export class AutomationListRoute extends Component {
                 <div className="automationSettings">
                     <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions()}/>
                     <div className="automationSettings--container">
-                        <Table hover className="automationSettings--table">
-                          <thead>
-                            <tr>
-                                <th><I18nMessage message="automation.automationList.nameHeader"/></th>
-                                <th><I18nMessage message="automation.automationList.activeHeader"/></th>
-                                <th><I18nMessage message="automation.automationList.actionHeader"/></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {automationRows}
-                          </tbody>
-                        </Table>
+                        <QbGrid
+                            columns={this.transformColumns()}
+                            rows={this.transformRows()}
+                            numberOfColumns={3}
+                            showRowActionsColumn={true}
+                            onClickToggleSelectedRow={false}
+                            cellRenderer={ReportCell}
+                            onClickEditIcon={this.editAutomation}
+                            onClickDeleteIcon={this.deleteAutomation}
+                            onClickTestRowIcon={this.handleTestAutomationClicked}
+                            editingRowErrors={[]}
+                            onCancelEditingRow={this.cancelEditingRow()}
+                            onClickSaveRow={this.clickSaverow()}
+                        />
                     </div>
+
                 </div>
             </Loader>
         );
@@ -108,12 +142,13 @@ AutomationListRoute.protoTypes = {
     automations: React.PropTypes.array,
     /** Get the list of automations for the app. */
     loadAutomations: React.PropTypes.func,
-    testAutomation: React.PropTypes.bool
+    testAutomation: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
     return {
-        automations : getAutomationList(state)
+        automations : getAutomationList(state),
+        testAutomation: testAutomation(state)
     };
 };
 
@@ -126,3 +161,4 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(AutomationListRoute);
+

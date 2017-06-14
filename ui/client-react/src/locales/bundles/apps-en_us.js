@@ -90,6 +90,7 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
+            testAutomation: "Test Automation",
             dontDelete: "Don't delete",
             deleteThisRecord: "Delete this record?",
             deleteTheseSwitches: "Delete these feature switches?",

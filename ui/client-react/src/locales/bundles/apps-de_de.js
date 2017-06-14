@@ -88,6 +88,7 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
+            testAutomation: "Testautomatisierung",
             dontDelete: "Nicht löschen",
             deleteThisRecord: "Löschen Sie diesen Datensatz?",
             deleteTheseSwitches: "Löschen sie diesen Schaltet?",
