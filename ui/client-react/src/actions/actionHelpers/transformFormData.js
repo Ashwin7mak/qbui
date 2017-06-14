@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {findFormElementKey} from '../../utils/formUtils';
-
+import * as constants from '../../../../common/src/constants';
 /**
  * Final data structure:
  * formMeta: {
@@ -223,7 +223,7 @@ function convertSectionsToObjectStructure(tab) {
 export function transformFieldBeforeSave(field) {
 
     const transformedField = _.cloneDeep(field);
-    if (_.get(transformedField, "datatypeAttributes.type", null) === "LINK_TO_RECORD") {
+    if (_.get(transformedField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD) {
         transformedField.datatypeAttributes.type = transformedField.parentFieldType;
         delete transformedField.parentTableId;
         delete transformedField.parentFieldId;

@@ -16,7 +16,19 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         show: PropTypes.bool,
         tables: PropTypes.array,
         childTableId: PropTypes.string,
-        tableSelected: PropTypes.func
+        tableSelected: PropTypes.func,
+        fields: PropTypes.array,
+        newRelationshipFields: PropTypes.array,
+        fieldsToDelete: PropTypes.array,
+        parentTables: PropTypes.array,
+    },
+
+    getDefaultProps() {
+        return {
+            fields: [],
+            fieldsToDelete: [],
+            newRelationshipFields: [],
+        };
     },
 
     getInitialState() {
@@ -70,7 +82,25 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         if (table.value !== this.state.selectedTableId) {
             const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: table.value}) : null;
-            this.setState({selectedTableId: table.value, selectedFieldId: selectedTable.recordTitleFieldId});
+
+            this.setState({selectedTableId: table.value});
+            if (selectedTable.recordTitleFieldId) {
+                this.setState({selectedFieldId: selectedTable.recordTitleFieldId});
+            } else {
+                // no record title field ID, pick first field (record ID will always be an option)
+                const fieldChoices = this.getFieldChoices(selectedTable);
+                this.setState({selectedFieldId: fieldChoices[0].id});
+            }
+        }
+    },
+
+    getTableChoices() {
+        if (this.props.app) {
+            const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.childTableId}) : null;
+
+            return RelationshipUtils.getValidParentTablesForRelationship(this.props.app, table, this.props.fields, this.props.newRelationshipFields, this.props.fieldsToDelete);
+        } else {
+            return [];
         }
     },
 
@@ -81,9 +111,9 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     getTableSelect() {
         const placeHolderMessage = Locale.getMessage("selection.tablesPlaceholder");
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
-        const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.props.childTableId}) : null;
 
-        const tableChoices = this.props.app ? RelationshipUtils.getValidParentTablesForRelationship(this.props.app.relationships, this.props.app.tables, selectedTable) : [];
+        const tableChoices = this.getTableChoices();
+
         const choices = tableChoices.map(table => {
             return {
                 value: table.id,
@@ -106,6 +136,16 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     },
 
     /**
+     * get valid parent table fields
+     * @param table
+     */
+    getFieldChoices(table) {
+        const fields = table ? table.fields : [];
+
+        return _.filter(fields, field => RelationshipUtils.isValidRelationshipKeyField(field));
+    },
+
+    /**
      * get react-select for master table field
      * @returns {XML}
      */
@@ -113,9 +153,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
 
         const selectedTable = this.props.app ? _.find(this.props.app.tables, {id: this.state.selectedTableId}) : null;
 
-        const fields = selectedTable ? selectedTable.fields : [];
-
-        const fieldChoices = _.filter(fields, field => RelationshipUtils.isValidRelationshipKeyField(field));
+        const fieldChoices = this.getFieldChoices(selectedTable);
 
         const choices = fieldChoices.map(field => {
 
