@@ -98,7 +98,7 @@ export const FACET_FIELDS = () => [
     }
 ];
 
-export const GetFacetFields = (hasAccountAdmin, hasRealmAdmin) => {
+export const GetAccountUsersFacetFields = (hasAccountAdmin, hasRealmAdmin) => {
 
     // Build the full facet information compliant with FacetInterface
     let facetInfo = [];
