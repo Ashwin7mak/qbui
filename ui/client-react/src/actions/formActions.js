@@ -437,7 +437,7 @@ export const  deleteDetailFieldUpdateParentForm = (appId, childTableId, fieldId,
                 if  (relatedRelationship) {
                     removeRelationshipFromForm(relatedRelationship).then(
                         () => resolve()
-                    ).catch(error => {
+                    ).catch((error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error, 'error deleting section from parent form');
                         reject();
                     });
@@ -462,7 +462,7 @@ export const deleteMarkedFields = (appId, tblId, formMeta) => {
 
         return Promise.all(fieldPromises).then(() => {
             logger.debug('All promises processed in deleteMarkedFields against app: `{appId}`, tbl: `{tblId}`');
-        }).catch(error => {
+        }).catch((error) => {
             logger.error(error);
         });
     };

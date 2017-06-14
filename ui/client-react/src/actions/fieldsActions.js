@@ -168,7 +168,7 @@ export const  updateParentFormForRelationship = (appId, relationshipId, childTab
                         resolve();
                     }
                 }
-            ).then(function(updatedForm) {
+            ).then((updatedForm) => {
                 if (updatedForm) {
                     formService.updateForm(appId, parentTableId, updatedForm).then(
                         () => resolve()
@@ -210,11 +210,11 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                                 (relationshipResponse) => {
                                     return relationshipResponse.data.id;
                                 }
-                            ).then(function(relationshipId) {
+                            ).then((relationshipId) => {
                                 updateParentFormForRelationship(appId, relationshipId, field.childTableName, field.parentTableId).then(
                                     () => resolve()
                                 );
-                            }).catch(error => {
+                            }).catch((error) => {
                                 // unable to create a relationship, delete the field since it is not useful
                                 logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createRelationship or update form failed');
                                 fieldsService.deleteField(appId, tblId, fieldId);
@@ -231,7 +231,7 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                         dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
                         reject();
                     }
-                ).catch(error => {
+                ).catch((error) => {
                     logger.error(error);
                     return Promise.reject(error);
                 });
@@ -261,7 +261,7 @@ export const updateAllFieldsWithEdits = (appId, tableId) => {
 
         return Promise.all(fieldPromises).then(() => {
             logger.debug('All promises processed in updateAllFieldsWithEdit against app: `{appId}`, tbl: `{tableId}`');
-        }).catch(error => {
+        }).catch((error) => {
             logger.error(error);
         });
     };
@@ -286,7 +286,7 @@ export const saveAllNewFields = (appId, tableId, formId = null) => {
 
         return Promise.all(fieldPromises).then(() => {
             logger.debug('All promises processed in saveAllNewFields against app: `{appId}`, tbl: `{tableId}`');
-        }).catch(error => {
+        }).catch((error) => {
             logger.error(error);
         });
     };
