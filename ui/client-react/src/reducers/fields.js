@@ -152,11 +152,8 @@ const fieldsStore = (state = [], action) => {
             let {field, propertyName, newValue} = action;
 
             field[propertyName] = newValue;
-
-            if (propertyName === 'unique') {
-                //indexed needs to be set to true if 'unique' is set to true;
-                field.indexed = newValue;
-            }
+            //indexed and unique are linked and needs to be set to the same value
+            field.indexed = field.unique;
 
             fieldList.fields[fieldIndex] = {...field, isPendingEdit: true};
             fieldList.isPendingEdit = true;
