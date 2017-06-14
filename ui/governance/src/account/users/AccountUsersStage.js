@@ -5,22 +5,20 @@ import StageHeaderCount from "../../../../reuse/client/src/components/stage/stag
 import Locale from "../../../../reuse/client/src/locales/locale";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import lodash from "lodash";
+import connect from "react-redux";
+import {getTotalPaidUsers} from "./AccountUsersReducer";
 
 import "./AccountUsersStage.scss";
 
 /**
  * The stage for the AccountUsers page
  */
-class AccountUsersStage extends Component {
+export class AccountUsersStage extends Component {
 
     /**
      * Paid users are any users that have access to the app and are not internal Quick Base users
      * @returns {*}
      */
-    getTotalPaidUsers() {
-        return lodash.sumBy(this.props.users, user =>  (
-            user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));
-    }
 
     getTotalDeniedUsers() {
         return lodash.sumBy(this.props.users, user =>  (RealmUserAccountFlagConstants.IsDenied(user) ? 1 : 0));
@@ -35,7 +33,7 @@ class AccountUsersStage extends Component {
     }
 
     render() {
-        let paidUsers = this.getTotalPaidUsers(),
+        let paidUsers = this.props.paidUsers,
             deniedUsers = this.getTotalDeniedUsers(),
             deactivatedUsers = this.getTotalDeactivatedUsers();
 
@@ -77,4 +75,10 @@ AccountUsersStage.defaultProps = {
     users: []
 };
 
-export default AccountUsersStage;
+const mapStateToProps = (state) => {
+    return {
+        paidUsers: getTotalPaidUsers(state)
+    };
+};
+
+export default connect(mapStateToProps)(AccountUsersStage);

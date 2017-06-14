@@ -9,11 +9,13 @@ import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
 import Analytics from "../../../reuse/client/src/components/analytics/analytics";
 import Config from "../../../client-react/src/config/app.config";
+import _ from 'lodash';
 
 import "./governanceAppShell.scss";
 
 export class GovernanceAppShell extends Component {
     render() {
+        console.log("this.props", this.props);
         return (
             <AppShell functionalAreaName="governance">
                 <Analytics dataset={Config.evergageDataset} userId={this.props.currentUserId}/>
@@ -51,16 +53,18 @@ GovernanceAppShell.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+    console.log("STATE", state);
     let requestContextStateAccount = state.RequestContext.account;
     let requestContextStateCurrentUser = state.RequestContext.currentUser;
     return {
         isNavOpen: state.Nav.isNavOpen,
         isNavCollapsed: state.Nav.isNavCollapsed,
         accountId: requestContextStateAccount.id,
-        subdomainName: requestContextStateAccount.name,
+        subdomainName: state.RequestContext.realm.name,
         currentUserId: requestContextStateCurrentUser.id,
         isAdmin: requestContextStateCurrentUser.isAccountAdmin,
-        isRealmAdmin: requestContextStateCurrentUser.isRealmAdmin
+        isRealmAdmin: requestContextStateCurrentUser.isRealmAdmin,
+        totalItems: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0)
     };
 };
 
