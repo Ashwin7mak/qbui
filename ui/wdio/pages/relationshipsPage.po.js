@@ -183,10 +183,13 @@
         }
         },
 
+        /**
+         * Modify child records to link to one of the parent records
+         */
         modifyChildTableToRelateTpParent: {
             value: function (realmName, app, table) {
 
-                // Add child records to one of the parent records
+                // Modify child records to link to one of the parent records
                 // More efficient to do this via API but I wanted to exercise the UI in these tests
                 // Go to List All report
                 e2ePageBase.loadReportByIdInBrowser(realmName, app.id, table.id, 1);
@@ -210,7 +213,8 @@
                 childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
                 childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
                 childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
-        }}
+            }
+        }
     });
 
     module.exports = relationshipsPage;
