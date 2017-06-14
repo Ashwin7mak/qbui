@@ -122,7 +122,8 @@ describe('Relationships - View child table on form tests: ', () => {
             relationshipsPO.clickOnParentRecordLinkInForm();
             // opens parent record in slidey-Righty
             relationshipsPO.slideyRightyEl.waitForVisible();
-            // Do I need to check expectation here?
+            let parentRecordElementInDrawer = relationshipsPO.parentRecordLinkInDrawerEl;
+            expect(parentRecordElementInDrawer.getText()).toEqual("5.4349");
         });
 
         /**
@@ -132,8 +133,12 @@ describe('Relationships - View child table on form tests: ', () => {
             reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
             let parentLinkText = relationshipsPO.parentRecordLinkEl;
             expect(parentLinkText.getText()).toEqual('1');
+            // Click on the parent link just to make sure that it's clickable
+            parentLinkText.click();
+            relationshipsPO.slideyRightyEl.waitForVisible();
+            let parentRecordElementInDrawer = relationshipsPO.parentRecordLinkInDrawerEl;
+            expect(parentRecordElementInDrawer.getText()).toEqual("5.4349");
         });
-
     }
 });
 

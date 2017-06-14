@@ -29,6 +29,11 @@
                 return browser.element('.textField.viewElement.textLink');
             }
         },
+        parentRecordLinkInDrawerEl: {
+            get: function() {
+                return browser.element('.numericField.viewElement');
+            }
+        },
         // Page Object functions
         /**
          * Returns form section containing the child table for a relationship
@@ -83,7 +88,7 @@
         /**
          * Given a form that contains a link to a parent node, click on the link
          */
-        clickOnParentRecordLinkInForm: {value: function() {
+        clickOnParentRecordLinkInForm: {value: function(index) {
             formsPO.viewFormContainerEl.waitForVisible();
             browser.waitForVisible('.textField.viewElement.textLink');
             let linkEl = this.parentRecordLinkEl;
