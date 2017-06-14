@@ -286,24 +286,28 @@ function updateParentFormForRelationship(appId, relationshipId, childTableName, 
             formService.getForm(appId, parentTableId).then(
                 (formResponse) => {
                     let formMeta = formResponse.data.formMeta;
-                    let sections = formMeta.tabs[0].sections;
-                    let childReportExists = null;
-                    Object.keys(sections).forEach((sectionKey) => {
-                        if (_.has(sections[sectionKey], 'headerElement.FormHeaderElement.displayText')) {
-                            if (_.includes(_.map(sections[sectionKey], 'headerElement.FormHeaderElement.displayText'), childTableName)) {
-                                childReportExists = true;
+                    if  (formMeta.tabs[0] && formMeta.tabs[0].sections) {
+                        let sections = formMeta.tabs[0].sections;
+                        let childReportExists = null;
+                        Object.keys(sections).forEach((sectionKey) => {
+                            if (_.has(sections[sectionKey], 'headerElement.FormHeaderElement.displayText')) {
+                                if (_.includes(_.map(sections[sectionKey], 'headerElement.FormHeaderElement.displayText'), childTableName)) {
+                                    childReportExists = true;
+                                }
                             }
+                        });
+                        if (childReportExists) {
+                            return null;
+                        } else {
+                            let length = Object.keys(sections).length;
+                            sections[length] = createFormSectionForChildTable(
+                                sections[0],
+                                childTableName,
+                                relationshipId);
+                            return formMeta;
                         }
-                    });
-                    if (childReportExists) {
-                        return null;
                     } else {
-                        let length = Object.keys(sections).length;
-                        sections[length] = createFormSectionForChildTable(
-                            sections[0],
-                            childTableName,
-                            relationshipId);
-                        return formMeta;
+                        resolve();
                     }
                 }
             ).then(function(updatedForm) {
