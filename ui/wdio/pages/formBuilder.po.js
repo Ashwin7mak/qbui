@@ -92,7 +92,7 @@ class formBuilderPage {
         // The MUST BE FILLED IN checkbox in its UNCHECKED state
         return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
     }
-=
+
     get saveBtn() {
         // SAVE (form) button in footer bar
         return browser.element('.mainTrowserFooterButton');
