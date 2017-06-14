@@ -2,7 +2,7 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import Button from 'react-bootstrap/lib/Button';
 import Loader  from 'react-loader';
-import AppsList from './appsList';
+import AppsList from './appsListForLeftNav';
 import TablesList from './tablesList';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
