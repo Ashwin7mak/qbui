@@ -88,12 +88,12 @@
             /**
              * Retrieves the relationships created for the sample app.
              */
-            retrieveSavedRelationships: function (createdApp) {
+            retrieveSavedRelationships: function(createdApp) {
                 let appId = createdApp.id;
                 let relationshipEndpoint = recordBase.apiBase.resolveRelationshipsEndpoint(appId);
-                return recordBase.apiBase.executeRequest(relationshipEndpoint, consts.GET).then(function (result) {
+                return recordBase.apiBase.executeRequest(relationshipEndpoint, consts.GET).then(function(result) {
                     return JSON.parse(result.body);
-                }).catch(function (error) {
+                }).catch(function(error) {
                     log.error('Error retrieving relationships');
                     return error;
                 });
@@ -104,18 +104,18 @@
              * in the app
              * @param savedRelationships
              */
-            addChildReportsToTableForms: function (createdApp, savedRelationships) {
+            addChildReportsToTableForms: function(createdApp, savedRelationships) {
                 let appId = createdApp.id;
                 let addChildReportElements = [];
 
                 createdApp.tables.forEach((table) => {
-                    addChildReportElements.push(function () {
+                    addChildReportElements.push(function() {
 
                         const tableId = table.id;
                         let formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, 1);
                         let putFormsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
 
-                        return recordBase.apiBase.executeRequest(formsEndpoint, consts.GET).then(function (formsResult) {
+                        return recordBase.apiBase.executeRequest(formsEndpoint, consts.GET).then(function(formsResult) {
                             var form = JSON.parse(formsResult.body);
                             if (savedRelationships) {
                                 savedRelationships.forEach((relationship, index) => {
@@ -134,9 +134,9 @@
                                 });
                             }
                             return form;
-                        }).then(function (updatedForm) {
+                        }).then(function(updatedForm) {
                             return recordBase.apiBase.executeRequest(putFormsEndpoint, consts.PUT, updatedForm);
-                        }).catch(function (error) {
+                        }).catch(function(error) {
                             log.error('Error adding child report to form');
                             log.error(error);
                             return error;
@@ -144,7 +144,7 @@
                     });
                 });
                 // Bluebird's promise.each function (executes each promise sequentially)
-                return promise.each(addChildReportElements, function (queueItem) {
+                return promise.each(addChildReportElements, function(queueItem) {
                     // This is an iterator that executes each Promise function in the array here
                     return queueItem();
                 });

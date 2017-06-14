@@ -82,7 +82,7 @@
          * @param
          */
         clickAddChildButton: {
-            value: function () {
+            value: function() {
                 browser.waitForVisible('.addChildBtn');
                 browser.element('.addChildBtn').click();
                 browser.waitForVisible('.recordTrowser');
@@ -96,14 +96,14 @@
          * @param parentRefVal - parent record value
          */
         addChildRecord: {
-            value: function (origRecordCount, parentRefVal) {
+            value: function(origRecordCount, parentRefVal) {
                 // Click on add child button on embedded table opens trowser
                 this.clickAddChildButton();
                 const fieldTypes = ['allTextFields', 'allParentRecordFields'];
 
                 browser.waitForVisible('form.editForm');
                 // enter form values
-                fieldTypes.forEach(function (fieldType) {
+                fieldTypes.forEach(function(fieldType) {
                     let parentReferenceFieldValue = null;
                     if (fieldType === 'allParentRecordFields') {
                         parentReferenceFieldValue = parentRefVal;

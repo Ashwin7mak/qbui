@@ -227,7 +227,7 @@
          * Method to verify cell values in the embedded report for table child table A under parent table A -> report1 -> ListAll report
          */
         verifyFieldValuesInEmbeddedReportTable: {
-            value: function (expectedRecordValues) {
+            value: function(expectedRecordValues) {
                 for (var i = 0; i < expectedRecordValues.length; i++) {
                     //text field
                     expect(expectedRecordValues[0]).toBe(sText.toString());

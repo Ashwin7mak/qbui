@@ -203,7 +203,7 @@
          * @returns Array of parent fields
          */
         getAllParentRecordFields: {
-            value: function () {
+            value: function() {
                 return this.editFormContainerEl.elements('.Select-placeholder');
             }
         },
@@ -371,7 +371,7 @@
          * @param parentValue  parent record to be linked to
          */
         enterFormValues: {
-            value: function (fieldType, parentValue) {
+            value: function(fieldType, parentValue) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
                 var i;
                 if (!parentValue) {

@@ -166,9 +166,9 @@
                     if (createdApp.tables[2] && createdApp.tables[3]) {
                         return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7);
                     }
-                }).then(function () {
+                }).then(function() {
                     return e2eBase.relationshipService.retrieveSavedRelationships(createdApp);
-                }).then(function (savedRelationships) {
+                }).then(function(savedRelationships) {
                     return e2eBase.relationshipService.addChildReportsToTableForms(createdApp, savedRelationships);
                 }).then(function() {
                     // Return the createdApp object
