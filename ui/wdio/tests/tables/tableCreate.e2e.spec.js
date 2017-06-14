@@ -186,17 +186,5 @@
             expect(tableList.indexOf(tableName)).toBe(-1);
 
         });
-
-        it('Verify that only ADMIN can add a new table', function() {
-
-            //get user authentication and go to apps page
-            newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
-
-            //Select app
-            RequestAppsPage.selectApp(testApp.name);
-
-            //Verify New Table button not available for user other than ADMIN
-            expect(browser.isVisible('.newTable')).toBe(false);
-        });
     });
 }());

@@ -151,20 +151,5 @@
             //Verify originalFieldNames and newFieldsNames are same
             expect(originalFieldValues).toEqual(newFieldValues);
         });
-
-        it('Verify that only ADMIN can edit a new table', function() {
-            //get user authentication and go to apps page
-            newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
-
-            //Select app
-            RequestAppsPage.selectApp(testApp.name);
-
-            //Select table Table 1
-            e2ePageBase.loadTableByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id);
-
-            //Verify settings icon not available for user other than ADMIN
-            expect(browser.isExisting('.topNav .iconUISturdy-settings')).toBe(false);
-            expect(browser.isVisible('.topNav .iconUISturdy-settings')).toBe(false);
-        });
     });
 }());
