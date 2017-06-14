@@ -2,21 +2,17 @@
     'use strict';
 
     //Load the page Objects
-    var newStackAuthPO = requirePO('newStackAuth');
-    var e2ePageBase = requirePO('e2ePageBase');
-    var tableCreatePO = requirePO('tableCreate');
-    var formsPO = requirePO('formsPage');
-    let ReportContentPO = requirePO('reportContent');
-    let leftNavPO = requirePO('leftNav');
-    var rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let newStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let tableCreatePO = requirePO('tableCreate');
+    let modalDialog = requirePO('/common/modalDialog');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
-    const descFieldTitleText = 'Description';
 
-    describe('Tables - Edit Table validation tests: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
+    describe('Tables - Edit table validation tests: ', function() {
+        let realmName;
+        let realmId;
+        let testApp;
         var existingTableName = 'Table 2';
 
         /**
@@ -46,7 +42,6 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
             return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
         });
 
@@ -59,6 +54,7 @@
                     message: 'with empty table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -68,7 +64,7 @@
                     message: 'with empty required fields',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '}
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -79,16 +75,17 @@
                     message: 'with duplicate table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
-                },
+                }
             ];
         }
 
         tableFieldValidationTestCases().forEach(function(testCase) {
-            it('Verify Edit table Validation ' + testCase.message, function() {
+            it('Edit table ' + testCase.message, function() {
 
                 //Click on existing table named 'Table 2'
                 tableCreatePO.selectTable(existingTableName);
@@ -111,8 +108,11 @@
                 //Verify Reset button is enabled
                 expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
 
-                //Click on reset button in edit table mode
-                tableCreatePO.clickOnEditTableResetBtn();
+                //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
+                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
+
+                //Click on back to apps link
+                tableCreatePO.clickBackToAppsLink();
 
             });
         });
