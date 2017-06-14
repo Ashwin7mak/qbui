@@ -622,7 +622,7 @@ export default {
             name: "prénom",
             required: "Doit être rempli",
             multiChoice: "Les choix",
-            unique: "Doit avoir des valeurs uniques",
+            unique: "Doit être unique",
             linkToRecord: "Lien vers un enregistrement dans la table",
             connectedTo: "Connecté sur le champ {fieldName}"
         },

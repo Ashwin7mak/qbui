@@ -630,7 +630,7 @@ export default {
             name: "Name",
             required: "Must be filled in",
             multiChoice: "Choices",
-            unique: "Must have unique values",
+            unique: "Must be unique",
             linkToRecord: "Link to a record in the table",
             connectedTo: "Connected on {fieldName} field"
         },
