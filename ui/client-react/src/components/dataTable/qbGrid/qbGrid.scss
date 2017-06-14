@@ -77,13 +77,13 @@ $edit-icon-font-size: 18px;
 
         &.placeholderCell {
             background-color: rgba($color-purple-600, 0.08);
-            border-left: $stroke-width-thin dashed $color-black-300;
-            border-right: $stroke-width-thin dashed $color-black-300;
+            border-left: $stroke-width-thin dashed $color-purple-600;
+            border-right: $stroke-width-thin dashed $color-purple-600;
             border-bottom: none;
-            border-top: $stroke-width-thin dashed $color-black-300;
+            border-top: $stroke-width-thin dashed $color-purple-600;
 
             &:last-of-type {
-                border-right: $stroke-width-thin dashed $color-black-300;
+                border-right: $stroke-width-thin dashed $color-purple-600;
             }
 
             .gridHeaderLabel {
@@ -226,13 +226,13 @@ $edit-icon-font-size: 18px;
         position: relative;
         vertical-align: top;
         background-color: rgba($color-purple-600, 0.08);
-        border-left: $stroke-width-thin dashed $color-black-300;
-        border-right: $stroke-width-thin dashed $color-black-300;
+        border-left: $stroke-width-thin dashed $color-purple-600;
+        border-right: $stroke-width-thin dashed $color-purple-600;
         border-bottom: none;
         border-top: none;
 
         &:last-of-type {
-            border-right: $stroke-width-thin dashed $color-black-300;
+            border-right: $stroke-width-thin dashed $color-purple-600;
         }
 
         .cellWrapper {
@@ -590,7 +590,7 @@ $edit-icon-font-size: 18px;
         border-bottom: 1px solid $grid-line-color;
     }
     .qbRow:last-of-type .placeholderCell {
-        border-bottom: $stroke-width-thin dashed $color-black-300;
+        border-bottom: $stroke-width-thin dashed $color-purple-600;
     }
 
     // row hover highlighting - only done while not inline editing
