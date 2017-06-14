@@ -28,12 +28,12 @@
 
 
         addChildButtonClass: {
-            get: function () {
+            get: function() {
                 return '.addChildBtn';
             }
         },
         addChildButtonDisabledClass: {
-            get: function () {
+            get: function() {
                 return '.addChildBtn.disabled';
             }
         },
@@ -189,7 +189,7 @@
          * @param table
          */
         modifyChildTableToRelateToParent: {
-            value: function (app, table) {
+            value: function(app, table) {
                 const fieldToEdit = table.fields[6];
                 const editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
                 return e2eBase.recordService.editRecords(app.id, table.id, editRecords);
