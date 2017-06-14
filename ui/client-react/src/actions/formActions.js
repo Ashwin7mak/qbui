@@ -516,8 +516,8 @@ function removeRelationshipFromForm(relationship) {
                         let sections = formMeta.tabs[0].sections;
                         let sectionToBeDeleted = null;
                         Object.keys(sections).forEach((sectionKey) => {
-                            if(_.includes(_.map(_.map(_.get(sections[sectionKey], 'elements'),'ChildReportElement'),'relationshipId'), relationship.id)){
-                               sectionToBeDeleted = sectionKey;
+                            if(_.includes(_.map(_.map(_.get(sections[sectionKey], 'elements'), 'ChildReportElement'), 'relationshipId'), relationship.id)) {
+                                sectionToBeDeleted = sectionKey;
                             }
                         });
                         if (sectionToBeDeleted) {
@@ -542,9 +542,8 @@ function removeRelationshipFromForm(relationship) {
         }else{
             resolve();
         }
-    })
+    });
 }
-
 
 
 
