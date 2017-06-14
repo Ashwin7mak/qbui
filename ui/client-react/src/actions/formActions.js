@@ -279,8 +279,8 @@ export const deselectField = (formId, location) => {
  * @param location
  * @returns {{id, type, content}|*}
  */
-export const removeFieldFromForm = (formId, field, location) => {
-    return {id: formId, type: types.REMOVE_FIELD, field, location};
+export const removeFieldFromForm = (formId, appId, tblId, field, location) => {
+    return {id: formId, type: types.REMOVE_FIELD, appId, tblId, field, location};
 };
 
 /**

@@ -147,8 +147,9 @@ export const FormBuilderContainer = React.createClass({
     },
 
     removeField() {
+        const {appId, tblId} = this.props.match.params;
         if (this.props.removeFieldFromForm) {
-            return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
+            return this.props.removeFieldFromForm(this.props.currentForm.id, appId, tblId, this.props.selectedField);
         }
     },
 

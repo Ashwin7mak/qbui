@@ -188,7 +188,13 @@ const fieldsStore = (state = [], action) => {
 
         return newState;
     }
-
+    case types.REMOVE_FIELD : {
+        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        fieldList = _.cloneDeep(fieldList);
+        fieldList.fields = _.filter(fieldList.fields, field => field.id !== action.field.id);
+        newState.push(fieldList);
+        return newState;
+    }
     default:
         return state;
     }
