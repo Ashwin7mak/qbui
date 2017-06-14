@@ -277,7 +277,6 @@ export const FormBuilderContainer = React.createClass({
             formId = this.props.currentForm.id;
             formData = this.props.currentForm.formData;
         }
-        let app = this.props.app;
 
         return (
             <div className="formBuilderContainer">
