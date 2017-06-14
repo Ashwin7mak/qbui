@@ -54,12 +54,14 @@
             UsersTablePage.userRemoveIcon.click();
 
             // Click on remove button from the dialogue box
+            expect(modalDialog.modalDialogTitle).toContain("Remove this user?");
             modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
             //wait until notification container goes away
             browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Check that the user was removed
             ReportTableActionsPO.selectAllRecordsCheckbox();
+            browser.pause(e2eConsts.shortWaitTimeMs);
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
@@ -79,6 +81,7 @@
 
             // Check for the user not removed
             ReportTableActionsPO.selectAllRecordsCheckbox();
+            browser.pause(e2eConsts.shortWaitTimeMs);
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
     });

@@ -58,10 +58,16 @@ class modalDialogWindow {
         return this.modalDialogContainer.element('.modal-title').getAttribute('textContent');
     }
 
-    get modalDialogTitlex() {
+    get modalDialogAddUserTitle() {
         // modal dialog title
         this.modalDialogContainer.element('.title').waitForVisible();
         return this.modalDialogContainer.element('.title').getAttribute('textContent');
+    }
+
+    get modalDialogShareTitle() {
+        // modal dialog title
+        this.modalDialogContainer.element('.titleText').waitForVisible();
+        return this.modalDialogContainer.element('.titleText').getAttribute('textContent');
     }
 
     get modalDialogFooterButtons() {

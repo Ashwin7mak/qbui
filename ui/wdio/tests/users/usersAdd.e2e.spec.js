@@ -82,15 +82,17 @@
             UsersTablePage.newUserBtn.click();
             expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
             var appName = testApp.name;
-            expect(modalDialog.modalDialogTitlex).toContain(appName);
+            expect(modalDialog.modalDialogAddUserTitle).toContain(appName);
             // Search for known user
             UsersTablePage.selecthUser(searchUserName);
             // Select user
             UsersTablePage.userAddSearcMenu.click();
             // Click add user
             modalDialog.modalDialogAddUserBtn.click();
-            // Click No Thanks to Share with User
             browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+            expect(modalDialog.modalDialogShareTitle).toContain("Your app has");
+            // Click No Thanks to Share with User
             modalDialog.modalDialogNoThanksButton.click();
         });
 

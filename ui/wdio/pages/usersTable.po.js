@@ -6,9 +6,6 @@
     'use strict';
     // Import the base page object
     let e2ePageBase = requirePO('./e2ePageBase');
-    let formsPO = requirePO('formsPage');
-
-
     let UsersTablePage = Object.create(e2ePageBase, {
 
 
@@ -24,21 +21,11 @@
         // Add new user button
         newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
-        // Add user button
-        addUserBtn: {get: function() {return browser.element('.buttons .finishedButton.btn.btn-primary');}},
-
         // Search for a new user search container
         searchNewUser: {get: function() {return browser.element('.modal-dialog .Select-multi-value-wrapper');}},
 
-        // Select user role container
-        userRoleSelection: {get: function() {return browser.element('.assignRole .Select-arrow-zone');}},
-
-        // Select user option
-        userSelectSearch: {get: function() {return browser.element('.Select-input .Select-value-label span');}},
-
         // Add new user menu
         userAddSearcMenu: {get: function() {return browser.element('.modal-dialog .Select-menu-outer');}},
-
 
         // Add new user clear searchbox entry
         userAddSearchBoxClear: {get: function() {return browser.element('.Select-clear');}},
