@@ -28,7 +28,6 @@ let AppsList = React.createClass({
         this.setState({searchText: ev.target.value});
     },
     searchMatches(name) {
-        debugger;
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
     appList() {
