@@ -101,6 +101,12 @@
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
 
+        // Turn on/off inbound and outbound request tracing
+        tracingEnabled: false,
+
+        // Tracing host name
+        tracingHost: ''
+
         /**
          * mock data for feature switches for local testing
          */

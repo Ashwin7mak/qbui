@@ -10,7 +10,8 @@
     let log = require('../logger').getLogger();
     let perfLogger = require('../perfLogger');
     let routesConstants = require('./routeConstants');
-    let request = require('request');
+    let env = require('../config/environment');
+    let request = require('../requestClient').getClient(env);
     let routeGroupMapper = require('./qbRouteGroupMapper');
     let simpleStringify = require('./../../../common/src/simpleStringify.js');
     let queryFormatter = require('../api/quickbase/formatter/queryFormatter');
