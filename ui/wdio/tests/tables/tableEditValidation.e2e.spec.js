@@ -59,7 +59,6 @@
                     message: 'with empty table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -80,7 +79,6 @@
                     message: 'with duplicate table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
@@ -88,8 +86,7 @@
                 },
             ];
         }
-
-        //TODO disabling this test and fix it tomorrow so it wont block master e2e failure
+        
         tableFieldValidationTestCases().forEach(function(testCase) {
             it('Verify Edit table Validation ' + testCase.message, function() {
 
@@ -114,11 +111,8 @@
                 //Verify Reset button is enabled
                 expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
 
-                //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
-
-                //Click on back to apps link
-                tableCreatePO.clickBackToAppsLink();
+                //Click on reset button in edit table mode
+                tableCreatePO.clickOnEditTableResetBtn();
 
             });
         });
