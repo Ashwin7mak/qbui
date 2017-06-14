@@ -151,6 +151,7 @@ export const sortUsers = (users, sortFids) => {
  */
 
 export const facetUser = (users, facetSelections) => {
+    const facetFields = FACET_FIELDS();
 
     // Get the all the selected in this format {(id: [facets*])*}
     let facetsApplied = facetSelections && facetSelections.getSelections ? facetSelections.getSelections() : {};
@@ -163,11 +164,11 @@ export const facetUser = (users, facetSelections) => {
             return _.every(facetsApplied, (facetValues, fieldID) => {
 
                 // CHECKBOXES can have different values "Y/N", "T/F". Normalize it
-                if (FACET_FIELDS[fieldID].type.toUpperCase() === SCHEMACONSTS.CHECKBOX) {
+                if (facetFields[fieldID].type.toUpperCase() === SCHEMACONSTS.CHECKBOX) {
                     facetValues = facetValues.map((facet) => (facet.toString().toUpperCase() === 'NO' || facet.toString().toUpperCase() === 'FALSE') ?  false : true);
                 }
                 // if the facet fields have values then see if the values exist for the fields
-                return _.isEmpty(facetValues) || _.includes(facetValues, (FACET_FIELDS[fieldID].formatter(user)));
+                return _.isEmpty(facetValues) || _.includes(facetValues, (facetFields[fieldID].formatter(user)));
             });
         });
     }
@@ -181,7 +182,7 @@ export const facetUser = (users, facetSelections) => {
  *
  * NOTE: In the future, this is going to be at the server
  */
-export const doUpdate = (gridId, gridState, _itemsPerPage) => {
+export const doUpdateUsers = (gridId, gridState, _itemsPerPage) => {
     return (dispatch, getState) => {
         let users = getState().AccountUsers ? getState().AccountUsers.users : [];
 
@@ -240,7 +241,7 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
             dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
 
             // run through the pipeline and update the grid
-            dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));
+            dispatch(doUpdateUsers(gridID, StandardGridState.defaultGridState, itemsPerPage));
 
         }).catch(error => {
             dispatch(failedAccountUsers(error));

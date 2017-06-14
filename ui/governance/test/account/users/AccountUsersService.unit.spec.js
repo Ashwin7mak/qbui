@@ -4,7 +4,7 @@ import AccountUsersService from "../../../src/account/users/AccountUsersService"
 
 describe('Account Users Service Tests', () => {
 
-    var accountUsersService;
+    let accountUsersService;
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
