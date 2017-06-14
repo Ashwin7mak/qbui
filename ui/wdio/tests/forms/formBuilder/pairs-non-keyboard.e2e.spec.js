@@ -93,7 +93,7 @@
                 expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
                 // revise the REQUIRED property (i.e. click the checkbox to make it checked)
                 // formBuilderPO.setRequiredCheckboxState(true);
-                requiredCheckboxNotChecked.click();
+                formBuilderPO.requiredCheckboxNotChecked.click();
                 // cancel, reopen, reselect
                 formBuilderPO.cancel().open().selectFieldByIndex(1);
                 // verify REQUIRED checkbox IS NOT checked
@@ -105,7 +105,7 @@
                 expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
                 // revise the REQUIRED property (i.e. click the checkbox to make it checked)
                 // formBuilderPO.setRequiredCheckboxState(true);
-                requiredCheckboxNotChecked.click();
+                formBuilderPO.requiredCheckboxNotChecked.click();
                 // save, reopen, reselect
                 formBuilderPO.save().open().selectFieldByIndex(1);
                 // verify REQUIRED checkbox IS checked
