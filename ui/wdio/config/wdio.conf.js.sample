@@ -1,8 +1,16 @@
+// wdio.conf.js
+// Use this config file to run wdio tests against desktop browsers locally
+
 // Global variable that allows you to set wdio to use a realm defined in your node config file
 // (see onPrepare hook below)
 var localConf;
+// Variables for the test directory structure
+var baseTestDir = './ui/wdio/tests';
 
 exports.config = {
+    // Set to true if this config file uses the Appium service (mobile device emulator testing)
+    useAppium : false,
+
     // ============
     // Debug config
     // ============
@@ -21,69 +29,77 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './ui/wdio/tests/**/*.spec.js'
+        //baseTestDir + '/**/*.spec.js'
     ],
     // Patterns to exclude.
     exclude: [
         // Forms Tests
-        // Stabilize in CI before enabling
         //TODO MC-2105 needs to be fixed to enable permissions on forms
         // disabling formPermissions tests as after moving to ExperienceEngine,
         // permissions for viewer and participant are not working correctly
-        './ui/wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
-        './ui/wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
+        baseTestDir + '/forms/formPermissionsViewerRole.e2e.spec.js',
+        baseTestDir + '/forms/formPermissionsParticipantRole.e2e.spec.js',
 
         // Reports Tests
         //TODO: MB-2115 this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
         // reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
         // because the save and add button is disabled we turned off the reportAddRecord test
         // we will turn it back on once this button has been enabled again
-        './ui/wdio/tests/reports/reportAddRecord.e2e.spec.js',
-        // Stabilize in CI before enabling
-        './ui/wdio/tests/reports/reportSearch.e2e.spec.js'
+        baseTestDir + '/reports/reportAddRecord.e2e.spec.js',
+
+        // Run smallBP tests with wdioMobile.conf.js instead
+        baseTestDir + '/smallBP/**/*.spec.js'
     ],
     // Tests organized into suites (add --suite reports,forms,tables to your IntelliJ config to use).
     suites: {
         // Please alphabetize these by folder level
+        automations: [
+            baseTestDir + '/automations/settingsMenu.e2e.spec.js',
+            baseTestDir + '/automations/automationsList.e2e.spec.js'
+        ],
         forms: [
-            './ui/wdio/tests/forms/formAdd.e2e.spec.js',
-            './ui/wdio/tests/forms/formAddValidation.e2e.spec.js',
-            './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
-            './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
-            './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
-            './ui/wdio/tests/forms/formEdit.e2e.spec.js',
-            './ui/wdio/tests/forms/formEditValidation.e2e.spec.js'
-        ],
-        reports: [
-            './ui/wdio/tests/reports/reportBuilder.e2e.spec.js',
-            './ui/wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
-            './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
-            './ui/wdio/tests/reports/reportNavigation.e2e.spec.js',
-            './ui/wdio/tests/reports/reportTable.e2e.spec.js',
-            './ui/wdio/tests/reports/reportTopNav.e2e.spec.js',
-            './ui/wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-            './ui/wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-            './ui/wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-            './ui/wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
-        ],
-        relationships: [
-            './ui/wdio/tests/relationships/relationshipNavToChild.e2e.spec.js'
-        ],
-        tables: [
-            './ui/wdio/tests/tables/tableCreate.e2e.spec.js',
-            './ui/wdio/tests/tables/tableDelete.e2e.spec.js',
-            './ui/wdio/tests/tables/tableEdit.e2e.spec.js',
-            './ui/wdio/tests/tables/tableHomePage.e2e.spec.js'
-
-        ],
-        users: [
-            './ui/wdio/tests/users/usersTable.e2e.spec.js',
-            './ui/wdio/tests/users/usersRemove.e2e.spec.js'
+            baseTestDir + '/forms/formAdd.e2e.spec.js',
+            baseTestDir + '/forms/formAddValidation.e2e.spec.js',
+            baseTestDir + '/forms/formBuilder/non-pairs.e2e.spec.js',
+            baseTestDir + '/forms/formBuilder/pairs-keyboard.e2e.spec.js',
+            baseTestDir + '/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
+            baseTestDir + '/forms/formEdit.e2e.spec.js',
+            baseTestDir + '/forms/formEditValidation.e2e.spec.js'
         ],
         global: [
-            './ui/wdio/tests/global/globalTopNav.e2e.spec.js',
-            './ui/wdio/tests/global/globalLeftNav.e2e.spec.js',
-        ]
+            baseTestDir + '/global/globalTopNav.e2e.spec.js',
+            baseTestDir + '/global/globalLeftNav.e2e.spec.js'
+        ],
+        relationships: [
+            baseTestDir + '/relationships/createRelationship.e2e.spec.js',
+            baseTestDir + '/relationships/createRelationshipNegativeTests.e2e.spec.js',
+            baseTestDir + '/relationships/relationshipNavToChild.e2e.spec.js'
+        ],
+        reports: [
+            baseTestDir + '/reports/reportBuilder.e2e.spec.js',
+            baseTestDir + '/reports/reportDeleteRecord.e2e.spec.js',
+            baseTestDir + '/reports/reportEditRecord.e2e.spec.js',
+            baseTestDir + '/reports/reportNavigation.e2e.spec.js',
+            baseTestDir + '/reports/reportSearch.e2e.spec.js',
+            baseTestDir + '/reports/reportTable.e2e.spec.js',
+            baseTestDir + '/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseTestDir + '/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+            baseTestDir + '/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+            baseTestDir + '/reports/sorting/reportSortingViaContainer.e2e.spec.js'
+        ],
+        tables: [
+            baseTestDir + '/tables/tableCreate.e2e.spec.js',
+            baseTestDir + '/tables/tableCreateValidation.e2e.spec.js',
+            baseTestDir + '/tables/tableDelete.e2e.spec.js',
+            baseTestDir + '/tables/tableEdit.e2e.spec.js',
+            baseTestDir + '/tables/tableEditValidation.e2e.spec.js',
+            baseTestDir + '/tables/tableHomePage.e2e.spec.js'
+        ],
+        users: [
+            baseTestDir + '/users/usersTable.e2e.spec.js',
+            baseTestDir + '/users/usersRemove.e2e.spec.js'
+        ],
+
     },
     //
     // ============
@@ -111,11 +127,12 @@ exports.config = {
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 5,
+        maxInstances: 1,
         // what browser instance you want to launch
         browserName: 'chrome',
         // Custom variable we use to set the size of the browser
-        breakpointSize: 'large'
+        breakpointSize: 'xlarge'
+
     }],
     //
     // ===================
@@ -195,17 +212,17 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
     reporters: ['spec', 'junit'],
-        reporterOptions: {
-            junit: {
-                outputDir: './ui/wdio/junitOutput'
-            }
-        },
+    reporterOptions: {
+        junit: {
+            outputDir: './ui/wdio/junitOutput'
+        }
+    },
     //
     // Options to be passed to Jasmine.
     jasmineNodeOpts: {
         //
         // Jasmine default timeout
-        defaultTimeoutInterval: 120000,
+        defaultTimeoutInterval: 500000,
         //
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time
@@ -276,14 +293,16 @@ exports.config = {
         // See http://webdriver.io/guide/testrunner/browserobject.html for working with config file variables
         global.browserName = browser.desiredCapabilities.browserName;
 
-        // Grab the browser settings from the capabilities object and set the browser size
-        var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
-        global.breakpointSize = browserDimensions.breakpointSize;
-        global.browserWidth = browserDimensions.browserWidth;
-        global.browserHeight = browserDimensions.browserHeight;
-
-        browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-        browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+        // This does not work if using Appium so need to check global var here
+        if (!this.useAppium) {
+            // Grab the browser settings from the capabilities object and set the browser size
+            var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
+            global.breakpointSize = browserDimensions.breakpointSize;
+            global.browserWidth = browserDimensions.browserWidth;
+            global.browserHeight = browserDimensions.browserHeight;
+            browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+            browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+        }
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object
         // This call creates a your test realm down in api.base
