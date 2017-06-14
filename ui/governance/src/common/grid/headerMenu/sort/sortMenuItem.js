@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import MenuItem from "react-bootstrap/lib/MenuItem";
-import Locale from "APP/locales/locales";
+import Locale from "REUSE/locales/locale";
 import * as FieldConsts from "APP/constants/schema";
 import Icon from "REUSE/components/icon/icon";
 
@@ -13,7 +13,7 @@ class SortMenuItem extends Component {
      * Gets the appropriate sort ascending message based on field type
      * @returns {*}
      */
-    getSortAscText() {
+    getSortAscText = () => {
         if (!_.has(this.props.fieldDef, 'datatypeAttributes.type')) {
             return '';
         }
@@ -42,13 +42,13 @@ class SortMenuItem extends Component {
             break;
         }
         return Locale.getMessage(`report.menu.sort.${message}`);
-    }
+    };
 
     /**
      * Gets the appropriate sort descending message based on field type
      * @returns {*}
      */
-    getSortDescText() {
+    getSortDescText = () => {
         if (!_.has(this.props.fieldDef, 'datatypeAttributes.type')) {
             return '';
         }
@@ -78,82 +78,82 @@ class SortMenuItem extends Component {
         }
 
         return Locale.getMessage(`report.menu.sort.${message}`);
-    }
+    };
 
     /**
      * Gets the appropriate sort message
      * @returns {*}
      */
-    getSortText() {
+    getSortText = () => {
         if (this.props.asc) {
             return this.getSortAscText();
         } else {
             return this.getSortDescText();
         }
-    }
+    };
 
     /**
      * Checks if a particular field has been sorted in ascending order
      * @returns {boolean}
      */
-    isSortedAsc() {
+    isSortedAsc = () => {
         if (!this.props.sortFids) {return false;}
 
         return _.some(this.props.sortFids, fid => {
             // Math.abs is needed because when a field is sorted in descending order, the field id is a negative value
             return Math.abs(fid) === this.props.fieldDef.id && fid > 0;
         });
-    }
+    };
 
     /**
      * Checks if a particular field has been sorted
      * @returns {boolean}
      */
-    isColumnSorted() {
+    isColumnSorted = () => {
         if (!this.props.sortFids) {return false;}
 
         return _.some(this.props.sortFids, fid => {
             // Math.abs is needed because when a field is sorted in descending order, the field id is a negative value
             return Math.abs(fid) === this.props.fieldDef.id;
         });
-    }
+    };
 
     /**
      * Checks if column is sorted ascending
      * @returns {boolean}
      */
-    isColumnSortedAscending() {
+    isColumnSortedAscending = () => {
         return this.isColumnSorted() && this.isSortedAsc();
-    }
+    };
 
     /**
      * Checks if column is sorted descending
      * @returns {boolean}
      */
-    isColumnSortedDescending() {
+    isColumnSortedDescending = () => {
         return this.isColumnSorted() && !this.isSortedAsc();
-    }
+    };
 
     /**
      * Checks if column is already sorted as desired
      * @returns {boolean}
      */
-    isColumnAlreadySorted() {
+    isColumnAlreadySorted = () => {
         if (this.props.asc) {
             return this.isColumnSortedAscending();
         } else {
             return this.isColumnSortedDescending();
         }
-    }
+    };
 
     /**
      * Updates the sort based on this menu item
      */
-    setSort() {
+    setSort = () => {
         if (this.props.setSort) {
             this.props.setSort(this.props.fieldDef.id, this.props.asc, this.isColumnAlreadySorted());
         }
-    }
+    };
 
     render() {
         return (

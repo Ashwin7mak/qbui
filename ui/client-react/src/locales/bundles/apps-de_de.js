@@ -608,7 +608,7 @@ export default {
             name: "Name",
             required: "Muss ausgefüllt werden",
             multiChoice: "Wahlen",
-            unique: "Muss einmalige Werte haben",
+            unique: "Muss einzigartig sein",
             linkToRecord: "Link zu einem Datensatz in der Tabelle",
             connectedTo: "Auf {fieldName}-Feld verbunden"
         },
@@ -655,6 +655,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
+            existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",

@@ -607,7 +607,7 @@ export default {
             name: "prénom",
             required: "Doit être rempli",
             multiChoice: "Les choix",
-            unique: "Doit avoir des valeurs uniques",
+            unique: "Doit être unique",
             linkToRecord: "Lien vers un enregistrement dans la table",
             connectedTo: "Connecté sur le champ {fieldName}"
         },
@@ -654,6 +654,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
+            existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",

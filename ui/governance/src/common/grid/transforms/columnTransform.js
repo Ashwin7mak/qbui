@@ -19,9 +19,9 @@ class ColumnTransform {
      * @param column - the original array of columns
      * @returns a new column definitions transformed as desired
      */
-    apply(columns) {
+    apply = (columns) => {
         return columns;
-    }
+    };
 }
 
 export default ColumnTransform;

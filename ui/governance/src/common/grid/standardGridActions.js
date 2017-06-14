@@ -112,7 +112,7 @@ export const setFacetSelections = (gridId, facetSelections) => ({
  */
 export const doUpdate = (gridId, doUpdateAction) => {
     return (dispatch, getState) => {
-        var gridState = getState().Grids[gridId] || {};
+        let gridState = getState().Grids[gridId] || {};
         dispatch(doUpdateAction(gridId, gridState));
     };
 };
