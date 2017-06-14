@@ -76,14 +76,14 @@ $edit-icon-font-size: 18px;
         z-index: $zindex-qbGrid-th;
 
         &.placeholderCell {
-            background-color: rgba($color-purple-600, 0.08);
-            border-left: $stroke-width-thin dashed $color-purple-600;
-            border-right: $stroke-width-thin dashed $color-purple-600;
+            background-color: rgba($dragPreview-background-color, 0.08);
+            border-left: $stroke-width-thin dashed $dragtoken-border-color;
+            border-right: $stroke-width-thin dashed $dragtoken-border-color;
             border-bottom: none;
-            border-top: $stroke-width-thin dashed $color-purple-600;
+            border-top: $stroke-width-thin dashed $dragtoken-border-color;
 
             &:last-of-type {
-                border-right: $stroke-width-thin dashed $color-purple-600;
+                border-right: $stroke-width-thin dashed $dragtoken-border-color;
             }
 
             .gridHeaderLabel {
@@ -225,14 +225,14 @@ $edit-icon-font-size: 18px;
         max-width: 80px;
         position: relative;
         vertical-align: top;
-        background-color: rgba($color-purple-600, 0.08);
-        border-left: $stroke-width-thin dashed $color-purple-600;
-        border-right: $stroke-width-thin dashed $color-purple-600;
+        background-color: rgba($dragPreview-background-color, 0.08);
+        border-left: $stroke-width-thin dashed $dragtoken-border-color;
+        border-right: $stroke-width-thin dashed $dragtoken-border-color;
         border-bottom: none;
         border-top: none;
 
         &:last-of-type {
-            border-right: $stroke-width-thin dashed $color-purple-600;
+            border-right: $stroke-width-thin dashed $dragtoken-border-color;
         }
 
         .cellWrapper {
@@ -590,7 +590,7 @@ $edit-icon-font-size: 18px;
         border-bottom: 1px solid $grid-line-color;
     }
     .qbRow:last-of-type .placeholderCell {
-        border-bottom: $stroke-width-thin dashed $color-purple-600;
+        border-bottom: $stroke-width-thin dashed $dragtoken-border-color;
     }
 
     // row hover highlighting - only done while not inline editing
