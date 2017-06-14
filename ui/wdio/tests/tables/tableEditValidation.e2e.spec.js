@@ -38,12 +38,6 @@
             });
         });
 
-        /**
-         * Before each it block reload the list all report (can be used as a way to reset state between tests)
-         */
-        beforeEach(function() {
-            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-        });
 
         /**
          * Data provider for table field validation testCases.
@@ -87,6 +81,9 @@
         tableFieldValidationTestCases().forEach(function(testCase) {
             it('Edit table ' + testCase.message, function() {
 
+                //load app via url
+                e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+
                 //Click on existing table named 'Table 2'
                 tableCreatePO.selectTable(existingTableName);
 
@@ -111,8 +108,8 @@
                 //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
                 expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
 
-                //Click on back to apps link
-                tableCreatePO.clickBackToAppsLink();
+                //Click on reset button in edit table mode
+                tableCreatePO.clickOnEditTableResetBtn();
 
             });
         });

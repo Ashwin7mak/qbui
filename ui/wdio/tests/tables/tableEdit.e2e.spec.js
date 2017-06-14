@@ -133,7 +133,7 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Click on apply button in edit table mode
+            //Click on reset button in edit table mode
             tableCreatePO.clickOnEditTableResetBtn();
 
             //Click on back to apps page link
