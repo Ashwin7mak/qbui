@@ -2,16 +2,12 @@ import Locale from "../../../../../reuse/client/src/locales/locale";
 import * as SCHEMACONSTS from "../../../../../client-react/src/constants/schema";
 import * as Formatters from "./AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmUserAccountFlagConstants.js";
-import GovernanceBundleLoader from "../../../locales/governanceBundleLoader";
-
-GovernanceBundleLoader.changeLocale('en-us');
 
 /**
  * These are all the fields that the Users Grid Supports
  * Different User Permissions shows and hides the different facet fields
- * @type {[*]}
  */
-export const FACET_FIELDS = [
+export const FACET_FIELDS = () => [
     {
         name: Locale.getMessage("governance.account.users.userStatus"),
         type: SCHEMACONSTS.TEXT,
@@ -102,19 +98,21 @@ export const FACET_FIELDS = [
     }
 ];
 
-export const GetFacetFields = (hasAccountAdmin, hasRealmAdmin) => {
+export const GetAccountUsersFacetFields = (hasAccountAdmin, hasRealmAdmin) => {
 
     // Build the full facet information compliant with FacetInterface
     let facetInfo = [];
 
-    _.forEach(FACET_FIELDS, (field, fieldID) => {
+    let facetFields = FACET_FIELDS();
+
+    _.forEach(facetFields, (field, fieldID) => {
         if (field && (field.needsAccountAdmin && hasAccountAdmin || field.needsRealmAdmin && hasRealmAdmin)) {
             let id = parseInt(fieldID);
             facetInfo.push({
                 id: id,
-                name: FACET_FIELDS[fieldID].name,
-                type: FACET_FIELDS[fieldID].type,
-                values: _.map(FACET_FIELDS[fieldID].options, (aFacet) => {
+                name: facetFields[fieldID].name,
+                type: facetFields[fieldID].type,
+                values: _.map(facetFields[fieldID].options, (aFacet) => {
                     return {id: id, value: aFacet};
                 })
             });
