@@ -62,7 +62,6 @@ let AppsList = React.createClass({
 
 
     render() {
-        console.log('this.appList: ', this.appList());
         return (
             <ul className={"appsList"} >
 
