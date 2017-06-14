@@ -6,4 +6,4 @@ describe('HeaderMenuColumnTransform', () => {
         jasmineEnzyme();
         let testHeaderMenuColumnTransform = new headerMenuColumnTransform();
     });
-})
+});
