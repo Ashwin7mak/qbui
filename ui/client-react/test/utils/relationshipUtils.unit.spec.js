@@ -1,74 +1,6 @@
 import RelationshipUtils from '../../src/utils/relationshipUtils';
 
 describe('RelationshipUtils', () => {
-    describe('canCreateNewParentRelationship', () => {
-
-        let fields = [
-            {id:1},
-            {id:2},
-            {id:3}
-        ];
-
-        let tables = [
-            {id: "t1", recordTitleFieldId: 1, fields}, // only valid parent table
-            {id: "t2", recordTitleFieldId: 1, fields}, // existing relationship to parent
-            {id: "t3", fields}, // no record title field
-        ];
-
-        let relationships = [
-            {masterTableId: "t1", detailTableId: "t2"}
-        ];
-
-        let allRelationships = [
-            {masterTableId: "t1", detailTableId: "t2"},
-            {masterTableId: "t3", detailTableId: "t2"}
-        ];
-
-        let testCases = [
-            {
-                description: 'returns true if parent is still available',
-                tableId: "t3",
-                tables: tables,
-                relationships,
-                expectation: true
-            },
-            {
-                description: 'returns true if parent is still available due to no relationships',
-                tableId: "t2",
-                tables: tables,
-                relationships: [],
-                expectation: true
-            },
-            {
-                description: 'returns false if no parent is available due to existing relationship',
-                tableId: "t2",
-                tables: tables,
-                relationships: allRelationships,
-                expectation: false
-            },
-            {
-                description: 'returns false if no parent is available due to no tables',
-                tableId: "t2",
-                tables: [],
-                relationships,
-                expectation: false
-            },
-            {
-                description: 'returns true if parent is available without having a recordTitleFieldId',
-                tableId: "t2",
-                tables: tables,
-                relationships,
-                expectation: true
-            },
-
-        ];
-
-        testCases.forEach(testCase => {
-            it(testCase.description, () => {
-                expect(RelationshipUtils.canCreateNewParentRelationship(testCase.tableId, testCase.tables, testCase.relationships)).toEqual(testCase.expectation);
-            });
-        });
-    });
 
     describe('getValidParentTablesForRelationship', () => {
         let tables = [
@@ -79,56 +11,79 @@ describe('RelationshipUtils', () => {
 
         let existingRelationships = [
             {masterTableId: "t1", detailTableId: "t2"},
-            {masterTableId: "t3", detailTableId: "t2"}
+            {masterTableId: "t3", detailTableId: "t2", detailFieldId: 123}
         ];
         let testCases = [
             {
                 description: 'test no current table',
-                existingRelationships: existingRelationships,
                 detailTable: null,
-                appTables: tables,
+                app: {tables, relationships: existingRelationships},
+                deletedFields: [],
+                newRelationshipFieldIds: [],
                 expectedList: []
             },
             {
                 description: 'test no app tables',
-                existingRelationships: existingRelationships,
                 detailTable: tables[0],
-                appTables: [],
+                app: {tables: [], relationships: existingRelationships},
+                deletedFields: [],
+                newRelationshipFieldIds: [],
                 expectedList: []
             },
             {
                 description: 'test null app tables',
-                existingRelationships: existingRelationships,
                 detailTable: tables[0],
-                appTables: null,
+                app: {tables: null, relationships: existingRelationships},
+                deletedFields: [],
+                newRelationshipFieldIds: [],
                 expectedList: []
             },
             {
                 description: 'test no existing relationship, filter out self',
-                existingRelationships: [],
                 detailTable: tables[0],
-                appTables: tables,
+                app: {tables, relationships: []},
+                deletedFields: [],
+                newRelationshipFieldIds: [],
                 expectedList: [tables[1], tables[2]]
             },
             {
                 description: 'test filter out existing masters',
-                existingRelationships: existingRelationships,
                 detailTable: tables[1],
-                appTables: tables,
+                app: {tables, relationships: existingRelationships},
+                deletedFields: [],
+                newRelationshipFieldIds: [],
                 expectedList: []
             },
             {
-                description: 'test filter out circular relationships',
-                existingRelationships: [{masterTableId: "t1", detailTableId: "t2"}],
+                description: 'test filter out existing masters unless deleted',
+                detailTable: tables[1],
+                app: {tables, relationships: existingRelationships},
+                deletedFields: [123],
+                newRelationshipFieldIds: [],
+                expectedList: [tables[2]]
+            },
+            {
+                description: 'test filter out new unsaved relationships',
                 detailTable: tables[0],
-                appTables: tables,
+                app: {id: 'appId', tables, relationships: []},
+                deletedFields: [],
+                fields: [{appId: 'appId', tblId: 't1', fields: [{id: 'new1', parentTableId: "t2"}]}],
+                newRelationshipFieldIds: ['new1'],
+                expectedList: [tables[2]]
+            },
+            {
+                description: 'test filter out circular relationships',
+                detailTable: tables[0],
+                app: {tables, relationships: [{masterTableId: "t1", detailTableId: "t2"}]},
+                deletedFields: [],
+                newRelationshipFieldIds: [],
                 expectedList: [tables[2]]
             }
         ];
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                expect(RelationshipUtils.getValidParentTablesForRelationship(testCase.existingRelationships, testCase.appTables, testCase.detailTable)).toEqual(testCase.expectedList);
+                expect(RelationshipUtils.getValidParentTablesForRelationship(testCase.app, testCase.detailTable, testCase.fields, testCase.newRelationshipFieldIds, testCase.deletedFields)).toEqual(testCase.expectedList);
             });
         });
     });
