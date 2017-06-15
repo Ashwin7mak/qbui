@@ -8,7 +8,7 @@
     //Load the page Objects
     let e2ePageBase = requirePO('e2ePageBase');
     let RequestAppsPage = requirePO('requestApps');
-    let ReportContentPO = requirePO('reportContent');
+    let reportContentPO = requirePO('reportContent');
     let newStackAuthPO = requirePO('newStackAuth');
     let tableCreatePO = requirePO('tableCreate');
 
@@ -169,6 +169,7 @@
 
                 //Select table Table 1
                 e2ePageBase.loadTableByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id);
+                reportContentPO.waitForReportContent();
 
                 //Assert report title to be expected
                 browser.element('.tableHomepageStageHeadline').waitForVisible();
@@ -212,6 +213,7 @@
             //test that admin have access to admin report
             //Load the admin report
             e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId);
+            reportContentPO.waitForReportContent();
 
             //Assert report title to be expected
             browser.element('.stageHeadline').waitForVisible();
@@ -220,6 +222,7 @@
             //test that admin have access to participant report
             //Load the participant report
             e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId);
+            reportContentPO.waitForReportContent();
 
             //Assert report title to be expected
             browser.element('.stageHeadline').waitForVisible();
@@ -228,6 +231,7 @@
             //test that admin have access to viewer report
             //Load the viewer report
             e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId);
+            reportContentPO.waitForReportContent();
 
             //Assert report title to be expected
             browser.element('.stageHeadline').waitForVisible();
