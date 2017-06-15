@@ -669,6 +669,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
+            existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
             existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
