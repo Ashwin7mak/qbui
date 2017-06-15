@@ -38,6 +38,16 @@
             });
         });
 
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
+            e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+            //Select table Table 2
+            return e2ePageBase.loadTableByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id);
+        });
+
 
         /**
          * Data provider for table field validation testCases.
@@ -81,12 +91,6 @@
         tableFieldValidationTestCases().forEach(function(testCase) {
             it('Edit table ' + testCase.message, function() {
 
-                //load app via url
-                e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-
-                //Select table Table 2
-                e2ePageBase.loadTableByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id);
-
                 //Select the table properties of settings of table 1 from global actions gear
                 tableCreatePO.clickOnModifyTableSettingsLink();
 
@@ -110,6 +114,9 @@
 
                 //Click on reset button in edit table mode
                 tableCreatePO.clickOnEditTableResetBtn();
+
+                //Click on back to apps page link
+                tableCreatePO.clickBackToAppsLink();
 
             });
         });
