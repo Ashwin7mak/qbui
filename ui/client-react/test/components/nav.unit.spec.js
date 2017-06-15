@@ -315,7 +315,7 @@ describe('Nav Unit tests', () => {
         expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);
     });
 
-    it('ensures a table was created and both sessionStorage getItem and setItem was called', () => {
+    it('ensures a table was created and both sessionStorage getItem and setItem were called', () => {
         spyOn(window.sessionStorage, 'getItem');
         spyOn(window.sessionStorage, 'setItem');
         spyOn(props, 'loadApp');
