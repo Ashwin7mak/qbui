@@ -19,13 +19,22 @@
         reportRecordsCount: {get: function() {return browser.element('.rightReportToolbar .recordsCount span');}},
 
         // All records checkbox on table report
-        reportSelectAllCheckbox: {get: function() {return browser.element('.selectAllCheckbox');}},
+        reportSelectAllCheckbox: {get: function() {
+            browser.element('.qbHeader .selectAllCheckbox').waitForVisible();
+            return browser.element('.qbHeader .selectAllCheckbox');
+        }},
 
         // Records row checkbox on table report
-        reportSelectRowCheckbox: {get: function() {return browser.elements('input.selectRowCheckbox');}},
+        reportSelectRowCheckbox: {get: function() {
+            browser.element('input.selectRowCheckbox').waitForVisible();
+            return browser.elements('input.selectRowCheckbox');
+        }},
 
         // Records selected count label on table report
-        reportSelectedRowLabel: {get: function() {return browser.element('.selectedRowsLabel');}},
+        reportSelectedRowLabel: {get: function() {
+            browser.element('.reportActions .selectedRowsLabel').waitForVisible();
+            return browser.element('.reportActions .selectedRowsLabel');
+        }},
 
         // Records edit icon on table report
         reportEdit: {get: function() {return browser.element('.qbIcon.iconTableUISturdy-edit');}},

@@ -134,8 +134,8 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.iconActionButton.addRecord');
+        //wait until report rows in table are loaded
+        return reportContentPO.waitForReportContent();
     };
 
     PageBase.prototype.navigateTo = function(url) {

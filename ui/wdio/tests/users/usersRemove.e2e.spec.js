@@ -56,6 +56,7 @@
             // Click on remove button from the dialogue box
             modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
             //wait until notification container goes away
+            browser.waitForExist('.notification-container-empty', e2eConsts.longWaitTimeMs, true);
             browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Check that the user was removed
