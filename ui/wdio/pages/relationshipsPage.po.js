@@ -269,21 +269,6 @@
             browser.pause(slideyRightyPause);
             this.tableHomePageLinkEl.click();
         }
-        },
-
-        /**
-         * Modify child records to link to one of the parent records
-         * @param app
-         * @param table
-         */
-        modifyChildTableToRelateToParent: {
-            value: function(app, table) {
-                const fieldToEdit = table.fields[6];
-                // setting parent value to be the first record (#record id) of parent table,
-                // so new parent value is 1 for first three child records
-                const editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
-                return e2eBase.recordService.editRecords(app.id, table.id, editRecords);
-            }
         }
     });
 
