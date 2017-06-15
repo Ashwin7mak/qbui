@@ -139,7 +139,7 @@ export const QbGrid = React.createClass({
 
         /**
          * Not all Grids require multiselect, this option will hide the checkboxes if set to false */
-        multiSelectIsEnabled: PropTypes.bool
+        disableMultiSelect: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -153,7 +153,7 @@ export const QbGrid = React.createClass({
             isEditingRowSaving: false,
             showRowActionsColumn: true,
             isDraggable: false,
-            multiSelectIsEnabled: true
+            disableMultiSelect: false
         };
     },
 
@@ -197,7 +197,7 @@ export const QbGrid = React.createClass({
             onClickSaveRow={this.props.onClickSaveRow}
             onClickToggleSelectedRow={this.onClickToggleSelectedRow}
             onClickTestRowIcon={this.props.onClickTestRowIcon}
-            multiSelectIsEnabled={this.props.multiSelectIsEnabled}
+            disableMultiSelect={this.props.disableMultiSelect}
         />;
     },
 
@@ -334,7 +334,7 @@ export const QbGrid = React.createClass({
 
         return (
             <div className="actionHeader">
-                {this.props.multiSelectIsEnabled ? <input
+                {this.props.disableMultiSelect ? <input
                     type="checkbox"
                     className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
                     checked={this.props.areAllRowsSelected}
@@ -453,7 +453,7 @@ export const QbGrid = React.createClass({
 
         let className = "qbGrid";
         className += this.props.isInlineEditOpen ? ' inlineEditing' : '';
-        className += !this.props.multiSelectIsEnabled ? ' disableMultiSelect' : '';
+        className += Coothis.props.disableMultiSelect ? ' disableMultiSelect' : '';
 
         return (
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.QB_GRID}>
