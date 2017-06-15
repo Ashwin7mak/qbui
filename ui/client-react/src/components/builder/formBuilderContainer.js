@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm} from '../../actions/formActions';
+import * as formActions from '../../actions/formActions';
 import {draggingLinkToRecord} from '../../actions/relationshipBuilderActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
@@ -52,18 +52,18 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    loadForm,
-    moveFieldOnForm,
-    updateForm,
-    updateFormAnimationState,
-    toggleFormBuilderChildrenTabIndex,
-    toggleToolPaletteChildrenTabIndex,
-    keyboardMoveFieldUp,
-    keyboardMoveFieldDown,
-    selectFieldOnForm,
-    deselectField,
-    removeFieldFromForm,
-    draggingLinkToRecord
+    loadForm: formActions.loadForm,
+    moveFieldOnForm: formActions.moveFieldOnForm,
+    updateForm: formActions.updateForm,
+    toggleFormBuilderChildrenTabIndex: formActions.toggleFormBuilderChildrenTabIndex,
+    toggleToolPaletteChildrenTabIndex: formActions.toggleToolPaletteChildrenTabIndex,
+    keyboardMoveFieldUp: formActions.keyboardMoveFieldUp,
+    keyboardMoveFieldDown: formActions.keyboardMoveFieldDown,
+    selectFieldOnForm: formActions.selectFieldOnForm,
+    deselectField: formActions.deselectField,
+    removeFieldFromForm: formActions.removeFieldFromForm,
+    draggingLinkToRecord,
+    updateFormAnimationState
 };
 
 /**
