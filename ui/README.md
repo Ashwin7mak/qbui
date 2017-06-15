@@ -341,34 +341,32 @@ and
     - *Note:* You may need to add the NodeJs IntelliJ plugin if you do not see an option to create a Node configuration.
     - ![IntelliJ Configuration for E2E Tests on SauceLabs](https://s3.amazonaws.com/qbui-readme-assets/Config_for_E2E_on_SauceLabs.png)
 
-2. You need to click the ellipses (...) next to "Environment Variables" and define the following:
+1. You need to click the ellipses (...) next to "Environment Variables" and define the following:
     - `NODE_ENV` = `e2e`
     - `SAUCE_JOB_NAME` = `<your initials>Sauce` (or whatever you want)
     - `ENV_TUNNEL_NAME` = `<your initials>SauceTunnel` (or whatever you want)
     - `SAUCE_DOMAIN` = `http://localhost:9000` (or the route you access your local server in the browser)
     - `SAUCE_USERNAME` = Obtain this from another Dev or QA
     - `SAUCE_KEY` = Obtain this from another DEV or QA. If you are able to login to SauceLabs, you can find the key by clicking the username in the top right of the screen and choosing 'User Settings', then under 'Access Key', choose to show your key and then use the copy button to copy the key to your clipboard.
-    - `BUILD_NUMBER` = Any number you would like. I use `1` or `13`.
+    - `BROWSER` = The browser you want to run in SauceLabs. Options are: Chrome, Edge, Firefox, Safari, and more (capitalization is important!). 
+    The browser name is equal to the browser name in the config files. I.e., look for `wdioSauce{BrowserName}.conf.js` in the `wdio/config` folder to see available options.
 
-3. You will need to have any services your tests will use running locally on your machine (e.g., Qbui, Core, EE)
+1. Copy and rename the `wdioSauce.conf.override.js.sample` to `wdio.conf.override.js` (remove the `.sample` from the end). For
+many devs this will work as is; however, you can change any values you need to override in the normal `wdioSauce.conf.js` file.
 
-4. In `wdioSauce.conf.js`, uncomment the `dns: '127.0.0.1'`, line uner `sauceConnectOpts` toward the top of the file.
+1. By default, `wdioSauce.conf.override.js` only has one test activated. Add or modify tests or directories in the `specs` array in `wdioSauce.conf.override.js`.
 
-5. By default, `wdioSauce.conf.js` does not have any tests activated. Add tests or directories in the `specs` array in `wdioSauce.conf.js`.
+1. You will need to have any services your tests will use running locally on your machine (e.g., Qbui, Core, EE)
 
-6. Run the tests with the play or debug button in Intellij.
+1. Run the tests with the play or debug button in Intellij.
 
 *Bonus 1:* You can login to SauceLabs and watch the tests run live (go to Dashboard -> Automated Tests)
 
-*Bonus 2:* To run specific browsers, you can modify the `Application Parameters` (in the IntelliJ job) to point to a browser specific config
-instead of the generic `wdioSauce.conf.js` (e.g., `wdioSauceChrome.conf.js`, `wdioSauceFirefox.conf.js`, `wdioSauceSafari.conf.js`). These
-files inherit all of the properties from `wdioSauce.conf.js` except for those specifically listed in the browser specific config file. You
-may want to change the `SAUCE_JOB_NAME` variable in your IntelliJ job to reflect the specific browser so it is easier to find on SauceLabs.
+*Bonus 2:* In your IntelliJ configuration, click the "+" button under "Before Launch" and add a task to run `npm run webpack` before the tests
+run to ensure you have the most up to date code running in your E2E test. Warning: This slows down your tests and only needs to be run if there is a code change.
 
-*Bonus 3:* In your IntelliJ configuration, click the "+" button under "Before Launch" and add a task to run `npm run webpack` before the tests
-run to ensure you have the most up to date code running in your E2E test.
-
-*Bonus 4:* Give your jobs a name so they are more easily identifiable in Sauce Labs. Under `capabilities` in `wdioSauce.config.js`, add a `name` key to the browsers. Can be something like `[initials]ChromeTest`, but you can name it anything you would like.
+*Bonus 3:* Give your jobs a name so they are more easily identifiable in Sauce Labs. Under `capabilities` in `wdioSauce.config.override.js`, change the `name` key to something more descriptive.
+Can be something like `[initials]ChromeTest`, but you can name it anything you would like.
 
 ## Using Gradle to build distribution node server
 

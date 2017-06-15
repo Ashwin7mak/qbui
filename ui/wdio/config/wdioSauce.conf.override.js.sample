@@ -4,14 +4,13 @@
 // Global variable that allows you to set wdio to use a realm defined in your node config file
 // (see onPrepare hook below)
 var randomNum = Math.floor((Math.random() * (100 - 1) + 1));
-var seleniumPort = 4400 + randomNum;
 var baseTestDir = './ui/wdio/tests';
 
 var config = require(`./wdioSauce${process.env.BROWSER}.conf`);
 
 var overrides = {
     host: '127.0.0.1',
-    port: seleniumPort,
+
     //path: '/wd/hub',
     //
     // ============
