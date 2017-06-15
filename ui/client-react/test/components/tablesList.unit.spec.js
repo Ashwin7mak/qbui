@@ -1,26 +1,38 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import TablesList from '../../src/components/nav/tablesList';
-import NavItem from '../../src/components/nav/navItem';
+import TablesList, {__RewireAPI__ as TablesListRewireAPI} from '../../src/components/nav/tablesList';
+import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
+import {Link} from 'react-router-dom';
 import CreateNewItemButton from '../../src/components/nav/createNewItemButton';
 import SearchBox from '../../src/components/search/searchBox';
 
 let component;
 let instance;
+
 let mockFunc = {
     getAppTables(_selectedAppId, _apps) {},
     onCreateNewTable(_selectedAppId, _apps) {}
 };
 
+const LinkMock = React.createClass({
+    render() {
+        return <div className="linkMock">{this.props.children}</div>;
+    }
+});
+
 describe('TablesList', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        NavItemRewireAPI.__Rewire__('Link', LinkMock)
+        TablesListRewireAPI.__Rewire__('Link', LinkMock)
         spyOn(mockFunc, 'getAppTables').and.returnValue([{}]);
     });
 
     afterEach(() => {
         mockFunc.getAppTables.calls.reset();
+        NavItemRewireAPI.__ResetDependency__('Link');
+        TablesListRewireAPI.__ResetDependency__('Link');
     });
 
     it('renders a new table button', () => {
@@ -44,7 +56,7 @@ describe('TablesList', () => {
     });
 
     it('sets searching to true and searchText to an empty string when clicked', () => {
-        component = shallow(<TablesList getAppTables={mockFunc.getAppTables}
+        component = mount(<TablesList getAppTables={mockFunc.getAppTables}
                                         onCreateNewTable={mockFunc.onCreateNewTable} />);
 
         instance = component.instance();
