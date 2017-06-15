@@ -52,12 +52,12 @@
             // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.clickUserRemoveIcon();
-            modalDialog.modalDialogContainer.waitForVisible();
+            browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Click on remove button from the dialogue box
             expect(modalDialog.modalDialogTitle).toContain("Remove this user?");
             modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
-            //wait until notification container goes away
+            // Wait for modal to disappear
             browser.waitForExist('.notification-container-empty', e2eConsts.longWaitTimeMs, true);
             browser.pause(e2eConsts.shortWaitTimeMs);
 
@@ -74,10 +74,11 @@
             // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.clickUserRemoveIcon();
+            browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Click on cancel button from the dialogue box
             modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
-            //wait until notification container goes away
+            // Wait for modal to disappear
             browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Check for the user not removed

@@ -10,7 +10,7 @@
     let UsersTablePage = requirePO('usersTable');
     let modalDialog = requirePO('/common/modalDialog');
 
-    describe('Users - Add user(s) tests: ', function() {
+    describe('@smoke Users - Add user(s) tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
