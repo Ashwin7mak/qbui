@@ -80,7 +80,7 @@ above for more info.
         - You may need to extend the types in the `renderItem` method to determine the icon and text of the field token.
 
 2. The current XD specs have a left panel with a list of elements that can be dragged onto the main area. (Example: NewFieldsMenu)
-    - Create a <ListOFElements> that will hold all of the elements
+    - Create a `<ListOfElements>` that will hold all of the elements
     - Pass in your top level draggable component as the `renderer` (prop)
     - In the array of elements, you can specify an `alternateRenderer` on the child elements if a particular item
     has different behavior than other elements in the list. This `alternateRenderer` should also be a top level draggable component.
