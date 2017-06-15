@@ -41,7 +41,7 @@ describe('AppsListForLeftNav', () => {
         expect(component.state().searching).toEqual(false);
     });
 
-    it('sets searching to false when clicked', () => {
+    it('sets searching to true and searchText to an empty string when clicked', () => {
         component = shallow(<AppsList apps={apps}/>);
 
         instance = component.instance();
