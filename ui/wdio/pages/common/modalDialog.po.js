@@ -136,7 +136,7 @@ class modalDialogWindow {
 
         //get all buttons from modal dialog footer
         let btns = this.modalDialogFooterButtons.value.filter(function(button) {
-            return button.getAttribute('textContent') === btnName;
+            return button.getAttribute('textContent').trim().includes(btnName);
         });
 
         if (btns !== []) {

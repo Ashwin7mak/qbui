@@ -23,7 +23,7 @@ import UserSuccessDialog from './userSuccessDialog.js';
 export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
-            roleId: ''
+            updateRowCount: true
         };
     },
 
@@ -69,7 +69,7 @@ export const AppUsersRoute = React.createClass({
     },
 
     getSelectionActions() {
-        return (<UserActions appId={this.props.appId} roleId={this.state.roleId} />);
+        return (<UserActions appId={this.props.appId} updateRowCount={this.state.updateRowCount} />);
     },
 
     getTableActions() {
@@ -96,14 +96,17 @@ export const AppUsersRoute = React.createClass({
             selectedRows = [];
         }
         // add to selectedRows if id is not in the list
-        if (selectedRows.indexOf(id) === -1) {
-            selectedRows.push(id);
+        let isAlreadySelected = _.find(selectedRows, (selectedRow)=>{
+            return selectedRow.id === id && selectedRow.roleId === roleId;
+        });
+
+        if (!isAlreadySelected) {
+            selectedRows.push({id, roleId});
         } else {
             // id is in the list, remove it
-            selectedRows = _.without(selectedRows, id);
+            selectedRows = _.without(selectedRows, isAlreadySelected);
         }
-        this.setState({roleId:roleId});
-
+        this.setState({updateRowCount:!this.state.updateRowCount});
         this.props.selectUserRows(selectedRows);
     },
 
@@ -112,15 +115,13 @@ export const AppUsersRoute = React.createClass({
      */
 
     selectAllRows() {
-        let roleId = this.state.roleId;
         let appUsers = this.props.unfilteredAppUsers;
         let selected = [];
         // Transform the records first so that subHeaders (grouped records) can be handled appropriately
         this.props.appRoles.map(role => {
             if (appUsers[role.id]) {
                 appUsers[role.id].map(user => {
-                    roleId = user.roleId;
-                    selected.push(user.userId);
+                    selected.push({id: user.userId, roleId: role.id});
                 });
             }
         });

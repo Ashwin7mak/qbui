@@ -186,25 +186,5 @@
             expect(tableList.indexOf(tableName)).toBe(-1);
 
         });
-
-        it('Verify that only ADMIN can add a new table', function() {
-
-            //get user authentication
-            e2ePageBase.getUserAuthentication(realmName, realmId, userId);
-
-            // Load the app in the realm
-            e2ePageBase.loadAppsInBrowser(realmName);
-
-            //Select app
-            RequestAppsPage.selectApp(testApp.name);
-
-            //Select table to delete ('Table 1' here) and make sure it lands in reports page
-            tableCreatePO.selectTable('Table 1');
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
-
-            //Verify New Table button not available for user other than ADMIN
-            expect(browser.isVisible('.newTable')).toBe(false);
-        });
     });
 }());

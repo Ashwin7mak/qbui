@@ -95,6 +95,11 @@
                 var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
                 return requestReportsPageEndPoint;
             },
+            // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
+            getRequestRecordsPageEndpoint: function(realmName, appId, tableId, reportId) {
+                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
+                return requestReportsPageEndPoint;
+            },
             // Get the proper URL for loading the session ticket page in the browser
             getSessionTicketRequestEndpoint: function(realmName, realmId, ticketEndpoint) {
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
@@ -102,7 +107,7 @@
             },
             // Helper method to get the proper URL for loading the user management page containing a list of users for an app
             getRequestUsersEndpoint: function(realmName, appId) {
-                var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users/');
+                var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users');
                 return requestUsersEndPoint;
             },
 
@@ -170,6 +175,11 @@
                     return e2eBase.relationshipService.retrieveSavedRelationships(createdApp);
                 }).then(function(savedRelationships) {
                     return e2eBase.relationshipService.addChildReportsToTableForms(createdApp, savedRelationships);
+                }).then(function() {
+                    // Edit child records relating them to the parent (3rd and 4th tables)
+                    let fieldToEdit = createdApp.tables[3].fields[6];
+                    let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
+                    return e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[3].id, editRecords);
                 }).then(function() {
                     // Return the createdApp object
                     return createdApp;
