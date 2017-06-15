@@ -51,7 +51,7 @@
 
             // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
-            UsersTablePage.userRemoveIcon.click();
+            UsersTablePage.clickUserRemoveIcon();
 
             // Click on remove button from the dialogue box
             modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
@@ -70,7 +70,7 @@
 
             // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
-            UsersTablePage.userRemoveIcon.click();
+            UsersTablePage.clickUserRemoveIcon();
 
             // Click on cancel button from the dialogue box
             modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);

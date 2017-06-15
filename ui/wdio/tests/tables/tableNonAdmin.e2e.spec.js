@@ -82,7 +82,5 @@
             expect(browser.isExisting('.topNav .iconUISturdy-settings')).toBe(false);
             expect(browser.isVisible('.topNav .iconUISturdy-settings')).toBe(false);
         });
-
-
     });
 }());

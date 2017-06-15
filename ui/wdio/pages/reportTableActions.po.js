@@ -53,14 +53,14 @@
          * Returns report records selected count
          */
         getReportRecordsSelectedCount: {value: function() {
-            return (this.reportSelectedRowLabel.getText());
+            return this.reportSelectedRowLabel.getText();
         }},
 
         /**
          * Select all records checkbox
          */
         selectAllRecordsCheckbox : {value: function() {
-            return (this.reportSelectAllCheckbox.click());
+            return this.reportSelectAllCheckbox.click();
         }},
 
         /**
@@ -73,7 +73,8 @@
             });
 
             if (getAllCheckBoxs !== []) {
-                getAllCheckBoxs[0].click();
+                getAllCheckBoxs[0].waitForVisible();
+                return getAllCheckBoxs[0].click();
             } else {
                 throw new Error('Checkbox not found at row ' + recordRowIndex);
             }
