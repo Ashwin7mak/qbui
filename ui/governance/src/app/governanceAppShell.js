@@ -64,10 +64,10 @@ const mapStateToProps = (state) => {
         isAdmin: requestContextStateCurrentUser.isAccountAdmin,
         isRealmAdmin: requestContextStateCurrentUser.isRealmAdmin,
         totalItems: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0),
-        paidUsers: getTotalPaidUsers(state.AccountUsers.users),
-        deniedUsers: getTotalDeniedUsers(state.AccountUsers.users),
-        deactivatedUsers: getTotalDeactivatedUsers(state.AccountUsers.users),
-        totalRealmUsers: getTotalRealmUsers(state.AccountUsers.users)
+        paidUsers: getTotalPaidUsers(state),
+        deniedUsers: getTotalDeniedUsers(state),
+        deactivatedUsers: getTotalDeactivatedUsers(state),
+        totalRealmUsers: getTotalRealmUsers(state)
     };
 };
 

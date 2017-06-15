@@ -14,10 +14,8 @@ import "./AccountUsersStage.scss";
 class AccountUsersStage extends Component {
 
     render() {
-        let paidUsers = this.props.paidUsers,
-            deniedUsers = this.props.deniedUsers,
-            deactivatedUsers = this.props.deactivatedUsers,
-            totalRealmUsers = this.props.totalRealmUsers;
+        
+        let {paidUsers, deniedUsers, deactivatedUsers, totalRealmUsers} = this.props;
 
         return (
             <Stage stageHeadline={
@@ -52,12 +50,6 @@ class AccountUsersStage extends Component {
 AccountUsersStage.propTypes = {
 
     /**
-     * Array which contains the whole user data
-     * Typically this is passed as a prop from Redux (AccountUsersReducer)
-     */
-    users: PropTypes.array,
-
-    /**
      * Prop which contains the number of paid users
      * Typically this is passed as a prop from Redux (AccountUsersReducer)
      */
@@ -83,14 +75,18 @@ AccountUsersStage.propTypes = {
 
 };
 
-const mapStateToProps = (state) => {
-    return {
-        users: state.AccountUsers.users,
-        paidUsers: getTotalPaidUsers(state.AccountUsers.users),
-        deniedUsers: getTotalDeniedUsers(state.AccountUsers.users),
-        deactivatedUsers: getTotalDeactivatedUsers(state.AccountUsers.users),
-        totalRealmUsers: getTotalRealmUsers(state.AccountUsers.users)
-    };
+AccountUsersStage.defaultProps = {
+    paidUsers: 0,
+    deniedUsers: 0,
+    deactivatedUsers: 0,
+    totalRealmUsers: 0
 };
+
+const mapStateToProps = (state) => ({
+    paidUsers: getTotalPaidUsers(state),
+    deniedUsers: getTotalDeniedUsers(state),
+    deactivatedUsers: getTotalDeactivatedUsers(state),
+    totalRealmUsers: getTotalRealmUsers(state)
+});
 
 export default connect(mapStateToProps)(AccountUsersStage);

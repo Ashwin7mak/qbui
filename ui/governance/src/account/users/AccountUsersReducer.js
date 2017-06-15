@@ -15,34 +15,6 @@ const users = (state = [], action) => {
     }
 };
 
-export const getTotalPaidUsers = _users => {
-    const paidUsers = _.filter(_users, user =>  {
-        return user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user);
-    });
-    return paidUsers.length;
-};
-
-export const getTotalDeniedUsers = _users => {
-    const deniedUsers = _.filter(_users, user =>  {
-        return RealmUserAccountFlagConstants.IsDenied(user);
-    });
-    return deniedUsers.length;
-};
-
-export const getTotalDeactivatedUsers = _users => {
-    const deactivatedUsers = _.filter(_users, user =>  {
-        return RealmUserAccountFlagConstants.IsDeactivated(user);
-    });
-    return deactivatedUsers.length;
-};
-
-export const getTotalRealmUsers = _users => {
-    const totalUsers = _.filter(_users, user =>  {
-        return user.realmDirectoryFlags !== 0;
-    });
-    return totalUsers.length;
-};
-
 const AccountUsers = combineReducers({
     users,
     status: GetStatus
@@ -50,6 +22,27 @@ const AccountUsers = combineReducers({
 
 export const isFetching = (state) => {
     return state.AccountUsers.status.isFetching;
+};
+
+/**
+ * Paid users are any users that have access to the app and are not internal Quick Base users
+ * @returns {*}
+ */
+export const getTotalPaidUsers = state => {
+    return _.sumBy(state.AccountUsers.users, user =>  (
+        user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));
+};
+
+export const getTotalDeniedUsers = state => {
+    return _.sumBy(state.AccountUsers.users, user =>  (RealmUserAccountFlagConstants.IsDenied(user) ? 1 : 0));
+};
+
+export const getTotalDeactivatedUsers = state => {
+    return _.sumBy(state.AccountUsers.users, user =>  (RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));
+};
+
+export const getTotalRealmUsers = state => {
+    return _.sumBy(state.AccountUsers.users, user =>  (user.realmDirectoryFlags !== 0 ? 1 : 0));
 };
 
 export default AccountUsers;
