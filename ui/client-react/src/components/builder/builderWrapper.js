@@ -104,8 +104,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         loadApp: (appId) => dispatch(loadApp(appId)),
-        loadApps: () => dispatch(loadApps())
+        loadApps: () => dispatch(loadApps()),
+        toggleNav: () => dispatch(commonNavActions('builder').toggleNav())
     };
 };
 
-export default withRouter(connect(mapStateToProps, commonNavActions('builder'))(BuilderWrapper));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BuilderWrapper));

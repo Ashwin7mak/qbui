@@ -27,6 +27,7 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'removeFieldFromForm');
 
         component = shallow(<FieldEditingTools
+            app={{id: 'app1'}} tblId={'tbl1'}
             numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
@@ -42,7 +43,7 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, relatedField, location);
+        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, 'app1', 'tbl1', relatedField, location);
         mockParentProps.removeFieldFromForm.calls.reset();
     });
 
