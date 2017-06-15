@@ -109,7 +109,9 @@ const mapStateToProps = (state, ownProps) => {
     const currentForm = getFormByContext(state, ownProps.formId || CONTEXT.FORM.VIEW);
 
     return {
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
         selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
+        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
         isAnimating: state.animation.isFormAnimating
     };
 };

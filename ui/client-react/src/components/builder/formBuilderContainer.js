@@ -77,15 +77,15 @@ export class FormBuilderContainer extends Component {
 
         /**
          * A route that will be redirected to after a save/cancel action. Currently passed through mapState. */
-            redirectRoute: PropTypes.string,
+        redirectRoute: PropTypes.string,
 
         /**
          * Controls the open state of the left tool panel */
-            isOpen: PropTypes.bool,
+        isOpen: PropTypes.bool,
 
         /**
          * Controls the collapsed state of the left tool panel */
-            isCollapsed: PropTypes.bool
+        isCollapsed: PropTypes.bool
     };
 
     static defaultProps = {
@@ -113,7 +113,7 @@ export class FormBuilderContainer extends Component {
         this.closeFormBuilder();
     };
 
-    removeField= () => {
+    removeField = () => {
         if (this.props.removeFieldFromForm) {
             return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
         }
@@ -268,7 +268,6 @@ export class FormBuilderContainer extends Component {
                                                 alternateFieldRenderer={DraggableField}
                                                 formBuilderContainerContentElement={formBuilderContainerContent}
                                                 formFocus={this.props.formFocus}
-                                                selectedField={this.props.selectedField}
                                                 formBuilderUpdateChildrenTabIndex={this.props.formBuilderUpdateChildrenTabIndex}
                                                 edit={true}
                                                 editingForm={true}

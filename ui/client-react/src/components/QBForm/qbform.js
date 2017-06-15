@@ -421,8 +421,6 @@ export const QBForm = React.createClass({
                     masterFieldId={masterFieldId}
                     location={location}
 
-                    selectedField={this.props.selectedField}
-                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
                     formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                 />
             </div>
@@ -638,7 +636,6 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = _.get(state, `forms[${formId}]`, {});
     return {
         fields: state.fields,
-        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
         relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : []
     };
 };

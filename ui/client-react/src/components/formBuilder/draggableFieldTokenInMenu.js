@@ -104,7 +104,8 @@ const mapStateToProps = state => {
         appId: _.get(currentForm, 'formData.formMeta.appId'),
         tblId: _.get(currentForm, 'formData.formMeta.tableId'),
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null),
-        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined)
+        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
+        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined)
     };
 };
 
