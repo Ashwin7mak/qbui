@@ -4,7 +4,8 @@
 (function() {
     'use strict';
 
-    let defaultRequest = require('request');
+    let env = require('../../config/environment');
+    let defaultRequest = require('../../requestClient').getClient(env);
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
     let log = require('../../logger').getLogger();

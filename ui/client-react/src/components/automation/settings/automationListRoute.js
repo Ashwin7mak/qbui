@@ -20,8 +20,9 @@ import {CONTEXT} from "../../../actions/context";
 
 export class AutomationListRoute extends Component {
 
-    getInitialState() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             confirmInputValue: ""
         };
     }
@@ -32,7 +33,7 @@ export class AutomationListRoute extends Component {
 
     getPageActions() {
         const actions = [];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu="5"/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={5} />);
     }
 
     getStageHeadline() {
@@ -61,7 +62,7 @@ export class AutomationListRoute extends Component {
                 .map((automation, index) => {
                     let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
                     return (
-                        <tr>
+                        <tr key={automation.id}>
                             <td><Link to={link} onClick={this.onClick} onKeyDown={this.onClick}>{automation.name}</Link></td>
                             <td>{automation.active ? <I18nMessage message="automation.automationList.activeYes"/> : <I18nMessage message="automation.automationList.activeNo"/>}</td>
                             <td><Button className="finishedButton" bsStyle="primary" onClick={() => this.testButtonClicked(automation.name)}><I18nMessage message="automation.automationList.actionButton"/></Button></td>
@@ -103,12 +104,12 @@ export class AutomationListRoute extends Component {
     }
 }
 
-AutomationListRoute.protoTypes = {
+AutomationListRoute.propTypes = {
     /** The list of automations to display. */
     automations: React.PropTypes.array,
     /** Get the list of automations for the app. */
     loadAutomations: React.PropTypes.func,
-    testAutomation: React.PropTypes.bool
+    testAutomation: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
