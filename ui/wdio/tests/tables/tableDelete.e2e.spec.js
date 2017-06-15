@@ -106,12 +106,16 @@
             //Set the deletePromtTextField value to 'YES'
             tableCreatePO.setDeletePromtTextFieldValue('YES');
 
-            //Click on Delete table.
-            modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_DELETE_BTN);
-            tableCreatePO.waitUntilNotificationContainerGoesAway();
-            if (modalDialog.modalDialogPrimaryButton.isExisting()) {
-                modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_DELETE_BTN);
-            }
+            //Click on Delete table. Need to use JS click because sometimes this button is not getting clicked intermittently
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 2
+                });
+                document.getElementsByClassName('modal-content')[0].getElementsByClassName('modal-footer')[0].querySelector('.primaryButton').dispatchEvent(event);
+            });
 
             //Wait until new table button visible
             tableCreatePO.newTableBtn.waitForVisible();
