@@ -84,8 +84,8 @@
                 //load app via url
                 e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
 
-                //Click on existing table named 'Table 2'
-                tableCreatePO.selectTable(existingTableName);
+                //Select table Table 2
+                e2ePageBase.loadTableByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id);
 
                 //Select the table properties of settings of table 1 from global actions gear
                 tableCreatePO.clickOnModifyTableSettingsLink();
