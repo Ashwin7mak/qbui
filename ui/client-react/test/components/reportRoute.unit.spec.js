@@ -1,4 +1,5 @@
 import React from 'react';
+import jasmineEnzyme from 'jasmine-enzyme';
 import {shallow, mount} from 'enzyme';
 import {MemoryRouter} from 'react-router-dom';
 
@@ -73,6 +74,7 @@ describe('ReportRoute', () => {
     }
 
     beforeEach(() => {
+        jasmineEnzyme();
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadReport');
