@@ -139,14 +139,6 @@
             }
         }
 
-        /**
-         *  The element cache is always hidden. It contains copies of elements that are being dragged to support
-         *  an issue with touch events. See formBuilder.js for more information.
-         */
-        .elementCache {
-            display: none;
-        }
-
         .field {
             padding-bottom: 12px;
         }
