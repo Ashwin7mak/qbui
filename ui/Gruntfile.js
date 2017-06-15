@@ -620,7 +620,10 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ],
                     relationships: [
-                        './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
+                        './wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
+                        './wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
+                        './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js',
+                        './wdio/tests/relationships/verifyCreateRelationshipDialog.e2e.spec.js'
                     ],
                     reports: [
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
