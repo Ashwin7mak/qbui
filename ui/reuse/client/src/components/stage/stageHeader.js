@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 
 import './stageHeader.scss';
 

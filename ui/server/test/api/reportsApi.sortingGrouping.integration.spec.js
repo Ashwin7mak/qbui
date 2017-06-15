@@ -230,7 +230,8 @@
                     var r = JSON.parse(report.body);
 
                     // Get the report data back, check for sortList prop which also contains groupBy
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.GET).then(function(reportGetResult) {
+                    reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, r.id, true);
+                    recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportGetResult) {
                         var reportResult = JSON.parse(reportGetResult.body);
                         assert.strictEqual(reportResult.name, reportToCreate.name, 'Unexpected report name returned');
                         assert.strictEqual(reportResult.description, reportToCreate.description, 'Unexpected report description returned');
@@ -240,7 +241,7 @@
                     }).done(null, done); // This bubbles up errors out of the promise chain to let Mocha know there was a failure
 
                     // Execute a report and check sort order of records
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results', consts.GET).then(function(reportResults) {
+                    recordBase.apiBase.executeRequest(reportEndpoint + '/results', consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
                         // Sort the expected records by text field (id 6)
                         var sortedExpectedRecords = sortRecords(testcase.sortFids, records);
@@ -281,7 +282,8 @@
                 var r = JSON.parse(report.body);
 
                 // Get the report data back, check for sortList prop which also contains groupBy
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.GET).then(function(reportGetResult) {
+                reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, r.id, true);
+                recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportGetResult) {
                     var reportResult = JSON.parse(reportGetResult.body);
                     assert.strictEqual(reportResult.name, reportToCreate.name, 'Unexpected report name returned');
                     assert.strictEqual(reportResult.description, reportToCreate.description, 'Unexpected report description returned');

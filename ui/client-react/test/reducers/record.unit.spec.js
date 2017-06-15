@@ -10,7 +10,7 @@ function event(id, type, content) {
     };
 }
 
-let initialState = [];
+let initialState = {};
 let appId = '1';
 let tblId = '2';
 
@@ -27,10 +27,10 @@ describe('Record reducer delete functions', () => {
             let ev = event(testCase.recIds[0], types.DELETE_RECORDS, {appId, tblId, recIds:testCase.recIds});
             states = reducer(initialState, ev);
 
-            expect(states.length).toEqual(testCase.recIds.length);
-            states.forEach(state => {
-                expect(state.pendEdits).toBeDefined();
-                expect(state.pendEdits.saving).toEqual(true);
+            expect(states.records.length).toEqual(testCase.recIds.length);
+            states.records.forEach(record => {
+                expect(record.pendEdits).toBeDefined();
+                expect(record.pendEdits.saving).toEqual(true);
             });
             done();
         });
@@ -55,12 +55,12 @@ describe('Record reducer delete functions', () => {
                 });
                 const errorStates = reducer(states, ev);
                 if (errorTestCase.isValid) {
-                    expect(errorStates.length).toEqual(testCase.recIds.length);
-                    errorStates.forEach(state => {
-                        expect(state.pendEdits).toBeDefined();
-                        expect(state.pendEdits.saving).toEqual(true);
-                        expect(state.pendEdits.editErrors.errors.length).toEqual(errorTestCase.errors.length);
-                        expect(state.pendEdits.editErrors.ok).toEqual(false);
+                    expect(errorStates.records.length).toEqual(testCase.recIds.length);
+                    errorStates.records.forEach(record => {
+                        expect(record.pendEdits).toBeDefined();
+                        expect(record.pendEdits.saving).toEqual(true);
+                        expect(record.pendEdits.editErrors.errors.length).toEqual(errorTestCase.errors.length);
+                        expect(record.pendEdits.editErrors.ok).toEqual(false);
                     });
                 } else {
                     //  no change in state if invalid/missing errors list
@@ -75,8 +75,8 @@ describe('Record reducer delete functions', () => {
             let ev = event(testCase.recIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds: testCase.recIds});
             const completeState = reducer(states, ev);
 
-            expect(completeState.length).toEqual(testCase.recIds.length);
-            completeState.forEach(state => {
+            expect(completeState.records.length).toEqual(testCase.recIds.length);
+            completeState.records.forEach(state => {
                 expect(state.pendEdits).toBeDefined();
                 expect(state.pendEdits.saving).toEqual(false);
                 expect(state.pendEdits.editErrors.errors.length).toEqual(0);
@@ -105,7 +105,7 @@ describe('Record reducer open record', () => {
                 nextOrPreviousEdit: testCase.nextOrPreviousEdit
             };
             const state = reducer(initialState, event(testCase.recId, types.OPEN_RECORD, obj));
-            const record = state[0];
+            const record = state.records[0];
 
             expect(record.id).toEqual(testCase.recId);
             expect(record.recId).toEqual(testCase.recId);
@@ -119,7 +119,7 @@ describe('Record reducer open record', () => {
 });
 
 describe('Record reducer save record events', () => {
-    let saveState = [];
+    let saveState = {};
     let changes = {};
     let recId = 3;
 
@@ -167,7 +167,7 @@ describe('Record reducer save record events', () => {
             };
 
             saveState = reducer(saveState, event(testCase.recId, types.SAVE_RECORD, obj));
-            const record = saveState[0];
+            const record = saveState.records[0];
 
             expect(mockRecordModel.prototype.setRecordChanges).toHaveBeenCalled();
             if (testCase.recordInStore) {
@@ -310,7 +310,7 @@ describe('Record reducer edit record events', () => {
                 mockRecordModel.prototype.setEditRecordStart.calls.reset();
                 recordState = reducer(recordState, event(testCase.recId, types.EDIT_RECORD_START, obj));
             }
-            const record = recordState[0];
+            const record = recordState.records[0];
 
             expect(mockRecordModel.prototype.setEditRecordStart).toHaveBeenCalled();
             expect(record.id).toEqual(testCase.recId);
@@ -343,7 +343,7 @@ describe('Record reducer edit record events', () => {
                 mockRecordModel.prototype.setEditRecordChange.calls.reset();
                 recordState = reducer(recordState, event(testCase.recId, types.EDIT_RECORD_CHANGE, obj));
             }
-            const record = recordState[0];
+            const record = recordState.records[0];
 
             if (testCase.recordInStore) {
                 expect(mockRecordModel.prototype.set).toHaveBeenCalled();
@@ -409,7 +409,7 @@ describe('Record reducer edit record events', () => {
                 //  need to put a record in the store before verifying..
                 let recordState = reducer(initialState, event(testCase.recId, types.EDIT_RECORD_START, obj));
                 recordState = reducer(recordState, event(testCase.recId, types.EDIT_RECORD_CANCEL, obj));
-                expect(recordState[0].pendEdits).not.toBeDefined();
+                expect(recordState.records[0].pendEdits).not.toBeDefined();
             } else {
                 let recordState = reducer(initialState, event(testCase.recId, types.EDIT_RECORD_CANCEL, obj));
                 expect(recordState).toEqual(initialState);

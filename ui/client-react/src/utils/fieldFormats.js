@@ -11,7 +11,17 @@ class FieldFormats {
      * @return formatType from formats
      */
     static getFormatType(fieldDef) {
+
+
         if (fieldDef && fieldDef.datatypeAttributes) {
+            if (_.has(fieldDef, 'parentTableId')) {
+                return FieldFormats.LINK_TO_RECORD;
+            }
+
+            if (_.has(fieldDef, 'parentTableId')) {
+                return FieldFormats.LINK_TO_RECORD;
+            }
+
             switch (fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
@@ -92,6 +102,9 @@ class FieldFormats {
             case serverTypeConsts.NUMERIC_FORMULA :
                 return FieldFormats.NUMERIC_FORMULA_FORMAT;
 
+            case serverTypeConsts.LINK_TO_RECORD :
+                return FieldFormats.LINK_TO_RECORD;
+
             default:
                 return FieldFormats.TEXT_FORMAT;
 
@@ -126,5 +139,7 @@ FieldFormats.PERCENT_FORMAT_MULTICHOICE = 22;
 FieldFormats.NUMBER_FORMAT_MULTICHOICE = 23;
 FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS = 24;
 FieldFormats.TEXT_FORMAT_RADIO_BUTTONS = 25;
+FieldFormats.LINK_TO_RECORD = 26;
+
 
 export default FieldFormats;

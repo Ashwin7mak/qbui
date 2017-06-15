@@ -5,10 +5,11 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let reportContentPO = requirePO('reportContent');
-    let reportInLineEditPO = requirePO('reportInLineEdit');
+    let modalDialog = requirePO('/common/modalDialog');
     let reportNavPO = requirePO('reportNavigation');
+    let tableCreatePO = requirePO('tableCreate');
 
-    describe('Reports Page - Add Record Tests', function() {
+    describe('Reports - Delete record tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -62,12 +63,19 @@
                 deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount + " records");
 
-                // Step 1: Select the checkbox and click on delete icon
-                reportContentPO.selectRow(rowToBeDeleted);
-                reportContentPO.deleteIcon.click();
+                //Select the checkbox and click on delete icon
+                reportContentPO.selectRowAndClickDeleteIcon(rowToBeDeleted);
 
-                // Step 2: Click on delete button from the dialogue box
-                reportContentPO.deleteButton.click();
+                //Click on Delete. Need to use JS click because sometimes this button is not getting clicked intermittently
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    document.getElementsByClassName('modal-content')[0].getElementsByClassName('modal-footer')[0].querySelector('.primaryButton').dispatchEvent(event);
+                });
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForTheAbsenceDeletedRecordOnTheCurrentPage(deletedRecord);
@@ -87,17 +95,18 @@
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records");
 
                 // Step 1: Select the DropDown menu and clicking on delete icon
+                reportContentPO.dropDownIcon.waitForVisible();
                 reportContentPO.dropDownIcon.click();
+                reportContentPO.dropDownDeleteIcon.waitForVisible();
                 reportContentPO.dropDownDeleteIcon.click();
 
                 // Step 2: Click on delete button from the dialogue box
-                reportContentPO.dontDeleteButton.click();
+                modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
+                //Need this to wait for delete success container to slide away
+                browser.pause(e2eConsts.mediumWaitTimeMs);
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);
-
-
-
             });
         });
     });

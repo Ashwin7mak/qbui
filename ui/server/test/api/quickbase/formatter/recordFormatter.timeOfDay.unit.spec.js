@@ -12,7 +12,7 @@ describe('Time of day record formatter unit test', function() {
      * DataProvider containing Records, FieldProperties and record display expectations TimeOfDay fields
      */
     function provider() {
-        var inputTod = '18:51:21Z';
+        var inputTod = '18:51:21';
         //Incomplete number
         var recordsInput = [[{
             id   : 7,
@@ -23,7 +23,7 @@ describe('Time of day record formatter unit test', function() {
             value  : inputTod,
             display: '6:51 pm'
         }]];
-        var todHHMM12HourClock = [
+        var fieldWithoutTimezone = [
             {
                 id                : 7,
                 type              : 'SCALAR',
@@ -31,27 +31,62 @@ describe('Time of day record formatter unit test', function() {
                 datatypeAttributes: {
                     type          : 'TIME_OF_DAY',
                     scale         : 'HH:MM',
-                    use24HourClock: false
+                    use24HourClock: false,
+                    timeZone          : "America/Los_Angeles"
+                }
+            }
+        ];
+        var fieldWithTimezone = [
+            {
+                id                : 7,
+                type              : 'SCALAR',
+                name              : 'datetime',
+                datatypeAttributes: {
+                    type          : 'TIME_OF_DAY',
+                    scale         : 'HH:MM',
+                    use24HourClock: false,
+                    useTimezone       : true,
+                    timeZone          : "America/Los_Angeles"
                 }
             }
         ];
 
+        var expectedHHMM12HourClockTz = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
+        expectedHHMM12HourClockTz[0][0].display = '11:51 am';
+
         var expectedHHMM24HourClock = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
         expectedHHMM24HourClock[0][0].display = '18:51';
-        var todHHMM24HourClock = JSON.parse(JSON.stringify(todHHMM12HourClock));
-        todHHMM24HourClock[0].datatypeAttributes.use24HourClock = true;
+        var todHHMM24HourField = JSON.parse(JSON.stringify(fieldWithoutTimezone));
+        todHHMM24HourField[0].datatypeAttributes.use24HourClock = true;
+
+        var expectedHHMM24HourClockTz = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
+        expectedHHMM24HourClockTz[0][0].display = '11:51';
+        var todHHMM24HourTzField = JSON.parse(JSON.stringify(fieldWithTimezone));
+        todHHMM24HourTzField[0].datatypeAttributes.use24HourClock = true;
 
         var expectedHHMMSS24HourClock = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
         expectedHHMMSS24HourClock[0][0].display = '18:51:21';
-        var todHHMMSS24HourClock = JSON.parse(JSON.stringify(todHHMM12HourClock));
-        todHHMMSS24HourClock[0].datatypeAttributes.use24HourClock = true;
-        todHHMMSS24HourClock[0].datatypeAttributes.scale = 'HH:MM:SS';
+        var todHHMMSS24HourField = JSON.parse(JSON.stringify(fieldWithoutTimezone));
+        todHHMMSS24HourField[0].datatypeAttributes.use24HourClock = true;
+        todHHMMSS24HourField[0].datatypeAttributes.scale = 'HH:MM:SS';
+
+        var expectedHHMMSS24HourClockTz = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
+        expectedHHMMSS24HourClockTz[0][0].display = '11:51:21';
+        var todHHMMSS24HourTzField = JSON.parse(JSON.stringify(fieldWithTimezone));
+        todHHMMSS24HourTzField[0].datatypeAttributes.use24HourClock = true;
+        todHHMMSS24HourTzField[0].datatypeAttributes.scale = 'HH:MM:SS';
 
         var expectedHHMMSS12HourClock = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
         expectedHHMMSS12HourClock[0][0].display = '6:51:21 pm';
-        var todHHMMSS12HourClock = JSON.parse(JSON.stringify(todHHMM12HourClock));
-        todHHMMSS12HourClock[0].datatypeAttributes.use24HourClock = false;
-        todHHMMSS12HourClock[0].datatypeAttributes.scale = 'HH:MM:SS';
+        var todHHMMSS12HourField = JSON.parse(JSON.stringify(fieldWithoutTimezone));
+        todHHMMSS12HourField[0].datatypeAttributes.use24HourClock = false;
+        todHHMMSS12HourField[0].datatypeAttributes.scale = 'HH:MM:SS';
+
+        var expectedHHMMSS12HourClockTz = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
+        expectedHHMMSS12HourClockTz[0][0].display = '11:51:21 am';
+        var todHHMMSS12HourTzField = JSON.parse(JSON.stringify(fieldWithTimezone));
+        todHHMMSS12HourTzField[0].datatypeAttributes.use24HourClock = false;
+        todHHMMSS12HourTzField[0].datatypeAttributes.scale = 'HH:MM:SS';
 
         var expectedNull = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
         expectedNull[0][0].display = '';
@@ -66,12 +101,16 @@ describe('Time of day record formatter unit test', function() {
         recordsEmpty[0][0].value = '';
 
         var cases = [
-            {message: 'TOD - HH:MM 12 hour clock', records: recordsInput, fieldInfo: todHHMM12HourClock, expectedRecords: expectedHHMM12HourClock},
-            {message: 'TOD - HH:MM 24 hour clock', records: recordsInput, fieldInfo: todHHMM24HourClock, expectedRecords: expectedHHMM24HourClock},
-            {message: 'TOD - HH:MM:SS 24 hour clock', records: recordsInput, fieldInfo: todHHMMSS24HourClock, expectedRecords: expectedHHMMSS24HourClock},
-            {message: 'TOD - HH:MM:SS 12 hour clock', records: recordsInput, fieldInfo: todHHMMSS12HourClock, expectedRecords: expectedHHMMSS12HourClock},
-            {message: 'TOD - null -> empty string', records: recordsNull, fieldInfo: todHHMM12HourClock, expectedRecords: expectedNull},
-            {message: 'TOD - empty string -> empty string', records: recordsEmpty, fieldInfo: todHHMM12HourClock, expectedRecords: expectedEmpty}
+            {message: 'TOD - HH:MM 12 hour clock', records: recordsInput, fieldInfo: fieldWithoutTimezone, expectedRecords: expectedHHMM12HourClock},
+            {message: 'TOD - HH:MM 24 hour clock', records: recordsInput, fieldInfo: todHHMM24HourField, expectedRecords: expectedHHMM24HourClock},
+            {message: 'TOD - HH:MM:SS 24 hour clock', records: recordsInput, fieldInfo: todHHMMSS24HourField, expectedRecords: expectedHHMMSS24HourClock},
+            {message: 'TOD - HH:MM:SS 12 hour clock', records: recordsInput, fieldInfo: todHHMMSS12HourField, expectedRecords: expectedHHMMSS12HourClock},
+            {message: 'TOD - null -> empty string', records: recordsNull, fieldInfo: fieldWithoutTimezone, expectedRecords: expectedNull},
+            {message: 'TOD - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldWithoutTimezone, expectedRecords: expectedEmpty},
+            {message: 'TOD - HH:MM 12 hour clock with timezone', records: recordsInput, fieldInfo: fieldWithTimezone, expectedRecords: expectedHHMM12HourClockTz},
+            {message: 'TOD - HH:MM 24 hour clock with timezone', records: recordsInput, fieldInfo: todHHMM24HourTzField, expectedRecords: expectedHHMM24HourClockTz},
+            {message: 'TOD - HH:MM:SS 24 hour clock with timezone', records: recordsInput, fieldInfo: todHHMMSS24HourTzField, expectedRecords: expectedHHMMSS24HourClockTz},
+            {message: 'TOD - HH:MM:SS 12 hour clock with timezone', records: recordsInput, fieldInfo: todHHMMSS12HourTzField, expectedRecords: expectedHHMMSS12HourClockTz},
         ];
 
         return cases;

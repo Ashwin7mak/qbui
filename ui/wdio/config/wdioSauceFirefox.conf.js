@@ -2,9 +2,9 @@ var baseConf = require('./wdioSauce.conf');
 var config = {
     capabilities: [
         {
-            platform: 'OS X 10.11',
+            platform: 'OS X 10.12',
             browserName: 'firefox',
-            version: '46.0',
+            marionette: 'false',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX Firefox Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'try', 'OSX', 'Firefox', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
@@ -12,10 +12,10 @@ var config = {
             // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'xlarge',
+            breakpointSize: 'large',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 5
         }
     ]
 };

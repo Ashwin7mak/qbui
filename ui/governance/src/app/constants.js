@@ -11,4 +11,5 @@ export default {
 
     USERS               : 'users',
     CONTEXT              : 'context',
+    USERS_GRID_ITEMSPERPAGE : 500,
 };

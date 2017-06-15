@@ -12,9 +12,6 @@ describe('Logger', () => {
 
         //  following configuration values are expected to exist
         expect(config.env).toBe('PROD');
-        expect(config.api.qbVersion).toBeDefined();
-        expect(config.api.nodeVersion).toBeDefined();
-        expect(config.api.eeVersion).toBeDefined();
         expect(config.logger.logLevel).toBeDefined();
         expect(config.logger.logToConsole).toBeDefined();
         expect(config.logger.logToServer).toBeDefined();

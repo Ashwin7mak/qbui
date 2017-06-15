@@ -7,7 +7,8 @@ import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import {connect} from 'react-redux';
-import {loadDynamicReport, hideColumn} from '../../../actions/reportActions';
+import {loadDynamicReport} from '../../../actions/reportActions';
+import {hideColumn, insertPlaceholderColumn} from '../../../actions/reportBuilderActions';
 import _ from 'lodash';
 
 import ReportUtils from '../../../utils/reportUtils';
@@ -218,49 +219,77 @@ export class ReportColumnHeaderMenu extends Component {
         if (!this.hasRequiredIds()) {return;}
         if (this.props.isOnlyOneColumnVisible) {return;}
 
-        let params = {
-            columnId: this.props.fieldDef.id
-        };
+        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id);
+    };
 
-        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
+    showAColumn(before) {
+        if (!this.hasRequiredIds()) {return;}
+
+        this.props.insertPlaceholderColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id, before);
+    }
+
+    showAColumnBefore = () => {
+        this.showAColumn(true);
+    };
+
+    showAColumnAfter = () => {
+        this.showAColumn(false);
     };
 
     render() {
-        let isDisabled = this.props.isOnlyOneColumnVisible;
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
+        let isHideOptionDisabled = this.props.isOnlyOneColumnVisible;
+
+        let builderMenus = [];
+        if (inBuilderMode) {
+            builderMenus = [
+                <MenuItem key="1" divider/>,
+
+                <MenuItem key="2" onSelect={this.showAColumnBefore}>
+                    <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
+                </MenuItem>,
+
+                <MenuItem key="3" onSelect={this.showAColumnAfter}>
+                    <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
+                </MenuItem>,
+
+                <MenuItem key="4" disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
+                    <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
+                </MenuItem>
+            ];
+        }
+
+        const headerMenus = [
+            <MenuItem key="5" onSelect={this.sortReportAscending}>
+                {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
+                <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
+            </MenuItem>,
+
+            <MenuItem key="6" onSelect={this.sortReportDescending}>
+                {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
+                <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
+            </MenuItem>,
+
+            <MenuItem key="7" divider/>,
+
+            <MenuItem key="8" onSelect={this.groupReportAscending}>
+                <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
+            </MenuItem>,
+
+            <MenuItem key="9" onSelect={this.groupReportDescending}>
+                <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
+            </MenuItem>,
+            ...builderMenus
+        ];
+
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
-                <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
+                <Button tabIndex="0" bsRole="toggle" className="dropdownToggle iconActionButton">
                     <QbIcon icon="caret-filled-down"/>
                 </Button>
 
                 <Dropdown.Menu>
-                    <MenuItem onSelect={this.sortReportAscending}>
-                        {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
-                        <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
-                    </MenuItem>
-
-                    <MenuItem onSelect={this.sortReportDescending}>
-                        {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
-                        <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
-                    </MenuItem>
-
-                    <MenuItem divider/>
-
-                    <MenuItem onSelect={this.groupReportAscending}>
-                        <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
-                    </MenuItem>
-                    <MenuItem onSelect={this.groupReportDescending}>
-                        <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
-                    </MenuItem>
-
-                    <MenuItem divider/>
-
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-
-                    <MenuItem disabled={isDisabled} onSelect={this.hideThisColumn}>
-                        <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
-                    </MenuItem>
+                    {headerMenus}
                 </Dropdown.Menu>
             </Dropdown>
         );
@@ -273,13 +302,22 @@ ReportColumnHeaderMenu.propTypes = {
     isOnlyOneColumnVisible: PropTypes.bool
 };
 
+const mapStateToProps = (state) => {
+    return {
+        reportBuilder: state.reportBuilder
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         },
-        hideColumn: (context, appId, tblId, rptId, params) => {
-            dispatch(hideColumn(context, appId, tblId, rptId, params));
+        hideColumn: (context, clickedId) => {
+            dispatch(hideColumn(context, clickedId));
+        },
+        insertPlaceholderColumn: (context, clickedColumn, addBeforeColumn) => {
+            dispatch(insertPlaceholderColumn(context, clickedColumn, addBeforeColumn));
         }
     };
 };
@@ -290,4 +328,4 @@ function convertSortingMessageToI18nMessage(prependText, message) {
     return Locale.getMessage(`report.menu.${prependText}.${message}`);
 }
 
-export default connect(null, mapDispatchToProps)(ReportColumnHeaderMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(ReportColumnHeaderMenu);

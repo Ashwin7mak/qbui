@@ -9,7 +9,8 @@ let config = {
         private    : 'privateKey',
         cert       : 'cert',
         requireCert: true
-    }
+    },
+    isMockServer: false
 };
 
 let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
@@ -72,7 +73,7 @@ describe('Validate RequestHelper unit tests', function() {
         let req = {};
         req.url = '/someurl.com';
         it('Test request url method', function(done) {
-            let request = requestHelper.getRequestUrl(req);
+            let request = requestHelper.getRequestCoreUrl(req);
             should(request).be.exactly(config.javaHost + req.url);
             done();
         });
@@ -180,6 +181,7 @@ describe('Validate RequestHelper unit tests', function() {
         it('Test setAutomationEngineOptions with GET method', function(done) {
             req.method = 'GET';
             req.originalUrl = '/someurl.com';
+            req.cookies = "TICKET=TestCookie";
             let request = requestHelper.setAutomationEngineOptions(req);
             should(request.url).be.exactly(config.automationHost + req.url);
             should.not.exist(request.body);
@@ -561,12 +563,37 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
-    describe('validate getLegacyRealmBase function', function() {
-        it('Test case realm host is formatted', function(done) {
-            let req = {headers: {host: 'wmt.ns.quickbase-dev.com/governance'}, params: {}};
-            assert.equal(requestHelper.getLegacyRealmBase(req),
-                'https://wmt' + config.legacyBase);
-            done();
+
+    describe('legacy options setup', function() {
+        let sampleReq = {headers: {host: 'wmt.ns.quickbase-dev.com/governance'}, params: {}, method: 'get'};
+        describe('validate getLegacyRealmBase function', function() {
+            it('Test case realm host is formatted', function(done) {
+                let req = Object.assign({}, sampleReq);
+                assert.equal(requestHelper.getLegacyRealmBase(req),
+                    'https://wmt' + config.legacyBase);
+                done();
+            });
+        });
+
+        describe('setLegacyOptions', function() {
+            it('should set the correct host in the header', function() {
+                let req = Object.assign({}, sampleReq);
+                let opts = requestHelper.setLegacyOptions(req, "");
+                assert.equal(opts.headers.host, req.headers.host);
+            });
+            it('should set the correct url in the header', function() {
+                let req = Object.assign({}, sampleReq);
+                let path = "/super/duper/long/path/to/no/where";
+                let opts = requestHelper.setLegacyOptions(req, path);
+                assert.equal(opts.url, `${consts.PROTOCOL.HTTPS}${req.headers.host}${path}`);
+            });
+            it('should set the correct sbIID based on the TID', function() {
+                let req = Object.assign({}, sampleReq);
+                requestHelper.setTidHeader(req);
+                let tid = req.headers.tid;
+                let opts = requestHelper.setLegacyOptions(req, "");
+                assert(opts.headers.cookie, `${consts.COOKIES.SBIID}=${tid}`);
+            });
         });
     });
 });

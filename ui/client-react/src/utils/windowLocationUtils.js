@@ -1,5 +1,3 @@
-import AppHistory from '../globals/appHistory';
-
 /**
  * Static class of window url param access functions
  *   extracted for mockability /testability
@@ -62,38 +60,14 @@ class WindowLocationUtils {
     }
 
     /**
-     * push current url with key=value query param
-     * @param key
-     * @param value
+     * Function to returns a DOMString containing the canonical
+     * form of the origin of the current location.
+     * i.e. for url https://developer.mozilla.org/en-US/search?q=URL#search-results-close-container';
+     * origin is https://developer.mozilla.org
      */
-    static pushWithQuery(key, value) {
-
-        let urlQueryString = document.location.search;
-        let newParam = key + '=' + value;
-        let params = '?' + newParam;
-
-        // If the "search" string exists, then build params from it
-        if (urlQueryString) {
-            let keyRegex = new RegExp('([\?&])' + key + '[^&]*');
-
-            // If param exists already, update it
-            if (urlQueryString.match(keyRegex) !== null) {
-                params = urlQueryString.replace(keyRegex, "$1" + newParam);
-            } else { // Otherwise, add it to end of query string
-                params = urlQueryString + '&' + newParam;
-            }
-        }
-        AppHistory.history.push(location.pathname + params);
+    static getOrigin() {
+        return window.location.origin;
     }
-
-    /**
-     * push current url without query params
-     */
-    static pushWithoutQuery() {
-
-        AppHistory.history.push(location.pathname);
-    }
-
     /**
      * Calls window.addEventListener. This is mostly for ease of testing.
      */

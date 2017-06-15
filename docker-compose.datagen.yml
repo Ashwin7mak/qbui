@@ -1,0 +1,19 @@
+version: '2'
+services:
+  datagen:
+    # DataGen Container
+    build:
+      # Build image from the parent project directory
+      context: ./
+      dockerfile: Dockerfile-datagen
+    command: 'node wdio/dataGen/dataGenCustomize.js'
+    links:
+      # Required to make the DNS resolution work for the subdomain.core mapping
+      - core:localhost.core
+      - ui:localhost.ui
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - NODE_ENV=datagen
+    image: quickbase/ui-datagen
+    volumes:
+      - /tmp/log/docker/datagen/service:/var/log/qbase

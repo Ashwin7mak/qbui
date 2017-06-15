@@ -1,6 +1,12 @@
+// wdioSauce.conf.js
+// This config file is used to run wdio tests out on Sauce Labs (used in our CI wdio try and master builds)
+
 // Global variable that allows you to set wdio to use a realm defined in your node config file
 // (see onPrepare hook below)
 var localConf;
+var randomNum = Math.floor((Math.random() * (100 - 1) + 1));
+var seleniumPort = 4400 + randomNum;
+var metricsPort = 8800 + randomNum;
 
 exports.config = {
     //
@@ -20,7 +26,13 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         // Use a random int to make the port unique between Jenkins jobs
-        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1)))
+        port            : seleniumPort,
+        connectRetries : 5,
+        connectRetryTimeout: 5000,
+        // Custom ip to query for test metrics
+        metricsAddress : 'localhost:' + metricsPort,
+        // Custom id to add to the ready file name to make the file unique
+        readyFileId: randomNum
     },
     //
     //
@@ -30,7 +42,7 @@ exports.config = {
     // Define all options that are relevant for connecting WebdriverIO to a Sauce Labs Selenium Server here
     //
     //host: '127.0.0.1',
-    //port: 4400,
+    port: seleniumPort,
     //path: '/wd/hub',
     //
     // ============
@@ -74,75 +86,24 @@ exports.config = {
     // from the same test should run tests.
     //
     maxInstances: 10,
+    // =============================
+    // Appium Server Configuration
+    // =============================
+    // Define all options that are relevant for connecting to appium server
+    appium: {
+        args: {
+            host: '127.0.0.1',
+            port: '4723',
+            commandTimeout: '7200'
+        }
+    },
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [
-        {
-            platform : 'OS X 10.11',
-            browserName     : 'chrome',
-            version: '55.0',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Chrome Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'master', 'OSX', 'Chrome', process.env.BUILD_NUMBER],
-            screenResolution : '2048x1536',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 4,
-        },
-        // {
-        //     platform: 'OS X 10.11',
-        //     browserName: 'safari',
-        //     version: '10.0',
-        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //     build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser',
-        //     tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'master', 'OSX', 'Safari', process.env.BUILD_NUMBER],
-        //     screenResolution : '2048x1536',
-        //     // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //     idleTimeout: '180',
-        //     maxDuration: 10800,
-        //     breakpointSize: 'xlarge',
-        //     shardTestFiles: true,
-        //     maxInstances: 4
-        // },
-        {
-            platform: 'OS X 10.11',
-            browserName: 'firefox',
-            version: '46.0',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'master', 'OSX', 'Firefox', process.env.BUILD_NUMBER],
-            screenResolution: '2048x1536',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 4,
-        },
-        {
-            platform: 'Windows 10',
-            browserName: 'MicrosoftEdge',
-            version: '14.14393',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - Windows 10 Edge Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_Win10_Edge', 'master', 'Win10', 'Edge', process.env.BUILD_NUMBER],
-            screenResolution: '2560x1600',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 4,
-        }
+        // capabilities are overridden by the individual browser / device config files (ex: wdioSauceChrome.conf.js)
     ],
     //
     // ===================
@@ -303,13 +264,17 @@ exports.config = {
         global.browserName = browser.desiredCapabilities.browserName;
 
         // Grab the browser settings from the capabilities object and set the browser size
-        var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
-        global.breakpointSize = browserDimensions.breakpointSize;
-        global.browserWidth = browserDimensions.browserWidth;
-        global.browserHeight = browserDimensions.browserHeight;
-
-        browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-        browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+        if (browser.desiredCapabilities.breakpointSize) {
+            var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
+            global.breakpointSize = browserDimensions.breakpointSize;
+            global.browserWidth = browserDimensions.browserWidth;
+            global.browserHeight = browserDimensions.browserHeight;
+            browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+            //TODO on firefox53 this is not working
+            if (browserName === 'chrome') {
+                browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+            }
+        }
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object
         // This call creates a your test realm down in api.base

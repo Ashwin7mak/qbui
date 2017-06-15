@@ -3,26 +3,32 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
-import {notifyTableCreated} from '../../actions/tableCreationActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addFieldToForm} from '../../actions/formActions';
+import {draggingLinkToRecord} from '../../actions/relationshipBuilderActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
+import FieldFormats from '../../utils/fieldFormats';
 import FormBuilder from '../formBuilder/formBuilder';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../utils/navigationUtils';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
-import {getFormByContext, getFormRedirectRoute} from '../../reducers/forms';
-import {CONTEXT} from '../../actions/context';
+import {getFormByContext, getFormRedirectRoute, getSelectedFormElement} from '../../reducers/forms';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
+import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
-import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
+import {DragDropContext} from 'react-dnd';
+import TouchBackend from 'react-dnd-touch-backend';
+import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
+import {HideAppModal} from '../qbModal/appQbModalFunctions';
+import AppQbModal from '../qbModal/appQbModal';
+import {CONTEXT} from '../../actions/context';
 
 import './formBuilderContainer.scss';
 
@@ -35,12 +41,16 @@ const mapStateToProps = state => {
     return {
         currentForm,
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
+        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
         redirectRoute: getFormRedirectRoute(state),
-        tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
+        formBuilderChildrenTabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : "-1"),
+        toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
-        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
+        toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
         isOpen: state.builderNav.isNavOpen,
-        isCollapsed: state.builderNav.isNavCollapsed
+        isCollapsed: state.builderNav.isNavCollapsed,
+        newRelationshipFieldIds: state.relationshipBuilder.newRelationshipFieldIds,
+        fields: state.fields
     };
 };
 
@@ -50,11 +60,14 @@ const mapDispatchToProps = {
     updateForm,
     updateFormAnimationState,
     toggleFormBuilderChildrenTabIndex,
+    toggleToolPaletteChildrenTabIndex,
     keyboardMoveFieldUp,
     keyboardMoveFieldDown,
+    selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    notifyTableCreated
+    addFieldToForm,
+    draggingLinkToRecord
 };
 
 /**
@@ -98,14 +111,20 @@ export const FormBuilderContainer = React.createClass({
 
         /**
          * Controls the collapsed state of the left tool panel */
-        isCollapsed: PropTypes.bool
+        isCollapsed: PropTypes.bool,
+
+        /**
+         * newly added (unsaved) link-to-parent field IDs
+         */
+        newRelationshipFieldIds: PropTypes.array
     },
 
     getDefaultProps() {
         // For easier unit tests without the Router, we can pass in default empty values
         return {
             location: {query: {}},
-            match: {params: {}}
+            match: {params: {}},
+            showCustomDragLayer: true
         };
     },
 
@@ -115,29 +134,27 @@ export const FormBuilderContainer = React.createClass({
 
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
-
-        // if we've been sent here from the table creation flow, show a notification
-        if (this.props.shouldNotifyTableCreated) {
-            this.props.notifyTableCreated(false);
-            setTimeout(() => {
-                NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
-            }, 1000);
-        }
     },
 
-    onCancel() {
+    closeFormBuilder() {
         const {appId, tblId} = this.props.match.params;
 
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
 
+    onCancel() {
+        this.closeFormBuilder();
+    },
+
     removeField() {
+        const {appId, tblId} = this.props.match.params;
         if (this.props.removeFieldFromForm) {
-            return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
+            return this.props.removeFieldFromForm(this.props.currentForm.id, appId, tblId, this.props.selectedField);
         }
     },
 
     saveClicked() {
+        HideAppModal();
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
@@ -149,8 +166,8 @@ export const FormBuilderContainer = React.createClass({
     getRightAlignedButtons() {
         return (
             <div>
-                <Button bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.SAVE_BUTTON_TABINDEX} bsStyle="primary" onClick={this.saveClicked} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     },
@@ -172,11 +189,10 @@ export const FormBuilderContainer = React.createClass({
     },
 
     updateChildrenTabIndex(e) {
-        let childrenTabIndex = this.props.tabIndex;
+        let childrenTabIndex = this.props.formBuilderChildrenTabIndex;
 
-        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== "0") {
+        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== tabIndexConstants.FORM_TAB_INDEX) {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
-            e.preventDefault();
         }
     },
 
@@ -189,28 +205,69 @@ export const FormBuilderContainer = React.createClass({
     keyboardMoveFieldDown() {
         let {tabIndex, sectionIndex, columnIndex} = this.props.selectedField;
         let formDataLength = this.props.currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements.length - 1;
-
         if (this.props.selectedField.elementIndex < formDataLength) {
             this.props.keyboardMoveFieldDown(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
-    deselectField() {
-        if (this.props.deselectField) {
-            this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
-        }
-    },
-
     escapeCurrentContext() {
-        let childrenTabIndex = this.props.tabIndex;
         let selectedField = this.props.selectedField;
-        if (selectedField) {
-            this.deselectField();
-        } else if (this.props.tabIndex === "0") {
-            this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
+        let formId = this.props.currentForm.id;
+
+        if (this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
+            if (this.props.toggleFormBuilderChildrenTabIndex) {
+                this.props.toggleFormBuilderChildrenTabIndex(formId, tabIndexConstants.FORM_TAB_INDEX);
+            }
+        } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.TOOL_PALETTE_TABINDEX) {
+            if (this.props.toggleToolPaletteChildrenTabIndex) {
+                this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.TOOL_PALETTE_TABINDEX);
+            }
+        } else if (selectedField) {
+            if (this.props.deselectField) {
+                this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
+            }
         } else {
             this.onCancel();
         }
+    },
+
+    toggleToolPaletteChildrenTabIndex(e) {
+        let formId = this.props.currentForm.id;
+        if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
+            this.props.toggleToolPaletteChildrenTabIndex(formId, "-1");
+            e.preventDefault();
+        }
+    },
+
+    /**
+     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
+     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
+     * */
+    componentDidUpdate() {
+        if (this.props.formFocus &&
+            document.activeElement.classList[0] !== "checkbox" &&
+            document.activeElement.tagName !== "TEXTAREA" &&
+            document.activeElement.tagName !== "INPUT" &&
+            document.activeElement.tagName !== "BUTTON") {
+            formBuilderContainerContent.focus();
+        }
+    },
+
+    /**
+     * detect drag of field
+     **/
+    beginDrag(props) {
+
+        if (props.type === FieldFormats.LINK_TO_RECORD) {
+            this.props.draggingLinkToRecord(true);
+        }
+    },
+
+    /**
+     * drag complete
+     */
+    endDrag() {
+        this.props.draggingLinkToRecord(false);
     },
 
     render() {
@@ -224,12 +281,14 @@ export const FormBuilderContainer = React.createClass({
 
         return (
             <div className="formBuilderContainer">
-
+                {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
+                <AppQbModal/>
+                <FormBuilderCustomDragLayer />
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[
                                        {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
                                        {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                                       {key: 'backspace', callback: () => {this.removeField(); return false;}}
+                                       {key: 'shift+backspace', callback: () => {this.removeField(); return false;}},
                                    ]}
                                    shortcutBindingsPreventDefault={[
                                        {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
@@ -238,34 +297,52 @@ export const FormBuilderContainer = React.createClass({
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
-                <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
-                    <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
-                        <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
+                <ToolPalette isCollapsed={this.props.isCollapsed}
+                             isOpen={this.props.isOpen}
+                             beginDrag={this.beginDrag}
+                             endDrag={this.endDrag}
+                             toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
+                             toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                             toolPaletteFocus={this.props.toolPaletteFocus}
+                             formMeta={formData ? formData.formMeta : null}
+                             newRelationshipFieldIds={this.props.newRelationshipFieldIds}
+                             fields={this.props.fields}
+                             app={this.props.app}>
+                <FieldProperties appId={this.props.match.params.appId} app={this.props.app} tableId={this.props.match.params.tblId} formId={formId}>
+                        <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}
+                             className="formBuilderContainerContent"
+                             ref={element => formBuilderContainerContent = element}
+                             role="button"
+                             onKeyDown={this.updateChildrenTabIndex}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                         <FormBuilder
-                                            formFocus={this.props.formFocus}
+                                            formBuilderContainerContentElement={formBuilderContainerContent}
                                             selectedField={this.props.selectedField}
-                                            formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                             formId={formId}
+                                            app={this.props.app}
+                                            appId={this.props.match.params.appId}
+                                            tblId={this.props.match.params.tblId}
                                             formData={formData}
                                             moveFieldOnForm={this.props.moveFieldOnForm}
                                             updateAnimationState={this.props.updateFormAnimationState}
+                                            selectedFormElement={this.props.selectedFormElement}
+                                            addFieldToForm={this.props.addFieldToForm}
+                                            selectFieldOnForm={this.props.selectFieldOnForm}
                                         />
                                     </Loader>
                                 </div>
                             </AutoScroll>
-                            {this.getSaveOrCancelFooter()}
                         </div>
                     </FieldProperties>
                 </ToolPalette>
+                {this.getSaveOrCancelFooter()}
             </div>
         );
     }
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FormBuilderContainer);
+export default
+    DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(
+    connect(mapStateToProps, mapDispatchToProps)(FormBuilderContainer));

@@ -25,8 +25,7 @@ const tableCreation = (
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
-        editing: null,
-        notifyTableCreated: false
+        editing: null
     },
     action) => {
 
@@ -81,6 +80,7 @@ const tableCreation = (
         tableInfo[action.property] = {
             value: action.value,
             validationError: action.validationError,
+            pendingValidationError: action.pendingValidationError,
             edited: fieldInfo.edited || action.isUserEdit
         };
 
@@ -116,12 +116,6 @@ const tableCreation = (
         };
     }
 
-    case types.NOTIFY_TABLE_CREATED: {
-        return {
-            ...state,
-            notifyTableCreated: action.notifyTableCreated
-        };
-    }
     default:
         // return existing state by default in redux
         return state;

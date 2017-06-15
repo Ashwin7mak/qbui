@@ -29,6 +29,17 @@
     }
 }
 
+@include medium-breakpoint {
+
+    .multiStepModal.tableCreationDialog .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 350px;
+        }
+        width: 600px;
+    }
+}
+
 /* some initial small styles in case we support small */
 @include small-breakpoint {
 
@@ -38,5 +49,14 @@
             height: 550px;
         }
         width: 420px;
+        .iconChooser.open {
+            width: 100%;
+        }
+        .tableField {
+            width: 100%;
+        }
+        .tableField:first-of-type {
+            padding-right: 0;
+        }
     }
 }

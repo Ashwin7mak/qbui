@@ -5,6 +5,15 @@
     var _ = require('lodash');
     let constants = require('../../../../common/src/constants');
 
+    const cannedTitleField = {[constants.REQUEST_PARAMETER.FIELD.NAME]:'Record title',
+        [constants.REQUEST_PARAMETER.FIELD.TYPE]:'SCALAR',
+        [constants.REQUEST_PARAMETER.FIELD.DATA_TYPE_ATTRS]: {
+            [constants.REQUEST_PARAMETER.FIELD.TYPE]: 'TEXT'
+        },
+        [constants.REQUEST_PARAMETER.FIELD.REQUIRED]: true,
+        [constants.REQUEST_PARAMETER.FIELD.UNIQUE]: true
+    };
+
     const cannedTextField = {[constants.REQUEST_PARAMETER.FIELD.NAME]:'Text',
         [constants.REQUEST_PARAMETER.FIELD.TYPE]:'SCALAR',
         [constants.REQUEST_PARAMETER.FIELD.DATA_TYPE_ATTRS]:{
@@ -58,6 +67,14 @@
                                     //'fieldId': 7,
                                     [constants.REQUEST_PARAMETER.FORM.SHOW_AS_RADIO]: false
                                 }
+                            },
+                            2: {
+                                [constants.REQUEST_PARAMETER.FORM.FORM_FIELD_EL]: {
+                                    [constants.REQUEST_PARAMETER.FORM.TYPE]: 'FIELD',
+                                    [constants.REQUEST_PARAMETER.FORM.ORDER_IDX]: 1,
+                                    //'fieldId': 8,
+                                    [constants.REQUEST_PARAMETER.FORM.SHOW_AS_RADIO]: false
+                                }
                             }
                         }
                     }
@@ -67,20 +84,21 @@
     };
     module.exports  = {
         getCannedFields: function() {
-            return [cannedTextField, cannedDateField];
+            return [cannedTitleField, cannedTextField, cannedDateField];
         },
 
         getCannedReports: function(tableName) {
             cannedListAllReport[constants.REQUEST_PARAMETER.REPORT.NAME] = 'All ' + tableName;
-            return [cannedListChangesReport, cannedListAllReport];
+            return [cannedListAllReport, cannedListChangesReport];
         },
 
         getCannedForms: function(formName, fieldIds) {
             let form = _.clone(cannedForm);
             form[constants.REQUEST_PARAMETER.FORM.NAME] = formName + ' form';
-            if (fieldIds.length === 2) {
+            if (fieldIds.length === 3) {
                 form.tabs[0].sections[0].elements[0].FormFieldElement.fieldId = fieldIds[0];
                 form.tabs[0].sections[0].elements[1].FormFieldElement.fieldId = fieldIds[1];
+                form.tabs[0].sections[0].elements[2].FormFieldElement.fieldId = fieldIds[2];
             }
             return [form];
         }

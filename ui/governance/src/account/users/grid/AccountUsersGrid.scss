@@ -1,68 +1,86 @@
-@import '../../../../../reuse/client/src/assets/css/qbVariables';
+@import "../../../../../reuse/client/src/assets/css/qbVariables";
 
 .accountUsersContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
   .qbCell {
-    vertical-align: middle;
-    word-wrap: break-word;
-    padding: {
-      top: 6px;
-      bottom: 6px;
-    }
+      vertical-align: middle;
+      word-wrap: break-word;
+      padding: {
+          top: 6px;
+          bottom: 6px;
+      }
   }
   .qbHeaderCell {
-    word-wrap: break-word;
+      word-wrap: break-word;
   }
   .ScreennameColumn {
-    max-width: 200px;
+      max-width: 200px;
   }
   .EmailColumn {
-    max-width: 180px;
+      max-width: 180px;
   }
   .BoolColumn {
-    max-width: 120px;
-    min-width: 80px;
+      max-width: 180px;
+      min-width: 80px;
   }
   .qbGrid {
-    display: table;
-    table-layout: auto;
+      table-layout: auto;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow-y: auto;
 
-    .gridHeaderCell {
-      .gridHeaderLabel {
-        max-height: 60px;
+      .gridHeaderCell {
+          .gridHeaderLabel {
+              max-height: 60px;
+          }
       }
-    }
-    .dropdown-menu {
-      .qbIcon {
-        font-size: .8em;
-        width: .8em;
-        position: absolute;
-        left: 5px;
-        top: calc(50% - .4em);
+
+      .dropdown-menu {
+          .qbIcon {
+              font-size: .8em;
+              width: .8em;
+              position: absolute;
+              left: 5px;
+              top: calc(50% - .4em);
+          }
+          li {
+              position: relative;
+          }
       }
-      li {
-        position: relative;
-      }
-    }
   }
   .accessStatusLabel {
-    .qbIcon {
-      font-size: $size-iconfont-medium;
-      vertical-align: bottom;
-    }
-    &.paid {
-      color: $color-green-600;
-    }
-    &.denied {
-      color: $color-red-700;
-    }
-    &.deactivated {
-      color: $color-black-600;
-    }
-    &.staff {
-      color: $color-black-600;
-    }
-    &.none {
-      color: $color-black-600
-    }
+      .qbIcon {
+          font-size: $size-iconfont-medium;
+          vertical-align: bottom;
+      }
+      &.paid {
+          .paidIcon {
+              color: $color-green-600;
+          }
+      }
+      &.denied {
+          .deniedIcon {
+              color: $color-red-700;
+          }
+      }
+      &.deactivated {
+          .deactivatedIcon {
+              color: $color-black-600;
+          }
+      }
+      &.staff {
+          .staffIcon {
+              color: $color-purple-600;
+          }
+      }
+      &.none {
+          .noneIcon {
+              color: $color-black-600
+          }
+      }
   }
 }

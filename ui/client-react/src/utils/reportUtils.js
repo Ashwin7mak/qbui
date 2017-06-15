@@ -402,6 +402,17 @@ class ReportUtils {
         // the transformation step
         return selectedRows.length === transformedRows.filter(row => !row.isSubHeader).length;
     }
+
+    /**
+     * Returns an array of columns that are in allColumns but not in currentColumns.
+     * @param allColumns
+     * @param currentColumns
+     * @param columnProperty iterate by this
+     * @return array
+     */
+    static getDifferenceOfColumns(allColumns, currentColumns, columnProperty = 'id') {
+        return _.differenceBy(allColumns, currentColumns, columnProperty);
+    }
 }
 
 ReportUtils.listDelimiter = listDelimiter;

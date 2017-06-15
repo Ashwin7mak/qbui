@@ -5,13 +5,13 @@ import TestUtils from 'react-addons-test-utils';
 import _ from 'lodash';
 
 
-import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
+import {QbGrid} from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
-import ReportColumnTransformer from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
+import {CONTEXT} from '../../../src/actions/context';
 
 const testColumns = [
     new ColumnTransformer('Header 1', 1, 'header1class', false),
@@ -77,7 +77,8 @@ const requiredProps = {
     editingRowErrors: [],
     onCancelEditingRow: actions.onClickCancel,
     onClickSaveRow: actions.onClickSave,
-    cellRenderer: testCellRenderer
+    cellRenderer: testCellRenderer,
+    moveColumn: (context, params) => {}
 };
 
 let component;
@@ -86,7 +87,6 @@ let instance;
 describe('QbGrid', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
         // TODO:: Refactor once redux stores are implemented. https://quickbase.atlassian.net/browse/MB-1920
         QbIconActionsRewireAPI.__Rewire__('IconActions', () => {return <div></div>;});
     });
@@ -264,6 +264,17 @@ describe('QbGrid', () => {
         });
     });
 
+    describe('getPlaceholderCellProps', () => {
+        it('adds the isPlaceholderCell prop to placeholder cells so the component can add the appropriate class', () => {
+            component = shallow(<QbGrid {...requiredProps}/>);
+            instance = component.instance();
+
+            expect(instance.getPlaceholderCellProps()).toEqual({
+                isPlaceholderCell: true
+            });
+        });
+    });
+
     describe('onClickToggleSelectedRow', () => {
         it('creates a function that can be used an event listener that includes the row id', () => {
             spyOn(actions, 'onClickToggle');
@@ -331,5 +342,22 @@ describe('QbGrid', () => {
         // Displays subHeaders if there are any rows where isSubHeader is true
         let subHeader = TestUtils.findRenderedDOMComponentWithClass(component, 'groupHeader');
         expect(subHeader.innerText).toEqual(subHeaderRow.subHeaderLabel);
+    });
+
+    describe('onMoveColumn', () => {
+        it('calls the moveColumn prop', () => {
+            spyOn(requiredProps, 'moveColumn');
+            component = shallow(<QbGrid {...requiredProps}/>);
+            instance = component.instance();
+
+            let column = {
+                sourceLabel: 5,
+                targetLabel: 6
+            };
+
+            instance.onMoveColumn(column);
+
+            expect(requiredProps.moveColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, column);
+        });
     });
 });

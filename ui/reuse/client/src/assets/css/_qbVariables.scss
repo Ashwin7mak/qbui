@@ -8,7 +8,6 @@
 $font-family: Lato, 'Open Sans', Helvetica, Arial, sans-serif;  /* default font face stack */
 $font-size: $font-size-base;          /* base/default body font size */
 $font-color: $color-black-700;                 /* default font color */
-$top-nav-height: 40px;
 
 /* breakpoints and mixins */
 $small-breakpoint-width: 640px;
@@ -118,6 +117,7 @@ $form-edit-input-width: 280px;
 // TODO:: $radius-base is different than specified in _customVariables, but this matches spec at https://quickbase.atlassian.net/wiki/display/qbasepd/Semantic+Names
 $radius-base: 2px;
 $stroke-width-thin: 1px;
+$stroke-width-thick: 2px;
 
 // Semantic names for icon fonts
 $size-iconfont-small: 16px;
@@ -146,8 +146,6 @@ $line-height-text-comfortable:  16px;
 $line-height-text-generous:     24px;
 $line-height-text-multiline:    13px;
 
-// -- FormBuilder - Drag & Drop
-@mixin dragpreview-active-gradient {
-    border: $stroke-width-thin solid $color-black-400;
-    background: linear-gradient(rgba($color-black-400, 0), rgba($color-black-400, 0.2));
-}
+$top-nav-height: 40px;
+$trowser-footer-height: 66px;
+$topnav-title-text-size: $font-size-h4;

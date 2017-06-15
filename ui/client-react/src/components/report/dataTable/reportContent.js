@@ -7,8 +7,7 @@ import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import ReportUtils from '../../../utils/reportUtils';
-import WindowLocationUtils from '../../../utils/windowLocationUtils';
-import Fluxxor from "fluxxor";
+import {WindowHistoryUtils} from '../../../utils/windowHistoryUtils';
 import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
@@ -27,14 +26,15 @@ import {tableFieldsReportDataObj} from '../../../reducers/fields';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
+import {getPendEdits} from '../../../reducers/record';
+import {scrollingReport} from '../../../actions/shellActions';
 
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 export const ReportContent = React.createClass({
-    mixins: [FluxMixin, IntlMixin],
+    mixins: [IntlMixin],
 
     getInitialState() {
         return {
@@ -69,11 +69,15 @@ export const ReportContent = React.createClass({
             recId = row[this.props.primaryKeyName].value;
         }
 
-        this.openRow(recId);
-        //create the link we want to send the user to and then send them on their way
-        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.history) {
-            this.props.history.push(link);
+        if (this.props.handleDrillIntoChild) {
+            this.props.handleDrillIntoChild(tblId, recId, this.props.uniqueId);
+        } else {
+            this.openRow(recId);
+            //create the link we want to send the user to and then send them on their way
+            const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+            if (this.props.history) {
+                this.props.history.push(link);
+            }
         }
     },
 
@@ -212,10 +216,12 @@ export const ReportContent = React.createClass({
      * to be saved.
      * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
      * was one or changes if it's a new record
+     * inlineEdit set to true by default, if its called from a trowser, the value passed in is going to be false
      * @param recId
      * @param fieldToStartEditing
+     * @param inLineEdit
      */
-    handleEditRecordStart(recId, fieldToStartEditing = null) {
+    handleEditRecordStart(recId, fieldToStartEditing = null, inLineEdit = true) {
         if (_.has(this.props, 'reportData.data')) {
             let origRec = null;
             let changes = {};
@@ -227,8 +233,7 @@ export const ReportContent = React.createClass({
             } else {
                 changes = this.setNewRowFieldChanges(recId);
             }
-
-            this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
+            this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, inLineEdit, fieldToStartEditing);
         }
     },
 
@@ -522,9 +527,11 @@ export const ReportContent = React.createClass({
      * @param data row record data
      */
     openRecordForEditInTrowser(recordId) {
-        this.handleEditRecordStart();
+        //both actions should just add one record to the state, so passing the record id,
+        //so that the record gets updated
         this.openRow(recordId);
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+        this.handleEditRecordStart(recordId, null, false);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     /**
@@ -532,12 +539,10 @@ export const ReportContent = React.createClass({
      * icon for a bit
      */
     onScrollRecords() {
-        const flux = this.getFlux();
-
         const createTimeout = () => {
             this.scrollTimer = setTimeout(() => {
                 this.scrollTimer = null;
-                flux.actions.scrollingReport(false);
+                this.props.scrollingReport(false);
             }, 1000);
         };
 
@@ -546,7 +551,7 @@ export const ReportContent = React.createClass({
             clearTimeout(this.scrollTimer);
             createTimeout();
         } else {
-            flux.actions.scrollingReport(true);
+            this.props.scrollingReport(true);
             createTimeout();
         }
 
@@ -845,60 +850,10 @@ export const ReportContent = React.createClass({
         }
     },
 
-    /**
-     * when report changed from not loading to loading start measure of components performance
-     *  @param nextProps
-     */
-    startPerfTiming(nextProps) {
-        if (_.has(this.props, 'reportData.loading') &&
-            !this.props.reportData.loading &&
-            nextProps.reportData.loading) {
-            let flux = this.getFlux();
-            flux.actions.mark('component-ReportContent start');
-        }
-    },
-
-    /**
-     * when report changed from loading to loaded finish measure of components performance
-     * @param prevProps
-     */
-    capturePerfTiming(prevProps) {
-        let timingContextData = {numReportCols:0, numReportRows:0};
-        let flux = this.getFlux();
-        if (_.has(this.props, 'reportData.loading') &&
-            !this.props.reportData.loading &&
-            prevProps.reportData.loading) {
-            flux.actions.measure('component-ReportContent', 'component-ReportContent start');
-
-            // note the size of the report with the measure
-            if (_.has(this.props, 'reportData.data.columns.length')) {
-                let reportData = this.props.reportData.data;
-                timingContextData.numReportCols = reportData.columns.length;
-                timingContextData.numReportRows = reportData.filteredRecordsCount ?
-                    reportData.filteredRecordsCount : reportData.recordsCount;
-            }
-            flux.actions.logMeasurements(timingContextData);
-        }
-    },
-
     getPendEdits() {
-        let pendEdits = {};
-        //  TODO: just getting to work....improve this to support multi records...
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
-        return pendEdits;
+        return getPendEdits(this.props.record);
     },
 
-    componentWillUpdate(nextProps) {
-        this.startPerfTiming(nextProps);
-    },
-
-    componentDidUpdate(prevProps) {
-        this.capturePerfTiming(prevProps);
-    },
     render() {
         //  Get the pending props from the redux store..
         let pendEdits = this.getPendEdits();
@@ -925,13 +880,16 @@ export const ReportContent = React.createClass({
         } else if (isRowPopUpMenuOpen) {
             classNames.push('rowPopUpMenuOpen');
         }
+        if (isSmall) {
+            classNames.push('small');
+        }
 
         classNames.push(this.props.reportData.loading ? 'loading' : '');
 
         const editErrors = pendEdits.editErrors || null;
 
         // onCellClick handler: do nothing for embedded reports phase1.
-        let openRowToView = this.props.phase1 ? undefined : this.openRowToView;
+        let openRowToView = this.openRowToView;
 
         let reportContent;
 
@@ -984,6 +942,7 @@ export const ReportContent = React.createClass({
                                             onScroll={this.onScrollRecords}
                                             onRowClicked={this.openRowToView}
                                             selectedRows={this.props.selectedRows}
+                                            selectRows={this.selectRows}
                                             pageStart={this.props.cardViewPagination.props.pageStart}
                                             pageEnd={this.props.cardViewPagination.props.pageEnd}
                                             getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
@@ -1079,7 +1038,8 @@ const mapDispatchToProps = (dispatch) => {
             //  inline edit row is updated and the new row is added to the grid. So, the
             //  new row is added after the record save reducer event is executed but before
             //  the grid is refreshed.  See record save reducer for more info..
-        }
+        },
+        scrollingReport
     };
 };
 

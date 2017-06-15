@@ -74,7 +74,15 @@ const FieldValueRenderer = React.createClass({
 
         /**
          * identifier suffix for key */
-        idKey : React.PropTypes.any
+        idKey: React.PropTypes.any,
+
+        goToParent: React.PropTypes.func, //handles drill down to parent
+
+        masterTableId: React.PropTypes.string,
+
+        masterAppId: React.PropTypes.string,
+
+        masterFieldId: React.PropTypes.number
     },
 
     getDefaultProps() {
@@ -209,9 +217,14 @@ const FieldValueRenderer = React.createClass({
         default: {
             return (
                     <TextFieldValueRenderer {...commonProperties}
-                                            value={this.props.display ? this.props.display : this.props.value}
+                                            value={this.props.value}
+                                            display={this.props.display}
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
+                                            goToParent={this.props.goToParent}
+                                            masterTableId={this.props.masterTableId}
+                                            masterAppId={this.props.masterAppId}
+                                            masterFieldId={this.props.masterFieldId}
                                             />
             );
         }

@@ -25,10 +25,17 @@ $edit-icon-font-size: 18px;
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
     table-layout: fixed;
+    padding-bottom: $spacing-medium1;
 
     // The min height allows the menus that can be opened from the header (sort on column) to be seen
     // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.
     min-height: 275px;
+
+    // There may be cases where no rows are shown when we display a grid in an embedded report. Override the default
+    // 275px to a lower number.
+    .embeddedReportContainer & {
+        min-height: 50px;
+    }
 
     .qbTbody {
         background-color: $color-black-100;
@@ -68,6 +75,22 @@ $edit-icon-font-size: 18px;
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
         z-index: $zindex-qbGrid-th;
 
+        &.placeholderCell {
+            background-color: $color-purple-100;
+            border-left: 1px dashed $color-purple-600;
+            border-right: 1px dashed $color-purple-600;
+            border-bottom: none;
+            border-top: 1px dashed $color-purple-600;
+
+            &:last-of-type {
+                border-right: 1px dashed $color-purple-600;
+            }
+        }
+
+        &.isDraggable {
+            cursor: move;
+        }
+
         // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
         &.stickyCell {
             z-index: $zindex-qbGrid-header-stickyCell;
@@ -79,6 +102,7 @@ $edit-icon-font-size: 18px;
 
         &:last-of-type {
             border-right: 1px solid $grid-column-header-border-color;
+            width: 100%;
         }
     }
 
@@ -118,6 +142,7 @@ $edit-icon-font-size: 18px;
             font-size: $font-size-h6;
             font-weight: 400;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .qbIcon {
@@ -183,6 +208,24 @@ $edit-icon-font-size: 18px;
         vertical-align: top;
         z-index: $zindex-qbGrid-firstOfType-stickyColumn;
         background-color: $color-black-100;
+    }
+
+    //== styling for the placeholder column cells
+    .qbRow .placeholderCell {
+        left: 0;
+        width: 80px;
+        max-width: 80px;
+        position: relative;
+        vertical-align: top;
+        background-color: $color-purple-100;
+        border-left: 1px dashed $color-purple-600;
+        border-right: 1px dashed $color-purple-600;
+        border-bottom: none;
+        border-top: none;
+
+        &:last-of-type {
+            border-right: 1px dashed $color-purple-600;
+        }
     }
 
     //== header row above groups of rows
@@ -264,9 +307,18 @@ $edit-icon-font-size: 18px;
 
     // cells get the pointer cursor when not in edit mode
     // tooltips get the pointer cursor too
-    .qbRow:not(.editing) .qbCell:not(.phase1),
+    .qbRow:not(.editing) .qbCell,
     .qbCell .tipChildWrapper {
         cursor: pointer;
+        // embedded tables in trowser are not clickable/editable
+        .trowser & {
+            cursor: auto;
+        }
+    }
+
+    .qbRow:not(.editing) .placeholderCell,
+    .placeholderCell .tipChildWrapper {
+        cursor: default;
     }
 
     // styles for specific types of data cells
@@ -295,6 +347,7 @@ $edit-icon-font-size: 18px;
     // div sitting inside the table cell wrapping the contents
     .cellWrapper {
         width: 100%;
+        height: 100%;
         padding-top: 6px;
         position: relative;
 
@@ -330,7 +383,7 @@ $edit-icon-font-size: 18px;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid $color-purple-400;
+        border: 1px solid $color-black-400;
 
         .loadedContent {
             padding: 0;
@@ -381,7 +434,7 @@ $edit-icon-font-size: 18px;
                 }
 
                 &:hover {
-                    color: $iconfont-on-hover-color;
+                    color: $iconfont-on-light-hover-color;
                 }
 
                 &.deleteRecord {
@@ -389,7 +442,10 @@ $edit-icon-font-size: 18px;
                 }
 
                 &.addRecord {
-                    color: $iconfont-on-light-normal-color;
+                    color: $color-cyan-500;
+                    &:hover {
+                        color: $color-cyan-400;
+                    }
 
                     &.disabled {
                         color: $iconfont-on-light-disabled-color;
@@ -441,11 +497,9 @@ $edit-icon-font-size: 18px;
 
         // menu to access additional row actions such as print, email, copy, and delete
         .dropdown-menu {
-
             // position menu to the right of the sticky cells
-            top: 28px;
+            /* top: 28px;
             left: -5px;
-
             &:before {
                 right: auto;
                 left: 10px;
@@ -455,6 +509,28 @@ $edit-icon-font-size: 18px;
                 right: auto;
                 left: 10px;
             }
+*/
+            //We have a problem with the stacking contexts where we cannot display this popup menu below the more button
+            // as required by XD without some additional function in popup menus that we do not have coded at this time.
+            // As such, we have temporarily moved the menu to the right and relocated the pointer arrow so it doesn't look broken.
+            // This styling will be pulled back out once we have the necessary function in the popup menu to place it where it is desired.
+            top: 0;
+            left: 28px;
+
+            &:before {
+                right: auto;
+                left: -11px;
+                top: 10px;
+                transform: rotate(270deg);
+            }
+
+            &:after {
+                right: auto;
+                left: -10px;
+                top: 10px;
+                transform: rotate(270deg);
+            }
+            // End Temporary Fix
 
             a {
                 padding-left: 4px;
@@ -465,44 +541,16 @@ $edit-icon-font-size: 18px;
                     vertical-align: middle;
                     width: 28px;
                     padding: 4px;
-
-                    &.print {
-                        color: $print-icon-normal-color;
-                    }
-
-                    &.email {
-                        color: $mail-icon-normal-color;
-                    }
-
-                    &.duplicate {
-                        color: $copy-icon-normal-color;
-                    }
-
-                    &.delete {
-                        color: $delete-icon-normal-color;
-                    }
-
+                    color: $iconfont-on-light-normal-color;
                 }
 
                 // dropdown menu hover icon colors
                 &:hover {
                     .qbIcon {
-                        color: $color-black-100;
-
-                        &.print {
-                            background-color: $print-icon-normal-color;
-                        }
-
-                        &.email {
-                            background-color: $mail-icon-normal-color;
-                        }
-
-                        &.duplicate {
-                            background-color: $copy-icon-normal-color;
-                        }
+                        color: $iconfont-on-light-hover-color;
 
                         &.delete {
-                            background-color: $delete-icon-normal-color;
+                            color: $iconfont-on-light-hover-danger-color;
                         }
                     }
                 }
@@ -511,7 +559,6 @@ $edit-icon-font-size: 18px;
             // disabled icon colors
             .disabled a .qbIcon {
                 color: $iconfont-on-light-disabled-color;
-                background-color: transparent;
             }
         }
     }
@@ -530,12 +577,15 @@ $edit-icon-font-size: 18px;
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;
     }
+    .qbRow:last-of-type .placeholderCell {
+        border-bottom: 1px dashed $color-black-600;
+    }
 
     // row hover highlighting - only done while not inline editing
     &:not(.inlineEditing) {
 
         // highlight the row when mouse is over the row
-        .qbRow:hover .qbCell {
+        .qbRow:hover .qbCell:not(.placeholderCell) {
             background: $grid-row-hover-color;
         }
 
@@ -547,8 +597,8 @@ $edit-icon-font-size: 18px;
         // It makes it more complicated... but... if we don't, then we can't style the way we want below
         // because CSS does not have a *previous sibling* selector. We have no way to change the border
         // of the row *above* the row that will be edited. Only the one after.
-        .qbRow.willEdit .qbCell:not(.stickyCell),
-        .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell) {
+        .qbRow.willEdit .qbCell:not(.stickyCell):not(.placeholderCell),
+        .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell):not(.placeholderCell) {
             border-top: 1px solid $grid-onpencil-row-border-color;
             transition: border 150ms ease-in;
         }
@@ -588,7 +638,7 @@ $edit-icon-font-size: 18px;
 
         // standard cell
         .qbCell {
-            border-top: 1px solid $color-purple-400;
+            border-top: 1px solid $color-black-400;
             overflow: visible;
             margin: 0;
             border-right: 1px solid $color-black-300;

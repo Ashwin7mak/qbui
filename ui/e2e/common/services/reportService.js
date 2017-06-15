@@ -189,7 +189,7 @@
              */
             runReport: function(appId, tableId, reportId) {
                 var deferred = promise.pending();
-                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId, reportId);
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId, reportId, true);
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'GET').then(function(result) {
                     //console.log('Report create result');
                     var responseBody = JSON.parse(result.body);

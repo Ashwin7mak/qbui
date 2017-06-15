@@ -5,20 +5,64 @@ $builder-wrapper-border-color: $color-black-300;
 .builderWrapperContent {
     height: 100%;
     width: 100%;
+    .topNav {
+        background-color: $topnav-builder-background-color;
+        .qbIcon {
+            color: $topnav-builder-icon-color;
+        }
+        .navLabel {
+            color: $topnav-builder-icon-color;
+        }
+        //for user button
+        .btn-group button {
+            //Keeps icon from 'jumping' when a focus border is added
+            border: 1px solid transparent;
+            background-color: $topnav-builder-background-color;
+            &:focus {
+                outline: none;
+                border: $stroke-width-thin solid $topnav-button-focus-border-color;
+            }
+        }
+        //for user button
+        .btn-group, .btn-group-vertical {
+            vertical-align: inherit;
+        }
 
+        .dropdownToggle {
+            //Keeps icon from 'jumping' when a focus border is added
+            border: 1px solid transparent;
+            height: 40px;
+            &:focus {
+                outline: none;
+                border: $stroke-width-thin solid $topnav-button-focus-border-color;
+            }
+            .qbIcon {
+                vertical-align: inherit;
+            }
+        }
+
+        .topTitle {
+            display: inline-block;
+            padding-top: 9px;
+            margin-left: 5px;
+            font-family: Lato, "Open Sans", Arial, Sans-Serif;
+            @include correctFontWeightForLightTextOnDarkBackground;
+            font-size: $topnav-title-text-size;
+            color: $topnav-builder-title-color;
+            font-weight: 400;
+        }
+    }
     .builderWrapperBody {
         height: calc(100% - #{$top-nav-height} - 1px);
         width: 100%;
-
         border-top: 1px solid $builder-wrapper-border-color;
     }
 
     .saveOrCancelFooter {
-        z-index: 2;
+        z-index: $zindex-trowserFooter;
         flex: 0 auto;
         display: flex;
         flex-direction: row;
-        color: $color-black-100;
         position: absolute;
         bottom: 0;
         width: 100%;

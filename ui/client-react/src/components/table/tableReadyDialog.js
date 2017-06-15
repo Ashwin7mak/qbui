@@ -35,7 +35,7 @@ export class TableReadyDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage("tableCreation.tableReadyDialogOK")}>
             <div className="tableReadyContent">
                 <div className="topTitle">
-                    <div className="dndImage animated lightSpeedIn">
+                    <div className="dndImage animated zoomIn">
                         <img className="dndSvg" alt="Drag and drop" src={DnDImage} />
                     </div>
                     <div className="titleText">

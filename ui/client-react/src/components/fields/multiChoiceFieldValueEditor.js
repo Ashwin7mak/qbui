@@ -22,6 +22,10 @@ const MultiChoiceFieldValueEditor = React.createClass({
          * expects an array of choices */
         choices: React.PropTypes.array,
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+        /**
          * gets the selected value for input box for multi choice */
         value: React.PropTypes.any,
         /**
@@ -37,7 +41,11 @@ const MultiChoiceFieldValueEditor = React.createClass({
         /**
          * Group name for the radio buttons, if component is rendered as radio button group
          */
-        radioGroupName: React.PropTypes.string
+        radioGroupName: React.PropTypes.string,
+        /**
+         * callback on react select open
+         */
+        onOpen: React.PropTypes.func
     },
 
     getInitialState() {
@@ -131,7 +139,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
                        value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
                        onChange={this.onClick} onBlur={this.onBlur}
                        tabIndex={this.props.tabIndex}
-                       checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
+                       checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
+                       disabled={this.props.isDisabled}/>
                         <div className="check"><div className="inside"></div></div>
                 <span className="choiceText"><I18nMessage message={"noneOption"}/></span>
             </label>);
@@ -149,7 +158,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const emptyOptionText = '\u00a0'; //Non breaking space
 
         let choices = this.props.choices;
-        let selectedValue = _.get(this, 'state.choice.value');
+        let selectedValue = _.get(this, 'state.choice.display');
         /**
          *This is commented out right now, because the current Schema in core does not accept/save null inputs
          * This gives the user the ability to select an empty space as an input
@@ -168,6 +177,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         return <Select
             tabIndex={this.props.tabIndex}
+            isDisabled={this.props.isDisabled}
             value={selectedValue && {label: selectedValue}}
             optionRenderer={this.renderOption}
             options={choices}
@@ -176,7 +186,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
             noResultsText={notFoundMessage}
             autosize={false}
             clearable={false}
-            onBlur={this.onBlur} />;
+            onBlur={this.onBlur}
+            onOpen={this.props.onOpen}/>;
     },
 
     getFieldElement() {

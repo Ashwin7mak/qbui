@@ -14,16 +14,16 @@
             .iconActions {
                 display: inline-block;
                 /* this is temporary fix because the icons have built in padding which is incorrect */
-                margin-right: 10px;
+                margin-right: $spacing-xxx-small;
 
                 .btn {
                     &:hover {
-                        background-color: $trowser-header-nav-icon-hover-background-color;
-                        color: $color-black-100;
+                        color: $color-cyan-400;
                     }
                     background-color: inherit;
                     color: $color-black-100;
                     padding: 0;
+                    width: 15px;
 
                     .qbIcon {
                         font-size: 24px;
@@ -31,7 +31,7 @@
 
                     &.prevRecord, &.nextRecord {
                         .qbIcon {
-                            font-size: 30px;
+                            font-size: $size-iconfont-medium;
                             width: 30px;
                         }
                     }

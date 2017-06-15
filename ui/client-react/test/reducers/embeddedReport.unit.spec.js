@@ -108,6 +108,14 @@ describe('Embedded report reducer', () => {
         });
     });
 
+    it('unload action removes entry from state', () => {
+        actionObj.type = types.UNLOAD_EMBEDDED_REPORT;
+        actionObj.id = 11;
+        state = reducer(reportState, actionObj);
+
+        expect(state[11]).toBeFalsy();
+    });
+
     describe('Report reducer load failed', () => {
         let expectedState = _.cloneDeep(reportState);
 
@@ -128,26 +136,38 @@ describe('Embedded report reducer', () => {
         });
     });
 
-    describe('Report reducer error report loading', () => {
-        it('test correct state when loading a report fails', () => {
+    describe('failed load request', () => {
+        it('state.loading is set to false', () => {
             actionObj.type = types.LOAD_EMBEDDED_REPORT_FAILED;
             state = reducer(state, actionObj);
-            logger.info("state=" + JSON.stringify(state));
 
             expect(state[1].loading).toEqual(false);
+        });
+
+        it('state.error is set to true', () => {
+            actionObj.type = types.LOAD_EMBEDDED_REPORT_FAILED;
+            state = reducer(state, actionObj);
+
             expect(state[1].error).toEqual(true);
         });
     });
 
-    describe('Report reducer success report loading', () => {
-        it('test correct state when loading a report succeeds', () => {
+    describe('successful load request', () => {
+        beforeEach(() => {
             actionObj.type = types.LOAD_EMBEDDED_REPORT_SUCCESS;
             actionObj.content = reportActionContent;
             state = reducer(state, actionObj);
-            logger.info("state=" + JSON.stringify(state));
+        });
 
-            expect(state[1].loading).toEqual(false);
+        it('sets state.error to false', () => {
             expect(state[1].error).toEqual(false);
+        });
+
+        it('sets state.loading to false', () => {
+            expect(state[1].loading).toEqual(false);
+        });
+
+        it('sets appdId, tblId, and data', () => {
             expect(state[1].appId).toEqual(actionObj.content.appId);
             expect(state[1].tblId).toEqual(actionObj.content.tblId);
             expect(state[1].data).toEqual(actionObj.content.data);

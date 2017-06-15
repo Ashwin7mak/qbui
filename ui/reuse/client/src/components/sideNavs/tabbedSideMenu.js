@@ -6,54 +6,43 @@ import InkTabBar from 'rc-tabs/lib/InkTabBar';
 import 'rc-tabs/assets/index.css';
 import './tabbedSideMenu.scss';
 
-
 /**
  * Used to create a side nav that has tabbed navigation within it.
  * HEADS UP: Pass this component into either SideMenuBase or SideTrowser as the sideMenuContent.
- * TODO:: This is a very basic implementation. Additional styling and behavior will be added once when we have the final spec.
  */
 class TabbedSideNav extends Component {
     constructor(props) {
         super(props);
-
-        this.getDefaultTab = this.getDefaultTab.bind(this);
-        this.onTabChanged = this.onTabChanged.bind(this);
-        this.onTabClicked = this.onTabClicked.bind(this);
     }
 
-    onTabChanged(tabKey) {
-        if (this.props.onTabChanged) {
-            this.props.onTabChanged(tabKey);
-        }
-    }
-
-    onTabClicked(tabKey) {
-        if (this.props.onTabClicked) {
-            this.props.onTabClicked(tabKey);
-        }
-    }
-
-    getDefaultTab() {
+    getDefaultTab = () => {
         if (this.props.defaultTab) {
             return this.props.defaultTab;
         }
 
-        if (this.tabs && this.tabs.length > 0) {
-            return this.tabs[0].key;
+        if (this.props.tabs && this.props.tabs.length > 0) {
+            return this.props.tabs[0].key;
         }
-    }
+
+        return null;
+    };
 
     render() {
+        let classes = ["tabbedSideNav"];
+        if (this.props.isCollapsed) {
+            classes.push('hideTabs');
+        }
+
         return (
-            <div className="tabbedSideNav">
+            <div className={classes.join(' ')}>
                 <Tabs
                     defaultActiveKey={this.getDefaultTab()}
-                    onChange={this.onTabChanged}
-                    renderTabBar={() => <InkTabBar onTabClick={this.onTabClicked} />}
-                    renderTabContent={() => <TabContent />}
+                    onChange={this.props.onTabChanged}
+                    renderTabBar={() => <InkTabBar onTabClick={this.props.onTabClicked} />}
+                    renderTabContent={() => <TabContent animated={false}/>}
                 >
                     {this.props.tabs.map(tab => (
-                        <TabPane tab={tab.title} key={tab.key}>{tab.content}</TabPane>
+                        <TabPane tab={tab.title} key={tab.key} forceRender={true}>{tab.content}</TabPane>
                     ))}
                 </Tabs>
             </div>

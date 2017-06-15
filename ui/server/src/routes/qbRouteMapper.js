@@ -6,10 +6,12 @@
 (function() {
     'use strict';
 
+    let _ = require('lodash');
     let log = require('../logger').getLogger();
     let perfLogger = require('../perfLogger');
-    let routeConsts = require('./routeConstants');
-    let request = require('request');
+    let routesConstants = require('./routeConstants');
+    let env = require('../config/environment');
+    let request = require('../requestClient').getClient(env);
     let routeGroupMapper = require('./qbRouteGroupMapper');
     let simpleStringify = require('./../../../common/src/simpleStringify.js');
     let queryFormatter = require('../api/quickbase/formatter/queryFormatter');
@@ -31,6 +33,7 @@
     let accountUsersApi;
     let governanceApi;
 
+    /*eslint no-shadow:0 */
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
         routeGroup = config.routeGroup;
@@ -50,105 +53,165 @@
         tablesApi = require('../api/quickbase/tablesApi')(config);
         governanceApi = require('../governance/common/GovernanceCommonApi')(config);
 
-        /* internal data */
-        /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a GET request
+        /**
+         * Define all DELETE routes which map to a custom function. Another words these
+         * routes DO NOT just proxy through node to the backend server.
+         *
+         * @returns List of get routes
          */
-        var routeToGetFunction = {};
+        function bindDeleteRequestRouteToFunction(routes) {
+            let requestFunctions = {};
 
-        routeToGetFunction[routeConsts.QBUI_HEALTH_CHECK] = getHealthCheck;
-        routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.RECORD] = deleteSingleRecord;
+                requestFunctions[routes.RECORDS_BULK] = deleteRecordsBulk;
+                requestFunctions[routes.TABLE] = deleteTableComponents;
+            }
 
-        routeToGetFunction[routeConsts.FEATURE_SWITCHES] = getFeatureSwitches;
-        routeToGetFunction[routeConsts.FEATURE_STATES] = getFeatureStates;
+            return requestFunctions;
+        }
 
-        // governance endpoints
-        routeToGetFunction[routeConsts.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
-        routeToGetFunction[routeConsts.GOVERNANCE_CONTEXT] = getGovernanceContext;
-
-        //  app endpoints
-        routeToGetFunction[routeConsts.APPS] = getApps;
-        routeToGetFunction[routeConsts.APP_USERS] = getAppUsers;
-
-        routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
-
-        //  form endpoints
-        routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
-        routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
-
-        //  record endpoints
-        routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
-        routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
-
-        //  report endpoints
-        routeToGetFunction[routeConsts.REPORT_META] = fetchReportMeta;
-        routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
-        routeToGetFunction[routeConsts.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
-        routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
-        routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
-
-        routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
-        routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
-        routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
-        routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
-
-        routeToGetFunction[routeConsts.SWAGGER_API_EE] = fetchSwagger;
-        routeToGetFunction[routeConsts.SWAGGER_RESOURCES_EE] = fetchSwagger;
-        routeToGetFunction[routeConsts.SWAGGER_IMAGES_EE] = fetchSwagger;
-        routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION_EE] = fetchSwagger;
-
-        //  role endpoints
-        routeToGetFunction[routeConsts.APP_ROLES] = getAppRoles;
-
-        //  users endpoints
-        routeToGetFunction[routeConsts.REQ_USER] = getReqUser;
-
-        /*
-         * routeToPostFunction maps each route to the proper function associated with that route for a POST request
+        /**
+         * Define all GET routes
+         *
+         * @returns List of get routes
          */
-        var routeToPostFunction = {};
-        routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
+        function bindGetRequestRouteToFunction(routes) {
+            let requestFunctions = {};
 
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.APPS] = getApps;
+                requestFunctions[routes.APP_USERS] = getAppUsers;
+                requestFunctions[routes.APP_ROLES] = getAppRoles;
+                requestFunctions[routes.APP_COMPONENTS] = getAppComponents;
 
-        routeToPostFunction[routeConsts.FEATURE_SWITCHES] = createFeatureSwitch;
-        routeToPostFunction[routeConsts.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
-        routeToPostFunction[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-        routeToPostFunction[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
+                requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
 
-        routeToPostFunction[routeConsts.TABLE_COMPONENTS] = createTableComponents;
+                requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
+                requestFunctions[routes.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
 
-        /*
-         * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
+                requestFunctions[routes.RECORD] = fetchSingleRecord;
+                requestFunctions[routes.RECORDS] = fetchAllRecords;
+
+                requestFunctions[routes.REPORT_META] = fetchReportMeta;
+                requestFunctions[routes.REPORT_RESULTS] = fetchReportResults;
+                requestFunctions[routes.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
+                requestFunctions[routes.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
+                requestFunctions[routes.FACET_EXPRESSION_PARSE] = resolveReportFacets;
+
+                requestFunctions[routes.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
+
+                requestFunctions[routes.REQ_USER] = getReqUser;
+
+                requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
+                requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
+            }
+
+            requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
+            requestFunctions[routes.SWAGGER_CORE] = forwardApiRequest;
+            requestFunctions[routes.SWAGGER_EE] = forwardApiRequest;
+            requestFunctions[routes.SWAGGER_WE] = forwardApiRequest;
+
+            requestFunctions[routes.SWAGGER_RESOURCES] = forwardApiRequest;
+            requestFunctions[routes.SWAGGER_V2] = forwardApiRequest;
+
+            return requestFunctions;
+        }
+
+        /**
+         * Define all PATCH routes
+         *
+         * @returns List of get routes
          */
-        var routeToPutFunction = {};
-        routeToPutFunction[routeConsts.FEATURE_SWITCH] = updateFeatureSwitch;
-        routeToPutFunction[routeConsts.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+        function bindPatchRequestRouteToFunction(routes) {
+            let requestFunctions = {};
 
-        /*
-         * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.RECORD] = saveSingleRecord;
+                requestFunctions[routes.TABLE] = updateTable;
+            }
+
+            return requestFunctions;
+        }
+
+        /**
+         * Define all POST routes
+         *
+         * @returns List of get routes
          */
-        var routeToPatchFunction = {};
-        routeToPatchFunction[routeConsts.RECORD] = saveSingleRecord;
-        routeToPatchFunction[routeConsts.TABLE] = updateTable;
+        function bindPostRequestRouteToFunction(routes) {
+            let requestFunctions = {};
 
-        /*
-         * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
+                requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
+                requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
+                requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+
+                requestFunctions[routes.RECORDS] = createSingleRecord;
+                requestFunctions[routes.RECORDS_BULK] = forwardApiRequest;
+                requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
+            }
+
+            return requestFunctions;
+        }
+
+        /**
+         * Define all PUT routes
+         *
+         * @returns List of get routes
          */
-        var routeToDeleteFunction = {};
-        routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
-        routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
-        routeToDeleteFunction[routeConsts.TABLE] = deleteTableComponents;
 
-        /*
-         * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
+        function bindPutRequestRouteToFunction(routes) {
+            let requestFunctions = {};
+
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
+                requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+            }
+
+            return requestFunctions;
+        }
+
+        /**
+         * Define routes which support all request methods
+         *
+         * @returns List of get routes
          */
-        var routeToAllFunction = {};
-        routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardApiRequest;
-        routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardExperienceEngineApiRequest;
-        routeToAllFunction[routeConsts.EE_FORMS] = forwardExperienceEngineApiRequest;
-        routeToAllFunction[routeConsts.AUTOMATION_ENGINE_ALL] = forwardAutomationEngineApiRequest;
+        function bindAllRequestRouteToFunction(routes) {
+            let requestFunctions = {};
+            //
+            routesConstants.publicEndPoints.forEach(endPoint => {
+                requestFunctions[endPoint.route] = forwardApiRequest;
+            });
+            //
+            requestFunctions[routes.CORE_ENGINE] = forwardApiRequest;
+            requestFunctions[routes.EXPERIENCE_ENGINE] = forwardApiRequest;
+            requestFunctions[routes.WORKFLOW_ENGINE] = forwardApiRequest;
+            requestFunctions[routes.AUTOMATION_ENGINE] = forwardApiRequest;
 
-        /*** public data ****/
+            return requestFunctions;
+        }
+
+        // Map all requests
+        let routeToGetFunction = bindGetRequestRouteToFunction(routesConstants.routes);
+        let routeToPostFunction = bindPostRequestRouteToFunction(routesConstants.routes);
+        let routeToPutFunction = bindPutRequestRouteToFunction(routesConstants.routes);
+        let routeToPatchFunction = bindPatchRequestRouteToFunction(routesConstants.routes);
+        let routeToDeleteFunction = bindDeleteRequestRouteToFunction(routesConstants.routes);
+        let routeToAllFunction = bindAllRequestRouteToFunction(routesConstants.routes);
+
         return {
 
             /**
@@ -156,7 +219,7 @@
              * @returns {*[]}
              */
             fetchAllRoutes: function() {
-                return routeConsts;
+                return routesConstants.routes;
             },
 
             /**
@@ -239,6 +302,16 @@
         return filtered;
     }
 
+    /**
+     * Common function to log a consistent api success message and output
+     * optional performance information if a perfLog object is included on
+     * the request.
+     *
+     * @param req
+     * @param response
+     * @param perfLog
+     * @param apiName
+     */
     function logApiSuccess(req, response, perfLog, apiName) {
         log.debug({req: filterNodeReq(req), res:response}, apiName ? 'API SUCCESS:' + apiName : 'API SUCCESS');
         if (perfLog) {
@@ -246,6 +319,16 @@
         }
     }
 
+    /**
+     * Common function to log a consistent api failure message and output
+     * optional performance information if a perfLog object is included on
+     * the request.
+     *
+     * @param req
+     * @param response
+     * @param perfLog
+     * @param apiName
+     */
     function logApiFailure(req, response, perfLog, apiName) {
         log.error({req: req, res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
         if (perfLog) {
@@ -254,15 +337,24 @@
     }
 
     /**
-     * This helper method takes the request url produced and replaces the single /api with /api/api on the original
-     * request
+     * This helper method examines the req.url and updates based on whether
+     * it is a client customer endpoint or public short-hand notation endpoint.
      *
      * @param req
      */
     function modifyRequestPathForApi(req) {
-        var originalUrl = req.url;
-        if (originalUrl.search('/api/api') === -1) {
-            req.url = originalUrl.replace('/api', '/api/api');
+        //   if this is a client endpoint route, replace the client route identifier with its back-end context.
+        let clientRoute = routesConstants.clientEndPoints.find(endPoint => endPoint.regEx.test(req.url) === true);
+        if (clientRoute) {
+            req.url = req.url.replace(clientRoute.route, clientRoute.context);
+            return;
+        }
+
+        //  if this is a public endpoint route, prepend its back-end context
+        let publicRoute = routesConstants.publicEndPoints.find(endPoint => endPoint.regEx.test(req.url) === true);
+        if (publicRoute) {
+            req.url = publicRoute.context + req.url;
+            return;
         }
     }
 
@@ -287,6 +379,7 @@
 
     /**
      * Completes a health check for the node layer
+     *
      * Does not include any unnecessary tasks (e.g., performance logging) so
      * that this request can be as fast as possible.
      * @param req
@@ -306,36 +399,8 @@
     }
 
     /**
-     * get feature switches with overrides
-     * @param req
-     * @param res
-     */
-    function getFeatureSwitches(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Get feature switches', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            featureSwitchesApi.getFeatureSwitches(req).then(
-                function(response) {
-                    res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Get feature switches');
-                },
-                function(response) {
-                    logApiFailure(req, response, perfLog, 'Get feature switches');
-
-                    //  client is waiting for a response..make sure one is always returned
-                    if (response && response.statusCode) {
-                        res.status(response.statusCode).send(response);
-                    } else {
-                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
-                    }
-                }
-            );
-        });
-    }
-
-    /**
      * get account users
+     *
      * @param req
      * @param res
      */
@@ -397,6 +462,35 @@
     }
 
     /**
+     * get feature switches with overrides
+     * @param req
+     * @param res
+     */
+    function getFeatureSwitches(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get feature switches', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            featureSwitchesApi.getFeatureSwitches(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get feature switches');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get feature switches');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
      * create new feature switch
      * @param req
      * @param res
@@ -406,22 +500,24 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Create feature switch', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.createFeatureSwitch(req).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, 'Create feature switch');
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, 'Create feature switch');
+        processRequest(req, res, function(req, res) {
+            featureSwitchesApi.createFeatureSwitch(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Create feature switch');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Create feature switch');
 
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     /**
@@ -434,22 +530,24 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Update feature switch', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.updateFeatureSwitch(req, req.params.featureSwitchId).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, 'Update feature switch');
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, 'Update feature switch');
+        processRequest(req, res, function(req, res) {
+            featureSwitchesApi.updateFeatureSwitch(req, req.params.featureSwitchId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Update feature switch');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Update feature switch');
 
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     /**
@@ -462,23 +560,25 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Delete feature switches', {req:filterNodeReq(req)});
 
-        let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
-        featureSwitchesApi.deleteFeatureSwitches(req, ids).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, 'Delete feature switches');
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, 'Delete features switches');
+        processRequest(req, res, function(req, res) {
+            let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
+            featureSwitchesApi.deleteFeatureSwitches(req, ids).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Delete feature switches');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Delete features switches');
 
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     /**
@@ -491,22 +591,24 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Create feature switch override', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.createFeatureSwitchOverride(req, req.params.featureSwitchId).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, 'Create feature switch override');
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, 'Create feature switch override');
+        processRequest(req, res, function(req, res) {
+            featureSwitchesApi.createFeatureSwitchOverride(req, req.params.featureSwitchId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Create feature switch override');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Create feature switch override');
 
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     /**
@@ -519,22 +621,24 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Save feature switch overrides', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.updateFeatureSwitchOverride(req, req.params.featureSwitchId, req.params.overrideId).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, 'Save feature switch overrides');
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, 'Save feature switch overrides');
+        processRequest(req, res, function(req, res) {
+            featureSwitchesApi.updateFeatureSwitchOverride(req, req.params.featureSwitchId, req.params.overrideId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Save feature switch overrides');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Save feature switch overrides');
 
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     /**
@@ -547,23 +651,25 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Delete feature switch overrides', {req:filterNodeReq(req)});
 
-        let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
-        featureSwitchesApi.deleteFeatureSwitchOverrides(req, req.params.featureSwitchId, ids).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, 'Delete feature switch overrides');
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, 'Delete features switch overrides');
+        processRequest(req, res, function(req, res) {
+            let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
+            featureSwitchesApi.deleteFeatureSwitchOverrides(req, req.params.featureSwitchId, ids).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Delete feature switch overrides');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Delete features switch overrides');
 
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     /**
@@ -575,24 +681,56 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get feature states', {req:filterNodeReq(req)});
 
-        let appId = req.query && req.query.appId;
+        processRequest(req, res, function(req, res) {
+            let appId = req.query && req.query.appId;
+            featureSwitchesApi.getFeatureSwitchStates(req, appId ? appId : null).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get feature states');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get feature states');
 
-        featureSwitchesApi.getFeatureSwitchStates(req, appId ? appId : null).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, 'Get feature states');
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, 'Get feature states');
-
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
+    }
+
+    /**
+     * Return an app with table information and app rights
+     * @param req
+     * @param res
+     */
+    function getAppComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+
+            let appId = req.params.appId ? req.params.appId : null;
+            appsApi.getAppComponents(req, appId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get App Hydrated');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get App Hydrated');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
     }
 
     /**
@@ -633,7 +771,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function getAppUsers(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get App Users', {req:filterNodeReq(req)});
@@ -663,7 +800,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function fetchSingleRecord(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Single Record', {req:filterNodeReq(req)});
@@ -694,7 +830,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function fetchAllRecords(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch All Records', {req:filterNodeReq(req)});
@@ -726,7 +861,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function fetchTableHomePageReport(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Table HomePage Report Components', {req:filterNodeReq(req)});
@@ -935,9 +1069,9 @@
         });
     }
 
-    function resolveFacets(req, res) {
+    function resolveReportFacets(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Resolve Facets', {req:filterNodeReq(req)});
+        perfLog.init('Resolve Report Facets', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             queryFormatter.format(req).then(
@@ -953,48 +1087,55 @@
         let activityName = 'Save Record';
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
-        recordsApi.saveSingleRecord(req).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, activityName);
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, activityName);
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+
+        processRequest(req, res, function(req, res) {
+            recordsApi.saveSingleRecord(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, activityName);
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     function createSingleRecord(req, res) {
         let activityName = 'Add Record';
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
-        recordsApi.createSingleRecord(req).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, activityName);
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, activityName);
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+
+        processRequest(req, res, function(req, res) {
+            recordsApi.createSingleRecord(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, activityName);
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     function deleteSingleRecord(req, res) {
         let activityName = 'Delete a Record';
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
+
         processRequest(req, res, function(req, res) {
             recordsApi.deleteSingleRecord(req).then(
                 function(response) {
@@ -1018,6 +1159,7 @@
         let activityName = 'Delete Records Bulk';
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
+
         processRequest(req, res, function(req, res) {
             recordsApi.deleteRecordsBulk(req).then(
                 function(response) {
@@ -1042,7 +1184,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function getAppRoles(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get App Roles', {req:filterNodeReq(req)});
@@ -1156,7 +1297,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -1164,103 +1305,41 @@
     }
 
     /**
-     * This is the function for proxying to a swagger endpoint on
-     * either core or experience engine.
+     * Forward a request
      *
      * @param req
      * @param res
      */
-    function fetchSwagger(req, res) {
-        //  ensure the route is enabled
-        if (!isRouteEnabled(req)) {
-            routeTo404(req, res);
-            return;
-        }
-
-        //  log some route info and set the request options
-        log.debug({req: req}, 'Fetch swagger');
-
-        //  experience engine or core
-        let opts = req.url.startsWith(routeConsts.SWAGGER_API_EE) ? requestHelper.setExperienceEngineOptions(req) : requestHelper.setOptions(req);
-        request(opts)
-            .on('error', function(error) {
-                log.error({req:req}, 'API SWAGGER ERROR: ' + JSON.stringify(error));
-            })
-            .pipe(res);
-    }
-
-    /**
-     * This is the function for forwarding a request to the core server.  Expectation
-     * is that the data in the body of the response is a json structure for all requests.
-     *
-     * @param req
-     * @param res
-     */
-    /*eslint no-shadow:0 */
     function forwardApiRequest(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward API Request', {req:filterNodeReq(req)});
-
         processRequest(req, res, function(req, res) {
-            var opts = requestHelper.setOptions(req);
-            request(opts)
-                .on('response', function(response) {
-                    logApiSuccess(req, response, perfLog);
-                })
-                .on('error', function(error) {
-                    logApiFailure(req, error, perfLog);
-                })
-                .pipe(res);
-        });
-    }
+            let opts;
+            switch (true) {
+            case req.url.startsWith('/api'):
+                opts = requestHelper.setOptions(req);
+                break;
+            case req.url.startsWith('/ee'):
+                opts = requestHelper.setExperienceEngineOptions(req);
+                break;
+            case req.url.startsWith('/we'):
+                opts = requestHelper.setAutomationEngineOptions(req);
+                break;
+            }
 
-    /**
-     * This is the function for forwarding a request to the experience engine server.  Expectation
-     * is that the data in the body of the response is a json structure for all requests.
-     *
-     * @param req
-     * @param res
-     */
-    /*eslint no-shadow:0 */
-    function forwardExperienceEngineApiRequest(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward experience engine API Request', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            var opts = requestHelper.setExperienceEngineOptions(req);
-            request(opts)
-                .on('response', function(response) {
-                    logApiSuccess(req, response, perfLog);
-                })
-                .on('error', function(error) {
-                    logApiFailure(req, error, perfLog);
-                })
-                .pipe(res);
-        });
-    }
-
-    /**
-     * This is the function for forwarding a request to the automation server.  Expectation
-     * is that the data in the body of the response is a json structure for all requests.
-     *
-     * @param req
-     * @param res
-     */
-    /*eslint no-shadow:0 */
-    function forwardAutomationEngineApiRequest(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward automation engine API Request', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            var opts = requestHelper.setAutomationEngineOptions(req);
-            request(opts)
-                .on('response', function(response) {
-                    logApiSuccess(req, response, perfLog);
-                })
-                .on('error', function(error) {
-                    logApiFailure(req, error, perfLog);
-                })
-                .pipe(res);
+            if (opts) {
+                let perfLog = perfLogger.getInstance();
+                perfLog.init('Forward Request', {req:filterNodeReq(req)});
+                request(opts)
+                    .on('response', function(response) {
+                        logApiSuccess(req, response, perfLog);
+                    })
+                    .on('error', function(error) {
+                        logApiFailure(req, error, perfLog);
+                    })
+                    .pipe(res);
+            } else {
+                log.error({req:req}, 'Forward Request error.  Unable to determine route request.');
+                routeTo404(req, res);
+            }
         });
     }
 
@@ -1270,24 +1349,21 @@
      * @param res
      */
     function routeTo404(req, res) {
-        log.error({req:req, res:res}, 'Route ' + req.route.path + ' is not enabled for routeGroup ' + routeGroup);
-        res.status(404).send();
+        log.error({req:req, res:res}, 'Route is not enabled for routeGroup ' + routeGroup);
+        res.status(httpConstants.NOT_FOUND).send();
     }
 
     /**
-     * Check that the route has been enabled for this environment, if it has, then
+     * Check that the route has been enabled for this environment
      * @param req
      */
     function isRouteEnabled(req) {
-
-        var enabled = false;
         if (req !== undefined) {
             if (req.route !== undefined && req.method !== undefined) {
-                enabled = routeGroupMapper.routeIsEnabled(routeGroup, req.route.path, req.method);
+                return routeGroupMapper.routeIsEnabled(routeGroup, req.route.path, req.method);
             }
         }
-
-        return enabled;
+        return false;
     }
 
 }());

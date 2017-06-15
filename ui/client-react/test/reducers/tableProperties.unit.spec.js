@@ -34,11 +34,13 @@ describe('Test table properties reducers', () => {
                 type: types.SET_TABLE_PROPS,
                 property: 'name',
                 value: '',
+                pendingValidationError: 'pendingValueIsEmpty',
                 validationError: 'valueIsEmpty',
                 isUserEdit: false
             };
             const state = reducer(initialState, action);
             expect(state.tableInfo.name.value).toBe('');
+            expect(state.tableInfo.name.pendingValidationError).toBe('pendingValueIsEmpty');
             expect(state.tableInfo.name.validationError).toBe('valueIsEmpty');
             expect(state.tableInfo.name.edited).toBeFalsy();
 
@@ -51,11 +53,13 @@ describe('Test table properties reducers', () => {
                 type: types.SET_TABLE_PROPS,
                 property: 'name',
                 value: 'newName',
+                pendingValidationError: null,
                 validationError: null,
                 isUserEdit: true
             };
             const state = reducer(initialState, action);
             expect(state.tableInfo.name.value).toBe('newName');
+            expect(state.tableInfo.name.pendingValidationError).toBe(null);
             expect(state.tableInfo.name.validationError).toBe(null);
             expect(state.tableInfo.name.edited).toBeTruthy();
 
@@ -103,7 +107,7 @@ describe('Test table properties reducers', () => {
 
         it('return loaded table props', () => {
             let state = reducer(initialState, {type: types.LOADED_TABLE_PROPS, tableInfo: {description: 'description'}});
-            expect(state.tableInfo.description).toEqual({origValue: 'description', value: 'description', validationError: undefined, edited: undefined});
+            expect(state.tableInfo.description).toEqual({origValue: 'description', value: 'description', pendingValidationError: undefined, validationError: undefined, edited: undefined});
         });
 
         it('return deleted table', () => {

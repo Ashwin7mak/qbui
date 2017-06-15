@@ -1,20 +1,20 @@
 /**
  * E2E tests for the App User Management table
- *
  */
 (function() {
     'use strict';
 
     //Load the page Objects
-    var NewStackAuthPO = requirePO('newStackAuth');
-    var e2ePageBase = requirePO('e2ePageBase');
-    var RequestAppsPage = requirePO('requestApps');
-    var UsersTablePage = requirePO('usersTable');
+    let NewStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let UsersTablePage = requirePO('usersTable');
+    let ReportContentPO = requirePO('reportContent');
+    let ReportTableActionsPO = requirePO('reportTableActions');
 
-    describe('Users - Application User Management Table Tests', function() {
-        var realmName;
-        var realmId;
-        var testApp;
+    describe('Users - Application user management table tests: ', function() {
+        let realmName;
+        let realmId;
+        let testApp;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -41,8 +41,7 @@
          */
         beforeEach(function() {
             //load the users page
-            RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
-            return UsersTablePage.newUserBtn.waitForVisible();
+            return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });
 
         /**
@@ -54,19 +53,62 @@
         });
 
         /**
-         * Test methods. Test that the user Stage expands/collapses.
+         * Test method. Test that the user Stage expands/collapses.
          */
-        it('Should expand the reports stage', function() {
+        it('Should expand and collapse the user page stage', function() {
             // Click on user Stage button to expand the stage
-            UsersTablePage.userStageBtn.click();
+            UsersTablePage.clickUserStage();
             // Wait for the Stage area content to display
             UsersTablePage.userStageContent.waitForVisible();
+            //wait for container to slide
             browser.pause(e2eConsts.shortWaitTimeMs);
+
+            // Verify the app owner name is linked
+            expect(browser.isEnabled('.appOwnerName')).toBe(true);
+
             // Click on the user Stage button to collapse the stage
-            UsersTablePage.userStageBtn.click();
+            UsersTablePage.clickUserStage();
+            //wait for container to slide
             browser.pause(e2eConsts.shortWaitTimeMs);
             expect(UsersTablePage.userStageArea.getAttribute('clientHeight')).toMatch('0');
             expect(UsersTablePage.userStageArea.getAttribute('clientWidth')).toMatch('0');
+        });
+
+        /**
+         * Test method. Checks to make sure the first user row is selected, user count is correct
+         */
+        it('Should select first row of users and display total with action icons', function() {
+            // Select first row of records checkbox
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
+            // Assert user selected count
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("1");
+            // Verify the number of user action icons
+            expect(UsersTablePage.userActionsListEl.value.length).toBe(4);
+        });
+
+        /**
+         * Test method. Checks to make sure the check all users is selected and unselected
+         */
+        it('Should select all users, unselect one user, verify unchecked', function() {
+            // Select all records checkbox
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            expect(ReportTableActionsPO.reportSelectAllCheckbox.isSelected()).toBe(true);
+            // Assert user selected count
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("6");
+            // Select first user row
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
+            // Assert select all users is unchecked
+            expect(ReportTableActionsPO.reportSelectAllCheckbox.isSelected()).toBe(false);
+            // Assert user selected count
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+        });
+
+        /**
+         * Test method. Checks to make sure user emails are linked
+         */
+        it('Should verify all the users emails are linked', function() {
+            // Verify the user emails are linked
+            expect(UsersTablePage.userEmailUlEl.isExisting()).toBe(true);
         });
     });
 }());

@@ -1,0 +1,72 @@
+@import '../../../assets/css/qbVariables';
+
+
+.linkContainerRowOfButtons {
+    display: flex;
+    flex-direction: row;
+}
+
+.linkContainer {
+    margin: 10px;
+
+    .linkInRecord.btn {
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: $button-lightbg-text-color;
+        background-color: $color-black-200;
+
+
+        &.disabled {
+            color: $link-button-disabled-color;
+        }
+
+        .qbIcon {
+            font-size: $size-iconfont-small;
+            vertical-align: middle;
+            padding-right: 5px;
+        }
+    }
+
+    .addChildBtn .qbIcon {
+        font-size: $size-iconfont-small;
+        vertical-align: middle;
+    }
+    .tableName {
+        vertical-align: middle;
+    }
+}
+
+.addChild {
+    padding-right: 10px;
+}
+
+@include small-breakpoint {
+
+    .linkContainerRowOfButtons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .linkContainer {
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+    }
+    .addChild {
+        padding-left: 0;
+        padding-right: 0;
+        .qbIcon {
+            font-size: $size-iconfont-medium;
+        }
+    }
+
+    .linkInRecord.btn {
+        .qbIcon {
+            font-size: $size-iconfont-medium;
+        }
+    }
+
+
+
+}

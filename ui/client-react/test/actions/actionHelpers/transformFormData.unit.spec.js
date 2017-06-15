@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {buildTestFormData, buildTestArrayBasedFormData} from '../../testHelpers/testFormData';
-import {convertFormToArrayForClient, convertFormToObjectForServer} from '../../../src/actions/actionHelpers/transformFormData';
+import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from '../../../src/actions/actionHelpers/transformFormData';
 
 const testFormData = buildTestFormData();
 const testArrayBasedFormData = buildTestArrayBasedFormData();
@@ -129,6 +129,69 @@ describe('TransformFormData', () => {
             expect(section.rows).toBeUndefined();
             expect(element.id).toBeUndefined();
             expect(element.orderIndex).toBeUndefined();
+        });
+    });
+
+    describe('addRelationshipFieldProps', () => {
+
+        let detailFields;
+        let formMeta;
+
+        beforeEach(() => {
+            detailFields = [{id: 1}, {id: 2}, {id: 3}];
+
+            formMeta = {
+                fields: [1, 2, 3],
+                relationships: [
+                    {
+                        detailAppId: 'app1',
+                        detailTableId: 'childTable1',
+                        detailFieldId: 1,
+                        masterAppId: 'masterApp1',
+                        masterTableId: 'masterTable1',
+                        masterFieldId: 2
+                    }
+                ]
+            };
+        });
+
+        it('adds parentTableId and parentFieldId props to fields when needed', () => {
+
+            let fieldsWithRelationshipProps = [
+                {id: 1, parentAppId: 'masterApp1', parentTableId: 'masterTable1', parentFieldId: 2},
+                {id: 2},
+                {id: 3}
+            ];
+
+            addRelationshipFieldProps('app1', 'childTable1', formMeta, detailFields);
+
+            expect(detailFields).toEqual(fieldsWithRelationshipProps);
+        });
+
+        it('skips parentTableId and parentFieldId props to fields when app does not match', () => {
+
+            let fieldsWithoutRelationshipProps = [
+                {id: 1},
+                {id: 2},
+                {id: 3}
+            ];
+
+            addRelationshipFieldProps('appXXX', 'childTable1', formMeta, detailFields);
+
+            expect(detailFields).toEqual(fieldsWithoutRelationshipProps);
+        });
+
+        it('skips parentTableId and parentFieldId props to fields when table does not match', () => {
+
+            let fieldsWithoutRelationshipProps = [
+                {id: 1},
+                {id: 2},
+                {id: 3}
+            ];
+
+            addRelationshipFieldProps('app1', 'childTableXXX', formMeta, detailFields);
+
+            expect(detailFields).toEqual(fieldsWithoutRelationshipProps);
         });
     });
 });

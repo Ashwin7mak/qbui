@@ -3,10 +3,10 @@ import _ from 'lodash';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Button from 'react-bootstrap/lib/Button';
 import Dropdown from 'react-bootstrap/lib/Dropdown';
-import Icon from '../icon/icon';
-import Tooltip from '../tooltip/tooltip';
-import {I18nMessage} from '../../utils/i18nMessage';
-import {ENTER_KEY, SPACE_KEY} from '../keyboardShortcuts/keyCodeConstants';
+import Icon from 'REUSE/components/icon/icon';
+import Tooltip from 'REUSE/components/tooltip/tooltip';
+import {I18nMessage} from 'REUSE/utils/i18nMessage';
+import {ENTER_KEY, SPACE_KEY} from 'REUSE/components/keyboardShortcuts/keyCodeConstants';
 import './iconActions.scss';
 
 /**

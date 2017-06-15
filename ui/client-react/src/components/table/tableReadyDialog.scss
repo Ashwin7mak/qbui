@@ -28,6 +28,7 @@
                     height: 120px;
                     color: $color-black-100;
                     background-color: $newTableDialog-highlight-color;
+                    @include correctFontWeightForLightTextOnDarkBackground;
                     font-size: $font-size-h2;
                     .dndImage {
                         margin-left: 20px;

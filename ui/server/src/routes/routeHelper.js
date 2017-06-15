@@ -401,7 +401,7 @@
             if (root) {
                 let eeUrl = getEEReqURL(root);
                 if (eeUrl) {
-                    return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '') + '/' + TABLEPROPERTIES;
+                    return eeUrl + (tableId ? '/' + TABLES + '/' + tableId : '') + '/' + TABLEPROPERTIES;
                 }
             }
 
@@ -909,6 +909,14 @@
          */
         getMyAppsLegacyStackRoute: function() {
             return `${getLegacyStackMainHandlerRoot()}?a=myqb`;
+        },
+
+        /**
+         * Navigate to the legacy stack 'Logout' page
+         * @returns {string}
+         */
+        getSignoutLegacyStackRoute: function() {
+            return `${getLegacyStackMainHandlerRoot()}?a=Signout`;
         }
 
 

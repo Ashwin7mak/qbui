@@ -10,7 +10,22 @@
     var assert = require('assert');
     // Logging library
     var log = require('../../../server/src/logger').getLogger();
+    // Lodash library
+    var _ = require('lodash');
+    // Import constants file
+    var consts = require('../../../common/src/constants.js');
 
+
+    function getFieldName(table, fieldId) {
+        let answer = '';
+        if (table && table.fields) {
+            let theField = table.fields.find(field => fieldId === field.id);
+            if (theField) {
+                answer = theField.name;
+            }
+        }
+        return answer;
+    }
     module.exports = function(recordBase) {
         var relationshipService = {
             /**
@@ -22,12 +37,17 @@
              * @param lookUpFieldId - FieldId in master table used to relate master and child table
              * @returns Promise function that resolves to the returned JSON obj of the create relationship API call
              */
-            createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId, lookUpFieldId) {
+            createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId, lookUpFieldId,
+                                                 description = 'Referential integrity relationship between Master / Child Tables') {
                 const RECORD_ID_NAME = 'Record ID#';
                 let masterTableId = parentTable.id;
                 let detailTableId = childTable.id;
                 let masterTablePkFieldId = lookUpFieldId;
                 let detailTableFkFieldId = detailFieldId;
+                let masterTableName = parentTable.name;
+                let detailTableName = childTable.name;
+                let masterFieldName = getFieldName(parentTable, masterTablePkFieldId);
+                let detailFieldName = getFieldName(childTable, detailTableFkFieldId);
 
                 parentTable.fields.forEach(field => {
                     if (masterTablePkFieldId === undefined && field.name === RECORD_ID_NAME) {
@@ -40,27 +60,95 @@
                         detailTableFkFieldId = field.id;
                     }
                 });
-
                 const relationshipToCreate = {
-                    appId        : app.id,
-                    masterAppId  : app.id,
-                    masterTableId: masterTableId,
+                    appId: app.id,
+                    masterAppId: app.id,
+                    masterTableName,
+                    masterTableId,
                     masterFieldId: masterTablePkFieldId,
-                    detailAppId  : app.id,
-                    detailTableId: detailTableId,
+                    masterFieldName,
+                    detailAppId: app.id,
+                    detailTableName,
+                    detailTableId,
+                    detailFieldName,
                     detailFieldId: detailTableFkFieldId,
                     referentialIntegrity: false,
                     cascadeDelete: false,
-                    description  : 'Referential integrity relationship between Master / Child Tables'
+                    description  : description
                 };
 
-                recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
+                return recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
                     return JSON.parse(relResponse.body);
                 }).catch(function(error) {
                     log.error('Error creating relationship');
-                    return promise.reject(error);
+                    return error;
                 });
-            }
+            },
+
+            /**
+             * Retrieves the relationships created for the sample app.
+             */
+            retrieveSavedRelationships: function(createdApp) {
+                let appId = createdApp.id;
+                let relationshipEndpoint = recordBase.apiBase.resolveRelationshipsEndpoint(appId);
+                return recordBase.apiBase.executeRequest(relationshipEndpoint, consts.GET).then(function(result) {
+                    return JSON.parse(result.body);
+                }).catch(function(error) {
+                    log.error('Error retrieving relationships');
+                    return error;
+                });
+            },
+
+            /**
+             * Adds sections containing child report elements to a tab in the form associated with all tables
+             * in the app
+             * @param savedRelationships
+             */
+            addChildReportsToTableForms: function(createdApp, savedRelationships) {
+                let appId = createdApp.id;
+                let addChildReportElements = [];
+
+                createdApp.tables.forEach((table) => {
+                    addChildReportElements.push(function() {
+
+                        const tableId = table.id;
+                        let formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, 1);
+                        let putFormsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+
+                        return recordBase.apiBase.executeRequest(formsEndpoint, consts.GET).then(function(formsResult) {
+                            var form = JSON.parse(formsResult.body);
+                            if (savedRelationships) {
+                                savedRelationships.forEach((relationship, index) => {
+                                    if (relationship.masterTableId === tableId) {
+                                        const sections = form.tabs[0].sections;
+                                        const length = Object.keys(sections).length;
+                                        const childReportElement = {"ChildReportElement" : {relationshipId: index}};
+                                        sections[length] = Object.assign(_.cloneDeep(sections[0]), {
+                                            elements: {0: childReportElement},
+                                            fields: [],
+                                            orderIndex: length
+                                        });
+                                        const childTableName = _.find(createdApp.tables, {id:relationship.detailTableId}).name;
+                                        sections[length].headerElement.FormHeaderElement.displayText = childTableName;
+                                    }
+                                });
+                            }
+                            return form;
+                        }).then(function(updatedForm) {
+                            return recordBase.apiBase.executeRequest(putFormsEndpoint, consts.PUT, updatedForm);
+                        }).catch(function(error) {
+                            log.error('Error adding child report to form');
+                            log.error(error);
+                            return error;
+                        });
+                    });
+                });
+                // Bluebird's promise.each function (executes each promise sequentially)
+                return promise.each(addChildReportElements, function(queueItem) {
+                    // This is an iterator that executes each Promise function in the array here
+                    return queueItem();
+                });
+            },
         };
         return relationshipService;
     };

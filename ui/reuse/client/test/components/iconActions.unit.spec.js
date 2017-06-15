@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import IconActions, {__RewireAPI__ as IconActionsRewireAPI} from '../../src/components/iconActions/iconActions';
+import IconActions, {__RewireAPI__ as IconActionsRewireAPI} from 'REUSE/components/iconActions/iconActions';
 
 const I18nMessageMock = ({message}) => <span className="mockI18nMessage">{message}</span>;
 const IconMock = ({icon}) => <span className="mockIcon">{icon}</span>;

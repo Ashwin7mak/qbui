@@ -1,0 +1,66 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+$table-properties-panel-width: 776px;
+
+.settingsAppShell {
+    .pageActions {
+        .deleteTable {
+            color: $color-red-700;
+        }
+    }
+    .automationListSettingsStage {
+        font-size: 24px;
+        color: $stage-headline-color;
+        padding-top: 30px;
+        .qbIcon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        & > * {
+            vertical-align: middle;
+        }
+    }
+    .automationListInfoPanel {
+        margin: 15px;
+        max-width: $table-properties-panel-width;
+
+        .automationListField {
+            padding-right: 20px;
+        }
+
+        .automationListInfo .sections .iconSelection .iconChooser.open {
+            width: calc(200% - 20px);
+        }
+
+        .automationListInfoButtons {
+            float: right;
+
+            &.open {
+                opacity: 1;
+                transition: all 300ms ease-in;
+            }
+            &.closed {
+                opacity: 0;
+                transition: all 300ms ease-in;
+            }
+
+            & > * {
+                vertical-align: middle;
+            }
+
+            .primaryButton {
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+
+.automationSettings--container {
+    padding: 10px;
+}
+
+.automationSettings--table {
+    background: $color-black-100;
+}
+

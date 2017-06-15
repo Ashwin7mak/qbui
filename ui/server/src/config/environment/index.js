@@ -4,6 +4,7 @@
     // Environment specific configurations extend these defaults
     var _ = require('lodash');
     var path = require('path');
+
     var all = {
         // Root path of server
         root: path.normalize(path.join(__dirname,  '/../../../..')),
@@ -30,7 +31,17 @@
         legacyBase: '',
 
         // when starting up express server, fork as many listener forks as there are cpu cores.
-        forkWorkers: false
+        forkWorkers: false,
+
+        //  allow for a node instance to be setup where only 'public' routes are configured.  By
+        //  default all routes are exposed.
+        publicRoutesOnly: false,
+
+        // Turn off inbound and outbound request tracing by default
+        tracingEnabled: false,
+
+        // Tracing host name. Environments must configure if setting explicitly
+        tracingHost: ''
     };
 
     /**

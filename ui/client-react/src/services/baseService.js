@@ -144,6 +144,9 @@ class BaseService {
             case 401:   // invalid/no ticket
                 return this.constructRedirectUrl().then(function(currentStackSignInUrl) {
                     WindowLocationUtils.update(currentStackSignInUrl);
+                }).catch(() => {
+                    // We will do nothing here... If the promise was rejected from constructRedirectUrl.
+                    // that means that Firefox is redirecting to the current stack sign-in page
                 });
             }
         }
@@ -195,9 +198,16 @@ class BaseService {
                     return currentStackSignInUrl;
                 })
                 .catch(error => {
-                    // When the federation legacy URL request fails, return the default redirect
-                    // We can't use the Logger here because it would cause a circular reference because Logger uses baseService
-                    return Promise.resolve(UNAUTHORIZED);
+                    if (error.statusCode === null) {
+                        // Firefox has differing behavior here from Chrome. For Firefox, if a redirect is executing the
+                        // get FEDERATION_LEGACY_URL promise will reject and return an error object that has a bunch of
+                        // null fields.
+                        return Promise.reject();
+                    } else {
+                        // When the federation legacy URL request fails, return the default redirect
+                        // We can't use the Logger here because it would cause a circular reference because Logger uses baseService
+                        return Promise.resolve(UNAUTHORIZED);
+                    }
                 });
         }
     }

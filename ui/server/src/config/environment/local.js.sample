@@ -16,7 +16,7 @@
 
     var client = clientConsts.REACT;
 
-    module.exports = {
+    let baseVars = {
 
         //  Logging configuration
         LOG: {
@@ -38,8 +38,8 @@
         // folder.. comment this out if don't want to offer ssl support.
 
         //SSL_KEY: {
-        //    private: path.normalize(__dirname + '/keys/private.pem'),
-        //    cert: path.normalize(__dirname + '/keys/cert.pem'),
+        //    private: path.join(__dirname, '/keys/private.pem'),
+        //    cert: path.join(__dirname, '/keys/cert.pem'),
         //    requireCert: false  // set to false for self signed certs
         //},
 
@@ -65,6 +65,10 @@
         //Express Server
         //DOMAIN: 'https://localhost:9443',
         DOMAIN: 'http://localhost:9000',
+
+        //Automation Server settings
+        automationHost: 'http://localhost:8089',
+
 
         //  legacy quickbase host
         legacyBase: '.quickbase-dev.com',
@@ -97,6 +101,12 @@
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
 
+        // Turn on/off inbound and outbound request tracing
+        tracingEnabled: false,
+
+        // Tracing host name
+        tracingHost: ''
+
         /**
          * mock data for feature switches for local testing
          */
@@ -107,4 +117,6 @@
          */
         //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
     };
+module.exports = Object.assign({}, baseVars, process.env);
+
 }());

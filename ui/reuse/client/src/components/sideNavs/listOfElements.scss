@@ -5,6 +5,10 @@ $toolpalette-header-color: $color-black-400;
 $toolpalette-header-font-size: 10px;
 
 .listOfElementsContainer {
+    //By giving it a border the same size as the focus border and a transparent background,
+    //it keeps the container from 'jumping' on focus
+    border: $stroke-width-thin solid transparent;
+    overflow: auto;
     background-color: $leftnav-background-color;
     width: 100%;
     height: 100%;
@@ -22,16 +26,19 @@ $toolpalette-header-font-size: 10px;
         cursor: pointer;
     }
 
-    .listOfElementsMainList, .listOfElementsItemList {
+    .listOfElementsMainList, .listOfElementsItemList, .animatedListOfElementsItemList {
         list-style-type: none;
-        padding: 0 0 $spacing-xxx-small 0;
+        padding: 0;
     }
 
     .listOfElementsMainList {
         margin-bottom: $spacing-medium3; // Add margin to the bottom so the last element can be seen when scrolled to the bottom
+        .listOfElementsItemGroup {
+            padding-top: $spacing-xx-small;
+        }
     }
 
-    .listOfElementsItemList {
+    .listOfElementsItemList, .animatedListOfElementsItemList {
         padding-left: 0;
         padding-right: 0;
         padding-top: 0;
@@ -52,7 +59,6 @@ $toolpalette-header-font-size: 10px;
 
     .listOfElementsItem {
         padding-bottom: 3px; // No semantic spacing for 3px, but requested by design
-
         .fieldToken:not(.fieldTokenCollapsed) {
             width: 100%;
         }
@@ -82,6 +88,24 @@ $toolpalette-header-font-size: 10px;
             max-height: 0;
 
             transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
+        }
+    }
+    //For the left nav focus
+    &:focus {
+        outline: none;
+        border: $stroke-width-thin solid $selected-color;
+    }
+
+    .fieldTokenInMenuWrapper {
+        //By giving it a border the same size as the focus border and a transparent background,
+        //it keeps the container from 'jumping' on focus
+        border: $stroke-width-thin solid transparent;
+        box-shadow: 0 0 2px 0px rgba(transparent, 0);
+        &:focus {
+            outline: none;
+            border-radius: $border-radius-base;
+            box-shadow: 0 0 2px 0px rgba($selected-color, 0.75);
+            border: $stroke-width-thin solid $selected-color;
         }
     }
 }

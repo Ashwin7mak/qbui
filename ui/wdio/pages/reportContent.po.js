@@ -6,9 +6,12 @@
 (function() {
     'use strict';
     // Import the base page object
-    var e2ePageBase = requirePO('./e2ePageBase');
+    var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
-
+    var tablesPO = requirePO('tableCreate');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
+    const sText = 'testTextValue';
+    const sNumeric = 1;
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
         recordCheckBoxes: {
@@ -19,12 +22,28 @@
                 return checkBoxes;
             }},
         deleteIcon: {get: function() {return browser.element('.icon-delete span');}},
-
+        reportTitle: {get: function() {return browser.element('.formContainer .qbPanelHeaderTitleText');}},
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
+        addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
+        settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
+        settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
+        modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
+        tableHomepageLink: {get: function() {return browser.element('.tableHomepageLink');}},
+
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
+        reportSearchEnterValues: {value: function(field) {
+            //Check for the visibility of search box
+            this.reportFilterSearchBox.waitForVisible();
+            //Enter the value in the search box
+            this.reportFilterSearchBox.setValue(field);
+            this.waitForReportContent();
+            //Needs this for the Dom to stabilize after loading the searched data
+            browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+        clearSearch: {get: function() {return this.reportsToolBar.element('.clearSearch .searchIcon');}},
         clickAndWaitForGrid: {value: function(button) {
             button.click();
             this.qbGridContainer.waitForVisible();
@@ -47,12 +66,12 @@
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
         }},
-        // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .primaryButton');}},
-        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
+
+        // Title for report (found in the stage)
+        stageTableHomepageTitleEl: {get: function() {return this.reportContainerEl.element('.tableHomepageStageHeadline');}},
 
         //Drop down menu actions icon
-        dropDownIcon : {get: function() {return browser.element('.actionsCol .iconActionsDropDownMenu');}},
+        dropDownIcon : {get: function() {return browser.element('.actionsCol .iconUISturdy-fries');}},
         dropDownDeleteIcon: {get: function() {return browser.element('.dropdown-menu .delete');}},
 
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
@@ -84,22 +103,13 @@
         // List of all field column headers from qbGrid
         qbGridColHeaderElList: {get: function() {return browser.elements('.qbHeaderCell');}},
 
-        // qbGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
-        qbGridBodyEl: {get: function() {
-            this.qbGridContainer.element('.qbTbody').waitForVisible();
-            return this.qbGridContainer.element('.qbTbody');
-        }},
-
         qbGridBodyViewportEl : {get: function() {return browser.element('.qbTbody');}},
 
         // Container for each records action column
-        qbGridLeftColsContainerEl: {get: function() {return this.qbGridBodyEl.element('.qbCell.stickyCell');}},
+        qbGridLeftColsContainerEl: {get: function() {return this.qbGridBodyViewportEl.element('.qbCell.stickyCell');}},
 
         // this will get you every row of the actions column
         qbGridRowActionsElList: {get: function() {return this.qbGridLeftColsContainerEl.elements('.qbRow');}},
-
-        // this will get you every record element on the grid
-        qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -111,6 +121,27 @@
             return browser.element('.qbRow').waitForVisible();
         }},
 
+        /**
+         * Helper method to ensure the leftNav has been properly loaded with tables Links with text.
+         * @returns A promise that will resolve after waiting for the leftNav to be displayed
+         */
+        waitForLeftNavLoaded : {value: function() {
+            //wait for apps Toggle area
+            browser.element('.appsToggleArea').waitForExist();
+            browser.element('.appsToggleArea').waitForVisible();
+            //wait for table headings area
+            browser.element('.tablesHeadingAndList .tablesHeading').waitForVisible();
+            //wait until you see tables leftNav links labels
+            browser.element('.tablesHeadingAndList .tablesList .leftNavLink').waitForVisible();
+            //wait until text is shown up on leftNavLinks.Selected table is not loaded until all table properties are available
+            return browser.waitForText('.tablesList .link', e2eConsts.mediumWaitTimeMs);
+        }},
+        getReportListUlEl: {
+            get: function() {
+                browser.element('.qbPanelBody .reportItems .reportLink').waitForVisible();
+                return browser.elements('.qbPanelBody .reportItems .reportLink');
+            }
+        },
         /**
          * Helper function that will get all of the field column headers from the report. Returns an array of strings.
          */
@@ -129,7 +160,7 @@
          * @returns Resolved record row element at specified index
          */
         getAllRows: {get: function() {
-            this.qbGridBodyEl.element('.qbRow').waitForVisible();
+            this.qbGridBodyViewportEl.element('.qbRow').waitForVisible();
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
@@ -169,6 +200,7 @@
          * @returns either an array of cell values (as strings) or one value of a cell
          */
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
+            this.waitForReportContent();
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
             // Return all record values if no cell number supplied
@@ -190,6 +222,21 @@
                 return this.formatRecordValue(cellValue2);
             }
         }},
+
+        /**
+         * Method to verify cell values in the embedded report for table child table A under parent table A -> report1 -> ListAll report
+         */
+        verifyFieldValuesInEmbeddedReportTable: {
+            value: function(expectedRecordValues) {
+                for (var i = 0; i < expectedRecordValues.length; i++) {
+                    //text field
+                    expect(expectedRecordValues[0]).toBe(sText.toString());
+                    //numeric field
+                    expect(expectedRecordValues[1]).toBe(sNumeric.toString());
+                }
+            }
+        },
+
         /**
          * Strip the data from the first column of the table row
          * @param: recordIndex, recordCellIndex
@@ -208,11 +255,9 @@
             var tableRecords = [];
             //get the count of records rows in a table
             var numOfRows = formsPO.getRecordsCountInATable();
-            console.log("the records count is: " + numOfRows);
             //for each record row get the cell values
             for (var i = 0; i < numOfRows; i++) {
                 var cellValues = this.getRecordValues(i);
-                console.log("the cell values are : " + cellValues);
                 //we need to remove record actions like print, email etc
                 cellValues.splice(0, 1);
                 tableRecords.push(cellValues);
@@ -243,6 +288,29 @@
             this.qbGridBodyViewportEl.waitForVisible();
             var rows = this.qbGridBodyViewportEl.elements('.qbRow');
             return rows.value.length;
+        }},
+
+        /**
+         * Method to click settings Icon on Report Table
+         */
+        clickSettingsIcon: {value: function() {
+            this.settingsIcon.waitForVisible();
+            //Click on settings icon
+            this.settingsIcon.click();
+            //wait until you see dropdown list
+            return this.modifyTableSettings.waitForVisible();
+        }},
+
+        /**
+         * Method to click 'Table properties & settings' from the dropdown list
+         */
+        clickModifyTableSettings: {value: function() {
+            // wait for 'Table properties & settings' button tobe visible
+            this.modifyTableSettings.waitForVisible();
+            //Click on 'Table properties & settings'
+            this.modifyTableSettings.click();
+            //wait until you see delete table action button
+            return tablesPO.deleteTableActionButton.waitForVisible();
         }},
 
         /**
@@ -286,8 +354,8 @@
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
-            //wait until view form is visible
-            return formsPO.viewFormContainerEl.waitForVisible();
+            // wait until spinner disappears
+            browser.waitForVisible('.spinner', e2eConsts.longWaitTimeMs, true);
         }},
 
         /**
@@ -342,9 +410,7 @@
 
         checkForTheAbsenceDeletedRecordOnTheCurrentPage: {
             value: function(deletedRecord) {
-                console.log('Deleted record: ' + deletedRecord);
                 for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
-                    console.log('Row' + i + ': ' + this.getRecordValues(i));
                     expect(deletedRecord).not.toEqual(this.getRecordValues(i));
                 }
             }},
@@ -375,10 +441,133 @@
             }},
 
         // Record Row to be selected:
-        selectRow: {value: function(recordRow) {
+        selectRowAndClickDeleteIcon: {value: function(recordRow) {
             this.recordCheckBoxes.value[recordRow].click();
-            this.deleteIcon.waitForExist();
+            this.deleteIcon.waitForVisible();
+            return this.deleteIcon.click();
         }},
+
+        //Select a report from tables page with reportID being the index of the report
+        selectReport: {value: function(tableName, reportIndex) {
+            //wait unti leftNav is loaded
+            this.waitForLeftNavLoaded();
+            //Select the tabe
+            tablesPO.selectTable(tableName);
+            //Click on reports menu
+            browser.element('.selected .iconUISturdy-report-menu-3').waitForVisible();
+            browser.element('.selected .iconUISturdy-report-menu-3').click();
+            //wait for container to slide down
+            browser.pause(e2eConsts.mediumWaitTimeMs);
+            browser.element('.reportGroups .reportGroup .open').waitForVisible();
+            //Filter the reports
+            var allReports = this.getReportListUlEl.value.filter(function(report) {
+                return report.index === reportIndex;
+            });
+
+            if (allReports !== []) {
+                //Click on the report
+                allReports[0].element('.iconUISturdy-report-table').waitForVisible();
+                allReports[0].element('.iconUISturdy-report-table').click();
+                //wait for container to slide away
+                browser.pause(e2eConsts.mediumWaitTimeMs);
+                //wait for reportContent to load
+                return this.waitForReportContent();
+            }
+        }},
+
+        // /***********************
+        //  * Small Breakpoint elements and helper methods
+        // **********************/
+        //
+        //add new record button element
+        addRecordBtnSB: {
+            get: function() {
+                return browser.element('.reportToolsAndContentContainer .addNewRecord');
+            }
+        },
+        // sort and group button element on report page
+        reportSortGrpBtnSB: {
+            get: function() {
+                return browser.element('.sortButton');
+            }
+        },
+        //returns cell values for all the rows
+        getAllRowsCellValuesSB: {
+            get: function() {
+                browser.element('.fieldRow').waitForVisible();
+                return browser.elements('.fieldValue');
+            }
+        },
+        //Element for dropdownToggle ActionButton
+        dropdownToggleActionButtonSB: {
+            get: function() {
+                return browser.element('.qbIcon.iconUISturdy-fries');
+            }
+        },
+        //Element for card-expander
+        cardExpanderButtonSB: {
+            get: function() {
+                return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up');
+            }
+        },
+        /**
+         * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
+         * @returns A promise that will resolve after waiting for the report records to be displayed
+         */
+        waitForReportContentSB: {
+            value: function() {
+                // wait until you see .records count
+                return browser.element('.recordsCount').waitForVisible();
+            }
+        },
+
+        /**
+         * Helper method that will load a report for you in your browser by directly hitting a generated URL
+         * @param realmName
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @returns A promise that will resolve after loading the generated URL
+         */
+        loadReportByIdInBrowserSB: {
+            value: function(realmName, appId, tableId, reportId) {
+            //navigate to the url
+                browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+            //wait for the report content to be visible
+                return this.waitForReportContentSB();
+            }
+        },
+        /**
+         * Function that will click on the Add record button on report page
+         */
+        clickAddRecordBtnSB: {
+            value: function() {
+                browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
+                browser.element('.reportToolsAndContentContainer .addNewRecord').click();
+                return  browser.element('.editForm').waitForVisible();
+            }
+        },
+        /**
+         * Function that will click on the DropdownToggleActionButton
+         */
+        clickDropdownToggleActionButtonSB: {
+            value: function() {
+                expect(this.dropdownToggleActionButtonSB.isVisible()).toBe(true);
+                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBe(true);
+                return browser.element('.qbIcon.iconUISturdy-fries').click();
+            }
+        },
+        /**
+         * Function that will click on the card expander button
+         */
+        clickCardExpanderButtonSB: {
+            value: function() {
+                expect(this.cardExpanderButtonSB.isVisible()).toBe(true);
+                expect(this.cardExpanderButtonSB.isEnabled()).toBe(true);
+                return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
+            }
+        },
+
     });
 
     module.exports = ReportContentPage;

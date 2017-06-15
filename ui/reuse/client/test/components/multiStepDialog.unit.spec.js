@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import MultiStepDialog from '../../src/components/multiStepDialog/multiStepDialog';
+import MultiStepDialog from 'REUSE/components/multiStepDialog/multiStepDialog';
 
 let component;
 

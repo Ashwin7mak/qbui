@@ -13,12 +13,12 @@ class RecordService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_RECORD         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
-            GET_RECORDS        : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
-            PATCH_RECORD       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
-            CREATE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
-            DELETE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
-            DELETE_RECORD_BULK : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/${constants.BULK}`
+            GET_RECORD         : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            GET_RECORDS        : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            PATCH_RECORD       : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            CREATE_RECORD      : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            DELETE_RECORD      : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            DELETE_RECORD_BULK : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/${constants.BULK}`
 
         };
     }

@@ -3,7 +3,6 @@ import React from "react";
 import {render} from "react-dom";
 import {Router, Switch} from "react-router-dom";
 import AppHistory from '../globals/appHistory';
-import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
 import BuilderWrapper from '../components/builder/builderWrapper';
 import SettingsWrapper from '../components/settings/settingsWrapper';
@@ -12,6 +11,7 @@ import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
+import ReportBuilderContainer from '../components/builder/reportBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
 import FeatureSwitchOverridesRoute from "../components/featureSwitches/featureSwitchOverridesRoute";
@@ -20,64 +20,54 @@ import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
 import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
 import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
 import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
+import AutomationListRoute from "../components/automation/settings/automationListRoute";
+import AutomationViewRoute from "../components/automation/settings/automationViewRoute";
+import AutomationBuilderContainer from "../components/automation/builder/automationBuilderContainer";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
 import Logger from "../utils/logger";
-import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
+import {APPS_ROUTE, APP_ROUTE, AUTOMATION, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
+import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
+import {updateForm, saveFormComplete, setFormBuilderPendingEditToFalse} from '../actions/formActions';
+import {setReportBuilderPendingEditToFalse, saveReport} from '../actions/reportBuilderActions';
+import {setFieldsPropertiesPendingEditToFalse} from '../actions/fieldsActions';
+import {getNavReport} from '../reducers/report';
 
 import "react-fastclick";
 
 import {Provider, connect} from "react-redux";
 import createAppStore from './store';
 
-import getFlux from './fluxxor';
 import RouteWithSubRoutes from "./RouteWithSubRoutes";
 
-let fluxxor = getFlux();
-
 let logger = new Logger();
-PerfLogUtils.setLogger(logger);
 
 const store = createAppStore();
 let storeFunc = {
-    editRecordCancel: editRecordCancel,
-    createRecord: createRecord,
-    updateRecord: updateRecord
+    editRecordCancel,
+    createRecord,
+    updateRecord,
+    hideTrowser,
+    updateForm,
+    saveReport,
+    saveFormComplete,
+    showErrorMsgDialog,
+    getNavReport,
+    setFieldsPropertiesPendingEditToFalse,
+    setFormBuilderPendingEditToFalse,
+    setReportBuilderPendingEditToFalse
 };
 //  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;
-
-const mapStateToProps = (state) => {
-    return {
-        qbui: state
-    };
-};
-
-
-const withFlux = (ComponentToWrap) => {
-    class WrappedComponent extends React.Component {
-        render() {
-            const {...props} = this.props;
-            return <ComponentToWrap {...props} flux={fluxxor}/>;
-        }
-    }
-    return WrappedComponent;
-};
-
-const ConnectedNav = connect(mapStateToProps)(withFlux(NavWrapper)); // pass Redux state as qbui prop
-const ConnectedBuilderNav = connect(mapStateToProps)(withFlux(BuilderWrapper)); // pass Redux state as qbui prop
-const ConnectedSettingsNav = connect(mapStateToProps)(withFlux(SettingsWrapper)); // pass Redux state as qbui prop
 
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
 
 // init the feature switches
 store.dispatch(FeatureSwitchActions.getStates());
-
-const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
 
 /**
  * routes config
@@ -88,12 +78,10 @@ const createElementWithFlux = (Component, props) => <Component {...props} flux={
  *          routes - an array child routes that occur under within the route (optional)
  *          props - object with any properties to be included when rendering the component (optional)
  **/
-
-
 const routes = [
     {
         path: ADMIN_ROUTE,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes: [
             {
                 path: `${ADMIN_ROUTE}/featureSwitches/:id`,
@@ -106,32 +94,22 @@ const routes = [
         ]
     },
     {
-        path: `${APP_ROUTE}/:appId/users`,
-        component: ConnectedNav,
-        routes: [
-            {
-                path: `${APP_ROUTE}/:appId/users`,
-                component: AppUsersRoute
-            }
-        ]
-    },
-    {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes:  [
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/(report)?/:rptId?/record/:recordId`,
-                exact: true,
+                exact: false,
                 component: RecordRoute
             },
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
-                exact: true,
+                exact: false,
                 component: ReportRoute
             },
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
-                exact: true,
+                exact: false,
                 component: RecordRoute
             },
             {
@@ -141,8 +119,8 @@ const routes = [
             },
             {
                 path: `${APP_ROUTE}/:appId/users`,
-                exact: true,
-                component: withFlux(AppUsersRoute)
+                exact: false,
+                component: AppUsersRoute
             },
             {
                 path: `${APP_ROUTE}/:appId`,
@@ -154,7 +132,7 @@ const routes = [
     {
         path: APPS_ROUTE,
         exact: true,
-        component: ConnectedNav,
+        component: NavWrapper,
         routes: [
             {
                 path: APPS_ROUTE,
@@ -164,26 +142,48 @@ const routes = [
     },
     {
         path: `${BUILDER_ROUTE}/app/:appId`,
-        component: ConnectedBuilderNav,
+        component: BuilderWrapper,
         routes: [
             {
                 path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
                 component: FormBuilderContainer
+            },
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/report/:rptId`,
+                component: ReportBuilderContainer
+            },
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId`,
+                component: AutomationBuilderContainer
             }
         ]
     },
     {
-        path: `${SETTINGS_ROUTE}/app/:appId/(table)?/:tblId?`,
-        component: ConnectedSettingsNav,
+        path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId`,
+        component: SettingsWrapper,
         routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
                 exact: true,
-                component: withFlux(TablePropertiesRoute)
-            },
+                component: TablePropertiesRoute
+            }
+        ]
+    },
+    {
+        path: `${SETTINGS_ROUTE}/app/:appId/`,
+        component: SettingsWrapper,
+        routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/properties`,
                 component: AppPropertiesRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId/${AUTOMATION.VIEW}`,
+                component: AutomationViewRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION.PATH}`,
+                component: AutomationListRoute
             },
             {
                 path: `${SETTINGS_ROUTE}/app/:appId`,
@@ -191,12 +191,12 @@ const routes = [
                 component: AppSettingsRoute
             }
         ]
-    },
+    }
 ];
 
 render((
     <Provider store={store}>
-        <Router history={history} createElement={createElementWithFlux} >
+        <Router history={history}>
                 {/*  within Switch 1st match wins
                     includes all the above top level routes and passes on the child routes in the properties
                     note if an entry it is without a path to match it matches all

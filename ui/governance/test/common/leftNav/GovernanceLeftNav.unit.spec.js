@@ -1,12 +1,16 @@
-import React from 'react';
-import {mount, shallow} from 'enzyme';
-import jasmineEnzyme from 'jasmine-enzyme';
-import {GovernanceLeftNav} from '../../../src/common/leftNav/GovernanceLeftNav';
-import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
+import React from "react";
+import {mount, shallow} from "enzyme";
+import jasmineEnzyme from "jasmine-enzyme";
+import {GovernanceLeftNav} from "../../../src/common/leftNav/GovernanceLeftNav";
+import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 
 describe('<GovernanceLeftNav />', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        GovernanceBundleLoader.changeLocale('en-us');
+    });
+
+    afterEach(() => {
         GovernanceBundleLoader.changeLocale('en-us');
     });
 

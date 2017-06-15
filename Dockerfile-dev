@@ -1,0 +1,22 @@
+# To directly build an image from this Dockerfile, run 'docker build -t quickbase/coreui .' from the root project directory
+FROM library/node:6.9.5-alpine
+
+# Install OpenSSL to generate key and cert for SSL
+RUN apk add --no-cache openssl
+
+# Add SSL config script to image and make it executable
+COPY docker/certs.sh /usr/local/bin/certs.sh
+RUN chmod +x /usr/local/bin/certs.sh
+
+# Add debug script for development
+COPY docker/debug.sh /usr/local/bin/debug.sh
+RUN chmod +x /usr/local/bin/debug.sh
+
+# Expects that the code has already been built at 'dist'
+# Copy dist code only into image
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# Nested script - create the secrets directory, update ownership, create a key and self-signed cert
+# Start Node with nodemon in debug mode
+CMD /usr/local/bin/debug.sh

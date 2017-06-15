@@ -1,8 +1,8 @@
-import CommonNavReducer from '../../src/components/sideNavs/commonNavReducer';
-import {TOGGLE_NAV} from '../../src/components/sideNavs/commonNavActions';
+import CommonNavReducer from 'REUSE/components/sideNavs/commonNavReducer';
+import {TOGGLE_NAV} from 'REUSE/components/sideNavs/commonNavActions';
 
 // IMPORTS FROM CLIENT REACT
-import Breakpoints from '../../../../client-react/src/utils/breakpoints';
+import Breakpoints from 'APP/utils/breakpoints';
 // IMPORTS FROM CLIENT REACT
 
 let reducer;

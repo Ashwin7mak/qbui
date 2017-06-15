@@ -3,8 +3,10 @@ import React from 'react';
 import QBForm from '../QBForm/qbform';
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
+import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {editRecordStart, editRecordChange} from '../../actions/recordActions';
+import {getAppUsers} from '../../reducers/app';
 import {UNSAVED_RECORD_ID} from "../../constants/schema";
 
 export const Record = React.createClass({
@@ -14,7 +16,8 @@ export const Record = React.createClass({
     componentWillReceiveProps(nextProps) {
         let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && this.props.pendEdits.recordEditOpen === false;
         let shouldRecordEditOpen = _.has(nextProps, 'pendEdits.recordEditOpen') && !nextProps.pendEdits.recordEditOpen;
-        if (wasRecordEditOpen !== shouldRecordEditOpen && _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges)) {
+        let noPendingChanges = _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges);
+        if ((wasRecordEditOpen !== shouldRecordEditOpen && noPendingChanges) || (_.get(this.props, 'location.query.detailKeyValue', undefined) !== undefined  && noPendingChanges)) {
             this.handleEditRecordStart(this.props.recId);
         }
     },
@@ -54,6 +57,7 @@ export const Record = React.createClass({
     handleEditRecordStart() {
         let origRec = null;
         let changes = {};
+        let queryParams = _.get(this.props, 'location.query', {});
         if (this.props.recId) {
             origRec = this.getOrigRec();
         } else if (this.props.formData && !this.props.formData.record) {
@@ -65,7 +69,12 @@ export const Record = React.createClass({
                     (field => fieldId === field.id));
                 if (fieldDef && !fieldDef.builtIn) {
                     let value = null;
-                    if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
+                    //if there is a parent value for this child auto fill it in
+                    let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
+                    // fieldId is a numeric and params from url are strings so +parentFid for type equality test
+                    if (parentFid && +parentFid === fieldId) {
+                        value =  _.get(queryParams, 'detailKeyValue', null);
+                    } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         // if there is a default value use that as new record changes
                         value = fieldDef.defaultValue.coercedValue.value;
                     }
@@ -116,6 +125,7 @@ export const Record = React.createClass({
 
     render() {
         return <QBForm {...this.props}
+                    appUsers={this.props.appUsers}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
                     onFieldChange={this.handleFieldChange}
@@ -127,7 +137,8 @@ export const Record = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        record: state.record
+        record: state.record,
+        appUsers: getAppUsers(state.app)
     };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -141,7 +152,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Record);
+)(Record));

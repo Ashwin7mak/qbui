@@ -16,6 +16,7 @@ describe('QbCell', () => {
 
         expect(component).toHaveClassName('qbCell');
         expect(component).not.toHaveClassName('stickyCell');
+        expect(component).not.toHaveClassName('placeholderCell');
     });
 
     it('renders a sticky cell', () => {
@@ -23,5 +24,13 @@ describe('QbCell', () => {
 
         expect(component).toHaveClassName('qbCell');
         expect(component).toHaveClassName('stickyCell');
+        expect(component).not.toHaveClassName('placeholderCell');
+    });
+
+    it('renders a placeholder cell', () => {
+        component = shallow(<QbCell isPlaceholderCell={true} />);
+        expect(component).toHaveClassName('qbCell');
+        expect(component).not.toHaveClassName('stickyCell');
+        expect(component).toHaveClassName('placeholderCell');
     });
 });

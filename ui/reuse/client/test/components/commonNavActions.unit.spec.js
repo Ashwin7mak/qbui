@@ -1,4 +1,4 @@
-import commonNavActions, {toggleNav, TOGGLE_NAV} from '../../src/components/sideNavs/commonNavActions';
+import commonNavActions, {toggleNav, TOGGLE_NAV} from 'REUSE/components/sideNavs/commonNavActions';
 
 describe('CommonNavActions', () => {
     it('sends an event to update the nav state', () => {

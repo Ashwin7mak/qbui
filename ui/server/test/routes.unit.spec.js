@@ -5,7 +5,7 @@ var request = require('supertest');
 var log = require('../src/logger').getLogger();
 var errors = require('../src/components/errors');
 var routeGroups = require('../src/routes/routeGroups');
-var routeConstants = require('../src/routes/routeConstants');
+var routes = require('../src/routes/routeConstants').routes;
 
 var express = require('express');
 var app = express();
@@ -36,7 +36,7 @@ describe('Test Express Node Routes', function() {
         stubLog = sinon.stub(log, 'info').returns(true);
 
         request(app).
-            post(routeConstants.LOG_CLIENT_MSG).
+            post(routes.LOG_CLIENT_MSG).
             send({level:'debug', msg:'test'}).
             expect(200, 'OK').
             end(function(err, res) {
@@ -52,7 +52,7 @@ describe('Test Express Node Routes', function() {
     it('Validate get log route is not supported', function(done) {
 
         request(app).
-            get(routeConstants.LOG_CLIENT_MSG).
+            get(routes.LOG_CLIENT_MSG).
             expect(405).
             end(function(err, res) {
                 if (err) {
@@ -65,7 +65,7 @@ describe('Test Express Node Routes', function() {
     it('Validate post log route with invalid body data', function(done) {
 
         request(app).
-            post(routeConstants.LOG_CLIENT_MSG).
+            post(routes.LOG_CLIENT_MSG).
             send({level:'debug'}).
             expect(400).
             end(function(err, res) {
@@ -80,7 +80,7 @@ describe('Test Express Node Routes', function() {
     it('Validate post log route with no body data', function(done) {
 
         request(app).
-            post(routeConstants.LOG_CLIENT_MSG).
+            post(routes.LOG_CLIENT_MSG).
             expect(400).
             end(function(err, res) {
                 if (err) {
@@ -94,7 +94,7 @@ describe('Test Express Node Routes', function() {
     it('Validate post log route with invalid log level', function(done) {
 
         request(app).
-            post(routeConstants.LOG_CLIENT_MSG).
+            post(routes.LOG_CLIENT_MSG).
             send({level:'invalid', msg:'test'}).
             expect(400).
             end(function(err, res) {
@@ -111,7 +111,7 @@ describe('Test Express Node Routes', function() {
         stubLog = sinon.stub(log, 'info').returns(true);
 
         request(app).
-        post(routeConstants.LOG_CLIENT_PERF_MSG).
+        post(routes.LOG_CLIENT_PERF_MSG).
         send({perf:'stat1', another:'stat2'}).
         expect(200, 'OK').
         end(function(err, res) {
@@ -127,7 +127,7 @@ describe('Test Express Node Routes', function() {
     it('Validate get log client perf route is not supported', function(done) {
 
         request(app).
-        get(routeConstants.LOG_CLIENT_PERF_MSG).
+        get(routes.LOG_CLIENT_PERF_MSG).
         expect(405).
         end(function(err, res) {
             if (err) {

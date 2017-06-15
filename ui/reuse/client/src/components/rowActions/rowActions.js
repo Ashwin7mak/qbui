@@ -1,7 +1,10 @@
 import React, {PropTypes, Component} from 'react';
-import {PositionedRowEditActions} from '../../../../../client-react/src/components/dataTable/qbGrid/rowEditActions';
-import IconActions from '../iconActions/iconActions';
-import Locale from '../../locales/locale';
+import IconActions from 'REUSE/components/iconActions/iconActions';
+import Locale from 'REUSE/locales/locale';
+
+// TEMPORARY IMPORTS FROM CLIENT-REACT
+import {PositionedRowEditActions} from 'APP/components/dataTable/qbGrid/rowEditActions';
+// TEMPORARY IMPORTS FROM CLIENT-REACT
 
 import './rowActions.scss';
 

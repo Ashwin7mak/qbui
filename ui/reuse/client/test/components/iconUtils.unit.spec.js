@@ -1,4 +1,4 @@
-import IconUtils from '../../src/components/icon/iconUtils';
+import IconUtils from 'REUSE/components/icon/iconUtils';
 
 let iconsByTag = [
     {
@@ -14,6 +14,18 @@ let iconsByTag = [
             "Plane"
         ]
     },
+    {
+        "tag": "tag1",
+        "icons": [
+            "Apple"
+        ]
+    },
+    {
+        "tag": "tag2",
+        "icons": [
+            "aPpLe", "banana"
+        ]
+    }
 ];
 
 describe('IconUtils', () => {
@@ -44,5 +56,16 @@ describe('IconUtils', () => {
         // text not lowercased
         expect(IconUtils.filterMatches(iconsByTag, "Addresses", "Location")).toBe(false);
         expect(IconUtils.filterMatches(iconsByTag, "Location", "Location")).toBe(false);
+    });
+});
+
+describe('getIconTooltipTitle', () => {
+
+    it('returns correct string', () => {
+        expect(IconUtils.getIconToolTipTitle(iconsByTag, 'apple')).toEqual('tag1, tag2');
+    });
+
+    it('handles incorrect parameters', () => {
+        expect(IconUtils.getIconToolTipTitle(undefined, undefined)).toEqual('');
     });
 });

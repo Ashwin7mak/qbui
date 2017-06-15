@@ -9,7 +9,7 @@ $fieldtoken-title-margin-left: 12px;
 .fieldToken {
     // Overflow: hidden is used here to create the effect that the icon is rounded on the left, but flat on the right.
     overflow: hidden;
-
+    outline: none;
     border-radius: $fieldtoken-border-radius;
     height: $fieldtoken-height;
     width: $fieldtoken-width;
@@ -35,15 +35,6 @@ $fieldtoken-title-margin-left: 12px;
         transition: opacity 0.3s, max-width 0.3s;
     }
 
-    &.fieldTokenCollapsed {
-        max-width: $fieldtoken-icon-width;
-
-        .fieldTokenTitle {
-            opacity: 0;
-            max-width: 0;
-        }
-    }
-
     .fieldTokenIconContainer {
         width: $fieldtoken-icon-width;
         height: $fieldtoken-height;
@@ -56,10 +47,23 @@ $fieldtoken-title-margin-left: 12px;
         justify-content: center;
     }
 
+    &.fieldTokenCollapsed {
+        max-width: $fieldtoken-icon-width;
+
+        .fieldTokenTitle {
+            opacity: 0;
+            max-width: 0;
+        }
+
+        .fieldTokenIconContainer {
+            width: 100%; // Fixes the positioning of the icon when there is no title text
+        }
+    }
+
     &.fieldTokenDragging {
         color: $dragtoken-text-color;
         background-color: $dragtoken-background-color2;
-        border: $stroke-width-thin solid $dragtoken-border-color;
+        border: $stroke-width-thick solid $dragtoken-border-color;
 
         .fieldTokenIconContainer {
             background-color: $dragtoken-background-color1;

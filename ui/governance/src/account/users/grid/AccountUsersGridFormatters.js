@@ -1,20 +1,37 @@
-import moment from 'moment';
-import React from 'react';
-import Icon from '../../../../../reuse/client/src/components/icon/icon';
+import React from "react";
+import moment from "moment";
+import Icon from "../../../../../reuse/client/src/components/icon/icon";
 import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmUserAccountFlagConstants.js";
 
 // Render Helpers
+/**
+ * SQL in current stack stores the Null time as 1900s
+ * @param timeStr
+ * @constructor
+ */
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
+
+/**
+ * Currently we transform the true/false in UI columns to Y/---
+ * @param bool
+ * @constructor
+ */
 const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
-// Start of Formatters
-export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
+/**
+ * Format the Access Status for the User into a readable format
+ * @param hasAppAccess
+ * @param cellInfo
+ * @returns {*}
+ * @constructor
+ */
+export const FormatAccessStatusText = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return "Deactivated";
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
         return "Denied";
     } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
-        return "QuickBase Staff";
+        return "Quick Base Staff";
     } else if (hasAppAccess) {
         return "Paid Seat";
     } else {
@@ -22,29 +39,56 @@ export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
     }
 };
 
-export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
+/**
+ * Format the User Status for the User into a readable format
+ * @param hasAppAccess
+ * @param cellInfo
+ * @returns {*}
+ * @constructor
+ */
+export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
-        return (<span className="accessStatusLabel deactivated"><Icon icon="errorincircle-outline"/> Deactivated</span>);
+        return "Deactivated";
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
-        return (<span className="accessStatusLabel denied"><Icon icon="deactivate"/> Denied</span>);
+        return "Denied";
     } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
-        return (<span className="accessStatusLabel staff"><Icon icon="user"/> QuickBase Staff</span>);
-    } else if (hasAppAccess) {
-        return (<span className="accessStatusLabel paid"><Icon icon="currency-dollar"/> Paid Seat</span>);
+        return "Quick Base Staff";
+    } else if (RealmUserAccountFlagConstants.IsVerified(cellInfo.rowData)) {
+        return "Registered";
+    } else if (RealmUserAccountFlagConstants.IsRegistered(cellInfo.rowData)) {
+        return "Unverified";
     } else {
-        return (<span className="accessStatusLabel none"><Icon icon="lock"/> No App Access</span>);
+        return "Unregistered";
     }
 };
 
-export const FormatIsInactive = (lastAccessString, cellInfo) => {
+export const FormatAccessStatusHTML = (hasAppAccess, cellInfo) => {
+    if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
+        return (<div className="accessStatusLabel deactivated"><span className="deactivatedIcon"><Icon icon="errorincircle-outline"/></span> Deactivated</div>);
+    } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
+        return (<div className="accessStatusLabel denied"><span className="deniedIcon"><Icon icon="deactivate"/></span> Denied</div>);
+    } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
+        return (<div className="accessStatusLabel staff"><span className="staffIcon"><Icon iconFont="iconTableSturdy" icon="User"/></span> Quick Base Staff</div>);
+    } else if (hasAppAccess) {
+        return (<div className="accessStatusLabel paid"><span className="paidIcon"><Icon icon="currency-dollar"/></span> Paid Seat</div>);
+    } else {
+        return (<div className="accessStatusLabel none"><span className="noneIcon"><Icon icon="infoincircle-fill"/></span> No App Access</div>);
+    }
+};
+
+
+
+export const FormatIsInactiveBool = (lastAccessString) => {
     if (IsTimeNull(lastAccessString)) {
-        return RenderBoolColumn(false);
+        return false;
     } else {
         const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-        return RenderBoolColumn(daysSinceLastAccess >= 180);
+        return daysSinceLastAccess >= 180;
     }
 };
 
+export const FormatIsInactive = (lastAccessString, cellInfo) => RenderBoolColumn(FormatIsInactiveBool(lastAccessString));
+export const FormatUsernameString = (usrNameString, cellInfo) => cellInfo.rowData.email === cellInfo.rowData.userName ? "" : cellInfo.rowData.userName;
 export const FormatLastAccessString = (lastAccessString, cellInfo) => IsTimeNull(lastAccessString) ? 'never' : moment(lastAccessString).format("MMMM D YYYY");
 export const FormatIsGroupMember = (numGroupsMember, cellInfo) => RenderBoolColumn(numGroupsMember > 0);
 export const FormatIsGroupManager = (numGroupsManaged, cellInfo) => RenderBoolColumn(numGroupsManaged > 0);

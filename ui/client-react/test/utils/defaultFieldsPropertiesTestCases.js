@@ -1,4 +1,6 @@
 import FieldFormats from '../../src/utils/fieldFormats';
+import Locale from '../../src/locales/locales';
+import {defaultOptionsI18nPath} from '../../src/constants/defaultFieldPropertiesConstants';
 const serverTypeConsts = require('../../../common/src/constants');
 
 const standardProperties = {
@@ -98,7 +100,8 @@ const testCases = [
             "datatypeAttributes": {
                 "type": "USER"
             },
-            "name": "User"
+            "name": "User",
+            "indexed": true
         }
     },
     {
@@ -176,6 +179,26 @@ const testCases = [
                 "type": "TEXT"
             },
             "name": "Text"
+        }
+    },
+    {
+        type: FieldFormats.TEXT_FORMAT_MULTICHOICE,
+        serverType: serverTypeConsts.TEXT,
+        expectedResult: {
+            ...standardProperties,
+            "datatypeAttributes": {
+                "type": "TEXT"
+            },
+            "name": "Choice list",
+            "multipleChoice": {
+                "allowNew": false,
+                "choices": [
+                    {"coercedValue": {"value": Locale.getMessage(`${defaultOptionsI18nPath}.first`)}, "displayValue": Locale.getMessage(`${defaultOptionsI18nPath}.first`)},
+                    {"coercedValue": {"value": Locale.getMessage(`${defaultOptionsI18nPath}.second`)}, "displayValue": Locale.getMessage(`${defaultOptionsI18nPath}.second`)},
+                    {"coercedValue": {"value": Locale.getMessage(`${defaultOptionsI18nPath}.third`)}, "displayValue": Locale.getMessage(`${defaultOptionsI18nPath}.third`)}
+                ],
+                "sortAsGiven": false
+            }
         }
     }
 ];

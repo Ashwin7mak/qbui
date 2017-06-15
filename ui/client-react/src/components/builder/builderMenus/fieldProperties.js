@@ -5,10 +5,15 @@ import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
 import MultiLineTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
 import FieldFormats from '../../../utils/fieldFormats';
 import Locale from '../../../../../reuse/client/src/locales/locale';
+import {I18nMessage} from '../../../utils/i18nMessage';
 import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
+import _ from 'lodash';
+import serverTypeConsts from '../../../../../common/src/constants';
+import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './fieldProperties.scss';
 
@@ -24,8 +29,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateField: (field, appId, tableId) => {
-            dispatch(updateField(field, appId, tableId));
+        updateField: (field, appId, tableId, propertyName, newValue) => {
+            dispatch(updateField(field, appId, tableId, propertyName, newValue));
         }
     };
 };
@@ -34,16 +39,8 @@ export class FieldProperties extends Component {
     constructor(props) {
         super(props);
 
-        this.createPropertiesTitle = this.createPropertiesTitle.bind(this);
-        this.createTextPropertyContainer = this.createTextPropertyContainer.bind(this);
-        this.createCheckBoxPropertyContainer = this.createCheckBoxPropertyContainer.bind(this);
-        this.createMultiChoiceTextPropertyContainer = this.createMultiChoiceTextPropertyContainer.bind(this);
-        this.createNameProperty = this.createNameProperty.bind(this);
-        this.createRequiredProperty = this.createRequiredProperty.bind(this);
-        this.findFieldProperties = this.findFieldProperties.bind(this);
-        this.updateFieldProps = this.updateFieldProps.bind(this);
-        this.updateMultiChoiceFieldProps = this.updateMultiChoiceFieldProps.bind(this);
-        this.buildMultiChoiceDisplayList = this.buildMultiChoiceDisplayList.bind(this);
+        this.unique = 'unique';
+        this.required = 'required';
     }
 
     /**
@@ -51,9 +48,9 @@ export class FieldProperties extends Component {
      * @param fieldName
      * @returns {XML}
      */
-    createPropertiesTitle() {
+    createPropertiesTitle = (key) => {
         return (
-            <div className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
+            <div key={key} className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
         );
     }
 
@@ -62,13 +59,15 @@ export class FieldProperties extends Component {
      * Using a textfieldvalueeditor to keep it green and it has handy props
      * @param propertyTitle
      * @param propertyValue
+     * @param key
      * @returns {XML}
      */
-    createTextPropertyContainer(propertyTitle, propertyValue) {
+    createTextPropertyContainer = (propertyTitle, propertyValue, key) => {
         return (
-            <div className="textPropertyContainer">
+            <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
+                                      tabIndex={tabIndexConstants.FIELD_PROP_TABINDEX}
                                       classes="textPropertyValue"
                                       inputType="text"
                                       onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
@@ -82,14 +81,19 @@ export class FieldProperties extends Component {
      * Using a checkboxfieldvalueeditor to keep it green and the awesome label/onChange built in support
      * @param propertyTitle
      * @param propertyValue
+     * @param propertyName
+     * @param isDisabled
+     * @param key
      * @returns {XML}
      */
-    createCheckBoxPropertyContainer(propertyTitle, propertyValue) {
+    createCheckBoxPropertyContainer = (propertyTitle, propertyValue, propertyName, key, isDisabled = false) => {
         return (
-            <div className="checkboxPropertyContainer">
+            <div key={key} className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
-                                          onChange={(newValue) => this.updateFieldProps(newValue, 'required')}
+                                          isDisabled={isDisabled}
+                                          tabIndex={tabIndexConstants.FIELD_PROP_TABINDEX}
+                                          onChange={(newValue) => this.updateFieldProps(newValue, propertyName)}
                 />
             </div>
         );
@@ -100,11 +104,12 @@ export class FieldProperties extends Component {
      * Using a MultiLinTextFieldValueEditor to keep it green and textarea built in support
      * @param propertyTitle
      * @param propertyValue
+     * @param key
      * @returns {XML}
      */
-    createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue) {
+    createMultiChoiceTextPropertyContainer = (propertyTitle, propertyValue, key) => {
         return (
-            <div className="multiChoicePropertyContainer">
+            <div key={key} className="multiChoicePropertyContainer">
                 <div className="multiChoicePropertyTitle">{propertyTitle}</div>
                 <MultiLineTextFieldValueEditor
                     value={propertyValue}
@@ -115,12 +120,33 @@ export class FieldProperties extends Component {
     }
 
     /**
+     * create properties for link to record field (the parent table name with its icon)
+     * @param propertyTitle
+     * @param propertyValue
+     * @param key
+     * @returns {XML}
+     */
+    createLinkToRecordPropertyContainer = (propertyTitle, propertyValue, key) => {
+
+        const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
+        const field = table && _.find(table.fields, {id: this.props.selectedField.parentFieldId});
+
+        return (
+            <div key={key} className="textPropertyContainer">
+                <div className="textPropertyTitle">{propertyTitle}</div>
+                {table && <div className="linkToRecordLinkedToValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+                {field && <div className="linkToRecordConnectedOnValue"><Icon icon="url"/> <I18nMessage message="fieldPropertyLabels.connectedTo" fieldName={field.name} /></div>}
+            </div>
+        );
+    }
+
+    /**
      * takes the array of choices objects and creates a string separated by newline characters to display each
      * option on a separate line in the textarea
      * @param choices
      * @returns empty string OR string with each choice newline separated
      */
-    buildMultiChoiceDisplayList(choices) {
+    buildMultiChoiceDisplayList = (choices) => {
         let list = "";
         if (choices.length > 0) {
             let choiceArr = choices.map(choice => choice.displayValue);
@@ -135,8 +161,8 @@ export class FieldProperties extends Component {
      * @param name
      * @returns {XML}
      */
-    createNameProperty(name) {
-        return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name));
+    createNameProperty = (name, key) => {
+        return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name, key));
     }
 
     /**
@@ -145,25 +171,62 @@ export class FieldProperties extends Component {
      * @param required
      * @returns {XML}
      */
-    createRequiredProperty(required) {
-        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required));
+    createRequiredProperty = (required, key, isDisabled) => {
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required, this.required, key, isDisabled));
     }
+
+    /**
+     * unique property creation for every field type except for checkboxes
+     * @param required
+     * @returns {XML}
+     */
+    createUniqueProperty= (unique, key, isDisabled) => {
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.unique'), unique, this.unique, key, isDisabled));
+    }
+
 
     /**
      * Find all field properties for a given field type
      * We know EVERY field type currently has a Name and Required property so generate those no matter what
      * We also know that we need to display the Title header for field properties so do that too.
+     * TODO:: Currently the key iterators are hardcoded. Once this comes from a json object, set keys to unique id or index in array
      * @returns {Array}
      */
-    findFieldProperties() {
-        let fieldPropContainers = [this.createPropertiesTitle(),
-            this.createNameProperty(this.props.selectedField.name),
-            this.createRequiredProperty(this.props.selectedField.required)];
+    findFieldProperties = () => {
+        let key = 0;
+
+        let isRecordTitleField = false;
+        let fieldType = _.get(this.props, 'selectedField.datatypeAttributes.type');
+        const table = this.props.app ? _.find(this.props.app.tables, {id: this.props.tableId}) : null;
+        if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
+            isRecordTitleField = true;
+        }
+
+        let fieldPropContainers = [
+            this.createPropertiesTitle(key++),
+            this.createNameProperty(this.props.selectedField.name, key++)
+        ];
+
+        if (isRecordTitleField) {
+            fieldPropContainers.push(this.createRequiredProperty(true, key++, true));
+            fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
+        } else if (fieldType !== serverTypeConsts.CHECKBOX) {
+            fieldPropContainers.push(this.createUniqueProperty(this.props.selectedField.unique, key++));
+            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
+        } else {
+            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
+        }
+
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
+
         if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
-            fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
+            fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices, key++));
+        } else if (formatType === FieldFormats.LINK_TO_RECORD) {
+
+            fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField, key++));
         }
+
         return fieldPropContainers;
     }
 
@@ -173,10 +236,10 @@ export class FieldProperties extends Component {
      * @param newValue
      * @param propertyName
      */
-    updateFieldProps(newValue, propertyName) {
+    updateFieldProps = (newValue, propertyName) => {
         let field = this.props.selectedField;
-        field[propertyName] = newValue;
-        this.props.updateField(field, this.props.appId, this.props.tableId);
+
+        this.props.updateField(field, this.props.appId, this.props.tableId, propertyName, newValue);
     }
 
     /**
@@ -185,7 +248,7 @@ export class FieldProperties extends Component {
      * TODO: figure out how to handle bad user data for Number Multi Choice fields
      * @param newValues
      */
-    updateMultiChoiceFieldProps(newValues) {
+    updateMultiChoiceFieldProps = (newValues) => {
         let field = this.props.selectedField;
         let choices = newValues.split("\n");
         let newChoices = [];

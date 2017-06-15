@@ -1,0 +1,107 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+.standardGridToolBar {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    align-items: flex-start;
+    color: $search-input-color;
+
+    &.noFacets {
+      justify-content: flex-start;
+    }
+
+    .standardLeftToolBar {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 auto;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    .standardRightToolBar {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-self: center;
+        color: $pagination-iconfont-darkblack-color;
+
+        .standardGridItemsCount {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 16px;
+
+            .itemsCount {
+              text-align: right;
+              font-family: "Lato", Sans-Serif;
+              font-size: 14px;
+
+              @include small-breakpoint {
+                color: $icon-color-hover;
+                white-space: nowrap;
+                margin-left: 15px;
+                line-height: 40px;
+              }
+            }
+        }
+
+        .standardGridNavigation{
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+.facetsMenuButton {
+    display: inline-block;
+    cursor: pointer;
+    order: 10;
+
+    &.withoutSelections {
+        margin-bottom: 4px;
+    }
+
+    .facetButtons {
+        color: $icon-color-hover;
+
+        @include small-breakpoint {
+            color: $secondary-bar-color;
+        }
+    }
+
+    &.popoverShown, .facetButtons:hover {
+        color: $icon-color-hover;
+
+        @include small-breakpoint {
+            color: $secondary-bar-color;
+        }
+    }
+
+    .filterButton {
+        font-size: 18px;
+        cursor: pointer;
+
+        @include small-breakpoint {
+            font-size: 18px !important;
+            cursor: pointer !important;
+            color: $icon-color-hover !important;
+        }
+
+        &.qbIcon {
+            display: inline;
+        }
+
+        &:hover {
+            color: $icon-light-color-hover;
+        }
+    }
+
+    .filterButtonCaret {
+        font-size: 16px;
+        cursor: pointer;
+        color: $icon-color-hover !important;
+    }
+}

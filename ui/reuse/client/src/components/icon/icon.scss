@@ -1,3 +1,14 @@
+@import "../../../src/assets/css/customVariables";
+
 .qbIcon {
     display: inline-block;
+}
+
+.tipChildWrapper {
+    cursor: pointer;
+}
+
+.tooltip {
+    z-index: $zindex-tooltip !important;
+    max-width: $tooltip-max-width;
 }

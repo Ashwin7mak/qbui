@@ -1,5 +1,5 @@
-import AccountUsersReducer from '../../../src/account/users/AccountUsersReducer';
-import * as types from '../../../src/app/actionTypes';
+import AccountUsersReducer, {isFetching} from "../../../src/account/users/AccountUsersReducer";
+import * as types from "../../../src/app/actionTypes";
 
 let initialState = {};
 
@@ -67,5 +67,13 @@ describe('Account Users Reducers Tests', () => {
         });
     });
 
+    describe('isFetching', () => {
+        it("should return true while fetching the account users ", () => {
+            expect(isFetching({AccountUsers:{...initialState, status: {...initialState.status, isFetching: true}}})).toEqual(true);
+        });
+        it("should return false while we have completed fetching the account users ", () => {
+            expect(isFetching({AccountUsers:{...initialState}})).toEqual(false);
+        });
+    });
 });
 

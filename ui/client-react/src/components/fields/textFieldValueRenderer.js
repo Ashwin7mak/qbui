@@ -1,6 +1,7 @@
 import React from 'react';
 import './fields.scss';
 import _ from 'lodash';
+import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
 /**
  * # TextFieldValueRenderer
  *
@@ -12,8 +13,11 @@ const TextFieldValueRenderer = React.createClass({
     displayName: 'TextFieldValueRenderer',
     propTypes: {
         /**
-         * the value to render */
+         * the rawvalue for this field */
         value: React.PropTypes.any,
+        /**
+         * the display value to render */
+        display: React.PropTypes.any,
 
         /**
          * optional additional classes for the input to customize styling */
@@ -26,7 +30,15 @@ const TextFieldValueRenderer = React.createClass({
         /**
          * text field attributes
          */
-        attributes: React.PropTypes.object
+        attributes: React.PropTypes.object,
+
+        goToParent: React.PropTypes.func, //handles drill down to parent
+
+        masterTableId: React.PropTypes.string,
+
+        masterAppId: React.PropTypes.string,
+
+        masterFieldId: React.PropTypes.number
 
     },
 
@@ -36,6 +48,34 @@ const TextFieldValueRenderer = React.createClass({
             classes: null,
             attributes: null
         };
+    },
+
+    /**
+     * call the method to open a drawer
+     */
+    handleClick() {
+        this.props.goToParent(this.props.masterAppId, this.props.masterTableId, this.props.masterFieldId, this.props.value);
+    },
+
+    /**
+     * return the element with link to a parent
+     * @param classes
+     * @param htmlAllowed
+     * @return {XML}
+     */
+    getParentLink(classes, htmlAllowed) {
+        if (this.props.display) {
+            classes += ' textLink';
+            if (htmlAllowed) {
+                return <span className={classes} dangerouslySetInnerHTML={{__html: this.props.display}}
+                             onClick={this.handleClick}/>;
+            } else {
+                return <span className={classes} onClick={this.handleClick}>{_.unescape(this.props.display)}</span>;
+            }
+        } else {
+            classes += ' italicize';
+            return <span className={classes}><I18nMessage message="form.noParentRecordSelected"/></span>;
+        }
     },
 
     /**
@@ -61,10 +101,16 @@ const TextFieldValueRenderer = React.createClass({
         }
 
         if (this.props.attributes && this.props.attributes.htmlAllowed) {
-            return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.value}} />;
+            if (this.props.goToParent) {
+                return this.getParentLink(classes, true);
+            }
+            return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.display}} />;
         } else {
-             //react will encode
-            return <div className={classes}>{_.unescape(this.props.value)}</div>;
+            //react will encode
+            if (this.props.goToParent) {
+                return this.getParentLink(classes, false);
+            }
+            return <div className={classes}>{_.unescape(this.props.display)}</div>;
         }
     }
 });

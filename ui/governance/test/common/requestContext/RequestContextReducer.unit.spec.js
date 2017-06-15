@@ -1,5 +1,5 @@
-import RequestContextReducer from '../../../src/common/requestContext/RequestContextReducer';
-import * as types from '../../../src/app/actionTypes';
+import RequestContextReducer, {isFetching, getCurrentUser, getRealm} from "../../../src/common/requestContext/RequestContextReducer";
+import * as types from "../../../src/app/actionTypes";
 
 const initialState = {
     realm: {},
@@ -11,7 +11,7 @@ const initialState = {
     }
 };
 
-describe('Account Users Reducers Tests', () => {
+describe('RequestContext Reducers Tests', () => {
 
     it('should have the correct initial state', () => {
         expect(RequestContextReducer(undefined, {})).toEqual(initialState);
@@ -50,8 +50,38 @@ describe('Account Users Reducers Tests', () => {
         };
 
         let state = RequestContextReducer(initialState, {type: types.REQUEST_CONTEXT_FETCHING});
+
         state = RequestContextReducer(state, {type: types.REQUEST_CONTEXT_SUCCESS, ...result});
         expect(state.status.isFetching).toEqual(false);
         expect(state.status.error).toEqual(null);
     });
+
+    describe('selectors', () => {
+        describe('isFetching', () => {
+            it("should return true while fetching the request user's context", () => {
+                expect(isFetching({RequestContext:{...initialState, status: {...initialState.status, isFetching: true}}})).toEqual(true);
+            });
+            it("should return false if the state isFetching is false AND we don't have the current user's information", () => {
+                expect(isFetching({RequestContext:{...initialState}})).toEqual(true);
+            });
+            it("should return false while we have completed fetching the request user's context", () => {
+                expect(isFetching({RequestContext:{...initialState, currentUser:{id: 1}}})).toEqual(false);
+            });
+        });
+        describe('getCurrentUser', () => {
+            it('should return the current user from the request context', () => {
+                let user = {id: 1};
+                expect(getCurrentUser({RequestContext:{...initialState, currentUser: user}})).toEqual(user);
+            });
+        });
+        describe('getRealm', () => {
+            it('should return the realm from the request context', () => {
+                let realm = {id: 1};
+                expect(getRealm({RequestContext:{...initialState, realm: realm}})).toEqual(realm);
+            });
+        });
+    });
+
+
+
 });

@@ -12,6 +12,7 @@ describe('FieldsService functions', () => {
         spyOn(BaseService.prototype, 'get');
         spyOn(BaseService.prototype, 'patch');
         spyOn(BaseService.prototype, 'post');
+        spyOn(BaseService.prototype, 'delete');
         fieldsService = new FieldsService();
     });
 
@@ -49,6 +50,15 @@ describe('FieldsService functions', () => {
         var url = fieldsService.constructUrl(fieldsService.API.GET_FIELD, [appId, tableId, field.id]);
         fieldsService.updateField(appId, tableId, field);
         expect(BaseService.prototype.patch).toHaveBeenCalledWith(url, field);
+    });
+
+    it('test deleteField function', () => {
+        var appId = '123';
+        var tableId = '456';
+        var fieldId = '7';
+        var url = fieldsService.constructUrl(fieldsService.API.DELETE_FIELD, [appId, tableId, fieldId]);
+        fieldsService.deleteField(appId, tableId, fieldId);
+        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url);
     });
 
 });

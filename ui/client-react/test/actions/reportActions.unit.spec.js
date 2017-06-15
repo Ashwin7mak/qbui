@@ -49,26 +49,6 @@ describe('Report actions', () => {
                 done();
             });
     });
-
-    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', (done) => {
-        const params = {
-            columnId: 6
-        };
-        const expectedActions = [
-            event(context, types.HIDE_COLUMN, params)
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.hideColumn(context, appId, tblId, rptId, params)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedActions);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
-    });
 });
 
 describe('Test ReportsActions function success workflow', () => {
@@ -207,6 +187,7 @@ describe('Test ReportsActions function success workflow', () => {
                 done();
             });
     });
+
 });
 
 describe('Test ReportsActions function failure workflow', () => {
@@ -237,18 +218,28 @@ describe('Test ReportsActions function failure workflow', () => {
         }
     }
 
+    class mockFieldService {
+        getFields() {
+            return Promise.reject(mockErrorResponse);
+        }
+    }
+
     beforeEach(() => {
         spyOn(mockReportService.prototype, 'getReports').and.callThrough();
         spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
         spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
         ReportsActionsRewireAPI.__Rewire__('ReportService', mockReportService);
+        ReportsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
     });
 
     afterEach(() => {
         mockReportService.prototype.getReports.calls.reset();
         mockReportService.prototype.getReportResults.calls.reset();
         mockReportService.prototype.getDynamicReportResults.calls.reset();
+        mockFieldService.prototype.getFields.calls.reset();
         ReportsActionsRewireAPI.__ResetDependency__('ReportService');
+        ReportsActionsRewireAPI.__ResetDependency__('FieldsService');
     });
 
     it('verify loadReports action with promise reject', (done) => {

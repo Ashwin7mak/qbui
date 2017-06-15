@@ -173,5 +173,25 @@ describe('AutoScroll', () => {
             expect(component.props().pixelsFromTopForMobile).toBe(30);
             expect(component.props().pixelsFromBottomForMobile).toBe(30);
         });
+
+        it('remove touch & mouse events on unmount', () => {
+            spyOn(document, 'removeEventListener');
+            spyOn(document, 'addEventListener');
+            const mockAutoScrollProp = {
+                addEventListener() {},
+                removeEventListener() {}
+            };
+            spyOn(mockAutoScrollProp, 'addEventListener');
+            spyOn(mockAutoScrollProp, 'removeEventListener');
+
+            const component = mount(<AutoScroll parentContainer={mockParentContainer} />);
+            const instance = component.instance();
+            instance.autoScroll = mockAutoScrollProp;
+
+            instance.componentWillUnmount();
+
+            expect(document.removeEventListener).toHaveBeenCalled();
+            expect(mockAutoScrollProp.removeEventListener).toHaveBeenCalled();
+        });
     });
 });

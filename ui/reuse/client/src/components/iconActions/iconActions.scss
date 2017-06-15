@@ -88,6 +88,10 @@
                         border-radius: 30px;
                     }
                 }
+
+                &.disabled .qbIcon{
+                    color: $color-black-400;
+                }
             }
         }
     }

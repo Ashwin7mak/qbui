@@ -2,29 +2,44 @@
 
 .formBuilderContainer {
     height: 100%;
-
+    .listOfElementsContainer {
+        height: calc(100% - #{$trowser-footer-height + 59px});
+        @include medium-breakpoint {
+            //for tablets and smaller, to keep footer from vanishing
+            height: 100%;
+        }
+    }
     .formBuilderContainerContent {
-        height: 100%;
+        //By giving it a border the same size as the focus border and a transparent background,
+        //it keeps the container from 'jumping' on focus
+        border: $stroke-width-thin solid transparent;
+        height: calc(100% - #{$trowser-footer-height});
+        @include medium-breakpoint {
+            //for tablets and smaller, to keep footer from vanishing
+            height: 100%;
+        }
         min-width: 100%;
         overflow-y: scroll; /* has to be scroll, not auto */
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
+        &:focus {
+            outline: none;
+            border: $stroke-width-thin solid $input-text-focus-border-color;
+        }
     }
 
     .formBuilderContent {
         flex: 1 auto;
         max-height: 100%;
-        overflow-y: scroll; /* has to be scroll, not auto */
-        -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
+        @include medium-breakpoint {
+            //improves scrolling on tablet, but keeps duplicate scroll bars from appearing on desktop
+            overflow-y: scroll; /* has to be scroll, not auto */
+            -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
+        }
+
     }
 
     .formContainer {
         padding-bottom: 90px;
-        .editForm {
-            &:focus {
-                outline: none;
-                border: $stroke-width-thin solid $border-focused-color;
-            }
-        }
     }
 
     .qbPanel .qbPanelHeader .qbPanelHeaderTitle .qbPanelHeaderTitleText {

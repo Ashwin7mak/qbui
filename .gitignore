@@ -30,3 +30,6 @@ ui/client/quickbase/assets/css
 ui/client/quickbase/assets/*.map
 buildSrc/build/
 ui/ui
+# Docker #
+######################
+docker-compose.override.yml

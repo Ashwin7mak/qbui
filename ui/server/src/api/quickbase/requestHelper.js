@@ -4,13 +4,16 @@
     let fs = require('fs');
     let uuid = require('uuid');
     let Promise = require('bluebird');
-    let defaultRequest = require('request');
+    let env = require('../../config/environment');
+    let defaultRequest = require('../../requestClient').getClient(env);
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
     let url = require('url');
     let consts = require('../../../../common/src/constants');
+    let requestUtils = require('../../utility/requestUtils');
 
     module.exports = function(config) {
+        var TICKET_NAME = "TICKET";
         let request = defaultRequest;
         /**
          * Set of common methods used to parse out information from the http request object
@@ -47,7 +50,7 @@
             getRequestEeHostEnable: function() {
                 return config ? config.eeHostEnable : '';
             },
-            getRequestUrl  : function(req) {
+            getRequestCoreUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
             getRequestEEUrl  : function(req) {
@@ -146,6 +149,7 @@
 
                 //  override the url to use the experience engine
                 opts.url = this.getRequestEEUrl(req);
+
                 return opts;
             },
 
@@ -157,49 +161,14 @@
              */
             setAutomationEngineOptions: function(req) {
                 //  set the default request options
-                let opts = this.setAutomationOptions(req);
+                let opts = this.setOptions(req);
 
                 //  override the url to use automation server
                 opts.url = this.getRequestAutomationUrl(req);
+                opts.headers[TICKET_NAME] = req.cookies.TICKET;
                 opts.cookies = req.cookies;
                 return opts;
             },
-
-            /**
-             * Set the request attributes for a automation server request
-             *
-             * @param req
-             * @returns request object used when submitting a server request
-             */
-            setAutomationOptions: function(req) {
-
-                this.setTidHeader(req);
-
-                let opts = {
-                    url         : this.getRequestAutomationUrl(req),
-                    method      : (req.method),
-                    agentOptions: this.getAgentOptions(req),
-                    headers     : req.headers
-                };
-
-                if (config) {
-                    if (config.isMockServer) {
-                        opts.gzip = false;
-                        opts.headers["accept-encoding"] = "";
-                    }
-                    if (config.proxyHost) {
-                        opts.host = config.proxyHost;
-                        if (config.proxyPort) {
-                            opts.port = config.proxyPort;
-                        }
-                    }
-                }
-
-                this.setBodyOption(req, opts);
-
-                return opts;
-            },
-
 
             /**
              * Set the request attributes for a core server request
@@ -213,7 +182,7 @@
                 this.setTidHeader(req);
 
                 let opts = {
-                    url         : this.getRequestUrl(req),
+                    url         : this.getRequestCoreUrl(req),
                     method      : (forceGet === true ? 'GET' : req.method),
                     agentOptions: this.getAgentOptions(req),
                     headers     : req.headers
@@ -304,7 +273,7 @@
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
-                            } else if (response.statusCode !== 200) {
+                            } else if (!requestUtils.wasRequestSuccessful(response.statusCode)) {
                                 reject(response);
                             } else {
                                 resolve(response);
@@ -445,6 +414,26 @@
 
                 return realmURL;
             },
+
+            /**
+             * Set the request options for Outbound DotNet Request
+             * @param req   Inbound request
+             * @param path  URL Path for DotNet endpoint
+             */
+            setLegacyOptions: function(req, path) {
+                // Setup some default options
+                let opts = this.setOptions(req, false);
+                let host = this.getLegacyRealmBase(req, false);
+
+                // Override the host url path in the options
+                opts.headers.host = host;
+                opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + path;
+
+                // Add sbIID to cookies
+                opts.headers.cookie =  `${opts.headers.cookie};${consts.COOKIES.SBIID}=${req.headers.tid}`;
+
+                return opts;
+            }
         };
 
         return helper;

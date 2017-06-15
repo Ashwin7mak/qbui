@@ -9,8 +9,7 @@
     var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
 
-    describe('Forms - Add Record via Form Validation Tests: ', function() {
-
+    describe('Forms - Add a record via form validation tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -112,6 +111,5 @@
             //step 5 - Close the dirty form
             formsPO.clickFormCloseBtn();
         });
-
     });
 }());

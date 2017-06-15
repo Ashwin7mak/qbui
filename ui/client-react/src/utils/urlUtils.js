@@ -5,7 +5,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
 
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE, APP_ROUTE} from '../constants/urlConstants';
+import * as URL from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -49,7 +49,17 @@ const UrlUtils = {
     },
     getSupportLink() {
         let hostname = WindowLocationUtils.getHostname();
-        return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${SUPPORT_LINK_PATH}`;
+        return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${URL.SUPPORT_LINK_PATH}`;
+    },
+    getFeedBackLink() {
+        return `https://${URL.FEEDBACK_LINK_PATH}`;
+    },
+    getReportFeedBackLink() {
+        let hostname = WindowLocationUtils.getHostname();
+        return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${URL.SUPPORT_LINK_PATH}`;
+    },
+    getHelpLink() {
+        return `http://${URL.HELP_LINK_PATH}`;
     },
 
     /**
@@ -61,7 +71,7 @@ const UrlUtils = {
      * @returns {string}
      */
     getReportLink(appId, tblId, rptId) {
-        return StringUtils.format(REPORT_LINK, [appId, tblId, rptId]);
+        return StringUtils.format(URL.REPORT_LINK, [appId, tblId, rptId]);
     },
 
     /**
@@ -72,7 +82,40 @@ const UrlUtils = {
      * @return {string} URL of route for displaying a child report
      */
     getRelatedChildReportLink(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
-        return StringUtils.format(CHILD_REPORT_LINK, [...arguments]);
+        return StringUtils.format(URL.CHILD_REPORT_LINK, [...arguments]);
+    },
+
+    /**
+     * Return URL segment for a record to be displayed in a drawer.
+     *
+     *   `sr_app_${appId}_table_${tableId}_report_${reportId}_record_${recordId}`
+     *
+     * @return {string} URL of route for displaying a child report
+     */
+    getRecordDrawerSegment(appId, tableId, reportId, recordId) {
+        return StringUtils.format(URL.DRAWER.RECORD_SEGMENT, [...arguments]);
+    },
+
+    /**
+     * Return URL segment for a report to be displayed in a drawer.
+     *
+     *   `sr_report_app_${appId}_table_${tableId}_report_${reportId}_dtFid_${detailKeyFid}_dtVal_${detailKeyValue}`
+     *
+     * @return {string} URL of route for displaying a report in a drawer
+     */
+    getReportDrawerSegment(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
+        return StringUtils.format(URL.DRAWER.REPORT_SEGMENT, [...arguments]);
+    },
+
+    /**
+     * Return URL of route for adding a related child in the following form:
+     *
+     *    `location?${EDIT_RECORD_KEY}=new&${DETAIL_APPID}={detailAppId}${DETAIL_TABLEID}={detailTableId}
+     *       ${DETAIL_REPORTID}={detailReportId}${DETAIL_KEY_FID}={detailKeyFid}&${DETAIL_KEY_VALUE}={detailKeyValue}&${EMBEDDED_REPORT}={uniqueEmbeddedReportId}`;
+     * @return {string} URL of route for showing new child record
+     */
+    getAddRelatedChildLink(location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, uniqueEmbeddedReportId) {
+        return StringUtils.format(URL.ADD_RELATED_CHILD_LINK, [...arguments]);
     },
 
     /**
@@ -82,7 +125,7 @@ const UrlUtils = {
      * @returns {string}
      */
     getAppUsersLink(appId) {
-        return StringUtils.format(USERS_ROUTE, [appId]);
+        return StringUtils.format(URL.USERS_ROUTE, [appId]);
     },
 
     /**
@@ -91,20 +134,32 @@ const UrlUtils = {
      * @param tblId
      */
     getAfterTableCreatedLink(appId, tblId) {
-        return `${BUILDER_ROUTE}/app/${appId}/table/${tblId}/form/1`;
+        return `${URL.BUILDER_ROUTE}/app/${appId}/table/${tblId}/form/1`;
     },
 
     /**
      * Get the link for Table Properties & Settings page
      */
     getTableSettingsLink(appId, tableId) {
-        return `${SETTINGS_ROUTE}/app/${appId}/table/${tableId}/properties`;
+        return `${URL.SETTINGS_ROUTE}/app/${appId}/table/${tableId}/properties`;
     },
     /**
      * Get the link for app home page
      */
     getAppHomePageLink(appId) {
-        return `${APP_ROUTE}/${appId}`;
+        return `${URL.APP_ROUTE}/${appId}`;
+    },
+    /**
+     * Get the link for Automation Settings page
+     */
+    getAutomationSettingsLink(appId) {
+        return `${URL.SETTINGS_ROUTE}/app/${appId}/${URL.AUTOMATION.PATH}`;
+    },
+    /**
+     * Get the link for viewing an Automation
+     */
+    getAutomationViewLink(appId, automationId) {
+        return `${URL.SETTINGS_ROUTE}/app/${appId}/${URL.AUTOMATION.PATH}/${automationId}/${URL.AUTOMATION.VIEW}`;
     }
 };
 

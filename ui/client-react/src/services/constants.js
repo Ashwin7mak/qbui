@@ -9,19 +9,19 @@ export default {
         TICKET          : 'ticket'
     },
 
-    // Define the base urls for QuickBase and Node API endpoints.
+    // Define the base context when calling node:
     //
-    // A Quickbase or Experience Engine endpoint that calls out to
-    // the public api, proxying through the node server.
-    //
-    // A Node endpoint DOES NOT require the Quickbase API to fulfill
-    // its request.  Work is done exclusively on the Node server.
+    //  QBUI:    indicates the route performs qbui custom/composition work in
+    //           the node layer before routing the request to the appropriate
+    //           back-end server (if required) for processing.
+    //  PROXY:   indicates the route will directly proxy through node to an
+    //           external server endpoint.  Note the content of 'proxy' is
+    //           blank..this is intentional as this constant is to better
+    //           self-document the endpoint call within the service.
     BASE_URL: {
-        QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
-        EXPERIENCE  : '/ee/' + Configuration.api.eeVersion,
-        AUTOMATION  : '/we/workflow',          // + Configuration.api.automationVersion,
-        NODE        : '/api/n/' + Configuration.api.nodeVersion,
-        LEGACY      : '/api/l/' + Configuration.api.legacyVersion
+        QBUI            : '/qbui',
+        PROXY           : '',
+        AUTOMATION      : '/we'
     },
 
     // Entities
@@ -35,8 +35,8 @@ export default {
     FORMS               : 'forms',
     FORMS_TYPE          : 'formsType',
     LOG                 : 'log',
-    LOG_PERF            : 'clientPerf',
     USERS               : 'users',
+    RELATIONSHIPS       : 'relationships',
     RIGHTS              : 'accessRights',
 
     FEATURE_SWITCHES    : 'featureSwitches',
@@ -57,6 +57,17 @@ export default {
     BULK                : 'bulk',
     REQUSER             : 'reqUser',
     TABLECOMPONENTS     : 'tableComponents',
+    APPCOMPONENTS       : 'appComponents',
     // Legacy actions
-    STACK               : 'stack'
+    STACK               : 'stack',
+
+	// Slugs
+    SEARCH              : 'search',
+
+    // Automations
+    AUTOMATION : {
+        INVOKE   : 'workflow',
+        API      : 'api/v1',
+        FLOWS    : 'workflow/flows'
+    }
 };

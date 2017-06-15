@@ -1,4 +1,5 @@
 const assert = require('assert');
+const assertStatusOk = require('../testHelpers/assertStatusOk');
 require('../../src/app');
 const config = require('../../src/config/environment');
 const recordBase = require('./recordApi.base')(config);
@@ -168,26 +169,32 @@ function findFieldInTableOrFail(table, fieldName) {
     return field;
 }
 
-function refreshTable(appId, tableId) {
-    return recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(appId, tableId), constants.GET)
+/**
+ * Get a fresh version of the table from the API. Returns table json.
+ * @param {Object} payload
+ * @param {string} payload.app.id
+ * @param {string} payload.table.id
+ */
+function refreshTable(payload) {
+    return recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(payload.app.id, payload.table.id), constants.GET)
         .then(tableResponse => {
             return JSON.parse(tableResponse.body);
         });
 }
 
 function assertFieldsWereReturned(fields) {
-    assert.equal(fields.length, 6); // Total is 6 because 5 build in fields + 1 created field
-    assert.equal(fields[5].name, testFieldName);
+    return new Promise(resolve => {
+        assert.equal(fields.length, 6); // Total is 6 because 5 build in fields + 1 created field
+        assert.equal(fields[5].name, testFieldName);
+        resolve();
+    });
 }
 
 function assertFieldWasCreatedWithUniqueName(payload) {
-    assert.equal(payload.statusCode, constants.HttpStatusCode.OK);
-
-    // Assert the server returns the id of the new field
-    assert.notEqual(payload.createdField.id, null);
-
     // Assert the field was persisted to the table schema
-    return refreshTable(payload.app.id, payload.table.id)
+    return assertStatusCodeOk(payload)
+        .then(assertFieldIdReturned)
+        .then(refreshTable)
         .then(refreshedTable => {
             // Can't find the field by name for this test because it has been changed by Core
             const createdField = refreshedTable.fields.find(field => field.id === payload.createdField.id);
@@ -197,30 +204,35 @@ function assertFieldWasCreatedWithUniqueName(payload) {
         });
 }
 
-function assertFieldWasCreated(payload) {
-    assert.equal(payload.statusCode, constants.HttpStatusCode.OK, 'Expected creating a new field to be successful, but it failed');
+/**
+ * Assert that the api call has a successful status code (200 by default)
+ * @param payload
+ * @param statusCode (optional)
+ * @returns {Promise}
+ */
+function assertStatusCodeOk(payload, statusCode = constants.HttpStatusCode.OK) {
+    return new Promise(resolve => {
+        assertStatusOk(payload.statusCode);
+        resolve(payload);
+    });
+}
 
-    // Assert the server returns the id of the new field
-    assert.notEqual(payload.createdField.id, null, 'The server did not return a new id for the created field');
-
-    // Assert the field was persisted to the table schema
-    return refreshTable(payload.app.id, payload.table.id)
-        .then(refreshedTable => {
-            const createdField = findFieldInTableOrFail(refreshedTable, testFieldName);
-            assert.equal(createdField.name, testFieldName, 'The field name for the new field was different than expected');
-            assert.equal(createdField.datatypeAttributes.type, testFieldType, 'The field type for a new field was different than expected');
-            assert.equal(createdField.required, false, 'The required property for the new field was different than expected');
-        });
+/**
+ * Assert the server returns the id of the new field
+ * @param payload
+ * @returns {Promise}
+ */
+function assertFieldIdReturned(payload) {
+    return new Promise(resolve => {
+        assert.notEqual(payload.createdField.id, null, 'The server did not return a new id for the created field');
+        resolve(payload);
+    });
 }
 
 function assertFieldWasUpdated(payload) {
-    assert.equal(payload.statusCode, constants.HttpStatusCode.OK, 'Expected the field update to be successful, but it failed');
-
-    // The response body is empty on a patch request
-    assert.equal(payload.responseBody, '', 'The body was not empty on a patch request. Core probably changed something');
-
     // Assert the field was updated in the table schema
-    return refreshTable(payload.app.id, payload.table.id)
+    return assertStatusCodeOk(payload)
+        .then(refreshTable)
         .then(refreshedTable => {
             const updatedField = findFieldInTableOrFail(refreshedTable, updatedFieldName);
             assert.equal(updatedField.name, updatedFieldName, 'The field name was not updated, but it should have been');
@@ -229,10 +241,27 @@ function assertFieldWasUpdated(payload) {
         });
 }
 
-function assertFieldValidationError(payload) {
-    assert.equal(payload.statusCode, constants.HttpStatusCode.BAD_REQUEST);
+function assertFieldWasCreated(payload) {
+    // Assert the field was persisted to the table schema
+    return assertStatusCodeOk(payload)
+        .then(assertFieldIdReturned)
+        .then(refreshTable)
+        .then(refreshedTable => {
+            const createdField = findFieldInTableOrFail(refreshedTable, testFieldName);
+            assert.equal(createdField.name, testFieldName, 'The field name for the new field was different than expected');
+            assert.equal(createdField.datatypeAttributes.type, testFieldType, 'The field type for a new field was different than expected');
+            assert.equal(createdField.required, false, 'The required property for the new field was different than expected');
+        });
+}
 
-    const responseBody = JSON.parse(payload.body);
-    assert.equal(responseBody.length, 1, 'There was more than 1 error returned from the server. Only expected name to be invalid');
-    assert.equal(responseBody[0].code, fieldNameValidationErrorCode, 'The error code was different than expected for a blank field name');
+function assertFieldValidationError(payload) {
+    return new Promise(resolve => {
+        assert.equal(payload.statusCode, constants.HttpStatusCode.BAD_REQUEST);
+
+        const responseBody = JSON.parse(payload.body);
+        assert.equal(responseBody.length, 1, 'There was more than 1 error returned from the server. Only expected name to be invalid');
+        assert.equal(responseBody[0].code, fieldNameValidationErrorCode, 'The error code was different than expected for a blank field name');
+
+        resolve(payload);
+    });
 }

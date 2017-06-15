@@ -8,7 +8,7 @@
     var formsPO = requirePO('formsPage');
     var ReportInLineEditPO = requirePO('reportInLineEdit');
 
-    describe('Forms - Add a Record Via Form Tests: ', function() {
+    describe('Forms - Add a record via form tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -79,6 +79,5 @@
             // Step 7 - Verify the records count got increased by 1
             expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount + 1);
         });
-
     });
 }());

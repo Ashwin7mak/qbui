@@ -99,10 +99,8 @@ $color-yellow-100: #fef8e2; //
 
 
 //== Indigo - for the various link states
-$color-indigo-800: #009deb; // Link
-$color-indigo-700: #009deb; // Visted Link
+$color-indigo-800: #009deb; // Link, visited link, active link
 $color-indigo-600: #03aff2; // Hover Link
-$color-indigo-500: #009deb; // Active Link
 
 
 //== Blacks - Defaul text color, borders, page backgrounds, default icon color
@@ -117,30 +115,3 @@ $color-black-200: #f5f5f5; // Shadows, backgrounds and environmental accents
 $color-black-100: #ffffff; // Form fields, stage background
 
 
-/*
-FOR VISUAL DESIGN QA/TESTING, TEMPORARILY MAKE THE FOLLOWING COLORS $color-red-500
-*/
-
-/*
-//== Teal - NO LONG VALID COLOR IN PALETTE
-$color-teal-800: #007e89;
-$color-teal-700: #009aad;
-$color-teal-600: #00b0c2; // Date picker header & selected/todays date or time
-$color-teal-500: #00c4d8;
-$color-teal-400: #13dbf1;
-$color-teal-300: #95edf6;
-$color-teal-200: #caf6fb;
-$color-teal-100: #effcfe;
-*/
-
-/*
-//== Blue - NO LONG VALID COLOR IN PALETTE
-$color-blue-800: #4e2a6f; // Tooltip background
-$color-blue-700: #5c3483; // Trowser footer
-$color-blue-600: #74489d; // Numerical badges, Secondary buttons on Trowser Footer
-$color-blue-500: #9067b7; // All icons on deep-sea or white
-$color-blue-400: #b192d0; // Dividers in table headers, Sort by column, date picker hover
-$color-blue-300: #d3bde9; // Table row inline edit selection state
-$color-blue-200: #eadff4; // Table row hover state, Bottom gradient color in stage background
-$color-blue-100: #f8f5fb; // page background
-*/

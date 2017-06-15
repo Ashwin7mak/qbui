@@ -69,7 +69,7 @@ if(System.getProperty("endpoint")) {
 def instanceId = System.getenv("INSTANCE_ID");
 def executorId = System.getenv("EXECUTOR_NUMBER");
 //def sauceURL = "https://localhost."+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
-def sauceURL = "http://quickbase-dev.com:9000";
+def sauceURL = "http://quickbase-dev.com:9000/api";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
 def sauceProdJobName = "JENKINS_UI_E2E_PROD_SMOKETEST" + System.getenv("BUILD_NUMBER");
@@ -238,6 +238,10 @@ task gruntSassDebugVerbose(type: GruntTask) {
 
 task gruntBuildNoColor(type: GruntTask) {
     args = ["build", "--no-color"]
+}
+
+task gruntLogGitState(type: GruntTask) {
+    args = ["logGitState"]
 }
 
 task gruntUnitTestsNoColor(type: GruntTask) {

@@ -21,6 +21,11 @@ const UrlFieldValueEditor = React.createClass({
 
         onBlur: PropTypes.func,
 
+        /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
         /** Optional prop to pass in placeholder text. Defaults to: 'name@domain.com' (internationalized). */
         placeholder: PropTypes.string
     },
@@ -43,7 +48,7 @@ const UrlFieldValueEditor = React.createClass({
                                      value={value}
                                      placeholder={(this.props.placeholder || Locales.getMessage('placeholder.url'))}
                                      onBlur={this.onBlur}
-                                     showClearButton={true}
+                                     showClearButton={!this.props.isDisabled}
                                      {...otherProps} />;
     }
 });

@@ -4,6 +4,7 @@ import NumberUtils from '../utils/numberUtils';
 import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 import CommonConstants from '../../../common/src/constants';
+import _ from 'lodash';
 
 // a new service is constructed with each actions request..
 // so cachedReportRequest is a global, should be able to keep with reportService
@@ -18,12 +19,13 @@ class ReportService extends BaseService {
 
         //  Report service API endpoints
         this.API = {
-            GET_REPORT_META             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
-            GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
-            GET_REPORT_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
-            GET_INVOKE_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.INVOKE}`,
-            PARSE_FACET_EXPR            : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
+            GET_REPORT_META             : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            PATCH_REPORT_META           : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
+            GET_REPORTS                 : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
+            GET_REPORT_RESULTS          : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
+            GET_INVOKE_RESULTS          : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.INVOKE}`,
+            PARSE_FACET_EXPR            : `${constants.BASE_URL.QBUI}/${constants.FACETS}/${constants.PARSE}`
         };
     }
 
@@ -203,7 +205,7 @@ class ReportService extends BaseService {
     /**
      * Parse a facet Expression to a queryString.
      *
-     * NOTE: this endpoint calls a NODE only endpoint..no core server references are mad.e
+     * NOTE: this endpoint calls a NODE only endpoint..no core server references are made
      *
      * @param facetExpression looks like [{fid: fid1, fieldtype:'', values: [value1, value2]}, {fid: fid3, fieldtype:'DATE', values: [value3, value4]}, ... ]
      * @returns promise
@@ -217,6 +219,23 @@ class ReportService extends BaseService {
         }
 
         return super.get(this.API.PARSE_FACET_EXPR, {params: params});
+    }
+
+    /**
+     * Patch an existing report with the specified metadata properties
+     *
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @param reportDef - object with only the properties defined that should be overwritten in the report
+     *
+     * @returns promise
+     */
+    updateReport(appId, tableId, reportId, reportDef) {
+        if (reportDef !== null && !_.isEmpty(reportDef)) {
+            let url = super.constructUrl(this.API.PATCH_REPORT_META, [appId, tableId, reportId]);
+            return super.patch(url, reportDef);
+        }
     }
 }
 

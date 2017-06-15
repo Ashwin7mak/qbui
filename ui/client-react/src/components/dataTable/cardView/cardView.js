@@ -17,6 +17,7 @@ let CardView = React.createClass({
     propTypes: {
         data: React.PropTypes.object,
         columns: React.PropTypes.array,
+        columnsMap: React.PropTypes.instanceOf(Map),
         rowId: React.PropTypes.number,
         enableRowActions: React.PropTypes.bool,
         onSwipe: React.PropTypes.func,
@@ -105,19 +106,31 @@ let CardView = React.createClass({
         );
     },
     createRow() {
-        var fields = [];
-        var keys = Object.keys(this.props.data);
+        const keys = Object.keys(this.props.data);
         if (!keys.length) {
             return null;
         }
-        let firstFieldObject = this.props.data[keys[0]];
-        let firstFieldValue = "";
-        if (firstFieldObject) {
-            firstFieldValue = firstFieldObject.display;
-        }
-        var topField = this.createTopField(_.unescape(firstFieldValue));
-        for (var i = 1; i < keys.length && i < CardView.MAX_FIELDS; i++) {
-            fields.push(this.createField(i, keys[i]));
+
+        const fields = [];
+        let topField;
+        let fieldCount = 0;
+        for (var i = 0; i < keys.length && fieldCount < CardView.MAX_FIELDS; i++) {
+            let nextFieldObject = this.props.data[keys[i]];
+            // skip fields/column(s) that are not supposed to be visible
+            if (!this.props.columnsMap.has(nextFieldObject.id)) {
+                continue;
+            }
+            // create top field with the first visible field/column
+            if (!topField) {
+                let firstFieldValue = "";
+                if (nextFieldObject) {
+                    firstFieldValue = nextFieldObject.display;
+                }
+                topField = this.createTopField(_.unescape(firstFieldValue));
+            } else {
+                fields.push(this.createField(i, keys[i]));
+            }
+            fieldCount++;
         }
 
         return <div className="card">{topField}<div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div></div>;
@@ -207,14 +220,14 @@ let CardView = React.createClass({
             this.setState({
                 swipingSelection:false
             }, () => {
-                this.props.onToggleCardSelection(true, this.props.data);
+                this.props.onToggleCardSelection(true, this.props.rowId);
             });
         }
     },
     /* callback when row is selected */
     onRowSelected(e) {
         if (this.props.onRowSelected) {
-            this.props.onRowSelected(this.props.data);
+            this.props.onRowSelected(this.props.rowId);
         }
     },
     /* close actions when row is clicked */
@@ -258,7 +271,7 @@ let CardView = React.createClass({
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
-            const isSelected = _.has(this.props.data, this.props.primaryKeyName) && this.props.isRowSelected(this.props.data[this.props.primaryKeyName].value);
+            const isSelected = this.props.isRowSelected(this.props.rowId);
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingActions ? "actionsOpen" : "actionsClosed") }

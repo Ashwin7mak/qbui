@@ -94,6 +94,14 @@ describe('CheckBoxFieldValueEditor', () => {
         expect(component.state.value).toBe(true);
     });
 
+    it('toggles the value when the enter key is pressed while focused on checkbox', () => {
+        component = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
+        let domComponent = ReactDOM.findDOMNode(component).querySelector('label');
+
+        Simulate.keyDown(domComponent, {keyCode: 13});
+        expect(component.state.value).toBe(true);
+    });
+
     it('does not toggle the value when other keys are pressed', () => {
         component = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
         let domComponent = ReactDOM.findDOMNode(component).querySelector('label');
@@ -152,7 +160,7 @@ describe('CheckBoxFieldValueEditor', () => {
         let domComponent = ReactDOM.findDOMNode(component).querySelector('label');
 
         Simulate.click(domComponent);
-        expect(component.state.value).toBe(false);
+        expect(component.state.value).toBe(true);
     });
 
     it('cannot be edited when the checkbox is read only', () => {

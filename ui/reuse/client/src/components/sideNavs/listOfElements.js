@@ -1,10 +1,12 @@
 import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import FlipMove from 'react-flip-move';
-import Locale from '../../locales/locale';
+import Locale from 'REUSE/locales/locale';
 
 // IMPORT FROM CLIENT REACT
-import SearchBox from '../../../../../client-react/src/components/search/searchBox';
+import SearchBox from 'APP/components/search/searchBox';
+// IMPORT FROM CLIENT REACT
+
 import './listOfElements.scss';
 
 const FILTER_DEBOUNCE_TIMEOUT = 100;
@@ -16,7 +18,7 @@ const FILTER_DEBOUNCE_TIMEOUT = 100;
 class ListOfElements extends Component {
     constructor(props) {
         super(props);
-
+        this.listOfElementsContainer = null;
         this.state = {
             // Stores the current value of the filter input
             fieldFilter: '',
@@ -67,7 +69,6 @@ class ListOfElements extends Component {
             if (!_.isString(element.title)) {
                 return false;
             }
-
             return element.title.toLowerCase().indexOf(this.state.activeFieldFilter.toLowerCase()) >= 0;
         });
 
@@ -91,11 +92,17 @@ class ListOfElements extends Component {
     renderElements = (fieldTypes) => {
         //Tokens are being passed in as a renderer to reduce dependency on client-react
         let TokenInMenu = this.props.renderer;
-        return fieldTypes.map((fieldType, index) => (
-            <li key={fieldType.key || index} className="listOfElementsItem">
-                <TokenInMenu {...fieldType} isCollapsed={this.props.isCollapsed} />
-            </li>
-        ));
+        if (fieldTypes) {
+            return fieldTypes.map((fieldType, index) => (
+                <li key={fieldType.key || index} className="listOfElementsItem">
+                    <TokenInMenu {...fieldType}
+                                 beginDrag={this.props.beginDrag}
+                                 endDrag={this.props.endDrag}
+                                 isCollapsed={this.props.isCollapsed}
+                                 tabIndex={this.props.childrenTabIndex}/>
+                </li>
+            ));
+        }
     };
 
     /**
@@ -107,27 +114,49 @@ class ListOfElements extends Component {
         if (this.state.activeFieldFilter) {
             return this.renderFilteredFieldsList();
         }
-        return this.props.elements.map((element, index) => {
-            if (element.children) {
-                return (
-                    <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
-                        <h6 className="listOfElementsItemHeader">{element.title}</h6>
+        if (this.props.elements) {
+            return this.props.elements.map((element, index) => {
+                if (element.children) {
+                    return (
+                        <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
+                            {this.props.hideTitle ? null :
+                                <h6 className="listOfElementsItemHeader">{element.title}</h6>}
+                            {this.props.animateChildren ?
+                                <FlipMove typeName="ul" className="animatedListOfElementsItemList">
+                                    {this.renderElements(element.children)}
+                                </FlipMove> :
+                                <ul className="listOfElementsItemList">
+                                    {this.renderElements(element.children)}
+                                </ul>
+                            }
+                        </li>
+                    );
+                }
 
-                        <ul className="listOfElementsItemList">
-                            {this.renderElements(element.children)}
-                        </ul>
-                    </li>
-                );
-            }
-
-            return this.renderElements([element]);
-        });
+                return this.renderElements([element]);
+            });
+        }
     };
+
+    componentDidUpdate = () => {
+        if (this.props.hasKeyBoardFocus &&
+            document.activeElement.classList[0] !== "checkbox" &&
+            document.activeElement.tagName !== "TEXTAREA" &&
+            document.activeElement.tagName !== "INPUT" &&
+            document.activeElement.tagName !== "BUTTON") {
+            this.listOfElementsContainer.focus();
+        }
+    }
 
     render() {
         return (
-            <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}>
+            <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}
+                 tabIndex={this.props.tabIndex}
+                 onKeyDown={this.props.toggleChildrenTabIndex}
+                 ref={(element) => {this.listOfElementsContainer = element;}}
+                 role="button">
                 <SearchBox
+                    tabIndex={this.props.childrenTabIndex}
                     value={this.state.fieldFilter}
                     onChange={this.onChangeFilter}
                     placeholder={Locale.getMessage('listOfElements.searchPlaceholder')}
@@ -142,14 +171,25 @@ class ListOfElements extends Component {
     }
 }
 
+ListOfElements.defaultProps = {
+    animateChildren: false
+};
+
 ListOfElements.propTypes = {
     /**
      * Show the list of elements in a collapsed state */
     isCollapsed: PropTypes.bool,
+    /**
+     * Wraps children in flipmove it is true */
+    animateChildren: PropTypes.bool,
 
     /**
      * Show the list of elements in an open state */
     isOpen: PropTypes.bool,
+
+    /**
+     * Hide the title of a group of elements */
+    hideTitle: PropTypes.bool,
 
     /**
      * Displays the filter box at the top of the menu */
@@ -159,6 +199,26 @@ ListOfElements.propTypes = {
      * Tokens are being passed in as a renderer to allow this component to be reusable
      * */
     renderer: PropTypes.func,
+
+    /**
+     * For Keyboard Nav: tabIndex for listOfElements
+     * */
+    tabIndex: PropTypes.number,
+
+    /**
+     * For Keyboard Nav: if true it will set focus on listOfElements
+     * */
+    hasKeyBoardFocus: PropTypes.bool,
+
+    /**
+     * For Keyboard Nav: tabIndex for the children elements inside of listOfElements
+     * */
+    childrenTabIndex: PropTypes.number,
+
+    /**
+     * For Keyboard Nav: This functions toggles listOfElements children's tabIndices, to add or remove it form the tabbing flow
+     * */
+    toggleChildrenTabIndex: PropTypes.func,
 
     /**
      * A list of grouped elements to be displayed in the menu. */

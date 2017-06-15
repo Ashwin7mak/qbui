@@ -26,9 +26,9 @@ var LocalesMock = {
     }
 };
 
-class WindowLocationUtilsMock {
-    static pushWithQuery(key, recId) { }
-}
+let WindowHistoryUtilsMock = {
+    pushWithQuery(key, recId) { }
+};
 
 var ReportGridMock = React.createClass({
     render: function() {
@@ -376,28 +376,15 @@ const selectedRowIds = [
     2
 ];
 
-let doneFunction = null; // Holds the done function for an asynchronous test so it can be called in the mock flux
-const flux = {
-    actions: {
-        scrollingReport(scrolling) {
-        },
-        mark: ()=> {
-        },
-        measure: ()=> {
-        },
-        logMeasurements : ()=> {
-        }
-    }
-};
-
 //  redux dispatch methods
 const props = {
     appId: '1',
     tblId: '2',
-    flux: flux,
-    record: [
-        {pendEdits: {}}
-    ],
+    record: {
+        records: [
+            {pendEdits: {}}
+        ]
+    },
     report: [],
     selectReportRecords: () => {},
     openRecord: () => {},
@@ -408,7 +395,8 @@ const props = {
     addBlankRecordToReport: () => {},
     deleteRecord: () => {},
     updateRecord: () => {return Promise.resolve();},
-    createRecord: () => {return Promise.resolve();}
+    createRecord: () => {return Promise.resolve();},
+    scrollingReport: () => {}
 };
 
 const fakeReportGroupDataTemplate = {
@@ -489,9 +477,9 @@ describe('ReportContent grouping functions', () => {
 
         //  initialize redux stores
         props.reports = [];
-        props.record = [
-            {pendEdits: {}}
-        ];
+        props.record = {
+            records: [{pendEdits: {}}]
+        };
     });
 
     var groupByNumberCases = [
@@ -806,9 +794,9 @@ describe('ReportContent functions', () => {
     beforeEach(() => {
         ReportContentRewireAPI.__Rewire__('ReportGrid', ReportGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
-        ReportContentRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        ReportContentRewireAPI.__Rewire__('WindowHistoryUtils', WindowHistoryUtilsMock);
 
-        spyOn(WindowLocationUtilsMock, 'pushWithQuery').and.callThrough();
+        spyOn(WindowHistoryUtilsMock, 'pushWithQuery').and.callThrough();
         //   spy on redux methods
         spyOn(props, 'selectReportRecords').and.callThrough();
         spyOn(props, 'openRecord').and.callThrough();
@@ -827,7 +815,7 @@ describe('ReportContent functions', () => {
         ReportContentRewireAPI.__ResetDependency__('ReportGrid');
         ReportContentRewireAPI.__ResetDependency__('WindowLocationUtils');
 
-        WindowLocationUtilsMock.pushWithQuery.calls.reset();
+        WindowHistoryUtilsMock.pushWithQuery.calls.reset();
         props.selectReportRecords.calls.reset();
         props.openRecord.calls.reset();
         props.editRecordStart.calls.reset();
@@ -992,9 +980,18 @@ describe('ReportContent functions', () => {
 
     it('test handleValidateFieldValue with fieldDef', () => {
         props.report[0] = fakeReportDataEmpty;
-        props.record[0].pendEdits = {
-            isInlineEditOpen: true,
-            currentEditingRecordId: 3
+        props.record = {
+            recordIdBeingEdited: 3,
+            records: [
+                {
+                    id: 3,
+                    recId: 3,
+                    pendEdits: {
+                        isInlineEditOpen: true,
+                        currentEditingRecordId: 3
+                    }
+                }
+            ]
         };
         component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={fakeReportDataEmpty}
@@ -1084,18 +1081,18 @@ describe('ReportContent functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.openRecordForEditInTrowser(1);
         expect(props.openRecord).toHaveBeenCalled();
-        expect(WindowLocationUtilsMock.pushWithQuery).toHaveBeenCalled();
+        expect(WindowHistoryUtilsMock.pushWithQuery).toHaveBeenCalled();
     });
 
     it('test onScrollRecords', () => {
-        spyOn(flux.actions, 'scrollingReport');
+        spyOn(props, 'scrollingReport');
         component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={fakeReportDataEmpty}
                                                                 reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.onScrollRecords();
-        expect(flux.actions.scrollingReport).toHaveBeenCalled();
+        expect(props.scrollingReport).toHaveBeenCalled();
     });
 
     it('test isNumericDataType returns true', () => {
@@ -1381,7 +1378,16 @@ describe('ReportContent functions', () => {
         };
 
         props.report[0] = fakeReportDataSimple;
-        props.record[0].pendEdits = edits;
+        props.record = {
+            recordIdBeingEdited: recordId,
+            records: [
+                {
+                    id: recordId,
+                    recId: recordId,
+                    pendEdits: edits
+                }
+            ]
+        };
         component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={fakeReportDataSimple}
                                                                 fields={fakeReportDataFieldsSimple}
@@ -1474,7 +1480,16 @@ describe('ReportContent functions', () => {
         };
 
         props.report[0] = fakeReportDataSimple;
-        props.record[0].pendEdits = edits;
+        props.record = {
+            recordIdBeingEdited: 1,
+            records: [
+                {
+                    id: 1,
+                    recId: 1,
+                    pendEdits: edits
+                }
+            ]
+        };
         component = TestUtils.renderIntoDocument(
             <ReportContent {...props}
                            reportData={fakeReportDataSimple}
@@ -1511,34 +1526,6 @@ describe('ReportContent functions', () => {
         grid = grid[0];
         expect(grid.props.records.length).toEqual(fakeReportDataSimple.data.filteredRecords.length);
         expect(_.intersection(grid.props.columns, fakeReportDataSimple.data.columns).length).toEqual(fakeReportDataSimple.data.columns.length);
-    });
-
-    it('test startPerfTiming', () => {
-        props.report[0] = fakeReportDataSimple;
-        component = TestUtils.renderIntoDocument(<ReportContent {...props}
-                                                                reportData={fakeReportDataSimple}
-                                                                reportHeader={headerEmpty}
-                                                                reportFooter={fakeReportFooter}/>);
-        spyOn(flux.actions, 'mark');
-        component.startPerfTiming({reportData: {
-            loading : true
-        }});
-        expect(flux.actions.mark).toHaveBeenCalled();
-    });
-
-    it('test capturePerfTiming', () => {
-        props.report[0] = fakeReportDataSimple;
-        component = TestUtils.renderIntoDocument(<ReportContent {...props}
-                                                                reportData={fakeReportDataSimple}
-                                                                reportHeader={headerEmpty}
-                                                                reportFooter={fakeReportFooter}/>);
-        spyOn(flux.actions, 'measure');
-        spyOn(flux.actions, 'logMeasurements');
-        component.capturePerfTiming({reportData: {
-            loading : true
-        }});
-        expect(flux.actions.measure).toHaveBeenCalled();
-        expect(flux.actions.logMeasurements).toHaveBeenCalled();
     });
 
     describe('handleRecordDelete', () => {

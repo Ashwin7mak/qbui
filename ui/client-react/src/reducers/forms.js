@@ -1,14 +1,23 @@
 import * as types from '../actions/types';
+import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
+import * as constants from '../../../common/src/constants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
+import fieldFormats from '../utils/fieldFormats';
+import {getFields} from '../reducers/fields';
+import Locale from '../../../reuse/client/src/locales/locale';
 
 const forms = (
 
     state = {}, action) => {
-
     const {id, formId} = action;
     // retrieve currentForm and assign the rest of the form to newState
-    let {[id || formId]: currentForm, ...newState} = _.cloneDeep(state);
+    // We use JSON.parse(JSON.stringify()) instead of _.cloneDeep in this case because:
+    // a) There was about 0.3 to 0.5 ms performance improvement and we need all the performance we can get for drag and drop
+    // b) It is a simple object, so no prototype information will be lost in the conversion.
+    // This is not a generally recommended practice. Consider either Object.assign, Object spread {...}, or _.cloneDeep before using this method.
+    let {[id || formId]: currentForm, ...newState} = JSON.parse(JSON.stringify(state));
+
     let updatedForm = currentForm;
 
     // TODO: do this smarter, change to markCopiesAsDirty
@@ -16,7 +25,6 @@ const forms = (
         // remove any entries where the entry's formData.recordId matches the passed in id
         return _.omit(newState, ['formData.recordId', _id]);
     }
-
     // reducer - no mutations!
     switch (action.type) {
 
@@ -27,13 +35,14 @@ const forms = (
         };
     }
 
+
     case types.LOADING_FORM: {
 
         newState[id] = ({
             id,
             loading: true,
             errorStatus: null,
-            syncLoadedForm: false
+            syncFormForRecordId: null
         });
 
         return newState;
@@ -46,6 +55,19 @@ const forms = (
          * */
         action.formData.formMeta.appId = action.formData.formMeta.appId || action.appId;
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
+
+        //Removes all built in fields for formBuilder
+        let allFields = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID_ARRAY, (field) => {
+            if (typeof field === 'number') {
+                return field;
+            } else {
+                return field.id;
+            }
+        });
+
+        action.formData.fields = allFields;
+        //this is needed to only show the delete icon on a field in formBuilder when there are more than one field on the form
+        action.formData.formMeta.numberOfFieldsOnForm = action.formData.formMeta.fields.length;
 
         newState[id] = ({
             id,
@@ -70,7 +92,7 @@ const forms = (
     case types.SYNC_FORM: {
         newState[id] = ({
             ...currentForm,
-            syncLoadedForm: true
+            syncFormForRecordId: action.recordId
         });
         return newState;
     }
@@ -104,7 +126,8 @@ const forms = (
         currentForm = {
             ...currentForm,
             saving: true,
-            selectedFields: []
+            selectedFields: [],
+            isPendingEdit: false
         };
 
         return {...newState, [id || formId]: currentForm};
@@ -145,25 +168,31 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
+        updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
+
         return newState;
     }
 
-    /**If a location is not passed in, a location will be hardcoded, since there is no current implementation
-     *that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
-     *Default location for a newField is always set to the bottom of the form.
+    /**
+     * If a location is not passed in, a location will be hardcoded, since there is no current implementation
+     * that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
+     * Default location for a field is always set to the bottom of the form.
      */
     case types.ADD_FIELD : {
         if (!currentForm) {
             return state;
         }
 
-        let {newField, newLocation} = _.cloneDeep(action.content);
+        let {field, newLocation} = _.cloneDeep(action.content);
+        const isNewRelationshipField = _.get(field, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD;
+
         updatedForm = _.cloneDeep(currentForm);
+        let columnElementLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
         // Remove all keys that are not necessary for forms
-        Object.keys(newField).forEach(key => {
+        Object.keys(field).forEach(key => {
             if (key !== 'FormFieldElement' && key !== 'id') {
-                delete newField[key];
+                delete field[key];
             }
         });
 
@@ -179,17 +208,17 @@ const forms = (
                 columnIndex: 0,
                 elementIndex: elementIndex
             };
-        } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
+        } else if (newLocation.elementIndex !== columnElementLength) {
             //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
-            if (newLocation && newLocation.elementIndex) {
+            if (newLocation && !_.isNil(newLocation.elementIndex)) {
                 newLocation.elementIndex = newLocation.elementIndex + 1;
             }
         }
 
-        updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
+        updatedForm.formData.formMeta = MoveFieldHelper.addFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
-            {...newField}
+            {...field}
         );
 
         if (!updatedForm.selectedFields) {
@@ -198,8 +227,11 @@ const forms = (
         }
 
         updatedForm.selectedFields[0] = newLocation;
+        updatedForm.formData.formMeta.numberOfFieldsOnForm = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
 
+        updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
+
         return newState;
     }
 
@@ -208,13 +240,31 @@ const forms = (
             return state;
         }
 
-        let {location} = action.content;
+        let {location, field} = action;
+        let relatedRelationship = false;
+        let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
 
-        updatedForm.formData.formMeta = MoveFieldHelper.removeField(
-            updatedForm.formData.formMeta,
-            location
-        );
+        if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
+            relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
+        }
 
+        if (relatedRelationship) {
+            if (formMetaCopy.fieldsToDelete) {
+                formMetaCopy.fieldsToDelete.push(field.id);
+            } else {
+                formMetaCopy.fieldsToDelete = [field.id];
+            }
+        }
+
+        if (updatedForm.formData.formMeta.numberOfFieldsOnForm > 1) {
+            updatedForm.formData.formMeta = MoveFieldHelper.removeField(
+                formMetaCopy,
+                location
+            );
+        }
+
+        updatedForm.formData.formMeta.numberOfFieldsOnForm = _.has(updatedForm, 'formData.formMeta.tabs[0].sections[0].columns[0]') ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -288,6 +338,47 @@ const forms = (
         return newState;
     }
 
+    case types.IS_DRAGGING : {
+        if (!currentForm) {
+            return state;
+        }
+
+        if (!updatedForm.isDragging) {
+            updatedForm.isDragging = [];
+        }
+
+        updatedForm.isDragging = true;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.SET_IS_PENDING_EDIT_TO_FALSE : {
+        if (!currentForm) {
+            return state;
+        }
+
+        updatedForm.isPendingEdit = false;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.END_DRAG : {
+        if (!currentForm) {
+            return state;
+        }
+
+        if (!updatedForm.isDragging) {
+            updatedForm.isDragging = [];
+        }
+
+        updatedForm.isDragging = false;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
     case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
             return state;
@@ -309,6 +400,7 @@ const forms = (
             -1
         );
 
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -334,6 +426,7 @@ const forms = (
             1
         );
 
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -343,22 +436,56 @@ const forms = (
             return state;
         }
 
-        let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+        let formTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.FORM_TAB_INDEX : "-1";
         let formFocus = false;
 
         if (action.content.currentTabIndex === undefined) {
             formFocus = false;
-        } else if (tabIndex === "-1") {
+        } else if (formTabIndex === "-1") {
             formFocus = true;
         }
 
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.toolPaletteChildrenTabIndex = [];
             updatedForm.formFocus = [];
+            updatedForm.toolPaletteFocus = [];
+        }
+        //In order to maintain proper tabbing and focus, everything is updated accordingly
+        updatedForm.formBuilderChildrenTabIndex[0] = formTabIndex;
+        updatedForm.toolPaletteChildrenTabIndex[0] = "-1";
+        updatedForm.formFocus[0] = formFocus;
+        updatedForm.toolPaletteFocus[0] = false;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX : {
+        if (!currentForm) {
+            return state;
         }
 
-        updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
-        updatedForm.formFocus[0] = formFocus;
+        let toolPaletteFocus = false;
+        let toolPaletteTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.TOOL_PALETTE_TABINDEX : "-1";
+
+        if (action.content.currentTabIndex === undefined) {
+            toolPaletteFocus = false;
+        } else if (toolPaletteTabIndex === "-1") {
+            toolPaletteFocus = true;
+        }
+
+        if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.toolPaletteChildrenTabIndex && !updatedForm.formFocus) {
+            updatedForm.toolPaletteChildrenTabIndex = [];
+            updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.formFocus = [];
+            updatedForm.toolPaletteFocus = [];
+        }
+        //In order to maintain proper tabbing and focus, everything is updated accordingly
+        updatedForm.toolPaletteChildrenTabIndex[0] = toolPaletteTabIndex;
+        updatedForm.formBuilderChildrenTabIndex[0] = "-1";
+        updatedForm.formFocus[0] = false;
+        updatedForm.toolPaletteFocus[0] = toolPaletteFocus;
 
         newState[id] = updatedForm;
         return newState;
@@ -382,7 +509,73 @@ export const getSelectedFormElement = (state, id) => {
     }
 
     const {tabIndex, sectionIndex, columnIndex, elementIndex} = currentForm.selectedFields[0];
-    return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
+    return _.get(currentForm, `formData.formMeta.tabs[${tabIndex}].sections[${sectionIndex}].columns[${columnIndex}].elements[${elementIndex}]`);
+};
+
+/***
+ * retrieve all existing fields that are not on a form
+ * @param state
+ * @param id
+ * @param appId
+ * @param tblId
+ * @returns {Array}
+ */
+export const getExistingFields = (state, id, appId, tblId) => {
+    const currentForm = state.forms[id];
+
+    if (!currentForm) {
+        return null;
+    }
+
+    let fields = getFields(state, appId, tblId).reduce((formFields, field) => {
+        // Skip any built in fields
+        if (_.includes(constants.BUILTIN_FIELD_ID_ARRAY, field.id)) {
+            return formFields;
+        }
+
+        // Skip fields that are already on the form
+        if (_.includes(currentForm.formData.formMeta.fields, field.id)) {
+            return formFields;
+        }
+
+        // Skip fields that are marked for deletion from schema
+        if (_.includes(currentForm.formData.formMeta.fieldsToDelete, field.id)) {
+            return formFields;
+        }
+
+        // Otherwise, create a form friendly version of the field and append it to the list of fields in the  existing fields menu.
+        return [
+            ...formFields,
+            {
+                containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
+                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+                key: `existingField_${field.id}`, // Key for react to use to identify it in the array
+                type: fieldFormats.getFormatType(field),
+                relatedField: field,
+                title: field.name,
+                tooltipText: Locale.getMessage('builder.existingFieldsToolTip', {fieldName: field.name})
+            }
+        ];
+    }, []);
+
+    return _.sortBy(fields, (field) => field.title);
+};
+
+/***
+ * retrieve all parent-child relationships where child is the current form's table
+ * @param state
+ * @param id
+ * @returns {Array}
+ */
+export const getParentRelationshipsForSelectedFormElement = (state, id) => {
+    const currentForm = _.has(state, 'forms') ? state.forms[id] : null;
+    const formMeta = currentForm !== null ? _.get(currentForm, 'formData.formMeta', {}) : {};
+    const relationships = !_.isEmpty(formMeta) && _.get(formMeta, 'relationships') ? formMeta.relationships : [];
+
+    const tableId = formMeta.tableId;
+    return _.filter(relationships, (relationship) => {
+        return (relationship.detailTableId === tableId);
+    });
 };
 
 export default forms;
@@ -391,3 +584,4 @@ export default forms;
 export const getFormByContext = (state, context) => _.get(state, `forms.${context}`);
 
 export const getFormRedirectRoute = (state) => _.get(state, 'forms.redirectRoute');
+

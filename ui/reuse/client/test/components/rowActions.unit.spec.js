@@ -2,9 +2,9 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import RowActions from '../../src/components/rowActions/rowActions';
-import {PositionedRowEditActions} from '../../../../client-react/src/components/dataTable/qbGrid/rowEditActions';
-import IconActions, {__RewireAPI__ as IconActionsRewireAPI} from '../../src/components/iconActions/iconActions';
+import RowActions from 'REUSE/components/rowActions/rowActions';
+import {PositionedRowEditActions} from 'APP/components/dataTable/qbGrid/rowEditActions';
+import IconActions, {__RewireAPI__ as IconActionsRewireAPI} from 'REUSE/components/iconActions/iconActions';
 
 let component;
 

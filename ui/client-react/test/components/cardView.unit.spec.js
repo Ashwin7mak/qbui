@@ -15,22 +15,44 @@ var RecordActionsMock = React.createClass({
 const fakeReportData_empty = {
     data: {
         results: {},
-        columnMetadata: []
+        columnMetadata: [],
+        columnsMap: new Map()
     }
 };
 const fakeReportData_valid = {
     data: {
         results: {
-            col_num: 1,
-            col_text: "abc",
-            col_date: "01-01-2015",
-            col_4: 2
+            "Record ID#": {
+                id: 3,
+                value: 1,
+                display: "1"
+            },
+            col_num: {
+                "id": 7,
+                "value": 1,
+                "display": "1"
+            },
+            col_text: {
+                "id": 6,
+                "value": "abc",
+                "display": "abc"
+            },
+            col_date:{
+                "id":8,
+                "value": "2015-01-01",
+                "display": "01-01-2015"
+            },
+            col_4:{
+                "id":9,
+                "value": 2,
+                "display": "2"
+            }
         },
-        columnMetadata: ["col_num", "col_text", "col_date", "col_4"]
+        columnMetadata: ["col_num", "col_text", "col_date", "col_4"],
+        // map of columns/fields that should be visible (keys are column/field ID, values are currently ignored)
+        columnsMap: new Map([[7, "colNumValue"], [6, "colTextValue"], [8, "colDateValue"], [9, "col4Value"]])
     }
 };
-
-let flux = {};
 
 describe('Report Mobile View functions', () => {
     'use strict';
@@ -39,10 +61,11 @@ describe('Report Mobile View functions', () => {
     var TestParent;
     beforeEach(() => {
         CardViewRewireAPI.__Rewire__('RecordActions', RecordActionsMock);
-        TestParent = (data = fakeReportData_valid.data.results) => React.createFactory(React.createClass({
+        TestParent = (data = fakeReportData_valid.data) => React.createFactory(React.createClass({
             render() {
                 return <CardView ref="refCardView"
-                                 data={data}
+                                 data={data.results}
+                                 columnsMap={data.columnsMap}
                                  primaryKeyName="col_num"
                                  allowCardSelection={() => {return false;} }
                                  isRowSelected={() => {return false;} }/>;
@@ -98,7 +121,7 @@ describe('Report Mobile View functions', () => {
     });
 
     it('expand row button should not render when data has 3 fields or less', () => {
-        var parent = TestUtils.renderIntoDocument(TestParent(fakeReportData_empty.data.results));
+        var parent = TestUtils.renderIntoDocument(TestParent(fakeReportData_empty.data));
         var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
 
         var node = ReactDOM.findDOMNode(cardView[0]);
@@ -141,6 +164,7 @@ describe('Report Mobile View functions', () => {
             render() {
                 return <CardView ref="refCardView"
                                  data={fakeReportData_valid.data.results}
+                                 columnsMap={fakeReportData_valid.data.columnsMap}
                                  primaryKeyName="col_num"
                                  allowCardSelection={this.allowCardSelection }
                                  onToggleCardSelection={this.onToggleCardSelection}

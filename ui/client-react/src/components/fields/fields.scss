@@ -1,20 +1,6 @@
 @import '../../../src/assets/css/qbVariables';
 $data-font-size: $font-size-p;
 
-@mixin text-input-focus {
-    border: solid 1px $input-text-focus-border-color;
-    //Added border-color for multi choice text box
-    border-color: $input-text-focus-border-color !important;
-
-    @include focus-shadow();
-}
-
-@mixin text-input-focus-with-rounding {
-
-    @include text-input-focus;
-    border-radius: 2px;
-}
-
 // plain user data
 .data {
     color: $field-user-data-color;
@@ -27,6 +13,7 @@ $data-font-size: $font-size-p;
 .cellEdit {
     height: $inline-edit-input-box-height;
     border: solid 1px $input-text-normal-border-color;
+    background-color: $color-black-100;
     box-shadow: none;
     border-radius: 2px;
 }
@@ -37,6 +24,40 @@ $data-font-size: $font-size-p;
     border: 1px solid $input-text-error-border-color;
     border-left-width: 5px;
     box-shadow: none;
+}
+
+// Disabled field background color for form builder
+.disabledField {
+    .Select-placeholder, input, span, .Select-control {
+        cursor: pointer;
+        pointer-events: none;
+    }
+
+    [type="text"],
+    [type="url"],
+    [type="email"],
+    [type="tel"] {
+        &.input, &.form-control {
+            background-color: $disabled-field-value-editor-background-color;
+        }
+    }
+
+    .checkbox [type="checkbox"]:not(:checked) + label:after {
+        background-color: $disabled-field-value-editor-background-color;
+    }
+
+    .dateCell.cellEdit {
+        span.input-group-addon, .input-group.date {
+            background-color: $disabled-field-value-editor-background-color !important;
+        }
+    }
+
+    .timeCell.cellEdit, .Select {
+        .Select-control,
+        .Select-arrow-zone {
+            background-color: $disabled-field-value-editor-background-color !important;
+        }
+    }
 }
 
 [type="text"],
@@ -147,6 +168,8 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 .requiredFlag-layout {
     display: block;
     padding-left: 2px;
+    margin-top: 5px;
+    margin-bottom: -5px;
 }
 
 .textFormat .cellData .textField {
@@ -259,5 +282,14 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
     min-width: 100%;
     @include small-breakpoint {
         display: block;
+    }
+}
+
+.textField {
+    &.textLink {
+        @include text-link($link-normal-color, $link-hover-color, $link-hover-decoration, $cursor-pointer);
+    }
+    &.italicize {
+        font-style: italic;
     }
 }

@@ -22,13 +22,13 @@ class AutomationUtils  {
                 "recordId": recId
             }
         };
-        return automationService.invokeAutomation("0duiiaaaaab", "ApproveProjectRecord", payload).then(
+        return automationService.invokeAutomation(appId, "ApproveProjectRecord", payload).then(
             response => {
                 logger.debug('Automation success');
-                NotificationManager.info(Locale.getMessage('form.automation.approverecord.success'), Locale.getMessage('success'));
+                NotificationManager.info(Locale.getMessage('automation.approverecord.success'), Locale.getMessage('success'));
             },
             error => {
-                NotificationManager.error(Locale.getMessage('form.automation.approverecord.error'), Locale.getMessage('failed'));
+                NotificationManager.error(Locale.getMessage('automation.approverecord.error'), Locale.getMessage('failed'));
                 //  if a validation error, print each one individually..
                 logger.parseAndLogError(LogLevel.ERROR, error.response, 'Automation');
             });

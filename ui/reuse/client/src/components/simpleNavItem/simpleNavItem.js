@@ -1,10 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import {Link} from 'react-router-dom';
-import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
-import Tooltip from '../tooltip/tooltip';
+import Icon, {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
+import Tooltip from 'REUSE/components/tooltip/tooltip';
 
 // IMPORTS FROM CLIENT REACT
-import Device from '../../../../../client-react/src/utils/device';
+import Device from 'APP/utils/device';
 // IMPORTS FROM CLIENT REACT
 
 import "./simpleNavItem.scss";

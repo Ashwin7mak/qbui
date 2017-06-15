@@ -3,11 +3,11 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import {ReportColumnHeaderMenu, __RewireAPI__ as RewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
-import * as FieldConsts from '../../../src/constants/schema';
-import * as query from '../../../src/constants/query';
+import * as FieldConsts from 'APP/constants/schema';
+import * as query from 'APP/constants/query';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
-import {CONTEXT} from '../../../src/actions/context';
-import serverTypeConstants from '../../../../common/src/constants';
+import {CONTEXT} from 'APP/actions/context';
+import serverTypeConstants from 'COMMON/constants';
 
 const testPrependText = 'groupTest';
 const MockLocale = {
@@ -15,7 +15,15 @@ const MockLocale = {
 };
 const testFieldDef = {
     id: 13,
-    datatypeAttributes: {type: FieldConsts.NUMERIC}
+    datatypeAttributes: {type: FieldConsts.NUMERIC},
+};
+const reportBuilder = {
+    reportBuilder: {
+        isInBuilderMode: true,
+        isCollapsed: true,
+        addBeforeColumn: null,
+        availableColumns: []
+    },
 };
 const testProps = {
     appId: 1,
@@ -24,9 +32,16 @@ const testProps = {
     filter: "somefilter",
     fieldDef: testFieldDef,
     sortFids: [],
+    reportBuilder: {
+        isInBuilderMode: true,
+        isCollapsed: true,
+        addBeforeColumn: null,
+        availableColumns: []
+    },
     isOnlyOneColumnVisible: false,
     loadDynamicReport: (context, appId, tblId, rptId, queryParams) => {},
-    hideColumn: (context, appId, tblId, rptId, params) => {}
+    hideColumn: (context, appId, tblId, rptId, params) => {},
+    insertPlaceholderColumn: (context, clickedColumn, addBeforeColumn) => {}
 };
 let component;
 let instance;
@@ -36,24 +51,26 @@ describe('ReportColumnHeaderMenu', () => {
         RewireAPI.__Rewire__('Locale', MockLocale);
         spyOn(testProps, 'loadDynamicReport').and.callThrough();
         spyOn(testProps, 'hideColumn').and.callThrough();
+        spyOn(testProps, 'insertPlaceholderColumn').and.callThrough();
     });
 
     afterEach(() => {
         RewireAPI.__ResetDependency__('Locale');
         testProps.loadDynamicReport.calls.reset();
         testProps.hideColumn.calls.reset();
+        testProps.insertPlaceholderColumn.calls.reset();
     });
 
     describe('hasRequiredIds', () => {
-        it('returns true if the appropriate props have been passed in to be able to call sort, group, and hide actions', () => {
+        it('returns true if the appropriate props have been passed in to be able to call sort, group, add, and hide actions', () => {
             component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeTruthy();
         });
 
-        it('returns false if the required props to call sort, group, and hide actions are missing', () => {
-            component = shallow(<ReportColumnHeaderMenu/>);
+        it('returns false if the required props to call sort, group, add, and hide actions are missing', () => {
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeFalsy();
@@ -121,7 +138,7 @@ describe('ReportColumnHeaderMenu', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}}/>);
+                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}} {...reportBuilder}/>);
                 instance = component.instance();
 
                 expect(instance.getSortAscText(testPrependText)).toEqual(`report.menu.${testPrependText}.${testCase.expectedValue}`);
@@ -129,7 +146,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns a blank string if no type is provided', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.getSortAscText(testPrependText)).toEqual('');
@@ -197,7 +214,7 @@ describe('ReportColumnHeaderMenu', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}}/>);
+                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}} {...reportBuilder}/>);
                 instance = component.instance();
 
                 expect(instance.getSortAscText(testPrependText)).toEqual(`report.menu.${testPrependText}.${testCase.expectedValue}`);
@@ -205,7 +222,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns a blank string if no type is provided', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.getSortAscText(testPrependText)).toEqual('');
@@ -273,7 +290,7 @@ describe('ReportColumnHeaderMenu', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}}/>);
+                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}} {...reportBuilder}/>);
                 instance = component.instance();
 
                 expect(instance.getSortDescText(testPrependText)).toEqual(`report.menu.${testPrependText}.${testCase.expectedValue}`);
@@ -281,7 +298,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns a blank string if no type is provided', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.getSortDescText(testPrependText)).toEqual('');
@@ -327,6 +344,7 @@ describe('ReportColumnHeaderMenu', () => {
                 component = shallow(<ReportColumnHeaderMenu
                     sortFids={testCase.sortFids}
                     fieldDef={{id: testCase.fieldId}}
+                    {...reportBuilder}
                 />);
                 instance = component.instance();
 
@@ -379,6 +397,7 @@ describe('ReportColumnHeaderMenu', () => {
                 component = shallow(<ReportColumnHeaderMenu
                     sortFids={testCase.sortFids}
                     fieldDef={{id: testCase.fieldId}}
+                    {...reportBuilder}
                 />);
                 instance = component.instance();
                 expect(instance.isSortedAsc()).toEqual(testCase.expectedValue);
@@ -433,7 +452,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu />);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} {...reportBuilder}/>);
             instance = component.instance();
 
             instance.groupReport(true, false);
@@ -486,12 +505,37 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu />);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} {...reportBuilder}/>);
             instance = component.instance();
 
             instance.groupReport(true);
 
             expect(testProps.loadDynamicReport).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('Report Builder Mode', () => {
+        it('when not in builder mode, should not see options to add or hide', () => {
+            let testPropsNotInBuilderMode = {
+                ...testProps,
+                reportBuilder: {
+                    isInBuilderMode: false,
+                    isCollapsed: true,
+                    addBeforeColumn: null,
+                    availableColumns: []
+                }
+            };
+            component = shallow(<ReportColumnHeaderMenu {...testPropsNotInBuilderMode}/>);
+            instance = component.instance();
+
+            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.hideThisColumn});
+            expect(hidingMenuItem).not.toBePresent();
+
+            let addingMenuItemBefore = component.find(MenuItem).find({onSelect: instance.showAColumnBefore});
+            expect(addingMenuItemBefore).not.toBePresent();
+
+            let addingMenuItemAfter = component.find(MenuItem).find({onSelect: instance.showAColumnAfter});
+            expect(addingMenuItemAfter).not.toBePresent();
         });
     });
 
@@ -517,15 +561,11 @@ describe('ReportColumnHeaderMenu', () => {
 
             instance.hideThisColumn(testProps.fieldDef.id);
 
-            let params = {
-                columnId: testProps.fieldDef.id
-            };
-
-            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
+            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.fieldDef.id);
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu isOnlyOneColumnVisible={false}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false} {...reportBuilder}/>);
             instance = component.instance();
 
             instance.hideThisColumn(testProps.fieldDef.id);
@@ -540,6 +580,64 @@ describe('ReportColumnHeaderMenu', () => {
             instance.hideThisColumn(testProps.fieldDef.id);
 
             expect(testProps.hideColumn).not.toHaveBeenCalled();
+        });
+
+        it('adds a column before when that menu item is selected', () => {
+
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            let addingMenuItem = component.find(MenuItem).find({onSelect: instance.showAColumnBefore});
+            expect(addingMenuItem).toBePresent();
+
+            spyOn(instance, "showAColumn");
+
+            expect(addingMenuItem.find('.addColumnBeforeText')).toHaveText('report.menu.addColumnBefore');
+            instance.showAColumnBefore();
+
+            expect(instance.showAColumn).toHaveBeenCalledWith(true);
+        });
+
+        it('adds a column after when that menu item is selected', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            let addingMenuItem = component.find(MenuItem).find({onSelect: instance.showAColumnAfter});
+            expect(addingMenuItem).toBePresent();
+
+            spyOn(instance, "showAColumn");
+
+            expect(addingMenuItem.find('.addColumnAfterText')).toHaveText('report.menu.addColumnAfter');
+            instance.showAColumnAfter();
+
+            expect(instance.showAColumn).toHaveBeenCalledWith(false);
+        });
+
+        it('calls insertPlaceholderColumn to open the menu in order to add a column before', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.showAColumnBefore();
+
+            expect(testProps.insertPlaceholderColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testFieldDef.id, true);
+        });
+
+        it('calls insertPlaceholderColumn to open the menu in order to add a column after', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.showAColumnAfter();
+
+            expect(testProps.insertPlaceholderColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testFieldDef.id, false);
+        });
+
+        it('does not call the action to open the menu to add a column if the required props are not passed in', () => {
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false} {...reportBuilder}/>);
+            instance = component.instance();
+
+            instance.showAColumn(true);
+
+            expect(testProps.insertPlaceholderColumn).not.toHaveBeenCalled();
         });
     });
 });

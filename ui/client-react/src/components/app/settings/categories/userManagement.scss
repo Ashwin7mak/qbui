@@ -1,12 +1,25 @@
 @import '../../../../../../reuse/client/src/assets/css/qbVariables';
 
-.userManagementContainer {
+.userManagementAction {
     padding-left: 22px;
-    padding-top: 30px;
+    padding-top: 0;
+}
+
+.userManagementAction + .userManagementContainer {
+    padding-top: 0;
+}
+
+.userManagementContainer {
+    padding-left: 20px;
+    padding-top: 50px;
 
     .qbHeaderCell {
         &:first-of-type {
             border-left: 1px solid $grid-column-header-border-color;
+        }
+        &.stickyCell {
+            width: auto;
+            min-width: 30px;
         }
     }
 

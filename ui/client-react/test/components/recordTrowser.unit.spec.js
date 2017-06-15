@@ -1,18 +1,15 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
 import {__RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/record/recordTrowser';
 import {RecordTrowser} from '../../src/components/record/recordTrowser';
 import RecordTrowserStore from '../../src/components/record/recordTrowser';
-import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
+import {UNSAVED_RECORD_ID, NEW_FORM_RECORD_ID} from '../../src/constants/schema';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import Promise from 'bluebird';
 import {Provider} from "react-redux";
 import configureMockStore from 'redux-mock-store';
-import {hideErrorMsgDialog} from '../../src/actions/shellActions';
-import {createRecord} from '../../src/actions/recordActions';
 
 import {mount} from 'enzyme';
 
@@ -29,6 +26,13 @@ let store = {};
 describe('RecordTrowser functions', () => {
 
 
+    const record = {
+        records: [
+            {
+                id: recId, recId: recId, nextRecordId: nextId, previousRecordId: prevId
+            }
+        ]
+    };
     let obj = {
         recId: recId
     };
@@ -64,7 +68,8 @@ describe('RecordTrowser functions', () => {
                     {recordId: {value: nextId}}
                 ]
             }
-        }
+        },
+        record: record
     };
     var mockWindowUtils = {
         pushWithQuery: function() {},
@@ -78,17 +83,7 @@ describe('RecordTrowser functions', () => {
     });
 
     const storeContent = {
-        record: [{
-            pendEdits: {
-                hasAttemptedSave: true,
-                isPendingEdit: true,
-                recordChanges: {},
-                editErrors: {
-                    errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
-                }
-            },
-            id: recId, recId: recId, nextRecordId: nextId, previousRecordId: prevId
-        }],
+        record: record,
         shell: {
             errorPopupHidden: false
         }
@@ -99,7 +94,7 @@ describe('RecordTrowser functions', () => {
         store = mockStore({});
         spyOn(mockWindowUtils, 'pushWithQuery').and.callThrough();
         spyOn(mockWindowUtils, 'pushWithoutQuery').and.callThrough();
-        RecordTrowserRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        RecordTrowserRewireAPI.__Rewire__('WindowHistoryUtils', mockWindowUtils);
         // have to mock Record component as it requires redux store to be injected and don't want to have to
         // always inject a provider when testing certain recordTrowser component functionality
         RecordTrowserRewireAPI.__Rewire__('Record', MockRecordComponent);
@@ -116,7 +111,7 @@ describe('RecordTrowser functions', () => {
     });
 
     afterEach(() => {
-        RecordTrowserRewireAPI.__ResetDependency__('WindowLocationUtils');
+        RecordTrowserRewireAPI.__ResetDependency__('WindowHistoryUtils');
         RecordTrowserRewireAPI.__ResetDependency__('Record');
         mockWindowUtils.pushWithQuery.calls.reset();
         mockWindowUtils.pushWithoutQuery.calls.reset();
@@ -137,6 +132,10 @@ describe('RecordTrowser functions', () => {
     });
 
     it('test render of loading component via connect', () => {
+        const initialState = {
+            record: record
+        };
+        store = mockStore(initialState);
         let component = TestUtils.renderIntoDocument(<Provider store={store}><RecordTrowserStore {...props}/></Provider>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
@@ -175,18 +174,65 @@ describe('RecordTrowser functions', () => {
         });
     });
 
+    const newRecStoreContent = {
+        record: {
+            records: [{
+                pendEdits: {
+                    hasAttemptedSave: true,
+                    isPendingEdit: true,
+                    recordChanges: {},
+                    editErrors: {
+                        errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
+                    }
+                },
+                id: NEW_FORM_RECORD_ID, recId: NEW_FORM_RECORD_ID, nextRecordId: nextId, previousRecordId: prevId
+            }]
+        },
+        shell: {
+            errorPopupHidden: false
+        }
+    };
+
+    const updateRecStoreContent = {
+        record: {
+            records: [{
+                pendEdits: {
+                    hasAttemptedSave: true,
+                    isPendingEdit: true,
+                    recordChanges: {},
+                    editErrors: {
+                        errors: [{id: 4, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
+                    }
+                },
+                id: 4, recId: 4, nextRecordId: nextId, previousRecordId: prevId
+            }]
+        },
+        shell: {
+            errorPopupHidden: false
+        }
+    };
     let errorValidationTestCases = [
-        {name:'test saving new record that throws a validation error', recId:UNSAVED_RECORD_ID},
-        {name:'test updating a record that throws a validation error', recId:recId}
+        {
+            name: 'test saving new record that throws a validation error',
+            recId: NEW_FORM_RECORD_ID,
+            storeContent: newRecStoreContent
+        },
+        {
+            name: 'test updating a record that throws a validation error',
+            recId: recId,
+            storeContent: updateRecStoreContent
+        }
     ];
     errorValidationTestCases.forEach(testCase => {
-        it(testCase, () => {
+        it(testCase.name, () => {
             let reject = function(ev) {
                 return Promise.reject();
             };
 
             //  override the props.recId and props.dispatch
-            let wrapper = mount(<RecordTrowser {...props} recId={testCase.recId} dispatch={reject} shell={storeContent.shell} record={storeContent.record}/>);
+            let testStoreContent = testCase.storeContent || storeContent;
+            let wrapper = mount(<RecordTrowser {...props} recId={testCase.recId} dispatch={reject} shell={testStoreContent.shell}
+                                               record={testStoreContent.record}/>);
             const button = wrapper.find('.saveOrCancelFooter .rightIcons .btn').last();
             button.simulate('click');
 

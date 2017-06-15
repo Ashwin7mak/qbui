@@ -78,7 +78,6 @@ describe('Field Actions success workflow', () => {
     });
 
     it('verify updateFieldProperties action', (done) => {
-        const formId = null;
         const expectedActions = [];
         const store = mockReportsStore({});
         return store.dispatch(fieldActions.updateFieldProperties(appId, tblId, field)).then(
@@ -355,6 +354,13 @@ describe('Field Actions failure workflow', () => {
                     }
                     done();
                 });
+        });
+    });
+
+    describe('setFieldsPropertiesPendingEditToFalse', () => {
+        it('creates an action that sets isPendingEdit to false', () => {
+            expect(fieldActions.setFieldsPropertiesPendingEditToFalse()).toEqual({
+                type: types.SET_IS_PENDING_EDIT_TO_FALSE});
         });
     });
 });

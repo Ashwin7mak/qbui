@@ -3,17 +3,17 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import {FieldEditingTools} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
-import DragHandle from '../../../src/components/formBuilder/dragHandle/dragHandle';
 
 const mockParentProps = {
     removeFieldFromForm(_location) {},
-    openFieldPreferences(_location) {},
     selectFieldOnForm(_formId, _location) {},
-    deselectField(_formId, _location) {}
+    deselectField(_formId, _location) {},
+    markFieldForDeletion(_formId, relationshipId) {}
 };
 
 const formBuilderChildrenTabIndex = ["0"];
 const formId = 'view';
+const relatedField = {id: 6, tableId: 'tableId'};
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
 const diffSelectedLocation = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
 let component;
@@ -23,20 +23,18 @@ describe('FieldEditingTools', () => {
         jasmineEnzyme();
     });
 
-    it('has a drag handle', () => {
-        component = shallow(<FieldEditingTools formBuilderChildrenTabIndex={formBuilderChildrenTabIndex} selectedFields={[]}/>);
-
-        expect(component.find(DragHandle)).toBePresent();
-    });
-
-    it('has a delete button', () => {
+    it('has a delete button if there are more than one field on the form', () => {
         spyOn(mockParentProps, 'removeFieldFromForm');
 
         component = shallow(<FieldEditingTools
+            app={{id: 'app1'}} tblId={'tbl1'}
+            numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
+            relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            isFieldDeletable={true}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
@@ -45,26 +43,39 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
+        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, 'app1', 'tbl1', relatedField, location);
+        mockParentProps.removeFieldFromForm.calls.reset();
     });
 
-    it('has a field preferences button', () => {
-        spyOn(mockParentProps, 'openFieldPreferences');
-
+    it('has no delete button if the prop isFieldDeletable is not present', () => {
         component = shallow(<FieldEditingTools
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
-            onClickFieldPreferences={mockParentProps.openFieldPreferences}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            relatedField={relatedField}
         />);
 
-        let preferencesIcon = component.find('.fieldPreferencesIcon button');
+        let deleteButton = component.find('.deleteFieldIcon button');
 
-        expect(preferencesIcon).toBePresent();
+        expect(deleteButton.length).toBe(0);
+    });
 
-        preferencesIcon.simulate('click');
+    it('does not have a a delete button if there is only one field on the form', () => {
+        spyOn(mockParentProps, 'removeFieldFromForm');
 
-        expect(mockParentProps.openFieldPreferences).toHaveBeenCalledWith(location);
+        component = shallow(<FieldEditingTools
+            numberOfFieldsOnForm={1}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            selectedFields={[]}
+            location={location}
+            relatedField={relatedField}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+        />);
+
+        let deleteButton = component.find('.deleteFieldIcon button');
+
+        expect(deleteButton).not.toBePresent();
     });
 
     it('selects a field when an element is clicked', () => {
@@ -111,7 +122,7 @@ describe('FieldEditingTools', () => {
 
     it('scrolls into view when the selectedFormElement is at the bottom of the page', () => {
         let container = {
-            height: 1500,
+            bottom: 1500,
             top: 100
         };
 
@@ -123,16 +134,16 @@ describe('FieldEditingTools', () => {
 
         let instance = component.instance();
         spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
-        spyOn(instance, 'scrollElementIntoView');
+        spyOn(instance, 'scrollElementDownIntoView');
 
         instance.updateScrollLocation();
 
-        expect(instance.scrollElementIntoView).toHaveBeenCalled();
+        expect(instance.scrollElementDownIntoView).toHaveBeenCalled();
     });
 
     it('scrolls into view when the selectedFormElement is at the top of the page', () => {
         let container = {
-            height: 50,
+            bottom: 50,
             top: 10
         };
 
@@ -144,16 +155,16 @@ describe('FieldEditingTools', () => {
 
         let instance = component.instance();
         spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
-        spyOn(instance, 'scrollElementIntoView');
+        spyOn(instance, 'scrollElementUpIntoView');
 
         instance.updateScrollLocation();
 
-        expect(instance.scrollElementIntoView).toHaveBeenCalled();
+        expect(instance.scrollElementUpIntoView).toHaveBeenCalled();
     });
 
-    it('will not scroll into view when the selectedFormElement is already in view', () => {
+    it('will not scroll down into view when the selectedFormElement is already in view', () => {
         let container = {
-            height: 50,
+            bottom: 50,
             top: 50
         };
 
@@ -165,11 +176,32 @@ describe('FieldEditingTools', () => {
 
         let instance = component.instance();
         spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
-        spyOn(instance, 'scrollElementIntoView');
+        spyOn(instance, 'scrollElementDownIntoView');
 
         instance.updateScrollLocation();
 
-        expect(instance.scrollElementIntoView).not.toHaveBeenCalled();
+        expect(instance.scrollElementDownIntoView).not.toHaveBeenCalled();
+    });
+
+    it('will not scroll up into view when the selectedFormElement is already in view', () => {
+        let container = {
+            bottom: 50,
+            top: 350
+        };
+
+        component = shallow(<FieldEditingTools
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            location={location}
+            selectedFields={[location]}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
+        spyOn(instance, 'scrollElementUpIntoView');
+
+        instance.updateScrollLocation();
+
+        expect(instance.scrollElementUpIntoView).not.toHaveBeenCalled();
     });
 
     it('will select a field when enter is pressed', () => {

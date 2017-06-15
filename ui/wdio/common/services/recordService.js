@@ -109,9 +109,9 @@
              */
             addBulkRecords: function(app, table, genRecords) {
                 //Resolve the proper record endpoint specific to the generated app and table
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
-                return recordBase.createBulkRecords(recordsEndpoint, genRecords).catch(function(error) {
-                    log.error('Error adding bulk records (possible random dataGen issue)');
+                var recordsBulkEndpoint = recordBase.apiBase.resolveRecordsBulkEndpoint(app.id, table.id);
+                return recordBase.createBulkRecords(recordsBulkEndpoint, genRecords).catch(function(error) {
+                    log.error('Error adding bulk records (possible random dataGen issue) for table:' + JSON.stringify(table) + ' withRecords: ' + JSON.stringify(genRecords));
                     return promise.reject(error);
                 });
             },
@@ -185,6 +185,40 @@
             },
 
             /**
+             * Generates an array of edits to be consumed by editRecords().
+             * @param field
+             * @parm {number} numRecsToEdit number of records to edit
+             * @param {function} callback that returns a value
+             * @returns {Array}
+             */
+            generateRecordsFromCallback: function(field, numRecsToEdit, valueGenFunction) {
+                var emptyRecords = this.generateEmptyRecords([field], numRecsToEdit);
+                return emptyRecords.map((record, idx) => {
+                    return record.map(_field => {
+                        _field.value = valueGenFunction(field, idx);
+                        return _field;
+                    });
+                });
+            },
+
+            /**
+             * Edit an array of records values with callback to be consumed by editRecords().
+             * @param records
+             * @param valueGenFunction
+             */
+            editRecordsWithFieldsCallback: function(records, valueGenFunction) {
+                return records.map((record, recordIdx) => {
+                    return record.map(_field => {
+                        let newVal = valueGenFunction(_field, recordIdx);
+                        if (typeof newVal !== 'undefined') {
+                            _field.value = newVal;
+                        }
+                        return _field;
+                    });
+                });
+            },
+
+            /**
              * Function that will compare actual and expected record values
              */
             assertRecordValues: function(actualRecords, expectedRecords) {
@@ -242,7 +276,7 @@
                 var numberOfRecords;
 
                 // Get the global number of records to create in each table if specified
-                if (recordsConfig && recordsConfig.numRecordsToCreate) {
+                if (recordsConfig && typeof recordsConfig.numRecordsToCreate !== 'undefined') {
                     numberOfRecords = recordsConfig.numRecordsToCreate;
                 }
 
@@ -253,16 +287,18 @@
 
                     // Get the number of records to create if specified for each table
                     if (recordsConfig && recordsConfig.tablesConfig && recordsConfig.tablesConfig[table.name] &&
-                        recordsConfig.tablesConfig[table.name].numRecordsToCreate &&
+                        typeof recordsConfig.tablesConfig[table.name].numRecordsToCreate !== 'undefined' &&
                         typeof recordsConfig.tablesConfig[table.name].numRecordsToCreate === 'number') {
 
                         tableNumOfRecords = recordsConfig.tablesConfig[table.name].numRecordsToCreate;
                     }
-                    if (tableNumOfRecords) {
+                    if (tableNumOfRecords !== null) {
                         // Generate and add records to each table
-                        recordCreatePromise.push(function() {
-                            return e2eBase.recordService.addRecordsToTable(createdApp, index, tableNumOfRecords, false, false);
-                        });
+                        if (tableNumOfRecords !== 0) {
+                            recordCreatePromise.push(function() {
+                                return e2eBase.recordService.addRecordsToTable(createdApp, index, tableNumOfRecords, false, false);
+                            });
+                        }
                     } else {
                         // Generate and add records to each table
                         recordCreatePromise.push(function() {

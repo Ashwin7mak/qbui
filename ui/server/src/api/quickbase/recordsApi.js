@@ -40,7 +40,8 @@
     'use strict';
 
     let Promise = require('bluebird');
-    let defaultRequest = require('request');
+    let env = require('../../config/environment');
+    let defaultRequest = require('../../requestClient').getClient(env);
     let _ = require('lodash');
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');

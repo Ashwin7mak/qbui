@@ -1,9 +1,12 @@
 import ReportService from '../services/reportService';
 import ReportModel from '../models/reportModel';
 import ReportsModel from '../models/reportsModel';
+import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
-
+import _ from 'lodash';
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
@@ -312,7 +315,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
 export const unloadEmbeddedReport = (context) =>
     event(context, types.UNLOAD_EMBEDDED_REPORT);
 
-/* Find the records count for a report. Allows customized report that optionally allows for query
+/** Find the records count for a report. Allows customized report that optionally allows for query
  * parameters. The overrides are expected to be defined in the queryParams parameter.
  *
  * When the results are returned from the node layer a LOAD_REPORT_SUCCESS event is fired and the
@@ -345,28 +348,3 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
         }
     };
 };
-
-/**
- * Hide a column based on the column id given.
- * @param context
- * @param appId
- * @param tblId
- * @param rptId
- * @param params { columnId }
- */
-export const hideColumn = (context, appId, tblId, rptId, params) => {
-    return (dispatch) => {
-        if (appId && tblId && rptId) {
-            logger.debug(`Hiding column with id: ${params.columnId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-            // Temporary until API to persist hidden columns.
-            return new Promise((resolve) => {
-                dispatch(event(context, types.HIDE_COLUMN, params));
-                resolve();
-            });
-        } else {
-            logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
-            return new Promise.reject();
-        }
-    };
-};
-

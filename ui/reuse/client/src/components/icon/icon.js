@@ -1,4 +1,5 @@
 import React from 'react';
+import QBToolTip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
 import './icon.scss';
 import './uiIcons.css';
 import './tableIcons.css';
@@ -28,6 +29,10 @@ const Icon = React.createClass({
         icon: React.PropTypes.string.isRequired,
         className: React.PropTypes.string,
         onClick: React.PropTypes.func,
+        /**
+         * A tooltip string title for icon in icon chooser
+         */
+        tooltipTitle: React.PropTypes.string,
 
         /**
          * Optionally set the font set to use for this icon
@@ -39,18 +44,29 @@ const Icon = React.createClass({
         return {
             className: '',
             isTableIcon: false,
+            tooltipTitle: '',
             iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
-    render: function() {
-        let {className, iconFont, icon} = this.props;
-        let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
-
+    renderIcon(iconClassName) {
         return (
             <span className={iconClassName} onClick={this.props.onClick}>
                 {this.props.children}
             </span>
         );
+    },
+    renderToolTipIcon(iconClassName, toolTipId, tooltipTitle) {
+        return (
+            <QBToolTip location="bottom" tipId={toolTipId} className="toolTip-iconChooser" plainMessage={tooltipTitle}>
+                {this.renderIcon(iconClassName)}
+            </QBToolTip>
+        );
+    },
+    render() {
+        let {className, iconFont, icon, tooltipTitle} = this.props;
+        let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
+        let toolTipId = `toolTip-${icon}`;
+        return (tooltipTitle ? this.renderToolTipIcon(iconClassName, toolTipId, tooltipTitle) : this.renderIcon(iconClassName));
     }
 });
 

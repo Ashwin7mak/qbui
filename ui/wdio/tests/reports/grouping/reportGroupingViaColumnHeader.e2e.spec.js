@@ -9,7 +9,7 @@
     //include underScore js
     var _ = require('underscore');
 
-    describe('Reports - Grouping Via Column Header Tests: ', function() {
+    describe('Reports - Grouping via column header tests: ', function() {
         var realmName;
         var realmId;
         var app;
@@ -139,7 +139,7 @@
             return [
                 {
                     message: 'USER FIELD: A to Z',
-                    fieldName: 'User Name',
+                    fieldName: 'USER NAME',
                     groupDirection: 'Group A to Z',
                     expectedGroups: ['Angela Leon', 'Chris Baker', 'Jon Neil'],
                     expectedRecords: [
@@ -151,7 +151,7 @@
                 },
                 {
                     message: 'TEXT FIELD: Z to A',
-                    fieldName: 'Project Phase',
+                    fieldName: 'PROJECT PHASE',
                     groupDirection: 'Group Z to A',
                     expectedGroups: ['Planning', 'Development'],
                     expectedRecords: [
@@ -163,7 +163,7 @@
                 },
                 {
                     message: 'DATE FIELD: oldest to newest',
-                    fieldName: 'Finish Date',
+                    fieldName: 'FINISH DATE',
                     groupDirection: 'Group oldest to newest',
                     expectedGroups: ['04-10-2009', '04-28-2009'],
                     expectedRecords: [
@@ -176,7 +176,7 @@
                 },
                 {
                     message: 'NUMERIC FIELD: Duration field lowest to highest',
-                    fieldName: 'Duration Taken',
+                    fieldName: 'DURATION TAKEN',
                     groupDirection: 'Group lowest to highest',
                     expectedGroups: ['(Empty)'], //TODO report a bug on below. The header says empty after grouping
                     expectedRecords: [

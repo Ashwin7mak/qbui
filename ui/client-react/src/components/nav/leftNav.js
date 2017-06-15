@@ -9,9 +9,10 @@ import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import LogoImg from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
+import {APPS_ROUTE} from '../../constants/urlConstants';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 
 let LeftNav = React.createClass({
-
     propTypes: {
         expanded:React.PropTypes.bool,
         visible:React.PropTypes.bool,
@@ -48,13 +49,19 @@ let LeftNav = React.createClass({
         </div>);
     },
 
+    reloadAppsPage() {
+        const origin = WindowLocationUtils.getOrigin();
+        const link = `${origin}${APPS_ROUTE}`;
+        WindowLocationUtils.update(link);
+    },
+
     /**
      * create a branding section
      * At some point in the future, customers will be able to specify their own branding image.
      * This is why we kept this as a method instead of coding it down in render();
      */
     createBranding() {
-        return (<div className="branding">
+        return (<div className="branding" onClick={this.reloadAppsPage}>
             <img className={"logo"} alt="QuickBase" src={LogoImg} />
         </div>);
     },

@@ -1,9 +1,8 @@
 //TEMPORARY IMPORT FROM CLIENT-REACT
-import Logger from '../../../client-react/src/utils/logger';
+import Logger from "../../../client-react/src/utils/logger";
 //TEMPORARY IMPORT FROM CLIENT-REACT
-
-import Locale from '../../../reuse/client/src/locales/locale';
-import _ from 'lodash';
+import Locale from "../../../reuse/client/src/locales/locale";
+import _ from "lodash";
 
 let logger = new Logger();
 

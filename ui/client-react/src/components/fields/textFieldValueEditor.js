@@ -31,6 +31,7 @@ const TextInput = React.createClass({
                        onChange={this.props.onChange}
                        onBlur={this.props.onBlur}
                        tabIndex={this.props.tabIndex}
+                       disabled={this.props.isDisabled}
                  />);
     }
 });
@@ -59,6 +60,11 @@ const TextFieldValueEditor = React.createClass({
         /**
          * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
+
+        /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
 
         /**
         * shows a button that will allow a user to clear the field in one click */
@@ -133,7 +139,7 @@ const TextFieldValueEditor = React.createClass({
         }
         classNames.push(this.props.classes || '');
 
-        let Input = this.props.showClearButton ? ClearableTextInput : TextInput;
+        let Input = (this.props.showClearButton && !this.props.isDisabled) ? ClearableTextInput : TextInput;
 
         // use the raw value as the input value, not the formatted display value that may include escaped content
         return (<Input
@@ -142,6 +148,7 @@ const TextFieldValueEditor = React.createClass({
                     onChange={this.onChange}
                     onBlur={this.onBlur}
                     tabIndex={this.props.tabIndex}
+                    isDisabled={this.props.isDisabled}
                 />);
     }
 });

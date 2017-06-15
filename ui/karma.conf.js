@@ -65,7 +65,8 @@ module.exports = function(config) {
                             path.resolve(__dirname, "reuse/client/src"),
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "node_modules/react-notifications"),
-                            path.resolve(__dirname, 'node_modules/react-select')
+                            path.resolve(__dirname, 'node_modules/react-select'),
+                            path.resolve(__dirname, 'node_modules/rc-tabs')
                         ],
                         loader: "style!css"
                     },
@@ -117,6 +118,17 @@ module.exports = function(config) {
                 'react/addons': true,
                 'react/lib/ExecutionEnvironment': true,
                 'react/lib/ReactContext': true
+            },
+            resolve: {
+                root: path.resolve(__dirname),
+                // Allow easier imports for commonly imported folders
+                alias: {
+                    APP: 'client-react/src',
+                    REUSE: 'reuse/client/src',
+                    GOVERNANCE: 'governance/src',
+                    AUTOMATION: 'automation/src',
+                    COMMON: 'common/src'
+                }
             }
         },
         webpackServer: {

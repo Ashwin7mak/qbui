@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import SideMenuBase, {__RewireAPI__ as SideMenuBaseRewireAPI} from '../../src/components/sideMenuBase/sideMenuBase';
+import SideMenuBase, {__RewireAPI__ as SideMenuBaseRewireAPI} from 'REUSE/components/sideMenuBase/sideMenuBase';
 
 const mockStoreActions = {onUpdateOpenState(isOpen) {return isOpen;}};
 const testSideMenuContent = <div className="testSideMenuContent">Test SideMenu Content</div>;

@@ -13,7 +13,8 @@ describe('Build drop down action functions', () => {
         push: () =>{}
     };
     const callbacks = {
-        navigateToBuilder: () =>{}
+        navigateToReportBuilder: () => {},
+        navigateToFormBuilder: () =>{}
     };
 
     it('test render of component', () => {
@@ -22,10 +23,28 @@ describe('Build drop down action functions', () => {
         expect(TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink").length).toEqual(0);
     });
 
+    it('test render of component in context of a app', () => {
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} />);
+        let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
+        Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        expect(automationSettingsLink.length).toEqual(1);
+    });
+
+    it('test automation settings link', () => {
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} history={history}/>);
+        let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
+        Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        Simulate.click(automationSettingsLink[0]);
+    });
+
     it('test render of component in context of a table', () => {
         component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable}/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        expect(automationSettingsLink.length).toEqual(1);
         let tableSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyTableSettings");
         expect(tableSettingsLink.length).toEqual(1);
     });
@@ -34,6 +53,8 @@ describe('Build drop down action functions', () => {
         component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2"/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        expect(automationSettingsLink.length).toEqual(1);
         let tableSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyTableSettings");
         expect(tableSettingsLink.length).toEqual(1);
         let formBuilderLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyForm");
@@ -49,13 +70,27 @@ describe('Build drop down action functions', () => {
     });
 
     it('test form builder link', () => {
-        spyOn(callbacks, "navigateToBuilder").and.callThrough();
-        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2" navigateToBuilder={callbacks.navigateToBuilder}/>);
+        spyOn(callbacks, "navigateToFormBuilder").and.callThrough();
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2" navigateToFormBuilder={callbacks.navigateToFormBuilder}/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
         let formBuilderLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyForm");
         Simulate.click(formBuilderLink[0]);
-        expect(callbacks.navigateToBuilder).toHaveBeenCalled();
+        expect(callbacks.navigateToFormBuilder).toHaveBeenCalled();
     });
+
+    it('test report builder link', () => {
+        spyOn(callbacks, "navigateToReportBuilder").and.callThrough();
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} rptId="2" navigateToReportBuilder={callbacks.navigateToReportBuilder}/>);
+
+        let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
+        Simulate.click(gearIcon[0]);
+
+        let reportBuilderLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyForm");
+        Simulate.click(reportBuilderLink[0]);
+
+        expect(callbacks.navigateToReportBuilder).toHaveBeenCalled();
+    });
+
 });
 

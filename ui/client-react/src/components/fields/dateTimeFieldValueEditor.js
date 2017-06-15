@@ -162,7 +162,6 @@ const DateTimeFieldValueEditor = React.createClass({
                     display: ''
                 };
 
-                valueObject.display = timeFormatter.format(valueObject, this.props.attributes);
                 this.props.onBlur(valueObject);
             }
         }

@@ -13,6 +13,7 @@
     var SS = ':ss';
     var AM_PM = ' a';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
+    var ZONE_DESIGNATOR_CHAR = 'Z';
 
     var JAVA_FORMAT_TO_JS_FORMAT = {
         'HH:MM'   : MM,
@@ -56,7 +57,9 @@
         //    }
         //    return formatString;
         //},
-        //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
+        // Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
+        // Unlike current stack, new stack timeOfDay field has a useTimezone boolean which when set the field works exactly like date/time field's time
+        // Which means all values in core are stoed in UTC. But the UI will render the values (view and edit) in app's timezone.
         format                 : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
@@ -79,16 +82,23 @@
             }
 
             var dateStr = yyyy + '-' + mm + '-' + dd +  'T' + fieldValue.value.replace(/(\[.*?\])/, '');
-            var d = new Date(dateStr);
-            //Resolve whether or not to shift based on timezone
-            var timeZone = consts.UTC_TIMEZONE;
+            //if the useTimezone is set then assume that the incoming value is in UTC
+            if (fieldInfo.useTimezone && fieldValue.value.indexOf('Z') === -1) {
+                dateStr += ZONE_DESIGNATOR_CHAR;
+            }
+            //Resolve whether or not to shift based on useTimezone and app's timezone
+            var m;
             if (fieldInfo.useTimezone) {
+                var d = new Date(dateStr);
+                var timeZone = consts.UTC_TIMEZONE;
                 timeZone = fieldInfo.timeZone;
                 if (!timeZone) {
                     timeZone = DEFAULT_TIMEZONE;
                 }
+                m = moment.tz(d, timeZone);
+            } else {
+                m = moment(dateStr);
             }
-            var m = moment.tz(d, timeZone);
 
             //Resolve formatting options
             var formatString = fieldInfo.jsFormat;

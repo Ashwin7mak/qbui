@@ -1,25 +1,20 @@
-import React from 'react';
-import {render} from 'react-dom';
-import 'react-fastclick';
-import {GOVERNANCE_ACCOUNT_ROUTE, GOVERNANCE_ACCOUNT_USERS_ROUTE} from './routes';
-import AppShell from './appShell';
-import AccountUsers from '../account/users/AccountUsers';
-import {BrowserRouter, Switch} from 'react-router-dom';
+import React from "react";
+import {render} from "react-dom";
+import "react-fastclick";
+import {GOVERNANCE_ACCOUNT_ROUTE, GOVERNANCE_ACCOUNT_USERS_ROUTE} from "./routes";
+import GovernanceAppShell from "./governanceAppShell";
+import AccountUsers from "../account/users/AccountUsersMain";
+import {BrowserRouter, Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
-import {Provider} from 'react-redux';
-import createGovernanceStore from './store';
-
-import GovernanceBundleLoader from '../locales/governanceBundleLoader';
-
-// init the localization services
-GovernanceBundleLoader.changeLocale('en-us'); // todo: LocaleHack - need to figure out how to get to: config.locale.default
+import {Provider} from "react-redux";
+import createGovernanceStore from "./store";
 
 const store = createGovernanceStore();
 
 const routes = [
     {
         path: GOVERNANCE_ACCOUNT_ROUTE,
-        component: AppShell,
+        component: GovernanceAppShell,
         routes: [
             {
                 path: GOVERNANCE_ACCOUNT_USERS_ROUTE,

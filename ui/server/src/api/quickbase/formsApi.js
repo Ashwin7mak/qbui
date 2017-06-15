@@ -51,6 +51,7 @@
                         //  each section may have elements (text, header, field, etc)
                         let section = tab.sections[sectionKey];
                         if (section.elements) {
+                            let elementsToRemove = [];
                             for (let elementKey in section.elements) {
                                 //  is this a form field element
                                 let element = section.elements[elementKey];
@@ -82,11 +83,16 @@
                                             let required = element.FormFieldElement.required;
                                             fidList.push({id: fieldId, required: required});
                                         } else {
+                                            elementsToRemove.push(elementKey);
                                             log.warn("Fid " + fieldId + " defined on form " + form.formId + " but not found in table (app:" + form.appId + ";table:" + form.tableId + "). Skipping..");
                                         }
                                     }
                                 }
                             }
+                            // remove elements with fields not found in table
+                            section.elements = lodash.omitBy(section.elements, (val, key) => {
+                                return elementsToRemove.indexOf(key) !== -1;
+                            });
                         }
                     }
                 }
@@ -155,67 +161,24 @@
                     opts.url += search;
                 }
 
-                // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
-                // For now we are manually adding to the form.
-                return this.createReferenceElements(req, opts);
+                // FormMeta element returned by the experience engine will contain child report elements. Fetch the
+                // form meta instance and add relationships to the form meta instance.
+                return this.fetchRelationshipsForForm(req, opts);
             },
 
             /**
-             * Eventually FormMetaData returned from the experience engine should include ReferenceElements at which
-             * point this function should be deleted. For now, this function will get the formMetaData and add
-             * ReferenceElements to the form.
+             * This function executes the request to fetch the formMetaData and add app relationships to the form.
              * @param req
              * @param opts
              * @returns {Promise}
              */
-            createReferenceElements: (req, opts) => {
-                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req), appsApi.getHydratedApp(req, req.params.appId)];
-                /* istanbul ignore next  */
+            fetchRelationshipsForForm: (req, opts) => {
+                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req)];
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
                     const relationships = response[1] || [];
-                    const app = response[2];
                     if (relationships.length) {
                         formMeta.relationships = relationships;
-                        let referenceElements = [];
-                        // creates the mock referenceElement
-                        const mockReferenceElement = (relationshipId) => {
-                            return {
-                                ReferenceElement: {
-                                    displayOptions: [
-                                        "VIEW",
-                                        "ADD",
-                                        "EDIT"
-                                    ],
-                                    type: "EMBEDREPORT",
-                                    orderIndex: 0,
-                                    positionSameRow: false,
-                                    relationshipId: relationshipId
-                                }
-                            };
-                        };
-
-                        relationships.forEach((relation, relationshipIdx) => {
-                            // if a relationship in which this form is a parent is defined, mock ReferenceElement
-                            if (relation.masterTableId === formMeta.tableId) {
-                                referenceElements.push(mockReferenceElement(relationshipIdx));
-                            }
-                        });
-                        // place each referenceElement in its own section and append the new
-                        // sections to the tab
-                        referenceElements.forEach(referenceElement => {
-                            const sections = formMeta.tabs[0].sections;
-                            const length = Object.keys(sections).length;
-                            sections[length] = Object.assign(lodash.cloneDeep(sections[0]), {
-                                elements: {0: referenceElement},
-                                fields: [],
-                                orderIndex: length
-                            });
-
-                            const childTableId = relationships[referenceElement.ReferenceElement.relationshipId].detailTableId;
-                            const childTableName = lodash.find(app.tables, {id:childTableId}).name;
-                            sections[length].headerElement.FormHeaderElement.displayText = childTableName;
-                        });
                     }
                     return formMeta;
                 });

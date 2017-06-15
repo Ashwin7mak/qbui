@@ -63,9 +63,9 @@ describe('Table properties actions', () => {
 
     it('should create an action for setting the editing property', () => {
         const expected = {
-            type: types.SET_TABLE_PROPS, property: 'name', value:'newName', validationError: 'badInput', isUserEdit: false
+            type: types.SET_TABLE_PROPS, property: 'name', value:'newName', pendingValidationError: 'emptyField', validationError: 'badInput', isUserEdit: false
         };
-        expect(actions.setTableProperty('name', 'newName', 'badInput', false)).toEqual(expected);
+        expect(actions.setTableProperty('name', 'newName', 'emptyField', 'badInput', false)).toEqual(expected);
     });
 
     it('should create an action for deleted table', () => {

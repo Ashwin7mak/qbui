@@ -11,8 +11,8 @@ class RoleService extends BaseService {
 
         //  App Service API endpoints
         this.API = {
-            GET_APP_ROLES       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.ROLES}`,
-            APP_ROLE_USERS      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.ROLES}/{1}/${constants.USERS}`
+            GET_APP_ROLES       : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.ROLES}`,
+            APP_ROLE_USERS      : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.ROLES}/{1}/${constants.USERS}`
         };
     }
 
@@ -29,20 +29,23 @@ class RoleService extends BaseService {
      * remove users from app role
      * @param appId
      * @param roleId
+     * @param userIds - list of user ids
      */
-    removeUsersFromRole(appId, roleId) {
+    removeUsersFromAppRole(appId, roleId, userIds) {
         let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-        return super.delete(url);
+        return super.delete(url, {data: userIds});
     }
 
     /**
-     * assign users to an app role
+     * Assign an app role to a list of users
      * @param appId
      * @param roleId
+     * @param userIds - list of userids
+     * @returns {*}
      */
-    assignUsersToRole(appId, roleId) {
+    assignUsersToAppRole(appId, roleId, userIds) {
         let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
-        return super.post(url);
+        return super.post(url, userIds);
     }
 }
 

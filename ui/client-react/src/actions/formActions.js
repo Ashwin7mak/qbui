@@ -4,15 +4,17 @@ import FormService from '../services/formService';
 import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-import WindowLocationUtils from '../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../utils/windowHistoryUtils';
 import Locale from '../locales/locales';
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as types from '../actions/types';
 import NavigationUtils from '../utils/navigationUtils';
-import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import FieldUtils from '../utils/fieldUtils';
+import {NEW_FORM_RECORD_ID, NEW_FIELD_PREFIX} from '../constants/schema';
 import _ from 'lodash';
-import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
-import {saveAllNewFields, updateAllFieldsWithEdits} from './fieldsActions';
+import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from './actionHelpers/transformFormData';
+import {saveAllNewFields, updateAllFieldsWithEdits, deleteField} from './fieldsActions';
+
 
 let logger = new Logger();
 
@@ -33,6 +35,7 @@ export const updateFormRedirectRoute = route => {
         redirectRoute: route
     };
 };
+
 
 /**
  * form load in progress
@@ -77,13 +80,16 @@ export const loadFormSuccess = (id, formData, appId, tblId) => {
 };
 
 /**
- * UI is syncing the view form to the saved version
- * @returns {{type}}
+ * UI should refresh the view form to the saved version
+ * @param id
+ * @param recordId newly saved record ID
+ * @returns {{id: *, type, recordId: *}}
  */
-export const syncForm = (id) => {
+export const syncForm = (id, recordId) => {
     return {
         id,
-        type: types.SYNC_FORM
+        type: types.SYNC_FORM,
+        recordId
     };
 };
 
@@ -99,7 +105,8 @@ export const saveForm = (id) => {
         type: types.SAVE_FORM
     };
 };
-/*
+
+/**
  * hide the 'modal working' spinner/window when completing a form save request.
  */
 export const saveFormComplete = (id) => {
@@ -108,6 +115,7 @@ export const saveFormComplete = (id) => {
         type: types.SAVE_FORM_COMPLETE
     };
 };
+
 
 /**
  * load a form, optionally with record data
@@ -118,10 +126,12 @@ export const saveFormComplete = (id) => {
  * @param recordId record ID or "new"
  * @returns {function(*=)}
  */
-export const loadForm = (appId, tblId, rptId, formType, recordId) => {
+export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
 
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+
+    context = context || formType;
 
     return (dispatch) => {
 
@@ -130,7 +140,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 reject();
             }
 
-            dispatch(loadingForm(formType));
+            dispatch(loadingForm(context));
 
             let formService = new FormService();
 
@@ -153,7 +163,9 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         response.data.recordId = recordId;
                     }
 
-                    dispatch(loadFormSuccess(formType, response.data, appId, tblId));
+                    addRelationshipFieldProps(appId, tblId, response.data.formMeta, response.data.fields);
+
+                    dispatch(loadFormSuccess(context, response.data, appId, tblId));
                     resolve(response.data);
                 },
                 (error) => {
@@ -172,7 +184,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                     }
 
                     // remove the editRec query string since we are not successfully editing the form
-                    WindowLocationUtils.pushWithoutQuery();
+                    WindowHistoryUtils.pushWithoutQuery();
                     dispatch(loadFormError(formType, error.response.status));
 
                     reject(error);
@@ -181,7 +193,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 logger.logException(ex);
                 NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'));
                 // remove the editRec query string since we are not successfully editing the form
-                WindowLocationUtils.pushWithoutQuery();
+                WindowHistoryUtils.pushWithoutQuery();
                 reject(ex);
             });
         });
@@ -189,35 +201,31 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 };
 
 /**
- * Private function for addNewFieldToForm, not exported
+ * Private function for addFieldToForm, not exported
  * */
-const buildNewField = (newField) => {
-    let newId = _.uniqueId('newField_');
-    let displayText = 'New Text Field';
-
+const buildField = (field, id) => {
+    id = id || _.uniqueId(NEW_FIELD_PREFIX);
+    //FormFieldElement is needed for both existing fields and new fields for experience engine
     return _.merge({}, {
-        id: newId,
+        id: id,
         edit: true,
         FormFieldElement: {
             positionSameRow: false,
-            fieldId: newId,
-            displayText
+            fieldId: id
         }
-    }, newField);
+    }, field);
 };
 
 /**
- * Move a field from one position on a form to a different position
+ * Adds a field to the form
  * @param formId
  * @param appId
  * @param tblId
  * @param newLocation
- * @param newField
+ * @param field
  * @returns {{id, type, content}|*}
  */
-export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) => {
-    newField = buildNewField(newField);
-
+export const addFieldToForm = (formId, appId, tblId, newLocation, field) => {
     return {
         type: types.ADD_FIELD,
         id: formId,
@@ -225,7 +233,7 @@ export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) =
         tblId,
         content: {
             newLocation,
-            newField,
+            field: buildField(field, field.id)
         }
     };
 };
@@ -267,13 +275,12 @@ export const deselectField = (formId, location) => {
 /**
  * Removes a field from the form
  * @param formId
+ * @param field
  * @param location
  * @returns {{id, type, content}|*}
  */
-export const removeFieldFromForm = (formId, location) => {
-    return event(formId, types.REMOVE_FIELD, {
-        location
-    });
+export const removeFieldFromForm = (formId, appId, tblId, field, location) => {
+    return {id: formId, type: types.REMOVE_FIELD, appId, tblId, field, location};
 };
 
 /**
@@ -301,7 +308,7 @@ export const keyboardMoveFieldDown = (formId, location) => {
 };
 
 /**
- * Toggles children tabIndex for formBuilder
+ * Toggles children tabIndex for formBuilder's form
  * @param formId
  * @returns {{id, type, content}|*}
  */
@@ -309,6 +316,44 @@ export const toggleFormBuilderChildrenTabIndex = (formId, currentTabIndex) => {
     return event(formId, types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX, {
         currentTabIndex
     });
+};
+
+/**
+ * Toggles children tabIndex for formBuilder's toolPalette
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const toggleToolPaletteChildrenTabIndex = (formId, currentTabIndex) => {
+    return event(formId, types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX, {
+        currentTabIndex
+    });
+};
+
+/**
+ * endDraggingState updates the dragging state to false for drag and drop
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const endDraggingState = (formId) => {
+    return event(formId, types.END_DRAG);
+};
+
+/**
+ * isInDraggingState updates the dragging state to true for drag and drop
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const isInDraggingState = (formId) => {
+    return event(formId, types.IS_DRAGGING);
+};
+
+/**
+ - * setFormBuilderPendingEditToFalse sets isPendingEdits to false
+ - * @param formId
+ - * @returns {{id, type, content}|*}
+ - */
+export const setFormBuilderPendingEditToFalse = (formId) => {
+    return event(formId, types.SET_IS_PENDING_EDIT_TO_FALSE);
 };
 
 /**
@@ -321,6 +366,24 @@ export const toggleFormBuilderChildrenTabIndex = (formId, currentTabIndex) => {
  */
 export const createForm = (appId, tblId, formType, form) => {
     return saveTheForm(appId, tblId, formType, form, true);
+};
+
+export const deleteMarkedFields = (appId, tblId, formMeta) => {
+    return (dispatch, getState) => {
+        let fields = formMeta.fieldsToDelete;
+
+        const fieldPromises = formMeta.fieldsToDelete ? fields.map(field => dispatch(deleteField(appId, tblId, field))) : [];
+        if (fieldPromises.length === 0) {
+            logger.info('No fields deleted with deleteMarkedFields for : `{appId}`, tbl: `{tblId}`');
+            return Promise.resolve();
+        }
+
+        return Promise.all(fieldPromises).then(() => {
+            logger.debug('All promises processed in deleteMarkedFields against app: `{appId}`, tbl: `{tblId}`');
+        }).catch(error => {
+            logger.error(error);
+        });
+    };
 };
 
 /**
@@ -345,6 +408,7 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, sho
 
         return dispatch(saveAllNewFields(appId, tblId, formType))
             .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
+            .then(() => dispatch(deleteMarkedFields(appId, tblId, formMeta)))
             .then(() => {
                 return new Promise((resolve, reject) => {
                     if (appId && tblId) {

@@ -2,8 +2,6 @@ import React from 'react';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
 import SearchBox from '../search/searchBox';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
 import './smallHeader.scss';
 import {connect} from 'react-redux';
 import * as ShellActions from '../../actions/shellActions';
@@ -56,8 +54,6 @@ var SmallHeader = React.createClass({
         let headerClasses = 'smallHeader' + (this.state.searching ? ' searching' : '');
         headerClasses += this.props.headerClasses ? ' ' + this.props.headerClasses : '';
 
-        const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
-
         return (<div className={headerClasses}>
             <div className="left">
                 <a className="iconLink toggleNavButton" href="#" onClick={this.onNavClick}>
@@ -84,13 +80,6 @@ var SmallHeader = React.createClass({
                 <a className="iconLink" href="#" onClick={this.startSearching}>
                     <QBicon icon="search" />
                 </a>
-                <OverlayTrigger placement="left"
-                                trigger={['hover', 'click']}
-                                overlay={unimplementedFavoritesTip}>
-                    <a className="iconLink" href="#" disabled>
-                        <QBicon icon="star-full" />
-                    </a>
-                </OverlayTrigger>
             </div>
         </div>);
     }

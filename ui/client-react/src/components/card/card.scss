@@ -28,12 +28,12 @@
     .cardHeader {
         background-color: $selected-color;
         padding: 1%;
-        color: $color-indigo-800;
+        color: $link-normal-color;
         position: relative;
     }
 
     .cardLink {
-        color: $color-indigo-800;
+        color: $link-normal-color;
     }
 
     .cardContent {

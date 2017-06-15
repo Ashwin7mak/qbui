@@ -7,12 +7,13 @@ $card-border-color: $color-black-300;
 /* TODO: move to qbVariables after figuring out relative urls */
 $chevron_opened_icon: url('../../../../src/assets/images/chevron_opened.svg');
 $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
-$custom-row-card-padding-left: 10px;
+$custom-row-card-padding-left: 20px;
 $custom-row-card-padding-right: 5px;
 $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row-card-padding-right;
 
 .swipeable {
     width: 100%;
+    position: relative;
 
     .actionsOpen .custom-row-card {
         margin-left: -240px;
@@ -23,6 +24,10 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         position: absolute;
         right: 0;
     }
+}
+
+.reportContent.small .loadedContent {
+    padding: 0 10px 0 0;
 }
 
 .custom-row-card {
@@ -81,6 +86,10 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         .field {
             position: relative;
         }
+    }
+
+    .top-card-row.field {
+        padding: 0 10px 5px 0;
     }
 
     .fieldRow {

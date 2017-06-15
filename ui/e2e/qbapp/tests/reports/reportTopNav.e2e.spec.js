@@ -70,6 +70,10 @@
             });
         });
 
+        /*
+        // The two buttons here were placeholders and have been removed.
+        // This test remains because one or more of them will be coming back when the function is actually implemented.
+        // The buttons were only there to make it look like there was function when there wasn't.
         it('Verify topNav harmony icons displayed', function(done) {
             // Verify harmony icons display in topNav and no text associated to them.
             reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
@@ -87,6 +91,7 @@
             });
 
         });
+        */
 
         it('Verify topNav global icons displayed/not displayed and verify text', function(done) {
             reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {

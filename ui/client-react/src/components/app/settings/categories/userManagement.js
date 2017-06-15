@@ -9,8 +9,9 @@ import QbCell from '../../../dataTable/qbGrid/qbCell';
 import EmailFieldValueRenderer from '../../../fields/emailFieldValueRenderer';
 import '../../../dataTable/qbGrid/qbGrid.scss';
 import './userManagement.scss';
+import UserRowActions from  './userRowActions';
 
-
+const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 /**
  * This class is the layout for App Users Management screen
  * We build a reactabular table and style it to match the rest, adding functionality as needed.
@@ -27,6 +28,11 @@ class UserManagement extends React.Component {
         super(...args);
         this.createUserColumns = this.createUserColumns.bind(this);
         this.createUserRows = this.createUserRows.bind(this);
+        this.getActionsCell = this.getActionsCell.bind(this);
+        this.getActionCellProps = this.getActionCellProps.bind(this);
+        this.getCheckboxHeader = this.getCheckboxHeader.bind(this);
+        this.onClickToggleSelectedRow = this.onClickToggleSelectedRow.bind(this);
+        this.userIsSelected = this.userIsSelected.bind(this);
     }
 
     createUserColumns(cellFormatter) {
@@ -64,14 +70,24 @@ class UserManagement extends React.Component {
         return columns;
     }
 
+    userIsSelected(selectedRows, userId) {
+        const rows = _.find(selectedRows, (user)=>{
+            return user.id === userId;
+        });
+        return Boolean(rows);
+    }
     createUserRows() {
         let appUsersFiltered = [];
         let appUsers = this.props.appUsers;
+        let selectedRows = this.props.selectedRows;
+        let self = this;
         this.props.appRoles.forEach(function(role) {
             if (appUsers[role.id]) {
                 appUsers[role.id].forEach(function(user) {
                     user.roleName = role.name;
-                    user.name = `${user.firstName} ${user.lastName}`;
+                    user.name = (user.firstName ? `${user.firstName} ` : "") + (user.lastName ? user.lastName : "");
+                    user.roleId = role.id;
+                    user.isSelected = self.userIsSelected(selectedRows, user.userId);
                     appUsersFiltered.push(user);
                 });
             }
@@ -79,13 +95,72 @@ class UserManagement extends React.Component {
         return appUsersFiltered;
     }
 
+    getActionsCell(_cellDataRow, rowProps) {
+        return <UserRowActions
+            rowId={rowProps.rowData.userId}
+            roleId={rowProps.rowData.roleId}
+            isSelected={rowProps.rowData.isSelected}
+            onClickToggleSelectedRow={this.onClickToggleSelectedRow}
+        />;
+    }
+
+    getActionCellProps() {
+        return {
+            isStickyCell: true
+        };
+    }
+
+    /**
+     * get the 1st column header (select-all toggle)
+     * @returns {React}
+     */
+    getCheckboxHeader() {
+        let collapseAllIcon = null;
+        return (
+            <div className="actionHeader">
+                <input
+                    type="checkbox"
+                    className={`selectAllCheckbox`}
+                    checked={this.props.areAllRowsSelected}
+                    onChange={this.props.onClickToggleSelectAllRows}
+                />
+                {collapseAllIcon}
+            </div>
+        );
+    }
+
+    onClickToggleSelectedRow(id, roleId) {
+        const {onClickToggleSelectedRow} = this.props;
+        onClickToggleSelectedRow(id, roleId);
+    }
+
     render() {
         const resolvedRows = this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
-        const columns = this.createUserColumns(cellFormatter);
+        const columns = [
+            ...[{
+                property: ICON_ACTIONS_COLUMN_ID,
+                headerClass: "gridHeaderCell",
+                header: {
+                    props: {
+                        scope: 'col'
+                    },
+                    label: this.getCheckboxHeader(),
+                    transforms: [this.getActionCellProps],
+                },
+                cell: {
+                    formatters: [this.getActionsCell],
+                    transforms: [this.getActionCellProps],
+                }
+            }],
+            ...this.createUserColumns(cellFormatter)
+        ];
+
         return (
+        resolvedRows.length > 0 &&
             <div className="userManagementReport">
                 <Table.Provider columns={columns} className="qbGrid"
+
                     components={{
                         header: {
                             cell: QbHeaderCell

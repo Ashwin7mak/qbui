@@ -22,7 +22,7 @@
         appRolesPodCount: {get: function() {return browser.elements('.appRolesPod .appRolesPodCount');}},
 
         // Add new user button
-        newUserBtn: {get: function() {return browser.element('.iconActionButton.disabled.addRecord');}},
+        newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
@@ -36,9 +36,57 @@
          */
         getUserColumnHeaders: {value: function() {
             var colHeaders = [];
-            for (var i = 0; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
+            for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
             return colHeaders;
         }},
+
+        // Send invite email button
+        userSendInviteEmail: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-mail');}},
+
+        // Export users button
+        userExportCSV: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-download-cloud');}},
+
+        // Change user role settings
+        userChangeRole : {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-settings');}},
+
+        // Remove user button on user report
+        userRemoveIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-errorincircle-fill');}},
+
+        // User action icon elements
+        userActionsListUlEl: {get: function() {return browser.element('.reportActionsBlock .actionIcons');}},
+
+        // User action icons element link
+        userActionsListEl: {get: function() {return this.userActionsListUlEl.elements('.iconLink');}},
+
+        // User email elements
+        userEmailUlEl: {get: function() {return browser.element('.qbCell .urlField');}},
+
+        // User email field in user table
+        userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
+
+        /**
+         * Function to click on user Remove Icon
+         */
+        clickUserRemoveIcon: {
+            value: function() {
+                //wait for user remove icon
+                this.userRemoveIcon.waitForVisible();
+                //click on the user remove icon
+                return this.userRemoveIcon.click();
+            }
+        },
+
+        /**
+         * Function to click on user Stage
+         */
+        clickUserStage: {
+            value: function() {
+                //wait for user stage
+                this.userStageBtn.waitForVisible();
+                //click on the user stage
+                return this.userStageBtn.click();
+            }
+        },
     });
 
     module.exports = UsersTablePage;

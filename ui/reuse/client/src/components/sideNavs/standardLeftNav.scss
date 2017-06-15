@@ -23,6 +23,7 @@
     .contextHeader {
         flex: 0 0 auto; // Don't shrink this on a short window.
         background-color: $leftnav-app-background-color; // Default for the left nav
+        @include correctFontWeightForLightTextOnDarkBackground;
         min-height: 40px;
         max-height: 105px;
 
@@ -91,19 +92,25 @@
             .contextHeaderButton {
                 display: flex;
                 flex-direction: row;
-                padding: 0;
+                padding: 0 10px;
                 align-items: center;
                 justify-content: center;
             }
 
             .contextHeaderIcon {
                 font-size: 24px;
-                width: 32px;
-                margin-left: -6px;
+                width: 24px;
+                flex-grow: 0;
+                flex-shrink: 0;
+                // Safari seems to ignore the parent's align-items: center and justify-content: center
+                align-self: center;
+                margin-left: auto;
             }
 
             .contextHeaderTitle {
                 margin: 0;
+                padding-left: 5px;
+                margin-right: auto;
             }
         }
 
@@ -227,6 +234,21 @@
     &.isCollapsedStandardLeftNav {
         .standardLeftNavBranding {
             opacity: 0;
+        }
+    }
+
+    .standardLeftNavPrimaryActions {
+        .primaryAction {
+
+            .navItemPrimaryAction {
+                .primaryNavItem {
+                    margin: 10px 50px 10px 0px;
+
+                    .navItemSecondaryIcon {
+                      margin-left: -1px;
+                    }
+                }
+            }
         }
     }
 }

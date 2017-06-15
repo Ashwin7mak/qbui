@@ -2,6 +2,7 @@ import React, {PropTypes} from "react";
 import _ from "lodash";
 
 import favicons from '../../constants/favicons';
+import {routes} from '../routeConstants';
 
 var Html = React.createClass({
     propTypes: {
@@ -23,7 +24,9 @@ var Html = React.createClass({
         let components = [];
         let nodeConfig = this.renderNodeConfig();
 
-        if (this.props.isClientPerfTrackingEnabled) {
+        //  suspending client perf tracking until migrated to redux on client
+        const isClientPerfTracking = false; //this.props.isClientPerfTrackingEnabled
+        if (isClientPerfTracking) {
             let scriptKey = 1;
             let initialUrl = _.has(this.props, 'req.url') ? this.props.req.url : 'undefined';
             components.push(<script key={"s" + scriptKey++}  dangerouslySetInnerHTML={{__html:`
@@ -38,7 +41,7 @@ var Html = React.createClass({
                 EPISODES.run = function(fn, context, params) { EPISODES.q.push( ["run", fn, context, params] ); };
 
                 EPISODES.bSendBeacon = 1;         // 1 == beacon back the resulting metrics
-                EPISODES.beaconUrl = '/api/n/v1/clientPerf';  // URL to use for the metrics beacon
+                EPISODES.beaconUrl = "${routes.LOG_CLIENT_PERF_MSG}";  // URL to use for the metrics beacon
                 EPISODES.beaconType = 'POST';  // URL to use for the metrics beacon
                 EPISODES.bPostMessage = false; // no iframes to notify
                 EPISODES.autorun = false; // done will be called after all routes rendering is done
@@ -103,7 +106,7 @@ var Html = React.createClass({
                 <head>
                     <meta charSet="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                     <link rel="stylesheet" href="/qbase/css/loadingScreen.css" />
-                    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
+                    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i" rel="stylesheet" />
                     {this.renderReactRouter4ErrorHandler()}
                     {this.renderPerfList()}
 

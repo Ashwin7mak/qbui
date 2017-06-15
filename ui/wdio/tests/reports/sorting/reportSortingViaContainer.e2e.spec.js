@@ -8,7 +8,7 @@
     let reportContentPO = requirePO('reportContent');
     let _ = require('lodash');
 
-    describe('Reports - Sorting Via Container Tests: ', function() {
+    describe('Reports - Sorting via container tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
@@ -49,15 +49,15 @@
             reportSortingPO.sortBySettings.waitForVisible();
 
             //Step 3 - Verify sort/Grp button is enabled
-            expect(browser.isEnabled('.settingsDialog .sortButtonSpan')).toBeTruthy();
+            expect(browser.isEnabled('.settingsDialog .sortButtonSpan')).toBe(true);
             //Step 4 - Verify the title of the container
             expect(browser.element('.settingsDialog .overlayCenter').getAttribute('textContent')).toBe('Sort & Group');
             //Step 5 - verify close button is enabled
-            expect(browser.isEnabled('.settingsDialog .btn-default')).toBeTruthy();
+            expect(browser.isEnabled('.settingsDialog .overlayRight .btn-default ')).toBe(true);
             //Step 6 - verify reset button is enabled
-            expect(browser.isEnabled('.settingsDialog .reset')).toBeTruthy();
+            expect(browser.isEnabled('.settingsDialog .dialogButtons .reset')).toBe(true);
             //Step 7 - verify apply button is enabled
-            expect(browser.isEnabled('.settingsDialog .apply')).toBeTruthy();
+            expect(browser.isEnabled('.settingsDialog .apply')).toBe(true);
             //Step 8 - Verify title of GroupBy Container
             expect(browser.element('.groupBySettings .title').getAttribute('textContent')).toEqual('Group');
             //Step 9 - Verify title of SortBy Container
@@ -65,7 +65,7 @@
             //Step 10 - Click on close button of the sort/Grp dialogue
             reportSortingPO.clickContainerCloseBtn();
             //Step 11 - Verify sort/grp dialogue dissapered
-            expect(browser.isVisible('.settingsDialog')).toBeFalsy();
+            expect(browser.isVisible('.settingsDialog')).toBe(false);
         });
 
         it("Verify sort/grp btn functionality inside the sort/Grp dialogue", function() {
@@ -80,7 +80,7 @@
             reportSortingPO.sortGroupDlgBtn.click();
 
             //Step 4 - Verify sort/grp dialogue dissapered
-            expect(browser.isVisible('.settingsDialog')).toBeFalsy();
+            expect(browser.isVisible('.settingsDialog')).toBe(false);
 
         });
 
@@ -226,7 +226,7 @@
             reportSortingPO.clickSortGroupIconOnReportsPage();
 
             //Step 4 - Verify you cannot select more than 5 items.
-            expect(browser.isVisible('.sortBySettings .fieldSelectorContainer .empty')).toBeFalsy();
+            expect(browser.isVisible('.sortBySettings .fieldSelectorContainer .empty')).toBe(false);
         });
 
         it("Verify more fields and Cancel functionality in field panel of sortSettings", function() {
@@ -248,13 +248,13 @@
             let allFieldFromFieldsPanel = reportSortingPO.getAllFieldsFromFieldPanelValues();
 
             //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields letiable values
-            expect(_.every(expectedMoreFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) >= 0;})).toBeTruthy();
+            expect(_.every(expectedMoreFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) >= 0;})).toBe(true);
 
             //Step 7 - Click cancel button
             reportSortingPO.fieldsPanelCancel.click();
 
             //Step 8 - Verify panel not visible
-            expect(browser.isVisible('.fieldsPanel')).toBeFalsy();
+            expect(browser.isVisible('.fieldsPanel')).toBe(false);
         });
 
         it("Verify Delete sort fields functionality", function() {
@@ -317,6 +317,5 @@
         });
 
         //TODO should add other testcase for doing sorting via UI. Right now its a bug that sortOrder Icon not showing up.
-
     });
 }());

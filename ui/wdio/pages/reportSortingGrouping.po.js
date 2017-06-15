@@ -40,13 +40,26 @@
          * Method to Select record ID# from field panels
          */
         sortByRecordID: {value: function() {
+            this.reportSortGrpBtnOnReportsPage.waitForVisible();
             this.reportSortGrpBtnOnReportsPage.click();
             this.sortBySettings.waitForVisible();
             this.clickInEmptyFieldInSortGrpDlg(this.sortBySettings, 'Choose a field to sort by');
             this.ClickMoreFieldsLinkInFieldsPanel();
-            this.recordID.waitForExist();
-            this.recordID.click();
-            reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
+            // this.recordID.waitForExist();
+            if (browserName === 'safari') {
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    document.getElementsByClassName('list-group')[0].getElementsByClassName('notInReport')[1].dispatchEvent(event);
+                });
+            } else {
+                this.recordID.click();
+            }
+            return reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
         }},
 
         /**
@@ -229,6 +242,33 @@
         }},
 
         /*
+         * Method to sort fields in sort container
+         * @param fieldToSort
+         */
+        sortFieldsFromSrtGrpDlg : {value: function(fieldToSort, sortOrder) {
+            this.sortBySettings.waitForVisible();
+            //Filter nonEmpty fields to match with fieldToSort
+            var results = this.sortBySettings.elements('.notEmpty').value.filter(function(field) {
+                return field.element('.fieldName').getAttribute('textContent') === fieldToSort;
+            });
+
+            //if filtered elements not empty
+            if (results !== []) {
+                //wait for sort button to be visible
+                results[0].element('.sortOrderIcon').waitForVisible();
+                //click on sort button
+                if (sortOrder === 'desc') {
+                    results[0].element('.sortOrderIcon').click();
+                    //Need this to wait for rendering
+                    return browser.pause(e2eConsts.shortWaitTimeMs);
+                }
+            } else {
+                browser.logger.error('The field with name ' + fieldToSort + ' is not found for container ' + this.sortBySettings);
+                throw new Error('Cannot sort value for field ' + fieldToSort);
+            }
+        }},
+
+        /*
          * Method to verify field Panel
          * @title
          */
@@ -236,7 +276,7 @@
             //wait until you see field panel
             this.fieldsPanel.waitForVisible();
             //Verify cancel button is enabled
-            return expect(browser.isEnabled('.fieldsPanel .cancel')).toBeTruthy();
+            return expect(browser.isEnabled('.fieldsPanel .cancel')).toBe(true);
             //TODO Element fieldsPanelTitle not getting identified
             //Verify the title of the field panel
             //expect(this.fieldsPanelTitle.getAttribute('textContent')).toBe(title);
@@ -247,11 +287,26 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
-            //scroll to more fields
-            this.fieldsPanel.element('.list-group .moreFields').scroll();
-            //click on more fields
-            this.fieldsPanel.element('.list-group .moreFields').click();
-            //Need this to wait for more fields to load
+            //TODO Scroll function disabled until it is fixed to work in Safari(mobile): MC-2598
+            //this.fieldsPanel.element('.list-group .moreFields').scroll();
+            //Click on more fields using JS click since scroll is not working on safari
+            if (browserName === 'safari') {
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    document.getElementsByClassName('list-group')[0].getElementsByClassName('moreFields')[0].dispatchEvent(event);
+                });
+            } else {
+                //scroll to an element
+                this.fieldsPanel.element('.list-group .moreFields').scroll();
+                //Click on more fields
+                this.fieldsPanel.element('.list-group .moreFields').click();
+            }
+            ////Need this to wait for more fields to load
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
@@ -371,7 +426,7 @@
             var sortedExpectedRecords = [];
 
             //report Endpoint
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(appId, tableId, reportId);
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsResultsEndpoint(appId, tableId, reportId);
             //GET report results
             browser.call(function() {
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
@@ -519,7 +574,7 @@
 
             if (items !== []) {
                 //verify the check mark beside the item selected
-                expect(items[0].element('.iconUISturdy-check').isVisible()).toBeTruthy();
+                expect(items[0].element('.iconUISturdy-checkmarkincircle-outline').isVisible()).toBe(true);
             } else {
                 browser.logger.error('Item with name ' + itemToVerify + ' not found under column header menu');
                 throw new Error('Item with name ' + itemToVerify + ' not found under column header menu');

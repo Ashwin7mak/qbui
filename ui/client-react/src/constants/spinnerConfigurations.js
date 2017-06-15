@@ -60,6 +60,7 @@ export const LARGE_RELATIVE_LIGHT_SPINNER = _.merge({}, LARGE_RELATIVE_SPINNER, 
 
 // Used in AgGrid when refreshing the full report, for large breakpoint.
 export const LARGE_BREAKPOINT = LARGE_ABSOLUTE_CENTERED_SPINNER;
+export const QB_GRID = Object.assign({}, LARGE_ABSOLUTE_CENTERED_SPINNER, {zIndex: 50});
 
 // Used in the left navbar when apps or tables are loading
 export const LEFT_NAV_BAR =  LARGE_RELATIVE_LIGHT_SPINNER;
@@ -67,16 +68,25 @@ export const LEFT_NAV_BAR =  LARGE_RELATIVE_LIGHT_SPINNER;
 // Used in the trowser content loading
 export const TROWSER_CONTENT =  LARGE_RELATIVE_SPINNER;
 
+// Used in the stacked forms in drawer content
+export const DRAWER_CONTENT = QB_GRID;
+
 // Used in card view when refreshing the full report, for large breakpoint.
 export const CARD_VIEW_REPORT = LARGE_RELATIVE_SPINNER;
 
 // Used in records count is not initially available very large datasets
 export const RECORD_COUNT = SMALL_SPINNER;
 
-// Used in records count is not initially available very large datasets
+// Used while saving an record when editing inline in a report
 export const INLINE_SAVING = SMALL_SPINNER;
+
+// Used when updating a small piece of the UI (e.g., when loading the currently logged in user's name)
+export const INLINE_UPDATING = SMALL_SPINNER;
 
 // Use on next swipe area in CARD_VIEW
 export const CARD_VIEW_NAVIGATION =  SMALL_PALE_SPINNER;
+
+// Use on automation list screen
+export const AUTOMATION_LIST_LOADING = LARGE_ABSOLUTE_CENTERED_SPINNER;
 
 

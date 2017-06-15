@@ -2,10 +2,11 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import DefaultTopNavGlobalActions from '../../src/components/topNav/defaultTopNavGlobalActions';
-import UserDropDown from '../../src/components/topNav/supportingComponents/userDropDown';
-import ReHelpButton from '../../src/components/helpButton/helpButton';
-import ReGlobalAction from '../../src/components/globalAction/globalAction';
+import DefaultTopNavGlobalActions from 'REUSE/components/topNav/defaultTopNavGlobalActions';
+import UserFeedBack from 'REUSE/components/topNav/supportingComponents/userFeedBack';
+import HelpButton from 'REUSE/components/topNav/supportingComponents/helpButton';
+import UserDropDown from 'REUSE/components/topNav/supportingComponents/userDropDown';
+import ReGlobalAction from 'REUSE/components/globalAction/globalAction';
 
 let component;
 
@@ -20,10 +21,20 @@ describe('DefaultTopNavGlobalActions', () => {
         expect(component.find(UserDropDown)).toBePresent();
     });
 
-    it('has a help button', () => {
-        component = mount(<DefaultTopNavGlobalActions/>);
+    it('renders the feedback button if hasFeedback is true', () => {
+        component = shallow(<DefaultTopNavGlobalActions hasFeedback={true} />);
 
-        expect(component.find(ReHelpButton)).toBePresent();
+        expect(component.find(UserFeedBack)).toBePresent();
+        expect(component.find(UserFeedBack)).toHaveProp('startTabIndex');
+        expect(component.find(UserFeedBack)).toHaveProp('shouldOpenMenusUp');
+    });
+
+    it('does not render the feedback button if hasFeedback is false', () => {
+        component = shallow(<DefaultTopNavGlobalActions hasFeedback={false} />);
+
+        expect(component.find(UserFeedBack)).not.toBePresent();
+        expect(component.find(UserDropDown)).toBePresent();
+        expect(component.find(HelpButton)).toBePresent();
     });
 
     it('can optionally display an array of global actions', () => {
@@ -46,5 +57,11 @@ describe('DefaultTopNavGlobalActions', () => {
         component = shallow(<DefaultTopNavGlobalActions>{testChildElement}</DefaultTopNavGlobalActions>);
 
         expect(component.find('.testChildElement')).toBePresent();
+    });
+
+    it('has a help button', () => {
+        component = mount(<DefaultTopNavGlobalActions/>);
+
+        expect(component.find('.reHelpButton')).toBePresent();
     });
 });

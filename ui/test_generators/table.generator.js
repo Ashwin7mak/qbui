@@ -5,6 +5,7 @@
 (function() {
     'use strict';
     //var consts = require('../common/src/constants');
+    var log = require('../server/src/logger').getLogger();
     var rawValueGenerator = require('./rawValue.generator');
     var tableBuilder = require('./table.builder');
     var tableConsts = require('./table.constants');
@@ -137,23 +138,23 @@
 
             if (typeof table[tableConsts.NAME] !== 'string') {
                 tablePropsValid = false;
-                console.error('The name of the table was not a string. Table: ' + JSON.stringify(table));
+                log.error('The name of the table was not a string. Table: ' + JSON.stringify(table));
             }
 
             if (typeof table[tableConsts.APP_ID] !== 'undefined' && typeof table[tableConsts.APP_ID] !== 'string') {
                 tablePropsValid = false;
-                console.error('The app id on the table was not a string. Table: ' + JSON.stringify(table));
+                log.error('The app id on the table was not a string. Table: ' + JSON.stringify(table));
             }
 
             if (typeof table[tableConsts.TABLE_ALIAS] !== 'undefined' && typeof table[tableConsts.TABLE_ALIAS] !== 'string') {
                 tablePropsValid = false;
-                console.error('The table alias for the table was not a string. Table: ' + JSON.stringify(table));
+                log.error('The table alias for the table was not a string. Table: ' + JSON.stringify(table));
             }
 
             for (var index in fields) {
                 if (!fieldGenerator.validateFieldProperties(fields[index])) {
                     fieldsValid = false;
-                    console.error('Could not validate field: ' + fieldGenerator.fieldToJsonString(fields[index]) + '.\n This field will not be added to the table');
+                    log.error('Could not validate field: ' + fieldGenerator.fieldToJsonString(fields[index]) + '.\n This field will not be added to the table');
                 }
             }
 
@@ -295,9 +296,9 @@
             var dataTypeAttributes = dataTypeAttributeBuilder.withType(dataType).build();
             var multiChoice = null;
             if (fieldNameToTypeMap[fieldName][DATA_ATTR_CONST]) {
-                console.log(`dataTypeAttributes for ${fieldName} before=${JSON.stringify(dataTypeAttributes)} adding ${JSON.stringify(fieldNameToTypeMap[fieldName][DATA_ATTR_CONST])}`);
+                log.trace(`dataTypeAttributes for ${fieldName} before=${JSON.stringify(dataTypeAttributes)} adding ${JSON.stringify(fieldNameToTypeMap[fieldName][DATA_ATTR_CONST])}`);
                 dataTypeAttributes = Object.assign({}, dataTypeAttributes, fieldNameToTypeMap[fieldName][DATA_ATTR_CONST]);
-                console.log(`dataTypeAttributes for ${fieldName} after=${JSON.stringify(dataTypeAttributes)}`);
+                log.trace(`dataTypeAttributes for ${fieldName} after=${JSON.stringify(dataTypeAttributes)}`);
             }
             if (fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]) {
                 multiChoice = Object.assign({}, fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]);

@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import QBToolTip from '../qbToolTip/qbToolTip';
+import ErrorWrapper from '../fields/errorWrapper';
 import * as CompConstants from '../../constants/componentConstants';
 
 import './tableFieldInput.scss';
@@ -49,7 +50,8 @@ class TableFieldInput extends React.Component {
      * @returns true only if we have a validation error AND we don't have focus AND the user has edited the field
      */
     showValidationError() {
-        return !this.props.hasFocus && this.props.validationError && this.props.edited;
+
+        return this.props.validationError && this.props.edited;
     }
 
     /**
@@ -65,7 +67,7 @@ class TableFieldInput extends React.Component {
             placeholder: this.props.placeholder,
             onChange: (e) => this.props.onChange(this.props.name, e.target.value),
             onFocus: () => this.props.onFocus && this.props.onFocus(this.props.name),
-            onBlur: () => this.props.onBlur && this.props.onBlur(this.props.name),
+            onBlur: (e) => this.props.onBlur && this.props.onBlur(this.props.name, e.target.value),
             ref: (input) => {this.input = input;}
         };
 
@@ -83,7 +85,11 @@ class TableFieldInput extends React.Component {
             <div className={classes.join(" ")}>
                 <div className="tableFieldTitle">{this.props.required && "*"} {this.props.title}</div>
                 <div className="tableFieldInput">
-                    {showValidationError ? this.renderInvalidInput(input) : input}
+
+                    <ErrorWrapper isInvalid={showValidationError}
+                                    invalidMessage={this.props.validationError}>
+                        {input}
+                    </ErrorWrapper>
                 </div>
             </div>);
     }

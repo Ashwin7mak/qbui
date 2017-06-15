@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'QuickBaseIconUISturdy';
-  src:  url('fonts/QuickBaseIconUISturdy.eot?cx15nv');
-  src:  url('fonts/QuickBaseIconUISturdy.eot?cx15nv#iefix') format('embedded-opentype'),
-    url('fonts/QuickBaseIconUISturdy.woff2?cx15nv') format('woff2'),
-    url('fonts/QuickBaseIconUISturdy.ttf?cx15nv') format('truetype'),
-    url('fonts/QuickBaseIconUISturdy.woff?cx15nv') format('woff'),
-    url('fonts/QuickBaseIconUISturdy.svg?cx15nv#QuickBaseIconUISturdy') format('svg');
+  src:  url('fonts/QuickBaseIconUISturdy.eot?v9845k');
+  src:  url('fonts/QuickBaseIconUISturdy.eot?v9845k#iefix') format('embedded-opentype'),
+    url('fonts/QuickBaseIconUISturdy.woff2?v9845k') format('woff2'),
+    url('fonts/QuickBaseIconUISturdy.ttf?v9845k') format('truetype'),
+    url('fonts/QuickBaseIconUISturdy.woff?v9845k') format('woff'),
+    url('fonts/QuickBaseIconUISturdy.svg?v9845k#QuickBaseIconUISturdy') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -435,5 +435,20 @@
 }
 .iconUISturdy-x-secondary:before {
   content: "\e988";
+}
+.iconUISturdy-invite-user:before {
+  content: "\e989";
+}
+.iconUISturdy-change-user-role:before {
+  content: "\e98a";
+}
+.iconUISturdy-delete-user:before {
+  content: "\e98b";
+}
+.iconUISturdy-help-reversed:before {
+  content: "\e98c";
+}
+.iconUISturdy-feedback:before {
+  content: "\e98d";
 }
 

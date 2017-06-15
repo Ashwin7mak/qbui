@@ -1,12 +1,13 @@
 import React, {PropTypes, Component} from 'react';
-import GlobalAction from '../globalAction/globalAction';
+import GlobalAction from 'REUSE/components/globalAction/globalAction';
 import UserDropDown from './supportingComponents/userDropDown';
-import HelpButton from '../helpButton/helpButton';
+import UserFeedBack from './supportingComponents/userFeedBack';
+import HelpButton from './supportingComponents/helpButton';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
-import Locale from '../../../../../client-react/src/locales/locales';
-import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
+import Locale from 'APP/locales/locales';
+import WindowLocationUtils from 'APP/utils/windowLocationUtils';
 // IMPORTING FROM CLIENT REACT
 
 import './defaultTopNavGlobalActions.scss';
@@ -20,7 +21,7 @@ const signOutHref = '/qbase/signout';
  * Alternatively, pass in additional top bar elements by wrapping them with this component as children: <ReDefaultTopNavGlobalActions> <div>CustomMenuItem</div> </ReDefaultTopNavGlobalActions>
  * Check out the propTypes for other values you can change if you need.
  * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
-class ReDefaultTopNavGlobalActions extends Component {
+class DefaultTopNavGlobalActions extends Component {
     /**
      * A link to sign the user out
      * (MenuItem href is currently incompatible with react-fastclick) */
@@ -32,10 +33,18 @@ class ReDefaultTopNavGlobalActions extends Component {
         return (
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
+                    {this.props.hasFeedback &&
+                    <li className="link globalAction withDropdown">
+                        <UserFeedBack
+                            startTabIndex={this.props.startTabIndex}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                        />
+                    </li>
+                    }
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
-                            tabIndex={this.props.startTabIndex + index}
+                            tabIndex={this.props.startTabIndex}
                             key={action.msg}
                             linkClass={this.props.linkClass}
                             onSelect={this.props.onSelect}
@@ -47,13 +56,14 @@ class ReDefaultTopNavGlobalActions extends Component {
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
                             changeLocale={this.props.changeLocale}
-                            startTabIndex={this.props.startTabIndex + this.props.actions.length}
+                            startTabIndex={this.props.startTabIndex}
                             signOutUser={this.signOutUser}
                             app={this.props.app}
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                             position = {"center"}
                         />
                     </li>
+
                     <li className="link globalAction"><HelpButton/></li>
                 </ul>
             </div>
@@ -67,7 +77,10 @@ const actionPropType = React.PropTypes.shape({
     link: React.PropTypes.string
 });
 
-ReDefaultTopNavGlobalActions.propTypes = {
+DefaultTopNavGlobalActions.propTypes = {
+    /**
+     * Determines whether the feedback button should be shown or not */
+    hasFeedback: PropTypes.bool,
     linkClass: PropTypes.string,
 
     /**
@@ -97,9 +110,10 @@ ReDefaultTopNavGlobalActions.propTypes = {
     shouldOpenMenusUp: React.PropTypes.bool
 };
 
-ReDefaultTopNavGlobalActions.defaultProps = {
+DefaultTopNavGlobalActions.defaultProps = {
+    hasFeedback: true,
     startTabIndex: 0,
     actions: [],
 };
 
-export default ReDefaultTopNavGlobalActions;
+export default DefaultTopNavGlobalActions;

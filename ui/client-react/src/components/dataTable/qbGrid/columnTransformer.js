@@ -14,8 +14,9 @@ class ColumnTransformer {
      * @param headerClasses Optionally any css classes to add to the column header element
      * @param headerLabelClasses Optionally any css classes to add to the column header label element
      * @param isHidden should this be rendered on screen
+     * @param isPlaceholder is this a placeholder column (used in order to indicate where you can place a column)
      */
-    constructor(headerLabel, cellIdentifierValue, headerClasses = '', headerLabelClasses = '', isHidden = false) {
+    constructor(headerLabel, cellIdentifierValue, headerClasses = '', headerLabelClasses = '', isHidden = false, isPlaceholder = false) {
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
         this.headerLabelClasses = headerLabelClasses;
@@ -25,6 +26,7 @@ class ColumnTransformer {
         this.headerMenuProps = {};
         this.classes = headerClasses;
         this.isHidden = isHidden;
+        this.isPlaceholder = isPlaceholder;
     }
 
     /**
@@ -58,11 +60,15 @@ class ColumnTransformer {
      * @params MenuComponent An optional React Element (e.g., menu dropdown) to display next to the header text
      * @returns {{property: *, header: {label: XML}}}
      */
-    getGridHeader() {
+    getGridHeader(onMove) {
         let transformedColumn = {
             property: this.cellIdentifierValue,
             header: {
                 label: this._buildHeaderComponent(),
+            },
+            props: {
+                label: this.headerLabel,
+                onMove
             }
         };
 

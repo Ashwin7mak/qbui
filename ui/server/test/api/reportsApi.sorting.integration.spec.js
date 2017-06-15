@@ -230,7 +230,8 @@
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
                     // Get the report data back, check for sortList prop which also contains groupBy
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.GET).then(function(reportGetResult) {
+                    reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, r.id, true);
+                    recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportGetResult) {
                         var reportResults = JSON.parse(reportGetResult.body);
                         var metaData = JSON.parse(reportResults.body);
                         //verify report Meta Data
@@ -242,7 +243,7 @@
 
                         // Execute a report and check sort order of records
                         // TODO report/results API is not getting the records sorted.So using report results below to verify.
-                        recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results', consts.GET).then(function(reportResult) {
+                        recordBase.apiBase.executeRequest(reportEndpoint + '/results', consts.GET).then(function(reportResult) {
                             var results = JSON.parse(reportResult.body);
                             // Sort the expected records
                             var sortedExpectedRecords = sortRecords(records, testcase.sortFids, testcase.sortOrder);

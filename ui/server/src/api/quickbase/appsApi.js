@@ -4,7 +4,8 @@
 (function() {
     'use strict';
 
-    let defaultRequest = require('request');
+    let env = require('../../config/environment');
+    let defaultRequest = require('../../requestClient').getClient(env);
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
     let log = require('../../logger').getLogger();
@@ -14,6 +15,7 @@
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
+        let rolesApi = require('./rolesApi')(config);
 
         let request = defaultRequest;
 
@@ -57,21 +59,54 @@
                 });
             },
 
-            getTableProperties: function(req, tableId) {
+            /** TODO: This method has been copied from tableApi.js but will be refactored to be removed once
+             *  circular dependencies between tableApi.js and appsApi.js have been sorted out.
+             *
+             * Create endpoint on the tableProperties object.
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
+            _createTableProperties: function(req, table) {
                 return new Promise((resolve, reject) =>{
                     let opts = requestHelper.setOptions(req);
-                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, table.id);
 
                     requestHelper.executeRequest(req, opts).then(
                         (eeResponse) =>{
                             resolve(JSON.parse(eeResponse.body));
                         },
                         (error) =>{
-                            log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties");
-                            //always resolve - we do not want to block the get Apps call on this failure
-                            resolve({});
+                            requestHelper.logUnexpectedError('appsApi._createTableProperties(): error creating table properties', error, true);
+                            resolve();
                         }).catch((ex) =>{
-                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
+                            requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties', ex, true);
+                            resolve();
+                        });
+                });
+            },
+
+            /**
+             * Get endpoint for tableProperties object.
+             * @param req
+             * @param table
+             * @returns {Promise}
+             */
+            getTablePropertiesList: function(req) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (eeResponse) => {
+                            resolve(JSON.parse(eeResponse.body));
+                        },
+                        (error) => {
+                            log.error({req: req}, "appsApi.getTablePropertiesList(): Error getting table properties list from EE");
+                            //resolve - we do not want to block the get Apps call on this failure
+                            resolve({});
+                        }).catch((ex) => {
+                            requestHelper.logUnexpectedError('appsApi.getTablePropertiesList(): unexpected error getting table properties list from EE', ex, true);
                             //always resolve - we do not want to block the get Apps call on this failure
                             resolve({});
                         });
@@ -81,10 +116,10 @@
             /**
              * Helper method to update the app's tables after table properties have been retrieved
              * @param app
-             * @param tables
+             * @param tablePropsArray
              * @private
              */
-            _mergeTableProps(app, tablePropsArray) {
+            _mergeTableProps(app, tablePropsArray, tablesWithoutProps) {
                 //ideally there should be same number of responses as tables but just to be sure look up which response corresponds to which table
                 app.tables.map((table) => {
                     let idx = _.findIndex(tablePropsArray, function(props) {return props.tableId === table.id;});
@@ -92,6 +127,9 @@
                         Object.keys(tablePropsArray[idx]).forEach(function(key, index) {
                             table[key] = tablePropsArray[idx][key];
                         });
+                    } else if (tablesWithoutProps) {
+                        //no props found - maybe this table was created through api so populate values into the tableProperties object for the benefit of UI
+                        tablesWithoutProps.push(table);
                     }
                 });
             },
@@ -102,36 +140,45 @@
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppsRoute(req.url, appId);
 
-                    //  make the api request to get the app
-                    requestHelper.executeRequest(req, opts).then(
-                        (response) => {
-                            let app = JSON.parse(response.body);
-                            let tablePromises = [];
-                            if (Array.isArray(app.tables)) {
-                                app.tables.map((table) => {
-                                    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
-                                    let tableReq = _.clone(req);
-                                    tableReq.url = tablesRootUrl;
-                                    tablePromises.push(this.getTableProperties(tableReq, table.id));
-                                });
-                                Promise.all(tablePromises).then(
-                                    (responses) => {
-                                        this._mergeTableProps(app, responses);
+                    let appPromises = [];
+                    appPromises.push(requestHelper.executeRequest(req, opts));
+                    //also get the table properties list for the app
+                    let propsReq = _.clone(req);
+                    appPromises.push(this.getTablePropertiesList(propsReq));
+
+                    Promise.all(appPromises).then(
+                        (responses) => {
+                            let app = JSON.parse(responses[0].body);
+                            if (responses.length > 1) {
+                                let tablesWithoutProps = [];
+                                this._mergeTableProps(app, responses[1], tablesWithoutProps);
+                                if (tablesWithoutProps.length > 0) {
+                                    let tablePromises = [];
+                                    tablesWithoutProps.forEach(table => {
+                                        let tablePropsReq = _.clone(req);
+                                        tablePropsReq.method = 'POST';
+                                        tablePropsReq.rawBody = JSON.stringify({"tableNoun": table.name});
+                                        tablePropsReq.headers[constants.CONTENT_LENGTH] = tablePropsReq.rawBody.length;
+                                        tablePromises.push(this._createTableProperties(tablePropsReq, table));
+                                    });
+                                    Promise.all(tablePromises).then(
+                                        (propsResponses) => {
+                                            this._mergeTableProps(app, propsResponses);
+                                            resolve(app);
+                                        },
+                                        () => {
+                                            resolve(app);
+                                        }
+                                    ).catch((ex) => {
+                                        requestHelper.logUnexpectedError('appsApi.getApp(): unexpected error creating table props for tables missing props in EE', ex, true);
                                         resolve(app);
-                                    },
-                                    (error) => {
-                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
-                                        resolve(app);
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                    });
+                                } else {
                                     resolve(app);
-                                });
+                                }
+                            } else {
+                                resolve(app);
                             }
-                        },
-                        (error) => {
-                            log.error({req: req}, "appsApi.getApp(): Error retrieving app.");
-                            reject(error);
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsApi.getApp(): unexpected error fetching app', ex, true);
@@ -140,6 +187,13 @@
                 });
             },
 
+            /**
+             * Return a hydrated app; this includes appAccessRights, core table properties and client table properties
+             *
+             * @param req
+             * @param appId
+             * @returns {Promise}
+             */
             getHydratedApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId)];
@@ -147,6 +201,12 @@
                         function(response) {
                             let app = response[0];
                             app.accessRights = response[1];
+
+                            //sort tables by id to match create order
+                            if (app.tables) {
+                                app.tables = _.sortBy(app.tables, 'id');
+                            }
+
                             resolve(app);
                         },
                         function(error) {
@@ -173,7 +233,6 @@
                             (response) => {
                                 let apps = JSON.parse(response.body);
 
-                                //  TODO: investigate...concern if the number of apps is large???
                                 let promises = [];
                                 apps.forEach((app) => {
                                     promises.push(this.getHydratedApp(_.clone(req), app.id));
@@ -297,7 +356,63 @@
                         reject(ex);
                     });
                 });
+            },
+
+            /**
+             * Get a single table or all tables for an app
+             *
+             * @param req
+             * @returns {Promise}
+             */
+            getTablesForApp: function(req, tableId) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req, true);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            const tables = JSON.parse(response.body);
+                            resolve(tables);
+                        },
+                        (error) => {
+                            log.error({req: req}, "appsApi.getTablesForApp(): Error fetching app tables on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('appsApi.getTablesForApp(): unexpected error fetching app tables on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
+            /**
+             * Fetch app users and a hydrated app
+             *
+             * @param req
+             * @param appId
+             * @returns {Promise}
+             */
+            getAppComponents: function(req, appId) {
+                return new Promise((resolve, reject) => {
+                    let appComponents = [this.getAppUsers(req), this.getHydratedApp(req, appId)];
+                    Promise.all(appComponents).then(
+                        function(response) {
+                            resolve({
+                                users: response[0],
+                                app: response[1]
+                            });
+                        },
+                        function(error) {
+                            log.error({req: req}, "appsApi.getAppComponents(): Error retrieving app components.");
+                            reject(error);
+                        }
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('reportsAPI..getAppComponents', error, true);
+                        reject(error);
+                    });
+                });
             }
+
         };
         return appsApi;
     };

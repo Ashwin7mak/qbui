@@ -12,6 +12,7 @@ describe('ReportService functions', () => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
         getSpy = spyOn(BaseService.prototype, 'get');
+        spyOn(BaseService.prototype, 'patch');
 
         reportService = new ReportService();
     });
@@ -22,7 +23,7 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_META, [appId, tblId, rptId]);
 
-        reportService.getReportMetaData(appId, tblId, rptId);
+        var returnedReport = reportService.getReportMetaData(appId, tblId, rptId);
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 
@@ -225,6 +226,28 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(reportService.API.PARSE_FACET_EXPR,  {params: params});
     });
 
+    it('should update a report', () => {
+        let appId = '123';
+        let tableId = '456';
+        let reportId = '1';
+        let report = {name: "report name", description: "desc", fids: [7, 8, 9]};
+
+        let url = reportService.constructUrl(reportService.API.PATCH_REPORT_META, [appId, tableId, reportId]);
+        reportService.updateReport(appId, tableId, reportId, report);
+        expect(BaseService.prototype.patch).toHaveBeenCalledWith(url, report);
+    });
+
+    it('should not update a report if no properties to update', () => {
+        let appId = '123';
+        let tableId = '456';
+        let reportId = '1';
+        let report = {};
+
+        let url = reportService.constructUrl(reportService.API.PATCH_REPORT_META, [appId, tableId, reportId]);
+        reportService.updateReport(appId, tableId, reportId, report);
+        expect(BaseService.prototype.patch).not.toHaveBeenCalled();
+    });
+
     describe('Test Cache of a fetch by key', () => {
 
         beforeEach(() => {
@@ -281,5 +304,4 @@ describe('ReportService functions', () => {
             expect(reportService._cached(signature1)).toEqual(undefined);
         });
     });
-
 });

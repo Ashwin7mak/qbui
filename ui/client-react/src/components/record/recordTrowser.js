@@ -9,7 +9,7 @@ import QBicon from "../qbIcon/qbIcon";
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
@@ -23,10 +23,15 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
-
+import {getPendEdits, getRecord} from '../../reducers/record';
+import {getRecordTitle} from '../../utils/formUtils';
 import './recordTrowser.scss';
-
-
+import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
+import {unloadEmbeddedReport} from '../../actions/reportActions';
+import NumberUtils from '../../utils/numberUtils';
+import constants from '../../../../common/src/constants';
+import * as UrlConsts from "../../constants/urlConstants";
+import QueryUtils from '../../utils/queryUtils';
 /**
  * trowser containing a record component
  *
@@ -38,7 +43,11 @@ export const RecordTrowser = React.createClass({
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         recId: React.PropTypes.string,
-        viewingRecordId: React.PropTypes.string,
+        editingAppId: React.PropTypes.string,
+        editingTblId: React.PropTypes.string,
+        editingRecId: React.PropTypes.number,
+        editingApp: React.PropTypes.object,
+        editingTable: React.PropTypes.object,
         visible: React.PropTypes.bool,
         editForm: React.PropTypes.object,
         reportData: React.PropTypes.object,
@@ -72,10 +81,10 @@ export const RecordTrowser = React.createClass({
             <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>
                 <Record
-                    selectedApp={this.props.selectedApp}
-                    appId={this.props.appId}
-                    tblId={this.props.tblId}
-                    recId={this.props.recId}
+                    selectedApp={this.props.editingApp}
+                    appId={this.props.editingAppId}
+                    tblId={this.props.editingTblId}
+                    recId={this.props.editingRecId}
                     appUsers={this.props.appUsers}
                     errorStatus={this.editForm ? this.props.editForm.errorStatus : null}
                     pendEdits={pendEdits}
@@ -99,8 +108,8 @@ export const RecordTrowser = React.createClass({
 
         const record = this.getRecordFromProps(this.props);
         if (record.navigateAfterSave === true) {
-            let {appId, tblId} = this.props;
-            this.props.history.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
+            let {editingAppId, editingTblId} = this.props;
+            this.props.history.push(`${APP_ROUTE}/${editingAppId}/table/${editingTblId}/record/${recId}`);
         }
     },
 
@@ -241,14 +250,13 @@ export const RecordTrowser = React.createClass({
             showNotificationOnSuccess: true,
             addNewRow: false
         };
-        this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, params)).then(
+        this.props.dispatch(updateRecord(this.props.editingAppId, this.props.editingTblId, this.props.editingRecId, params)).then(
             (obj) => {
                 //  need to call as the form.saving attribute is used to determine when to
                 //  open/close the 'modal working' spinner/window..
                 this.props.saveFormComplete(formType);
-                if (this.props.viewingRecordId === obj.recId) {
-                    this.props.syncForm(CONTEXT.FORM.VIEW);
-                }
+                this.props.syncForm(CONTEXT.FORM.VIEW, obj.recId);
+
 
                 if (next) {
                     this.nextRecord();
@@ -280,7 +288,10 @@ export const RecordTrowser = React.createClass({
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+
+        //get the fields for the currently edited app/table
+        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields) &&
+            (this.props.reportData.tblId === this.props.editingTblId) && (this.props.reportData.appId === this.props.editingAppId)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
@@ -293,13 +304,13 @@ export const RecordTrowser = React.createClass({
             showNotificationOnSuccess: true,
             addNewRow: false
         };
-        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
+        this.props.dispatch(createRecord(this.props.editingAppId, this.props.editingTblId, params)).then(
             (obj) => {
                 this.props.saveFormComplete(formType);
-                if (this.props.viewingRecordId === obj.recId) {
-                    this.props.syncForm(CONTEXT.FORM.VIEW);
-                }
+                this.props.syncForm(CONTEXT.FORM.VIEW, obj.recId);
 
+                //refresh the embedded report,after a child record is added to the embedded report
+                this.props.unloadEmbeddedReport(this.props.location.query[UrlConsts.EMBEDDED_REPORT]);
                 if (next) {
                     this.nextRecord();
                 } else {
@@ -351,7 +362,7 @@ export const RecordTrowser = React.createClass({
                 let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
                 this.props.openRecord(recId, nextRecordId, previousRecordId);
-                WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+                WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
             }
         }
     },
@@ -383,24 +394,26 @@ export const RecordTrowser = React.createClass({
     },
 
     getRecordFromProps(props = this.props) {
-        return _.nth(props.record, 0) || {};
+        return  getRecord(props.record.records, props.recId);
     },
 
     /**
      *  get breadcrumb element for top of trowser
      */
     getTrowserBreadcrumbs() {
-        const table = this.props.selectedTable;
+        const table = this.props.editingTable;
 
         let record = this.getRecordFromProps(this.props);
 
-        const showBack = !!(record.previousRecordId !== null);
-        const showNext = !!(record.nextRecordId !== null);
+        const showBack = !!(record.previousRecordId);
+        const showNext = !!(record.nextRecordId);
 
-        const recordName = this.props.selectedTable && this.props.selectedTable.name;
+        let relatedRecord =  _.has(this.props, 'editForm.formData.record') ? this.props.editForm.formData.record : null;
+        let recordName = getRecordTitle(this.props.editingTable, relatedRecord, this.props.recId);
+        //const recordName = this.props.editingTable && this.props.editingTable.name;
 
-        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
-            <span>{recordName} #{this.props.recId}</span>;
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :
+            <span>{recordName}</span>;
 
 
         return (
@@ -433,17 +446,17 @@ export const RecordTrowser = React.createClass({
                     </OverlayTrigger>
                 }
                 {showNext &&
-                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                    <Button className="alternativeTrowserFooterButton" bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
                 {this.props.recId === null &&
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                <Button className="alternativeTrowserFooterButton" bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
                 }
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+                <Button className="mainTrowserFooterButton" bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 
     hideTrowser() {
-        WindowLocationUtils.pushWithoutQuery();
+        WindowHistoryUtils.pushWithoutQuery();
 
         this.props.onHideTrowser();
     },
@@ -456,7 +469,7 @@ export const RecordTrowser = React.createClass({
     clearEditsAndClose() {
         HideAppModal();
         this.props.editRecordCancel(this.props.appId, this.props.tblId, this.props.recId);
-        WindowLocationUtils.pushWithoutQuery();
+        WindowHistoryUtils.pushWithoutQuery();
         this.props.onHideTrowser();
     },
 
@@ -485,17 +498,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getPendEdits() {
-        return this.getRecord().pendEdits || {};
-    },
-
-    getRecord() {
-        let record = {};
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                record = this.props.record[0];
-            }
-        }
-        return record;
+        return getPendEdits(this.props.record, this.props.recId || NEW_RECORD_VALUE);
     },
 
     keyboardOnSave() {
@@ -555,8 +558,8 @@ const mapDispatchToProps = (dispatch) => {
         //saveFormError: (formType, errorStatus) => {
         //    dispatch(saveFormError(formType, errorStatus));
         //},
-        syncForm: (formType) => {
-            dispatch(syncForm(formType));
+        syncForm: (formType, recordId) => {
+            dispatch(syncForm(formType, recordId));
         },
         hideErrorMsgDialog: () => {
             dispatch(hideErrorMsgDialog());
@@ -566,6 +569,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         openRecord:(recId, nextRecordId, prevRecordId) => {
             dispatch(openRecord(recId, nextRecordId, prevRecordId));
+        },
+        unloadEmbeddedReport: (context) => {
+            dispatch(unloadEmbeddedReport(context));
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));

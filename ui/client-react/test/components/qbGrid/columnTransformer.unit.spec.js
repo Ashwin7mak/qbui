@@ -7,6 +7,7 @@ const testCellIdentifierValue = 'Halloweentown';
 const testFormatter = (cell) => 'Nightmare Before Christmas';
 const TestHeaderComponent = React.createClass({render() {return <h1>Sally</h1>;}});
 const testHeaderProps = {type: 'Rag Doll', stuffing: 'Fall Leaves'};
+const onMove = {};
 
 describe('ColumnTransformer', () => {
     describe('new', () => {
@@ -66,12 +67,16 @@ describe('ColumnTransformer', () => {
             property: testCellIdentifierValue,
             header: {
                 label: <span className=""><span className="">{testHeaderLabel}</span></span>
+            },
+            props: {
+                label: testHeaderLabel,
+                onMove: onMove
             }
         };
 
         it('converts the ColumnTransformer instance into a column object that can be consumed by QbGrid', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
-            expect(_.isEqual(columnTransformer.getGridHeader(), expectedOutput)).toEqual(true);
+            expect(_.isEqual(columnTransformer.getGridHeader(onMove), expectedOutput)).toEqual(true);
         });
 
         it('adds a cell formatter if it is set', () => {
@@ -84,7 +89,7 @@ describe('ColumnTransformer', () => {
                 }
             });
 
-            expect(_.isEqual(columnTransformer.getGridHeader(), expectedOutputWithFormatter)).toEqual(true);
+            expect(_.isEqual(columnTransformer.getGridHeader(onMove), expectedOutputWithFormatter)).toEqual(true);
         });
 
         it('adds a menu component if it is set', () => {
@@ -106,7 +111,7 @@ describe('ColumnTransformer', () => {
                 }
             });
 
-            expect(_.isEqual(columnTransformer.getGridHeader(), expectedOutputWithHeaderMenu)).toEqual(true);
+            expect(_.isEqual(columnTransformer.getGridHeader(onMove), expectedOutputWithHeaderMenu)).toEqual(true);
         });
     });
 });

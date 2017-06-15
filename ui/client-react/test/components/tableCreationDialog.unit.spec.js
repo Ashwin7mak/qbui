@@ -9,7 +9,6 @@ let domComponent;
 
 const mockParentFunctions = {
     hideDialog() {},
-    notifyTableCreated() {},
     setEditingProperty() {},
     setTableProperty() {},
     createTable: () => {return {then: (fn) => fn({data:'tableId'})};},
@@ -52,7 +51,6 @@ function buildMockParent() {
                                      setTableProperty={mockParentFunctions.setTableProperty}
                                      hideTableCreationDialog={mockParentFunctions.hideDialog}
                                      createTable={mockParentFunctions.createTable}
-                                     notifyTableCreated={mockParentFunctions.notifyTableCreated}
                                      onTableCreated={mockParentFunctions.tableCreated}
                 />
             );

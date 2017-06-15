@@ -12,11 +12,12 @@ export default {
             testMsg: "test"
         },
         apps: {
-            header: "Apps"
+            header: "Apps",
+            missing: "Stay tuned, my apps is coming soon"
         },
         app: {
             homepage: {
-                welcomeTitle: "Welcome to Mercury Beta",
+                welcomeTitle: "Welcome to",
                 welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
                 "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
                 "data is here. Work you do here displays immediately in Classic view, too.",
@@ -35,12 +36,29 @@ export default {
                 helpLinkPreText: "Please ",
                 helpLinkText: "contact our Care team"
             },
+            dashboards: {
+                missing: "Stay tuned, app dashboards are coming soon"
+            },
             settings: "Settings",
             users: {
-                addUser: "Adding a new user is not available yet",
+                addUser: "Add a new user",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
-                manager: "Application Manager"
+                manager: "Application Manager",
+                removeUser: "Remove this user?",
+                unAssignUser: "Users will no longer be able to access this application. Any data they have previously entered will remain in the application.",
+                deleteUser: "Remove {value} user",
+                deleteUsers: "Remove {value} users",
+                removeButton: "Remove",
+                cancel: "Cancel",
+                plural: "users",
+                usersRemovedFromAppRole: "{numOfUsers} users have been removed from the app",
+                userRemovedFromAppRole: "User has been removed from the app",
+                userAdded: "User added",
+                userAddError: "Error adding user",
+                userRemovingError: "Error removing user",
+                emailBody: "Email body goes here",
+                emailSubject: "Email subject goes here"
             }
         },
         appMenu: {
@@ -81,6 +99,7 @@ export default {
             deleteTheseOverrides: "Delete these overrides?",
             more: "More...",
             placeholder: "Select...",
+            tablesPlaceholder: "Select a table...",
             notFound: "Not Found"
         },
         footer: {
@@ -110,11 +129,16 @@ export default {
             new: "New",
             apply: "Apply",
             backToApp: "Back to app",
-            reset: "Reset"
+            reset: "Reset",
+            closeRecord: "Close record",
+            expandSection: "Expand section",
+            collapseSection: "Collapse section"
+
         },
         field: {
             search: "Search",
-            searchNoMatch: "Nobody matches"
+            searchNoMatch: "Nobody matches",
+            searchNoMatchAddUser: "No users match what you're looking for"
         },
         grid: {
             no_data: "There is no data to display.",
@@ -137,6 +161,7 @@ export default {
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
             cancelSelection: "Cancel changes",
+            close: "Close",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
@@ -158,7 +183,7 @@ export default {
             recordNotAdded :"Record not added",
             recordSaved : "Record saved",
             recordNotSaved :"Record not saved",
-            deleted : "deleted",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n} deleted",
             notDeleted : "not deleted",
             cannotLoad : "Cannot load record",
             error: {
@@ -174,7 +199,11 @@ export default {
                     "de-de": "German"
                 },
                 preferences: "Preferences",
-                sign_out: "Sign out"
+                sign_out: "Sign out",
+                feedbackMenuButton: "Give feedback",
+                feedbackMenuTitle: "Feedback",
+                reportFeedBackButton: "Report an issue",
+                feedbackTooltip: "Share ideas and issues"
             }
         },
         fields: {
@@ -204,15 +233,53 @@ export default {
                     error: "Error saving form"
                 }
             },
-            automation: {
-                approverecord: {
-                    success: "Record Approved.",
-                    error: "An error occured when approving this record."
+            noParentRecordSelected: "No record selected"
+        },
+        automation: {
+            approverecord: {
+                success: "Record Approved.",
+                error: "An error occured when approving this record."
+            },
+            testAutomation: {
+                success: "Automation Test Successful.",
+                error: "An error occured when testing this automation."
+            },
+            saveAutomation: {
+                success: "Automation Saved Successful.",
+                error: "An error occured when saving this automation."
+            },
+            automationList: {
+                nameHeader: "Name",
+                activeHeader: "Active",
+                actionHeader: "Action",
+                actionButton: "Test",
+                activeYes: "Yes",
+                activeNo: "No"
+            },
+            automationView: {
+                stageHeading: "Automation: {automationName}",
+                nameHeader: "Name",
+                triggerHeader: "Trigger",
+                actionHeader: "Action",
+                actions: {
+                    email: "Send an email"
                 }
-            }
+            },
+            automationEdit: {
+                stageHeading: "Modify Automation: {automationName}",
+                nameHeader: "Name",
+                emailSectionHeader: "Send an Email",
+                toHeader: "Notify Whom",
+                subjectHeader: "Subject",
+                bodyHeader: "Message"
+            },
+            automationBuilder: {
+                modify: 'Modify Automation'
+            },
         },
         relationship: {
-            childTable: "Child Table"
+            childTable: "Child Table",
+            addChildRecord: "Add {tableNoun}"
         },
         durationWithUnits: {
             // these keys can't change they correspond to the
@@ -263,7 +330,14 @@ export default {
                 noCheck : "No",
                 yesCheck : "Yes",
                 clearFacet: "Clear {facet} filter",
-                clearFacetSelection: "Click to clear this filter"
+                clearFacetSelection: "Click to clear this filter",
+                filter: "Filter"
+            },
+            notification: {
+                save: {
+                    success: "Report saved",
+                    error: "Error saving report"
+                }
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -282,6 +356,7 @@ export default {
             nextPageLoadingOnSwipe: "Getting more...",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
+                sortAndGroupIcon: "Sort & Group",
                 addField: "Add a field",
                 by: "by",
                 changeGroupOrder: "Change group order",
@@ -327,6 +402,10 @@ export default {
                 newTable: "New table based on this column",
                 columnProps: "Column properties",
                 fieldProps: "Field properties"
+            },
+            drawer: {
+                title: "Hidden fields",
+                info: "Add a field to the report",
             }
         },
         errorMessagePopup: {
@@ -471,7 +550,7 @@ export default {
             emails: "Format all the addresses like name@domain.com",
             maxChars: "Use up to {maxNum} characters",
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
-            phone: "Format the {fieldName} like (xxx) xxx-xxxx",
+            phone: "Enter a genuine number for {fieldName}",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
             duration: {
                 timeFormat: "Format the {fieldName} in {value}",
@@ -494,7 +573,10 @@ export default {
             print: "Printing is not available yet",
             copy: "Copying is not available yet",
             email: "Emailing is not available yet",
-            delete: "Deleting is not available yet"
+            delete: "Deleting is not available yet",
+            emailUsers: "Exporting CSV is not available yet",
+            settingsRole: "Changing role is not available yet",
+            emailApp: "Sending app invite is not available yet",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
@@ -506,6 +588,7 @@ export default {
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
+        missingHelp: "Help is not available yet",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Long text",
@@ -532,6 +615,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Rating",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formula",
+            [FieldFormats.LINK_TO_RECORD]: "Get another record",
+            LINK_TO_RECORD_FROM: "Get another record from {parentTable}",
             FORMULA: "Formula",
             SCALAR: "Scalar",
             CONCRETE: "Concrete",
@@ -544,12 +629,25 @@ export default {
             title: "Field Properties",
             name: "Name",
             required: "Must be filled in",
-            multiChoice: "Choices"
+            multiChoice: "Choices",
+            unique: "Must be unique",
+            linkToRecord: "Link to a record in the table",
+            connectedTo: "Connected on {fieldName} field"
         },
         builder: {
+            tabs: {
+                existingFields: 'Add an existing field',
+                newFields:  'Create a new field',
+            },
+            reportBuilder: {
+                modify: 'Modify report'
+            },
             formBuilder: {
+                modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
+                newFieldsMenuTitle: 'New',
+                existingFieldsMenuTitle: 'Existing',
                 tooltips: {
                     // Tooltip for every single field type because of requirements for a/an and pronouns different for each language
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Create a text field and add it to the form",
@@ -577,13 +675,30 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Create a numeric choice list and add it to the form",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Create numeric radio buttons and add them to the form",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Create radio buttons field and add them to the form",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Create link to a record in another table",
                 }
             },
+            existingFieldsToolTip: "Add {fieldName} to the form",
             fieldGroups: {
-                text: 'Text',
-                numeric: 'Number',
-                date: 'Date',
-                other: 'Other'
+                text: "Text",
+                numeric: "Number",
+                date: "Date",
+                other: "Other",
+                relationships: "Relationships",
+                tableDataConnections: "Table data connections"
+            },
+            defaultMultichoiceOptions: {
+                first: "Option 1",
+                second: "Option 2",
+                third: "Option 3"
+            },
+            linkToRecord: {
+                dialogTitle: "Get another record",
+                addToForm: "Add to form",
+                tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
+                tableChooserHeading: "Where is the record you want to get?",
+                advancedSettingsHeading: "Advanced Settings",
+                fieldChooserDescription: "To get a record in the {tableName} table, an automatic association is made using a unique and required field.  To select another field, you can choose from the list below.  You can't change this field once you add it to your form."
             }
         },
         featureSwitchAdmin: {
@@ -628,7 +743,7 @@ export default {
             summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
 
             addFieldsTitle: "Get ready to add fields to your table",
-            tableNameHeading: "Table Name",
+            tableNameHeading: "Table name",
             recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",
@@ -665,11 +780,15 @@ export default {
         },
         settings: {
             header: "Settings",
+            appHeader: "App",
+            automationSettings: "Automations",
             tablesHeader: "Table",
-            appsHeader: "Table",
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
+            reportsHeader: 'Report',
+            configureReportBuilder: 'Modify this report'
+
         },
         tableEdit: {
             tableUpdateFailed: "Failed to update table",
@@ -684,6 +803,21 @@ export default {
                 prompt: "Type YES to confirm that you want to delete this table"
             },
             YES: "YES"
+        },
+        addUserToApp: {
+            title: "Add users to",
+            description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
+            searching: "Searching...",
+            userSuccessTitle: "Your app has a new user!",
+            userSuccessText: "Let them know they have access to your app by sharing the link with them.",
+            copy: "Copy",
+            email: "Email",
+            toCopy: "Click to Copy to Clipboard",
+            toEmail: "Click to send an Email",
+            userSuccessDialogOK: "No thanks",
+            copied: "Link copied",
+            messageSubject:"Link to the {appName} app",
+            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
         }
     }
 };

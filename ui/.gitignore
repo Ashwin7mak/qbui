@@ -33,10 +33,14 @@ node_modules/
 
 # don't want local configs accidentally checked in
 wdio/config/wdio.conf.js
+wdio/config/wdioMobile.conf.js
 tests.custom.webpack.js
 
 # generated error screenshots shouldn't be tracked either
 wdio/screenshots/
+
+# generated e2e test reports shouldn't be tracked
+wdio/junitOutput/
 
 #this folder is created everytime I run webdriverIO, do not commit
 wdio/ui

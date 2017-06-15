@@ -9,6 +9,7 @@
     var envConsts = require('./environmentConstants');
     var routeGroups = require('../../routes/routeGroups');
     var clientConsts = require('./clientConsts');
+    var random = require('lodash').random;
 
     var client = clientConsts.REACT;
 
@@ -17,9 +18,10 @@
     var javaHost = 'http://quickbase-dev.com';
     var eeHost = 'http://quickbase-dev.com';
     // same thing with node so we don't have colliding ports
-    var nodeHostPort = 9000 + Number(process.env.EXECUTOR_NUMBER);
+    var nodeHostPort = 9000 + random(0, 99);
     var nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
     var eeHostEnable = true;
+    let automationsHost = 'http://quickbase-dev.com';
 
     // For the e2e try job we want to connect to an integration instance of Tomcat. If we set the env var in Jenkins
     // then use that otherwise default to the above
@@ -28,6 +30,9 @@
     }
     if (process.env.EE_HOST) {
         eeHost = process.env.EE_HOST;
+    }
+    if (process.env.WE_HOST) {
+        automationsHost = process.env.WE_HOST;
     }
 
     if (!eeHostEnable) {
@@ -68,6 +73,9 @@
 
         eeHost: eeHost,
         eeHostEnable: true,
+
+        //host for Workflow Engine service
+        automationHost: automationsHost,
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'

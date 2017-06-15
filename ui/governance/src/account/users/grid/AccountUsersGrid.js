@@ -1,38 +1,53 @@
-import React, {PropTypes, Component} from 'react';
-
-import {GetAccountUsersGridColumns} from './AccountUsersGridColumns';
-
+import React, {PropTypes, Component} from "react";
+import {GetAccountUsersGridColumns} from "./AccountUsersGridColumns";
+import {GetAccountUsersFacetFields} from "./AccountUsersGridFacet";
+import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
+import * as AccountUsersActions from "../AccountUsersActions";
+import constants from "../../../app/constants";
 import "./AccountUsersGrid.scss";
-import StandardGrid from '../../../common/grid/standardGrid';
-import * as Actions from "../AccountUsersActions";
 
 /**
- * Renders the grid portion of the AccountUsers view
+ * Renders the Grid portion of the AccountUsers view
+ * It has all the standard components : Grid, ToolBar (Search, Filter, Pagination)
  */
 class AccountUsersGrid extends Component {
     render() {
         return (
             <StandardGrid
+                id={this.props.id}
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
-                doUpdate={Actions.doUpdate}
-                data={this.props.users}
-                id="accountUsers"
+                facetFields={GetAccountUsersFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
+                doUpdate={AccountUsersActions.doUpdateUsers}
                 rowKey="uid"
+                itemTypePlural="users"
+                itemTypeSingular="user"
+                itemsPerPage={constants.USERS_GRID_ITEMSPERPAGE}
+                noItemsFound={'governance.noItemsFound'}
             />
         );
     }
 }
 
-// Provide type checking
 AccountUsersGrid.propTypes = {
-    users: PropTypes.array,
-    showAccountColumns: PropTypes.bool,
-    showRealmColumns: PropTypes.bool
-};
+    /**
+     * ID of the Grid
+     */
+    id: PropTypes.string,
 
-// Provide default val
-AccountUsersGrid.defaultProps = {
-    users: []
+    /**
+     * We show different columns based on permissions.
+     * Account Columns for example are only shown for Account Admins
+     * Realm Columns are only shown for Realm Admins
+     * See GetAccountUsersGridColumns for more details
+     */
+    showAccountColumns: PropTypes.bool,
+    showRealmColumns: PropTypes.bool,
+
+    /**
+     * We need to tell the grid what kind of item we are displaying
+     */
+    itemTypePlural: PropTypes.string,
+    itemTypeSingular: PropTypes.string
 };
 
 export default AccountUsersGrid;

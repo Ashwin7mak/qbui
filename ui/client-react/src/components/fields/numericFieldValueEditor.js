@@ -26,6 +26,7 @@ const input = React.createClass({
                 onBlur={this.props.onBlur}
                 size={this.props.width}
                 tabIndex={this.props.tabIndex}
+                disabled={this.props.isDisabled}
             />
         );
     }
@@ -43,6 +44,12 @@ const NumericFieldValueEditor = React.createClass({
         })]), //as of now it should be a number only. if we decide to add currency symbol etc within the box then thats diff
 
         display: React.PropTypes.string,
+
+        /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
         /**
          * optional string to display when input is empty aka ghost text */
         placeholder: React.PropTypes.string,
@@ -157,8 +164,10 @@ const NumericFieldValueEditor = React.createClass({
 
         let width = _.get(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width', null);
 
+        let Input = this.props.isDisabled ? input : ClearableNumericField;
+
         return (
-            <ClearableNumericField
+            <Input
                 {...this.props}
                 onChange={this.onChange}
                 onBlur={this.onBlur}

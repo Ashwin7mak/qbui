@@ -1,12 +1,13 @@
 import React from 'react';
+import {shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import Fluxxor from 'fluxxor';
-import IconActions from '../../src/components/actions/iconActions';
+import {IconActions} from '../../src/components/actions/iconActions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
 import {__RewireAPI__ as ReportToolbarRewireAPI} from '../../src/components/report/reportToolbar';
 import FacetSelections  from '../../src/components/facet/facetSelections';
-import facetMenuActions from '../../src/actions/facetMenuActions';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -17,25 +18,6 @@ const mockStore = configureMockStore(middlewares);
 
 describe('ReportToolbar functions', () => {
     'use strict';
-
-    let navStore = Fluxxor.createStore({
-        getState() {
-            return {leftNavOpen: true};
-        }
-    });
-
-    let stores = {
-        NavStore: new navStore()
-    };
-
-    let flux = new Fluxxor.Flux(stores);
-    flux.actions = {
-        onToggleRowPopUpMenu() {
-            return;
-        }
-    };
-    const pageActions = <IconActions flux={flux} actions={[]}/>;
-
     let fakefacets = [
         {
             id: 1, name: "Types", type: "TEXT", blanks: true,
@@ -92,6 +74,7 @@ describe('ReportToolbar functions', () => {
     let callBacks = {};
     let store = {};
     beforeEach(() => {
+        jasmineEnzyme();
         store = mockStore({});
         // init props
         props = {
@@ -99,10 +82,12 @@ describe('ReportToolbar functions', () => {
             pageStart: 1,
             pageEnd: 0,
             recordsCount: 0,
+            toggleRowActionsMenu: () =>{},
             search: {
                 searchInput: ''
             }
         };
+
         callBacks = {
             filterOnSelections: function() {
             },
@@ -139,6 +124,7 @@ describe('ReportToolbar functions', () => {
             numRows:20
         }
     };
+    const pageActions = <IconActions {...props} actions={[]}/>;
 
     const fakeReportData_simple = {
         loading: false,
@@ -190,7 +176,6 @@ describe('ReportToolbar functions', () => {
         let component = TestUtils.renderIntoDocument(<ReportToolbar {...props}
                                                                 reportData={fakeReportWithNoFacets}
                                                                 selections={null}
-                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is no shown
@@ -212,15 +197,21 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
                                                                 searchTheString={callBacks.searchTheString}
-                                                                pageActions={pageActions} />);
+                                                                 />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         //add bool facet
-        component.handleFacetSelect(null, {id: 4}, 'Yes');
+        component.handleFacetSelect({id: 4}, 'Yes');
 
         // ensure the boolean facet becomes a member
         selected.addSelection(4, 'Yes');
-        expect(callBacks.filterOnSelections).toHaveBeenCalledWith(selected);
+
+        // For some reason, object comparison here is not working as we expect.
+        //expect(callBacks.filterOnSelections).toHaveBeenCalledWith(selected);
+        // So, instead, get the actual object passed to the callback and compare
+        // the selection hashes using getSelections().
+        let filterOnSelectionsFirstArg = callBacks.filterOnSelections.calls.mostRecent().args[0];
+        expect(selected.getSelections()).toEqual(filterOnSelectionsFirstArg.getSelections());
     });
 
     it('test render reportToolbar with selected values then clear a field selection', () => {
@@ -230,13 +221,12 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
                                                                 searchTheString={callBacks.searchTheString}
-                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         //select a couple of facets
-        component.handleFacetSelect(null, {id: 1}, 'Development');
-        component.handleFacetSelect(null, {id: 1}, 'Planning');
+        component.handleFacetSelect({id: 1}, 'Development');
+        component.handleFacetSelect({id: 1}, 'Planning');
         expect(callBacks.filterOnSelections).toHaveBeenCalled();
         callBacks.filterOnSelections.calls.reset();
 
@@ -255,12 +245,11 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
                                                                 searchTheString={callBacks.searchTheString}
-                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         //select a couple of facets
-        component.handleFacetDeselect(null, {id: 1}, 'Development');
+        component.handleFacetDeselect({id: 1}, 'Development');
         expect(callBacks.filterOnSelections).toHaveBeenCalled();
     });
 
@@ -271,12 +260,11 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
                                                                 searchTheString={callBacks.searchTheString}
-                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         //select a couple of facets
-        component.handleFacetSelect(null, {id: 1}, 'Development');
-        component.handleFacetSelect(null, {id: 2}, 'Claire Martinez');
+        component.handleFacetSelect({id: 1}, 'Development');
+        component.handleFacetSelect({id: 2}, 'Claire Martinez');
         callBacks.filterOnSelections.calls.reset();
 
         //clear all selects
@@ -285,5 +273,68 @@ describe('ReportToolbar functions', () => {
         expect(callBacks.filterOnSelections).toHaveBeenCalled();
     });
 
-});
+    it('does not render FilterSearchBox if isSearchBoxVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isSearchBoxVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
 
+        let reportToolbarSearchBox = component.find('.reportToolbarSearchBox');
+
+        expect(reportToolbarSearchBox).not.toBePresent();
+    });
+
+    it('does not render SortAndGroup if isSortAndGroupVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isSortAndGroupVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
+
+        let reportToolbarSortAndGroup = component.find('.reportToolbarSortAndGroup');
+
+        expect(reportToolbarSortAndGroup).not.toBePresent();
+    });
+
+    it('does not render FacetsMenu if isFacetMenuVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isFacetMenuVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
+
+        let facetMenu = component.find('.facetMenu');
+
+        expect(facetMenu).not.toBePresent();
+    });
+
+    it('does not render rightReportToolbar if isRightToolbarVisible is false', () => {
+        let component = shallow(
+            <ReportToolbar
+                {...props}
+                isRightToolbarVisible={false}
+                reportData={fakeReportData_simple}
+                filterOnSelections={callBacks.filterOnSelections}
+                searchTheString={callBacks.searchTheString}
+                pageActions={pageActions}
+            />);
+
+        let rightReportToolbar = component.find('.rightReportToolbar');
+
+        expect(rightReportToolbar).not.toBePresent();
+    });
+
+});

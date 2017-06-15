@@ -1,0 +1,97 @@
+@import '../../../../reuse/client/src/assets/css/qbVariables';
+
+/*
+ * This background color for appHomePageContainer is defined here because it is particular to the temporary app homepage
+ * background color. It overrides the white background for the purpose of this temp page. When/If this is deleted,
+ * the homepage will revert to the normal color.
+*/
+.appHomePageContainer {
+    background-color: $color-black-200;
+
+    .appHomePageStage {
+        padding-left: 30px;
+
+        .appStageHeadline {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: $stage-headline-color;
+            margin-bottom: 10px;
+
+            .appHeadLine {
+                height: 26px;
+                margin: 0;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+.appHomePage {
+    background-color: $color-black-200;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+
+    .appHomePageWidthConstraint {
+        max-width: 1200px;
+        min-width: 670px;
+        margin: auto;
+    }
+}
+
+.myappsBody {
+    margin-top: 25px;
+    margin-left: 10px;
+
+    .main {
+        padding: 0;
+        display: flex;
+        flex-flow: row;
+
+        .article {
+            padding: 5px;
+            flex: 3 1 100%;
+            order: 2;
+
+            .horizontalPlaceHolder {
+                color: $color-black-700;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .horizontalPlaceHolderIconLine {
+                    display: block;
+
+                    .myappsImage {
+                        width: 1200px;
+                    }
+                    @include medium-breakpoint {
+
+                        .myappsImage {
+                            width: 550px;
+                        }
+                    }
+
+                    @include small-breakpoint {
+                        .myappsImage {
+                            width: 390px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .header {
+        display: block;
+        margin-bottom: 25px;
+        padding: 5px;
+        min-height: 10px;
+        font-size: 18px;
+        color: $color-black-500;
+    }
+
+}

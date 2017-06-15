@@ -1,32 +1,41 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: QBUI ECS Deployment
+Description: QBUI ECS Deployment # CUSTOMIZE
 Parameters:
+  ServiceName:
+    Type: String
+    Default: coreui # CUSTOMIZE
+  Path:
+    Type: String
+    Default: "/*" # CUSTOMIZE
+  HealthCheckPath:
+    Type: String
+    Default: /qbui/health # CUSTOMIZE
+  Priority:
+    Type: String
+    Default: 200 # CUSTOMIZE
+  ContainerMemory:
+    Type: String
+    Default: 2048
+  ContainerPort:
+    Type: String
+    Default: 9443
+  LegacyBase:
+    Type: String
+    Default: "NO_DEFAULT"
+  # You probably shouldn't change any of the following parameters
+  ContainerImage:
+    Type: String
+  DesiredCount:
+    Type: String
+    Default: 3
   VPCStackName:
     Type: String
     Default: general-vpc
-  Path:
-    Type: String
-    Default: "/*"
   SwimlaneID:
     Type: String
   Environment:
     Type: String
-  ServiceName:
-    Type: String
-    Default: coreui
-  DesiredCount:
-    Type: String
-    Default: 2
-  ContainerPort:
-    Type: String
-    Default: 9443
-  ContainerImage:
-    Type: String
-    Default: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/ui:latest
-  ContainerMemory:
-    Type: String
-    Default: 2048
 
 Mappings:
   # 3381 = pre-prod
@@ -35,9 +44,13 @@ Mappings:
     DomainName:
       "723670383381": "newstack.quickbaserocks.com"
       "729325871063": "newstack.quickbase.com"
+      "717266932182": "newstack.quickbase.net"
+      "956858433230": "newstack.quickbase.me"
     SecretsKmsKeyId:
       "723670383381": "79461a25-ffdc-4fbf-ac4f-febb847dcb9b"
       "729325871063": "7eb8ecf8-3894-4d3d-a3e4-74ed8b811c7e"
+      "717266932182": "c66d258f-d4ec-4ba7-8e70-c9e977f8e56a"
+      "956858433230": "2a2988f8-f5ca-4f1a-9778-e5cf0ccff4f0"
 
 Resources:
   Service:
@@ -48,6 +61,11 @@ Resources:
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
+      PlacementStrategies:
+        - Field: attribute:ecs.availability-zone
+          Type: spread
+        - Field: instanceId
+          Type: spread
       LoadBalancers:
         - ContainerName: !Ref ServiceName
           ContainerPort: !Ref ContainerPort
@@ -69,6 +87,16 @@ Resources:
           Environment:
             - Name: NODE_ENV
               Value: container
+            - Name: javaHost
+              Value: !Sub
+                - "https://${SwimlaneID}-ecs.${DomainName}:443"
+                - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
+            - Name: eeHost
+              Value: !Sub
+                - "https://${SwimlaneID}-ecs.${DomainName}:443"
+                - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
+            - Name: legacyBase
+              Value: !Ref LegacyBase
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
@@ -78,7 +106,7 @@ Resources:
     Properties:
       ListenerArn:
         "Fn::ImportValue": !Sub "${SwimlaneID}-ecs-ALBListenerARN"
-      Priority: 200
+      Priority: !Ref Priority
       Conditions:
         - Field: path-pattern
           Values:
@@ -96,7 +124,7 @@ Resources:
       Matcher:
         HttpCode: 200-299
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /qbase/favicons/favicon.ico
+      HealthCheckPath: !Ref HealthCheckPath
       HealthCheckProtocol: HTTPS
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
@@ -158,7 +186,10 @@ Resources:
               Effect: Allow
               Action:
                 - ssm:GetParameters
-              Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-${Environment}-${ServiceName}-db.*"
+              Resource:
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-${Environment}-${ServiceName}.*"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-ecs-SHARED.*"
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/GLOBAL-${Environment}-SHARED.*"
             -
               Effect: Allow
               Action:

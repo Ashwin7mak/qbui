@@ -394,15 +394,19 @@ To run the production distribution node server:
 1. run build to create the dist dir with grunt or gradle
 
 * with grunt, go to the ui dir:        
-    `NODE_ENV=prod grunt clean build`
+    `NODE_ENV=prod GIT_UIBRANCH=master grunt clean build`
     
 * or with gradle, go to the project root dir:      
-    `NODE_ENV=prod gradle build`
+    `NODE_ENV=prod GIT_UIBRANCH=master gradle build`
     
 2. run one of the following (may need sudo) to start the server, go to the ui/dist dir:
 
-        NODE_ENV=prod node server/src/app.js
-        NODE_ENV=prod npm start
+        NODE_ENV=prod GIT_UIBRANCH=master node server/src/app.js
+        NODE_ENV=prod GIT_UIBRANCH=master npm start
+
+**IMPORTANT NOTE:** If you want the javascript bundles to be minified/uglified, you must include the GIT_UIBRANCH=master environment variable.
+Non-master branches are not uglified/minified to speed up try-builds for those branches. If you run the commands above without GIT_UIBRANCH,
+then the server will still run in prod mode, but the bundles will not be minified/uglified.
 
 ## Running with Forever
 To start a node server with forever which ensures that a given node script runs continuously:
@@ -560,6 +564,15 @@ whatever caution you determine to be appropriate. Note that turning off the
 hotloader only opens up node on port 9000 to other devices. Other services
 (such as core on port 8080 or Experience Engine on port 8081) are always open to
 all devices on the network and aren't affected by the hotloader settings.
+
+## Performance Logging
+Performance logging using EPISODES has not been migrated to redux.  The code was removed from the source branch as only 3 components
+generated performance statistics.  If there is a need re-activate performance logging on the client, a new redux store/actions should
+get created.  Reference to the old flux implementation code:
+
+    * branch: mc-2703-migrate-loadApp-actions-redux
+    * sha: cf51f74e3fae2aa710562d8f47666e0d4203f167
+
 
 ## Troubleshooting
 POSSIBLE ISSUES -- and how to resolve

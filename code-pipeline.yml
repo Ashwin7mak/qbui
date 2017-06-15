@@ -1,0 +1,232 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CoreUI Code Pipeline # CUSTOMIZE
+
+Parameters:
+  ServiceName:
+    Type: String
+    Default: coreui # CUSTOMIZE
+  GitRepoName:
+    Type: String
+    Default: qbui # CUSTOMIZE
+  # You probably shouldn't change any of the following parameters
+  CodeBuildContainerSize:
+    Type: String
+    Default: BUILD_GENERAL1_LARGE
+  CodeBuildImage:
+    Type: String
+    Default: aws/codebuild/docker:1.12.1
+  CodeBuildTimeOutMins:
+    Type: String
+    Default: 30
+  GitRepoBranch: 
+    Type: String
+    Default: master
+  GitRepoOwner:
+    Type: String
+    Default: QuickBase
+  PreProdCrossAccountID:
+    Type: String
+    Default: 723670383381
+    ConstraintDescription: Must be a valid AWS Account ID without hyphens.
+    AllowedPattern: '[0-9]*'
+    MinLength: 12
+    Description: PreProd Account ID where we want to deploy resources from CodePipeline
+  ProdCrossAccountID:
+    Type: String
+    Default: 729325871063
+    ConstraintDescription: Must be a valid AWS Account ID without hyphens.
+    AllowedPattern: '[0-9]*'
+    MinLength: 12
+    Description: Prod Account ID where we want to deploy resources from CodePipeline
+  PerfCrossAccountID:
+    Type: String
+    Default: 956858433230
+    ConstraintDescription: Must be a valid AWS Account ID without hyphens.
+    AllowedPattern: '[0-9]*'
+    MinLength: 12
+    Description: Perf Account ID where we want to deploy resources from CodePipeline
+  GitHubOauthToken:
+    Type: String
+    Default: 78ddf6f5c2fefd18f983fa734ff485eaefb15d2d
+    Description: Oauth token for GitHub Access
+
+Resources:
+  # This repo is being deprecated and will be deleted after all client configurations are updated
+  Repository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub quickbase/ui # Normally this is quickbase/${ServiceName}
+      RepositoryPolicyText:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Ref PreProdCrossAccountID
+                - !Ref ProdCrossAccountID
+                - !Ref PerfCrossAccountID
+            Action:
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+              - ecr:BatchCheckLayerAvailability
+              - ecr:ListImages
+              - ecr:DescribeImages
+
+  NewRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub quickbase/${ServiceName}
+      RepositoryPolicyText:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Ref PreProdCrossAccountID
+                - !Ref ProdCrossAccountID
+                - !Ref PerfCrossAccountID
+            Action:
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+              - ecr:BatchCheckLayerAvailability
+              - ecr:ListImages
+              - ecr:DescribeImages
+
+  CodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Ref AWS::StackName
+      RestartExecutionOnUpdate: true
+      ArtifactStore:
+        EncryptionKey:
+          Type: KMS
+          Id: !Sub arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/CodePipelineKey
+        Location: quickbase-codepipeline-bucket
+        Type: S3
+      RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/PipelineRole-${AWS::Region}
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: GitHubRepo
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              Configuration:
+                Branch: !Ref GitRepoBranch
+                OAuthToken: !Ref GitHubOauthToken
+                Owner: !Ref GitRepoOwner
+                Repo: !Ref GitRepoName
+              OutputArtifacts:
+                - Name: build-source
+        # If you encounter IAM permission errors during this phase, contact Product Infrastructure
+        - Name: Update-Pipeline
+          Actions:
+            - Name: Pipeline
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              Configuration:
+                TemplatePath: build-source::code-pipeline.yml
+                ActionMode: REPLACE_ON_FAILURE
+                Capabilities: CAPABILITY_IAM
+                StackName: !Sub codepipeline-${ServiceName}
+                RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/PipelineUpdateRole-${AWS::Region}
+              InputArtifacts:
+                - Name: build-source
+              RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/PipelineUpdateRole-${AWS::Region}
+        - Name: Build
+          Actions:
+            - Name: BuildCode
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              Configuration:
+                ProjectName: !Ref CodeBuildProject
+              InputArtifacts:
+                - Name: build-source
+              OutputArtifacts:
+                - Name: build-artifacts
+        # TODO: Don't deploy unless branch is master
+        - Name: Deployment
+          Actions:
+            - Name: INT1
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              Configuration:
+                TemplatePath: build-source::deploy/ecs.yml
+                ActionMode: REPLACE_ON_FAILURE
+                Capabilities: CAPABILITY_IAM
+                StackName: !Sub INT1-int-${ServiceName}
+                RoleArn: !Sub arn:aws:iam::${PreProdCrossAccountID}:role/CodePipelineCrossAccountRole-${AWS::Region}
+                # TODO: Add CF template config files to specify all but dynamic values (e.g. all but ContainerImage)
+                ParameterOverrides: !Sub |
+                  {
+                    "ContainerImage" : { "Fn::GetParam" : [ "build-artifacts", "build.json", "image" ] },
+                    "SwimlaneID": "INT1",
+                    "Environment": "int",
+                    "LegacyBase": ".currentstack-int.quickbaserocks.com"
+                  }
+              InputArtifacts:
+                - Name: build-artifacts
+                - Name: build-source
+              RoleArn: !Sub arn:aws:iam::${PreProdCrossAccountID}:role/CodePipelineCrossAccountRole-${AWS::Region}
+            - Name: PROD1
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              Configuration:
+                TemplatePath: build-source::deploy/ecs.yml
+                ActionMode: REPLACE_ON_FAILURE
+                Capabilities: CAPABILITY_IAM
+                StackName: !Sub PROD1-prod-${ServiceName}
+                RoleArn: !Sub arn:aws:iam::${ProdCrossAccountID}:role/CodePipelineCrossAccountRole-${AWS::Region}
+                # TODO: Add CF template config files to specify all but dynamic values (e.g. all but ContainerImage)
+                ParameterOverrides: !Sub |
+                 {
+                    "ContainerImage" : { "Fn::GetParam" : [ "build-artifacts", "build.json", "image" ] },
+                    "SwimlaneID": "PROD1",
+                    "Environment": "prod",
+                    "LegacyBase": ".quickbase.com"
+                 }
+              InputArtifacts:
+                - Name: build-artifacts
+                - Name: build-source
+              RoleArn: !Sub arn:aws:iam::${ProdCrossAccountID}:role/CodePipelineCrossAccountRole-${AWS::Region}
+
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+        Name: !Ref ServiceName
+      Description: Cross Account CodeBuild
+      EncryptionKey: alias/CodePipelineKey
+      Environment:
+        ComputeType: !Ref CodeBuildContainerSize
+        Image: !Ref CodeBuildImage
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:
+          - Name: REPOSITORY_URI
+            Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${NewRepository}
+          - Name: NEXUS_SG
+            Value: sg-9e809be6
+          - Name: REGISTRYID
+            Value: !Ref AWS::AccountId
+          - Name: BRANCH
+            Value: !Ref GitRepoBranch
+      Name: !Sub ${AWS::StackName}-CodeBuild
+      ServiceRole: !Sub arn:aws:iam::${AWS::AccountId}:role/CodeBuildRole-${AWS::Region}
+      Source:
+        Type: CODEPIPELINE
+      TimeoutInMinutes: !Ref CodeBuildTimeOutMins

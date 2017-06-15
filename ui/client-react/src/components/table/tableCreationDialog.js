@@ -1,12 +1,12 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import TableCreationPanel from './tableCreationPanel';
-import TableCreationSummaryPanel from './tableCreationSummaryPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from "../../utils/i18nMessage";
 import * as TableCreationActions from '../../actions/tableCreationActions';
+import {updateFormRedirectRoute} from '../../actions/formActions';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
@@ -49,21 +49,20 @@ export class TableCreationDialog extends React.Component {
             (response) => {
                 this.props.hideTableCreationDialog();
 
-                // indicate that a table created notification will be needed
-                this.props.notifyTableCreated(true);
-
                 const tblId = response.data;
 
                 this.props.onTableCreated(tblId);
 
                 // navigate to form builder (no page reload)
 
+                this.props.updateFormRedirectRoute(null);
                 AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
                 // leave the dialog open but issue a growl indicating an error
                 NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
             });
+
     }
 
     /**
@@ -72,17 +71,20 @@ export class TableCreationDialog extends React.Component {
      */
     isValid() {
 
-        // form is invalid if any tableInfo properties have a validationError value
+        // form can be saved if the state if the fields is valid, regardless of what previous validation error is being shown
 
-        return !_.findKey(this.props.tableInfo, (field) => field.validationError);
+        return this.props.tableCreation.edited && !_.findKey(this.props.tableInfo, (field) => field.pendingValidationError);
     }
 
     /**
      * get table names for app
      */
     getExistingTableNames() {
-
-        return this.props.app.tables.map((table) => table.name);
+        let appTablesNames = [];
+        if (_.has(this.props.app, 'tables')) {
+            appTablesNames = this.props.app.tables.map((table) => table.name);
+        }
+        return appTablesNames;
     }
 
     /**
@@ -130,8 +132,7 @@ TableCreationDialog.propTypes = {
     setEditingProperty: PropTypes.func.isRequired,
     hideTableCreationDialog: PropTypes.func.isRequired,
     createTable: PropTypes.func.isRequired,
-    onTableCreated: PropTypes.func.isRequired,
-    notifyTableCreated: PropTypes.func.isRequired
+    onTableCreated: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -143,7 +144,7 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    TableCreationActions
+    {...TableCreationActions, updateFormRedirectRoute}
 )(TableCreationDialog);
 
 

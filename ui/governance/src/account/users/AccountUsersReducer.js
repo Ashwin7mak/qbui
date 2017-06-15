@@ -1,9 +1,8 @@
-import * as types from '../../app/actionTypes';
-import GetStatus from '../../common/reducer/RequestStatusReducer';
-import {combineReducers} from 'redux';
+import * as types from "../../app/actionTypes";
+import GetStatus from "../../common/reducer/RequestStatusReducer";
+import {combineReducers} from "redux";
 
 const users = (state = [], action) => {
-    // reducer - no mutations!
     switch (action.type) {
     case types.GET_USERS_SUCCESS:
         // update the state with the new users sent through action
@@ -18,5 +17,9 @@ const AccountUsers = combineReducers({
     users,
     status: GetStatus
 });
+
+export const isFetching = (state) => {
+    return state.AccountUsers.status.isFetching;
+};
 
 export default AccountUsers;

@@ -7,7 +7,17 @@ let testsFile = "tests.webpack.js";
 let testWithCoverage = true;
 let profilePath = path.resolve(__dirname, '../build/chromeDebugPath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
 
-// To run a custom set of tests, use `grunt test:client`
+// Please copy "tests.custom.webpack.js.sample" from the UI directory to the governance folder
+// and rename it to "tests.custom.webpack.js".
+// Focus on the particular test before running the karma server.
+// To load the karma server, cd into governance directory and run `karma start governance.karma.conf.js`
+// You should get the url in the terminal through which you can debug your tests in your browser console.
+if (process.env.KARMA_USE_CUSTOM) {
+    testsFile = "tests.custom.webpack.js";
+}
+if (process.env.KARMA_WITHOUT_COVERAGE) {
+    testWithCoverage = false;
+}
 
 // TODO:: Once governance folder is clean of dependencies on client-react, remove client-react auto-imports and transpilation throughout this file
 module.exports = function(config) {
@@ -59,7 +69,8 @@ module.exports = function(config) {
                             path.resolve(__dirname, "../client-react/src"),
                             path.resolve(__dirname, "../reuse/client/src"),
                             path.resolve(__dirname, "../node_modules/react-notifications"),
-                            path.resolve(__dirname, '../node_modules/react-select')
+                            path.resolve(__dirname, '../node_modules/react-select'),
+                            path.resolve(__dirname, '../node_modules/rc-tabs')
                         ],
                         loader: "style!css"
                     },
@@ -112,6 +123,17 @@ module.exports = function(config) {
                 'react/addons': true,
                 'react/lib/ExecutionEnvironment': true,
                 'react/lib/ReactContext': true
+            },
+            resolve: {
+                root: path.resolve(__dirname, '../'),
+                // Allow easier imports for commonly imported folders
+                alias: {
+                    APP: 'client-react/src',
+                    REUSE: 'reuse/client/src',
+                    GOVERNANCE: 'governance/src',
+                    AUTOMATION: 'automation/src',
+                    COMMON: 'common/src'
+                }
             }
         },
         webpackServer: {
@@ -225,9 +247,9 @@ module.exports = function(config) {
             ],
             check : {
                 global: {
-                    statements: 87,
+                    statements: 86,
                     branches: 60,
-                    functions: 90,
+                    functions: 88,
                     lines: 90
                 }
             }

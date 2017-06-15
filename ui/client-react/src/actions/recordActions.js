@@ -1,3 +1,4 @@
+
 /**
  * Any actions related to Record model are defined here. This is responsible for making calls to Node layer api based on the action.
  */
@@ -14,7 +15,6 @@ import {NEW_TABLE_IDS_KEY} from '../constants/localStorage';
 import * as query from '../constants/query';
 import * as SchemaConstants from "../constants/schema";
 import * as types from '../actions/types';
-
 
 let logger = new Logger();
 
@@ -81,10 +81,12 @@ function createEditRecordEventObject(appId, tblId, recId, origRec, changes, isIn
  * @param recId
  * @param nextRecordId
  * @param previousRecordId
+ * @param viewContextId the context for this action such as "VIEW" or "DRAWER"
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
-export const openRecord = (recId, nextRecordId, previousRecordId) => {
-    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
+export const openRecord = (recId, nextRecordId, previousRecordId, viewContextId) => {
+    viewContextId = viewContextId || recId;
+    return event(viewContextId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
 };
 
 /**
@@ -115,7 +117,7 @@ export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineE
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
 export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
-    let obj = createEditRecordEventObject(appId, tblId, recId, origRec, changes, true, null);
+    let obj = createEditRecordEventObject(appId, tblId, recId, origRec, changes, false, null);
     return event(recId, types.EDIT_RECORD_CHANGE, obj);
 };
 
@@ -167,7 +169,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                         dispatch(event(recIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds}));
 
                         //  send out notification message on the client
-                        let message = `${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`;
+                        let message = Locale.getPluralizedMessage('recordNotifications.deleted', {value: recIds.length, nameForRecord: ''});
                         NotificationManager.success(message, Locale.getMessage('success'), NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
@@ -542,6 +544,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
 
                                 // delay the response object so that the state gets updated with success settings
                                 Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                    dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                     let obj = {
                                         recId:recId,
                                         appId:appId,
@@ -606,4 +609,19 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
             }
         });
     };
+};
+
+
+/**
+ * Add a child record for a parent record with related value
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param detailFid
+ * @param parentValue
+ * @returns {{id: *, type: *, content: *}}
+ */
+export const addChildRecord = (context, appId, tblId, rptId, detailFid, parentValue)=> {
+    return event(context, types.ADD_CHILD_RECORD, {appId, tblId, rptId, detailFid, parentValue});
 };

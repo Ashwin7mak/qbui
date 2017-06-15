@@ -3,7 +3,8 @@ import {DefaultFieldProperties} from '../constants/defaultFieldPropertiesConstan
 const serverTypeConsts = require('../../../common/src/constants');
 import _ from 'lodash';
 
-let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultProperties) =>{
+let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultProperties) => {
+
     let fieldDef = {datatypeAttributes: {type}};
     let fieldType = FieldFormats.getFormatType(fieldDef);
     userDefaultProperties = userDefaultProperties || {};
@@ -13,8 +14,12 @@ let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultPro
     return _.merge(defaultScalarFieldsProperties, defaultTypeProperties, userDefaultProperties);
 };
 
-export const createScalarDefaultFieldsProperties = (userDefaultProperties = null) =>{
+export const createScalarDefaultFieldsProperties = (userDefaultProperties = null) => {
+
     return {
+        [FieldFormats.TEXT_FORMAT_MULTICHOICE]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.TEXT, DefaultFieldProperties[FieldFormats.TEXT_FORMAT_MULTICHOICE], userDefaultProperties)
+        },
         [FieldFormats.NUMBER_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.NUMERIC, DefaultFieldProperties[FieldFormats.NUMBER_FORMAT], userDefaultProperties)
         },
@@ -53,6 +58,12 @@ export const createScalarDefaultFieldsProperties = (userDefaultProperties = null
         },
         [FieldFormats.PHONE_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.PHONE_NUMBER, DefaultFieldProperties[FieldFormats.PHONE_FORMAT], userDefaultProperties)
+        },
+        [FieldFormats.LINK_TO_RECORD]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.LINK_TO_RECORD, DefaultFieldProperties[FieldFormats.LINK_TO_RECORD], userDefaultProperties)
+        },
+        [FieldFormats.LIST_OF_RECORDS]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.LIST_OF_RECORDS, DefaultFieldProperties[FieldFormats.LIST_OF_RECORDS], userDefaultProperties)
         },
         [FieldFormats.TEXT_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.TEXT, DefaultFieldProperties[FieldFormats.TEXT_FORMAT], userDefaultProperties)

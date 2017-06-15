@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
 import configureMockStore from 'redux-mock-store';
 import {Provider} from "react-redux";
 import {mount, shallow} from 'enzyme';

@@ -16,6 +16,7 @@ let CardViewList = React.createClass({
         isRowSelected: React.PropTypes.func,
         onSwipe: React.PropTypes.func,
         columns: React.PropTypes.array,
+        columnsMap: React.PropTypes.instanceOf(Map),
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string
     },
@@ -51,6 +52,7 @@ let CardViewList = React.createClass({
                                      appId={this.props.appId}
                                      tblId={this.props.tblId}
                                      columns={this.props.columns}
+                                     columnsMap={this.props.columnsMap}
                                      primaryKeyName={this.props.primaryKeyName}
                                      allowCardSelection={this.props.allowCardSelection}
                                      onToggleCardSelection={this.props.onToggleCardSelection}
@@ -89,6 +91,7 @@ let CardViewList = React.createClass({
                               rowId={rowId}
                               data={this.props.node}
                               columns={this.props.columns}
+                              columnsMap={this.props.columnsMap}
                               primaryKeyName={this.props.primaryKeyName}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}

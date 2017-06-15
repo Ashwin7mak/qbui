@@ -4,7 +4,7 @@ import * as recordActions from '../../src/actions/recordActions';
 import {__RewireAPI__ as RecordActionsRewireAPI} from '../../src/actions/recordActions';
 import * as types from '../../src/actions/types';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
-
+import _ from 'lodash';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -36,6 +36,16 @@ describe('Open/edit Record actions', () => {
         expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId)).toEqual(event(obj.recId, types.OPEN_RECORD, obj));
     });
 
+    it('When a viewContextId is provided, opening a record creates an action using the viewContextId instead of recordId', () => {
+        let obj = {
+            recId: 1,
+            nextRecordId: 2,
+            previousRecordId: 3
+        };
+        const viewContextId = 'UNIQUE_VIEW_CONTEXT';
+        expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId, viewContextId)).toEqual(event(viewContextId, types.OPEN_RECORD, obj));
+    });
+
     let obj1 = {
         appId: 1,
         tblId: 2,
@@ -45,15 +55,26 @@ describe('Open/edit Record actions', () => {
         isInlineEdit: true,
         fieldToStartEditing: null
     };
+
     let obj2 = {
+        appId: 1,
+        tblId: 2,
+        recId: 3,
+        origRec: {'origRec':1},
+        changes: {'changes':2},
+        isInlineEdit: false,
+        fieldToStartEditing: null
+    };
+
+    let obj3 = {
         appId: 1,
         tblId: 2,
         recId: 3
     };
     let testCases = [
         {name:'Edit a record:start', func:recordActions.editRecordStart, type:types.EDIT_RECORD_START, obj:obj1, expectation:event(obj1.recId, types.EDIT_RECORD_START, obj1)},
-        {name:'Edit a record:change', func:recordActions.editRecordChange, type:types.EDIT_RECORD_CHANGE, obj:obj1, expectation:event(obj1.recId, types.EDIT_RECORD_CHANGE, obj1)},
-        {name:'Edit a record:cancel', func:recordActions.editRecordCancel, type:types.EDIT_RECORD_CANCEL, obj:obj2, expectation:event(obj2.recId, types.EDIT_RECORD_CANCEL, obj2)}
+        {name:'Edit a record:change', func:recordActions.editRecordChange, type:types.EDIT_RECORD_CHANGE, obj:obj2, expectation:event(obj2.recId, types.EDIT_RECORD_CHANGE, obj2)},
+        {name:'Edit a record:cancel', func:recordActions.editRecordCancel, type:types.EDIT_RECORD_CANCEL, obj:obj3, expectation:event(obj3.recId, types.EDIT_RECORD_CANCEL, obj3)}
     ];
 
     testCases.forEach((testCase) => {
@@ -76,6 +97,11 @@ describe('Open/edit Record actions', () => {
 });
 
 describe('Delete Record Actions -- success workflow', () => {
+    let mockLocale = {
+        getPluralizedMessage() {return;},
+        getMessage() {return;}
+    };
+
     class mockRecordService  {
         constructor() { }
         deleteRecords(appId, tblId, recIds) {
@@ -88,11 +114,13 @@ describe('Delete Record Actions -- success workflow', () => {
         spyOn(mockRecordService.prototype, 'deleteRecords').and.callThrough();
         RecordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
         RecordActionsRewireAPI.__Rewire__('NotificationManager', {success: notificationSuccess});
+        RecordActionsRewireAPI.__Rewire__('Locale', mockLocale);
     });
 
     afterEach(() => {
         RecordActionsRewireAPI.__ResetDependency__('RecordService');
         RecordActionsRewireAPI.__ResetDependency__('NotificationManager');
+        RecordActionsRewireAPI.__ResetDependency__('Locale');
     });
 
     const appId = '1';
@@ -110,7 +138,6 @@ describe('Delete Record Actions -- success workflow', () => {
                 event(expectedRecIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds:expectedRecIds}),
                 event(expectedRecIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds:expectedRecIds})
             ];
-
             const store = mockStore({});
             return store.dispatch(testCase.func.apply(this, [appId, tblId, testCase.recIds, 'name'])).then(
                 () => {
@@ -262,7 +289,8 @@ describe('create Record Actions -- success workflow', () => {
 
     let fields = [
         {id: 4, builtIn: false, datatypeAttributes :true},
-        {id: 5, builtIn: true}
+        {id: 5, builtIn: true},
+        {id: 6, builtIn: false, name:'new field'}
     ];
 
     let newVal = {value:"hi", display:"there"};
@@ -577,7 +605,8 @@ describe('update Record Actions -- success workflow', () => {
     });
 
     let fields = [
-        {id:6, name: "test"}
+        {id:6, name: "test"},
+        {id:7, name: "newField", builtIn: false}
     ];
     let pendEdits = {
         recordChanges: {
@@ -603,7 +632,8 @@ describe('update Record Actions -- success workflow', () => {
     const addNewRow = true;
     const expectedActions = [
         event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes:changes}),
-        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow})
+        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow}),
+        event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId})
     ];
 
     let testCases = [
@@ -884,3 +914,20 @@ describe('update Record Actions -- getRecord error workflow', () => {
     });
 });
 
+
+describe('addChildRecord', () => {
+    it('creates an action that will add a child record in specified app, table, report with parent value', () => {
+        let params = {
+            appId : "appId",
+            tblId : "tblId",
+            rptId : "rptId",
+            detailFid : "detailFid",
+            parentValue : "parentValue",
+        };
+        expect(recordActions.addChildRecord("context", params.appId, params.tblId, params.rptId, params.detailFid, params.parentValue)).toEqual({
+            id: "context",
+            type: types.ADD_CHILD_RECORD,
+            content: params
+        });
+    });
+});

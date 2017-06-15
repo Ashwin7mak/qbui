@@ -1,9 +1,9 @@
 import * as types from "../../app/actionTypes";
 import RequestContextService from "./RequestContextService";
-import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
-import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
-import Logger from '../../../../client-react/src/utils/logger';
-import LogLevel from '../../../../client-react/src/utils/logLevels';
+import WindowLocationUtils from "../../../../client-react/src/utils/windowLocationUtils";
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
+import Logger from "../../../../client-react/src/utils/logger";
+import LogLevel from "../../../../client-react/src/utils/logLevels";
 
 let logger = new Logger();
 
@@ -35,7 +35,9 @@ const fetchRequestContext = (desiredAccountId) => {
                 if (error.response && error.response.status === 403) {
                     logger.parseAndLogError(LogLevel.WARN, error.response, 'requestContextService.getRequestContext:');
                     WindowLocationUtils.update(FORBIDDEN);
-                } else {
+                } else if (!(error.response && error.response.status === 401)) {
+                    // Since BaseService might be in the process of handling the redirect to current stack,
+                    // we have to provide an additional IF guard here so that we don't redirect to INTERNAL_SERVER_ERROR
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'requestContextService.getRequestContext:');
                     WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
                 }

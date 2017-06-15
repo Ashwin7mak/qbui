@@ -82,7 +82,7 @@ describe('ReportCell', () => {
         spyOn(actions, 'onCellClick');
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
 
-        let cellClickableArea = component.find('.cellClickableArea');
+        let cellClickableArea = component.find('.cellWrapper');
         cellClickableArea.simulate('click');
 
         expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
@@ -91,7 +91,7 @@ describe('ReportCell', () => {
     it('does not call onCellClick click handler if no handler is defined', () => {
         component = shallow(<ReportCell isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
 
-        let cellClickableArea = component.find('.cellClickableArea');
+        let cellClickableArea = component.find('.cellWrapper');
         cellClickableArea.simulate('click');
         // no assertions, we just want to make sure no error is thrown
     });

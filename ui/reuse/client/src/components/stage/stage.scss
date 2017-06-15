@@ -46,6 +46,14 @@
                 text-overflow: ellipsis;
                 overflow: hidden;
             }
+
+            .reportNameEditor {
+                .editor {
+                    h3 {
+                        height: 35px;
+                    }
+                }
+            }
         }
 
         .breadCrumbs {

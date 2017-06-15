@@ -12,7 +12,7 @@
     var testApp;
     var recordList;
 
-    describe('Forms - Edit a Record Via Form Tests: ', function() {
+    describe('Forms - Edit a record via form tests: ', function() {
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */

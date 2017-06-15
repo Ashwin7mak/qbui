@@ -1,11 +1,11 @@
-import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
-import StandardLeftNav from '../../../../reuse/client/src/components/sideNavs/standardLeftNav';
-import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
-import GetLeftNavLinks from './GovernanceLeftNavLinks';
-import * as RequestContextActions from '../requestContext/RequestContextActions';
+import React, {PropTypes, Component} from "react";
+import {connect} from "react-redux";
+import StandardLeftNav from "../../../../reuse/client/src/components/sideNavs/standardLeftNav";
+import GetLeftNavLinks from "./GovernanceLeftNavLinks";
+import * as RequestContextActions from "../requestContext/RequestContextActions";
+import {isFetching, getCurrentUser, getRealm} from "../requestContext/RequestContextReducer";
 
-class GovernanceLeftNav extends Component {
+export class GovernanceLeftNav extends Component {
     componentDidMount() {
         this.props.fetchData(this.props.accountId);
     }
@@ -18,33 +18,21 @@ class GovernanceLeftNav extends Component {
                 showLoadingIndicator={this.props.isLoading}
                 isContextHeaderSmall={true}
                 showContextHeader={true}
-                contextHeaderIcon="settings"
-                contextHeaderTitle="Manage QuickBase"
-                navItems={GetLeftNavLinks(this.props.isAccountAdmin, this.props.isRealmAdmin, this.props.isAccountURL)}
-                globalActions={<DefaultTopNavGlobalActions dropdownIcon="user" dropdownMsg="globalActions.user" shouldOpenMenusUp={true} />}
+                contextHeaderTitle="Manage Quick Base"
+                navItems={
+                    GetLeftNavLinks(
+                        this.props.isAccountAdmin,
+                        this.props.isRealmAdmin,
+                        this.props.isAccountURL,
+                        this.props.isCSR
+                    )
+                }
             >
                 {this.props.children}
             </StandardLeftNav>
         );
     }
 }
-
-export {GovernanceLeftNav};
-
-const mapDispatchToProps = (dispatch) => ({
-    fetchData(id) {
-        dispatch(RequestContextActions.fetchRequestContextIfNeeded(id));
-    }
-});
-
-const mapStateToProps = (state) => {
-    return {
-        isLoading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id,
-        isAccountAdmin: state.RequestContext.currentUser.isAccountAdmin,
-        isRealmAdmin: state.RequestContext.currentUser.isRealmAdmin,
-        isAccountURL: state.RequestContext.realm.isAccountURL
-    };
-};
 
 GovernanceLeftNav.propTypes = {
     fetchData: PropTypes.func.isRequired,
@@ -55,6 +43,22 @@ GovernanceLeftNav.propTypes = {
     isRealmAdmin: PropTypes.bool,
     isAccountAdmin: PropTypes.bool,
     isAccountURL: PropTypes.bool
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchData(id) {
+        dispatch(RequestContextActions.fetchRequestContextIfNeeded(id));
+    }
+});
+
+const mapStateToProps = (state) => {
+    return {
+        isLoading: isFetching(state),
+        isAccountAdmin: getCurrentUser(state).isAccountAdmin,
+        isRealmAdmin: getCurrentUser(state).isRealmAdmin,
+        isAccountURL: getRealm(state).isAccountURL,
+        isCSR: getCurrentUser(state).isCSR
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GovernanceLeftNav);

@@ -18,6 +18,8 @@
         flex-direction: column;
         flex: 1 1 auto;
         min-width: 0; // keeps the top nav within the page
+        height: 100%;
+
         .mainContent {
             display: flex;
             flex-direction: column;
@@ -30,8 +32,10 @@
             transform: translate3d(0, 0, 0);
             //min-height is required in order for the scrollbar to work in firefox
             min-height: 0;
+            height: 100%;
             overflow: auto;
             background-color: $color-black-200;
+
         }
 
         .footer {
@@ -48,6 +52,14 @@
 
 body:not(.touch) .navShell .main .topNav .iconLink:hover {
     color: $topnav-hover-color;
+}
+
+/* hide qb tooltips on touch devices by default */
+body.touch .qbtooltip {
+    display: none;
+    &.invalidInput {
+        display: block;
+    }
 }
 
 @include small-breakpoint {

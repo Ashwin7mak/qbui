@@ -1,5 +1,5 @@
-import BaseService from '../../../../client-react/src/services/baseService';
-import constants from '../../app/constants';
+import BaseService from "../../../../client-react/src/services/baseService";
+import constants from "../../app/constants";
 
 class RequestContextService extends BaseService {
 
@@ -11,7 +11,8 @@ class RequestContextService extends BaseService {
     }
 
     /**
-     * Get the Account Users through the Node API for the given accountId
+     * Get the Request Context through the Node API for the given accountId
+     * Expects to get the state of the realm and the user
      */
     getRequestContext(accountId) {
         const params = {};

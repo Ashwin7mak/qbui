@@ -7,8 +7,6 @@ import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 
-import {DefaultFieldValueEditor} from './fieldValueEditors';
-
 import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
@@ -23,6 +21,7 @@ import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 import ErrorWrapper from '../fields/errorWrapper';
 import PhoneFieldValueEditor from './phoneFieldValueEditor';
+import LinkToRecordFieldValueEditor from './linkToRecordFieldValueEditor';
 
 /**
  * # FieldValueEditor
@@ -43,6 +42,11 @@ const FieldValueEditor = React.createClass({
 
         /* the display value */
         display: React.PropTypes.any,
+
+        /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
 
         /**
          * optional additional classes for the input to customize styling */
@@ -154,6 +158,7 @@ const FieldValueEditor = React.createClass({
             onValidated: this.props.onValidated,
             placeholder : placeholder,
             tabIndex: this.props.tabIndex,
+            isDisabled: this.props.isDisabled,
             idKey : this.props.idKey,
             ref:"fieldInput",
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),
@@ -173,6 +178,7 @@ const FieldValueEditor = React.createClass({
         if (fieldId === DEFAULT_RECORD_KEY_ID) {
             return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
         }
+
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT: {
             if (typeof commonProps.value === 'string') {
@@ -250,6 +256,7 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
+
             return <MultiLineTextFieldValueEditor {...commonProps}
                                                   isFormView={this.props.isFormView}
                                                   showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
@@ -261,6 +268,16 @@ const FieldValueEditor = React.createClass({
 
         case FieldFormats.EMAIL_ADDRESS: {
             return <EmailFieldValueEditor {...commonProps} classes="cellEdit" />;
+        }
+
+        case FieldFormats.LINK_TO_RECORD: {
+            let appId = _.get(this.props, "app.id", null);
+            return <LinkToRecordFieldValueEditor {...commonProps}
+                                                 appId={appId}
+                                                 tblId={this.props.tblId}
+                                                 app={this.props.app}
+                                                 removeFieldFromForm={() => {this.props.removeFieldFromForm(this.props.formId, appId, this.props.tblId, this.props.fieldDef, this.props.location);}}
+                                                 classes="cellEdit"/>;
         }
 
         case FieldFormats.TEXT_FORMAT:
@@ -346,6 +363,10 @@ const FieldValueEditor = React.createClass({
         let renderedType = null;
         if (this.props.type) {
             renderedType =  this.getEditorForType(this.props.type);
+        }
+
+        if (this.props.isDisabled) {
+            classes += ' disabledField';
         }
 
         return (
