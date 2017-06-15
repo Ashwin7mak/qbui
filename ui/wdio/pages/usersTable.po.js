@@ -62,6 +62,30 @@
         userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
 
         /**
+         * Function to click on user Remove Icon
+         */
+        clickUserRemoveIcon: {
+            value: function() {
+                //wait for user remove icon
+                this.userRemoveIcon.waitForVisible();
+                //click on the user remove icon
+                return this.userRemoveIcon.click();
+            }
+        },
+
+        /**
+         * Function to click on user Stage
+         */
+        clickUserStage: {
+            value: function() {
+                //wait for user stage
+                this.userStageBtn.waitForVisible();
+                //click on the user stage
+                return this.userStageBtn.click();
+            }
+        },
+
+        /**
          * Helper function that will get all of the field column headers from the user management report. Returns an array of strings.
          */
         getUserColumnHeaders: {value: function() {
