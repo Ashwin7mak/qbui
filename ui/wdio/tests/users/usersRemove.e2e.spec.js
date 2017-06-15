@@ -59,10 +59,9 @@
             //wait until notification container goes away
             browser.pause(e2eConsts.shortWaitTimeMs);
 
-            //TODO: MC-3410 - Need a better way to verify user was removed
             // Check that the user was removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
@@ -79,10 +78,9 @@
             //wait until notification container goes away
             browser.pause(e2eConsts.shortWaitTimeMs);
 
-            //TODO: MC-3410 - Need a better way to verify user was removed
             // Check for the user not removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
     });
 }());
