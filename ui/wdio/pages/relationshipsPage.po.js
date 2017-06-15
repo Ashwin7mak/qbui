@@ -243,8 +243,8 @@
                 fields[0].element('.cellWrapper .textLink').waitForVisible();
                 fields[0].element('.cellWrapper .textLink').click();
                 //Wait until the view form drawer loads
-                browser.element('.drawer .cellWrapper').waitForVisible();
-                getRecordValuesByClickingOnRelLink = browser.element('.drawer').elements('.cellWrapper').getAttribute('textContent');
+                browser.element('.drawer .viewForm .cellWrapper').waitForVisible();
+                getRecordValuesByClickingOnRelLink = browser.element('.drawer .viewForm').elements('.cellWrapper').getAttribute('textContent');
                 expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
 
                 //close the View record drawer

@@ -111,74 +111,76 @@
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
         });
 
+//mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+            it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults. )', function() {
+                let expectedTableList1 = ['Table 2', PARENT_TABLE];
+                let expectedTableList2 = ['Table 2'];
 
-        it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults. )', function() {
-            let expectedTableList1 = ['Table 2', PARENT_TABLE];
-            let expectedTableList2 = ['Table 2'];
+                //Select settings -> modify this form
+                formBuilderPO.open();
 
-            //Select settings -> modify this form
-            formBuilderPO.open();
+                //Click on add a new record button
+                formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
-            //Click on add a new record button
-            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+                //Verify 'RECORD TITLE' is selected as default and select parent table PARENT_TABLE
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, PARENT_TABLE, '');
 
-            //Verify 'RECORD TITLE' is selected as default and select parent table PARENT_TABLE
-            relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, PARENT_TABLE, '');
+                //Cancel the create relationship dialog
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+                modalDialog.waitUntilModalDialogSlideAway();
 
-            //Cancel the create relationship dialog
-            modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
-            modalDialog.waitUntilModalDialogSlideAway();
+                //Add a new record button again since its canceled above
+                formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
-            //Add a new record button again since its canceled above
-            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+                //select parent table PARENT_TABLE and Change the default 'RECORD TITLE' to 'RECORD ID'
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, PARENT_TABLE, SELECT_RECORD_ID_AS_FIELD);
 
-            //select parent table PARENT_TABLE and Change the default 'RECORD TITLE' to 'RECORD ID'
-            relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, PARENT_TABLE, SELECT_RECORD_ID_AS_FIELD);
+                //Add to form now
+                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
 
-            //Add to form now
-            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+                //Verify the get another record got added to the form builder
+                expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE);
 
-            //Verify the get another record got added to the form builder
-            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE);
+                //Should still see Add a new record button since you can add relationship to another parent table. So add again
+                formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
 
-            //Should still see Add a new record button since you can add relationship to another parent table. So add again
-            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+                //Verify 'RECORD ID#' is selected as default and select parent table Table 2
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '');
 
-            //Verify 'RECORD ID#' is selected as default and select parent table Table 2
-            relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '');
+                //Add to form now
+                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
 
-            //Add to form now
-            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+                //Verify the get another record got added to the form builder
+                expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE2);
 
-            //Verify the get another record got added to the form builder
-            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE2);
+                //Verify that the create relationship button is not visible since the child table has relationships to all tables in an app.
+                newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
 
-            //Verify that the create relationship button is not visible since the child table has relationships to all tables in an app.
-            newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+                //Remove a field
+                let fieldsOnForm = formBuilderPO.getFieldLabels().value.length;
+                formBuilderPO.removeField(fieldsOnForm - 1);
 
-            //Remove a field
-            let fieldsOnForm = formBuilderPO.getFieldLabels().value.length;
-            formBuilderPO.removeField(fieldsOnForm - 1);
+                //Verify add another record button becomes available since relationship got deleted
+                newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
 
-            //Verify add another record button becomes available since relationship got deleted
-            newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+                //add back the relationship and save
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '');
 
-            //add back the relationship and save
-            relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '');
+                //Add to form now
+                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
 
-            //Add to form now
-            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
-
-            //Save form
-            //Save the form builder
-            formBuilderPO.save();
-            //wait until save success container goes away
-            notificationContainer.waitUntilNotificationContainerGoesAway();
-            //verify You land in view form
-            formsPO.waitForViewFormsTableLoad();
-        });
+                //Save form
+                //Save the form builder
+                formBuilderPO.save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                //verify You land in view form
+                formsPO.waitForViewFormsTableLoad();
+            });
+        }
 
     });
 }());

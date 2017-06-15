@@ -127,53 +127,57 @@
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
         });
 
-        it('Verify able to create relationship even tough single relationship exists to 1 of the parent table', function() {
-            //Select settings -> modify this form
-            formBuilderPO.open();
+        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
 
-            //Verify that the create relationship button is not visible.
-            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) > -1).toBe(true);
+            it('Verify able to create relationship even tough single relationship exists to 1 of the parent table', function() {
+                //Select settings -> modify this form
+                formBuilderPO.open();
 
-            //Click on forms Cancel button
-            formsPO.clickFormCancelBtn();
+                //Verify that the create relationship button is not visible.
+                let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) > -1).toBe(true);
 
-        });
+                //Click on forms Cancel button
+                formsPO.clickFormCancelBtn();
 
-        it('App has 2 parent tables and 1 child table - Create multi relationship)', function() {
-            //create relationship between parent and child table.
-            //NOTE: I am not selecting any field here because 'titleField' should be selected as default
-            relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '');
+            });
 
-            //Select record from parent picker
-            //click on the edit pencil on the child record
-            formsPO.clickRecordEditPencilInViewForm();
+            it('App has 2 parent tables and 1 child table - Create multi relationship)', function() {
+                //create relationship between parent and child table.
+                //NOTE: I am not selecting any field here because 'titleField' should be selected as default
+                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '');
 
-            //Select titleField value from parent picker
-            relationshipsPO.selectFromParentPicker(parentPickerTitleFieldValue);
+                //Select record from parent picker
+                //click on the edit pencil on the child record
+                formsPO.clickRecordEditPencilInViewForm();
 
-            //Click Save on the form
-            formsPO.clickFormSaveBtn();
-            //wait until save success container goes away
-            notificationContainer.waitUntilNotificationContainerGoesAway();
-            //verify You land in view form since you edited a record from View form after saving
-            formsPO.waitForViewFormsTableLoad();
+                //Select titleField value from parent picker
+                relationshipsPO.selectFromParentPicker(parentPickerTitleFieldValue);
 
-            //Verify the relationship by clicking on get another record from parent link in view record mode.
-            //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
-            relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues);
-        });
+                //Click Save on the form
+                formsPO.clickFormSaveBtn();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                //verify You land in view form since you edited a record from View form after saving
+                formsPO.waitForViewFormsTableLoad();
 
-        it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {
-            //Select settings -> modify this form
-            formBuilderPO.open();
+                //Verify the relationship by clicking on get another record from parent link in view record mode.
+                //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
+                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues);
+            });
 
-            //Verify that the create relationship button is not visible.
-            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+            it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {
+                //Select settings -> modify this form
+                formBuilderPO.open();
 
-            //Click on forms Cancel button
-            formsPO.clickFormCancelBtn();
-        });
+                //Verify that the create relationship button is not visible.
+                let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+
+                //Click on forms Cancel button
+                formsPO.clickFormCancelBtn();
+            });
+        }
     });
 }());

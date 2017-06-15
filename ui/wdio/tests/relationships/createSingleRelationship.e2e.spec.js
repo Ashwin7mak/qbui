@@ -65,47 +65,50 @@
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, 1);
         });
 
-        it('App has just 2 tables - Create relationship between 2 tables(none of the table has title field)- recordId selected as default in create relationship dialog', function() {
+        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
 
+            it('App has just 2 tables - Create relationship between 2 tables(none of the table has title field)- recordId selected as default in create relationship dialog', function() {
 
-            //create relationship between parent and child table
-            //NOTE: I am not selecting any field here because 'Record ID' should be selected as default
-            relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '');
+                //create relationship between parent and child table
+                //NOTE: I am not selecting any field here because 'Record ID' should be selected as default
+                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '');
 
-            //Select record from parent picker
-            //click on the edit pencil on the child record
-            formsPO.clickRecordEditPencilInViewForm();
+                //Select record from parent picker
+                //click on the edit pencil on the child record
+                formsPO.clickRecordEditPencilInViewForm();
 
-            //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
-            formsPO.enterFormValues('allPhoneFields');
-            //Select record Id 2 from parent picker
-            relationshipsPO.selectFromParentPicker(recordId);
+                //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
+                formsPO.enterFormValues('allPhoneFields');
+                //Select record Id 2 from parent picker
+                relationshipsPO.selectFromParentPicker(recordId);
 
-            //Click Save on the form
-            formsPO.clickFormSaveBtn();
+                //Click Save on the form
+                formsPO.clickFormSaveBtn();
 
-            //wait until save success container goes away
-            notificationContainer.waitUntilNotificationContainerGoesAway();
-            //verify You land in view form since you edited a record from View form after saving
-            formsPO.waitForViewFormsTableLoad();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                //verify You land in view form since you edited a record from View form after saving
+                formsPO.waitForViewFormsTableLoad();
 
-            //Verify the relationship by clicking on get another record from parent link in view record mode.
-            //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
-            relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues);
+                //Verify the relationship by clicking on get another record from parent link in view record mode.
+                //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
+                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues);
 
-        });
+            });
 
-        it('Verify when relationship exists between 2 tables in an app unable to create one', function() {
-            //Select settings -> modify this form
-            formBuilderPO.open();
+            it('Verify when relationship exists between 2 tables in an app unable to create one', function() {
+                //Select settings -> modify this form
+                formBuilderPO.open();
 
-            //Verify that the create relationship button is not visible.
-            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-            expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+                //Verify that the create relationship button is not visible.
+                let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
 
-            //Click on forms Cancel button
-            formsPO.clickFormCancelBtn();
-        });
+                //Click on forms Cancel button
+                formsPO.clickFormCancelBtn();
+            });
+        }
 
     });
 }());
