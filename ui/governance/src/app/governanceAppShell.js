@@ -10,12 +10,12 @@ import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRo
 import Analytics from "../../../reuse/client/src/components/analytics/analytics";
 import Config from "../../../client-react/src/config/app.config";
 import _ from 'lodash';
+import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../src/account/users/AccountUsersReducer";
 
 import "./governanceAppShell.scss";
 
 export class GovernanceAppShell extends Component {
     render() {
-        console.log("this.props", this.props);
         return (
             <AppShell functionalAreaName="governance">
                 <Analytics dataset={Config.evergageDataset} userId={this.props.currentUserId}/>
@@ -64,7 +64,11 @@ const mapStateToProps = (state) => {
         currentUserId: requestContextStateCurrentUser.id,
         isAdmin: requestContextStateCurrentUser.isAccountAdmin,
         isRealmAdmin: requestContextStateCurrentUser.isRealmAdmin,
-        totalItems: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0)
+        totalItems: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0),
+        paidUsers: getTotalPaidUsers(state.AccountUsers.users),
+        deniedUsers: getTotalDeniedUsers(state.AccountUsers.users),
+        deactivatedUsers: getTotalDeactivatedUsers(state.AccountUsers.users),
+        totalRealmUsers: getTotalRealmUsers(state.AccountUsers.users)
     };
 };
 

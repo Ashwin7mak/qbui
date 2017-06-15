@@ -15,8 +15,33 @@ const users = (state = [], action) => {
     }
 };
 
-export const getTotalPaidUsers = state => _.sumBy(state.AccountUsers.users, user =>  (
-    user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));
+export const getTotalPaidUsers = _users => {
+    const paidUsers = _.filter(_users, user =>  {
+        return user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user);
+    });
+    return paidUsers.length;
+};
+
+export const getTotalDeniedUsers = _users => {
+    const deniedUsers = _.filter(_users, user =>  {
+        return RealmUserAccountFlagConstants.IsDenied(user);
+    });
+    return deniedUsers.length;
+};
+
+export const getTotalDeactivatedUsers = _users => {
+    const deactivatedUsers = _.filter(_users, user =>  {
+        return RealmUserAccountFlagConstants.IsDeactivated(user);
+    });
+    return deactivatedUsers.length;
+};
+
+export const getTotalRealmUsers = _users => {
+    const totalUsers = _.filter(_users, user =>  {
+        return user.realmDirectoryFlags !== 0;
+    });
+    return totalUsers.length;
+};
 
 const AccountUsers = combineReducers({
     users,
