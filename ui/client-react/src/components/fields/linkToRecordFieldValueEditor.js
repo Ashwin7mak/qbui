@@ -3,6 +3,7 @@ import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
 import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
+import {removeFieldFromForm} from '../../actions/formActions';
 import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
