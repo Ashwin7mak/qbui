@@ -243,12 +243,10 @@ class formBuilderPage {
 
     openMenu() {
         // Clicks on the 'gear' button to invoke the SETTINGS menu
-        // todo: move this (and open?) to topNavPO?
-        reportContentPO.reportTitle.waitForExist();
-        reportContentPO.reportTitle.waitForVisible();
         try {
             //Click settings Icon
-            reportContentPO.clickSettingsIcon();
+            topNavPO.settingsBtn.waitForVisible();
+            return topNavPO.settingsBtn.click();
         } catch (err) {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
