@@ -6,6 +6,7 @@ var consts = require('../../../../common/src/constants');
 var assert = require('assert');
 var log = require('../../../src/logger').getLogger();
 var ob32utils = require('../../../src/utility/ob32Utils');
+var routeHelper = require('../../../src/routes/routeHelper');
 
 var mockReq = {};
 var mockRes = {
@@ -42,6 +43,27 @@ describe('Validate https response authentication functions', function() {
         spyCookie.restore();
         spyClearCookie.restore();
         spyRedirect.restore();
+    });
+
+    it('validate federated users are redirected to   legacy', function() {
+
+        mockReq.headers = {
+            host: 'localhost'
+        };
+
+        mockReq.cookies = {
+            ISFEDERATED : true
+        };
+
+        authentication.signout(mockReq, mockRes);
+        assert(spyRedirect.calledOnce, 'should redirect');
+        assert(spyRedirect.getCall(0).args[0].includes(routeHelper.getSignoutLegacyStackRoute()), true,
+            'should redirect to legacy stack signout');
+        assert(spyClearCookie.callCount === 4, true);
+        assert(spyCookie.callCount === 4, true);
+        assert(stubLog.calledOnce);
+        assert.equal(mockRes.cookies.ISFEDERATED.value, "",
+            'the team_TICKET cookie value should be set as the TICKET cookie in the response');
     });
 
     it('validate http response 200 json request for signout', function() {
