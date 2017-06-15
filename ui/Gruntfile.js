@@ -643,6 +643,7 @@ module.exports = function(grunt) {
                     users: [
                         './wdio/tests/users/usersTable.e2e.spec.js',
                         './wdio/tests/users/usersRemove.e2e.spec.js',
+                        './wdio/tests/users/usersAdd.e2e.spec.js'
                     ]
                 }
             },
