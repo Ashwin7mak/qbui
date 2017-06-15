@@ -329,5 +329,5 @@ describe('Nav Unit tests', () => {
         expect(window.sessionStorage.getItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY);
         expect(window.sessionStorage.setItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY, '');
         expect(props.showTableReadyDialog).toHaveBeenCalled();
-    })
+    });
 });
