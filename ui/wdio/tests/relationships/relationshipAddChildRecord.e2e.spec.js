@@ -16,6 +16,8 @@ let realmName;
 let realmId;
 let testApp;
 
+let childRecordsTextValues = [];
+
 describe('Relationships - Add child Record to embedded Table tests: ', () => {
     const defaultParentRecordValue = 1;
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
@@ -110,7 +112,8 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
             const origRecordCount = formsPagePO.getRecordsCountInATable();
             relationshipsPO.clickAddChildButton();
             // Verify - when the trowser is opened for adding a child, you cannot add a child to this currently being added parent
-            // so if it has a relationship with a child , the add child record button is expected to be disable
+            // so if it has a relationship with a child , the add child record button is expected to be disabled
+            //only checking for the css disabled
             browser.waitForVisible(relationshipsPO.addChildButtonDisabledClass);
 
         });

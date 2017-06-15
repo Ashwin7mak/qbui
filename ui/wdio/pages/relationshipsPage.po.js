@@ -35,13 +35,13 @@
                 return browser.element('.numericField.viewElement');
             }
         },
-        // returns the class displaying the add child button
-        addChildButtonClass: {
+        // returns the element displaying the add child button
+        addChildButton: {
             get: function() {
-                return '.addChildBtn';
+                return browser.element('.addChildBtn');
             }
         },
-        // returns the class displaying the add child button but in a disabled state
+        // returns the class for the element displaying the add child button but in a disabled state
         addChildButtonDisabledClass: {
             get: function() {
                 return '.addChildBtn.disabled';
@@ -105,8 +105,8 @@
          */
         clickAddChildButton: {
             value: function() {
-                browser.waitForVisible(this.addChildButtonClass);
-                browser.element(this.addChildButtonClass).click();
+                this.addChildButton.waitForVisible();
+                this.addChildButton.click();
                 browser.waitForVisible('.recordTrowser');
             }
         },
