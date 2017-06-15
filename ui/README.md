@@ -337,6 +337,11 @@ and
 
 ### Running E2E Tests Through SauceLabs
 
+1. Copy and rename the `wdioSauce.conf.override.js.sample` to `wdio.conf.override.js` (remove the `.sample` from the end). For
+many devs this will work as is; however, you can change any values you need to override in the normal `wdioSauce.conf.js` file.
+
+1. By default, `wdioSauce.conf.override.js` only has one test activated. Add or modify tests or directories in the `specs` array in `wdioSauce.conf.override.js`.
+
 1. In IntelliJ, create a new Node configuration (Run -> Edit Configurations)
     - *Note:* You may need to add the NodeJs IntelliJ plugin if you do not see an option to create a Node configuration.
     - ![IntelliJ Configuration for E2E Tests on SauceLabs](https://s3.amazonaws.com/qbui-readme-assets/Config_for_E2E_on_SauceLabs.png)
@@ -350,11 +355,6 @@ and
     - `SAUCE_KEY` = Obtain this from another DEV or QA. If you are able to login to SauceLabs, you can find the key by clicking the username in the top right of the screen and choosing 'User Settings', then under 'Access Key', choose to show your key and then use the copy button to copy the key to your clipboard.
     - `BROWSER` = The browser you want to run in SauceLabs. Options are: Chrome, Edge, Firefox, Safari, and more (capitalization is important!). 
     The browser name is equal to the browser name in the config files. I.e., look for `wdioSauce{BrowserName}.conf.js` in the `wdio/config` folder to see available options.
-
-1. Copy and rename the `wdioSauce.conf.override.js.sample` to `wdio.conf.override.js` (remove the `.sample` from the end). For
-many devs this will work as is; however, you can change any values you need to override in the normal `wdioSauce.conf.js` file.
-
-1. By default, `wdioSauce.conf.override.js` only has one test activated. Add or modify tests or directories in the `specs` array in `wdioSauce.conf.override.js`.
 
 1. You will need to have any services your tests will use running locally on your machine (e.g., Qbui, Core, EE)
 
