@@ -384,7 +384,7 @@ export const  removeRelationshipFromForm = (relationship) => {
             formService.getForm(relationship.masterAppId, relationship.masterTableId).then(
                 (formResponse) => {
                     let formMeta = formResponse.data.formMeta;
-                    if (formMeta.tabs[0] && formMeta.tabs[0].sections) {
+                    if (formMeta.tabs && formMeta.tabs[0] && formMeta.tabs[0].sections) {
                         let sections = formMeta.tabs[0].sections;
                         let sectionToBeDeleted = null;
                         Object.keys(sections).forEach((sectionKey) => {
