@@ -4,11 +4,14 @@ import ReactDOM from 'react-dom';
 import * as ShellActions from '../../src/actions/shellActions';
 import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 import {mount, shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+import {NEW_TABLE_IDS_KEY} from '../../src/constants/localStorage';
 
 import _ from 'lodash';
 import {CONTEXT} from '../../src/actions/context';
 
 let smallBreakpoint = false;
+
 class BreakpointsMock {
     static isSmallBreakpoint() {
         return smallBreakpoint;
@@ -53,6 +56,9 @@ const query = {
 
 describe('Nav Unit tests', () => {
     'use strict';
+    beforeEach(() => {
+        jasmineEnzyme();
+    });
 
     let props = {
         toggleAppsList: (state) => {},
@@ -308,4 +314,20 @@ describe('Nav Unit tests', () => {
 
         expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);
     });
+
+    it('ensures a table was created and both sessionStorage getItem and setItem was called', () => {
+        spyOn(window.sessionStorage, 'getItem');
+        spyOn(window.sessionStorage, 'setItem');
+        spyOn(props, 'loadApp');
+        spyOn(props, 'showTableReadyDialog');
+
+        let component = shallow(<Nav {...props} />);
+        let instance = component.instance();
+        instance.tableCreated();
+
+        expect(props.loadApp).toHaveBeenCalledWith(props.selectedAppId);
+        expect(window.sessionStorage.getItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY);
+        expect(window.sessionStorage.setItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY, '');
+        expect(props.showTableReadyDialog).toHaveBeenCalled();
+    })
 });
