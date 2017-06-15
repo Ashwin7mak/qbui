@@ -83,9 +83,17 @@
             UsersTablePage.clickUserRemoveIcon();
 
             // Click on cancel button from the dialogue box
-            modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
-            //wait until notification container goes away
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 2
+                });
+                document.getElementsByClassName('modal-content')[0].getElementsByClassName('modal-footer')[0].querySelector('.secondaryButton').dispatchEvent(event);
+            });
+            //wait until modal dialog goes away
+            browser.pause(e2eConsts.mediumWaitTimeMs);
 
             // Check for the user not removed
             ReportTableActionsPO.selectAllRecordsCheckbox();
