@@ -43,12 +43,29 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
         });
 
         /**
+         * Setup method. Edits child records in the UI to relate them to a parent record
+         */
+        beforeAll(() => {
+            // Add child records to one of the parent records
+            // More efficient to do this via API but I wanted to exercise the UI in these tests
+            // Go to List All report
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1);
+
+            // Get values for text field of each record
+            childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
+            childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
+            childRecordsTextValues.push(reportContentPO.getRecordValues(2, 1));
+        });
+
+        /**
          * Setup method. Resets state between tests
          */
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
             reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
-            return reportContentPO.waitForLeftNavLoaded();
+            reportContentPO.waitForLeftNavLoaded();
+            //wait until view form is visible
+            return formsPagePO.viewFormContainerEl.waitForVisible();
         });
 
         /**
