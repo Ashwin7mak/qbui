@@ -77,7 +77,7 @@
         },
 
         /**
-         * Function to click on user Remove Icon
+         * Function to click on user Stage
          */
         clickUserStage: {
             value: function() {
