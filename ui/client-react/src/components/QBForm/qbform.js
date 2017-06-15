@@ -140,13 +140,13 @@ export const QBForm = React.createClass({
 
             // If the fieldRecord.value exists or is a boolean (for checkbox fields), then return the field record
             // otherwise fillin parent for new child or set the default values if available
-            if (fieldRecord && (fieldRecord.value || typeof fieldRecord.value === "boolean" || fieldRecord.value === 0)) {
+            if (_.has(fieldRecord, 'value')) {
                 return fieldRecord;
             } else { //no existing value then
-                let queryParams = _.get(this.props, 'location.query', {});
+                const queryParams = _.get(this.props, 'location.query', {});
                 //if there is a parent value for this child auto fill it in
-                let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
-                let detailTableId = _.get(queryParams, 'detailTableId', undefined);
+                const parentFid = _.get(queryParams, 'detailKeyFid', undefined);
+                const detailTableId = _.get(queryParams, 'detailTableId', undefined);
                 // fieldId is a numeric and params from url are strings so +parentFid for type equality test
                 if (parentFid && +parentFid === fieldId &&
                     detailTableId && detailTableId === field.tableId) {
