@@ -403,7 +403,7 @@ describe('FormBuilderContainer', () => {
 
             instance.removeField();
 
-            expect(mockActions.removeFieldFromForm).toHaveBeenCalledWith(currentForm.id, selectedField);
+            expect(mockActions.removeFieldFromForm).toHaveBeenCalledWith(currentForm.id, undefined, undefined, selectedField);
         });
 
         it('will move a field up if the selected form element is not at index 0', () => {
