@@ -225,8 +225,8 @@ describe('ReportRoute', () => {
         });
     });
 
-    describe('handleDrillIntoChild as a prop to ReportToolsAndContent', () => {
-        it('is undefined when uniqueId does not exist', () => {
+    describe('passes the correct props to ReportToolsAndContent', () => {
+        it('handleDrillIntoChild prop is undefined when uniqueId does not exist', () => {
             component = shallow(
                     <UnconnectedReportRoute
                         {...props}
@@ -238,7 +238,7 @@ describe('ReportRoute', () => {
                 .toHaveProp('handleDrillIntoChild', undefined);
         });
 
-        it('is handleDrillIntoChild function when uniqueId does exist', () => {
+        it('handleDrillIntoChild prop is handleDrillIntoChild function when uniqueId does exist', () => {
             component = shallow(
                     <UnconnectedReportRoute
                         {...props}
