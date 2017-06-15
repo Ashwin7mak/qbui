@@ -115,7 +115,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
             relationshipsPO.clickAddChildButton();
             // Verify - when the trowser is opened for adding a child,and we have the default parent selected
             browser.waitForVisible('.Select-value-label');
-            expect(browser.getValue('.Select-value-label')).toBe(parentRecordDefaultValue);
+            expect(browser.getText('.Select-value-label')).toBe('1');
 
         });
     }
