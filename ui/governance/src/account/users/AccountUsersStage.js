@@ -14,7 +14,7 @@ import "./AccountUsersStage.scss";
 class AccountUsersStage extends Component {
 
     render() {
-        
+
         let {paidUsers, deniedUsers, deactivatedUsers, totalRealmUsers} = this.props;
 
         return (

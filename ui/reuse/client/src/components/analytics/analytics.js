@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {getLoggedInUserId, getLoggedInUserAdminStatus} from 'REUSE/reducers/userReducer';
+import {getLoggedInUserId, getLoggedInUserAdminStatus, getLoggedInUserEmail} from 'REUSE/reducers/userReducer';
 import {getLoggedInUser} from 'REUSE/actions/userActions';
 
 // IMPORT FROM CLIENT REACT
@@ -205,6 +205,12 @@ Analytics.propTypes = {
     })
 };
 
-const mapStateToProps = state => ({userId: getLoggedInUserId(state), isAdmin: getLoggedInUserAdminStatus(state)});
+const mapStateToProps = state => {
+    return {
+        userId: getLoggedInUserId(state),
+        userEmail: getLoggedInUserEmail(state),
+        isAdmin: getLoggedInUserAdminStatus(state)
+    };
+}
 
 export default connect(mapStateToProps, {getLoggedInUser})(Analytics);
