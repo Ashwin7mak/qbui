@@ -91,22 +91,35 @@ export const assignUserToAppRole = (appId, roleId, userId) => {
     return assignUsersToAppRole(appId, roleId, [userId]);
 };
 
-export const removeUsersFromAppRole = (appId, roleId, userIds) => {
+export const removeUsersFromAppRole = (appId, userDetails) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             let logger = new Logger();
             let roleService = new RoleService();
-            roleService.removeUsersFromAppRole(appId, roleId, userIds).then(
-                () => {
+            let usersByRole = {};
+            // get userDetails from [{id: '1', roleId: '2'}] into {<roleId>:[<userIds>]}
+            // so we make calls per role rather that per userId which is way lesser
+            userDetails.map((userDetail)=>{
+                if (usersByRole[userDetail.roleId]) {
+                    usersByRole[userDetail.roleId].push(userDetail.id);
+                } else {
+                    usersByRole[userDetail.roleId] = [userDetail.id];
+                }
+            });
+            _.forEach(usersByRole, (userIds, usersRoleId)=> {
+                roleService.removeUsersFromAppRole(appId, usersRoleId, userIds).then(() => {
                     logger.debug('RoleService removeUsersFromAppRole success');
-                    dispatch(event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {roleId: roleId, userIds:userIds}));
-                    resolve(userIds);
-                },
-                (error) => {
+                    dispatch(event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {
+                        roleId: usersRoleId,
+                        userIds: userIds
+                    }));
+                    resolve(userDetails);
+                }, (error) => {
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.removeUsersFromAppRole:');
                     reject();
                 }
-            );
+				);
+            });
         });
     };
 };

@@ -62,7 +62,7 @@ describe('Relationships - View child table on form tests: ', () => {
             reportInLineEditPO.editNumericField(0, 1);
             reportInLineEditPO.clickSaveChangesButton();
 
-            // Edit the Numeric Field of the third record
+            // Edit the Numeric Field of the second record
             reportInLineEditPO.openRecordEditMenu(2);
             reportInLineEditPO.editNumericField(0, 1);
             reportInLineEditPO.clickSaveChangesButton();
@@ -83,117 +83,61 @@ describe('Relationships - View child table on form tests: ', () => {
         });
 
         /**
-         *  Create related child records and view them in the child table from the master record
+         *  Child record drawer shows link to navigate to parent record
          */
-        it('Create related child records and view them in the embedded child table', () => {
-            // Do assertions on the child table form section
+        it('Child record drawer shows link to navigate to parent record', () => {
+            // Select a parent record, verify parent record is displayed along with child records in embedded report
             let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);
-
             // Check the displayed record count
             let recordCount = relationshipsPO.recordsCountEl(childTableFormSection).getText();
             expect(recordCount).toContain('3 records');
-
             // Check the number of created related records in the table
             let rowCount = reportContentPO.getAllRows.value.length;
             expect(rowCount).toEqual(3);
-
             // Compare record values to make sure we are displaying the right ones
             let recordValues = [];
-
             recordValues.push(reportContentPO.getRecordValues(0, 0));
             recordValues.push(reportContentPO.getRecordValues(1, 0));
             recordValues.push(reportContentPO.getRecordValues(2, 0));
             expect(recordValues).toEqual(childRecordsTextValues);
 
-            // Click into one of the child records to view the record form
+            // Select a child record, open slidey-rightey
             relationshipsPO.clickOnRecordInChildTable(0);
 
-            // Confirm the values on the child form is the right record
-            let recordFormValues = relationshipsPO.getChildRecordValuesFromForm();
-            expect(recordFormValues[0]).toEqual(childRecordsTextValues[0]);
+            // Verify link to parent is displayed in drawer
+            let parentLinkText = relationshipsPO.parentRecordLinkEl;
+            expect(parentLinkText.getText()).toEqual('1');
         });
 
         /**
-         *  Navigate between child records from within slidey-righty
+         *  Clicking on parent link in child form opens slidey-righty to parent
          */
-        it('Navigate between child records from within slidey-righty', () => {
-            // Click into one of the child records to view the record form (second record)
-            relationshipsPO.clickOnRecordInChildTable(1);
-
-            // Use the nav buttons on the form to navigate to the next related child record
-            relationshipsPO.navigateToNextChildRecord();
-            // Check values
-            let record3FormValues = relationshipsPO.getChildRecordValuesFromForm();
-            expect(record3FormValues[0]).toEqual(childRecordsTextValues[2]);
-
-            // Go Back to the first record
-            relationshipsPO.navigateToNextChildRecord(true);
-            relationshipsPO.navigateToNextChildRecord(true);
-            // Check values
-            let record1FormValues = relationshipsPO.getChildRecordValuesFromForm();
-            expect(record1FormValues[0]).toEqual(childRecordsTextValues[0]);
-        });
-
-        /**
-         *  Navigate back to parent record by closing slidey-righty
-         */
-        it('Test that the X button closes an open slidey-righty', () => {
-            // Click into one of the child records to view the record form (second record)
-            relationshipsPO.clickOnRecordInChildTable(1);
-
-            // Check that you can close slidey-righty
-            relationshipsPO.closeSlideyRighty();
-        });
-
-        /**
-         * Navigate to a record (view form) and assert that the section containing an empty child table is displayed
-         */
-        it('Empty child table is present when viewing a parent record with no children (so sad!)', () => {
-            // Navigate to Table 3, Report 1, Record 2
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 2);
-
-            // Do assertions on the child table form section
+        it('Clicking on parent link in child form opens slidey-righty to parent', () => {
             let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);
-            childTableFormSection.waitForVisible();
-
-            // Check the table name
-            let sectionText = relationshipsPO.qbPanelHeaderTitleTextEl(childTableFormSection).getText();
-            expect(sectionText).toContain('Child Table A');
-
             // Check the displayed record count
-            let recordCount = relationshipsPO.recordsCountEl(childTableFormSection).getText();
-            expect(recordCount).toContain('0 records');
-
-            // Check there are no records in the child table
-            browser.waitForExist('.qbRow', 1000, true);
+            childTableFormSection.waitForVisible();
+            //click on child record
+            relationshipsPO.clickOnRecordInChildTable(0);
+            // click on the parent link
+            relationshipsPO.clickOnParentRecordLinkInForm();
+            // opens parent record in slidey-Righty
+            relationshipsPO.slideyRightyEl.waitForVisible();
+            let parentRecordElementInDrawer = relationshipsPO.parentRecordLinkInDrawerEl;
+            expect(parentRecordElementInDrawer.getText()).toEqual("5.4349");
         });
 
         /**
-         * Navigate back to the correct child report via link in open slidey-righty
+         *  Navigating to a child record without context of a parent, shows a link to parent record
          */
-        it('Navigate back to the child table homepage via link in open child record', () => {
-            // Click into one of the child records to view the record form
-            relationshipsPO.clickOnRecordInChildTable(0);
-
-            // Assert that the name of the link is for the Parent table
-            let parentLinkText = relationshipsPO.tableHomePageLinkEl.getAttribute('textContent');
-            expect(parentLinkText).toContain('Child Table A');
-
-            // Click the tablehomepage link (should send you back to the table homepage of the child table)
-            relationshipsPO.clickTableHomePageLink();
-
-            // Check the stage title to make sure we are on the right report
-            let tableHomepageText = reportContentPO.stageTableHomepageTitleEl.getText();
-
-            //TODO: This is failing in Edge even tho we are getting the exact same text back we expect to
-            //TODO: See https://jenkins1.ci.quickbaserocks.com/view/Try%20UX%20Builds/job/try-ui-wdio-Edge/1361/console
-            if (browserName !== 'MicrosoftEdge') {
-                expect(tableHomepageText).toContain('Child Table A Home');
-            }
-
-            // Check the url as well
-            let currentURL = browser.url().value;
-            expect(currentURL).toContain(testApp.tables[e2eConsts.TABLE4].id);
+        it('Navigating to a child record directly will show a link to the parent record', () => {
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
+            let parentLinkText = relationshipsPO.parentRecordLinkEl;
+            expect(parentLinkText.getText()).toEqual('1');
+            // Click on the parent link just to make sure that it's clickable
+            parentLinkText.click();
+            relationshipsPO.slideyRightyEl.waitForVisible();
+            let parentRecordElementInDrawer = relationshipsPO.parentRecordLinkInDrawerEl;
+            expect(parentRecordElementInDrawer.getText()).toEqual("5.4349");
         });
     }
 });

@@ -1,0 +1,11 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+$table-properties-panel-width: 776px;
+
+.automationEdit.formContainer .fieldValueEditor,
+.automationEdit.formContainer .emailField {
+    width: 400px;
+    textarea {
+        height: 300px;
+    }
+}

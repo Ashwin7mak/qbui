@@ -9,7 +9,7 @@
     var e2ePageBase = requirePO('./e2ePageBase');
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
-
+    let formsPagePO = requirePO('formsPage');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -24,7 +24,16 @@
         iconActionsRightButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-right');}},
         iconActionsLeftButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-left');}},
         iconActionsCloseDrawerButtonEl: {get: function() {return this.slideyRightyEl.element('.iconActionButton.closeDrawer');}},
-
+        parentRecordLinkEl: {
+            get: function() {
+                return browser.element('.textField.viewElement.textLink');
+            }
+        },
+        parentRecordLinkInDrawerEl: {
+            get: function() {
+                return browser.element('.numericField.viewElement');
+            }
+        },
         // Page Object functions
         /**
          * Returns form section containing the child table for a relationship
@@ -76,6 +85,57 @@
             return this.slideyRightyEl.waitForVisible();
         }},
 
+
+        /**
+         * clicks on add child button and opens the trowser.
+         * @param
+         */
+        clickAddChildButton: {
+            value: function() {
+                browser.waitForVisible('.addChildBtn');
+                browser.element('.addChildBtn').click();
+                browser.waitForVisible('.recordTrowser');
+            }
+        },
+
+
+        /***
+         * adds a child record to embedded table
+         * @param origRecordCount - original record counts in embedded table
+         * @param parentRefVal - parent record value
+         */
+        addChildRecord: {
+            value: function(origRecordCount, parentRefVal) {
+                // Click on add child button on embedded table opens trowser
+                this.clickAddChildButton();
+                const fieldTypes = ['allTextFields', 'allParentRecordFields'];
+
+                browser.waitForVisible('form.editForm');
+                // enter form values
+                fieldTypes.forEach(function(fieldType) {
+                    let parentReferenceFieldValue = null;
+                    if (fieldType === 'allParentRecordFields') {
+                        parentReferenceFieldValue = parentRefVal;
+                    }
+                    formsPagePO.enterFormValues(fieldType, parentReferenceFieldValue);
+                });
+
+                // Click Save on the form
+                formsPagePO.clickFormSaveBtn();
+                // wait until report rows in table are loaded
+                reportContentPO.waitForReportContent();
+            }
+        },
+
+        /**
+         * Given a form that contains a link to a parent node, click on the link
+         */
+        clickOnParentRecordLinkInForm: {value: function(index) {
+            formsPO.viewFormContainerEl.waitForVisible();
+            browser.waitForVisible('.textField.viewElement.textLink');
+            let linkEl = this.parentRecordLinkEl;
+            linkEl.click();
+        }},
         /**
          * While viewing a parent record on a form get the values of each record in the child table
          * @returns An array of record values for all child records
