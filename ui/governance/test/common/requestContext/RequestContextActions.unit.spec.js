@@ -8,7 +8,7 @@ import thunk from "redux-thunk";
 import Promise from "bluebird";
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 
-describe('RequestContextActions', () => {
+xdescribe('RequestContextActions', () => {
     const mockWindowUtils = {
         update: url => url,
     };

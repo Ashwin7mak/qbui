@@ -496,7 +496,7 @@ module.exports = function(grunt) {
                     },
                     mask          : '**/*.unit.spec.js',
                     root          : '.',
-                    excludes      : ['server/src/api/quickbase/mock/mockFeatureSwitchesApi.js'],
+                    excludes      : ['server/src/api/quickbase/mock/mockFeatureSwitchesApi.js', 'qb_lib/**/*'],
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
@@ -612,6 +612,9 @@ module.exports = function(grunt) {
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     relationships: [
+                        './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js',
+                        './wdio/tests/relationships/createRelationship.e2e.spec.js',
+                        './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
                     ],
                     reports: [
                         './wdio/tests/reports/reportBuilder.e2e.spec.js',
