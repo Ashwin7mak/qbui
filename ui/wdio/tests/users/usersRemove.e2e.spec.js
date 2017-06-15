@@ -52,9 +52,18 @@
             // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.clickUserRemoveIcon();
+            modalDialog.modalDialogContainer.waitForVisible();
 
-            // Click on remove button from the dialogue box
-            modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
+            // Need to do JS click here sometimes its not clicking on dialog button
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 2
+                });
+                document.getElementsByClassName('modal-content')[0].getElementsByClassName('modal-footer')[0].querySelector('.primaryButton').dispatchEvent(event);
+            });
             //wait until notification container goes away
             browser.waitForExist('.notification-container-empty', e2eConsts.longWaitTimeMs, true);
             browser.pause(e2eConsts.shortWaitTimeMs);
