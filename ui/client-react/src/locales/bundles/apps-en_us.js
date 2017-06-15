@@ -52,8 +52,8 @@ export default {
                 removeButton: "Remove",
                 cancel: "Cancel",
                 plural: "users",
-                usersRemovedFromAppRole: "{numOfUsers} users removed from the app role",
-                userRemovedFromAppRole: "User removed from the app role",
+                usersRemovedFromAppRole: "{numOfUsers} users have been removed from the app",
+                userRemovedFromAppRole: "User has been removed from the app",
                 userAdded: "User added",
                 userAddError: "Error adding user",
                 userRemovingError: "Error removing user",
@@ -203,8 +203,7 @@ export default {
                 feedbackMenuButton: "Give feedback",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
-                feedbackTooltip: "Share ideas and issues",
-                helpTooltip: "Help",
+                feedbackTooltip: "Share ideas and issues"
             }
         },
         fields: {
@@ -241,9 +240,13 @@ export default {
                 success: "Record Approved.",
                 error: "An error occured when approving this record."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automation Test Successful.",
                 error: "An error occured when testing this automation."
+            },
+            saveAutomation: {
+                success: "Automation Saved Successful.",
+                error: "An error occured when saving this automation."
             },
             automationList: {
                 nameHeader: "Name",
@@ -261,7 +264,18 @@ export default {
                 actions: {
                     email: "Send an email"
                 }
-            }
+            },
+            automationEdit: {
+                stageHeading: "Modify Automation: {automationName}",
+                nameHeader: "Name",
+                emailSectionHeader: "Send an Email",
+                toHeader: "Notify Whom",
+                subjectHeader: "Subject",
+                bodyHeader: "Message"
+            },
+            automationBuilder: {
+                modify: 'Modify Automation'
+            },
         },
         relationship: {
             childTable: "Child Table",
@@ -794,7 +808,7 @@ export default {
             title: "Add users to",
             description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
             searching: "Searching...",
-            userSuccessTitle: "Your app has new user!",
+            userSuccessTitle: "Your app has a new user!",
             userSuccessText: "Let them know they have access to your app by sharing the link with them.",
             copy: "Copy",
             email: "Email",
