@@ -35,13 +35,13 @@
                 return browser.element('.numericField.viewElement');
             }
         },
-
-
+        // returns the class displaying the add child button
         addChildButtonClass: {
             get: function() {
                 return '.addChildBtn';
             }
         },
+        // returns the class displaying the add child button but in a disabled state
         addChildButtonDisabledClass: {
             get: function() {
                 return '.addChildBtn.disabled';
