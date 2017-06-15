@@ -58,7 +58,7 @@ let AppsList = React.createClass({
         return <CreateNewItemButton handleOnClick={this.props.onCreateNewApp}
                                     message={"appCreation.newApp"} />;
     },
-    
+
     render() {
         return (
             <ul className={"appsList"} >
@@ -79,7 +79,6 @@ let AppsList = React.createClass({
                 {this.appList()}
                 {this.getNewAppItem()}
             </ul>
-
         );
     }
 });
