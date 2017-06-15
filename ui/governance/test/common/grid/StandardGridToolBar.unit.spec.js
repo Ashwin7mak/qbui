@@ -1,7 +1,7 @@
 import React from "react";
 import {mount} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import * as Actions from "../../../src/account/users/AccountUsersActions";
+import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import StandardGridNavigation from "../../../src/common/grid/toolbar/StandardGridNavigation";
 import StandardGridItemsCount from "../../../../reuse/client/src/components/itemsCount/StandardGridItemsCount";
@@ -23,7 +23,7 @@ describe('StandardGridToolBar', () => {
         let component = mount(
             <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 1500}, searchTerm: mockSearchTerm}}})}>
                 <StandardGridToolBar
-                    doUpdate={Actions.doUpdate}
+                    doUpdate={AccountUsersActions.doUpdateUsers}
                     id={"accountUsers"}
                     rowKey={"uid"}
                     itemTypePlural= "users"
@@ -56,7 +56,7 @@ describe('StandardGridToolBar', () => {
         let component = mount(
             <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}, searchTerm: mockSearchTerm}}})}>
                 <StandardGridToolBar
-                    doUpdate={Actions.doUpdate}
+                    doUpdate={AccountUsersActions.doUpdateUsers}
                     doFacet={false}
                     id={"accountUsers"}
                     rowKey={"uid"}
