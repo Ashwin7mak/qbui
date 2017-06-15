@@ -58,8 +58,7 @@ let AppsList = React.createClass({
         return <CreateNewItemButton handleOnClick={this.props.onCreateNewApp}
                                     message={"appCreation.newApp"} />;
     },
-
-
+    
     render() {
         return (
             <ul className={"appsList"} >
