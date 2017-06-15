@@ -7,6 +7,7 @@ import IconActions from "../../../../../reuse/client/src/components/iconActions/
 import {I18nMessage} from "../../../utils/i18nMessage";
 import {loadAutomation} from "../../../actions/automationActions";
 import {getAutomation} from "../../../reducers/automation";
+import * as UrlConsts from "../../../constants/urlConstants";
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
 
@@ -16,15 +17,25 @@ import "./automationView.scss";
 
 export class AutomationViewRoute extends Component {
 
-    getInitialState() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             confirmInputValue: ""
         };
     }
 
+    openAutomationForEdit = () => {
+        let appId = this.getAppId();
+        let automationId = this.getAutomationId();
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/${automationId}`;
+        this.props.history.push(link);
+    };
+
     getPageActions() {
-        const actions = [];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu="5"/>);
+        let actions = [
+            {msg: 'pageActions.edit', icon:'edit', onClick: this.openAutomationForEdit}];
+
+        return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     }
 
     getStageHeadline() {
@@ -87,7 +98,7 @@ export class AutomationViewRoute extends Component {
     }
 }
 
-AutomationViewRoute.protoTypes = {
+AutomationViewRoute.propTypes = {
     /** The automation to display. */
     automation: React.PropTypes.object,
     /** Get an automation to view. */
