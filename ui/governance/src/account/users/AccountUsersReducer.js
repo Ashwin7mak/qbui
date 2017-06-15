@@ -8,8 +8,10 @@ const users = (state = [], action) => {
     switch (action.type) {
     case types.GET_USERS_SUCCESS:
         // update the state with the new users sent through action
+        let startTime = window.performance.now();
         return [...action.users];
-    default:
+        let endTime = window.performance.now();
+        default:
         // return existing state by default in redux
         return state;
     }
