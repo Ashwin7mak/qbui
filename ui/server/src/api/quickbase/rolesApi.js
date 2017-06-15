@@ -7,7 +7,8 @@
 (function() {
     'use strict';
 
-    let defaultRequest = require('request');
+    let env = require('../../config/environment');
+    let defaultRequest = require('../../requestClient').getClient(env);
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);

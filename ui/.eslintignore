@@ -6,3 +6,4 @@ client-react/dist/*
 nodejs/*
 vendor/*
 client-react/src/components/node/*
+qb_lib/*

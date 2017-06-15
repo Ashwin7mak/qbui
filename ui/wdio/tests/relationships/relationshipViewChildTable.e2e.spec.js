@@ -62,7 +62,7 @@ describe('Relationships - View child table on form tests: ', () => {
             reportInLineEditPO.editNumericField(0, 1);
             reportInLineEditPO.clickSaveChangesButton();
 
-            // Edit the Numeric Field of the second record
+            // Edit the Numeric Field of the third record
             reportInLineEditPO.openRecordEditMenu(2);
             reportInLineEditPO.editNumericField(0, 1);
             reportInLineEditPO.clickSaveChangesButton();

@@ -58,11 +58,13 @@ export const setFieldsPropertiesPendingEditToFalse = () => {
  * @param tableId
  * @returns {{appId: *, tblId: *, field: *, type}}
  */
-export const updateField = (field, appId, tableId) => {
+export const updateField = (field, appId, tableId, propertyName, newValue) => {
     return {
+        field: field,
+        propertyName: propertyName,
+        newValue: newValue,
         appId: appId,
         tblId: tableId,
-        field: field,
         type: types.UPDATE_FIELD
     };
 };
