@@ -607,6 +607,7 @@ describe('Forms reducer functions', () => {
                 type: 1,
                 relatedField: {name: 'mockFieldName', id: 9},
                 title: 'mockFieldName',
+                tooltipText: `Add mockFieldName to the form`
             }];
 
             expect(result).toEqual(expectedResult);
