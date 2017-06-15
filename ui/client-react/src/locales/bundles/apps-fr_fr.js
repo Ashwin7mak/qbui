@@ -90,6 +90,7 @@ export default {
             delete: "Effacer",
             testAutomation: "Automatisation des tests",
             copyAutomation: "Copier l'automatisation",
+            editAutomation: "Modifier l'automatisation",
             deleteAutomation: "Supprimer l'automatisation",
             dontDelete: "Ne pas supprimer",
             deleteThisRecord: "Supprimer cet enregistrement?",

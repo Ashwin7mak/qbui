@@ -13,19 +13,20 @@ import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations
 import _ from "lodash";
 import QbGrid from '../../dataTable/qbGrid/qbGrid';
 import ReportCell from '../../dataTable/reportGrid/reportCell';
+import AutomationRowActions from '../../dataTable/qbGrid/automationRowActions';
 import "./automationList.scss";
 import {CONTEXT} from "../../../actions/context";
 import AutomationListTransformer from '../../../utils/automationListTransformer';
+import constants from '../constants'
 
-const CellRenderer = (props) => {return <div className="customCell">{props.text}</div>;};
-const cellFormatter = (cellData) => {return React.createElement(CellRenderer, cellData);};
+const CellRenderer = (props) => {<div className="customCell">{props.text}</div>;};
+const cellFormatter = (cellData) => {React.createElement(CellRenderer, cellData);};
 
 
 export class AutomationListRoute extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {appId: this.getAppId()}
     }
 
     getPageActions() {
@@ -35,6 +36,16 @@ export class AutomationListRoute extends Component {
 
     getStageHeadline() {
         return <div className="automationListSettingsStage stageHeadLine"><I18nMessage message="settings.automationSettings"/></div>;
+    }
+
+    getRowActionsRenderer() {
+        return <AutomationRowActions
+                rowId={this.getAppId()}
+                onClickEditRowIcon={this.editAutomation}
+                onClickDeleteRowIcon={this.deleteAutomation}
+                onClickTestRowIcon={this.handleTestAutomationClicked}
+
+        />
     }
 
     componentDidMount() {
@@ -67,25 +78,6 @@ export class AutomationListRoute extends Component {
         return [];
     }
 
-    renderAutomations() {
-        if (this.props.automations && this.props.automations.length > 0) {
-            return this.props.automations.filter((automation) => {
-                    return "EMAIL" === automation.type;
-                })
-                .map((automation, index) => {
-                    let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
-                    return (
-                        <tr>
-                            <td><Link to={link} onClick={this.onClick} onKeyDown={this.onClick}>{automation.name}</Link></td>
-                            <td>{automation.active ? <I18nMessage message="automation.automationList.activeYes"/> : <I18nMessage message="automation.automationList.activeNo"/>}</td>
-                            <td><Button className="finishedButton" bsStyle="primary" onClick={() => this.testButtonClicked(automation.name)}><I18nMessage message="automation.automationList.actionButton"/></Button></td>
-                        </tr>
-                    );
-                });
-        }
-        return [];
-    }
-
     editAutomation = (automationId) => {
         let link = UrlUtils.getAutomationViewLink(this.getAppId(), automationId);
         if (this.props.history) {
@@ -96,7 +88,7 @@ export class AutomationListRoute extends Component {
     deleteAutomation() {
     }
 
-    clickSaverow() {
+    clickSaveRow() {
     }
 
     cancelEditingRow() {
@@ -109,7 +101,6 @@ export class AutomationListRoute extends Component {
 
     render() {
         let loaded = !(_.isUndefined(this.props.automations));
-        let automationRows = this.renderAutomations();
         return (
             <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
                 <div className="automationSettings">
@@ -120,14 +111,14 @@ export class AutomationListRoute extends Component {
                             rows={this.transformRows()}
                             numberOfColumns={3}
                             showRowActionsColumn={true}
-                            onClickToggleSelectedRow={false}
                             cellRenderer={ReportCell}
                             onClickEditIcon={this.editAutomation}
-                            onClickDeleteIcon={this.deleteAutomation}
+                            onClickDeleteIcon={null}
                             onClickTestRowIcon={this.handleTestAutomationClicked}
                             editingRowErrors={[]}
-                            onCancelEditingRow={this.cancelEditingRow()}
-                            onClickSaveRow={this.clickSaverow()}
+                            onCancelEditingRow={this.cancelEditingRow}
+                            onClickSaveRow={this.clickSaveRow}
+                            rowActionsRenderer={AutomationRowActions}
                         />
                     </div>
 
@@ -147,8 +138,7 @@ AutomationListRoute.protoTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        automations : getAutomationList(state),
-        testAutomation: testAutomation(state)
+        automations : getAutomationList(state)
     };
 };
 

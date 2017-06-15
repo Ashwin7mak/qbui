@@ -3,6 +3,7 @@ import FieldUtils from './fieldUtils';
 import ColumnTransformer from '../components/dataTable/qbGrid/columnTransformer';
 import RowTransformer from '../components/dataTable/qbGrid/rowTransformer';
 import Locale from '../locales/locales';
+import constants from '../components/automation/constants';
 
 /* A helper to transform Automation List Data into a format that can be used by QBGrid. Expects a list of Automation Objects*/
 class AutomationListTransformer  {
@@ -18,9 +19,9 @@ class AutomationListTransformer  {
         }
         let key = 1;
         let columns = [];
-        columns.push("name");
-        columns.push("description");
-        columns.push("active");
+        columns.push(constants.AUTOMATION_LIST.NAME);
+        columns.push(constants.AUTOMATION_LIST.DESCRIPTION);
+        columns.push(constants.AUTOMATION_LIST.ACTIVE);
         return columns.map(column => {
             return this.createAutomationGridColumn(column, key++);
         });
@@ -30,8 +31,9 @@ class AutomationListTransformer  {
         if(!automations || !Array.isArray(automations)) {
             return [];
         }
+        let rowNumber = 1;
         return automations.map(automation => {
-            return this.createAutomationGridRow(automation);
+            return this.createAutomationGridRow(automation, rowNumber++);
         });
     }
 
@@ -54,17 +56,16 @@ class AutomationListTransformer  {
     /**
      * Transform a single automation item into a row that can be used by QbGrid
      * @param automation
-     * @param rowId
+     * @param rowNumber
      */
-    static createAutomationGridRow(automation, rowId) {
+    static createAutomationGridRow(automation, rowNumber) {
         let id = automation.id;
         let cells = [];
-
         let active = automation.active ? Locale.getMessage("automation.automationList.activeYes") : Locale.getMessage("automation.automationList.activeNo");
-        cells.push(this.createCellForField("NAME", automation.name, rowId, 1, false));
-        cells.push(this.createCellForField("DESCRIPTION", automation.description, rowId, 2, false));
-        cells.push(this.createCellForField("TEST", active, rowId, 3, false));
-        cells.push(this.createCellForField("ID", automation.id, rowId, 4, true));
+        cells.push(this.createCellForField(constants.AUTOMATION_LIST.NAME, automation.name, rowNumber, 1, false));
+        cells.push(this.createCellForField(constants.AUTOMATION_LIST.DESCRIPTION, automation.description, rowNumber, 2, false));
+        cells.push(this.createCellForField(constants.AUTOMATION_LIST.ACTIVE, active, rowNumber, 3, false));
+        cells.push(this.createCellForField(constants.AUTOMATION_LIST.ID, id, rowNumber, 4, true));
         return new RowTransformer(id, cells);
     }
 
@@ -109,7 +110,7 @@ class AutomationListTransformer  {
                 required: false,
                 type: "SCALAR",
                 unique: false,
-                userEditableValue: true
+                userEditableValue: false
             }
         };
         return cell;

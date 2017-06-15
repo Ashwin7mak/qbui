@@ -66,7 +66,8 @@ const actions = {
     onClickCancel() {},
     onClickEdit() {},
     onClickSave() {},
-    onClickToggle() {}
+    onClickToggle() {},
+    onClickTestRow() {}
 };
 
 const testCellRenderer = (props) => {
@@ -248,6 +249,7 @@ describe('QbGrid', () => {
                 onClickDeleteRowIcon: actions.onClickDelete,
                 onClickEditRowIcon: actions.onClickEdit,
                 onClickSaveRow: actions.onClickSave,
+                onClickTestRowIcon: actions.onClickTestRow(),
                 onClickToggleSelectedRow: instance.onClickToggleSelectedRow,
                 rowId: editingRow.id
             });

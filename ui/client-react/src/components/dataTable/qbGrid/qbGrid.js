@@ -8,6 +8,7 @@ import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
+import AutomationRowActions from './automationRowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
@@ -135,7 +136,10 @@ export const QbGrid = React.createClass({
         showRowActionsColumn: PropTypes.bool,
 
         // relationship phase-1, will need remove when we allow editing
-        phase1: PropTypes.bool
+        phase1: PropTypes.bool,
+
+        //
+        rowActionsRenderer: PropTypes.func
     },
 
     getDefaultProps() {
@@ -176,23 +180,33 @@ export const QbGrid = React.createClass({
      * @returns {XML}
      */
     getActionsCell(_cellDataRow, rowProps) {
-        return <RowActions
-            rowId={rowProps.rowData.id}
-            onClickDeleteRowIcon={this.props.onClickDeleteIcon}
-            onClickEditRowIcon={this.props.onClickEditIcon}
-            isEditing={rowProps.rowData.isEditing}
-            editingRowId={this.props.editingRowId}
-            isEditingRowValid={this.props.isEditingRowValid}
-            isEditingRowSaving={this.props.isEditingRowSaving}
-            isInlineEditOpen={this.props.isInlineEditOpen}
-            isSelected={rowProps.rowData.isSelected}
-            editingRowErrors={this.props.editingRowErrors}
-            onCancelEditingRow={this.props.onCancelEditingRow}
-            onClickAddNewRow={this.onClickAddNewRow}
-            onClickSaveRow={this.props.onClickSaveRow}
-            onClickToggleSelectedRow={this.onClickToggleSelectedRow}
-            onClickTestRowIcon={this.props.onClickTestRowIcon}
-        />;
+        if(this.props.rowActionsRenderer) {
+            return <AutomationRowActions
+                rowId={rowProps.rowData.id}
+                onClickEditRowIcon={this.props.onClickEditIcon}
+                onClickDeleteRowIcon={this.props.onClickDeleteIcon}
+                onClickTestRowIcon={this.props.onClickTestRowIcon}
+                />;
+        } else {
+            return <RowActions
+                rowId={rowProps.rowData.id}
+                onClickDeleteRowIcon={this.props.onClickDeleteIcon}
+                onClickEditRowIcon={this.props.onClickEditIcon}
+                isEditing={rowProps.rowData.isEditing}
+                editingRowId={this.props.editingRowId}
+                isEditingRowValid={this.props.isEditingRowValid}
+                isEditingRowSaving={this.props.isEditingRowSaving}
+                isInlineEditOpen={this.props.isInlineEditOpen}
+                isSelected={rowProps.rowData.isSelected}
+                editingRowErrors={this.props.editingRowErrors}
+                onCancelEditingRow={this.props.onCancelEditingRow}
+                onClickAddNewRow={this.onClickAddNewRow}
+                onClickSaveRow={this.props.onClickSaveRow}
+                onClickToggleSelectedRow={this.onClickToggleSelectedRow}
+                onClickTestRowIcon={this.props.onClickTestRowIcon}
+                rowActionsRenderer={this.props.rowActionsRenderer}
+            />;
+        }
     },
 
     /**
