@@ -1,5 +1,5 @@
 /**
- * E2E tests for viewing and navigating parent and child records in the UI
+ * E2E tests for viewing and navigating from parent to child records in the UI
  * Written by klabak 4/29/17
  */
 
@@ -18,7 +18,7 @@ let testApp;
 
 let childRecordsTextValues = [];
 
-describe('Relationships - View child table on form tests: ', () => {
+describe('Relationships - Navigate to child record tests: ', () => {
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -51,21 +51,6 @@ describe('Relationships - View child table on form tests: ', () => {
             // More efficient to do this via API but I wanted to exercise the UI in these tests
             // Go to List All report
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1);
-
-            // Edit the Numeric Field of the first record
-            reportInLineEditPO.openRecordEditMenu(0);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the second record
-            reportInLineEditPO.openRecordEditMenu(1);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the third record
-            reportInLineEditPO.openRecordEditMenu(2);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
 
             // Get values for text field of each record
             childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
