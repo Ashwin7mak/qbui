@@ -128,6 +128,7 @@ export class AutomationListRoute extends Component {
                             editingRowErrors={[]}
                             onCancelEditingRow={this.cancelEditingRow()}
                             onClickSaveRow={this.clickSaverow()}
+                            disableMultiSelect={true}
                         />
                     </div>
 
