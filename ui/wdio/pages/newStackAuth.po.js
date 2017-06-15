@@ -18,7 +18,8 @@
             //TODO: Will have to extend with user auth, for now just uses Super Admin to auth for ticket
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-        }},
+        }
+        },
 
         /**
          * Login function will request a ticket for the specific user for specified realm endpoint, store it as a browser cookie then load the applications endpoint
@@ -26,9 +27,10 @@
          * @param realmId
          * @param userId
          */
-        nonAdminRealmLogin: {value: function(realmName, realmId, userId) {
-            // Get a session ticket for that subdomain and realmId (stores it in the browser)
-            return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+        nonAdminRealmLogin: {
+            value: function (realmName, realmId, userId) {
+                // Get a session ticket for that subdomain and realmId (stores it in the browser)
+                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
         }}
     });
 

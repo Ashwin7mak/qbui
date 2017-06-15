@@ -68,7 +68,7 @@
          * Function to click on user Remove Icon
          */
         clickUserRemoveIcon: {
-            value: function() {
+            value: function () {
                 //wait for user remove icon
                 this.userRemoveIcon.waitForVisible();
                 //click on the user remove icon
@@ -80,7 +80,7 @@
          * Function to click on user Stage
          */
         clickUserStage: {
-            value: function() {
+            value: function () {
                 //wait for user stage
                 this.userStageBtn.waitForVisible();
                 //click on the user stage

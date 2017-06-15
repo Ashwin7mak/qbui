@@ -9,7 +9,7 @@
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
 
-    describe('Tables - Edit table validation tests: ', function() {
+    describe('Tables - Edit table validation tests: ', function () {
         let realmName;
         let realmId;
         let testApp;
@@ -89,7 +89,7 @@
         }
 
         tableFieldValidationTestCases().forEach(function(testCase) {
-            it('Edit table ' + testCase.message, function() {
+            it('Edit table ' + testCase.message, function () {
 
                 //Select the table properties of settings of table 1 from global actions gear
                 tableCreatePO.clickOnModifyTableSettingsLink();
