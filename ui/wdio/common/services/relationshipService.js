@@ -122,13 +122,13 @@
                                     if (relationship.masterTableId === tableId) {
                                         const sections = form.tabs[0].sections;
                                         const length = Object.keys(sections).length;
-                                        const childReportElement = {"ChildReportElement": {relationshipId: index}};
+                                        const childReportElement = {"ChildReportElement" : {relationshipId: index}};
                                         sections[length] = Object.assign(_.cloneDeep(sections[0]), {
                                             elements: {0: childReportElement},
                                             fields: [],
                                             orderIndex: length
                                         });
-                                        const childTableName = _.find(createdApp.tables, {id: relationship.detailTableId}).name;
+                                        const childTableName = _.find(createdApp.tables, {id:relationship.detailTableId}).name;
                                         sections[length].headerElement.FormHeaderElement.displayText = childTableName;
                                     }
                                 });
@@ -148,7 +148,7 @@
                     // This is an iterator that executes each Promise function in the array here
                     return queueItem();
                 });
-            }
+            },
         };
         return relationshipService;
     };
