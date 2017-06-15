@@ -17,7 +17,7 @@ console.time('dataGen');
 
 // if you set realmToUse null it will randomly generated a new realm name
 // change this to a string i.e. "myRealm" of an existing realm to use
-var realmToUse = 'deepa1234567';
+var realmToUse = 'localhost';
 
 // Get the node config set by your NODE_ENV var
 var config = require('../../server/src/config/environment');

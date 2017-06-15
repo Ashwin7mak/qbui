@@ -143,7 +143,7 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["HeadlessChrome"],
+        browsers: ["PhantomJS_Desktop"],
         customLaunchers: {
             'PhantomJS_Desktop': {
                 base: 'PhantomJS',
