@@ -75,6 +75,7 @@ export class BuilderCustomDragLayer extends Component {
 
     render() {
         const {item, itemType, isDragging} = this.props;
+        console.log(isDragging);
 
         if (!isDragging) {
             return null;

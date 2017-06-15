@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
+import {getEmptyImage} from 'react-dnd-html5-backend';
 import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
 import DraggableItemTypes from '../../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
@@ -44,6 +45,10 @@ class QbHeaderCell extends Component {
         return shallowCompare(this, nextProps);
     };
 
+    componentDidMount() {
+        this.props.connectDragPreview(getEmptyImage());
+    }
+
     render() {
         const {connectDragSource, connectDropTarget, isDragging} = this.props;
 
@@ -87,6 +92,7 @@ QbHeaderCell.defaultProps = {
 const dragSource = DragSource(
     DraggableItemTypes.FIELD, headerSource, (connect, monitor) => ({
         connectDragSource: connect.dragSource(),
+        connectDragPreview: connect.dragPreview(),
         isDragging: monitor.isDragging()
     })
 );
