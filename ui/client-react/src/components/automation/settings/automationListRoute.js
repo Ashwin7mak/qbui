@@ -38,16 +38,6 @@ export class AutomationListRoute extends Component {
         return <div className="automationListSettingsStage stageHeadLine"><I18nMessage message="settings.automationSettings"/></div>;
     }
 
-    getRowActionsRenderer() {
-        return <AutomationRowActions
-                rowId={this.getAppId()}
-                onClickEditRowIcon={this.editAutomation}
-                onClickDeleteRowIcon={this.deleteAutomation}
-                onClickTestRowIcon={this.handleTestAutomationClicked}
-
-        />
-    }
-
     componentDidMount() {
         if (this.getAppId()) {
             this.props.loadAutomations(CONTEXT.AUTOMATION.GRID, this.getAppId());
@@ -119,6 +109,7 @@ export class AutomationListRoute extends Component {
                             onCancelEditingRow={this.cancelEditingRow}
                             onClickSaveRow={this.clickSaveRow}
                             rowActionsRenderer={AutomationRowActions}
+                            disableMultiSelect={true}
                         />
                     </div>
 

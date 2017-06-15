@@ -139,7 +139,13 @@ export const QbGrid = React.createClass({
         phase1: PropTypes.bool,
 
         //
-        rowActionsRenderer: PropTypes.func
+        rowActionsRenderer: PropTypes.func,
+
+        phase1: PropTypes.bool,
+
+        /**
+         * Not all Grids require multiselect, this option will hide the checkboxes if set to false */
+        disableMultiSelect: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -152,7 +158,8 @@ export const QbGrid = React.createClass({
             isEditingRowValid: true,
             isEditingRowSaving: false,
             showRowActionsColumn: true,
-            isDraggable: false
+            isDraggable: false,
+            disableMultiSelect: false
         };
     },
 
@@ -186,6 +193,7 @@ export const QbGrid = React.createClass({
                 onClickEditRowIcon={this.props.onClickEditIcon}
                 onClickDeleteRowIcon={this.props.onClickDeleteIcon}
                 onClickTestRowIcon={this.props.onClickTestRowIcon}
+                disableMultiSelect={this.props.disableMultiSelect}
                 />;
         } else {
             return <RowActions
@@ -342,12 +350,12 @@ export const QbGrid = React.createClass({
 
         return (
             <div className="actionHeader">
-                <input
+                {this.props.disableMultiSelect ? <input
                     type="checkbox"
                     className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
                     checked={this.props.areAllRowsSelected}
                     onChange={this.props.onClickToggleSelectAllRows}
-                />
+                /> : null }
                 {collapseAllIcon}
             </div>
         );
@@ -458,13 +466,17 @@ export const QbGrid = React.createClass({
         } else {
             columns = this.getVisibleColumns();
         }
-        return (
 
+        let className = "qbGrid";
+        className += this.props.isInlineEditOpen ? ' inlineEditing' : '';
+        className += Coothis.props.disableMultiSelect ? ' disableMultiSelect' : '';
+
+        return (
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.QB_GRID}>
                 <Table.Provider
                     ref="qbGridTable"
                     // Turn off hover effects when in inline editing mode
-                    className={`qbGrid${this.props.isInlineEditOpen ? ' inlineEditing' : ''}`}
+                    className={className}
                     columns={columns}
                     onScroll={this.handleScroll}
                     components={{
