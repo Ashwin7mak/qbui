@@ -69,6 +69,7 @@ describe('Nav Unit tests', () => {
         loadReports: (ctx, app, tbl) => {},
         updateFormRedirectRoute: (route) => {},
         showTableCreationDialog: () => {},
+        showAppCreationDialog: () => {},
         showTableReadyDialog: () => {},
         enterBuilderMode: (context) => {},
         loadApps: () => {},
@@ -329,5 +330,25 @@ describe('Nav Unit tests', () => {
         expect(window.sessionStorage.getItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY);
         expect(window.sessionStorage.setItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY, '');
         expect(props.showTableReadyDialog).toHaveBeenCalled();
+    });
+
+    it('invokes showTableCreationDialog when createNewTable is called', (done) => {
+        spyOn(props, 'showTableCreationDialog');
+
+        let component = shallow(<Nav {...props} />);
+        let instance = component.instance();
+        instance.createNewTable();
+        done();
+        expect(props.showTableCreationDialog).toHaveBeenCalled();
+    });
+
+    it('invokes showAppCreationDialog when createNewTable is called', (done) => {
+        spyOn(props, 'showAppCreationDialog');
+
+        let component = shallow(<Nav {...props} />);
+        let instance = component.instance();
+        instance.createNewApp();
+        done();
+        expect(props.showAppCreationDialog).toHaveBeenCalled();
     });
 });
