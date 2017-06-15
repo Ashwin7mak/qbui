@@ -11,10 +11,8 @@
     let formBuilderPO = requirePO('formBuilder');
 
     const PARENT_TABLE = 'Table 1';
-    const SELECT_RECORD_ID_AS_FIELD = 'Record ID#';
     let parentTableRecordValues = [];
     const recordId = '2';
-    const GET_ANOTHER_RECORD = 'Get another record';
 
     describe('Relationships - Create single relationship Tests :', function() {
         let realmName;
@@ -103,7 +101,7 @@
 
                 //Verify that the create relationship button is not visible.
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) === -1).toBe(true);
 
                 //Click on forms Cancel button
                 formsPO.clickFormCancelBtn();

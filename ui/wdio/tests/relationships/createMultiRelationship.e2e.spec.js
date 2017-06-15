@@ -14,9 +14,7 @@
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
     let PARENT_TABLE;
-    const GET_ANOTHER_RECORD = 'Get another record';
     let parentPickerTitleFieldValue = 'testTextValue';
-    const TITLE_FIELD = 'Record title';
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
@@ -136,7 +134,7 @@
 
                 //Verify that the create relationship button is not visible.
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) > -1).toBe(true);
+                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) > -1).toBe(true);
 
                 //Click on forms Cancel button
                 formsPO.clickFormCancelBtn();
@@ -173,7 +171,7 @@
 
                 //Verify that the create relationship button is not visible.
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(GET_ANOTHER_RECORD) === -1).toBe(true);
+                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) === -1).toBe(true);
 
                 //Click on forms Cancel button
                 formsPO.clickFormCancelBtn();

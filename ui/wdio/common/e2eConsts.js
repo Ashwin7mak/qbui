@@ -32,6 +32,8 @@
             'Date Field', 'Date Time Field', 'Time Of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
             'Email Address Field', 'Url Field', 'User Field'],
 
+        GET_ANOTHER_RECORD : 'Get another record',
+
         TABLE1 : 0,
         TABLE2 : 1,
         TABLE3 : 2,
