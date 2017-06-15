@@ -204,7 +204,7 @@
             ReportContentPO.waitForReportContent();
 
             //Verify New Table button not available for user other than ADMIN
-            expect(browser.isVisible('.newTable')).toBe(false);
+            expect(browser.isVisible('.newItem')).toBe(false);
         });
     });
 }());
