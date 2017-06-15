@@ -53,7 +53,7 @@ class WindowLocationUtilsMock {
     static update(url) { }
 }
 const query = {
-    'editRec': 9,
+    'editRec': 9
 };
 
 describe('Nav Unit tests', () => {
@@ -346,7 +346,7 @@ describe('Nav Unit tests', () => {
             expect(props.showTableCreationDialog).toHaveBeenCalled();
         });
 
-        it('invokes showAppCreationDialog when createNewTable is called', (done) => {
+        it('invokes showAppCreationDialog when createNewApp is called', (done) => {
             spyOn(props, 'showAppCreationDialog');
 
             let component = shallow(<Nav {...props} />);
