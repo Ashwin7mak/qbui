@@ -17,7 +17,7 @@
     const RECORD_TITLE_FIELD_NAME = '* Record title';
 
 
-    describe('Tables - Create a table via builder tests: ', function() {
+    describe('Tables - nonAdmin table tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
