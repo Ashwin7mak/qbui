@@ -133,7 +133,6 @@ class modalDialogWindow {
      */
     clickOnModalDialogBtn(btnName) {
         this.modalDialog.waitForVisible();
-        this.modalDialogContainer.click();
 
         //get all buttons from modal dialog footer
         let btns = this.modalDialogFooterButtons.value.filter(function(button) {
