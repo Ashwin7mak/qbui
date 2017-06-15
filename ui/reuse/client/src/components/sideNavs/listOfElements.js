@@ -114,7 +114,7 @@ class ListOfElements extends Component {
         if (this.state.activeFieldFilter) {
             return this.renderFilteredFieldsList();
         }
-        if (this.props.elements) {
+        if (this.props.elements && this.props.elements.length > 0) {
             return this.props.elements.map((element, index) => {
                 if (element.children) {
                     return (
@@ -247,7 +247,12 @@ ListOfElements.propTypes = {
             title: PropTypes.string.isRequired,
             // Other props will be passed through the to the rendering component
         }))
-    }))
+    })),
+
+    /**
+     *  Text to be displayed when no items are in the leftNav
+     */
+    emptyMessage: PropTypes.string
 };
 
 export default ListOfElements;

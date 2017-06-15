@@ -9,24 +9,13 @@ import Locale from '../../../../../reuse/client/src/locales/locale';
 
 export class ExistingFieldsMenu extends Component {
 
-    noExistingFields = () => {
-        if (_.isEmpty(this.props.existingFields)) {
-            let table = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId}) || {};
-            return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
-        }
-    };
-
-    getElements = () => {
-        let existing = this.props.existingFields;
-        if (existing && existing.length) {
-            return [{children: existing, key: 'existingFields', title: 'Existing Fields'}];
-        } else {
-            return undefined;
-        }
+    buildEmptyState = () => {
+        let table = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId}) || {};
+        return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
     };
 
     render = () => {
-        let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex} = this.props;
+        let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
         return (
             <ListOfElements
                 tabIndex={toolPaletteTabIndex}
@@ -36,11 +25,11 @@ export class ExistingFieldsMenu extends Component {
                 renderer={FieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={this.getElements()}
+                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'Existing Fields'}] : undefined}
                 isOpen={isOpen}
                 isFilterable={true}
                 hideTitle={true}
-                emptyMessage={this.noExistingFields()}
+                emptyMessage={this.buildEmptyState()}
             />
         );
     }
