@@ -34,7 +34,6 @@ describe('FieldEditingTools', () => {
             location={location}
             relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
-            isFieldDeletable={true}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
@@ -47,18 +46,23 @@ describe('FieldEditingTools', () => {
         mockParentProps.removeFieldFromForm.calls.reset();
     });
 
-    it('has no delete button if the prop isFieldDeletable is not present', () => {
+    it('has disabled delete button if the field is a recordtitle field', () => {
         component = shallow(<FieldEditingTools
+            app={{id: 'app1'}} tblId={'tbl1'}
+            numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
-            removeFieldFromForm={mockParentProps.removeFieldFromForm}
             relatedField={relatedField}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            fieldId={relatedField.id}
+            table={{recordTitleFieldId: relatedField.id}}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
 
-        expect(deleteButton.length).toBe(0);
+        expect(deleteButton).toBePresent();
+        expect(deleteButton).toBeDisabled();
     });
 
     it('does not have a a delete button if there is only one field on the form', () => {

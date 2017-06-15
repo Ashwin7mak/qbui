@@ -583,4 +583,30 @@ describe('FieldUtils', () => {
             });
         });
     });
+
+    describe('isRecordTitleField', () => {
+        const testState = {};
+
+        it('returns false if there is no table', () => {
+            expect(FieldUtils.isRecordTitleField(null, 2)).toEqual(false);
+        });
+
+        it('returns false if there is no record title on the table', () => {
+            const testApp = {tables: [{id: 1}]};
+
+            expect(FieldUtils.isRecordTitleField(testApp.tables[0], 2)).toEqual(false);
+        });
+
+        it('returns false if the current fieldId does not match the title field id for the table', () => {
+            const testApp = {tables: [{id: 1, recordTitleFieldId: 3}]};
+
+            expect(FieldUtils.isRecordTitleField(testApp.tables[0], 2)).toEqual(false);
+        });
+
+        it('returns false if the current fieldId matches the title field id for the table', () => {
+            const testApp = {tables: [{id: 1, recordTitleFieldId: 2}]};
+
+            expect(FieldUtils.isRecordTitleField(testApp.tables[0], 2));
+        });
+    });
 });
