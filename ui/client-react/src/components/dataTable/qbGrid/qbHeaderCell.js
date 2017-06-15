@@ -33,7 +33,6 @@ const headerTarget = {
 
 /**
  * The header cell component used in the QbGrid
- * @type {__React.ClassicComponentClass<P>}
  */
 class QbHeaderCell extends Component {
     /**
