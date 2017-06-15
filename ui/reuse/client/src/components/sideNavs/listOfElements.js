@@ -248,11 +248,6 @@ ListOfElements.propTypes = {
             // Other props will be passed through the to the rendering component
         }))
     })),
-
-    /**
-     *  Text to be displayed when no items are in the leftNav
-     */
-    emptyMessage: PropTypes.string
 };
 
 export default ListOfElements;
