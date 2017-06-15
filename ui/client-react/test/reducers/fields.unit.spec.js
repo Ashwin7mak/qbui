@@ -157,6 +157,48 @@ describe('Test fields reducer', () => {
         expect(state[0].isPendingEdit).toEqual(false);
     });
 
+    it('removing an existing field does not remove it from the field list', () => {
+        const newState = [{
+            appId: appId,
+            tblId: tblId,
+            fields: [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}]
+        }];
+        const actionPayload = {
+            type: types.REMOVE_FIELD,
+            appId: appId,
+            tblId: tblId,
+            field: {id: 3}
+        };
+        const state = reducer(newState, actionPayload, {type: types.REMOVE_FIELD});
+        const currentFieldList = tableFieldsObj(state, appId, tblId);
+
+        const expectedFieldsWithRemoval = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}];
+        expect(currentFieldList.appId).toEqual(appId);
+        expect(currentFieldList.tblId).toEqual(tblId);
+        expect(currentFieldList.fields).toEqual(expectedFieldsWithRemoval);
+    });
+
+    it('removing a new field removes it from the field list', () => {
+        const newState = [{
+            appId: appId,
+            tblId: tblId,
+            fields: [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}, {builtIn: true, id: 'newField_250'}]
+        }];
+        const actionPayload = {
+            type: types.REMOVE_FIELD,
+            appId: appId,
+            tblId: tblId,
+            field: {id: 'newField_250'}
+        };
+        const state = reducer(newState, actionPayload, {type: types.REMOVE_FIELD});
+        const expectedFieldsWithRemoval = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}];
+        const currentFieldList = tableFieldsObj(state, appId, tblId);
+
+        expect(currentFieldList.appId).toEqual(appId);
+        expect(currentFieldList.tblId).toEqual(tblId);
+        expect(currentFieldList.fields).toEqual(expectedFieldsWithRemoval);
+    });
+
     describe('isFieldDeletable', () => {
         const testState = {}; // App store is not in redux yet. Refactor once app can be obtained from state.
 
