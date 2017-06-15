@@ -909,6 +909,14 @@
          */
         getMyAppsLegacyStackRoute: function() {
             return `${getLegacyStackMainHandlerRoot()}?a=myqb`;
+        },
+
+        /**
+         * Navigate to the legacy stack 'Logout' page
+         * @returns {string}
+         */
+        getSignoutLegacyStackRoute: function() {
+            return `${getLegacyStackMainHandlerRoot()}?a=Signout`;
         }
 
 

@@ -43,17 +43,19 @@ export default {
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
-                unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
+                unAssignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
                 deleteUser: "Retirer {valeur} utilisateur",
                 deleteUsers: "Retirer {valeur} utilisateurs",
                 removeButton: "Retirer",
                 cancel: "Annuler",
-                singular: "utilisateur",
                 plural: "utilisateurs",
-                usersRemoved: " Les utilisateurs ont été enlevés",
-                userRemoved: " L'utilisateur a été supprimé",
-                userAdded: "Vous avez ajouté"
-
+                usersRemovedFromAppRole: "{numOfUsers} Les utilisateurs ont été supprimés de l'application",
+                userRemovedFromAppRole: "L'utilisateur a été supprimé de l'application",
+                userAdded: "Utilisateur ajouté",
+                userAddError: "Erreur d'ajout d'utilisateur",
+                userRemovingError: "Erreur lors de l'enlever",
+                emailBody: "Le corps du courrier électronique va ici",
+                emailSubject: "Le sujet de l'email va ici"
             }
         },
         appMenu: {
@@ -200,7 +202,8 @@ export default {
                 feedbackMenuButton: "Donnez votre avis",
                 feedbackMenuTitle: "Retour d'information",
                 reportFeedBackButton: "Signaler un problème",
-                feedbackTooltip: "Partagez des idées et des problèmes"
+                feedbackTooltip: "Partagez des idées et des problèmes",
+                helpTooltip: "Aidez-moi",
             }
         },
         fields: {
@@ -237,9 +240,13 @@ export default {
                 success: "Enregistrement approuvé.",
                 error: "Une erreur s'est produite lors de l'approbation de ce document."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Test d'automatisation réussi.",
                 error: "Une erreur s'est produite lors du test de cette automatisation."
+            },
+            saveAutomation: {
+                success: "Automatisation enregistrée réussie.",
+                error: "Une erreur s'est produite lors de la sauvegarde de cette automatisation."
             },
             automationList: {
                 nameHeader: "Prénom",
@@ -257,6 +264,17 @@ export default {
                 actions: {
                     email: "Envoyer un e-mail"
                 }
+            },
+            automationEdit: {
+                stageHeading: "Modifier l'automatisation: {automationName}",
+                nameHeader: "Prénom",
+                emailSectionHeader: "Envoyer un e-mail",
+                toHeader: "Notifier à qui",
+                subjectHeader: "Assujettir",
+                bodyHeader: "Message"
+            },
+            automationBuilder: {
+                modify: 'Modifier l\'automatisation'
             }
         },
         relationship: {
@@ -608,7 +626,7 @@ export default {
             name: "prénom",
             required: "Doit être rempli",
             multiChoice: "Les choix",
-            unique: "Doit avoir des valeurs uniques",
+            unique: "Doit être unique",
             linkToRecord: "Lien vers un enregistrement dans la table",
             connectedTo: "Connecté sur le champ {fieldName}"
         },
@@ -655,6 +673,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
+            existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",

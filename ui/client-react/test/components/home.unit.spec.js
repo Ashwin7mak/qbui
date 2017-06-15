@@ -1,18 +1,12 @@
-import Fluxxor from 'fluxxor';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import Home, {__RewireAPI__ as HomeRewireAPI}  from '../../src/components/apps/home';
-import Store from '../../src/stores/appsStore';
+import {App, __RewireAPI__ as HomeRewireAPI}  from '../../src/components/apps/home';
+import {mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 
-//TODO this is a placeholder file to add tests as table home page gets built out
+let props = {
+    getApps: () => {}
+};
 
-var AppsHeaderMock = React.createClass({
-    render: function() {
-        return (
-            <div>Header</div>
-        );
-    }
-});
 var AppsListMock = React.createClass({
     render: function() {
         return (
@@ -24,27 +18,24 @@ var AppsListMock = React.createClass({
 describe('Home page functions', () => {
     'use strict';
 
-    let component;
-
-    let store = new Store();
-    let stores = {AppsStore: store};
-    let flux = new Fluxxor.Flux(stores);
-
     beforeEach(() => {
-        HomeRewireAPI.__Rewire__('AppsHeader', AppsHeaderMock);
+        jasmineEnzyme();
+        spyOn(props, 'getApps').and.callThrough();
         HomeRewireAPI.__Rewire__('AppsList', AppsListMock);
     });
 
     afterEach(() => {
-        HomeRewireAPI.__ResetDependency__('AppsHeader', AppsHeaderMock);
+        props.getApps.calls.reset();
         HomeRewireAPI.__ResetDependency__('AppsList', AppsListMock);
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<Home flux={flux}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        expect(TestUtils.scryRenderedComponentsWithType(component, AppsHeaderMock).length).toEqual(1);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AppsListMock).length).toEqual(1);
+        const component = mount(<App {...props}/>);
+        expect(component).toBeDefined();
+        expect(props.getApps).toHaveBeenCalled();
+
+        let appsContainer = component.find('.apps-container');
+        expect(appsContainer.length).toBe(1);
     });
 
 });

@@ -10,7 +10,7 @@ import NotificationManager from '../../../reuse/client/src/scripts/notificationM
 import * as types from '../actions/types';
 import NavigationUtils from '../utils/navigationUtils';
 import FieldUtils from '../utils/fieldUtils';
-import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import {NEW_FORM_RECORD_ID, NEW_FIELD_PREFIX} from '../constants/schema';
 import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from './actionHelpers/transformFormData';
 import {saveAllNewFields, updateAllFieldsWithEdits, deleteField} from './fieldsActions';
@@ -80,13 +80,16 @@ export const loadFormSuccess = (id, formData, appId, tblId) => {
 };
 
 /**
- * UI is syncing the view form to the saved version
- * @returns {{type}}
+ * UI should refresh the view form to the saved version
+ * @param id
+ * @param recordId newly saved record ID
+ * @returns {{id: *, type, recordId: *}}
  */
-export const syncForm = (id) => {
+export const syncForm = (id, recordId) => {
     return {
         id,
-        type: types.SYNC_FORM
+        type: types.SYNC_FORM,
+        recordId
     };
 };
 
@@ -201,7 +204,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
  * Private function for addFieldToForm, not exported
  * */
 const buildField = (field, id) => {
-    id = id || _.uniqueId('newField_');
+    id = id || _.uniqueId(NEW_FIELD_PREFIX);
     //FormFieldElement is needed for both existing fields and new fields for experience engine
     return _.merge({}, {
         id: id,
@@ -276,8 +279,8 @@ export const deselectField = (formId, location) => {
  * @param location
  * @returns {{id, type, content}|*}
  */
-export const removeFieldFromForm = (formId, field, location) => {
-    return {id: formId, type: types.REMOVE_FIELD, field, location};
+export const removeFieldFromForm = (formId, appId, tblId, field, location) => {
+    return {id: formId, type: types.REMOVE_FIELD, appId, tblId, field, location};
 };
 
 /**

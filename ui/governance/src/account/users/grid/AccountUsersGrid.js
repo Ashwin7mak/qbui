@@ -1,9 +1,10 @@
 import React, {PropTypes, Component} from "react";
 import {GetAccountUsersGridColumns} from "./AccountUsersGridColumns";
-import {GetFacetFields} from "./AccountUsersGridFacet";
-import "./AccountUsersGrid.scss";
+import {GetAccountUsersFacetFields} from "./AccountUsersGridFacet";
 import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
-import * as Actions from "../AccountUsersActions";
+import * as AccountUsersActions from "../AccountUsersActions";
+import constants from "../../../app/constants";
+import "./AccountUsersGrid.scss";
 
 /**
  * Renders the Grid portion of the AccountUsers view
@@ -15,11 +16,13 @@ class AccountUsersGrid extends Component {
             <StandardGrid
                 id={this.props.id}
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
-                facetFields={GetFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
-                doUpdate={Actions.doUpdate}
+                facetFields={GetAccountUsersFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
+                doUpdate={AccountUsersActions.doUpdateUsers}
                 rowKey="uid"
                 itemTypePlural="users"
                 itemTypeSingular="user"
+                itemsPerPage={constants.USERS_GRID_ITEMSPERPAGE}
+                noItemsFound={'governance.noItemsFound'}
             />
         );
     }

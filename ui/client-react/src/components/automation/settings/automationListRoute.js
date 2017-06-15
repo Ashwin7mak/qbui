@@ -112,14 +112,13 @@ export class AutomationListRoute extends Component {
                             disableMultiSelect={true}
                         />
                     </div>
-
                 </div>
             </Loader>
         );
     }
 }
 
-AutomationListRoute.protoTypes = {
+AutomationListRoute.propTypes = {
     /** The list of automations to display. */
     automations: React.PropTypes.array,
     /** Get the list of automations for the app. */
@@ -142,4 +141,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(AutomationListRoute);
-

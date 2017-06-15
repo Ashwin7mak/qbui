@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 import Logger from '../utils/logger';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
+import {NEW_FIELD_PREFIX} from '../constants/schema';
 
 //  Return the table fields object for the given appId and tableId
 export const tableFieldsObj = (state, appId, tblId) => {
@@ -149,9 +150,15 @@ const fieldsStore = (state = [], action) => {
             fieldList = _.cloneDeep(fieldList);
 
             let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
+            let {field, propertyName, newValue} = action;
 
-            fieldList.fields[fieldIndex] = {...action.field, isPendingEdit: true};
+            field[propertyName] = newValue;
+            //indexed and unique are linked and needs to be set to the same value
+            field.indexed = field.unique;
+
+            fieldList.fields[fieldIndex] = {...field, isPendingEdit: true};
             fieldList.isPendingEdit = true;
+
             newState.push(fieldList);
             return newState;
 
@@ -182,7 +189,15 @@ const fieldsStore = (state = [], action) => {
 
         return newState;
     }
-
+    case types.REMOVE_FIELD : {
+        // remove a field from the list only if this is not a saved field on the table schema
+        if (action.field && action.field.id && action.field.id.toString().indexOf(NEW_FIELD_PREFIX) !== -1) {
+            let fieldList = _.find(state, {appId: action.appId, tblId: action.tblId});
+            let fields = _.filter(fieldList.fields, field => field.id !== action.field.id);
+            return [...newState, {...fieldList, fields}];
+        }
+        return state;
+    }
     default:
         return state;
     }

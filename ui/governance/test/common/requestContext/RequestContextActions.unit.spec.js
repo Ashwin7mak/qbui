@@ -8,7 +8,7 @@ import thunk from "redux-thunk";
 import Promise from "bluebird";
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 
-describe('RequestContextActions', () => {
+xdescribe('RequestContextActions', () => {
     const mockWindowUtils = {
         update: url => url,
     };
@@ -22,7 +22,7 @@ describe('RequestContextActions', () => {
         RequestContextActionsRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
     });
 
-    var middleware =  [thunk];
+    let middleware =  [thunk];
     const mockStore = configureMockStore(middleware);
 
     const defaultServiceData = {

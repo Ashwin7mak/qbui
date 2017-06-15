@@ -36,7 +36,7 @@
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
         //cancel form button
-        formCancelBtn: {get: function() {return browser.element('.mainTrowserFooterButton');}},
+        formCancelBtn: {get: function() {return browser.element('.alternativeTrowserFooterButton');}},
 
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.element('div.qbErrorMessage.qbErrorMessageVisible');}},
@@ -199,6 +199,16 @@
         }},
 
         /**
+         * Returns all Parent fields on the form
+         * @returns Array of parent fields
+         */
+        getAllParentRecordFields: {
+            value: function() {
+                return this.editFormContainerEl.elements('.Select-placeholder');
+            }
+        },
+
+        /**
          * Returns all Checkbox fields on the form
          * @returns Array of checkbox fields
          */
@@ -316,14 +326,18 @@
          */
         selectFromList : {value: function(listOption) {
             browser.waitForVisible('.Select-menu-outer');
+            //Need this to stabilize
+            browser.pause(e2eConsts.shortWaitTimeMs);
             //get all options from the list
-            var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.element('div div').getText().includes(listOption);
+            browser.waitForVisible('.Select-option');
+            var option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
+                return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
             if (option !== []) {
                 //Click on filtered option
-                option[0].element('div div').click();
+                option[0].waitForVisible();
+                option[0].click();
                 //wait until loading screen disappear
                 return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
             } else {
@@ -356,48 +370,57 @@
 
         /**
          * Method to enter field values in the form.
+         * @param fieldType type of field to be filled in
+         * @param parentValue  parent record to be linked to
          */
-        enterFormValues : {value: function(fieldType) {
+        enterFormValues: {
+            value: function(fieldType, parentValue) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            var i;
+                var i;
+                if (!parentValue) {
+                    parentValue = 1;
+                }
             //get all input fields in the form
-            if (fieldType === 'allTextFields') {
-                this.setFormInputValue(this.getAllTextFields(), sText);
-            } else if (fieldType === 'allEmailFields') {
-                this.setFormInputValue(this.getAllEmailInputFields(), sEmail);
-            } else if (fieldType === 'allPhoneFields') {
-                this.setFormInputValue(this.getAllPhoneInputFields(), sPhone);
-            } else if (fieldType === 'allUrlFields') {
-                this.setFormInputValue(this.getAllUrlInputFields(), sUrl);
-            } else if (fieldType === 'allDurationFields') {
-                this.setFormInputValue(this.getAllDurationInputFields(), sNumeric);
-            } else if (fieldType === 'allNumericFields') {
-                this.setFormInputValue(this.getAllNumericInputFields(), sNumeric);
-            } else if (fieldType === 'allTimeFields') {
-                this.setDropDownValue(this.getAllTimeInputFields(), sTime);
-            } else if (fieldType === 'allDateFields') {
+                if (fieldType === 'allTextFields') {
+                    this.setFormInputValue(this.getAllTextFields(), sText);
+                } else if (fieldType === 'allEmailFields') {
+                    this.setFormInputValue(this.getAllEmailInputFields(), sEmail);
+                } else if (fieldType === 'allPhoneFields') {
+                    this.setFormInputValue(this.getAllPhoneInputFields(), sPhone);
+                } else if (fieldType === 'allUrlFields') {
+                    this.setFormInputValue(this.getAllUrlInputFields(), sUrl);
+                } else if (fieldType === 'allDurationFields') {
+                    this.setFormInputValue(this.getAllDurationInputFields(), sNumeric);
+                } else if (fieldType === 'allNumericFields') {
+                    this.setFormInputValue(this.getAllNumericInputFields(), sNumeric);
+                } else if (fieldType === 'allTimeFields') {
+                    this.setDropDownValue(this.getAllTimeInputFields(), sTime);
+                } else if (fieldType === 'allDateFields') {
                 //get all date field input validators
-                var dateFields = this.getAllDateInputFields();
-                for (i = 0; i < dateFields.value.length; i++) {
-                    if (browserName === 'safari') {
-                        dateFields.value[i].element('input').setValue(sDate.replace(/-/g, "/"));
-                    } else {
-                        dateFields.value[i].element('input').setValue(sDate);
+                    var dateFields = this.getAllDateInputFields();
+                    for (i = 0; i < dateFields.value.length; i++) {
+                        if (browserName === 'safari') {
+                            dateFields.value[i].element('input').setValue(sDate.replace(/-/g, "/"));
+                        } else {
+                            dateFields.value[i].element('input').setValue(sDate);
+                        }
                     }
-                }
-            } else if (fieldType === 'allCheckboxFields') {
+                } else if (fieldType === 'allCheckboxFields') {
                 //get all checkbox fields on form
-                var checkboxFields = this.getAllCheckboxFields();
-                for (i = 0; i < checkboxFields.value.length; i++) {
+                    var checkboxFields = this.getAllCheckboxFields();
+                    for (i = 0; i < checkboxFields.value.length; i++) {
                     //if checkbox not selected then check it.
-                    if (checkboxFields.value[i].element('input').isSelected() === false) {
-                        checkboxFields.value[i].element('label').click();
+                        if (checkboxFields.value[i].element('input').isSelected() === false) {
+                            checkboxFields.value[i].element('label').click();
+                        }
                     }
+                } else if (fieldType === 'allUserField') {
+                    this.setDropDownValue(this.getAllUserFields(), sUser);
+                } else if (fieldType === 'allParentRecordFields') {
+                    this.setDropDownValue(this.getAllParentRecordFields(), parentValue);
                 }
-            } else if (fieldType === 'allUserField') {
-                this.setDropDownValue(this.getAllUserFields(), sUser);
             }
-        }},
+        },
 
         /**
          * Method to enter field values in the form.

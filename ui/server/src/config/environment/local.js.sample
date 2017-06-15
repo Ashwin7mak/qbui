@@ -16,7 +16,7 @@
 
     var client = clientConsts.REACT;
 
-    module.exports = {
+    let baseVars = {
 
         //  Logging configuration
         LOG: {
@@ -101,6 +101,12 @@
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
 
+        // Turn on/off inbound and outbound request tracing
+        tracingEnabled: false,
+
+        // Tracing host name
+        tracingHost: ''
+
         /**
          * mock data for feature switches for local testing
          */
@@ -111,4 +117,6 @@
          */
         //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
     };
+module.exports = Object.assign({}, baseVars, process.env);
+
 }());

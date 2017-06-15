@@ -11,6 +11,7 @@ export const DETAIL_KEY_VALUE = 'detailKeyValue';
 export const NEW_RECORD_VALUE = 'new';
 export const SUPPORT_LINK_PATH = '/qb/support/NewCase?subject=MercuryBeta';
 export const FEEDBACK_LINK_PATH = 'quickbase.uservoice.com/forums/378045-mercury';
+export const HELP_LINK_PATH = `quickbase.com/mercury/help`;
 export const WALKME_ID_FOR_LARGE = 228348;
 export const WALKME_ID_FOR_SMALL_AND_MEDIUM = 272137;
 export const EMBEDDED_REPORT = 'embeddedReport';
@@ -55,5 +56,6 @@ export const DRAWER = Object.assign(drawer, {
 
 export const AUTOMATION = Object.freeze({
     PATH : 'automation',
-    VIEW : 'view'
+    VIEW : 'view',
+    EDIT : 'edit'
 });

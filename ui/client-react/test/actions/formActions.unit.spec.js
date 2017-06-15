@@ -52,7 +52,7 @@ describe('Form Actions', () => {
 
         it('creates an action to indicate the view form needs to be reloaded', () => {
 
-            expect(formActions.syncForm("view")).toEqual({type: types.SYNC_FORM, id: "view"});
+            expect(formActions.syncForm("view", 123)).toEqual({type: types.SYNC_FORM, id: "view", recordId: 123});
         });
     });
 
@@ -510,9 +510,11 @@ describe('Form Actions', () => {
 
     describe('removeFieldFromForm', () => {
         it('creates an action that will remove a field', () => {
-            expect(formActions.removeFieldFromForm('view', {id: 6}, 1)).toEqual({
+            expect(formActions.removeFieldFromForm('view', 'appId', 'tblId', {id: 6}, 1)).toEqual({
                 id: 'view',
                 type: types.REMOVE_FIELD,
+                appId: 'appId',
+                tblId: 'tblId',
                 field: {id: 6},
                 location: 1
             });

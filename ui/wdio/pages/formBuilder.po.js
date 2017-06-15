@@ -3,6 +3,7 @@ let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
+let modalDialog = requirePO('/common/modalDialog');
 
 class formBuilderPage {
 
@@ -140,6 +141,11 @@ class formBuilderPage {
         return browser.element(tab_Field);
     }
 
+    get addAnotherRecordDialogTitle() {
+        // TITLE for add another record dialog
+        return browser.element('.modal-dialog .modal-title');
+    }
+
     get title() {
         // The name of the form, as displayed at the top of the form builder
         return browser.element('.formContainer .qbPanelHeaderTitleText');
@@ -237,12 +243,10 @@ class formBuilderPage {
 
     openMenu() {
         // Clicks on the 'gear' button to invoke the SETTINGS menu
-        // todo: move this (and open?) to topNavPO?
-        reportContentPO.reportTitle.waitForExist();
-        reportContentPO.reportTitle.waitForVisible();
-        topNavPO.settingsBtn.waitForExist();
         try {
-            topNavPO.settingsBtn.click();
+            //Click settings Icon
+            topNavPO.settingsBtn.waitForVisible();
+            return topNavPO.settingsBtn.click();
         } catch (err) {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
@@ -327,6 +331,56 @@ class formBuilderPage {
             return browser.element(target).getText() === label;
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
         return this.getFieldLabels();
+    }
+
+    addNewFieldToFormByDoubleClicking(fieldToSelect) {
+        //get all field tokens
+        var token = browser.elements('.fieldToken .fieldTokenTitle').value.filter(function(tokenTitle) {
+            return tokenTitle.getAttribute('textContent') === fieldToSelect;
+        });
+
+        if (token !== []) {
+            //scroll to a field.
+            browser.execute("return arguments[0].scrollIntoView(true);", token[0]);
+            //Click on filtered save button
+            return token[0].doubleClick();
+        } else {
+            throw new Error('field with name ' + fieldToSelect + " not found on the new list in form builder");
+        }
+    }
+
+    /**
+     * Verify the Get another record relationship dialog titles, descriptions and functionality
+     * @param expectedTablesList to verify the select table drop down list
+     * @param parentTable table to select
+     * @param childTable table to verify that I am inside this table while creating relationship
+     * @param expectedFieldsList to verify the fields from advanced settings select dropdown
+     */
+    verifyGetAnotherRecordRelationshipDialog(expectedTablesList, parentTable, childTable, expectedFieldsList) {
+        expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+        //Verify title
+        expect(modalDialog.modalDialogTitle).toContain('Get another record');
+        //Verify select tables drop down has all the tables except the one you're in
+        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+        let tableDropDownList = modalDialog.allDropDownListOptions;
+        expect(tableDropDownList).toEqual(expectedTablesList);
+        //click again on the arrow to collapse the outer menu
+        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+        //Select the table
+        modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
+        //Click on advanced settings
+        modalDialog.clickModalDialogAdvancedSettingsToggle();
+        //Click on advanced setting field drop down
+        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
+        //Verify select drop down has just record id
+        let selectFieldDropDownList = modalDialog.allDropDownListOptions;
+        expect(selectFieldDropDownList).toEqual(expectedFieldsList);
+        //Finally close the dialog
+        modalDialog.modalDialogCloseBtn.click();
+        //Verify the dialog got closed
+        browser.waitForVisible('.modal-dialog .iconUISturdy-close', e2eConsts.longWaitTimeMs, true);
+        //Close the form builder
+        this.cancel();
     }
 
     KB_cancel() {

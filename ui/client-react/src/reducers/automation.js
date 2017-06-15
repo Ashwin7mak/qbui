@@ -1,6 +1,22 @@
 import * as types from "../actions/types";
 import _ from "lodash";
 
+
+/*
+    Methods for accessing particular parts of auomtations of type email.
+    There are a number things we need to access that are particular to how we
+    set up the email templated automations. These methods assure one place
+    to change if the template changes.
+*/
+export const emailAutomationGetTo = (anAutomation) => anAutomation.inputs.filter((input) => input.name === "toAddress")[0].defaultValue;
+export const emailAutomationSetTo = (anAutomation, value) => anAutomation.inputs.filter((input) => input.name === "toAddress")[0].defaultValue = value;
+
+export const emailAutomationGetSubject = (anAutomation) => anAutomation.inputs.filter((input) => input.name === "subject")[0].defaultValue;
+export const emailAutomationSetSubject = (anAutomation, value) => anAutomation.inputs.filter((input) => input.name === "subject")[0].defaultValue = value;
+
+export const emailAutomationGetBody = (anAutomation) => anAutomation.inputs.filter((input) => input.name === "body")[0].defaultValue;
+export const emailAutomationSetBody = (anAutomation, value) => anAutomation.inputs.filter((input) => input.name === "body")[0].defaultValue = value;
+
 /**
  * Manage automation states
  *
@@ -80,6 +96,42 @@ const automation = (
             automation: action.content,
             error: undefined
         };
+    }
+    case types.SAVE_AUTOMATION: {
+        return {
+            ...state,
+            appId: action.content.appId,
+            automationId: action.content.automationId,
+            automation: action.content.automation
+        };
+    }
+    case types.SAVE_AUTOMATION_FAILED: {
+        return {
+            ...state,
+            error: action.content
+        };
+    }
+    case types.SAVE_AUTOMATION_SUCCESS: {
+        return {
+            ...state,
+            automation: action.content,
+            error: undefined
+        };
+    }
+    case types.CHANGE_AUTOMATION_EMAIL_TO: {
+        let newState = _.cloneDeep(state);
+        emailAutomationSetTo(newState.automation, action.content.newTo);
+        return newState;
+    }
+    case types.CHANGE_AUTOMATION_EMAIL_SUBJECT: {
+        let newState = _.cloneDeep(state);
+        emailAutomationSetSubject(newState.automation, action.content.newSubject);
+        return newState;
+    }
+    case types.CHANGE_AUTOMATION_EMAIL_BODY: {
+        let newState = _.cloneDeep(state);
+        emailAutomationSetBody(newState.automation, action.content.newBody);
+        return newState;
     }
     default:
         // by default, return existing state

@@ -10,12 +10,6 @@ describe('AppHomePageRoute functions', () => {
     'use strict';
 
     let component;
-    const flux = {
-        actions:{
-            selectAppId: function() {return;},
-            doneRoute: function() {return;}
-        }
-    };
 
     const props = {
         showTopNav: () => {}
@@ -30,16 +24,15 @@ describe('AppHomePageRoute functions', () => {
     ];
 
     beforeEach(() => {
-        spyOn(flux.actions, 'selectAppId');
         spyOn(HtmlUtils, 'updatePageTitle');
     });
 
     afterEach(() => {
-        flux.actions.selectAppId.calls.reset();
+        HtmlUtils.updatePageTitle.calls.reset();
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} flux={flux} selectedApp={selectedApp}/>);
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} selectedApp={selectedApp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -50,7 +43,7 @@ describe('AppHomePageRoute functions', () => {
         };
 
 
-        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} match={{params}} selectedAppId={1} flux={flux} selectedApp={selectedApp}/>);
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} match={{params}} selectedAppId={1} selectedApp={selectedApp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -65,7 +58,7 @@ describe('AppHomePageRoute functions', () => {
                 return {params, selectedAppId: 1};
             },
             render() {
-                return <AppHomePageRoute ref="ahp" match={{params:this.state.params}} selectedAppId={this.state.selectedAppId} {...props} flux={flux} selectedApp={selectedApp}/>;
+                return <AppHomePageRoute ref="ahp" match={{params:this.state.params}} selectedAppId={this.state.selectedAppId} {...props} selectedApp={selectedApp}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -86,7 +79,7 @@ describe('AppHomePageRoute functions', () => {
 
     it('sets the page title to the currently selected app', () => {
         component = TestUtils.renderIntoDocument(
-            <AppHomePageRoute {...props} flux={flux} apps={apps} selectedAppId={selectedAppId} selectedApp={selectedApp}/>
+            <AppHomePageRoute {...props} apps={apps} selectedAppId={selectedAppId} selectedApp={selectedApp}/>
         );
 
         expect(HtmlUtils.updatePageTitle).toHaveBeenCalledWith(`${selectedAppName} - ${DEFAULT_PAGE_TITLE}`);
@@ -131,7 +124,7 @@ describe('AppHomePageRoute functions', () => {
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 component = TestUtils.renderIntoDocument(
-                    <AppHomePageRoute {...props} selectedAppId={testCase.selectedAppId} selectedApp={selectedApp} apps={testCase.apps} flux={flux} />
+                    <AppHomePageRoute {...props} selectedAppId={testCase.selectedAppId} selectedApp={selectedApp} apps={testCase.apps}/>
                 );
 
                 expect(component.getSelectedAppName()).toEqual(testCase.expectedName);

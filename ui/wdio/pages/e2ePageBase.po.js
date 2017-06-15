@@ -88,6 +88,23 @@
     };
 
     /**
+     * Helper method that will load an particular table by ID in an app for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @param tableId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadTableByIdInBrowser = function(realmName, appId, tableId) {
+        this.navigateTo(e2eBase.getRequestTableEndpoint(realmName, appId, tableId));
+        //wait until loading screen disappear in leftNav
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        //wait until loading screen disappear in report Content
+        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //wait until apps home page is visible
+        return browser.waitForVisible('.reportContent .loadedContent');
+    };
+
+    /**
      * Helper method that will load a report for you in your browser by directly hitting a generated URL
      * @param realmName
      * @param appId
@@ -117,12 +134,13 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.iconActionButton.addRecord');
+        //wait until report rows in table are loaded
+        return reportContentPO.waitForReportContent();
     };
 
     PageBase.prototype.navigateTo = function(url) {
         return browser.url(url);
     };
+
     module.exports = new PageBase();
 }());

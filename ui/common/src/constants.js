@@ -64,7 +64,11 @@
         COOKIES: {
             TICKET: 'TICKET',
             NSTICKET: 'NSTICKET',
-            V2TOV3: 'V2TOV3'
+            // Is Federated signifies that the user logged in via legacy
+            ISFEDERATED: 'ISFEDERATED',
+            V2TOV3: 'V2TOV3',
+            // TIDs are passed to DotNet as sbIIDs
+            SBIID: 'sbIID'
         },
 
         NUMERIC_SEPARATOR: {

@@ -132,7 +132,7 @@ export const QbGrid = React.createClass({
         menuProps: PropTypes.object,
 
         /**
-         * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
+         * Flag to include the first column that includes row specific actions.*/
         showRowActionsColumn: PropTypes.bool,
 
         // relationship phase-1, will need remove when we allow editing
@@ -469,7 +469,7 @@ export const QbGrid = React.createClass({
 
         let className = "qbGrid";
         className += this.props.isInlineEditOpen ? ' inlineEditing' : '';
-        className += Coothis.props.disableMultiSelect ? ' disableMultiSelect' : '';
+        className += this.props.disableMultiSelect ? ' disableMultiSelect' : '';
 
         return (
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.QB_GRID}>

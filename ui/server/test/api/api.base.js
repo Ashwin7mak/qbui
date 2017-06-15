@@ -10,6 +10,7 @@
     var _ = require('lodash');
     //This is the url that will be used for making requests to the node server or the java server
     var baseUrl;
+    var confTicket;
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -72,6 +73,7 @@
         var REQ_USER = 'reqUser';
         //add comment about this usage
         baseUrl = config === undefined ? '' : config.DOMAIN;
+        confTicket = config === undefined ? '' : config.ticket;
 
         function resolveFullUrl(realmSubdomain, path) {
             log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain + ' for base url: ' + baseUrl);
@@ -540,7 +542,11 @@
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket      : function(realmId) {
-                return this.executeRequest(this.resolveTicketEndpoint() + realmId, consts.GET, '', DEFAULT_HEADERS);
+                if (confTicket) {
+                    return promise.resolve({body:confTicket});
+                } else {
+                    return this.executeRequest(this.resolveTicketEndpoint() + realmId, consts.GET, '', DEFAULT_HEADERS);
+                }
             },
             //Deletes a realm, if one is set on the instance, returns a promise
             cleanup           : function() {
