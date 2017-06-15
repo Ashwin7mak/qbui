@@ -764,7 +764,11 @@ export default {
             tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
             tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs.",
 
-            tableReadyDialogOK: "D'accord"
+            tableReadyDialogOK: "D'accord",
+
+            recordTitleFieldHeading: "Identification des enregistrements",
+            recordTitleFieldDescription: "Sélectionnez un champ à utiliser pour identifier les enregistrements dans ce tableau. Un champ avec cette propriété sera requis sur le formulaire.",
+            recordTitleFieldDefault: "Par défaut à Noun + ID"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."

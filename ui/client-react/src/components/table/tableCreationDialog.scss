@@ -12,6 +12,9 @@
         color: $color-black-500;
         font-size: 16px;
     }
+    .sections .iconSelection  .iconChooser.open {
+        height: 256px; // override the table settings style since it has a different height
+    }
 }
 
 @include not-small-breakpoint {
