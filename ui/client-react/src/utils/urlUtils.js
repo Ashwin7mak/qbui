@@ -115,7 +115,7 @@ const UrlUtils = {
      * @return {string} URL of route for showing new child record
      */
     getAddRelatedChildLink(location, {detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, detailKeyDisplay}, uniqueEmbeddedReportId) {
-        return StringUtils.format(URL.ADD_RELATED_CHILD_LINK, [...arguments]);
+        return StringUtils.format(URL.ADD_RELATED_CHILD_LINK, [location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, detailKeyDisplay, uniqueEmbeddedReportId]);
     },
 
     /**
