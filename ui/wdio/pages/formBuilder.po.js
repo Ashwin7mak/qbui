@@ -53,6 +53,11 @@ class formBuilderPage {
         return browser.element('.fieldTokenDragging');
     }
 
+    get fieldTokenCollapsed() {
+        // the token which appears when dragging a field to another position
+        return browser.element('.fieldTokenCollapsed');
+    }
+
     get fieldTokenTitle() {
         // the label of the first NEW FIELD token
         return browser.element('.fieldTokenTitle');
@@ -242,7 +247,11 @@ class formBuilderPage {
 
     getRequiredCheckboxState() {
         // gets checked status of the MUST BE FILLED IN checkbox ('checked' attribute is either NULL or TRUE)
-        return this.fieldProperty_Required_Input.getAttribute('checked') !== null;
+
+        // this line fails on edge
+        // return this.fieldProperty_Required_Input.getAttribute('checked') !== null;
+
+        return this.requiredCheckboxChecked.isExisting();
     }
 
     moveByName(source, target) {
@@ -260,6 +269,7 @@ class formBuilderPage {
         this.openMenu();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForExist();
+        expect(this.tab_Active.getText()).toBe("New");
         return this;
     }
 
