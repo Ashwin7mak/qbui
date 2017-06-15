@@ -601,7 +601,7 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportBuilder.e2e.spec.js',
 
                     //TODO: MC-3410 - Need a better way to verify user was removed
-                    './wdio/tests/users/usersRemove.e2e.spec.js',
+
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -641,7 +641,8 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     users: [
-                        './wdio/tests/users/usersTable.e2e.spec.js'
+                        './wdio/tests/users/usersTable.e2e.spec.js',
+                        './wdio/tests/users/usersRemove.e2e.spec.js',
                     ]
                 }
             },
