@@ -76,6 +76,8 @@ class reportBuilderPage {
     }
 
     clickCancel() {
+        this.cancelButton.waitForVisible();
+        browser.pause(fiveSeconds);
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
         this.dirtyForm_Dismiss();
@@ -101,6 +103,8 @@ class reportBuilderPage {
     }
 
     clickSave() {
+        this.saveButton.waitForVisible();
+        browser.pause(fiveSeconds);
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
         this.saveButton.click();
         browser.pause(fiveSeconds);
@@ -108,30 +112,40 @@ class reportBuilderPage {
     }
 
     clickFieldToken() {
+        this.fieldToken.waitForVisible();
+        browser.pause(fiveSeconds);
         this.fieldToken.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
     clickHeaderMenu() {
+        this.headerMenu.waitForVisible();
+        browser.pause(fiveSeconds);
         this.headerMenu.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
     clickHideMenuOption() {
+        this.hideMenuOption.waitForVisible();
+        browser.pause(fiveSeconds);
         this.hideMenuOption.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
     clickAddColumnBeforeMenuOption() {
+        this.addColumnBeforeMenuOption.waitForVisible();
+        browser.pause(fiveSeconds);
         this.addColumnBeforeMenuOption.click();
         browser.pause(fiveSeconds);
         return this;
     }
 
     clickAddColumnAfterMenuOption() {
+        this.addColumnAfterMenuOption.waitForVisible();
+        browser.pause(fiveSeconds);
         this.addColumnAfterMenuOption.click();
         browser.pause(fiveSeconds);
         return this;
