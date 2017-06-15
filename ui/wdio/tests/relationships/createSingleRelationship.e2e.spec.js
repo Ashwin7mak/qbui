@@ -10,9 +10,9 @@
     let relationshipsPO = requirePO('relationshipsPage');
     let formBuilderPO = requirePO('formBuilder');
 
-    const PARENT_TABLE = 'Table 1';
     let parentTableRecordValues = [];
-    const recordId = '2';
+    const PARENT_TABLE = 'Table 1';
+    const RECORD_ID = '2';
 
     describe('Relationships - Create single relationship Tests :', function() {
         let realmName;
@@ -50,7 +50,7 @@
 
         beforeAll(function() {
             //Load the record of the parent table ie 'Table 1' and get the values of the record
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, recordId);
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, RECORD_ID);
             parentTableRecordValues = browser.elements('.cellWrapper').getAttribute('textContent');
             return parentTableRecordValues;
         });
@@ -79,7 +79,7 @@
                 //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
                 formsPO.enterFormValues('allPhoneFields');
                 //Select record Id 2 from parent picker
-                relationshipsPO.selectFromParentPicker(recordId);
+                relationshipsPO.selectFromParentPicker(RECORD_ID);
 
                 //Click Save on the form
                 formsPO.clickFormSaveBtn();

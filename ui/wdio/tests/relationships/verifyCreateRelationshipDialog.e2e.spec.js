@@ -13,14 +13,13 @@
     let formsPO = requirePO('formsPage');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-    let PARENT_TABLE;
-    let PARENT_TABLE2 = 'Table 2';
+    let parentTable;
     let newFieldsOnForm;
     const SELECT_RECORD_ID_AS_FIELD = 'Record ID#';
-    const GET_ANOTHER_RECORD = 'Get another record';
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
+    const PARENT_TABLE2 = 'Table 2';
 
     describe('Relationships - Verify create relationship dialog Tests :', function() {
         let realmName;
@@ -57,9 +56,9 @@
         });
 
         beforeAll(function() {
-            PARENT_TABLE = rawValueGenerator.generateStringWithFixLength(5);
+            parentTable = rawValueGenerator.generateStringWithFixLength(5);
             let tableFields = [
-                {fieldTitle: tableNameFieldTitleText, fieldValue: PARENT_TABLE},
+                {fieldTitle: tableNameFieldTitleText, fieldValue: parentTable},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(5)},
                 {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(5)}
             ];
@@ -100,7 +99,7 @@
             //wait until save success container goes away
             tableCreatePO.waitUntilNotificationContainerGoesAway();
 
-            return PARENT_TABLE;
+            return parentTable;
         });
 
         /**
@@ -114,7 +113,7 @@
 //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults. )', function() {
-                let expectedTableList1 = ['Table 2', PARENT_TABLE];
+                let expectedTableList1 = ['Table 2', parentTable];
                 let expectedTableList2 = ['Table 2'];
 
                 //Select settings -> modify this form
@@ -124,7 +123,7 @@
                 formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
 
                 //Verify 'RECORD TITLE' is selected as default and select parent table PARENT_TABLE
-                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, PARENT_TABLE, '');
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, parentTable, '');
 
                 //Cancel the create relationship dialog
                 modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
@@ -134,13 +133,13 @@
                 formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
 
                 //select parent table PARENT_TABLE and Change the default 'RECORD TITLE' to 'RECORD ID'
-                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, PARENT_TABLE, SELECT_RECORD_ID_AS_FIELD);
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, parentTable, SELECT_RECORD_ID_AS_FIELD);
 
                 //Add to form now
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
 
                 //Verify the get another record got added to the form builder
-                expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE);
+                expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable);
 
                 //Should still see Add a new record button since you can add relationship to another parent table. So add again
                 formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);

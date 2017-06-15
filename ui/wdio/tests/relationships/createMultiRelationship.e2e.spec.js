@@ -13,7 +13,7 @@
     let modalDialog = requirePO('/common/modalDialog');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-    let PARENT_TABLE;
+    let parentTable;
     let parentPickerTitleFieldValue = 'testTextValue';
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
@@ -56,9 +56,9 @@
         });
 
         beforeAll(function() {
-            PARENT_TABLE = rawValueGenerator.generateStringWithFixLength(5);
+            parentTable = rawValueGenerator.generateStringWithFixLength(5);
             let tableFields = [
-                {fieldTitle: tableNameFieldTitleText, fieldValue: PARENT_TABLE},
+                {fieldTitle: tableNameFieldTitleText, fieldValue: parentTable},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(5)},
                 {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(5)}
             ];
@@ -114,7 +114,7 @@
 
             parentTableRecordValues = browser.elements('.cellWrapper').getAttribute('textContent');
 
-            return PARENT_TABLE;
+            return parentTable;
         });
 
         /**
@@ -144,7 +144,7 @@
             it('App has 2 parent tables and 1 child table - Create multi relationship)', function() {
                 //create relationship between parent and child table.
                 //NOTE: I am not selecting any field here because 'titleField' should be selected as default
-                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '');
+                relationshipsPO.createRelationshipToParentTable(parentTable, '');
 
                 //Select record from parent picker
                 //click on the edit pencil on the child record
