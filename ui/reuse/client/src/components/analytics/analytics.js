@@ -173,6 +173,18 @@ Analytics.propTypes = {
     userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
+     * The Req User id of the currently logged in user to be used with Evergage.
+     * Typically this is passed as a prop from Redux (user reducer)
+     */
+    gReqUserId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+    /**
+     * The email of the currently logged in user to be used with Evergage.
+     * Typically this is passed as a prop from Redux (user reducer)
+     */
+    gReqUserEmail: PropTypes.string,
+
+    /**
      * Boolean indicating whether the current user is an admin.
      * Typically this is passed as a prop from Redux (user reducer)
      */
