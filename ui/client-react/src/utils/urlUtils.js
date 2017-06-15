@@ -114,7 +114,7 @@ const UrlUtils = {
      *       ${DETAIL_REPORTID}={detailReportId}${DETAIL_KEY_FID}={detailKeyFid}&${DETAIL_KEY_VALUE}={detailKeyValue}&${DETAIL_KEY_DISPLAY}={detailKeyDisplay}${EMBEDDED_REPORT}={uniqueEmbeddedReportId}`;
      * @return {string} URL of route for showing new child record
      */
-    getAddRelatedChildLink(location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, detailKeyDisplay, uniqueEmbeddedReportId) {
+    getAddRelatedChildLink(location, {detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, detailKeyDisplay}, uniqueEmbeddedReportId) {
         return StringUtils.format(URL.ADD_RELATED_CHILD_LINK, [...arguments]);
     },
 
