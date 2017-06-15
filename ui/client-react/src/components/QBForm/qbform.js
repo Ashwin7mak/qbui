@@ -633,7 +633,7 @@ function buildUserField(id, fieldValue, name) {
 
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || ownProps.uniqueId || CONTEXT.FORM.VIEW);
-    let currentForm = _.get(state, `forms[${formId}]`, {});
+
     return {
         fields: state.fields,
         relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : []

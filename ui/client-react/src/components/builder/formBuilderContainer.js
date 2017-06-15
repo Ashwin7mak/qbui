@@ -45,7 +45,9 @@ const mapStateToProps = state => {
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
         isOpen: state.builderNav.isNavOpen,
-        isCollapsed: state.builderNav.isNavCollapsed
+        isCollapsed: state.builderNav.isNavCollapsed,
+        newRelationshipFieldIds: state.relationshipBuilder.newRelationshipFieldIds,
+        fields: state.fields
     };
 };
 
@@ -85,7 +87,12 @@ export class FormBuilderContainer extends Component {
 
         /**
          * Controls the collapsed state of the left tool panel */
-        isCollapsed: PropTypes.bool
+        isCollapsed: PropTypes.bool,
+
+        /**
+         * newly added (unsaved) link-to-parent field IDs
+         */
+        newRelationshipFieldIds: PropTypes.array
     };
 
     static defaultProps = {
@@ -114,8 +121,10 @@ export class FormBuilderContainer extends Component {
     };
 
     removeField = () => {
+        const {appId, tblId} = this.props.match.params;
+
         if (this.props.removeFieldFromForm) {
-            return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
+            return this.props.removeFieldFromForm(this.props.currentForm.id, appId, tblId, this.props.selectedField);
         }
     };
 
@@ -253,6 +262,8 @@ export class FormBuilderContainer extends Component {
                              app={this.props.app}
                              appId={this.props.appId}
                              tableId={this.props.tableId}
+                             newRelationshipFieldIds={this.props.newRelationshipFieldIds}
+                             fields={this.props.fields}
                 >
                     <FieldProperties appId={this.props.match.params.appId} app={this.props.app} tableId={this.props.match.params.tblId} formId={formId}>
                         <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}

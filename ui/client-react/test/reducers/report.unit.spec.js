@@ -916,6 +916,35 @@ describe('Report reducer functions', () => {
                 }
             }
         ];
+        let initialStateNoPlaceholder = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: true,
+                            isPlaceholder: false,
+                            id: 7
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
         let requestedColumnId6InColumns = {
             fieldDef: {
                 id: 6
@@ -1004,6 +1033,20 @@ describe('Report reducer functions', () => {
                     expect(testState[0].data.fids[0]).toEqual(6);
                     expect(testState[0].data.fids[1]).toEqual(7);
                     expect(testState[0].data.fids[2]).toEqual(8);
+                }
+            },
+            {
+                description: 'add requested column before with no placeholder present',
+                initialState: initialStateNoPlaceholder,
+                content : {addBefore: true, requestedColumn: requestedColumnId7InColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(2);
+                    expect(testState[0].data.columns[0].id).toEqual(7);
+                    expect(testState[0].data.columns[1].id).toEqual(6);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.fids[0]).toEqual(7);
+                    expect(testState[0].data.fids[1]).toEqual(6);
                 }
             }
         ];

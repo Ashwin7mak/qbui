@@ -5,6 +5,7 @@ import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 import fieldFormats from '../utils/fieldFormats';
 import {getFields} from '../reducers/fields';
+import Locale from '../../../reuse/client/src/locales/locale';
 
 const forms = (
 
@@ -542,6 +543,11 @@ export const getExistingFields = (state, id, appId, tblId) => {
             return formFields;
         }
 
+        // Skip fields that are marked for deletion from schema
+        if (_.includes(currentForm.formData.formMeta.fieldsToDelete, field.id)) {
+            return formFields;
+        }
+
         // Otherwise, create a form friendly version of the field and append it to the list of fields in the  existing fields menu.
         return [
             ...formFields,
@@ -551,7 +557,8 @@ export const getExistingFields = (state, id, appId, tblId) => {
                 key: `existingField_${field.id}`, // Key for react to use to identify it in the array
                 type: fieldFormats.getFormatType(field),
                 relatedField: field,
-                title: field.name
+                title: field.name,
+                tooltipText: Locale.getMessage('builder.existingFieldsToolTip', {fieldName: field.name})
             }
         ];
     }, []);

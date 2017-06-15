@@ -49,8 +49,8 @@ export default {
                 removeButton: "Retirer",
                 cancel: "Annuler",
                 plural: "utilisateurs",
-                usersRemovedFromAppRole: "{numOfUsers} utilisateurs ont été supprimés du rôle de l'application",
-                userRemovedFromAppRole: "Utilisateur supprimé du rôle de l'application",
+                usersRemovedFromAppRole: "{numOfUsers} Les utilisateurs ont été supprimés de l'application",
+                userRemovedFromAppRole: "L'utilisateur a été supprimé de l'application",
                 userAdded: "Utilisateur ajouté",
                 userAddError: "Erreur d'ajout d'utilisateur",
                 userRemovingError: "Erreur lors de l'enlever",
@@ -198,7 +198,8 @@ export default {
                 feedbackMenuButton: "Donnez votre avis",
                 feedbackMenuTitle: "Retour d'information",
                 reportFeedBackButton: "Signaler un problème",
-                feedbackTooltip: "Partagez des idées et des problèmes"
+                feedbackTooltip: "Partagez des idées et des problèmes",
+                helpTooltip: "Aidez-moi",
             }
         },
         fields: {
@@ -235,9 +236,13 @@ export default {
                 success: "Enregistrement approuvé.",
                 error: "Une erreur s'est produite lors de l'approbation de ce document."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Test d'automatisation réussi.",
                 error: "Une erreur s'est produite lors du test de cette automatisation."
+            },
+            saveAutomation: {
+                success: "Automatisation enregistrée réussie.",
+                error: "Une erreur s'est produite lors de la sauvegarde de cette automatisation."
             },
             automationList: {
                 nameHeader: "Prénom",
@@ -255,6 +260,17 @@ export default {
                 actions: {
                     email: "Envoyer un e-mail"
                 }
+            },
+            automationEdit: {
+                stageHeading: "Modifier l'automatisation: {automationName}",
+                nameHeader: "Prénom",
+                emailSectionHeader: "Envoyer un e-mail",
+                toHeader: "Notifier à qui",
+                subjectHeader: "Assujettir",
+                bodyHeader: "Message"
+            },
+            automationBuilder: {
+                modify: 'Modifier l\'automatisation'
             }
         },
         relationship: {
@@ -606,7 +622,7 @@ export default {
             name: "prénom",
             required: "Doit être rempli",
             multiChoice: "Les choix",
-            unique: "Doit avoir des valeurs uniques",
+            unique: "Doit être unique",
             linkToRecord: "Lien vers un enregistrement dans la table",
             connectedTo: "Connecté sur le champ {fieldName}"
         },
@@ -653,6 +669,7 @@ export default {
                     [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
+            existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
