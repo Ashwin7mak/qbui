@@ -2,8 +2,11 @@
 #### original goal of refactoring:
 In general, the record store used the recId as the key to identify entries in the record store.  
 Using the recId is bad practice since another record from a different table can have the same recId. Using the recId as the identifier would cause collisions for different entries.  
-Our goal was to refactor the record store to always use appId, tblId, and recId when storing an entry in the record store. This is in addition to the `id` which is used to represent the record's context. For example a record with the same app/tbl/rec ids could have a different entry depending on where the record is displayed--the base report vs in a drawer etc.  
-   
+Our goal was to refactor the record store to always use appId, tblId, and recId when storing an entry in the record store.
+
+Record entries also include an `id` which is used to represent the record's context. For example a record with the same app/tbl/rec ids could have a different entry depending on where the record is displayed--one report might have different fields displayed from an embedded child table report.
+However, if the underlying record is always the same for all instances and the only difference is in how we display the record, there is no need for the `id` context.
+
 ##### Challenges and difficulties
 - The record store's entry is consumed by many files and many contexts:  
   files: reportGrid, recordTrowser, reportContent, nav, components/record, dataTable, appHistory  
@@ -33,7 +36,7 @@ Because of the many possible paths, we hit many edge cases such as different beh
 - The lack of e2e tests covering all the edge cases means every time we made a change, we had to do lots of manual testing to cover all edge cases.
 - Inconsistent use and definition of `id` or `recId`
   - The recId for a record is sometimes stored as a number, a string representation of a number ('32'), a string such as 'new', or null.
-      There were logic in many files to treat the recId defensively, such as to treat the recId as 'new' if the recId were null and vise versa. This led me to believe that I should perhaps enforce what is allowed to be stored as the recId. I settled on converting the recId in the record store to always be a number, except when the recId is null or 'new' we stored it as 'new'.
+      There were logic in many files to treat the recId defensively, such as to treat the recId as 'new' if the recId were null and vice versa. This led me to believe that I should perhaps enforce what is allowed to be stored as the recId. I settled on converting the recId in the record store to always be a number, except when the recId is null or 'new' we stored it as 'new'.
       Some files used null because we don't want to display a Record ID value of 'new', it should show up as blank for a record in a report.
       Some files used 'new', as in the case for recordTrowser because we don't want the query parameter in the url to say "?recId=null".
 
