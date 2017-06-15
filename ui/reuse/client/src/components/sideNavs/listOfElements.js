@@ -247,7 +247,7 @@ ListOfElements.propTypes = {
             title: PropTypes.string.isRequired,
             // Other props will be passed through the to the rendering component
         }))
-    })),
+    }))
 };
 
 export default ListOfElements;
