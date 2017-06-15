@@ -55,12 +55,12 @@ class RowActions extends Component {
 
         return (
             <div className="actionsCol">
-                <input
+                {this.props.multiSelectIsEnabled ? <input
                     className={SELECT_ROW_CHECKBOX}
                     type="checkbox"
                     checked={this.props.isSelected}
                     onChange={this.props.onClickToggleSelectedRow(this.props.rowId)}
-                />
+                /> : null }
                 {this.props.iconActionsNode || <IconActions onClickEditRowIcon={this.onClickEditRowIcon}
                                                             onClickDeleteRowIcon={this.onClickDeleteRowIcon}
                                                             dropdownTooltip={true}
@@ -121,7 +121,9 @@ RowActions.propTypes = {
     onClickSaveRow: PropTypes.func.isRequired,
     /*
     * Uses an IconActions component to render the icon menu by default, but you can override the renderer by passing in your own React class (e.g., QbIconActions). */
-    iconActionsNode: PropTypes.element
+    iconActionsNode: PropTypes.element,
+
+    multiSelectIsEnabled: PropTypes.bool
 };
 
 RowActions.defaultProps = {
@@ -148,7 +150,9 @@ RowActions.defaultProps = {
     editingRowErrors: [],
     /*
     * Node set to null initially - so renders IconActions - if any value is passed, renders QbIconActions */
-    iconActionsNode: null
+    iconActionsNode: null,
+
+    multiSelectIsEnabled: true
 };
 
 export default RowActions;
