@@ -4,7 +4,9 @@ import DraggableTokenInMenu from '../../../../reuse/client/src/components/dragAn
 import {endDraggingState, isInDraggingState, addFieldToForm, selectFieldOnForm} from '../../actions/formActions';
 import {getFormByContext, getSelectedFormElement} from '../../reducers/forms';
 import {updateFormAnimationState} from '../../actions/animationActions';
+import {draggingLinkToRecord} from '../../actions/relationshipBuilderActions';
 import {CONTEXT} from '../../actions/context';
+import FieldFormats from '../../utils/fieldFormats';
 import _ from 'lodash';
 
 /**
@@ -36,6 +38,10 @@ export class DraggableFieldTokenInMenu extends Component {
         // Deselect any selected fields on the form, because we are dragging from the menu.
         this.props.selectFieldOnForm(this.props.formId, null);
 
+        if (this.props.type === FieldFormats.LINK_TO_RECORD) {
+            this.props.draggingLinkToRecord(true);
+        }
+
         return {
             id: dragItemProps.containingElement.id,
             location: dragItemProps.location,
@@ -50,6 +56,7 @@ export class DraggableFieldTokenInMenu extends Component {
     endDrag = () => {
         this.props.endDraggingState(this.props.formId);
         this.props.updateFormAnimationState(false);
+        this.props.draggingLinkToRecord(false);
     };
 
     render() {
@@ -106,7 +113,8 @@ const mapDispatchToProps = {
     endDraggingState,
     isInDraggingState,
     addFieldToForm,
-    selectFieldOnForm
+    selectFieldOnForm,
+    draggingLinkToRecord
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DraggableFieldTokenInMenu);

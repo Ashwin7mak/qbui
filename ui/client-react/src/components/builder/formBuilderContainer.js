@@ -4,14 +4,12 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import * as formActions from '../../actions/formActions';
-import {draggingLinkToRecord} from '../../actions/relationshipBuilderActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
-import FieldFormats from '../../utils/fieldFormats';
 import QbForm from '../QBForm/qbform';
 import DraggableField from '../formBuilder/draggableField';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
@@ -62,7 +60,6 @@ const mapDispatchToProps = {
     selectFieldOnForm: formActions.selectFieldOnForm,
     deselectField: formActions.deselectField,
     removeFieldFromForm: formActions.removeFieldFromForm,
-    draggingLinkToRecord,
     updateFormAnimationState
 };
 
@@ -220,22 +217,6 @@ export class FormBuilderContainer extends Component {
         }
     }
 
-    /**
-     * detect drag of field
-     **/
-    beginDrag = props => {
-        if (props.type === FieldFormats.LINK_TO_RECORD) {
-            this.props.draggingLinkToRecord(true);
-        }
-    };
-
-    /**
-     * drag complete
-     */
-    endDrag = () => {
-        this.props.draggingLinkToRecord(false);
-    };
-
     render() {
         let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
@@ -265,8 +246,6 @@ export class FormBuilderContainer extends Component {
 
                 <ToolPalette isCollapsed={this.props.isCollapsed}
                              isOpen={this.props.isOpen}
-                             beginDrag={this.beginDrag}
-                             endDrag={this.endDrag}
                              toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                              toolPaletteFocus={this.props.toolPaletteFocus}
