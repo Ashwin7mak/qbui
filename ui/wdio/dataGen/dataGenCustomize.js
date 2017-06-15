@@ -145,7 +145,7 @@ projRecs.init(projGen);
     //tablesToCreate = plainParentChildOnly;
 
     //or use concat to have a combination of tables in the app
-    //tablesToCreate = companiesTables.concat(countryStateCityOnly).concat();
+    //tablesToCreate = companiesTables.concat(countryStateCityOnly);
 
     log.debug('dataGenCustomize seed: ' + seed);
 
