@@ -77,11 +77,11 @@ const UrlUtils = {
     /**
      * Return URL of route for displaying a child report in the following form:
      *
-     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`
+     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}&detailKeyDisplay=${detailKeyDisplay}`
      *
      * @return {string} URL of route for displaying a child report
      */
-    getRelatedChildReportLink(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
+    getRelatedChildReportLink(appId, tableId, reportId, detailKeyFid, detailKeyValue, detailKeyDisplay) {
         return StringUtils.format(URL.CHILD_REPORT_LINK, [...arguments]);
     },
 
@@ -99,11 +99,11 @@ const UrlUtils = {
     /**
      * Return URL segment for a report to be displayed in a drawer.
      *
-     *   `sr_report_app_${appId}_table_${tableId}_report_${reportId}_dtFid_${detailKeyFid}_dtVal_${detailKeyValue}`
+     *   `sr_report_app_${appId}_table_${tableId}_report_${reportId}_dtFid_${detailKeyFid}_dtVal_${detailKeyValue}_dtDsp_${detailKeyDisplay}`
      *
      * @return {string} URL of route for displaying a report in a drawer
      */
-    getReportDrawerSegment(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
+    getReportDrawerSegment(appId, tableId, reportId, detailKeyFid, detailKeyValue, detailKeyDisplay) {
         return StringUtils.format(URL.DRAWER.REPORT_SEGMENT, [...arguments]);
     },
 
@@ -111,10 +111,10 @@ const UrlUtils = {
      * Return URL of route for adding a related child in the following form:
      *
      *    `location?${EDIT_RECORD_KEY}=new&${DETAIL_APPID}={detailAppId}${DETAIL_TABLEID}={detailTableId}
-     *       ${DETAIL_REPORTID}={detailReportId}${DETAIL_KEY_FID}={detailKeyFid}&${DETAIL_KEY_VALUE}={detailKeyValue}&${EMBEDDED_REPORT}={uniqueEmbeddedReportId}`;
+     *       ${DETAIL_REPORTID}={detailReportId}${DETAIL_KEY_FID}={detailKeyFid}&${DETAIL_KEY_VALUE}={detailKeyValue}&${DETAIL_KEY_DISPLAY}={detailKeyDisplay}${EMBEDDED_REPORT}={uniqueEmbeddedReportId}`;
      * @return {string} URL of route for showing new child record
      */
-    getAddRelatedChildLink(location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, uniqueEmbeddedReportId) {
+    getAddRelatedChildLink(location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue, detailKeyDisplay, uniqueEmbeddedReportId) {
         return StringUtils.format(URL.ADD_RELATED_CHILD_LINK, [...arguments]);
     },
 
