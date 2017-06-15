@@ -338,7 +338,7 @@ and
 ### Running E2E Tests Through SauceLabs
 
 1. Copy and rename the `wdioSauce.conf.override.js.sample` to `wdio.conf.override.js` (remove the `.sample` from the end). For
-many devs this will work as is; however, you can change any values you need to override in the normal `wdioSauce.conf.js` file.
+many devs this will work as is; however, you can change any values you need to override listed in the `wdioSauce.conf.js` file.
 
 1. By default, `wdioSauce.conf.override.js` only has one test activated. Add or modify tests or directories in the `specs` array in `wdioSauce.conf.override.js`.
 
