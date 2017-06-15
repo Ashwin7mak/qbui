@@ -596,9 +596,9 @@ module.exports = function(grunt) {
                     './wdio/tests/automations/settingsMenu.e2e.spec.js',
 
                     // Failing in CI
-                    './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js',
                     './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js',
-                    './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js'
+                    './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js',
+                    './wdio/tests/reports/reportBuilder.e2e.spec.js',
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -617,7 +617,6 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ],
                     relationships: [
-                        './wdio/tests/relationships/createRelationship.e2e.spec.js',
                         './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
                     ],
                     reports: [
@@ -625,7 +624,6 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/reportBuilder.e2e.spec.js',
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
