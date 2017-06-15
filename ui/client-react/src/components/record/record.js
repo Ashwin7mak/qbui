@@ -17,8 +17,8 @@ export const Record = React.createClass({
         let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && this.props.pendEdits.recordEditOpen === false;
         let shouldRecordEditOpen = _.has(nextProps, 'pendEdits.recordEditOpen') && !nextProps.pendEdits.recordEditOpen;
         let noPendingChanges = _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges);
-        if ((wasRecordEditOpen !== shouldRecordEditOpen && noPendingChanges) || (_.get(this.props, 'location.query.detailKeyValue', undefined) !== undefined  && noPendingChanges)) {
-            this.handleEditRecordStart(this.props.recId);
+        if ((wasRecordEditOpen !== shouldRecordEditOpen && noPendingChanges)) {
+            this.handleEditRecordStart(false);
         }
     },
 
@@ -26,7 +26,7 @@ export const Record = React.createClass({
         //new record or existing records with pending changes on open
         if ((this.props.recId === UNSAVED_RECORD_ID && _.isEmpty(this.props.pendEdits.recordChanges)) ||
             (_.has(this.props, 'pendEdits.recordEditOpen') && _.isEmpty(this.props.pendEdits.recordChanges) && this.props.pendEdits.recordEditOpen !== false)) {
-            this.handleEditRecordStart(this.props.recId);
+            this.handleEditRecordStart(true);
         }
     },
 
@@ -52,9 +52,9 @@ export const Record = React.createClass({
      * it's non null values as changes to the new record to be saved.  Then initiate the edit record start action with
      * the app/table/recId and originalRec if there was one or changes if it's a new record.
      *
-     * @param recId
+     * @param initialMount - called from did mount
      */
-    handleEditRecordStart() {
+    handleEditRecordStart(initialMount) {
         let origRec = null;
         let changes = {};
         let queryParams = _.get(this.props, 'location.query', {});
@@ -69,11 +69,13 @@ export const Record = React.createClass({
                     (field => fieldId === field.id));
                 if (fieldDef && !fieldDef.builtIn) {
                     let value = null;
+                    let display = null;
                     //if there is a parent value for this child auto fill it in
                     let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
                     // fieldId is a numeric and params from url are strings so +parentFid for type equality test
-                    if (parentFid && +parentFid === fieldId) {
+                    if (initialMount && parentFid && +parentFid === fieldId) {
                         value =  _.get(queryParams, 'detailKeyValue', null);
+                        display =  _.get(queryParams, 'detailKeyDisplay', null);
                     } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         // if there is a default value use that as new record changes
                         value = fieldDef.defaultValue.coercedValue.value;
@@ -82,7 +84,7 @@ export const Record = React.createClass({
                     let change = {
                         //the + before field.id is needed turn the field id from string into a number
                         oldVal: {value: undefined, id: +fieldDef.id},
-                        newVal: {value: value},
+                        newVal: display === null ? {value: value} : {value: value, display:display},
                         fieldName: fieldDef.name, //or get name of field in form ?
                         fieldDef: fieldDef
                     };

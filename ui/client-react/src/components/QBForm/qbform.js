@@ -139,14 +139,27 @@ export const QBForm = React.createClass({
             });
 
             // If the fieldRecord.value exists or is a boolean (for checkbox fields), then return the field record
-            // otherwise set the default values if available
+            // otherwise fillin parent for new child or set the default values if available
             if (fieldRecord && (fieldRecord.value || typeof fieldRecord.value === "boolean" || fieldRecord.value === 0)) {
                 return fieldRecord;
-            } else if (field.defaultValue && field.defaultValue.coercedValue) {
-                fieldRecord = {};
-                fieldRecord.display = field.defaultValue.displayValue;
-                fieldRecord.value = field.defaultValue.coercedValue.value;
-                return fieldRecord;
+            } else { //no existing value then
+                let queryParams = _.get(this.props, 'location.query', {});
+                //if there is a parent value for this child auto fill it in
+                let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
+                let detailTableId = _.get(queryParams, 'detailTableId', undefined);
+                // fieldId is a numeric and params from url are strings so +parentFid for type equality test
+                if (parentFid && +parentFid === fieldId &&
+                    detailTableId && detailTableId === field.tableId) {
+                    fieldRecord = {};
+                    fieldRecord.value = _.get(queryParams, 'detailKeyValue', null);
+                    fieldRecord.display = _.get(queryParams, 'detailKeyDisplay', null);
+                    return fieldRecord;
+                } else if (field.defaultValue && field.defaultValue.coercedValue) {
+                    fieldRecord = {};
+                    fieldRecord.display = field.defaultValue.displayValue;
+                    fieldRecord.value = field.defaultValue.coercedValue.value;
+                    return fieldRecord;
+                }
             }
         }
     },
@@ -457,6 +470,7 @@ export const QBForm = React.createClass({
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
         const detailKeyValue = _.get(fieldRecord, 'value', null);
+        const detailKeyDisplay = _.get(fieldRecord, 'display', null);
 
         // Find the child table's name.
         const tables = _.get(this, 'props.selectedApp.tables');
@@ -482,6 +496,7 @@ export const QBForm = React.createClass({
                     childTableNoun={childTableNoun}
                     detailKeyFid={_.get(relationship, "detailFieldId")}
                     detailKeyValue={detailKeyValue}
+                    detailKeyDisplay={detailKeyDisplay}
                     relationshipId={ReferenceElement.relationshipId}
                     relationship={relationship}
                     type={ReferenceElement.type}
