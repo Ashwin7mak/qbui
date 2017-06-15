@@ -598,10 +598,7 @@ module.exports = function(grunt) {
                     // Failing in CI
                     './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js',
                     './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js',
-                    './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js',
-                    //https://quickbase.atlassian.net/browse/MC-3411
-                    './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
-
+                    './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -620,7 +617,8 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ],
                     relationships: [
-                        './wdio/tests/relationships/createRelationship.e2e.spec.js'
+                        './wdio/tests/relationships/createRelationship.e2e.spec.js',
+                        './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js'
                     ],
                     reports: [
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
