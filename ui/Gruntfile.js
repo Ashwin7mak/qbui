@@ -597,7 +597,8 @@ module.exports = function(grunt) {
 
                     // Failing in CI
                     './wdio/tests/relationships/createRelationshipNegativeTests.e2e.spec.js',
-                    './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js'
+                    './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js',
+                    './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level

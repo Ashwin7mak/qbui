@@ -74,7 +74,8 @@ exports.config = {
             baseTestDir + '/relationships/createRelationship.e2e.spec.js',
             baseTestDir + '/relationships/createRelationshipNegativeTests.e2e.spec.js',
             baseTestDir + '/relationships/relationshipAddChildRecord.e2e.spec.js',
-            baseTestDir + '/relationships/relationshipNavToChild.e2e.spec.js'
+            baseTestDir + '/relationships/relationshipNavToChild.e2e.spec.js',
+            baseTestDir + '/relationships/relationshipNavToParent.e2e.spec.js'
         ],
         reports: [
             baseTestDir + '/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
