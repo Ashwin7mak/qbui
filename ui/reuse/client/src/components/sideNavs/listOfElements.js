@@ -135,9 +135,13 @@ class ListOfElements extends Component {
                 return this.renderElements([element]);
             });
         } else {
-            return (<p className="emptyStateMessage">
-                {this.props.emptyMessage}
-            </p>);
+            return (
+                <li key="emptyStateMessage">
+                    <p className="emptyStateMessage">
+                        {this.props.emptyMessage}
+                    </p>
+                </li>
+            );
         }
     };
 
