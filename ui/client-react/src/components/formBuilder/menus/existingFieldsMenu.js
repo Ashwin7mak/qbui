@@ -4,8 +4,8 @@ import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 import {getFormByContext, getExistingFields} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
-import _ from "lodash";
-import Locale from "../../../../../reuse/client/src/locales/locale";
+import _ from 'lodash';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 
 export class ExistingFieldsMenu extends Component {
 
@@ -16,8 +16,17 @@ export class ExistingFieldsMenu extends Component {
         }
     };
 
+    getElements = () => {
+        let existing = this.props.existingFields;
+        if (existing && existing.length) {
+            return [{children: existing, key: 'existingFields', title: 'Existing Fields'}];
+        } else {
+            return undefined;
+        }
+    };
+
     render = () => {
-        let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
+        let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex} = this.props;
         return (
             <ListOfElements
                 tabIndex={toolPaletteTabIndex}
@@ -27,7 +36,7 @@ export class ExistingFieldsMenu extends Component {
                 renderer={FieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'Existing Fields'}] : undefined}
+                elements={this.getElements()}
                 isOpen={isOpen}
                 isFilterable={true}
                 hideTitle={true}
