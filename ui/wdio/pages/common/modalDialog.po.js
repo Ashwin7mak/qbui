@@ -15,7 +15,9 @@ class modalDialogWindow {
     get modalDialog() {
         // modal dialog
         browser.element('.modal-dialog').waitForVisible();
-        return browser.element('.modal-dialog');
+        browser.element('.modal-dialog');
+        //Need this to stabilize after modal dialog slides in
+        return browser.pause(e2eConsts.shortWaitTimeMs);
     }
 
     get modalDialogCloseBtn() {
