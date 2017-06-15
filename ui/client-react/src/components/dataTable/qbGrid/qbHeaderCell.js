@@ -2,12 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
+import DraggableItemTypes from '../../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
 import {CONTEXT} from '../../../actions/context';
-import {draggingColumnStart, draggingColumnStop} from '../../../actions/reportBuilderActions';
-
-const DragTypes = {
-    HEADER: 'HEADER'
-};
 
 const headerSource = {
     beginDrag(props) {
@@ -62,6 +58,7 @@ class QbHeaderCell extends Component {
             classes.push('isDraggable');
             if (isDragging) {
                 classes.push('placeholderCell');
+                
             }
             return connectDragSource(connectDropTarget(<th className={classes.join(' ')} {...this.props} />));
         } else {
@@ -88,27 +85,16 @@ QbHeaderCell.defaultProps = {
 };
 
 const dragSource = DragSource(
-    DragTypes.HEADER, headerSource, (connect, monitor) => ({
+    DraggableItemTypes.FIELD, headerSource, (connect, monitor) => ({
         connectDragSource: connect.dragSource(),
         isDragging: monitor.isDragging()
     })
 );
 
 const dropTarget = DropTarget(
-    DragTypes.HEADER, headerTarget, connect => ({
+    DraggableItemTypes.FIELD, headerTarget, connect => ({
         connectDropTarget: connect.dropTarget()
     })
 );
 
-const mapStateToProps = (state) => {
-    return {
-        /*columnIsDragging: state.reportBuilder.columnIsDragging*/
-    }
-};
-
-const mapDispatchToProps = {
-    draggingColumnStart,
-    draggingColumnStop
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(dragSource(dropTarget(QbHeaderCell)));
+export default dragSource(dropTarget(QbHeaderCell));

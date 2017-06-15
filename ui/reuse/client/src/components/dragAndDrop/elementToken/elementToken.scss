@@ -1,0 +1,83 @@
+@import "../../../assets/css/_qbVariables";
+
+$fieldtoken-width: 250px;
+$fieldtoken-icon-width: 34px;
+$fieldtoken-height: 34px;
+$fieldtoken-border-radius: 4px;
+$fieldtoken-title-margin-left: 12px;
+
+.fieldToken {
+    // Overflow: hidden is used here to create the effect that the icon is rounded on the left, but flat on the right.
+    overflow: hidden;
+    outline: none;
+    border-radius: $fieldtoken-border-radius;
+    height: $fieldtoken-height;
+    width: $fieldtoken-width;
+
+    display: flex;
+    align-items: center;
+
+    background-color: $fieldtoken-background-color2;
+
+    border: $stroke-width-thin solid $fieldtoken-border-color;
+
+    transition: border-color 0.3s;
+
+    &:hover, &.fieldTokenDragging {
+        border: $stroke-width-thin solid $fieldtoken-hover-border-color;
+        box-shadow: 0 0 8px 0 rgba($color-black-800, 0.3);
+    }
+
+    .fieldTokenTitle {
+        max-width: $fieldtoken-width;
+        opacity: 1;
+
+        transition: opacity 0.3s, max-width 0.3s;
+    }
+
+    .fieldTokenIconContainer {
+        width: $fieldtoken-icon-width;
+        height: $fieldtoken-height;
+        color: $fieldtoken-icon-color;
+        background-color: $fieldtoken-background-color1;
+
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.fieldTokenCollapsed {
+        max-width: $fieldtoken-icon-width;
+
+        .fieldTokenTitle {
+            opacity: 0;
+            max-width: 0;
+        }
+
+        .fieldTokenIconContainer {
+            width: 100%; // Fixes the positioning of the icon when there is no title text
+        }
+    }
+
+    &.fieldTokenDragging {
+        color: $dragtoken-text-color;
+        background-color: $dragtoken-background-color2;
+        border: $stroke-width-thick solid $dragtoken-border-color;
+
+        .fieldTokenIconContainer {
+            background-color: $dragtoken-background-color1;
+        }
+    }
+
+    .fieldTokenIcon {
+        font-size: 18px;
+    }
+
+    .fieldTokenTitle {
+        margin-left: $fieldtoken-title-margin-left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

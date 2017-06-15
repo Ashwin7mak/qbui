@@ -8,7 +8,8 @@ const reportBuilder = (
         isInBuilderMode: false,
         availableColumns: [],
         addBeforeColumn: false,
-        labelBeingDragged: ''
+        labelBeingDragged: '',
+        isDragging: false
     }, action) => {
 
     switch (action.type) {
@@ -65,12 +66,14 @@ const reportBuilder = (
     case types.DRAGGING_COLUMN_START: {
         return {
             ...state,
+            isDragging: true,
             labelBeingDragged: action.content.sourceLabel
         }
     }
     case types.DRAGGING_COLUMN_END: {
         return {
             ...state,
+            isDragging: false,
             labelBeingDragged: ''
         }
     }
