@@ -190,7 +190,7 @@
                     let fieldToEdit = createdApp.tables[4].fields[6];
                     let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
                     return e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[4].id, editRecords);
-                }).then(function () {
+                }).then(function() {
                     // Return the createdApp object
                     return createdApp;
                 }).catch(function(error) {

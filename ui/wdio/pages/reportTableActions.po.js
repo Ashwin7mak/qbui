@@ -20,7 +20,7 @@
 
         // All records checkbox on table report
         reportSelectAllCheckbox: {
-            get: function () {
+            get: function() {
                 browser.element('.qbHeader .selectAllCheckbox').waitForVisible();
                 return browser.element('.qbHeader .selectAllCheckbox');
             }
@@ -28,7 +28,7 @@
 
         // Records row checkbox on table report
         reportSelectRowCheckbox: {
-            get: function () {
+            get: function() {
                 browser.element('input.selectRowCheckbox').waitForVisible();
                 return browser.elements('input.selectRowCheckbox');
             }
@@ -36,7 +36,7 @@
 
         // Records selected count label on table report
         reportSelectedRowLabel: {
-            get: function () {
+            get: function() {
                 browser.element('.reportActions .selectedRowsLabel').waitForVisible();
                 return browser.element('.reportActions .selectedRowsLabel');
             }

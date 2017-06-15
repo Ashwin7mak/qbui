@@ -28,10 +28,10 @@
          * @param userId
          */
         nonAdminRealmLogin: {
-            value: function (realmName, realmId, userId) {
+            value: function(realmName, realmId, userId) {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-        }}
+            }}
     });
 
     module.exports = newStackAuthPage;

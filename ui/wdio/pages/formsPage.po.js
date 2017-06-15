@@ -330,7 +330,7 @@
             browser.pause(e2eConsts.shortWaitTimeMs);
             //get all options from the list
             browser.waitForVisible('.Select-option');
-            var option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function (optionText) {
+            var option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
                 return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 

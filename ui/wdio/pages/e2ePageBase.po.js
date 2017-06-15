@@ -94,7 +94,7 @@
      * @param tableId
      * @returns A promise that will resolve after loading the generated URL
      */
-    PageBase.prototype.loadTableByIdInBrowser = function (realmName, appId, tableId) {
+    PageBase.prototype.loadTableByIdInBrowser = function(realmName, appId, tableId) {
         this.navigateTo(e2eBase.getRequestTableEndpoint(realmName, appId, tableId));
         //wait until loading screen disappear in leftNav
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();

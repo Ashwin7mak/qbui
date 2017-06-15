@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     //Load the page Objects
@@ -17,7 +17,7 @@
     const RECORD_TITLE_FIELD_NAME = '* Record title';
 
 
-    describe('Tables - nonAdmin table tests: ', function () {
+    describe('Tables - nonAdmin table tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
@@ -26,27 +26,27 @@
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
-        beforeAll(function () {
+        beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, 5).then(function (createdApp) {
+            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-            }).then(function () {
+            }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
-            }).then(function () {
+            }).then(function() {
                 // Create a user
-                return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
                 });
-            }).then(function () {
+            }).then(function() {
                 // Add user to participant appRole
                 return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
-            }).catch(function (error) {
+            }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
@@ -57,12 +57,12 @@
         /**
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
-        beforeEach(function () {
+        beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
             newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
         });
 
-        it('Verify User cannot add a new table', function () {
+        it('Verify User cannot add a new table', function() {
             //go to app via url
             e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
 
@@ -70,7 +70,7 @@
             expect(browser.isVisible('.newTable')).toBe(false);
         });
 
-        it('Verify User cannot edit a table', function () {
+        it('Verify User cannot edit a table', function() {
 
             //go to app via url
             e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);

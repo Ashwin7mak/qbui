@@ -67,7 +67,7 @@
                 reportContentPO.selectRowAndClickDeleteIcon(rowToBeDeleted);
 
                 //Click on Delete. Need to use JS click because sometimes this button is not getting clicked intermittently
-                browser.execute(function () {
+                browser.execute(function() {
                     var event = new MouseEvent('click', {
                         'view': window,
                         'bubbles': true,
