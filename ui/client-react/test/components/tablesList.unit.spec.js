@@ -24,8 +24,8 @@ const LinkMock = React.createClass({
 describe('TablesList', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        NavItemRewireAPI.__Rewire__('Link', LinkMock)
-        TablesListRewireAPI.__Rewire__('Link', LinkMock)
+        NavItemRewireAPI.__Rewire__('Link', LinkMock);
+        TablesListRewireAPI.__Rewire__('Link', LinkMock);
         spyOn(mockFunc, 'getAppTables').and.returnValue([{}]);
     });
 
