@@ -25,7 +25,7 @@ export class AutomationListRoute extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {appId: this.getAppId()}
+        this.state = {appId: this.getAppId()};
     }
 
     getPageActions() {
