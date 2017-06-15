@@ -50,11 +50,37 @@ class AccountUsersStage extends Component {
 }
 
 AccountUsersStage.propTypes = {
-    users: PropTypes.array,
-};
 
-AccountUsersStage.defaultProps = {
-    users: []
+    /**
+     * Array which contains the whole user data
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    users: PropTypes.array,
+
+    /**
+     * Prop which contains the number of paid users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    paidUsers: PropTypes.number,
+
+    /**
+     * Prop which contains the number of denied users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    deniedUsers: PropTypes.number,
+
+    /**
+     * Prop which contains the number of deactivated users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    deactivatedUsers: PropTypes.number,
+
+    /**
+     * Prop which contains the total number of realm users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    totalRealmUsers: PropTypes.number,
+
 };
 
 const mapStateToProps = (state) => {

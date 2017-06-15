@@ -53,7 +53,6 @@ GovernanceAppShell.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    console.log("STATE", state);
     let requestContextStateAccount = state.RequestContext.account;
     let requestContextStateCurrentUser = state.RequestContext.currentUser;
     return {
