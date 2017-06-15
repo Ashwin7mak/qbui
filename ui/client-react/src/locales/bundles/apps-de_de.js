@@ -198,8 +198,7 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen",
-                helpTooltip: "Hilfe",
+                feedbackTooltip: "Teilen Sie Ideen und Fragen"
             }
 
         },
@@ -237,9 +236,13 @@ export default {
                 success: "Rekord genehmigt.",
                 error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automatisierungstest erfolgreich.",
                 error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
+            },
+            saveAutomation: {
+                success: "Automatisierung wurde erfolgreich.",
+                error: "Beim Speichern dieser Automatisierung ist ein Fehler aufgetreten."
             },
             automationList: {
                 nameHeader: "Name",
@@ -257,6 +260,17 @@ export default {
                 actions: {
                     email: "Eine E-Mail senden"
                 }
+            },
+            automationEdit: {
+                stageHeading: "Automatisierung ändern: {automationName}",
+                nameHeader: "Name",
+                emailSectionHeader: "Eine E-Mail senden",
+                toHeader: "Benachrichtige wer",
+                subjectHeader: "Fach",
+                bodyHeader: "Nachricht"
+            },
+            automationBuilder: {
+                modify: 'Automatisierung ändern'
             }
         },
         relationship: {

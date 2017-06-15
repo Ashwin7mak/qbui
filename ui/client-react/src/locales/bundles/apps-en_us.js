@@ -203,8 +203,7 @@ export default {
                 feedbackMenuButton: "Give feedback",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
-                feedbackTooltip: "Share ideas and issues",
-                helpTooltip: "Help",
+                feedbackTooltip: "Share ideas and issues"
             }
         },
         fields: {
@@ -241,9 +240,13 @@ export default {
                 success: "Record Approved.",
                 error: "An error occured when approving this record."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automation Test Successful.",
                 error: "An error occured when testing this automation."
+            },
+            saveAutomation: {
+                success: "Automation Saved Successful.",
+                error: "An error occured when saving this automation."
             },
             automationList: {
                 nameHeader: "Name",
@@ -261,7 +264,18 @@ export default {
                 actions: {
                     email: "Send an email"
                 }
-            }
+            },
+            automationEdit: {
+                stageHeading: "Modify Automation: {automationName}",
+                nameHeader: "Name",
+                emailSectionHeader: "Send an Email",
+                toHeader: "Notify Whom",
+                subjectHeader: "Subject",
+                bodyHeader: "Message"
+            },
+            automationBuilder: {
+                modify: 'Modify Automation'
+            },
         },
         relationship: {
             childTable: "Child Table",
