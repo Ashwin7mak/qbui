@@ -9,7 +9,7 @@ import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
 import {getLoggedInUser} from '../../../../reuse/client/src/actions/userActions';
 import {getApp, getSelectedAppId, getSelectedTableId} from '../../reducers/app';
-import {getLoggedInUserId} from '../../../../reuse/client/src/reducers/userReducer';
+import {getLoggedInUserLoaded} from '../../../../reuse/client/src/reducers/userReducer';
 
 const walkMeScript = document.createElement("script");
 walkMeScript.src = Configuration.walkmeJSSnippet;
@@ -51,7 +51,9 @@ export const NavWrapper = React.createClass({
             document.body.className = "touch";
         }
         //only load the logged in User if it doesnt exist in state yet!
-        this.props.getLoggedInUser();
+        if (!this.props.userLoaded) {
+            this.props.getLoggedInUser();
+        }
 
         let paramVals = this.props.match.params;
         if (paramVals.appId) {
@@ -135,6 +137,7 @@ const mapStateToProps = (state) => ({
     locales: state.shell.locale,
     selectedAppId: getSelectedAppId(state.app),
     selectedTableId: getSelectedTableId(state.app),
+    userLoaded: getLoggedInUserLoaded(state),
     getApp: (appId) => getApp(state.app, appId)
 });
 

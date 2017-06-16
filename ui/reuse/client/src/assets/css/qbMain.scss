@@ -114,16 +114,6 @@ html body {
         content: '';
     }
 
-    &:after {
-        position: absolute;
-        top: -6px;
-        left: 9px;
-        display: inline-block;
-        border-right: 7px solid transparent;
-        border-bottom: 7px solid #ffffff;
-        border-left: 7px solid transparent;
-        content: '';
-    }
 
     li[role="presentation"]{
         padding: 2px 0;
@@ -143,5 +133,17 @@ html body {
     &:after {
         right:9px;
         left:auto;
+    }
+}
+
+.dropdown-menu[aria-labelledby="nav-left-dropup"]{
+    &:before {
+        right:auto;
+        left:9px;
+    }
+
+    &:after {
+        right:auto;
+        left:9px;
     }
 }

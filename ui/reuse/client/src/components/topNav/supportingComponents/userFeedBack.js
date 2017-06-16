@@ -5,11 +5,10 @@ import Icon from '../../icon/icon';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import UrlUtils from '../../../../../../client-react/src/utils/urlUtils';
 import Tooltip from '../../tooltip/tooltip';
-
+import Breakpoints from 'APP/utils/breakpoints';
 import './userFeedBack.scss';
 
-// Uses defaults messages an icons specific to a feedback dropdown in the DefaultTopNav
-const dropDownMessage = 'header.menu.feedbackMenuTitle';
+// Uses default icon specific to a feedback dropdown in the DefaultTopNav
 const dropDownIcon = 'Advertising';
 
 /**
@@ -24,16 +23,18 @@ class userFeedBack extends Component {
 
     render() {
         const {startTabIndex} = this.props;
+        const dropDownId = Breakpoints.isNotSmallBreakpoint() ? "nav-right-dropdown" : "nav-left-dropup";
+        const dropDownMenuClass = Breakpoints.isNotSmallBreakpoint() ? "userFeedBackDropDown" : "userFeedBackDropUp";
 
         return (
-            <DropDown id="nav-right-dropdown" className="userFeedBack globalActionLink" dropup={this.props.shouldOpenMenusUp}>
+            <DropDown id={dropDownId} className="userFeedBack globalActionLink" dropup={this.props.shouldOpenMenusUp}>
                 <Tooltip bsRole="toggle" tipId="feedback" i18nMessageKey="header.menu.feedbackTooltip" key="feedback" location="bottom">
                     <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
                         <Icon icon={dropDownIcon} iconFont="iconTableSturdy"/>
                     </a>
                 </Tooltip>
 
-                <DropDown.Menu>
+                <DropDown.Menu className={dropDownMenuClass}>
                     <MenuItem href={UrlUtils.getFeedBackLink()} target="_blank" className="feedbackMenuButton">
                         <I18nMessage message="header.menu.feedbackMenuButton"/>
                     </MenuItem>

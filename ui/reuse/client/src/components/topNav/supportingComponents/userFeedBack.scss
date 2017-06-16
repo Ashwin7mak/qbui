@@ -20,4 +20,40 @@
             }
         }
     }
+
+    .userFeedBackDropUp {
+
+        border-radius:2px;
+
+        &:before {
+            position: absolute;
+            top: -7px;
+            left: 9px;
+            display: inline-block;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid #ccc;
+            border-left: 7px solid transparent;
+            border-bottom-color: rgba(0, 0, 0, 0.2);
+            content: '';
+        }
+
+        &:after {
+            position: absolute;
+            bottom: -6px;
+            left: 9px;
+            display: inline-block;
+            border-right: 7px solid transparent;
+            border-top: 7px solid #ffffff;
+            border-left: 7px solid transparent;
+            content: '';
+        }
+
+        li[role="presentation"]{
+            padding: 2px 0;
+        }
+
+        li.divider{
+            margin:3px 0;
+        }
+    }
 }
