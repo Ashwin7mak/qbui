@@ -3,6 +3,10 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 
+/**
+ * CreateNeItemButton is located in the left nav. It is currently used to create new items such as creating a new table
+ * or creating a new app.
+ * */
 const CreateNewItemButton = ({handleOnClick, message}) => (
         <li className="newItemButton link" key="newItem">
             <a className="newItem leftNavLink" onClick={handleOnClick}>
