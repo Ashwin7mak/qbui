@@ -75,6 +75,10 @@ export const Record = React.createClass({
                     // fieldId is a numeric and params from url are strings so +parentFid for type equality test
                     if (initialMount && parentFid && +parentFid === fieldId) {
                         value =  _.get(queryParams, 'detailKeyValue', null);
+                        let isTypeNumeric = SchemaConsts.isNumericType(fieldDef.datatypeAttributes.type);
+                        if (value !== null && isTypeNumeric) {
+                            value = +value;
+                        }
                         display =  _.get(queryParams, 'detailKeyDisplay', null);
                     } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         // if there is a default value use that as new record changes
