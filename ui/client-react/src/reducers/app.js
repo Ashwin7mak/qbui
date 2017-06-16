@@ -270,7 +270,7 @@ export const getTable = (state, appId, tableId) => {
     if (!appInState) {
         return null;
     }
-    return _.find(appInState.tables, (a) => a.id === tableId) || null;
+    return _.find(appInState.tables, {id: tableId}) || null;
 };
 
 export const getIsAppsLoading = (state) => {

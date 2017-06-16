@@ -321,7 +321,7 @@ class FieldUtils {
      * @returns {boolean}
      */
     static isRecordTitleField(currentTable, fieldId) {
-        return currentTable && currentTable.recordTitleFieldId ? currentTable.recordTitleFieldId === fieldId : false;
+        return (currentTable && currentTable.recordTitleFieldId === fieldId) || false;
     }
 
     /**
@@ -333,7 +333,7 @@ class FieldUtils {
      * @returns {null}
      */
     static isDetailKeyField(relationships, appId, tblId, fieldId) {
-        return _.find(relationships, {detailAppId: appId, detailTableId: tblId, detailFieldId: fieldId}) || null;
+        return _.find(relationships, {detailAppId: appId, detailTableId: tblId, detailFieldId: fieldId}) ? true : false;
     }
 }
 
