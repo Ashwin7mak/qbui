@@ -21,8 +21,8 @@ describe('Test appBuilder reducer - initial state', () => {
     });
 });
 
-describe('Test App Creation', () => {
-    it('test show app creation dialog', () => {
+describe('App Creation', () => {
+    it('will show the app creation dialog', () => {
         const state = reducer(storeState, {type: types.SHOW_APP_CREATION_DIALOG});
 
         expect(state.dialogOpen).toBe(true);
