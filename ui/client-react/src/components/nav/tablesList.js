@@ -145,7 +145,7 @@ let TablesList = React.createClass({
     getNewTableItem() {
         return <CreateNewItemButton handleOnClick={this.props.onCreateNewTable}
                                     message={"tableCreation.newTablePageTitle"}
-                />;
+        />;
     },
 
     render() {
