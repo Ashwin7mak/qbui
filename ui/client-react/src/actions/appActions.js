@@ -98,7 +98,3 @@ export const toggleAddToAppSuccessDialog = (isOpen, email) => {
 export const updateAppTableProperties = (appId, tblId, tableInfo) => {
     return event(types.UPDATE_APP_TABLE_PROPS, {appId, tblId, tableInfo});
 };
-
-export const showAppCreationDialog = () => {
-    return event(types.SHOW_APP_CREATION_DIALOG);
-};

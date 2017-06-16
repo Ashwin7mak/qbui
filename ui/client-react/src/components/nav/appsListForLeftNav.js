@@ -3,9 +3,14 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
+import {connect} from "react-redux";
+import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
+import {getApp, getSelectedAppId} from '../../reducers/app';
 
-let AppsList = React.createClass({
+import AppUtils from '../../utils/appUtils';
+
+export const AppsList = React.createClass({
 
     propTypes: {
         apps: React.PropTypes.array.isRequired,
@@ -60,6 +65,26 @@ let AppsList = React.createClass({
                 />;
     },
 
+    /**
+     * is user able to create a new app from the left nav
+     * @returns {*}
+     */
+    allowCreateNewApp() {
+        const app = this.props.getApp(this.props.selectedAppId);
+        return app && AppUtils.hasAdminAccess(app.accessRights);
+    },
+
+    /**
+     * open the create app wizard
+     */
+    createNewApp() {
+        if (this.allowCreateNewApp()) {
+            setTimeout(() => {
+                this.props.showAppCreationDialog();
+            });
+        }
+    },
+
     render() {
         return (
             <ul className={"appsList"} >
@@ -84,4 +109,13 @@ let AppsList = React.createClass({
     }
 });
 
-export default AppsList;
+const mapDispatchToProps = {
+    showAppCreationDialog,
+    getApp,
+    getSelectedAppId
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(AppsList);

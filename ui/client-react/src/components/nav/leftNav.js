@@ -79,10 +79,7 @@ let LeftNav = React.createClass({
     renderNavContent() {
         // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
         if (this.props.appsListOpen || !AppUtils.appExists(this.props.selectedAppId, this.props.apps)) {
-            return <AppsList {...this.props}
-                             key={"apps"}
-                             onSelectApp={this.onSelectApp}
-                             onCreateNewApp={this.props.onCreateNewApp}  />;
+            return <AppsList {...this.props} key={"apps"} onSelectApp={this.onSelectApp}/>;
         } else {
             return <TablesList key={"tables"}
                                expanded={this.props.expanded}

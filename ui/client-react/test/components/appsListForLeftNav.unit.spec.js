@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import AppsList from '../../src/components/nav/appsListForLeftNav';
+import {AppsList} from '../../src/components/nav/appsListForLeftNav';
 import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 import {Link} from 'react-router-dom';
 import CreateNewItemButton from '../../../reuse/client/src/components/sideNavs/createNewItemButton';
