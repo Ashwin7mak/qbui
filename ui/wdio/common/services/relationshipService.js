@@ -118,11 +118,11 @@
                         return recordBase.apiBase.executeRequest(formsEndpoint, consts.GET).then(function(formsResult) {
                             var form = JSON.parse(formsResult.body);
                             if (savedRelationships) {
-                                savedRelationships.forEach((relationship, index) => {
+                                savedRelationships.forEach((relationship) => {
                                     if (relationship.masterTableId === tableId) {
                                         const sections = form.tabs[0].sections;
                                         const length = Object.keys(sections).length;
-                                        const childReportElement = {"ChildReportElement" : {relationshipId: index}};
+                                        const childReportElement = {"ChildReportElement" : {relationshipId: relationship.id}};
                                         sections[length] = Object.assign(_.cloneDeep(sections[0]), {
                                             elements: {0: childReportElement},
                                             fields: [],
