@@ -21,7 +21,7 @@ describe('CreateNewItemButton', () => {
         CreateNewItemButtonRewireAPI.__ResetDependency__('I18nMessage');
     });
 
-    it('it will invoke function when clicked', () => {
+    it('it will invoke the handleOnClick function when clicked', () => {
         component = mount(<CreateNewItemButton message={mockMessage}
                                                handleOnClick={mockFunc.handleOnClick()} />);
 
