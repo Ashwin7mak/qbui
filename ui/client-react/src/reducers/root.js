@@ -18,8 +18,7 @@ import embeddedReports from './embeddedReports';
 import commonNavReducer from '../../../reuse/client/src/components/sideNavs/commonNavReducer';
 import facets from '../../../reuse/client/src/components/facets/facetMenuReducer';
 import automation from './automation';
-import appRoles from './appRoles';
-import appUsers from './appUsers';
+import selectedApp from './selectedApp';
 import users from './users';
 
 // combine individual reducers into a single root reducer (qbui)
@@ -27,8 +26,6 @@ export default combineReducers({
     app,
     user,
     animation,
-    appRoles,
-    appUsers,
     automation,
     featureSwitches,
     fields,
@@ -38,6 +35,7 @@ export default combineReducers({
     report,
     reportBuilder,
     search,
+    selectedApp,
     shell,
     tableCreation,
     embeddedReports,
