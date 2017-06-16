@@ -335,16 +335,16 @@
             let getEmbeddedReportChildRecordValues;
 
             //verify You land in view form since you edited a record from View form after saving
-            formsPO.waitForViewFormsTableLoad();
+            browser.pause(e2eConsts.shortWaitTimeMs);
             let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
                 return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
             });
 
             if (fields !== []) {
                 //Click on the relationship
-                fields[0].element('.cellWrapper .textLink').moveToObject();
-                fields[0].element('.cellWrapper .textLink').waitForVisible();
-                fields[0].element('.cellWrapper .textLink').click();
+                fields[0].element('.viewForm .cellWrapper .textLink').moveToObject();
+                fields[0].element('.viewForm .cellWrapper .textLink').waitForVisible();
+                fields[0].element('.viewForm .cellWrapper .textLink').click();
                 //Wait until the view form drawer loads
                 browser.element('.drawer .section-0 .cellWrapper').waitForVisible();
 

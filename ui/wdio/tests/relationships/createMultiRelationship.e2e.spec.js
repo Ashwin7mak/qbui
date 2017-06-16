@@ -15,6 +15,8 @@
 
     let parentTable;
     let parentPickerTitleFieldValue = 'testTextValue';
+    let randomTable_1RecordId = rawValueGenerator.generateInt(1, 10);
+    let randomTable_2RecordId = rawValueGenerator.generateInt(1, 10);
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
@@ -24,7 +26,8 @@
         let realmName;
         let realmId;
         let testApp;
-        let parentTableRecordValues = [];
+        let parentTableRecordValues;
+        let childTableRecordValues;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -32,18 +35,34 @@
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
-            // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
+            var generatedApp = e2eBase.appService.generateAppFromMap(e2eConsts.basicTableMap());
+            // Create the app via the API
+            return e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
-                //Delete API created 'Table 1' table
-                return e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE1].id);
+                //Add records into table 1
+                return e2eBase.recordService.addRecordsToTable(testApp, 0, 10, true, true);
             }).then(function() {
-                //Delete API created 'Table 2' table
-                return e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE2].id);
+                //Add records into table 2
+                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10, true, true);
+            }).then(function() {
+                //Create a form for each table
+                return e2eBase.formService.createDefaultForms(testApp);
+            }).then(function() {
+                // Create a Table 1 report
+                return e2eBase.reportService.createCustomReport(testApp.id, testApp.tables[0].id, 'Table 1 Report', null, null, null, null);
+            }).then(function() {
+                // Create a Table 2 report
+                return e2eBase.reportService.createCustomReport(testApp.id, testApp.tables[1].id, 'Table 2 Report', null, null, null, null);
+            }).then(function() {
+                // Generate and add the default set of Users to the app
+                return e2eBase.userService.addDefaultUserListToApp(testApp.id);
+            }).then(function() {
+                //Create one to one relationship between Table 1 and Table 2
+                return e2eBase.relationshipService.createOneToOneRelationship(testApp, testApp.tables[0], testApp.tables[1], 7);
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
@@ -112,7 +131,9 @@
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
-            parentTableRecordValues = browser.elements('.cellWrapper').getAttribute('textContent');
+            //Get record values of child Table
+            parentTableRecordValues = reportContentPO.getRecordValues(0);
+            parentTableRecordValues.shift();
 
             return parentTable;
         });
@@ -121,8 +142,8 @@
          * Before each it block reload the 1st record of list all report in view form mode
          */
         beforeEach(function() {
-            //Load the child table 'Child Table A' -> record 1 in view mode
-            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
+            //Load the child table 'table 2' -> random record in view mode
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
         });
 
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
@@ -132,7 +153,7 @@
                 //Select settings -> modify this form
                 formBuilderPO.open();
 
-                //Verify that the create relationship button is not visible.
+                //Verify that the create relationship button is visible since app has 3 tables and relationship exists between only 2 tables
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
                 expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) > -1).toBe(true);
 
@@ -141,7 +162,11 @@
 
             });
 
-            it('App with only 3 tables - Create multi relationship)', function() {
+            it('App with only 3 tables - Create multi relationship', function() {
+
+                //Get child record first Value
+                childTableRecordValues = browser.element('.cellWrapper').getAttribute('textContent');
+
                 //create relationship between parent and child table.
                 //NOTE: I am not selecting any field here because 'titleField' should be selected as default
                 relationshipsPO.createRelationshipToParentTable(parentTable, '');
@@ -150,6 +175,8 @@
                 //click on the edit pencil on the child record
                 formsPO.clickRecordEditPencilInViewForm();
 
+                //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
+                formsPO.enterFormValues('allPhoneFields');
                 //Select titleField value from parent picker
                 relationshipsPO.selectFromParentPicker(parentPickerTitleFieldValue);
 
@@ -162,7 +189,7 @@
 
                 //Verify the relationship by clicking on get another record from parent link in view record mode.
                 //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
-                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues);
+                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues, childTableRecordValues);
             });
 
             it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {

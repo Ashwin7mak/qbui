@@ -261,10 +261,8 @@
         waitForViewFormsTableLoad: {value: function() {
             //wait until loading screen disappear in report Content
             loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
-            // wait for view form
-            browser.waitForVisible('.viewForm', browser.waitforTimeout);
             // wait until you see elements in the page
-            return browser.waitForVisible('.cellWrapper', browser.waitforTimeout);
+            return browser.waitForVisible('.viewForm .cellWrapper', browser.waitforTimeout);
         }},
 
         /**
