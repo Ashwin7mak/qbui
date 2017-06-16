@@ -10,7 +10,7 @@ services:
       dockerfile: Dockerfile-dev
     environment:
       - NODE_ENV=container
-    image: quickbase/coreui
+    image: quickbase/ui-dev
     ports:
       # Unique post assignment from host:container
       - "9447:9443"

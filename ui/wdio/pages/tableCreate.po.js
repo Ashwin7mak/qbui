@@ -135,6 +135,8 @@
             loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
             //wait until loading screen disappear in report Content
             loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+            //Wait until new table button visible
+            this.newTableBtn.waitForVisible();
             browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
             return browser.elements('.tablesList .withSecondary .leftNavLabel');
         }},
