@@ -204,7 +204,7 @@
          */
         getAllParentRecordFields: {
             value: function() {
-                return this.editFormContainerEl.elements('.Select-placeholder');
+                return this.editFormContainerEl.elements('.Select-value');
             }
         },
 
