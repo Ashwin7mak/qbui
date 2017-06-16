@@ -265,6 +265,14 @@ export const getApp = (state, appId) => {
     return _.find(state.apps, (a) => a.id === appId) || null;
 };
 
+export const getTable = (state, appId, tableId) => {
+    let appInState = getApp(state, appId);
+    if (!appInState) {
+        return null;
+    }
+    return _.find(appInState.tables, {id: tableId}) || null;
+};
+
 export const getIsAppsLoading = (state) => {
     return state.loading;
 };
