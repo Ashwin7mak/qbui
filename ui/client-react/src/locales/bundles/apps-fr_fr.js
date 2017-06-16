@@ -642,6 +642,8 @@ export default {
                 modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
+                removeTitleField: "Ce champ ne peut pas être supprimé tant qu'un champ de titre d'enregistrement différent n'est pas réglé",
+                removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
                 tooltips: {

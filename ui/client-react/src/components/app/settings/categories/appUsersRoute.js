@@ -14,7 +14,7 @@ import UserActions from '../../../actions/userActions';
 import {loadAppAndOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows, clearSelectedUserRows} from '../../../../actions/userActions';
 import {toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
-import {getAppRoles} from '../../../../reducers/appRoles';
+import {getAppRoles} from '../../../../reducers/selectedApp';
 import {getSelectedAppId, getApp, getAppOwner, getAppUsers, getAppUnfilteredUsers} from '../../../../reducers/app';
 import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
 import './appUsersRoute.scss';
@@ -203,7 +203,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         unfilteredAppUsers: getAppUnfilteredUsers(state.app),
         appUsers: getAppUsers(state.app),
-        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
+        appRoles: getAppRoles(state.selectedApp),
         appId: selectedAppId,
         selectedApp: getApp(state.app, selectedAppId),
         appOwner: getAppOwner(state.app),
@@ -211,8 +211,8 @@ const mapStateToProps = (state, ownProps) => {
         openDialogStatus: getDialogStatus(state.users),
         roleIdToAdd: getRoleIdToAdd(state.users),
         selectedUserRows: getSelectedUsers(state.users),
-        successDialogOpen: state.appUsers.successDialogOpen,
-        addedAppUser: state.appUsers.addedAppUser
+        successDialogOpen: state.selectedApp.successDialogOpen,
+        addedAppUser: state.selectedApp.addedAppUser
     };
 };
 

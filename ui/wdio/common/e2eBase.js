@@ -169,17 +169,27 @@
                 }).then(function() {
                     // Create a relationship between the 3rd and 4th tables (Child Table's Numeric Field relates to Parent Table's Record ID)
                     if (createdApp.tables[2] && createdApp.tables[3]) {
-                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7);
+                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7).then(function(resp) {
+                            // Create a relationship between the 4th and 5th tables (Grand Child Table's Numeric Field relates to Child Table's Record ID)
+                            if (createdApp.tables[3] && createdApp.tables[4]) {
+                                return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[3], createdApp.tables[4], 7);
+                            }
+                        });
                     }
                 }).then(function() {
                     return e2eBase.relationshipService.retrieveSavedRelationships(createdApp);
                 }).then(function(savedRelationships) {
                     return e2eBase.relationshipService.addChildReportsToTableForms(createdApp, savedRelationships);
                 }).then(function() {
-                    // Edit child records relating them to the parent (3rd and 4th tables)
+                    // Edit child records relating them to the parent (3rd and 4th tables I.e. Parent Table A and Child Table A))
                     let fieldToEdit = createdApp.tables[3].fields[6];
                     let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
                     return e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[3].id, editRecords);
+                }).then(function() {
+                    // Edit child records relating them to the parent (4th and 5th tables i.e. Child Table A and GrandChild Table A)
+                    let fieldToEdit = createdApp.tables[4].fields[6];
+                    let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 1]);
+                    return e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[4].id, editRecords);
                 }).then(function() {
                     // Return the createdApp object
                     return createdApp;
