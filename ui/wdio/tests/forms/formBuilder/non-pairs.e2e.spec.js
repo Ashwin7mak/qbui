@@ -94,7 +94,7 @@
             });
 
             // one-offs
-
+/*
             it('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
                 let newField = formBuilderPO.fieldTokenTitle.getText();
                 // verify (hope) that the 2nd field (where new field will be inserted) doesn't already match new field label
@@ -301,6 +301,15 @@
                     ['Checkbox', 'User', 'URL', 'Email', 'Phone'],
                     ['Get another record']]
                 );
+            });
+*/
+            it('verify various aspects of the left nav panel after collapse & expand', function() {
+                // verify that there are initially no collapsed field tokens
+                formBuilderPO.fieldTokenCollapsed.waitForExist(null, true);
+                // click on hamburger to collapse field panel
+                topNavPO.topNavToggleHamburgerEl.click();
+                // verify that at least one collapsed field token exists
+                formBuilderPO.fieldTokenCollapsed.waitForExist();
             });
         }
     });

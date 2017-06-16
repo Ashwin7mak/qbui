@@ -89,11 +89,8 @@
 
             it('check the REQUIRED checkbox, cancel & verify not checked', function() {
                 formBuilderPO.selectFieldByIndex(1);
-                // verify initial state of checkbox
-                expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
-                // revise the REQUIRED property (i.e. click the checkbox to make it checked)
-                // formBuilderPO.setRequiredCheckboxState(true);
-                formBuilderPO.requiredCheckboxNotChecked.click();
+                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setRequiredCheckboxState(true);
                 // cancel, reopen, reselect
                 formBuilderPO.cancel().open().selectFieldByIndex(1);
                 // verify REQUIRED checkbox IS NOT checked
@@ -101,11 +98,8 @@
             });
             it('check the REQUIRED checkbox, save & verify checked', function() {
                 formBuilderPO.selectFieldByIndex(1);
-                // verify initial state of checkbox
-                expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
-                // revise the REQUIRED property (i.e. click the checkbox to make it checked)
-                // formBuilderPO.setRequiredCheckboxState(true);
-                formBuilderPO.requiredCheckboxNotChecked.click();
+                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setRequiredCheckboxState(true);
                 // save, reopen, reselect
                 formBuilderPO.save().open().selectFieldByIndex(1);
                 // verify REQUIRED checkbox IS checked

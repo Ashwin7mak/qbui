@@ -35,12 +35,9 @@ class formBuilderPage {
 
     get fieldProperty_Required() {
         // REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
+        // to get its state, use getRequiredCheckboxState
+        // to set its state, use setRequiredCheckboxState
         return browser.element('.checkboxPropertyContainer .checkbox');
-    }
-
-    get fieldProperty_Required_Input() {
-        // REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
-        return browser.element('.checkboxPropertyContainer .checkbox input');
     }
 
     get fieldPropertiesTitle() {
@@ -90,12 +87,14 @@ class formBuilderPage {
 
     get requiredCheckboxChecked() {
         // The MUST BE FILLED IN checkbox in its CHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:checked');
+        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
+        return browser.element('.checkboxPropertyContainer input:checked');
     }
 
     get requiredCheckboxNotChecked() {
         // The MUST BE FILLED IN checkbox in its UNCHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
+        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
+        return browser.element('.checkboxPropertyContainer input:not(:checked)');
     }
 
     get saveBtn() {
@@ -155,11 +154,6 @@ class formBuilderPage {
 
     get tab_firstField() {
         return browser.element(tab_Field);
-    }
-
-    get addAnotherRecordDialogTitle() {
-        // TITLE for add another record dialog
-        return browser.element('.modal-dialog .modal-title');
     }
 
     get title() {
@@ -246,11 +240,7 @@ class formBuilderPage {
     }
 
     getRequiredCheckboxState() {
-        // gets checked status of the MUST BE FILLED IN checkbox ('checked' attribute is either NULL or TRUE)
-
-        // this line fails on edge
-        // return this.fieldProperty_Required_Input.getAttribute('checked') !== null;
-
+        // gets checked status of the MUST BE FILLED IN checkbox
         return this.requiredCheckboxChecked.isExisting();
     }
 
@@ -268,7 +258,9 @@ class formBuilderPage {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
         topNavPO.modifyThisForm.click();
-        this.firstField.waitForExist();
+        // this.firstField.waitForExist();
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         expect(this.tab_Active.getText()).toBe("New");
         return this;
     }
@@ -342,7 +334,7 @@ class formBuilderPage {
 
     setRequiredCheckboxState(state) {
         // Clicks on the MUST BE FILLED IN checkbox IF NECESSARY to make the checked state match the specified value
-        if (this.getRequiredCheckboxState() !== state) {
+        if ((!state && this.requiredCheckboxChecked.isExisting()) || (state && this.requiredCheckboxNotChecked.isExisting())) {
             this.fieldProperty_Required.click();
         }
         return this;
