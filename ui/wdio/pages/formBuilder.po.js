@@ -194,6 +194,26 @@ class formBuilderPage {
         return this;
     }
 
+    dragNewFieldOntoForm(source, target) {
+        // Clicks on the specified new field token and drags it to the specified target field
+        let sourceLabel = source.getText();
+        source.moveToObject();
+        browser.buttonDown();
+        browser.pause(e2eConsts.shortWaitTimeMs);
+        // move to target & jiggle
+        target.moveToObject();
+        target.moveToObject(5, 5);
+        // release button
+        browser.buttonUp();
+        // wait for the new field to replace the target
+        browser.waitUntil(function() {
+            // can't use THIS here?
+            // return this.getSelectedFieldLabel() === source.getText();
+            return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
+        }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+        return this.getFieldLabels();
+    }
+
     getFieldLocator(index) {
         // Returns a locator string for a specific field in the form builder
         return '.formElementContainer:nth-child(' + index + ')';
@@ -369,6 +389,11 @@ class formBuilderPage {
         return this.getFieldLabels();
     }
 
+    stripAsterisk(label) {
+        // strips the leading '* ' from a field label if necessary
+        return label.replace('* ', ''); // not limited to leading chars but simple
+    }
+
     /**
      * Verify the Get another record relationship dialog titles, descriptions and functionality
      * @param expectedTablesList to verify the select table drop down list
@@ -472,13 +497,7 @@ class formBuilderPage {
 
     KB_save() {
         // save form via keyboard
-        if (browserName === 'MicrosoftEdge') {
-            // keyboard shortcut doesn't work on EDGE...
-            // can't reproduce the problem manually, not sure why
-            this.save();
-        } else {
-            browser.keys(['Command', 's', 'Command']);
-        }
+        browser.keys(['Command', 's', 'Command']);
         return this;
     }
 

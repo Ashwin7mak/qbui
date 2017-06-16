@@ -58,7 +58,6 @@
             });
 
             // disabled
-            //Add drag new field to form?
 
             xit('add a new field & verify that it does not appear in the existing fields list', function() {
                 // MC-3100: New fields appear immediately in Existing field tab
@@ -318,6 +317,19 @@
                 formBuilderPO.fieldTokenCollapsed.click();
                 // verify that the new field appears at the end of the revised fields list
                 expect(formBuilderPO.getFieldLabels()).toEqual(fields);
+            });
+
+            it('drag a new field onto the form & verify that it appears immediately  below the target field', function() {
+                let newField = formBuilderPO.fieldTokenTitle.getText();
+                let fields = formBuilderPO.getFieldLabels();
+                // verify (hope) that the 2nd field (where new field will be inserted) doesn't already match new field label
+                expect(fields[1]).not.toEqual(newField);
+                formBuilderPO.KB_selectField(1);
+                // drag first new field token onto first existing field on form
+                let newFields = formBuilderPO.dragNewFieldOntoForm(formBuilderPO.listOfElementsItem, formBuilderPO.firstField);
+                // verify that the new field is inserted below the existing one it was dragged to
+                fields.splice(0, 0, newField);
+                expect(newFields).toEqual(fields);
             });
         }
     });

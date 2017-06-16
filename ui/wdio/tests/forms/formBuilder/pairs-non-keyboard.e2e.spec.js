@@ -67,7 +67,7 @@
                 formBuilderPO.fieldProperty_Name.setValue(testString);
                 //  verify that the field label was revised
                 let existingFields = formBuilderPO.getFieldLabels();
-                expect(existingFields[0].replace('* ', '')).toEqual(testString);
+                expect(formBuilderPO.stripAsterisk(existingFields[0])).toEqual(testString);
                 // cancel & reopen
                 let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify field name is not revised
@@ -80,7 +80,7 @@
                 formBuilderPO.fieldProperty_Name.setValue(testString);
                 //  verify that the field label was revised
                 let existingFields = formBuilderPO.getFieldLabels();
-                expect(existingFields[0].replace('* ', '')).toEqual(testString);
+                expect(formBuilderPO.stripAsterisk(existingFields[0])).toEqual(testString);
                 // save & reopen
                 let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify field name is revised
