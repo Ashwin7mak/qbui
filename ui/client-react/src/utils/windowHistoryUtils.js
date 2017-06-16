@@ -18,26 +18,22 @@ export const WindowHistoryUtils = {
      */
     pushWithQueries(params = {}) {
         const urlQueryString = location.search;
-        let newParams = '';
+        let newParams = this.buildQueryString(urlQueryString, params);
 
-        if (urlQueryString) {
-            newParams = this.buildQueryString(params);
-        }
-
-        AppHistory.history.push(location.pathname + params);
+        AppHistory.history.push(location.pathname + newParams);
     },
 
     buildQueryString(urlQueryString, params) {
+        let parsed = {};
         if (urlQueryString) {
-            const parsed = queryString.parse(urlQueryString);
-            Object.keys(params).forEach(key => {
-                // add the key:value pairs
-                // overwrites the value if the key already exists as a query
-                parsed[key] = params[key];
-            });
-            return '?' + queryString.stringify(parsed);
+            parsed = queryString.parse(urlQueryString);
         }
-        return '';
+        Object.keys(params).forEach(key => {
+            // add the key:value pairs
+            // overwrites the value if the key already exists as a query
+            parsed[key] = params[key];
+        });
+        return '?' + queryString.stringify(parsed);
     },
 
     /**

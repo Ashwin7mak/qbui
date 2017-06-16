@@ -346,16 +346,28 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        // if (this.props.isDrawerContext) {
-        //     // console.log(this.props);
-        //     const {appId, tblId, reportId, }
-        //     const link = UrlUtils.getAddRelatedChildLink(urlPath, appId, childTableId, childReportId, detailKeyFid, encodeURI(detailKeyValue), uniqueId);
-        // }
-        // convert to  a number from a string
-        const recordId = +this.props.match.params.recordId;
-        this.navigateToRecord(recordId);
+        if (this.props.isDrawerContext) {
+            // FIXME: embeddedReport => embeddedReportId
+            const urlPath = this.props.match.url;
+            const {appId, tblId, rptId, recordId, embeddedReport} = this.props.match.params;
 
-        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+            const queries = {
+                editRec: recordId,
+                detailAppId: appId,
+                detailTableId: tblId,
+                detailReportId: rptId,
+                detailKeyFid: 3, //FIXME pass in from parent
+                detailKeyValue: 1, //FIXME pass in from parent
+                embeddedReport
+            };
+            const link = WindowHistoryUtils.pushWithQueries(queries);
+        } else {
+            // convert to  a number from a string
+            const recordId = +this.props.match.params.recordId;
+            this.navigateToRecord(recordId);
+
+            WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+        }
     },
 
     isAutomationEnabled() {
