@@ -42,13 +42,14 @@
          */
         it('Edit a NULL values record via record actions edit pencil In a Grid', function() {
             var origRecordCount;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
-
+            var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
+            var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
             //Step 1 - Go to report without any settings (LIST all report)
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
             //Step 2 - Get the original records count in a report
             origRecordCount = formsPO.getRecordsCountInATable();
+            console.log(origRecordCount);
 
             //Step 3 - Click on 5th record (which is NULL values record) edit pencil. Count starts from 0
             reportContentPO.clickRecordEditPencilInRecordActions(4);
@@ -57,7 +58,10 @@
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
-
+            fieldTypes2.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
+            console.log("qwerty");
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
