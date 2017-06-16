@@ -71,7 +71,6 @@ describe('Nav Unit tests', () => {
         loadReports: (ctx, app, tbl) => {},
         updateFormRedirectRoute: (route) => {},
         showTableCreationDialog: () => {},
-        showAppCreationDialog: () => {},
         showTableReadyDialog: () => {},
         enterBuilderMode: (context) => {},
         loadApps: () => {},
@@ -344,16 +343,6 @@ describe('Nav Unit tests', () => {
             instance.createNewTable();
             done();
             expect(props.showTableCreationDialog).toHaveBeenCalled();
-        });
-
-        it('invokes showAppCreationDialog when createNewApp is called', (done) => {
-            spyOn(props, 'showAppCreationDialog');
-
-            let component = shallow(<Nav {...props} />);
-            let instance = component.instance();
-            instance.createNewApp();
-            done();
-            expect(props.showAppCreationDialog).toHaveBeenCalled();
         });
     });
 
