@@ -8,7 +8,6 @@ import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
-import AutomationRowActions from './automationRowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
@@ -138,12 +137,12 @@ export const QbGrid = React.createClass({
         // relationship phase-1, will need remove when we allow editing
         phase1: PropTypes.bool,
 
-        //
+        // Custom propery renderer for automation grid
         rowActionsRenderer: PropTypes.func,
 
         /**
          * Not all Grids require multiselect, this option will hide the checkboxes if set to false */
-        disableMultiSelect: PropTypes.bool
+        isMultiSelectDisabled: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -157,7 +156,7 @@ export const QbGrid = React.createClass({
             isEditingRowSaving: false,
             showRowActionsColumn: true,
             isDraggable: false,
-            disableMultiSelect: false
+            isMultiSelectDisabled: false
         };
     },
 
@@ -185,33 +184,26 @@ export const QbGrid = React.createClass({
      * @returns {XML}
      */
     getActionsCell(_cellDataRow, rowProps) {
-        if (this.props.rowActionsRenderer) {
-            return <AutomationRowActions
-                rowId={rowProps.rowData.id}
-                onClickEditRowIcon={this.props.onClickEditIcon}
-                onClickDeleteRowIcon={this.props.onClickDeleteIcon}
-                onClickTestRowIcon={this.props.onClickTestRowIcon}
-                disableMultiSelect={this.props.disableMultiSelect}
-                />;
-        } else {
-            return <RowActions
-                rowId={rowProps.rowData.id}
-                onClickDeleteRowIcon={this.props.onClickDeleteIcon}
-                onClickEditRowIcon={this.props.onClickEditIcon}
-                isEditing={rowProps.rowData.isEditing}
-                editingRowId={this.props.editingRowId}
-                isEditingRowValid={this.props.isEditingRowValid}
-                isEditingRowSaving={this.props.isEditingRowSaving}
-                isInlineEditOpen={this.props.isInlineEditOpen}
-                isSelected={rowProps.rowData.isSelected}
-                editingRowErrors={this.props.editingRowErrors}
-                onCancelEditingRow={this.props.onCancelEditingRow}
-                onClickAddNewRow={this.onClickAddNewRow}
-                onClickSaveRow={this.props.onClickSaveRow}
-                onClickToggleSelectedRow={this.onClickToggleSelectedRow}
-                onClickTestRowIcon={this.props.onClickTestRowIcon}
+        const RowActionsRenderer = this.props.rowActionsRenderer || RowActions;
+        return <RowActionsRenderer
+            rowId={rowProps.rowData.id}
+            onClickDeleteRowIcon={this.props.onClickDeleteIcon}
+            onClickEditRowIcon={this.props.onClickEditIcon}
+            isEditing={rowProps.rowData.isEditing}
+            editingRowId={this.props.editingRowId}
+            isEditingRowValid={this.props.isEditingRowValid}
+            isEditingRowSaving={this.props.isEditingRowSaving}
+            isInlineEditOpen={this.props.isInlineEditOpen}
+            isSelected={rowProps.rowData.isSelected}
+            editingRowErrors={this.props.editingRowErrors}
+            onCancelEditingRow={this.props.onCancelEditingRow}
+            onClickAddNewRow={this.onClickAddNewRow}
+            onClickSaveRow={this.props.onClickSaveRow}
+            onClickToggleSelectedRow={this.onClickToggleSelectedRow}
+            onClickTestRowIcon={this.props.onClickTestRowIcon}
+            isMultiSelectDisabled={this.props.isMultiSelectDisabled}
+
             />;
-        }
     },
 
     /**
@@ -347,7 +339,7 @@ export const QbGrid = React.createClass({
 
         return (
             <div className="actionHeader">
-                {this.props.disableMultiSelect ? <input
+                {this.props.isMultiSelectDisabled ? <input
                     type="checkbox"
                     className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
                     checked={this.props.areAllRowsSelected}
@@ -466,7 +458,7 @@ export const QbGrid = React.createClass({
 
         let className = "qbGrid";
         className += this.props.isInlineEditOpen ? ' inlineEditing' : '';
-        className += this.props.disableMultiSelect ? ' disableMultiSelect' : '';
+        className += this.props.isMultiSelectDisabled ? ' isMultiSelectDisabled' : '';
 
         return (
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.QB_GRID}>

@@ -55,7 +55,7 @@ class RowActions extends Component {
 
         return (
             <div className="actionsCol">
-                {!this.props.disableMultiSelect ? <input
+                {!this.props.isMultiSelectDisabled ? <input
                     className={SELECT_ROW_CHECKBOX}
                     type="checkbox"
                     checked={this.props.isSelected}
@@ -123,7 +123,7 @@ RowActions.propTypes = {
     * Uses an IconActions component to render the icon menu by default, but you can override the renderer by passing in your own React class (e.g., QbIconActions). */
     iconActionsNode: PropTypes.element,
 
-    disableMultiSelect: PropTypes.bool
+    isMultiSelectDisabled: PropTypes.bool
 };
 
 RowActions.defaultProps = {
@@ -152,7 +152,7 @@ RowActions.defaultProps = {
     * Node set to null initially - so renders IconActions - if any value is passed, renders QbIconActions */
     iconActionsNode: null,
 
-    disableMultiSelect: false
+    isMultiSelectDisabled: false
 };
 
 export default RowActions;

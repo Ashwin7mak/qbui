@@ -249,19 +249,19 @@ describe('QbGrid', () => {
                 onClickSaveRow: actions.onClickSave,
                 onClickTestRowIcon: actions.onClickTestRow(),
                 onClickToggleSelectedRow: instance.onClickToggleSelectedRow,
-                rowId: editingRow.id
+                rowId: editingRow.id,
+                isMultiSelectDisabled: false
             });
         });
 
         it('gets a row action cell without multiselect', () => {
             component = shallow(<QbGrid
                 {...requiredProps}
-                disableMultiSelect={true}
-                rowActionsRenderer={true}
+                isMultiSelectDisabled={true}
             />);
             instance = component.instance();
             let actionCell = instance.getActionsCell(null, {rowData: editingRow});
-            expect(actionCell.props.disableMultiSelect).toBe(true);
+            expect(actionCell.props.isMultiSelectDisabled).toBe(true);
         });
     });
 

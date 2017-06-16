@@ -13,7 +13,7 @@ import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations
 import _ from "lodash";
 import QbGrid from '../../dataTable/qbGrid/qbGrid';
 import ReportCell from '../../dataTable/reportGrid/reportCell';
-import AutomationRowActions from '../../dataTable/qbGrid/automationRowActions';
+import AutomationRowActions from '../../dataTable/automationListGrid/automationRowActions';
 import "./automationList.scss";
 import {CONTEXT} from "../../../actions/context";
 import AutomationListTransformer from '../../../utils/automationListTransformer';
@@ -104,7 +104,7 @@ export class AutomationListRoute extends Component {
                             onCancelEditingRow={this.cancelEditingRow}
                             onClickSaveRow={this.clickSaveRow}
                             rowActionsRenderer={AutomationRowActions}
-                            disableMultiSelect={true}
+                            isMultiSelectDisabled={true}
                         />
                     </div>
                 </div>

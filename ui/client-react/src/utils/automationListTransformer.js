@@ -18,10 +18,11 @@ class AutomationListTransformer  {
             return [];
         }
         let key = 1;
-        let columns = [];
-        columns.push(constants.AUTOMATION_LIST.NAME);
-        columns.push(constants.AUTOMATION_LIST.DESCRIPTION);
-        columns.push(constants.AUTOMATION_LIST.ACTIVE);
+        let columns = [
+            constants.AUTOMATION_LIST.NAME,
+            constants.AUTOMATION_LIST.DESCRIPTION,
+            constants.AUTOMATION_LIST.ACTIVE
+        ];
         return columns.map(column => {
             return this.createAutomationGridColumn(column, key++);
         });
@@ -60,17 +61,17 @@ class AutomationListTransformer  {
      */
     static createAutomationGridRow(automation, rowNumber) {
         let id = automation.id;
-        let cells = [];
         let active = automation.active ? Locale.getMessage("automation.automationList.activeYes") : Locale.getMessage("automation.automationList.activeNo");
-        cells.push(this.createCellForField(constants.AUTOMATION_LIST.NAME, automation.name, rowNumber, 1, false));
-        cells.push(this.createCellForField(constants.AUTOMATION_LIST.DESCRIPTION, automation.description, rowNumber, 2, false));
-        cells.push(this.createCellForField(constants.AUTOMATION_LIST.ACTIVE, active, rowNumber, 3, false));
-        cells.push(this.createCellForField(constants.AUTOMATION_LIST.ID, id, rowNumber, 4, true));
+        let cells = [
+            this.createCellForField(constants.AUTOMATION_LIST.NAME, automation.name, rowNumber, 1, false),
+            this.createCellForField(constants.AUTOMATION_LIST.DESCRIPTION, automation.description, rowNumber, 2, false),
+            this.createCellForField(constants.AUTOMATION_LIST.ACTIVE, active, rowNumber, 3, false),
+            this.createCellForField(constants.AUTOMATION_LIST.ID, id, rowNumber, 4, true)
+        ];
         return new RowTransformer(id, cells);
     }
 
     static createCellForField(fieldName, fieldValue, rowId, cellId, isHidden) {
-
         let cell = {
             defaultValue: fieldValue,
             display: fieldValue,
@@ -115,7 +116,6 @@ class AutomationListTransformer  {
         };
         return cell;
     }
-
 }
 export default AutomationListTransformer;
 

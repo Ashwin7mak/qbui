@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import RowActionsReuse from '../../../../../reuse/client/src/components/rowActions/rowActions';
-import QbAutomationIconActions from './qbAutomationIconActions';
+import QbAutomationIconActions from '../qbGrid/qbAutomationIconActions';
 
 const AutomationRowActions = React.createClass({
     propTypes: {
