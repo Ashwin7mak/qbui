@@ -582,7 +582,6 @@ export const Nav = React.createClass({
 });
 
 const mapStateToProps = (state, ownProps) => {
-    console.log('state: ', state);
     return {
         getApp: (appId) => getApp(state.app, appId),
         getApps: () => getApps(state.app),
