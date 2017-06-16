@@ -135,15 +135,3 @@ html body {
         left:auto;
     }
 }
-
-.dropdown-menu[aria-labelledby="nav-left-dropup"]{
-    &:before {
-        right:auto;
-        left:9px;
-    }
-
-    &:after {
-        right:auto;
-        left:9px;
-    }
-}

@@ -23,18 +23,16 @@ class userFeedBack extends Component {
 
     render() {
         const {startTabIndex} = this.props;
-        const dropDownId = Breakpoints.isNotSmallBreakpoint() ? "nav-right-dropdown" : "nav-left-dropup";
-        const dropDownMenuClass = Breakpoints.isNotSmallBreakpoint() ? "userFeedBackDropDown" : "userFeedBackDropUp";
 
         return (
-            <DropDown id={dropDownId} className="userFeedBack globalActionLink" dropup={this.props.shouldOpenMenusUp}>
+            <DropDown id="nav-right-dropdown" className="userFeedBack globalActionLink" dropup={this.props.shouldOpenMenusUp}>
                 <Tooltip bsRole="toggle" tipId="feedback" i18nMessageKey="header.menu.feedbackTooltip" key="feedback" location="bottom">
                     <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
                         <Icon icon={dropDownIcon} iconFont="iconTableSturdy"/>
                     </a>
                 </Tooltip>
 
-                <DropDown.Menu className={dropDownMenuClass}>
+                <DropDown.Menu>
                     <MenuItem href={UrlUtils.getFeedBackLink()} target="_blank" className="feedbackMenuButton">
                         <I18nMessage message="header.menu.feedbackMenuButton"/>
                     </MenuItem>

@@ -6,11 +6,9 @@ import {I18nMessage} from 'REUSE/utils/i18nMessage';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {getLoggedInUserDropDownText} from '../../../reducers/userReducer';
-
 import './userDropDown.scss';
 
 // Uses defaults messages an icons specific to a user dropdown in the DefaultTopNav
-const dropDownMessage = 'globalActions.user';
 const dropDownIcon = 'user';
 const signOutMessage = 'header.menu.sign_out';
 
