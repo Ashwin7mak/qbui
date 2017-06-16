@@ -10,8 +10,10 @@ import Locale from '../../../../../reuse/client/src/locales/locale';
 export class ExistingFieldsMenu extends Component {
 
     buildEmptyState = () => {
-        let table = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId}) || {};
-        return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
+        if (_.isEmpty(this.props.existingFields)) {
+            let table = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId}) || {};
+            return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
+        }
     };
 
     render = () => {
@@ -40,7 +42,7 @@ const mapStateToProps = (state, ownProps) => {
     let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [];
     return {
         existingFields: getExistingFields(state, currentFormId, ownProps.appId, ownProps.tblId),
-        numberOfFieldsOnForm: (_.get(currentForm, "formData.formMeta.numberOfFieldsOnForm") || 1)
+        numberOfFieldsOnForm: _.get(currentForm, 'formData.formMeta.numberOfFieldsOnForm', 1)
     };
 };
 

@@ -116,23 +116,23 @@ describe('ListOfElements', () => {
             expect(component.find('.listOfElementsItem')).not.toBePresent();
         });
 
-        it('returns empty state message when there are no existing fields when it is undefined', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} emptyMessage={"MockemptyMessage"} />);
+        it('returns empty message when elements are not defined', () => {
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} emptyMessage= "MockemptyMessage"/>);
 
             expect(component.find('.listOfElementsItem').length).toEqual(0);
             expect(component.find('.emptyStateMessage')).toBePresent();
             expect(component.find('.emptyStateMessage').text()).toEqual("MockemptyMessage");
         });
 
-        it('returns empty message when existing fields is empty', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={[]} emptyMessage={"MockemptyMessage"} />);
+        it('returns empty message when elements are not present', () => {
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={[]} emptyMessage= "MockemptyMessage" />);
 
             expect(component.find('.listOfElementsItem').length).toEqual(0);
             expect(component.find('.emptyStateMessage')).toBePresent();
             expect(component.find('.emptyStateMessage').text()).toEqual("MockemptyMessage");
         });
 
-        it('doesn\'t return empty message when existing fields is not empty', () => {
+        it('doesn\'t return empty message when elements are present', () => {
             component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 
             expect(component.find('.listOfElementsItem').length).toEqual(4);
