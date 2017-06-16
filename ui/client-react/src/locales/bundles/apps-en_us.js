@@ -775,9 +775,10 @@ export default {
 
             tableReadyDialogOK: "OK",
 
-            recordTitleFieldHeading: "Identifying Records",
-            recordTitleFieldDescription: "Select a field to use to identify records in this table.  A field with this property will be required on the form.",
-            recordTitleFieldDefault: "Default to Noun + ID"
+            recordTitleFieldHeading: "The title field identifying each record",
+            recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
+            recordTitleFieldDefault: "Default to {recordName} + ID",
+            recordName: "Record Name"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."

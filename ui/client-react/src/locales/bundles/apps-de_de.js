@@ -766,9 +766,10 @@ export default {
 
             tableReadyDialogOK: "OK",
 
-            recordTitleFieldHeading: "Identifizieren von Aufzeichnungen",
-            recordTitleFieldDescription: "Wählen Sie ein Feld aus, das verwendet werden soll, um Datensätze in dieser Tabelle zu identifizieren. Ein Feld mit dieser Eigenschaft wird auf dem Formular benötigt.",
-            recordTitleFieldDefault: "Standard auf Noun + ID"
+            recordTitleFieldHeading: "Das Titelfeld identifiziert jeden Datensatz",
+            recordTitleFieldDescription: "Wählen Sie das Feld aus, das als Überschrift angezeigt wird, wenn Sie einen Datensatz anzeigen oder bearbeiten. Dieses Feld muss ausgefüllt werden.",
+            recordTitleFieldDefault: "Standard auf Noun + ID",
+            recordName: "Datensatzname"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"

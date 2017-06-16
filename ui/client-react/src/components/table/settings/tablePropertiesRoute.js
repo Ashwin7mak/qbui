@@ -12,7 +12,8 @@ import TableCreationPanel from '../tableCreationPanel';
 import RecordTitleFieldSelection from '../recordTitleFieldSelection';
 import QBModal from '../../qbModal/qbModal';
 import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable} from '../../../actions/tablePropertiesActions';
-import {updateAppTableProperties, loadApp, loadApps} from '../../../actions/appActions';
+import {updateAppTableProperties} from '../../../actions/appActions';
+
 import _ from 'lodash';
 
 import './tableProperties.scss';
@@ -134,10 +135,8 @@ export const TablePropertiesRoute = React.createClass({
 
     render() {
         let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.table) || _.isUndefined(this.props.tableProperties) || _.isNull(this.props.tableProperties.tableInfo));
-        let isDirty = this.props.isDirty ? true : false;
-        let buttonsClasses = "tableInfoButtons " + (isDirty ? "open" : "closed");
-        return <Loader loaded={loaded}>
-            <div>
+
+        return <Loader loadedClassName="tablePropertiesLoaded" loaded={loaded}>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
                 <div className="tableInfoPanel">
@@ -151,15 +150,16 @@ export const TablePropertiesRoute = React.createClass({
                                         validate={this.props.tableProperties.isDirty}
                                         appTables={this.getExistingTableNames()}/>
                     <RecordTitleFieldSelection tableInfo={this.props.tableProperties.tableInfo} onChange={this.updateRecordTitleField} />
-                    <div className={buttonsClasses}>
-                        <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage
-                            message="nav.reset"/></a>
-                        <Button disabled={!this.canApplyChanges()} className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage
-                            message="nav.apply"/></Button>
+                    <div className="tableInfoButtons">
+                        <Button disabled={!this.canApplyChanges()} className="secondaryButton resetButton" onClick={this.resetTableProperties}>
+                            <I18nMessage message="nav.reset"/>
+                        </Button>
+                        <Button disabled={!this.canApplyChanges()} className="primaryButton" bsStyle="primary" onClick={this.updateTable}>
+                            <I18nMessage message="nav.apply"/>
+                        </Button>
                     </div>
                 </div>
                 {this.getConfirmDialog()}
-            </div>
         </Loader>;
     }
 });
@@ -172,7 +172,15 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable, updateAppTableProperties, loadApps, loadApp
+    updateTable,
+    loadTableProperties,
+    setTableProperty,
+    openIconChooser,
+    closeIconChooser,
+    setEditingProperty,
+    resetEditedTableProperties,
+    deleteTable,
+    updateAppTableProperties
 };
 
 export default connect(

@@ -56,14 +56,17 @@ export const SettingsWrapper = React.createClass({
             if (!app) {
                 //TODO: performance improvement to support app argument to load when fetching all apps
                 this.props.loadApps();
-                this.props.loadApp(paramVals.appId);
+                this.props.loadApp(paramVals.appId).then(
+                    () => {
+                        if (paramVals.tblId) {
+                            this.props.selectTable(paramVals.appId, paramVals.tblId);
+                        }
+                    });
             }
 
             this.props.getFeatureSwitchStates(paramVals.appId);
 
-            if (paramVals.tblId) {
-                this.props.selectTable(paramVals.appId, paramVals.tblId);
-            } else {
+            if (!paramVals.tblId) {
                 /*eslint no-lonely-if:0 */
                 if (this.props.selectedTableId !== null) {
                     this.props.clearSelectedTable();

@@ -766,9 +766,10 @@ export default {
 
             tableReadyDialogOK: "D'accord",
 
-            recordTitleFieldHeading: "Identification des enregistrements",
-            recordTitleFieldDescription: "Sélectionnez un champ à utiliser pour identifier les enregistrements dans ce tableau. Un champ avec cette propriété sera requis sur le formulaire.",
-            recordTitleFieldDefault: "Par défaut à Noun + ID"
+            recordTitleFieldHeading: "Le champ du titre identifiant chaque enregistrement",
+            recordTitleFieldDescription: "Choisissez le champ qui s'affiche comme titre lorsque vous visualisez ou modifiez un enregistrement. Ce champ doit être rempli.",
+            recordTitleFieldDefault: "Par défaut à Noun + ID",
+            recordName: "Nom de l'enregistrement"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
