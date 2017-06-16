@@ -122,7 +122,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
         /**
          *  default parent selected in drop down when trowser opens while adding a child record, this value can be changed
          */
-        xit('Verify default parent selected in drop down when trowser opens while adding a child record', () => {
+        it('Verify default parent selected in drop down when trowser opens while adding a child record', () => {
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
             const origRecordCount = formsPagePO.getRecordsCountInATable();
