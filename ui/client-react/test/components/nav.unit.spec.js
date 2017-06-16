@@ -348,37 +348,39 @@ describe('Nav Unit tests', () => {
 
     describe('updateRecordTrowser ', () => {
         it('will invoke loadForm with childAppId, childTableId, childReportId, formType, editRec, showTrowser', () => {
-            let component = shallow(<Nav {...props} />);
-            query[UrlConsts.DETAIL_APPID] = {};
-            query[UrlConsts.DETAIL_TABLEID] = {};
-            query[UrlConsts.DETAIL_KEY_FID] = {};
-            query[UrlConsts.EDIT_RECORD_KEY] = {};
-            query[UrlConsts.DETAIL_REPORTID] = {};
+            let cloneProps = _.cloneDeep(props);
+            cloneProps.location.query = {
+                [UrlConsts.DETAIL_APPID]: {},
+                [UrlConsts.DETAIL_TABLEID]: {},
+                [UrlConsts.DETAIL_KEY_FID]: {},
+                [UrlConsts.EDIT_RECORD_KEY]: {},
+                [UrlConsts.DETAIL_REPORTID]: {}
+            };
+
+            let component = shallow(<Nav {...cloneProps} />);
 
             let instance = component.instance();
             instance.updateRecordTrowser();
 
             expect(props.loadForm).toHaveBeenCalledWith({}, {}, {}, 'edit', {}, true);
-            delete query[UrlConsts.DETAIL_APPID];
-            delete query[UrlConsts.DETAIL_TABLEID];
-            delete query[UrlConsts.DETAIL_KEY_FID];
-            delete query[UrlConsts.EDIT_RECORD_KEY];
-            delete query[UrlConsts.DETAIL_REPORTID];
         });
 
         it('will invoke loadForm with appId, tblId, rptId, formType, editRec, showTrowser', () => {
-            let component = shallow(<Nav {...props} />);
-            query[UrlConsts.EDIT_RECORD_KEY] = {};
+            let cloneProps = _.cloneDeep(props);
+            cloneProps.location.query = {[UrlConsts.EDIT_RECORD_KEY]: {}};
+
+            let component = shallow(<Nav {...cloneProps} />);
 
             let instance = component.instance();
             instance.updateRecordTrowser();
 
             expect(props.loadForm).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId, props.match.params.rptId, 'edit', {}, true);
-            delete query[UrlConsts.EDIT_RECORD_KEY];
         });
 
         it('will NOT invoke loadForm because there is not an edit record query parameter or the trowser is open or there is no new record id', () => {
-            let component = shallow(<Nav {...props} />);
+            let cloneProps = _.cloneDeep(props);
+            cloneProps.location.query = {};
+            let component = shallow(<Nav {...cloneProps} />);
 
             let instance = component.instance();
             instance.updateRecordTrowser();
