@@ -37,6 +37,7 @@ export class Analytics extends Component {
             this.updateAppManagerStatus,
             this.updateEvergageAccountId,
             this.updateEverageAppId,
+            ...props.additionalUpdateFunctions
         ];
     }
 
@@ -211,6 +212,6 @@ const mapStateToProps = state => {
         userEmail: getLoggedInUserEmail(state),
         isAdmin: getLoggedInUserAdminStatus(state)
     };
-}
+};
 
 export default connect(mapStateToProps, {getLoggedInUser})(Analytics);
