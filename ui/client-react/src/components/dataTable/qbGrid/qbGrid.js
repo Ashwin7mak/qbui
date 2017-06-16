@@ -202,7 +202,6 @@ export const QbGrid = React.createClass({
             onClickToggleSelectedRow={this.onClickToggleSelectedRow}
             onClickTestRowIcon={this.props.onClickTestRowIcon}
             isMultiSelectDisabled={this.props.isMultiSelectDisabled}
-
             />;
     },
 
