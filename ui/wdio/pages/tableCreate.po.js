@@ -14,9 +14,9 @@
 
     let tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.tablesList .newItemButton .newItem');}},
+        newTableBtn : {get: function() {return browser.element('.tablesList newTable .newItemButton .newItem');}},
         //New table Icon
-        newTableIconBtn : {get: function() {return browser.element('.newItemButton .newItem .iconUISturdy-add-new-stroke');}},
+        newTableIconBtn : {get: function() {return browser.element('.newTable .newItemButton .newItem .iconUISturdy-add-new-stroke');}},
 
         //new table description
         tableDescription : {get: function() {return modalDialog.modalDialogContainer.element('.pageContainer .description');}},
