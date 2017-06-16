@@ -16,6 +16,11 @@ let apps = [
     {name: 'mockAppName3', id: 3}
 ];
 
+let mockFuncs = {
+    getApp() {},
+    showAppCreationDialog() {}
+};
+
 const LinkMock = React.createClass({
     render() {
         return <div className="linkMock">{this.props.children}</div>;
@@ -58,14 +63,55 @@ describe('AppsListForLeftNav', () => {
         expect(component.state().searching).toEqual(false);
     });
 
-    it('sets searching to true and searchText to an empty string when clicked', () => {
-        component = mount(<AppsList apps={apps}/>);
+    it('will createNewApp if a user has access rights', () => {
+        spyOn(mockFuncs, 'showAppCreationDialog');
+        component = mount(<AppsList apps={apps}
+                                    showAppCreationDialog={mockFuncs.showAppCreationDialog}/>);
 
         instance = component.instance();
-        component.setState({searching: false});
-        instance.onClickApps();
+        spyOn(instance, 'allowCreateNewApp').and.returnValue(true);
 
-        expect(component.state().searching).toEqual(true);
-        expect(component.state().searchText).toEqual("");
+        instance.createNewApp();
+
+        expect(mockFuncs.showAppCreationDialog).toHaveBeenCalled();
+    });
+
+    it('will NOT createNewApp if a user does not have access rights', () => {
+        spyOn(mockFuncs, 'showAppCreationDialog');
+        component = mount(<AppsList apps={apps}
+                                    showAppCreationDialog={mockFuncs.showAppCreationDialog}/>);
+
+        instance = component.instance();
+        spyOn(instance, 'allowCreateNewApp').and.returnValue(false);
+
+        instance.createNewApp();
+
+        expect(mockFuncs.showAppCreationDialog).not.toHaveBeenCalled();
+    });
+
+    it('a user is allowed to create an app', () => {
+        let mockApp = {
+            accessRights: {appRights: ['EDIT_SCHEMA']}
+        };
+        spyOn(mockFuncs, 'getApp').and.returnValue(mockApp);
+        component = mount(<AppsList apps={apps}getApp={mockFuncs.getApp} />);
+
+        instance = component.instance();
+        let result = instance.allowCreateNewApp();
+
+        expect(result).toEqual(true);
+    });
+
+    it('a user is NOT allowed to create an app', () => {
+        let mockApp = {
+            accessRights: {appRights: []}
+        };
+        spyOn(mockFuncs, 'getApp').and.returnValue(mockApp);
+        component = mount(<AppsList apps={apps}getApp={mockFuncs.getApp} />);
+
+        instance = component.instance();
+        let result = instance.allowCreateNewApp();
+
+        expect(result).toEqual(false);
     });
 });
