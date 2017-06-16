@@ -39,6 +39,7 @@ describe('FieldEditingTools', () => {
         let deleteButton = component.find('.deleteFieldIcon button');
 
         expect(deleteButton).toBePresent();
+        expect(deleteButton).not.toBeDisabled();
 
         deleteButton.simulate('click');
 
@@ -49,6 +50,25 @@ describe('FieldEditingTools', () => {
     it('has disabled delete button if the field is a recordtitle field', () => {
         component = shallow(<FieldEditingTools
             app={{id: 'app1'}} tblId={'tbl1'}
+            numberOfFieldsOnForm={2}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            selectedFields={[]}
+            location={location}
+            relatedField={relatedField}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            fieldId={relatedField.id}
+            table={{recordTitleFieldId: relatedField.id}}
+        />);
+
+        let deleteButton = component.find('.deleteFieldIcon button');
+
+        expect(deleteButton).toBePresent();
+        expect(deleteButton).toBeDisabled();
+    });
+
+    it('has delete button if the field is a detail key field field', () => {
+        component = shallow(<FieldEditingTools
+            app={{id: 'app1', relationships: [{detailAppId: 'app1', detailTableId: 'tbl1', detailFieldId: relatedField.id}]}} tblId={'tbl1'}
             numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
