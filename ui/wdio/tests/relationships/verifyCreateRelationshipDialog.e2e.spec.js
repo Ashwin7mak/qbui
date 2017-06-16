@@ -200,6 +200,12 @@
                 notificationContainer.waitUntilNotificationContainerGoesAway();
                 //verify You land in view form
                 formsPO.waitForViewFormsTableLoad();
+
+                //Finally verify on view form you see 2 parent pickers
+                let fieldsOnViewForm = formsPO.getAllFieldsInViewForm();
+                expect(fieldsOnViewForm.includes(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable)).toBe(true);
+                expect(fieldsOnViewForm.includes(e2eConsts.GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE2)).toBe(true);
+
             });
         }
 

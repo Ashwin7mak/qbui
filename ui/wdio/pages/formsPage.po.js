@@ -278,6 +278,17 @@
         }},
 
         /**
+         * Method to get all fields from view form
+         */
+        getAllFieldsInViewForm: {value: function() {
+            let fields = [];
+            browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
+                return fields.push(fieldLabel.element('.fieldLabel').getAttribute('textContent'));
+            });
+            return fields;
+        }},
+
+        /**
          * Returns all error messages from the errorMessage container on the form
          * @returns Array of error messages
          */
