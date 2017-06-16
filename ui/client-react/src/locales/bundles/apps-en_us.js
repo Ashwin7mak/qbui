@@ -646,6 +646,8 @@ export default {
                 modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
+                removeTitleField: "This field cannot be removed until a different record title field is set",
+                removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
                 tooltips: {

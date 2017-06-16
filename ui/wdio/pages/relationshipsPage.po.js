@@ -10,6 +10,7 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
     let formsPagePO = requirePO('formsPage');
+    let reportInLineEditPO = requirePO('reportInLineEdit');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -32,6 +33,18 @@
         parentRecordLinkInDrawerEl: {
             get: function() {
                 return browser.element('.numericField.viewElement');
+            }
+        },
+        // returns the element displaying the add child button
+        addChildButton: {
+            get: function() {
+                return browser.element('.addChildBtn');
+            }
+        },
+        // returns the class for the element displaying the add child button but in a disabled state
+        addChildButtonDisabledClass: {
+            get: function() {
+                return '.addChildBtn.disabled';
             }
         },
         // Page Object functions
@@ -92,8 +105,8 @@
          */
         clickAddChildButton: {
             value: function() {
-                browser.waitForVisible('.addChildBtn');
-                browser.element('.addChildBtn').click();
+                this.addChildButton.waitForVisible();
+                this.addChildButton.click();
                 browser.waitForVisible('.recordTrowser');
             }
         },
@@ -142,11 +155,80 @@
          */
         getChildRecordValuesFromForm : {value: function() {
             this.slideyRightyEl.waitForVisible();
-            this.viewFormTableEl.waitForVisible();
             let fieldElements = this.viewFormTableEl.elements('.viewElement');
             return fieldElements.value.map(function(element) {
                 return element.getAttribute('textContent');
             });
+        }},
+
+        /**
+         * Get a particular visible form section element in the UI.
+         * @param inDrawer - boolean value if the form you are accessing is a drawer component (as with relationships). Defaults to false.
+         * @param sectionId - section identifier in the form itself (defaults to 0)
+         * @returns A promise that will resolve to a formSection element if successful
+         */
+        getFormSectionEl : {value: function(inDrawer, sectionId) {
+            let sectionLocatorString;
+            if (!sectionId) {
+                sectionLocatorString = '.section-0';
+            } else {
+                sectionLocatorString = '.section-' + sectionId;
+            }
+
+            //TODO: Handle case with multiple drawers open (need a nested relationship setup)
+            let fullLocatorString;
+            if (inDrawer) {
+                fullLocatorString = '.drawer .formTable' + sectionLocatorString;
+            } else {
+                fullLocatorString = '.formTable' + sectionLocatorString;
+            }
+
+            // Implicit assertion
+            browser.waitForVisible(fullLocatorString);
+            return browser.element(fullLocatorString);
+        }},
+
+        /**
+         * Get field values out of the visible form section in the UI
+         * @param inDrawer - boolean value if the form you are accessing is a drawer component (as with relationships). Defaults to false.
+         * @param sectionId - section identifier in the form itself (defaults to 0)
+         * @returns A promise that will resolve to an array of field values if successful
+         */
+        getValuesFromFormSection : {value: function(formSectionEl) {
+            let fieldElements = formSectionEl.elements('.viewElement');
+
+            // Direct assertion
+            // Handle if fieldElements is null
+            if (fieldElements.value.length !== 0) {
+                return fieldElements.value.map(function(element) {
+                    return element.getAttribute('textContent');
+                });
+            } else {
+                // Logging for wdio
+                browser.logger.error('No field values found in specified form section');
+                // Send error up the stack for proper test failure
+                throw Error('No field values found in specified form section');
+            }
+        }},
+
+        /**
+         * Looks through a visible form and tries to click on a field that has been linked to a related parent record
+         * @param formSectionEl - form section element to make search more specific
+         */
+        clickOnFormFieldLinkToParent : {value: function(formSectionEl) {
+            let linkToParentLocatorString = '.textField.viewElement.textLink';
+
+            if (formSectionEl) {
+                //TODO: Handle multiple links to parent(s)
+                // Use the specific form section
+                formSectionEl.waitForVisible();
+                formSectionEl.element(linkToParentLocatorString).click();
+            } else {
+                //TODO: Handle multiple links to parent(s)
+                // Try to find something clickable on the form
+                browser.waitForVisible(linkToParentLocatorString);
+                browser.element(linkToParentLocatorString).click();
+            }
         }},
 
         /**
@@ -186,7 +268,8 @@
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
             this.tableHomePageLinkEl.click();
-        }}
+        }
+        }
     });
 
     module.exports = relationshipsPage;
