@@ -1,7 +1,9 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../src/account/users/AccountUsersReducer";
-import Analytics from "REUSE/client/src/components/analytics/analytics";
+import Analytics from "../../../reuse/client/src/components/analytics/analytics";
+import Config from '../../../client-react/src/config/app.config';
+
 
 // IMPORT FROM CLIENT REACT
 import Logger from 'APP/utils/logger';
@@ -15,70 +17,6 @@ import Logger from 'APP/utils/logger';
 
 
 export class GovernanceAnalytics extends Component {
-
-    // constructor(props) {
-    //     super(props);
-    //
-    //     // Evergage requires a global variable called _aaq
-    //     this._aaq = window._aaq || (window._aaq = []);
-    //
-    //     // logger is set here so that unit test rewire will work
-    //     this.logger = new Logger();
-    //
-    //     this.listOfEvergageUpdateFunctions = [
-    //         this.updateEvergageUser,
-    //         this.updateEvergageAdminStatus,
-    //         this.updateEvergageAccountAdminStatus,
-    //         this.updateEvergageAccountId,
-    //         this.updateEvergageSubdomainName,
-    //         this.updateEvergageTotalItems,
-    //         this.updateEvergagePaidUsers,
-    //         this.updateEvergageDeniedUsers,
-    //         this.updateEvergageTotalRealmUsers
-    //     ];
-    // }
-
-    /**
-     * Setup script copied from the Evergage documentation.
-     * Setup script available in Evergage Account -> Choose Dataset -> Settings -> Javascript
-     * This setup creates a new script tag with the Evergage bundle and inserts it before the first script tag on the page.
-     */
-    // setupEvergage = () => {
-    //     if (document.getElementById(ANALYTICS_SCRIPT_ID)) {
-    //         return this.logger.debug('Analytics script has already been loaded for this page. Will not load again.');
-    //     }
-    //
-    //     const analyticsScript = document.createElement('script');
-    //     analyticsScript.id = ANALYTICS_SCRIPT_ID;
-    //     analyticsScript.type = 'text/javascript';
-    //     analyticsScript.defer = true;
-    //     analyticsScript.async = true;
-    //     analyticsScript.src = `${document.location.protocol}//cdn.evergage.com/beacon/${EVERGAGE_ACCOUNT_NAME}/${this.props.dataset}/scripts/evergage.min.js`;
-    //     const firstScript = document.getElementsByTagName('script')[0];
-    //     firstScript.parentNode.insertBefore(analyticsScript, firstScript);
-    // };
-
-    /**
-     * Calls each of the functions that will update evergage when the props change.
-     * Remember to add new update functions to `listOfEvergageUpdateFunctions` in the constructor.
-     */
-    // updateEvergage = () => {
-    //     this.listOfEvergageUpdateFunctions.forEach(updateFunction => updateFunction());
-    // };
-
-    /**
-     * Sets the currently logged in user to be tracked by Evergage
-     */
-    // updateEvergageUser = () => {
-    //     if (this.props.currentUserId) {
-    //         this._aaq.push(['setUser', this.props.currentUserId]);
-    //         this._aaq.push(['gReqUID', this.props.currentUserId]);
-    //     }
-    //
-    //     // if (this.props.email) {
-    //     //     this._aaq.push(['gReqUserEmail', this.props.userEmail]);
-    //     // }
-    // };
 
     /**
      * Sets the administrator status of the user in Evergage
@@ -152,45 +90,7 @@ export class GovernanceAnalytics extends Component {
         }
     };
 
-    /**
-     * Tracks the current user and places the Evergage script on the page.
-     */
-    componentDidMount() {
-        try {
-            if (!this.props.dataset) {
-                return this.logger.debug('Dataset was not provided to analytics component. Analytics have not been loaded.');
-            }
-
-            if (this.props.getLoggedInUser) {
-                this.props.getLoggedInUser();
-            }
-
-            this.updateEvergage();
-            this.setupEvergage();
-        } catch (error) {
-            this.logger.error('There was a problem loading analytics. ', error);
-        }
-    }
-
-    /**
-     * Removes the analytics script when the component unmounts
-     */
-    componentWillUnmount() {
-        let analyticsScript = document.getElementById(ANALYTICS_SCRIPT_ID);
-        if (analyticsScript) {
-            analyticsScript.remove();
-        }
-    }
-
-    /**
-     * Update Everage with the changes to the props
-     */
-    componentDidUpdate() {
-        this.updateEvergage();
-    }
-
     governanceUpdateFunctions = [
-        // this.updateEvergageUser,
         this.updateEvergageAdminStatus,
         this.updateEvergageAccountAdminStatus,
         this.updateEvergageAccountId,
@@ -203,10 +103,9 @@ export class GovernanceAnalytics extends Component {
 
     // This component does not display anything.
     render() {
-
         return (
             <Analytics dataset={Config.evergageDataset}
-                       userId =
+                       // userId={null}
                        additionalUpdateFunctions={this.governanceUpdateFunctions} />
         );
     }
