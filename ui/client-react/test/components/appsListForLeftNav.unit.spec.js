@@ -4,7 +4,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import AppsList from '../../src/components/nav/appsListForLeftNav';
 import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 import {Link} from 'react-router-dom';
-import CreateNewItemButton from '../../src/components/nav/createNewItemButton';
+import CreateNewItemButton from '../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import SearchBox from '../../src/components/search/searchBox';
 
 let component;
