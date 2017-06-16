@@ -5,8 +5,6 @@ import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/con
 import Logger from "../../../../client-react/src/utils/logger";
 import LogLevel from "../../../../client-react/src/utils/logLevels";
 
-let logger = new Logger();
-
 const fetchingRequestContext = () => ({
     type: types.REQUEST_CONTEXT_FETCHING
 });
@@ -23,6 +21,7 @@ const failedRequestContext = (error) => ({
 
 const fetchRequestContext = (desiredAccountId) => {
     return (dispatch) => {
+        let logger = new Logger();
         const srv = new RequestContextService();
         const promise = srv.getRequestContext(desiredAccountId);
 
