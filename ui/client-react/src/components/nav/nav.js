@@ -458,7 +458,6 @@ export const Nav = React.createClass({
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
                 onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
-                onCreateNewApp={this.allowCreateNewApp() && this.createNewApp}
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
