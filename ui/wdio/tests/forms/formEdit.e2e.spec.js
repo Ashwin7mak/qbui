@@ -49,7 +49,6 @@
 
             //Step 2 - Get the original records count in a report
             origRecordCount = formsPO.getRecordsCountInATable();
-            console.log(origRecordCount);
 
             //Step 3 - Click on 5th record (which is NULL values record) edit pencil. Count starts from 0
             reportContentPO.clickRecordEditPencilInRecordActions(4);
@@ -61,7 +60,6 @@
             fieldTypes2.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
-            console.log("qwerty");
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
