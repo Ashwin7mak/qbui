@@ -7,7 +7,7 @@ import './createNewItemButton.scss';
  * CreateNeItemButton is located in the left nav. It is currently used to create new items such as creating a new table
  * or creating a new app.
  * */
-const CreateNewItemButton = ({handleOnClick, message, className = ""}) => (
+const CreateNewItemButton = ({handleOnClick, message, className}) => (
         <li className={`${className} newItemButton link`} key="newItem">
             <a className="newItem leftNavLink" onClick={handleOnClick}>
                 <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message={message}/></span>
@@ -21,6 +21,7 @@ const CreateNewItemButton = ({handleOnClick, message, className = ""}) => (
 CreateNewItemButton.propTypes = {
     handleOnClick: PropTypes.func.isRequired,
     message: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
 };
 
 export default CreateNewItemButton;
