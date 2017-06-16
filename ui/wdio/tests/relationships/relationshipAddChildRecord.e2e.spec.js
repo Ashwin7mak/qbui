@@ -52,21 +52,6 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
             // Go to List All report
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1);
 
-            // Edit the Numeric Field of the first record
-            reportInLineEditPO.openRecordEditMenu(0);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the second record
-            reportInLineEditPO.openRecordEditMenu(1);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
-            // Edit the Numeric Field of the second record
-            reportInLineEditPO.openRecordEditMenu(2);
-            reportInLineEditPO.editNumericField(0, 1);
-            reportInLineEditPO.clickSaveChangesButton();
-
             // Get values for text field of each record
             childRecordsTextValues.push(reportContentPO.getRecordValues(0, 1));
             childRecordsTextValues.push(reportContentPO.getRecordValues(1, 1));
@@ -79,7 +64,9 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
             reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
-            return reportContentPO.waitForLeftNavLoaded();
+            reportContentPO.waitForLeftNavLoaded();
+            //wait until view form is visible
+            return formsPagePO.viewFormContainerEl.waitForVisible();
         });
 
         /**
