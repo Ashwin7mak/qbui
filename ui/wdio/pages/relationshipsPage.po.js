@@ -13,9 +13,9 @@
     let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
     let notificationContainer = requirePO('/common/notificationContainer');
+    let reportInLineEditPO = requirePO('reportInLineEdit');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
-    const GET_ANOTHER_RECORD = 'Get another record';
 
     var relationshipsPage = Object.create(e2ePageBase, {
         // Element locators
@@ -36,6 +36,18 @@
         parentRecordLinkInDrawerEl: {
             get: function() {
                 return browser.element('.numericField.viewElement');
+            }
+        },
+        // returns the element displaying the add child button
+        addChildButton: {
+            get: function() {
+                return browser.element('.addChildBtn');
+            }
+        },
+        // returns the class for the element displaying the add child button but in a disabled state
+        addChildButtonDisabledClass: {
+            get: function() {
+                return '.addChildBtn.disabled';
             }
         },
         // Page Object functions
@@ -96,8 +108,8 @@
          */
         clickAddChildButton: {
             value: function() {
-                browser.waitForVisible('.addChildBtn');
-                browser.element('.addChildBtn').click();
+                this.addChildButton.waitForVisible();
+                this.addChildButton.click();
                 browser.waitForVisible('.recordTrowser');
             }
         },
