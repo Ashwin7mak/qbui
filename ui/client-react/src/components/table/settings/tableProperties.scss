@@ -29,12 +29,12 @@ $table-properties-panel-width: 776px;
     .tableInfoPanel {
         margin: 15px;
         max-width: $table-properties-panel-width;
-        display:flex;
+        display: flex;
         flex-grow: 1;
         flex-direction: column;
 
         .recordTitleFieldSection {
-            flex-grow:1;
+            flex-grow: 1;
         }
         .tableField {
             padding-right: 20px;
@@ -53,8 +53,8 @@ $table-properties-panel-width: 776px;
             }
             .resetButton {
                 border: none;
-                background-color: $trowser-footer-alternative-button-color;
-                color: $trowser-footer-alternative-button-text-color;
+                background-color: $secondary-background-color;
+                color: $button-lightbg-text-color;
             }
         }
     }
