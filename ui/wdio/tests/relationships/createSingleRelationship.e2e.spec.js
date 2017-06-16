@@ -65,6 +65,7 @@
             //Load the record of the parent table ie 'Table 1' and get the values of the record
             reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, RECORD_ID);
             parentTableRecordValues = browser.elements('.cellWrapper').getAttribute('textContent');
+            console.log("The record 2 of Table 1 are: "+parentTableRecordValues)
             return parentTableRecordValues;
         });
 
