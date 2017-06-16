@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as SchemaConsts from '../constants/schema';
+import Consts from '../../../common/src/constants';
 
 /**
  * The data structure of the formMeta has elements (array) of element. Element has a property, but it changes depending on the type.
@@ -20,6 +21,49 @@ export function findFormElementKey(element) {
             return (element[key].positionSameRow !== undefined);
         }
     });
+}
+
+
+/**
+ * Constant defining header element
+ * @param displayText
+ */
+const headerElement = (displayText = 'Tab1-Section1') =>({
+    FormHeaderElement: {
+        displayText: displayText,
+        type: 'HEADER'
+    }
+});
+
+/**
+ * Constant defining the childReportElement on a given form.
+ * @param relationshipId
+ */
+const childReportElement = (relationshipId = 0) => ({
+    ChildReportElement: {
+        displayOptions: [
+            "VIEW",
+            "ADD",
+            "EDIT"
+        ],
+        displayText:null,
+        reportType:"EMBED_TABLE_REPORT",
+        type: Consts.REPORT_FORM_TYPE.CHILD_REPORT,
+        orderIndex: 0,
+        positionSameRow: false,
+        relationshipId: relationshipId
+    }
+});
+
+export function createFormSectionForChildTable(section, childTableName, relationshipId) {
+    if (section) {
+        return Object.assign(_.cloneDeep(section), {
+            headerElement: headerElement(childTableName),
+            elements: {0: childReportElement(relationshipId)},
+            fields: [],
+            orderIndex: length
+        });
+    }
 }
 
 /**
