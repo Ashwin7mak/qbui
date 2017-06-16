@@ -1,9 +1,7 @@
-'use strict';
-
-var sinon = require('sinon');
-var should = require('should');
-var assert = require('assert');
-var tracing = require('../src/tracingProvider');
+const sinon = require('sinon');
+const should = require('should');
+const assert = require('assert');
+const tracing = require('../src/tracingProvider');
 
 /**
  * Unit tests for tracing provider
@@ -14,6 +12,26 @@ describe('Validate that the tracing provider', () => {
     });
 
     describe('based on environment config', () => {
+        const tracingOn = [
+            {
+                name: "returns tracing middleware when tracing is enabled by the string 'true'",
+                mockConfig: {'tracingEnabled': 'true', 'tracingHost': 'xray'}
+            },
+            {
+                name: "returns tracing middleware when tracing is enabled by the boolean true",
+                mockConfig: {'tracingEnabled': true, 'tracingHost': 'xray'}
+            },
+        ];
+
+        tracingOn.forEach(function(testCase) {
+            it(testCase.name, () => {
+                let middleware = tracing.getTracingMiddleware(testCase.mockConfig);
+
+                assert.notEqual(middleware, undefined);
+                assert.notEqual(middleware, null);
+            });
+        });
+
         it('returns a tracing client', () => {
             let tracingClient = tracing.getTracingRequestClient();
 
@@ -21,12 +39,5 @@ describe('Validate that the tracing provider', () => {
             assert.notEqual(tracingClient, null);
         });
 
-        it('returns tracing middleware', () => {
-            let mockConfig = {'tracingEnabled': 'true', 'tracingHost': 'xray'};
-            let middleware = tracing.getTracingMiddleware(mockConfig);
-
-            assert.notEqual(middleware, undefined);
-            assert.notEqual(middleware, null);
-        });
     });
 });
