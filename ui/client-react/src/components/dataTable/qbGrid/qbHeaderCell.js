@@ -8,9 +8,9 @@ import {CONTEXT} from '../../../actions/context';
 
 const headerSource = {
     beginDrag(props) {
-        let {label} = props;
+        let {label, relatedField} = props;
         props.onDragStart(label);
-        return {label};
+        return {label, relatedField};
     },
 
     isDragging(sourceProps, monitor) {

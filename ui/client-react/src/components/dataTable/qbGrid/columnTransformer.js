@@ -70,7 +70,12 @@ class ColumnTransformer {
                 label: this.headerLabel,
                 onMove,
                 onDragStart,
-                onDragEnd
+                onDragEnd,
+                relatedField: {
+                    name: this.headerLabel,
+                    datatypeAttributes: this.fieldDef && this.fieldDef.datatypeAttributes
+                }
+
             }
         };
 
