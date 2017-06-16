@@ -102,6 +102,9 @@
             });
 
             tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
+
+            //Go back to apps page link
+            tableCreatePO.clickBackToAppsLink();
         });
 
         it('Verify Reset functionality in edit table mode', function() {
