@@ -37,7 +37,7 @@ const initialProps = {
     clearSelectedApp: () => {},
     selectTable: (appId, tblId) => {},
     clearSelectedTable: () => {},
-    loadApp: (appId) => {},
+    loadApp: (appId) => {return { then: () => {}}},
     loadApps: () => {},
     getFeatureSwitchStates: () => {}
 };

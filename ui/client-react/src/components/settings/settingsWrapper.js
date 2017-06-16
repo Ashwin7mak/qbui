@@ -66,7 +66,9 @@ export const SettingsWrapper = React.createClass({
 
             this.props.getFeatureSwitchStates(paramVals.appId);
 
-            if (!paramVals.tblId) {
+            if (paramVals.tblId) {
+                this.props.selectTable(paramVals.appId, paramVals.tblId);
+            } else {
                 /*eslint no-lonely-if:0 */
                 if (this.props.selectedTableId !== null) {
                     this.props.clearSelectedTable();
