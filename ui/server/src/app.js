@@ -20,8 +20,9 @@
     var log = require('./logger').getLogger();
 
     // Configure tracing client
+    const tracingEnabled = require('./utility/configUtils').parseBooleanConfigValue(config.tracingEnabled);
     let trace;
-    if (config.tracingEnabled === "true") {
+    if (tracingEnabled) {
         trace = require('./tracingProvider').getTracingMiddleware(config);
         log.info("Tracing middleware enabled");
     }
@@ -100,7 +101,7 @@
      * Open the tracing segment. * Only enable if the tracing filter is available.
      * This should always be defined as the last middleware before the routing declaration.
      */
-    if (config.tracingEnabled === "true") {
+    if (tracingEnabled) {
         app.use(trace.express.openSegment('UI'));
     }
 
@@ -110,7 +111,7 @@
      * Close the tracing segment. Only enable if the tracing filter is available.
      * This should always be defined as the first middleware after the routing declaration.
      */
-    if (config.tracingEnabled === "true") {
+    if (tracingEnabled) {
         app.use(trace.express.closeSegment());
     }
 
