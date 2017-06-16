@@ -15,6 +15,7 @@ import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
 import {removeFieldFromForm} from '../../actions/formActions';
+import * as SchemaConsts from "../../constants/schema";
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -162,7 +163,13 @@ export const QBForm = React.createClass({
                 if (parentFid && +parentFid === fieldId &&
                     detailTableId && detailTableId === field.tableId) {
                     fieldRecord = {};
-                    fieldRecord.value = _.get(queryParams, 'detailKeyValue', null);
+                    let value =  _.get(queryParams, 'detailKeyValue', null);
+                    let isTypeNumeric = SchemaConsts.isNumericType(field.datatypeAttributes.type);
+                    //params from url are strings so +value converts to a numeric
+                    if (value !== null && isTypeNumeric) {
+                        value = +value;
+                    }
+                    fieldRecord.value = value;
                     fieldRecord.display = _.get(queryParams, 'detailKeyDisplay', null);
                     return fieldRecord;
                 } else if (field.defaultValue && field.defaultValue.coercedValue) {
