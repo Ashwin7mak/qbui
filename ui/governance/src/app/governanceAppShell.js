@@ -10,7 +10,6 @@ import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRo
 import GovernanceAnalytics from "../analytics/governanceAnalytics";
 import Config from '../../../client-react/src/config/app.config';
 
-
 import "./governanceAppShell.scss";
 
 export class GovernanceAppShell extends Component {
