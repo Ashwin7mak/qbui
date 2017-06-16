@@ -8,9 +8,7 @@ const users = (state = [], action) => {
     switch (action.type) {
     case types.GET_USERS_SUCCESS:
         // update the state with the new users sent through action
-        let startTime = window.performance.mark('time to load grid');
         return [...action.users];
-        let endTime = window.performance.mark('end of load grid');
     default:
         // return existing state by default in redux
         return state;
