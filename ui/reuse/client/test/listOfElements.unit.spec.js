@@ -70,7 +70,7 @@ describe('ListOfElements', () => {
     });
 
     it('displays an un-grouped element', () => {
-        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
+        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const unGroupedElement = component.find('.listOfElementsMainList > .listOfElementsItem');
 
@@ -79,7 +79,7 @@ describe('ListOfElements', () => {
     });
 
     it('displays grouped child elements', () => {
-        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
+        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const groupedElements = component.find('.listOfElementsItemList .listOfElementsItem');
 
@@ -91,7 +91,7 @@ describe('ListOfElements', () => {
 
     describe('filtering elements', () => {
         it('filters elements based on the filter text', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
 
             component.setState({activeFieldFilter: 'elementa'});
 
@@ -101,14 +101,15 @@ describe('ListOfElements', () => {
         });
 
         it('will animate children if animateChildren is set to true', () => {
-            component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock} elements={testElements} />);
+            component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock}
+                                              elements={testElements}/>);
 
             expect(component.find('.listOfElementsItemList').length).toEqual(0);
             expect(component.find('.animatedListOfElementsItemList').length).toEqual(2);
         });
 
         it('shows a message if no fields match the filter text', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
 
             component.setState({activeFieldFilter: 'zzz'});
 
@@ -116,27 +117,39 @@ describe('ListOfElements', () => {
             expect(component.find('.listOfElementsItem')).not.toBePresent();
         });
 
-        it('returns empty message when elements are not defined', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} emptyMessage= "MockemptyMessage" />);
+        describe('Empty state Message', () => {
+            it('returns empty message when elements are not defined', () => {
+                component = mount(<ListOfElements renderer={FieldTokenInMenuMock}/>);
 
-            expect(component.find('.listOfElementsItem').length).toEqual(0);
-            expect(component.find('.emptyStateMessage')).toBePresent();
-            expect(component.find('.emptyStateMessage').text()).toEqual("MockemptyMessage");
-        });
+                expect(component.find('.listOfElementsItem').length).toEqual(0);
+                expect(component.find('.emptyStateMessage')).toBePresent();
+                expect(component.find('.emptyStateMessage').text()).toEqual("");
+            });
 
-        it('returns empty message when elements are not present', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={[]} emptyMessage= "MockemptyMessage" />);
+            it('returns empty message when elements are not defined', () => {
+                component = mount(<ListOfElements renderer={FieldTokenInMenuMock} emptyMessage="MockemptyMessage"/>);
 
-            expect(component.find('.listOfElementsItem').length).toEqual(0);
-            expect(component.find('.emptyStateMessage')).toBePresent();
-            expect(component.find('.emptyStateMessage').text()).toEqual("MockemptyMessage");
-        });
+                expect(component.find('.listOfElementsItem').length).toEqual(0);
+                expect(component.find('.emptyStateMessage')).toBePresent();
+                expect(component.find('.emptyStateMessage').text()).toEqual("MockemptyMessage");
+            });
 
-        it('doesn\'t return empty message when elements are present', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
+            it('returns empty message when elements are not present', () => {
+                component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={[]}
+                                                  emptyMessage="MockemptyMessage"/>);
 
-            expect(component.find('.listOfElementsItem').length).toEqual(4);
-            expect(component.find('.emptyStateMessage')).not.toBePresent();
+                expect(component.find('.listOfElementsItem').length).toEqual(0);
+                expect(component.find('.emptyStateMessage')).toBePresent();
+                expect(component.find('.emptyStateMessage').text()).toEqual("MockemptyMessage");
+            });
+
+            it('doesn\'t return empty message when elements are present', () => {
+                component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}
+                                                  emptyMessage="MockemptyMessage"/>);
+
+                expect(component.find('.listOfElementsItem').length).toEqual(4);
+                expect(component.find('.emptyStateMessage')).not.toBePresent();
+            });
         });
     });
 });
