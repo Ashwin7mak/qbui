@@ -41,7 +41,6 @@
          */
         beforeEach(function() {
             //load the users page
-            //load the users page
             return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });
 
@@ -58,14 +57,18 @@
          */
         it('Should expand and collapse the user page stage', function() {
             // Click on user Stage button to expand the stage
-            UsersTablePage.userStageBtn.click();
+            UsersTablePage.clickUserStage();
             // Wait for the Stage area content to display
             UsersTablePage.userStageContent.waitForVisible();
+            //wait for container to slide
             browser.pause(e2eConsts.shortWaitTimeMs);
+
             // Verify the app owner name is linked
             expect(browser.isEnabled('.appOwnerName')).toBe(true);
+
             // Click on the user Stage button to collapse the stage
-            UsersTablePage.userStageBtn.click();
+            UsersTablePage.clickUserStage();
+            //wait for container to slide
             browser.pause(e2eConsts.shortWaitTimeMs);
             expect(UsersTablePage.userStageArea.getAttribute('clientHeight')).toMatch('0');
             expect(UsersTablePage.userStageArea.getAttribute('clientWidth')).toMatch('0');

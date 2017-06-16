@@ -105,6 +105,8 @@
             //select App
             RequestAppsPage.selectApp(testApp.name);
 
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+
             //Verify if the left nav search element is visible and clickable
             leftNavPO.clickLeftNavSearch();
 
@@ -127,7 +129,7 @@
             expect(leftNavPO.leftNavSearchInputBox.getText()).toBe('');
 
             //Verify it returned all tables after clearing search
-            expect(browser.elements('.leftNav .tablesList .leftNavLabel').value.length).toBe(5);
+            expect(tableCreatePO.getAllTableLeftNavLinksList.value.length).toBe(originalTableLinksCount);
 
             //Verify if the left nav search element is clickable
             leftNavPO.clickLeftNavSearch();
