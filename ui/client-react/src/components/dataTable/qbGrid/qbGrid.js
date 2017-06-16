@@ -491,4 +491,4 @@ const mapDispatchToProps = {
     draggingColumnEnd
 };
 
-export default connect(null, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));
+export default connect(null, mapDispatchToProps)(QbGrid);

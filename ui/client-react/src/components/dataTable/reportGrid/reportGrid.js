@@ -1,4 +1,6 @@
 import React, {PropTypes} from 'react';
+import {DragDropContext} from 'react-dnd';
+import TouchBackend from 'react-dnd-touch-backend';
 import QbGrid from '../qbGrid/qbGrid';
 import ReportColumnTransformer from './reportColumnTransformer';
 import ReportRowTransformer from './reportRowTransformer';
@@ -366,6 +368,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(
-    mapStateToProps
-)(ReportGrid);
+export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(connect(mapStateToProps)(ReportGrid));
