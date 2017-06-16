@@ -1,7 +1,7 @@
 import * as types from '../actions/types';
 
 /**
- * Construct apps store redux store payload
+ * Construct appBuilder store redux store payload
  *
  * @param type - event type
  * @param content - optional content related to event type
