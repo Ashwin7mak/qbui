@@ -28,7 +28,7 @@ class AutomationListTransformer  {
     }
 
     static transformAutomationListRowsForGrid(automations = []) {
-        if(!automations || !Array.isArray(automations)) {
+        if (!automations || !Array.isArray(automations)) {
             return [];
         }
         let rowNumber = 1;

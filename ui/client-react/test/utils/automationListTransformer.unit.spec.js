@@ -48,5 +48,4 @@ describe('AutomationListTransformer', () => {
         expect(qbGridRows[0]['2'].display).toEqual(expected['2'].display);
         expect(qbGridRows[0]['3'].display).toEqual(expected['3'].display);
     });
-
 });

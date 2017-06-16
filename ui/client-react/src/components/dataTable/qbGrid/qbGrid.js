@@ -141,8 +141,6 @@ export const QbGrid = React.createClass({
         //
         rowActionsRenderer: PropTypes.func,
 
-        phase1: PropTypes.bool,
-
         /**
          * Not all Grids require multiselect, this option will hide the checkboxes if set to false */
         disableMultiSelect: PropTypes.bool
@@ -187,7 +185,7 @@ export const QbGrid = React.createClass({
      * @returns {XML}
      */
     getActionsCell(_cellDataRow, rowProps) {
-        if(this.props.rowActionsRenderer) {
+        if (this.props.rowActionsRenderer) {
             return <AutomationRowActions
                 rowId={rowProps.rowData.id}
                 onClickEditRowIcon={this.props.onClickEditIcon}
@@ -212,7 +210,6 @@ export const QbGrid = React.createClass({
                 onClickSaveRow={this.props.onClickSaveRow}
                 onClickToggleSelectedRow={this.onClickToggleSelectedRow}
                 onClickTestRowIcon={this.props.onClickTestRowIcon}
-                rowActionsRenderer={this.props.rowActionsRenderer}
             />;
         }
     },

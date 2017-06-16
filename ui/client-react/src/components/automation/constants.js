@@ -6,4 +6,4 @@ export default {
         ACTIVE      : 'active',
         ID          : 'id'
     }
-}
+};

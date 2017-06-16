@@ -197,11 +197,10 @@ describe('QbGrid', () => {
 
     describe('getCheckboxHeader', () => {
         it('has a checked checkbox when all rows are selected', () => {
-            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={rowIds} areAllRowsSelected={true} />);
+            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={rowIds} disableMultiSelect={true} areAllRowsSelected={true} showRowActionsColumn={true}/>);
             instance = component.instance();
 
             let headerComponent = instance.getCheckboxHeader();
-
             expect(shallow(headerComponent).find('input')).toBeChecked();
         });
 

@@ -17,11 +17,6 @@ import AutomationRowActions from '../../dataTable/qbGrid/automationRowActions';
 import "./automationList.scss";
 import {CONTEXT} from "../../../actions/context";
 import AutomationListTransformer from '../../../utils/automationListTransformer';
-import constants from '../constants'
-
-const CellRenderer = (props) => {<div className="customCell">{props.text}</div>;};
-const cellFormatter = (cellData) => {React.createElement(CellRenderer, cellData);};
-
 
 export class AutomationListRoute extends Component {
 

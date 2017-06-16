@@ -91,9 +91,8 @@ describe('AutomationListRoute', () => {
                         {...propsWithAutos}
                     />
                 </Provider>
-            )
+            );
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
         });
     });
 });
