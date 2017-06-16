@@ -3,6 +3,7 @@ import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
 import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
+import {removeFieldFromForm} from '../../actions/formActions';
 import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
@@ -42,11 +43,13 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         };
     },
 
-    /**
+     /**
      * parent table selected
      * @param tableId
+     * @param parentTableField
+     * @param childTableName
      */
-    relationshipSelected(tableId, parentTableField) {
+    relationshipSelected(tableId, parentTableField, childTableName) {
 
         this.props.hideRelationshipDialog();
 
@@ -58,6 +61,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         field.parentTableId = tableId;
         field.parentFieldId = parentTableField.id;
         field.parentFieldType = parentTableField.datatypeAttributes.type;
+        field.parentTableName = parentTable.name;
+        field.childTableName = childTableName;
 
         field.name = Locale.getMessage('fieldsDefaultLabels.LINK_TO_RECORD_FROM', {parentTable: parentTable.name});
 

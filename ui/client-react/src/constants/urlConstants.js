@@ -56,5 +56,6 @@ export const DRAWER = Object.assign(drawer, {
 
 export const AUTOMATION = Object.freeze({
     PATH : 'automation',
-    VIEW : 'view'
+    VIEW : 'view',
+    EDIT : 'edit'
 });
