@@ -31,7 +31,6 @@ export const getLoggedInUserAdminStatus = state => (state.user ? state.user.admi
 
 export const getLoggedInUserLoaded = state => (state.user && state.user.id ? true : false);
 
-//gotta trim it up bro!
 export const getLoggedInUserDropDownText = (state) => {
     if (state.user && state.user.firstName) {
         return state.user.firstName;

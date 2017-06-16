@@ -61,7 +61,7 @@ class UserDropDown extends Component {
         return (
             <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink" dropup={this.props.shouldOpenMenusUp}>
                 <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
-                    <Icon icon={dropDownIcon}/>
+                    <Icon className="userDropDownIcon" icon={dropDownIcon}/>
                     <span className="navLabel">{this.props.loggedInUserDisplay}</span>
                 </a>
 

@@ -9,7 +9,28 @@
 }
 
 .userDropDown {
+
+    .navLabel {
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
+        text-overflow: ellipsis;
+        max-width: 40ch;
+    }
+
+    .userDropDownIcon {
+        margin-bottom: 33px;
+    }
+
     @include small-breakpoint {
+        .navLabel {
+            max-width: 20ch;
+        }
+
+        .userDropDownIcon {
+            margin-bottom: 0px;
+        }
+
         .dropdown-menu {
 
             margin-bottom: 0px;
