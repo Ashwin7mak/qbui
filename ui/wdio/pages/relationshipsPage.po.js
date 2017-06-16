@@ -282,7 +282,7 @@
             formBuilderPO.open();
 
             //Click on add a new record button
-            formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+            formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
 
             //Select table from table list of add a record dialog
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
@@ -300,7 +300,7 @@
             modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
 
             //Verify the get another record got added to the form builder
-            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(GET_ANOTHER_RECORD + ' from ' + parentTable);
+            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable);
 
             //Save the form builder
             formBuilderPO.save();
