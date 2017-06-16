@@ -335,13 +335,13 @@ describe('Nav Unit tests', () => {
             expect(props.showTableReadyDialog).toHaveBeenCalled();
         });
 
-        it('invokes showTableCreationDialog when createNewTable is called', (done) => {
+        it('invokes showTableCreationDialog when createNewTable is called', () => {
             spyOn(props, 'showTableCreationDialog');
 
             let component = shallow(<Nav {...props} />);
             let instance = component.instance();
             instance.createNewTable();
-            done();
+
             expect(props.showTableCreationDialog).toHaveBeenCalled();
         });
     });

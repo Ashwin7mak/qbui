@@ -80,9 +80,7 @@ export const AppsList = React.createClass({
      */
     createNewApp() {
         if (this.allowCreateNewApp()) {
-            setTimeout(() => {
-                this.props.showAppCreationDialog();
-            });
+            this.props.showAppCreationDialog();
         }
     },
 
