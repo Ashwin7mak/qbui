@@ -76,13 +76,11 @@ describe('FieldEditingTools', () => {
             relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
             fieldId={relatedField.id}
-            table={{recordTitleFieldId: relatedField.id}}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
 
         expect(deleteButton).toBePresent();
-        expect(deleteButton).toBeDisabled();
     });
 
     it('does not have a a delete button if there is only one field on the form', () => {
