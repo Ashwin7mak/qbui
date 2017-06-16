@@ -326,15 +326,18 @@
          */
         selectFromList : {value: function(listOption) {
             browser.waitForVisible('.Select-menu-outer');
+            //Need this to stabilize
+            browser.pause(e2eConsts.shortWaitTimeMs);
             //get all options from the list
             browser.waitForVisible('.Select-option');
-            var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.element('div div').getText().includes(listOption);
+            var option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
+                return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
             if (option !== []) {
                 //Click on filtered option
-                option[0].element('div div').click();
+                option[0].waitForVisible();
+                option[0].click();
                 //wait until loading screen disappear
                 return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
             } else {

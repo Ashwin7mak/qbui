@@ -20,7 +20,7 @@
         },
         settingsBtn: {
             get: function() {
-                return browser.element('.topNav .builder');
+                return browser.element('.topNav .iconUISturdy-settings');
             }
         },
         // Feedback button topNav
