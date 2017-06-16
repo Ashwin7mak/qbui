@@ -23,7 +23,6 @@ let LeftNav = React.createClass({
         onSelect:React.PropTypes.func,
         onSelectReports:React.PropTypes.func,
         onCreateNewTable:React.PropTypes.func,
-        onCreateNewApp:React.PropTypes.func,
         globalActions:React.PropTypes.element
     },
 
