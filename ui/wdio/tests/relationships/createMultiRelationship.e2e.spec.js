@@ -128,7 +128,7 @@
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
 
-            it('Verify able to create relationship even tough single relationship exists to 1 of the parent table', function() {
+            it('Verify create relationship button is visible even tough single relationship exists to 1 of the parent table', function() {
                 //Select settings -> modify this form
                 formBuilderPO.open();
 
@@ -141,7 +141,7 @@
 
             });
 
-            it('App has 2 parent tables and 1 child table - Create multi relationship)', function() {
+            it('App with only 3 tables - Create multi relationship)', function() {
                 //create relationship between parent and child table.
                 //NOTE: I am not selecting any field here because 'titleField' should be selected as default
                 relationshipsPO.createRelationshipToParentTable(parentTable, '');
