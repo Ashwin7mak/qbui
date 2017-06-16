@@ -201,7 +201,6 @@ describe('QbGrid', () => {
             instance = component.instance();
 
             let headerComponent = instance.getCheckboxHeader();
-            console.log('')
             expect(shallow(headerComponent).find('input')).toBeChecked();
         });
 
