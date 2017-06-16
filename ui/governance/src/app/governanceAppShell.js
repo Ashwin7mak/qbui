@@ -7,10 +7,9 @@ import TopNav from "../../../reuse/client/src/components/topNav/topNav";
 import LeftNav from "../common/leftNav/GovernanceLeftNav";
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
-import Analytics from "../../../reuse/client/src/components/analytics/analytics";
-import Config from "../../../client-react/src/config/app.config";
-import _ from 'lodash';
-import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../src/account/users/AccountUsersReducer";
+import GovernanceAnalytics from "../analytics/governanceAnalytics";
+import Config from '../../../client-react/src/config/app.config';
+
 
 import "./governanceAppShell.scss";
 
@@ -18,8 +17,7 @@ export class GovernanceAppShell extends Component {
     render() {
         return (
             <AppShell functionalAreaName="governance">
-                <Analytics dataset={Config.evergageDataset} userId={this.props.currentUserId}/>
-
+                <GovernanceAnalytics dataset={Config.evergageDataset} />
                 <LeftNav
                     isNavCollapsed={this.props.isNavCollapsed}
                     isNavOpen={this.props.isNavOpen}
@@ -53,21 +51,9 @@ GovernanceAppShell.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    let requestContextStateAccount = state.RequestContext.account;
-    let requestContextStateCurrentUser = state.RequestContext.currentUser;
     return {
         isNavOpen: state.Nav.isNavOpen,
         isNavCollapsed: state.Nav.isNavCollapsed,
-        accountId: requestContextStateAccount.id,
-        subdomainName: state.RequestContext.realm.name,
-        currentUserId: requestContextStateCurrentUser.id,
-        isAdmin: requestContextStateCurrentUser.isAccountAdmin,
-        isRealmAdmin: requestContextStateCurrentUser.isRealmAdmin,
-        totalItems: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0),
-        paidUsers: getTotalPaidUsers(state),
-        deniedUsers: getTotalDeniedUsers(state),
-        deactivatedUsers: getTotalDeactivatedUsers(state),
-        totalRealmUsers: getTotalRealmUsers(state)
     };
 };
 
