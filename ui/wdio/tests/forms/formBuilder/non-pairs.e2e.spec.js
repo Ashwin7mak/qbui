@@ -94,7 +94,7 @@
             });
 
             // one-offs
-/*
+
             it('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
                 let newField = formBuilderPO.fieldTokenTitle.getText();
                 // verify (hope) that the 2nd field (where new field will be inserted) doesn't already match new field label
@@ -190,7 +190,6 @@
                 }, true);
                 expect(lastField.isVisibleWithinViewport()).toBe(false);
                 // move cursor to first field & press MB1
-                //            firstField.click(); // shouldn't be necessary... but edge tends to hang here
                 browser.moveToObject(firstFieldLocator);
                 browser.buttonDown();
                 // drag DOWN down until autoscroll begins
@@ -302,14 +301,23 @@
                     ['Get another record']]
                 );
             });
-*/
-            it('verify various aspects of the left nav panel after collapse & expand', function() {
+
+            it('add a new field from the collapsed NEW FIELDS panel', function() {
                 // verify that there are initially no collapsed field tokens
                 formBuilderPO.fieldTokenCollapsed.waitForExist(null, true);
+                // verify that (hopefully) the last existing field on the form
+                // doesn't have the same name as the first item in the NEW FIELDS list
+                let fields = formBuilderPO.getFieldLabels();
+                let newField = formBuilderPO.listOfElementsItem.getText();
+                expect(fields[fields.length - 1]).not.toBe(newField);
+                // set the expected result after adding new field
+                fields.push(newField);
                 // click on hamburger to collapse field panel
                 topNavPO.topNavToggleHamburgerEl.click();
-                // verify that at least one collapsed field token exists
-                formBuilderPO.fieldTokenCollapsed.waitForExist();
+                // click on a collapsed new field token to add a new field
+                formBuilderPO.fieldTokenCollapsed.click();
+                // verify that the new field appears at the end of the revised fields list
+                expect(formBuilderPO.getFieldLabels()).toEqual(fields);
             });
         }
     });
