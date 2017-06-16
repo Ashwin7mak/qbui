@@ -19,6 +19,8 @@ export const SHOW_APP_CREATION_DIALOG = 'SHOW_APP_CREATION_DIALOG';
 export const CLEAR_SELECTED_APP = 'CLEAR_SELECTED_APP';
 export const CLEAR_SELECTED_APP_TABLE = 'CLEAR_SELECTED_APP_TABLE';
 export const SELECT_APP_TABLE = 'SELECT_APP_TABLE';
+
+//  **** App Builder actions ****
 export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
 //  ******** App Role actions ********
