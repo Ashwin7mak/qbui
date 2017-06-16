@@ -14,7 +14,7 @@
 
     let tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.tablesList newTable .newItemButton .newItem');}},
+        newTableBtn : {get: function() {return browser.element('.tablesList .newTable .newItemButton .newItem');}},
         //New table Icon
         newTableIconBtn : {get: function() {return browser.element('.newTable .newItemButton .newItem .iconUISturdy-add-new-stroke');}},
 
