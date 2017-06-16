@@ -372,7 +372,7 @@
          * @param parentTable table to select
          */
         verifyTablesAndFieldsFromCreateRelationshipDialog: {
-            value: function(expectedTablesList, selectParentTable, selectField) {
+            value: function(expectedTablesList, selectParentTable, selectField, verifyDefaultField) {
                 expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
                 //Verify title
                 expect(modalDialog.modalDialogTitle).toContain('Get another record');
@@ -392,12 +392,14 @@
 
                     //Select field to link to parent table (This will be either titleField or recordId)
                     modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
-                } else {
+                }
+                if (verifyDefaultField !== '') {
                     //Click on advanced settings of add a record dialog
                     modalDialog.clickModalDialogAdvancedSettingsToggle();
 
                     //Verify the default field selected
-                    expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(selectField);
+                    modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').waitForVisible();
+                    expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(verifyDefaultField);
                 }
             }}
 

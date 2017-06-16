@@ -16,10 +16,14 @@
     let parentTable;
     let newFieldsOnForm;
     const SELECT_RECORD_ID_AS_FIELD = 'Record ID#';
+    const RECORD_TITLE = 'Record title';
+    const RECORD_ID = 'Record ID#';
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
     const PARENT_TABLE2 = 'Table 2';
+    let randomTable_1RecordId = rawValueGenerator.generateInt(1, 10);
+    let randomTable_2RecordId = rawValueGenerator.generateInt(1, 10);
 
     describe('Relationships - Verify create relationship dialog Tests :', function() {
         let realmName;
@@ -32,18 +36,31 @@
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
-            // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
+            var generatedApp = e2eBase.appService.generateAppFromMap(e2eConsts.basicTableMap());
+            // Create the app via the API
+            return e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
-                //Delete API created 'Parent Table A' table
-                return e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE3].id);
+                //Add records into table 1
+                return e2eBase.recordService.addRecordsToTable(testApp, 0, 10, true, true);
             }).then(function() {
-                //Delete API created 'Child Table A' table
-                return e2eBase.tableService.deleteTable(testApp.id, testApp.tables[e2eConsts.TABLE4].id);
+                //Add records into table 2
+                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10, true, true);
+            }).then(function() {
+                //Create a form for each table
+                return e2eBase.formService.createDefaultForms(testApp);
+            }).then(function() {
+                // Create a Table 1 report
+                return e2eBase.reportService.createCustomReport(testApp.id, testApp.tables[0].id, 'Table 1 Report', null, null, null, null);
+            }).then(function() {
+                // Create a Table 2 report
+                return e2eBase.reportService.createCustomReport(testApp.id, testApp.tables[1].id, 'Table 2 Report', null, null, null, null);
+            }).then(function() {
+                // Generate and add the default set of Users to the app
+                return e2eBase.userService.addDefaultUserListToApp(testApp.id);
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
@@ -110,7 +127,7 @@
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
         });
 
-//mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
+       //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults. )', function() {
                 let expectedTableList1 = ['Table 2', parentTable];
@@ -123,7 +140,7 @@
                 formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
 
                 //Verify 'RECORD TITLE' is selected as default and select parent table PARENT_TABLE
-                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, parentTable, '');
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, parentTable, '', RECORD_TITLE);
 
                 //Cancel the create relationship dialog
                 modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
@@ -133,7 +150,7 @@
                 formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
 
                 //select parent table PARENT_TABLE and Change the default 'RECORD TITLE' to 'RECORD ID'
-                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, parentTable, SELECT_RECORD_ID_AS_FIELD);
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList1, parentTable, SELECT_RECORD_ID_AS_FIELD, '');
 
                 //Add to form now
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
@@ -145,7 +162,7 @@
                 formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
 
                 //Verify 'RECORD ID#' is selected as default and select parent table Table 2
-                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '');
+                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '', RECORD_ID);
 
                 //Add to form now
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
@@ -158,18 +175,23 @@
                 expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) === -1).toBe(true);
 
                 //Remove a field
-                let fieldsOnForm = formBuilderPO.getFieldLabels().value.length;
-                formBuilderPO.removeField(fieldsOnForm - 1);
+                let fieldsOnForm = formBuilderPO.getFieldLabels();
+                formBuilderPO.removeField(fieldsOnForm.length);
 
                 //Verify add another record button becomes available since relationship got deleted
                 newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) === -1).toBe(true);
+                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) > -1).toBe(true);
 
-                //add back the relationship and save
-                relationshipsPO.verifyTablesAndFieldsFromCreateRelationshipDialog(expectedTableList2, PARENT_TABLE2, '');
+                //add back the relationship which we removed and save
+                formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
+                //Select table from table list of add a record dialog
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, PARENT_TABLE2);
 
                 //Add to form now
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+
+                //Verify the get another record got added back to the form builder
+                expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE2);
 
                 //Save form
                 //Save the form builder
