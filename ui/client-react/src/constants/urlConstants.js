@@ -12,6 +12,7 @@ export const NEW_RECORD_VALUE = 'new';
 export const SUPPORT_LINK_PATH = '/qb/support/NewCase?subject=MercuryBeta';
 export const FEEDBACK_LINK_PATH = 'quickbase.uservoice.com/forums/378045-mercury';
 export const HELP_LINK_PATH = `quickbase.com/mercury/help`;
+export const GOVERNANCE_HELP_LINK_PATH = `quickbase.com/mercury/accountusermgt`;
 export const WALKME_ID_FOR_LARGE = 228348;
 export const WALKME_ID_FOR_SMALL_AND_MEDIUM = 272137;
 export const EMBEDDED_REPORT = 'embeddedReport';
