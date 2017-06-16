@@ -119,8 +119,7 @@ class ListOfElements extends Component {
                 if (element.children) {
                     return (
                         <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
-                            {this.props.hideTitle ? null :
-                                <h6 className="listOfElementsItemHeader">{element.title}</h6>}
+                            {!this.props.hideTitle && <h6 className="listOfElementsItemHeader">{element.title}</h6>}
                             {this.props.animateChildren ?
                                 <FlipMove typeName="ul" className="animatedListOfElementsItemList">
                                     {this.renderElements(element.children)}
@@ -136,10 +135,8 @@ class ListOfElements extends Component {
             });
         } else {
             return (
-                <li key="emptyStateMessage">
-                    <p className="emptyStateMessage">
-                        {this.props.emptyMessage}
-                    </p>
+                <li key="emptyStateMessage" className="emptyStateMessage">
+                    {this.props.emptyMessage}
                 </li>
             );
         }
