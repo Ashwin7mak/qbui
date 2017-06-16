@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 import Logger from '../utils/logger';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
+import {NEW_FIELD_PREFIX} from '../constants/schema';
 
 //  Return the table fields object for the given appId and tableId
 export const tableFieldsObj = (state, appId, tblId) => {
@@ -27,21 +28,6 @@ export const getField = (state, id, appId, tblId) => {
 export const getFields = (state, appId, tblId) => {
     const fieldsList = _.find(state.fields, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
     return fieldsList ? fieldsList.fields : [];
-};
-
-/**
- * Determines if a particular field can be deleted from a form
- * TODO:: Remove app argument and instead access current app from state once apps store is refactored to redux.
- * @param state
- * @param app
- * @param tblId
- * @param fieldId
- * @returns {null|*|number|boolean}
- */
-export const isFieldDeletable = (state, app, tblId, fieldId) => {
-    const currentTable = app ? _.find(app.tables, {id: tblId}) : null;
-
-    return !currentTable || !currentTable.recordTitleFieldId || currentTable.recordTitleFieldId !== fieldId;
 };
 
 const fieldsStore = (state = [], action) => {
@@ -188,7 +174,15 @@ const fieldsStore = (state = [], action) => {
 
         return newState;
     }
-
+    case types.REMOVE_FIELD : {
+        // remove a field from the list only if this is not a saved field on the table schema
+        if (action.field && action.field.id && action.field.id.toString().indexOf(NEW_FIELD_PREFIX) !== -1) {
+            let fieldList = _.find(state, {appId: action.appId, tblId: action.tblId});
+            let fields = _.filter(fieldList.fields, field => field.id !== action.field.id);
+            return [...newState, {...fieldList, fields}];
+        }
+        return state;
+    }
     default:
         return state;
     }

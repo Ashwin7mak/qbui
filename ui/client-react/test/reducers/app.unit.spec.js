@@ -384,3 +384,27 @@ describe('Test app reducer - add/remove users from app', () => {
         expect(AppReducer.getAppUnfilteredUsers(usersRemovedState)).toEqual(unfilteredRemoved);
     });
 });
+
+describe('Test app reducer - get app table tests', () => {
+    const appTests = [
+        {'name': 'no app available', appId: null, tableId: null, table: null},
+        {'name': 'no table found', appData: {users: [], app: {id: '1'}}, appId: '1', tableId: '1', table: null},
+        {'name': 'find the app table', appData: {users: [], app: {
+            id: '1',
+            tables: [{
+                id: '2',
+                tableData: 'some old table data'
+            }]
+        }}, appId: '1', tableId: '2', table: {
+            id: '2',
+            tableData: 'some old table data',
+            tableIcon: 'Spreadsheet'
+        }}
+    ];
+    appTests.forEach(testCase => {
+        it(testCase.name, () => {
+            const state = reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: testCase.appData});
+            expect(AppReducer.getTable(state, testCase.appId, testCase.tableId)).toEqual(testCase.table);
+        });
+    });
+});

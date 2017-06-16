@@ -98,6 +98,45 @@ export const loadAutomation = (appId, automationId) => {
     };
 };
 
+/**
+ * Save an automation.
+ *
+ * @param appId - app id
+ * @param automationId - automation id
+ * @param automation - the automation to save
+ */
+export const saveAutomation = (appId, automationId, automation) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && automationId) {
+                logger.debug(`AutomationsAction.saveAutomation: saving automation for appId: ${appId} and automationId: ${automationId}`);
+
+                dispatch(event(null, types.SAVE_AUTOMATION, {appId: appId, automationId: automationId, automation: automation}));
+
+                let automationService = new AutomationService();
+                automationService.saveAutomation(appId, automationId, automation)
+                    .then((response) => {
+                        logger.debug('AutomationService saveAutomation success');
+                        NotificationManager.success(Locale.getMessage('automation.saveAutomation.success'), Locale.getMessage('success'));
+                        dispatch(event(null, types.SAVE_AUTOMATION_SUCCESS, response.data));
+                        resolve();
+                    })
+                    .catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'automationService.saveAutomation:');
+                        NotificationManager.error(Locale.getMessage('automation.saveAutomation.error'), Locale.getMessage('failed'));
+                        dispatch(event(null, types.SAVE_AUTOMATION_FAILED, error));
+                        reject();
+                    });
+            } else {
+                logger.error(`automationService.saveAutomation: Missing required input parameters.  appId: ${appId}, automationId: ${automationId}`);
+                NotificationManager.error(Locale.getMessage('automation.saveAutomation.error'), Locale.getMessage('failed'));
+                dispatch(event(null, types.SAVE_AUTOMATION_FAILED, 500));
+                reject();
+            }
+        });
+    };
+};
+
 export const testAutomation = (automationName, appId) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -108,13 +147,13 @@ export const testAutomation = (automationName, appId) => {
                 automationService.invokeAutomation(appId, automationName, null)
                     .then((response) => {
                         logger.debug('AutomationService testAutomationSuccess');
-                        NotificationManager.info(Locale.getMessage('automation.testautomation.success'), Locale.getMessage('success'));
+                        NotificationManager.info(Locale.getMessage('automation.testAutomation.success'), Locale.getMessage('success'));
                         dispatch(event(automationName, types.TEST_AUTOMATION_SUCCESS, response.data));
                         resolve();
                     })
                     .catch((error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'AutomationService.testAutomation');
-                        NotificationManager.error(Locale.getMessage('automation.testautomation.error'), Locale.getMessage('failed'));
+                        NotificationManager.error(Locale.getMessage('automation.testAutomation.error'), Locale.getMessage('failed'));
                         dispatch(event(automationName, types.TEST_AUTOMATION_FAILED, error));
                         reject();
                     });
@@ -128,4 +167,14 @@ export const testAutomation = (automationName, appId) => {
     };
 };
 
+export const changeAutomationEmailTo = (newTo) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_TO, {newTo}));
+};
 
+export const changeAutomationEmailSubject = (newSubject) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_SUBJECT, {newSubject}));
+};
+
+export const changeAutomationEmailBody = (newBody) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_BODY, {newBody}));
+};

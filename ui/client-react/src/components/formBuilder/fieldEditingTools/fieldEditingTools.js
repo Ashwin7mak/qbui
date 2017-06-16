@@ -7,7 +7,8 @@ import {connect} from "react-redux";
 import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
 import _ from "lodash";
 import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
-import {isFieldDeletable} from '../../../reducers/fields';
+import FieldUtils from '../../../utils/fieldUtils';
+import {getTable} from '../../../reducers/app';
 import {CONTEXT} from "../../../actions/context";
 import * as tabIndexConstants from '../tabindexConstants';
 import "./fieldEditingTools.scss";
@@ -31,7 +32,8 @@ export class FieldEditingTools extends Component {
 
     onClickDelete(e) {
         if (this.props.removeFieldFromForm) {
-            return this.props.removeFieldFromForm(this.props.formId, this.props.relatedField, this.props.location);
+            let appId = this.props.app ? this.props.app.id : null;
+            return this.props.removeFieldFromForm(this.props.formId, appId, this.props.tblId, this.props.relatedField, this.props.location);
         }
         e.preventDefault();
     }
@@ -68,18 +70,30 @@ export class FieldEditingTools extends Component {
         } else {
             tabIndex = '-1';
         }
+
+        let toolTipTextKey = "builder.formBuilder.removeField";
+        let enableDelete = true;
+
+        if (FieldUtils.isRecordTitleField(this.props.table, this.props.fieldId)) {
+            toolTipTextKey = "builder.formBuilder.removeTitleField";
+            enableDelete = false;
+        } else if (this.props.app && FieldUtils.isDetailKeyField(this.props.app.relationships, this.props.app.id, this.props.tblId, this.props.fieldId)) {
+            toolTipTextKey = "builder.formBuilder.removeRelationshipField";
+        }
+
         //Hide deleteFieldIcon if it is the last field on the form
         return (<div>
                 {this.props.numberOfFieldsOnForm > 1 &&
                 <div className="actionIcons">
-                    {this.props.isFieldDeletable &&
                     <div className="deleteFieldIcon">
-                        <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                            <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}><QbIcon icon="clear-mini"/>
-                            </button>
+                        <QbToolTip i18nMessageKey={toolTipTextKey}>
+                            {enableDelete ?
+                                <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}><QbIcon
+                                    icon="clear-mini"/></button> :
+                                <button disabled type="button" tabIndex={tabIndex}><QbIcon className="disabled" icon="clear-mini"/></button>
+                            }
                         </QbToolTip>
                     </div>
-                    }
                 </div>}
             </div>
         );
@@ -212,8 +226,7 @@ FieldEditingTools.propTypes = {
     app: PropTypes.object,
     tblId: PropTypes.string,
     fieldId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    formId: PropTypes.string,
-    isFieldDeletable: PropTypes.bool
+    formId: PropTypes.string
 };
 
 FieldEditingTools.defaultProps = {
@@ -235,14 +248,15 @@ const mapStateToProps = (state, ownProps) => {
     if (!isDragging && _.has(currentForm, 'isDragging')) {
         isDragging = currentForm.isDragging;
     }
-
+    let appId = ownProps.app ? ownProps.app.id : null;
+    let table = getTable(state.app, appId, ownProps.tblId);
     return {
         selectedFields,
         previouslySelectedField,
         formBuilderChildrenTabIndex,
         isDragging,
         numberOfFieldsOnForm,
-        isFieldDeletable: isFieldDeletable(state, ownProps.app, ownProps.tblId, ownProps.fieldId)
+        table
     };
 };
 
