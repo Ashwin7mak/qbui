@@ -252,6 +252,17 @@ describe('QbGrid', () => {
                 rowId: editingRow.id
             });
         });
+
+        it('gets a row action cell without multiselect', () => {
+            component = shallow(<QbGrid
+                {...requiredProps}
+                disableMultiSelect={true}
+                rowActionsRenderer={true}
+            />);
+            instance = component.instance();
+            let actionCell = instance.getActionsCell(null, {rowData: editingRow});
+            expect(actionCell.props.disableMultiSelect).toBe(true);
+        });
     });
 
     describe('getActionCellProps', () => {
@@ -264,6 +275,7 @@ describe('QbGrid', () => {
             });
         });
     });
+
 
     describe('getPlaceholderCellProps', () => {
         it('adds the isPlaceholderCell prop to placeholder cells so the component can add the appropriate class', () => {
