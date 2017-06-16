@@ -377,7 +377,7 @@ describe('Nav Unit tests', () => {
             delete query[UrlConsts.EDIT_RECORD_KEY];
         });
 
-        it('will NOT invoke loadForm', () => {
+        it('will NOT invoke loadForm because there is not an edit record query parameter or the trowser is open or there is no new record id', () => {
             let component = shallow(<Nav {...props} />);
 
             let instance = component.instance();
