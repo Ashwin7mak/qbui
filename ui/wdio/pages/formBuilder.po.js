@@ -173,7 +173,6 @@ class formBuilderPage {
         while (!formsPO.viewFormContainerEl.isExisting()) {
             this.dirtyForm_Dismiss();
         }
-        browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
 
@@ -191,6 +190,8 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -436,7 +437,10 @@ class formBuilderPage {
             'Escape', // defocus field
             'Escape' // close page
         ]);
-        return this.dirtyForm_Dismiss();
+        while (!formsPO.viewFormContainerEl.isExisting()) {
+            this.dirtyForm_Dismiss();
+        }
+        return this;
     }
 
     KB_focusField(index) {
@@ -498,6 +502,8 @@ class formBuilderPage {
     KB_save() {
         // save form via keyboard
         browser.keys(['Command', 's', 'Command']);
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 
