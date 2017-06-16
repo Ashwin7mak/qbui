@@ -339,7 +339,7 @@ export const QbGrid = React.createClass({
 
         return (
             <div className="actionHeader">
-                {this.props.isMultiSelectDisabled ? <input
+                {!this.props.isMultiSelectDisabled ? <input
                     type="checkbox"
                     className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
                     checked={this.props.areAllRowsSelected}
