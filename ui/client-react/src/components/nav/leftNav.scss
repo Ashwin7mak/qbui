@@ -381,28 +381,6 @@ div.leftNavTooltip {
             padding: 0;
             margin: 0;
             border-top: 1px solid $leftnav-background-stroke-color;
-
-            .newItemButton {
-                position: sticky;
-                position: -webkit-sticky;
-                bottom: 0;
-                background-color: $leftnav-background-color;
-                border-top: 1px solid $leftnav-background-stroke-color;
-            }
-            .newItem {
-                cursor: pointer;
-                line-height: 40px;
-
-                &:hover {
-                    color: $left-nav-link-hover-color;
-                    background-color: $leftnav-table-selected-color;
-                }
-                .hoverComponent {
-                    span {
-                        padding-left: 15px;
-                    }
-                }
-            }
         }
     }
     /* This is so when you hover over the item, the entire contents shows like a tooltip... but we then cannot scroll when collapsed. Temporary fix */
@@ -468,7 +446,7 @@ div.leftNavTooltip {
         }
     }
 
-    ul.tablesList, ul.tablesHeading, ul.appsList {
+    ul.tablesList, ul.tablesHeading {
         li {
             a.right {
                 opacity: 0;
@@ -624,13 +602,6 @@ div.leftNavTooltip {
         transform: translate3d(300px, 0, 0);
         -webkit-transform: translate3d(300px, 0, 0);
     }
-
-    /* hide tables footer (add new table) for small */
-
-    .link.newItemButton {
-        display: none;
-    }
-
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/

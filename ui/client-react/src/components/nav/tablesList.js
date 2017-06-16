@@ -9,7 +9,7 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
-import CreateNewItemButton from './createNewItemButton';
+import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
 let TablesList = React.createClass({
 

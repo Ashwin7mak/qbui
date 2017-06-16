@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
-import CreateNewItemButton from './createNewItemButton';
+import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
 let AppsList = React.createClass({
 

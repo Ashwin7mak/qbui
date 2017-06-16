@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import CreateNewItemButton, {__RewireAPI__ as CreateNewItemButtonRewireAPI} from '../../src/components/nav/createNewItemButton';
+import CreateNewItemButton, {__RewireAPI__ as CreateNewItemButtonRewireAPI} from '../../src/components/sideNavs/createNewItemButton';
 
 let component;
 const I18nMessageMock = () => <div>test</div>;

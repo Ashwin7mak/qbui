@@ -1,7 +1,7 @@
 import React, {PropTypes} from "react";
 import {I18nMessage} from '../../utils/i18nMessage';
-import QBicon from '../qbIcon/qbIcon';
-import './leftNav.scss';
+import QBicon from '../icon/icon';
+import './createNewItemButton.scss';
 
 /**
  * CreateNeItemButton is located in the left nav. It is currently used to create new items such as creating a new table
