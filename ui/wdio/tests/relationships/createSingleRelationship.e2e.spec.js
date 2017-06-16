@@ -9,10 +9,13 @@
     let notificationContainer = requirePO('/common/notificationContainer');
     let relationshipsPO = requirePO('relationshipsPage');
     let formBuilderPO = requirePO('formBuilder');
+    let rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-    let parentTableRecordValues = [];
+    let parentTableRecordValues;
+    let childTableRecordValues;
     const PARENT_TABLE = 'Table 1';
-    const RECORD_ID = '2';
+    let randomTable_1RecordId = rawValueGenerator.generateInt(1, 10);
+    let randomTable_2RecordId = rawValueGenerator.generateInt(1, 10);
 
     describe('Relationships - Create single relationship Tests :', function() {
         let realmName;
@@ -37,7 +40,7 @@
                 return e2eBase.recordService.addRecordsToTable(testApp, 0, 10, true, true);
             }).then(function() {
                 //Add records into table 2
-                return e2eBase.recordService.addRecordsToTable(testApp, 1, 5, true, true);
+                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10, true, true);
             }).then(function() {
                 //Create a form for each table
                 return e2eBase.formService.createDefaultForms(testApp);
@@ -62,19 +65,21 @@
         });
 
         beforeAll(function() {
-            //Load the record of the parent table ie 'Table 1' and get the values of the record
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, RECORD_ID);
-            parentTableRecordValues = browser.elements('.cellWrapper').getAttribute('textContent');
-            console.log("The record 2 of Table 1 are: "+parentTableRecordValues)
-            return parentTableRecordValues;
+            //Load the child table 'table 2' report
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
+            childTableRecordValues = reportContentPO.getRecordValues(randomTable_2RecordId - 1, 1);
+
+            //Load the random record of the parent table ie 'Table 1' and get the values of the record for verification of relation at the end
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
+            parentTableRecordValues = formsPO.getRecordValuesInViewForm('.viewForm');
         });
 
         /**
          * Before each it block reload the 1st record of list all report in view form mode
          */
         beforeEach(function() {
-            //Load the child table 'table 2' -> record 1 in view mode
-            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, 1);
+            //Load the child table 'table 2' -> random record in view mode
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, randomTable_2RecordId);
         });
 
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
@@ -93,7 +98,7 @@
                 //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
                 formsPO.enterFormValues('allPhoneFields');
                 //Select record Id 2 from parent picker
-                relationshipsPO.selectFromParentPicker(RECORD_ID);
+                relationshipsPO.selectFromParentPicker(randomTable_1RecordId);
 
                 //Click Save on the form
                 formsPO.clickFormSaveBtn();
@@ -104,8 +109,8 @@
                 formsPO.waitForViewFormsTableLoad();
 
                 //Verify the relationship by clicking on get another record from parent link in view record mode.
-                //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
-                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues);
+                //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected and also verify childEmbbeded report
+                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues, childTableRecordValues);
 
             });
 

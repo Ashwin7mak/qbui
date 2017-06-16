@@ -330,8 +330,10 @@
         /**
          * Method to verify relationship link in view record mode
          */
-        verifyParentRecordRelationship: {value: function(expectedParentRecordFieldValues) {
-            let getRecordValuesByClickingOnRelLink = [];
+        verifyParentRecordRelationship: {value: function(expectedParentRecordFieldValues, expectedChildTableRecordValues) {
+            let getRecordValuesByClickingOnRelLink;
+            let getEmbeddedReportChildRecordValues;
+
             //verify You land in view form since you edited a record from View form after saving
             formsPO.waitForViewFormsTableLoad();
             let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
@@ -339,12 +341,22 @@
             });
 
             if (fields !== []) {
+                //Click on the relationship
+                fields[0].element('.cellWrapper .textLink').moveToObject();
                 fields[0].element('.cellWrapper .textLink').waitForVisible();
                 fields[0].element('.cellWrapper .textLink').click();
                 //Wait until the view form drawer loads
-                browser.element('.drawer .viewForm .cellWrapper').waitForVisible();
-                getRecordValuesByClickingOnRelLink = browser.element('.drawer .viewForm').elements('.cellWrapper').getAttribute('textContent');
+                browser.element('.drawer .section-0 .cellWrapper').waitForVisible();
+
+                //Verify the parent record values
+                getRecordValuesByClickingOnRelLink = formsPO.getRecordValuesInViewForm('.drawer .viewForm .section-0');
                 expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
+
+                //Verify the embeddedReport ie child record values
+                //get first cell value
+                getEmbeddedReportChildRecordValues = reportContentPO.getRecordValues(0, 0);
+                //Just verify the first value to make sure selected record shows up
+                expect(getEmbeddedReportChildRecordValues).toEqual(expectedChildTableRecordValues);
 
                 //close the View record drawer
                 browser.element('.closeDrawer').click();

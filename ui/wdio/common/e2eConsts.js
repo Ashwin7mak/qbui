@@ -333,7 +333,7 @@
          * Creates a mapping for two tables with all supported field types that can be passed into the test generators package
          */
         basicTableMap() {
-            let table1Name = 'Table 1', table2Name = 'Table 2'
+            let table1Name = 'Table 1', table2Name = 'Table 2';
 
             // Create the table schema (map object) to pass into the app generator
             var tableToFieldToFieldTypeMap = {};

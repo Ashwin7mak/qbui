@@ -262,7 +262,21 @@
             //wait until loading screen disappear in report Content
             loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
             // wait for view form
-            return browser.waitForVisible('.viewForm', browser.waitforTimeout);
+            browser.waitForVisible('.viewForm', browser.waitforTimeout);
+            // wait until you see elements in the page
+            return browser.waitForVisible('.cellWrapper', browser.waitforTimeout);
+        }},
+
+        /**
+         * Method to get record values from view form mode
+         *
+         */
+        getRecordValuesInViewForm: {value: function(elementClassName) {
+            var recordValues = [];
+            browser.element(elementClassName).elements('.cellWrapper').value.filter(function(record) {
+                recordValues.push(record.getAttribute('textContent'));
+            });
+            return recordValues;
         }},
 
         /**
@@ -539,8 +553,7 @@
             }
             //Verify that fieldsOnForm array don't contain expectedFieldsNotPresentOnForm items
             expect(expectedFieldsNotPresentOnForm.indexOf(fieldsOnForm)).toBe(-1);
-        }}
-
+        }},
     });
 
     module.exports = FormsPage;
