@@ -23,7 +23,7 @@ const signOutHref = '/qbase/signout';
  * Check out the propTypes for other values you can change if you need.
  * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
 class DefaultTopNavGlobalActions extends Component {
-    
+
     /**
      * A link to sign the user out
      * (MenuItem href is currently incompatible with react-fastclick) */
