@@ -8,14 +8,15 @@ import {removeUsersFromAppRole, assignUsersToAppRole} from '../../../../actions/
 import  Select from 'react-select';
 import constants from '../../../../../../common/src/constants';
 import {NotificationManager} from 'react-notifications';
+import {getAppRoles} from '../../../../reducers/appRoles';
 
 import './userRoleChange.scss';
 
-class UserRoleChange extends React.Component {
+export class UserRoleChange extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {selectedRole: ''};
+        this.state = {selectedRole: '', savingRole: false};
         this.onFinished = this.onFinished.bind(this);
         this.getRoles = this.getRoles.bind(this);
         this.updateRole = this.updateRole.bind(this);
@@ -25,12 +26,15 @@ class UserRoleChange extends React.Component {
 	 * dialog finished
 	 */
     onFinished = () => {
-        const {appId, roleId, selectedUserRows} = this.props;
-        this.props.removeUsersFromAppRole(appId, roleId, selectedUserRows).then(()=>{
+    	this.setState({savingRole: true});
+        const {appId, selectedUserRows} = this.props;
+        this.props.removeUsersFromAppRole(appId, selectedUserRows).then(()=>{
             this.props.assignUsersToAppRole(appId, this.state.selectedRole, selectedUserRows).then(()=>{
                 this.props.toggleChangeUserRoleDialog(false);
-                let msg = this.props.getSelectionTip(selectedUserRows > 1 ? "changeUserRole.success" : "changeUserRole.pluralSuccess");
+                this.setState({savingRole: false});
+                let msg = this.props.getSelectionTip(selectedUserRows > 1 ? "changeUserRole.successUserRole" : "changeUserRole.pluralSuccessUserRole");
                 NotificationManager.success(msg);
+                this.props.clearSelectedUserRows();
             });
         });
     };
@@ -74,19 +78,22 @@ class UserRoleChange extends React.Component {
         let {selectedUserRows} = this.props;
         return (
 			<MultiStepDialog
+				savingRole={this.state.savingRole}
 				show={this.props.changeUserRoleDialog}
 				classes="userRoleChange"
 				onFinished={this.onFinished}
 				onCancel={()=>{this.props.toggleChangeUserRoleDialog(false);}}
 				showCancelButton={true}
 				showFinishedButton={true}
-				finishedButtonLabel={Locale.getMessage("changeUserRole.change")}>
+				finishedButtonLabel={this.props.getSelectionTip(selectedUserRows.length < 2 ? "changeUserRole.changeUserRole" : "changeUserRole.pluralChangeUserRole")}>
+				{/*<Loader loadedClassName="transitionGroup" loaded={!this.state.savingRole} options={SpinnerConfigurations.CHANGE_ROLE}>*/}
 				<div className="userRoleContent">
-					<div className="title"><I18nMessage message="changeUserRole.userRoleTitle"/></div>
-					<div className="description">{this.props.getSelectionTip(selectedUserRows > 1 ? "changeUserRole.userRoleText" : "changeUserRole.pluralUserRoleText")}</div>
+					<div className="title">{this.props.getSelectionTip(selectedUserRows.length < 2 ? "changeUserRole.userRoleTitle" : "changeUserRole.pluralUserRoleTitle")}</div>
+					<div className="description"><I18nMessage message="changeUserRole.userRoleDescription"/></div>
 					<div className="userRoleText">
 						<div className="userRoleDetails">
 							<div className="assignRole panel-items">
+								<div className="fieldLabel"><I18nMessage message="changeUserRole.userRoleText"/></div>
 								<Select
 									autofocus
 									options={this.getRoles()}
@@ -100,13 +107,15 @@ class UserRoleChange extends React.Component {
 						</div>
 					</div>
 				</div>
+				{/*</Loader>*/}
 			</MultiStepDialog>);
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        changeUserRoleDialog: state.appUsers.changeUserRoleDialog
+        changeUserRoleDialog: state.appUsers.changeUserRoleDialog,
+        appRoles: getAppRoles(state.appRoles, ownProps.appId),
     };
 };
 
@@ -114,7 +123,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         toggleChangeUserRoleDialog: (isOpen)=> {dispatch(toggleChangeUserRoleDialog(isOpen));},
         removeUsersFromAppRole: (appId, roleId, userId)=> {return dispatch(removeUsersFromAppRole(appId, roleId, userId));},
-        assignUsersToAppRole: (appId, roleId, userId)=> {return dispatch(assignUsersToAppRole(appId, roleId, userId));}
+        assignUsersToAppRole: (appId, roleId, userId)=> {return dispatch(assignUsersToAppRole(appId, roleId, userId));},
     };
 };
 

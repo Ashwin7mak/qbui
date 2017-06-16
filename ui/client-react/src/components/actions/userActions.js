@@ -131,7 +131,9 @@ export class UserActions extends React.Component {
                     appId={this.props.appId}
                     roleId={this.props.roleId}
                     selectedUserRows={this.props.selectedUserRows}
+                    clearSelectedUserRows={this.props.clearSelectedUserRows}
                     getSelectionTip={this.getSelectionTip}
+
                 />
             </div>
         );

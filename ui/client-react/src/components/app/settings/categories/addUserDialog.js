@@ -39,11 +39,11 @@ export class AddUserDialog extends React.Component {
     onFinished() {
         if (this.props.assignUserToAppRole) {
             const userInfo = {
-                userId: this.userPanel.getSelectedUser(),
+                id: this.userPanel.getSelectedUser(),
                 roleId: this.props.userRoleIdToAdd
             };
 
-            this.props.assignUserToAppRole(this.props.appId, userInfo.roleId, userInfo.userId).then(
+            this.props.assignUserToAppRole(this.props.appId, userInfo.roleId, [userInfo]).then(
                 () => {
                     let assignedUser = _.find(this.props.realmUsers, (realmUser)=>{
                         return realmUser.id === userInfo.userId;

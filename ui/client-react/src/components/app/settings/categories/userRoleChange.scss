@@ -4,18 +4,23 @@
 
     .title {
         color: $add-user-dialog-modal;
-        font-size: $font-size-h3;
+        font-size: $font-size-h2;
         padding-top: $spacing-small;
         padding-bottom: $spacing-x-small;
-        border-bottom: 1px solid #b1b1b1;
     }
     .description {
         color: $ghost-text-color;
         font-size: $font-size-p;
-        margin-top: 30px;
+        margin-top: 8px;
     }
     .hidden {
         display: none;
+    }
+    .fieldLabel {
+        margin-bottom: 10px;
+        span {
+            font-weight: bold;
+        }
     }
 }
 
@@ -31,13 +36,6 @@
 }
 
 
-.multiStepModal.userRoleChange {
-    .bodyContainer {
-        margin-right: $spacing-medium1;
-    }
-}
-
-
 @include not-small-breakpoint {
 
     .multiStepModal.userRoleChange .modal-dialog {
@@ -45,8 +43,14 @@
         .modal-content {
             height: 320px;
             width: 550px;
+            .multiStepDialogRightIcons {
+                z-index: 500000000;
+            }
             .bodyContainer {
                 height: 0;
+            }
+            .modal-body {
+                padding-right: 15px;
             }
         }
 
@@ -88,6 +92,10 @@
         .finishedButton {
             background-color: $add-user-button-color;
             border: 1px solid $add-user-button-color;
+            width: 133px;
+            height: 38px;
+            padding: 0;
+            border-radius: 4px;
             color: $add-user-dialog-border-button-color;
 
             &:hover {
@@ -102,15 +110,24 @@
         .Select-menu-outer {
             width: 97%;
         }
+        .Select .Select-control .Select-value {
+            padding-left: 10px;
+        }
+
+        .Select-option {
+            &.is-focused {
+                background-color: $color-black-200;
+            }
+        }
 
         .assignRole {
             z-index: 10000000;
-            margin-top: 20px;
+            margin-top: 37px;
             width: 35%;
         }
 
         .modal-footer {
-            padding-right: 70px;
+            padding-right: 20px;
             margin-top: 250px;
         }
     }

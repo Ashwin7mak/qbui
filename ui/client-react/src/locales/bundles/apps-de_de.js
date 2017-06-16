@@ -815,6 +815,16 @@ export default {
             copied: "Link kopiert",
             messageSubject:"Link zum {App Name} App",
             messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}"
+        },
+        changeUserRole: {
+            changeUserRole: "Rolle ändern",
+            pluralChangeUserRole: "Rollentausch",
+            userRoleTitle: "Ändern Sie die Rolle von {Wert} Benutzer",
+            pluralUserRoleTitle: "Ändern Sie die Rolle von {Wert} Benutzer",
+            userRoleDescription: "Das Ändern der Rolle kann beeinflussen, was ein Benutzer anzeigen kann.",
+            userRoleText: "Rolle ändern",
+            successUserRole: "{Wert} Die Rolle des Benutzers wurde geändert",
+            pluralSuccessUserRole: "{Wert} Benutzerrollen wurden geändert",
         }
     }
 };

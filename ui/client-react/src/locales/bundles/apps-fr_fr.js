@@ -814,6 +814,16 @@ export default {
             copied: "Lien copié",
             messageSubject:"Lien vers le {nom de l'application} Application",
             messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
+        },
+        changeUserRole: {
+            changeUserRole: "Changement de rôle",
+            pluralChangeUserRole: "Changer les rôles",
+            userRoleTitle: "Changer le rôle de {valeur} utilisateur",
+            pluralUserRoleTitle: "Changer le rôle de {valeur} utilisateurs",
+            userRoleDescription: "La modification du rôle peut affecter ce qu'un utilisateur peut afficher.",
+            userRoleText: "Changer le rôle vers",
+            successUserRole: "{valeur} Le rôle de l'utilisateur a été changé",
+            pluralSuccessUserRole: "{valeur} Les rôles des utilisateurs ont été modifiés",
         }
     }
 };

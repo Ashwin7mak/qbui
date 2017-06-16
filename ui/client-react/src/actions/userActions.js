@@ -157,5 +157,3 @@ export const clearSelectedUserRows = () => {
     return userEvent(types.SELECT_USER_ROWS, {selectedUsers: []});
 };
 
-
-

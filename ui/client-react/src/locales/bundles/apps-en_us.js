@@ -828,12 +828,14 @@ export default {
             messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
         },
         changeUserRole: {
-            change: "Change",
-            userRoleTitle: "Change Role",
-            userRoleText: "Change the role for {value} selected user",
-            pluralUserRoleText: "Change the role for {value} selected users",
-            success: "You changed {value} role successfully!",
-            pluralSuccess: "You changed {value} roles successfully!",
+            changeUserRole: "Change role",
+            pluralChangeUserRole: "Change roles",
+            userRoleTitle: "Change the role of {value} user",
+            pluralUserRoleTitle: "Change the role of {value} users",
+            userRoleDescription: "Changing the role may affect what a user can view.",
+            userRoleText: "Change role to",
+            successUserRole: "{value} user’s role has been changed",
+            pluralSuccessUserRole: "{value} users’ roles have been changed",
         }
     }
 };

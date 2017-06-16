@@ -102,4 +102,3 @@ export const updateAppTableProperties = (appId, tblId, tableInfo) => {
 export const toggleChangeUserRoleDialog = (isOpen) => {
     return event(types.TOGGLE_CHANGE_USER_ROLE, {isOpen});
 };
-
