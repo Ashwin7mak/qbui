@@ -21,3 +21,4 @@ export const DEFAULT_RECORD_KEY_ID = 3;
 
 export const UNSAVED_RECORD_ID = null;
 export const NEW_FORM_RECORD_ID = 'new';
+export const NEW_FIELD_PREFIX = 'newField_';

@@ -227,6 +227,9 @@ export function transformFieldBeforeSave(field) {
         transformedField.datatypeAttributes.type = transformedField.parentFieldType;
         delete transformedField.parentTableId;
         delete transformedField.parentFieldId;
+        delete transformedField.parentTableName;
+        delete transformedField.childTableName;
+        delete transformedField.parentAppId;
         delete transformedField.parentFieldType;
     }
     return transformedField;
