@@ -118,7 +118,7 @@ describe('ListOfElements', () => {
         });
 
         describe('Empty state Message', () => {
-            it('returns empty message when elements are not defined', () => {
+            it('doesn\'t display an empty message when elements and emptyMessage are not defined', () => {
                 component = mount(<ListOfElements renderer={FieldTokenInMenuMock}/>);
 
                 expect(component.find('.listOfElementsItem').length).toEqual(0);
@@ -153,5 +153,3 @@ describe('ListOfElements', () => {
         });
     });
 });
-
-
