@@ -44,9 +44,7 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
-                //wait until view form is visible
-                return formsPO.viewFormContainerEl.waitForVisible();
+                return e2ePageBase.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
             });
 
             beforeEach(function() {

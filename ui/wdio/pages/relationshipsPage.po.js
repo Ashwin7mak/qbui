@@ -110,7 +110,7 @@
             value: function() {
                 this.addChildButton.waitForVisible();
                 this.addChildButton.click();
-                browser.waitForVisible('.recordTrowser');
+                return browser.waitForVisible('.recordTrowser');
             }
         },
 
@@ -139,7 +139,7 @@
                 // Click Save on the form
                 formsPagePO.clickFormSaveBtn();
                 // wait until report rows in table are loaded
-                reportContentPO.waitForReportContent();
+                return reportContentPO.waitForReportContent();
             }
         },
 
@@ -150,7 +150,7 @@
             formsPO.viewFormContainerEl.waitForVisible();
             browser.waitForVisible('.textField.viewElement.textLink');
             let linkEl = this.parentRecordLinkEl;
-            linkEl.click();
+            return linkEl.click();
         }},
         /**
          * While viewing a parent record on a form get the values of each record in the child table
@@ -225,12 +225,12 @@
                 //TODO: Handle multiple links to parent(s)
                 // Use the specific form section
                 formSectionEl.waitForVisible();
-                formSectionEl.element(linkToParentLocatorString).click();
+                return formSectionEl.element(linkToParentLocatorString).click();
             } else {
                 //TODO: Handle multiple links to parent(s)
                 // Try to find something clickable on the form
                 browser.waitForVisible(linkToParentLocatorString);
-                browser.element(linkToParentLocatorString).click();
+                return browser.element(linkToParentLocatorString).click();
             }
         }},
 
@@ -260,7 +260,7 @@
             this.iconActionsCloseDrawerButtonEl.waitForVisible();
             this.viewFormTableEl.waitForExist();
             this.iconActionsCloseDrawerButtonEl.click();
-            browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
+            return browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
         }},
 
         /**
@@ -270,7 +270,7 @@
             this.tableHomePageLinkEl.waitForVisible();
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
-            this.tableHomePageLinkEl.click();
+            return this.tableHomePageLinkEl.click();
         }},
 
         /**
@@ -307,7 +307,7 @@
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
             //verify You land in view form
-            formsPO.waitForViewFormsTableLoad();
+            return formsPO.waitForViewFormsTableLoad();
         }},
 
         /**
@@ -361,7 +361,7 @@
                 //close the View record drawer
                 browser.element('.closeDrawer').click();
                 //wait until drawer screen disappear
-                browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+                return browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
             }
 
         }},
