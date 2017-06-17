@@ -1,4 +1,5 @@
 import React from 'react';
+import jasmineEnzyme from 'jasmine-enzyme';
 import {shallow, mount} from 'enzyme';
 import {MemoryRouter} from 'react-router-dom';
 
@@ -54,11 +55,11 @@ describe('ReportRoute', () => {
         }
     });
 
-    const ReportToolsAndContentMock = React.createClass({
+    class ReportToolsAndContentMock extends React.Component {
         render() {
-            return <div className="report-mock" />;
+            return <div />;
         }
-    });
+    }
 
     class mockReportFieldSelectMenu extends React.Component {
         render() {
@@ -73,6 +74,7 @@ describe('ReportRoute', () => {
     }
 
     beforeEach(() => {
+        jasmineEnzyme();
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadReport');
@@ -220,6 +222,34 @@ describe('ReportRoute', () => {
                         pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadDynamicReport).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('passes the correct handleDrillIntoChild prop to ReportToolsAndContent', () => {
+        it('prop is undefined when uniqueId does not exist', () => {
+            // uniqueId is a special id to indicate an embedded report
+            component = shallow(
+                    <UnconnectedReportRoute
+                        {...props}
+                        match={routeParams}
+                        reportData={reportDataParams.reportData}
+                        pendEdits={pendEdits}
+                    />);
+            expect(component.find('.reportToolsAndContentContainer'))
+                .toHaveProp('handleDrillIntoChild', undefined);
+        });
+
+        it('prop is handleDrillIntoChild function when uniqueId does exist', () => {
+            component = shallow(
+                    <UnconnectedReportRoute
+                        {...props}
+                        uniqueId={1}
+                        match={routeParams}
+                        reportData={reportDataParams.reportData}
+                        pendEdits={pendEdits}/>);
+            let instance = component.instance();
+            expect(component.find('.reportToolsAndContentContainer'))
+                .toHaveProp('handleDrillIntoChild', instance.handleDrillIntoChild);
         });
     });
 });

@@ -30,21 +30,6 @@ export const getFields = (state, appId, tblId) => {
     return fieldsList ? fieldsList.fields : [];
 };
 
-/**
- * Determines if a particular field can be deleted from a form
- * TODO:: Remove app argument and instead access current app from state once apps store is refactored to redux.
- * @param state
- * @param app
- * @param tblId
- * @param fieldId
- * @returns {null|*|number|boolean}
- */
-export const isFieldDeletable = (state, app, tblId, fieldId) => {
-    const currentTable = app ? _.find(app.tables, {id: tblId}) : null;
-
-    return !currentTable || !currentTable.recordTitleFieldId || currentTable.recordTitleFieldId !== fieldId;
-};
-
 const fieldsStore = (state = [], action) => {
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);

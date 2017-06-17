@@ -46,7 +46,10 @@
         //No borders or icon are displayed when it is not a touch device
         //Everything shows up on hover
         .deleteFieldIcon .qbIcon {
-            &:hover {
+            &.disabled {
+                color: $color-black-400;
+            }
+            &:not(.disabled):hover {
                 opacity: 1;
                 color: $color-red-700;
             }

@@ -313,6 +313,28 @@ class FieldUtils {
         default:                                       return 'text';
         }
     }
+
+    /**
+     * Figure out if a field is a recordTitleField on a table
+     * @param currentTable
+     * @param fieldId
+     * @returns {boolean}
+     */
+    static isRecordTitleField(currentTable, fieldId) {
+        return (currentTable && currentTable.recordTitleFieldId === fieldId) || false;
+    }
+
+    /**
+     * Given a set of relationships, figure out if a field belonging to an app and table is a detail key field.
+     * @param relationships
+     * @param appId
+     * @param tblId
+     * @param fieldId
+     * @returns {null}
+     */
+    static isDetailKeyField(relationships, appId, tblId, fieldId) {
+        return _.find(relationships, {detailAppId: appId, detailTableId: tblId, detailFieldId: fieldId}) ? true : false;
+    }
 }
 
 // PRIVATE METHODS
@@ -328,5 +350,6 @@ function getClassNameForDuration(fieldDef) {
     }
     return answer;
 }
+
 
 export default FieldUtils;
