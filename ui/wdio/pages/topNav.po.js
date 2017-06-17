@@ -37,8 +37,8 @@
         },
         modifyThisForm: {
             get: function() {
-                browser.element('.modifyForm').waitForVisible();
-                return browser.element('.modifyForm');
+                browser.element('.configMenu .modifyForm').waitForVisible();
+                return browser.element('.configMenu .modifyForm');
             }
         },
         //Report issue option in Feedback button
