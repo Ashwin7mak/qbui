@@ -4,6 +4,7 @@ let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
+let notificationContainer = requirePO('/common/notificationContainer');
 
 class formBuilderPage {
 
@@ -158,8 +159,8 @@ class formBuilderPage {
         while (!formsPO.viewFormContainerEl.isExisting()) {
             this.dirtyForm_Dismiss();
         }
-        browser.pause(e2eConsts.shortWaitTimeMs);
-        return this;
+        //Need this to wait for container to slide away
+        return browser.pause(e2eConsts.shortWaitTimeMs);
     }
 
     dirtyForm_Dismiss() {
@@ -278,7 +279,8 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        return this;
+        //wait until save success container goes away
+        return notificationContainer.waitUntilNotificationContainerGoesAway();
     }
 
     search(text) {
