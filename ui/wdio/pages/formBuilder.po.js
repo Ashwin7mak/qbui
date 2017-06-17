@@ -192,6 +192,7 @@ class formBuilderPage {
         }
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        formsPO.viewFormContainerEl.waitForExist();
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
@@ -500,7 +501,13 @@ class formBuilderPage {
 
     KB_save() {
         // save form via keyboard
-        browser.keys(['Command', 's', 'Command']);
+        if (browserName === 'MicrosoftEdge') {
+            // COMMAND key w/EDGE works locally but not in sauce...?
+            browser.keys(['Control', 's', 'Control']);
+        } else {
+            browser.keys(['Command', 's', 'Command']);
+        }
+        formsPO.viewFormContainerEl.waitForExist();
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
