@@ -139,16 +139,6 @@
         return reportContentPO.waitForReportContent();
     };
 
-    /**
-     * Helper method that will load record for a table for you in your browser by directly hitting a generated URL
-     * @param realmName
-     * @param appId
-     * @returns A promise that will resolve after loading the generated URL
-     */
-    PageBase.prototype.loadRecordByIdInBrowser = function(realmName, appId, tableId, reportId, recordId) {
-        return this.navigateTo(e2eBase.getRequestRecordsPageEndpoint(realmName, appId, tableId, reportId, recordId));
-    };
-
     PageBase.prototype.navigateTo = function(url) {
         return browser.url(url);
     };
