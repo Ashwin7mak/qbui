@@ -6,6 +6,7 @@
     'use strict';
     var reportContentPO = requirePO('reportContent');
     let loadingSpinner = requirePO('/common/loadingSpinner');
+    let formsPO = requirePO('formsPage');
 
     function PageBase() {
         // Define common locators that all pages share here
@@ -136,6 +137,22 @@
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
+    };
+
+    /**
+     * Helper method that will load record for a table for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadRecordByIdInBrowser = function(realmName, appId, tableId, reportId, recordId) {
+        this.navigateTo(e2eBase.getRequestRecordsPageEndpoint(realmName, appId, tableId, reportId, recordId));
+        //wait until loading screen disappear in leftNav
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        //wait until loading screen disappear in report Content
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        //wait until report rows in table are loaded
+        return formsPO.waitForViewFormsTableLoad();
     };
 
     PageBase.prototype.navigateTo = function(url) {
