@@ -49,7 +49,7 @@ class formBuilderPage {
 
     get firstField() {
         // the first field (wait for it after open)
-        return browser.element('.field');
+        return browser.element('.formTable .formElementContainer .formElement.field');
     }
 
     get formBuilderContainer() {
@@ -237,8 +237,7 @@ class formBuilderPage {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
         topNavPO.modifyThisForm.click();
-        this.firstField.waitForVisible();
-        return this;
+        return this.firstField.waitForVisible();
     }
 
     openMenu() {
