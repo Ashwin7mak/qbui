@@ -15,7 +15,7 @@ export const AppsList = React.createClass({
     propTypes: {
         apps: React.PropTypes.array.isRequired,
         onSelectApp: React.PropTypes.func.isRequired,
-        onCreateNewApp:React.PropTypes.func,
+        onCreateNewApp: React.PropTypes.func
     },
     getInitialState() {
         return {
