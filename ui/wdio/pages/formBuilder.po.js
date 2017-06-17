@@ -185,7 +185,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        this.firstField.waitForExist();
+        this.firstField.waitForVisible();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
@@ -237,7 +237,7 @@ class formBuilderPage {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
         topNavPO.modifyThisForm.click();
-        this.firstField.waitForExist();
+        this.firstField.waitForVisible();
         return this;
     }
 
@@ -463,7 +463,7 @@ class formBuilderPage {
         // select the specified field via keyboard
         this.KB_focusField(index);
         browser.keys(['Enter']); // select field
-        this.selectedField.waitForExist();
+        this.selectedField.waitForVisible();
         return this.getSelectedFieldLabel();
     }
 }
