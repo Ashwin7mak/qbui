@@ -333,6 +333,8 @@
         clickOnRelationshipFieldValueLink: {value: function(element) {
             //Click on the relationship
             element.element('.viewForm .cellWrapper .textLink').moveToObject();
+            // Needed for stabilize DOm after moveToObject
+            browser.pause(slideyRightyPause);
             element.element('.viewForm .cellWrapper .textLink').waitForVisible();
             return element.element('.viewForm .cellWrapper .textLink').click();
         }},
@@ -345,7 +347,7 @@
             let getEmbeddedReportChildRecordValues;
 
             //verify You land in view form since you edited a record from View form after saving
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.element('.formElementContainer .field').waitForVisible();
             let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
                 return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
             });
