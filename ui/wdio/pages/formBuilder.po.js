@@ -237,6 +237,8 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
+        //Need to stabilize the menu
+        browser.pause(e2eConsts.shortWaitTimeMs);
         topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForVisible();
