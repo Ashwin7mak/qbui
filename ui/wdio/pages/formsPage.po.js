@@ -252,7 +252,9 @@
          */
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
-            return browser.waitForVisible('.editForm', browser.waitforTimeout);
+            this.editFormContainerEl.waitForVisible();
+            // wait until you see settings button
+            return topNavPO.settingsBtn.waitForVisible();
         }},
 
         /**

@@ -328,6 +328,16 @@
             }},
 
         /**
+         * Method to click on Relationship link in view record mode
+         */
+        clickOnRelationshipFieldValueLink: {value: function(element) {
+            //Click on the relationship
+            element.element('.viewForm .cellWrapper .textLink').moveToObject();
+            element.element('.viewForm .cellWrapper .textLink').waitForVisible();
+            return element.element('.viewForm .cellWrapper .textLink').click();
+        }},
+
+        /**
          * Method to verify relationship link in view record mode
          */
         verifyParentRecordRelationship: {value: function(expectedParentRecordFieldValues, expectedChildTableRecordValues) {
@@ -342,9 +352,7 @@
 
             if (fields !== []) {
                 //Click on the relationship
-                fields[0].element('.viewForm .cellWrapper .textLink').moveToObject();
-                fields[0].element('.viewForm .cellWrapper .textLink').waitForVisible();
-                fields[0].element('.viewForm .cellWrapper .textLink').click();
+                this.clickOnRelationshipFieldValueLink(fields[0]);
                 //Wait until the view form drawer loads
                 browser.element('.drawer .section-0 .cellWrapper').waitForVisible();
 
