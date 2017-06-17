@@ -6,7 +6,7 @@
     'use strict';
     var reportContentPO = requirePO('reportContent');
     let loadingSpinner = requirePO('/common/loadingSpinner');
-    let tableCreatePO = requirePO('tableCreate');
+    let topNavPO = requirePO('topNav');
 
     function PageBase() {
         // Define common locators that all pages share here
@@ -85,7 +85,7 @@
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
         //wait until you see newTable in left Nav
-        return tableCreatePO.newTableBtn.waitForVisible();
+        return browser.element('.appHomePageBody .noRowsIcon').waitForVisible();
     };
 
     /**
