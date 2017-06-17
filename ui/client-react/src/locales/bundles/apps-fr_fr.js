@@ -55,7 +55,9 @@ export default {
                 userAddError: "Erreur d'ajout d'utilisateur",
                 userRemovingError: "Erreur lors de l'enlever",
                 emailBody: "Le corps du courrier électronique va ici",
-                emailSubject: "Le sujet de l'email va ici"
+                emailSubject: "Le sujet de l'email va ici",
+                settingsRole: "Changement {valeur} rôle",
+                settingsRoles: "Changement {valeur} les rôles"
             }
         },
         appMenu: {

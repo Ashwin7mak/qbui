@@ -2,73 +2,11 @@ import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {UserRoleChange, __RewireAPI__ as UserRoleChangeAPI} from '../../../../../src/components/app/settings/categories/userRoleChange';
 import {shallow, mount} from 'enzyme';
-// import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
 let component;
 let domComponent;
 
-const realmUsers = [
-    {
-        "id": "RDUII_UF2",
-        "firstName": "Clara",
-        "lastName": "Beck",
-        "screenName": "CBeck",
-        "email": "udaic@mudo.mn",
-        "deactivated": false,
-        "administrator": false,
-        "realmUserFlags": 0
-    },
-    {
-        "id": "RDUII_UHI",
-        "firstName": "Clarence",
-        "lastName": "Bridges",
-        "screenName": "CBridges",
-        "email": "ulo@bopitzus.cd",
-        "deactivated": false,
-        "administrator": false,
-        "realmUserFlags": 0
-    },
-    {
-        "id": "RDUII_UHZ",
-        "firstName": "Clara",
-        "lastName": "Dunn",
-        "screenName": "CDunn",
-        "email": "wenek@himdot.fo",
-        "deactivated": false,
-        "administrator": false,
-        "realmUserFlags": 0
-    },
-];
-const appUsers = {
-    10: [
-        {
-            "firstName": "Steve",
-            "lastName": "Rogers",
-            "screenName": "Cap",
-            "email": "imissthe40s@shield.com",
-            "userId": "RDUII_UB"
-        }
-    ],
-    11: [
-        {
-            "firstName": "Tony",
-            "lastName": "Stark",
-            "screenName": "ironman",
-            "email": "arcreactor@stark.com",
-            "userId": "RDUII_UC"
-        }
-    ],
-    12: [
-        {
-            "firstName": "administrator",
-            "lastName": "none",
-            "screenName": "administrator",
-            "email": "administrator@quickbase.com",
-            "userId": "10000"
-        }
-    ]
-};
 const appRoles = [
     {
         "id": 9,

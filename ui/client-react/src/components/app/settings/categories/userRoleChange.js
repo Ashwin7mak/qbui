@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {I18nMessage} from "../../../../utils/i18nMessage";
@@ -8,7 +8,7 @@ import {removeUsersFromAppRole, assignUsersToAppRole} from '../../../../actions/
 import  Select from 'react-select';
 import constants from '../../../../../../common/src/constants';
 import {NotificationManager} from 'react-notifications';
-import {getAppRoles} from '../../../../reducers/appRoles';
+import {getAppRoles} from '../../../../reducers/selectedApp';
 
 import './userRoleChange.scss';
 
@@ -26,7 +26,7 @@ export class UserRoleChange extends React.Component {
 	 * dialog finished
 	 */
     onFinished = () => {
-    	this.setState({savingRole: true});
+		this.setState({savingRole: true});
         const {appId, selectedUserRows} = this.props;
         this.props.removeUsersFromAppRole(appId, selectedUserRows).then(()=>{
             this.props.assignUsersToAppRole(appId, this.state.selectedRole, selectedUserRows).then(()=>{
@@ -114,8 +114,8 @@ export class UserRoleChange extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        changeUserRoleDialog: state.appUsers.changeUserRoleDialog,
-        appRoles: getAppRoles(state.appRoles, ownProps.appId),
+        changeUserRoleDialog: state.selectedApp.changeUserRoleDialog,
+        appRoles: getAppRoles(state.selectedApp, ownProps.appId),
     };
 };
 

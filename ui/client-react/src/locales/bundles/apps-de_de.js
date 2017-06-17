@@ -55,7 +55,9 @@ export default {
                 userAddError: "Fehler beim Hinzufügen von Benutzer",
                 userRemovingError: "Fehler beim Entfernen des Benutzers",
                 emailBody: "Email Körper geht hier",
-                emailSubject: "E-Mail-Thema geht hier"
+                emailSubject: "E-Mail-Thema geht hier",
+                settingsRole: "Veränderung {Wert} Rolle",
+                settingsRoles: "Veränderung {Wert} Rollen"
             }
         },
         appMenu: {
