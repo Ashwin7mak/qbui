@@ -168,7 +168,7 @@
                 e2ePageBase.loadAppByIdInBrowser(realmName, app.id);
 
                 //Select table Table 1
-                e2ePageBase.loadTableByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id);
+                tableCreatePO.selectTable('Table 1');
                 reportContentPO.waitForReportContent();
 
                 //Assert report title to be expected
@@ -177,6 +177,8 @@
 
                 //Expand the stage
                 browser.element('button.toggleStage').click();
+                //Need this for sliding
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 browser.element('.stage-showHide-content').waitForVisible();
 
                 //Assert description of the stage
