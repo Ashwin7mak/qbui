@@ -9,7 +9,7 @@ class formBuilderPage {
 
     get cancelBtn() {
         // CANCEL (form) button in footer bar
-        return browser.element('.alternativeTrowserFooterButton');
+        return browser.element('.saveOrCancelFooter .alternativeTrowserFooterButton');
     }
 
     get clearSearch() {
@@ -153,6 +153,7 @@ class formBuilderPage {
 
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
+        this.cancelBtn.waitForVisible();
         this.cancelBtn.click();
         while (!formsPO.viewFormContainerEl.isExisting()) {
             this.dirtyForm_Dismiss();
