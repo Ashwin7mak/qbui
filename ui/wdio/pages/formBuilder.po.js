@@ -49,7 +49,7 @@ class formBuilderPage {
 
     get firstField() {
         // the first field (wait for it after open)
-        return browser.element('.formTable .formElementContainer .formElement.field');
+        return browser.element('.field');
     }
 
     get formBuilderContainer() {
@@ -185,7 +185,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        this.firstField.waitForVisible();
+        this.firstField.waitForExist();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
@@ -237,7 +237,8 @@ class formBuilderPage {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
         topNavPO.modifyThisForm.click();
-        return this.firstField.waitForVisible();
+        this.firstField.waitForExist();
+        return this;
     }
 
     openMenu() {
@@ -462,7 +463,7 @@ class formBuilderPage {
         // select the specified field via keyboard
         this.KB_focusField(index);
         browser.keys(['Enter']); // select field
-        this.selectedField.waitForVisible();
+        this.selectedField.waitForExist();
         return this.getSelectedFieldLabel();
     }
 }

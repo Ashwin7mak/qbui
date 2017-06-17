@@ -10,6 +10,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     let loadingSpinner = requirePO('/common/loadingSpinner');
+    let topNavPO = requirePO('topNav');
 
     var sText = 'testTextValue';
     var sUrl = 'http://www.yahoo.com';
@@ -259,10 +260,9 @@
          *
          */
         waitForViewFormsTableLoad: {value: function() {
-            //wait until loading screen disappear in report Content
-            loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
-            // wait until you see elements in the page
-            return browser.waitForVisible('.viewForm .cellWrapper', browser.waitforTimeout);
+            this.viewFormContainerEl.waitForVisible();
+            // wait until you see settings button
+            return topNavPO.settingsBtn.waitForVisible();
         }},
 
         /**
