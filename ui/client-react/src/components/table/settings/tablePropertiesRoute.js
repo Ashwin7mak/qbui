@@ -127,7 +127,10 @@ export const TablePropertiesRoute = React.createClass({
         return this.props.isDirty && !_.findKey(this.props.tableProperties.tableInfo, (field) => field.pendingValidationError);
     },
 
-
+    /**
+     * update the recordTitleFieldId in table info
+     * @param fid new field ID or null to unset it on the table
+     */
     updateRecordTitleField(fid) {
 
         this.props.setTableProperty("recordTitleFieldId", fid, null, null, true);
@@ -149,7 +152,9 @@ export const TablePropertiesRoute = React.createClass({
                                         focusOn={this.props.tableProperties.editing}
                                         validate={this.props.tableProperties.isDirty}
                                         appTables={this.getExistingTableNames()}/>
+
                     <RecordTitleFieldSelection tableInfo={this.props.tableProperties.tableInfo} onChange={this.updateRecordTitleField} />
+
                     <div className="tableInfoButtons">
                         <Button disabled={!this.canApplyChanges()} className="secondaryButton resetButton" onClick={this.resetTableProperties}>
                             <I18nMessage message="nav.reset"/>

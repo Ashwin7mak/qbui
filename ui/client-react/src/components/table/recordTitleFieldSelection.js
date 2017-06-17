@@ -7,28 +7,41 @@ import {DEFAULT_RECORD_KEY_ID} from '../../constants/schema';
 
 import './recordTitleFieldSelection.scss';
 
+/**
+ * table properties section for choosing a record title field
+ */
 class RecordTitleFieldSelection extends React.Component {
 
     constructor(props) {
         super(props);
     }
 
+    /**
+     * callback with new field
+     * @param field
+     */
     selectField = field =>  {
-        this.props.onChange(field.value || null);
+        this.props.onChange(field.value || null); // update with field ID (map to null if empty string value was selected)
     };
 
+    /**
+     * get react-select component
+     * @returns {XML}
+     */
     getSelect() {
 
         let tableNoun = _.get(this.props, "tableInfo.tableNoun.value", "");
 
         if (tableNoun.trim() === "") {
-            tableNoun = Locale.getMessage("tableCreation.recordName");
+            tableNoun = Locale.getMessage("tableCreation.recordName"); // if empty, use a default string
         }
 
         const defaultName = Locale.getMessage("tableCreation.recordTitleFieldDefault", {recordName: tableNoun});
-        const defaultChoice = {id:'', name:defaultName};
+        const defaultChoice = {id:'', name:defaultName}; // default choice at bottom of select
+
         let tableFields = _.get(this.props, "tableInfo.fields.value", []);
 
+        // ignore built-in fields except for record ID
         tableFields = _.reject(tableFields, field => field.type !== "SCALAR" || (field.builtIn && field.id !== DEFAULT_RECORD_KEY_ID));
         const choices = [...tableFields, defaultChoice].map(field => {
             return {
@@ -37,7 +50,7 @@ class RecordTitleFieldSelection extends React.Component {
             };
         });
 
-        const selectedValue = _.get(this.props, "tableInfo.recordTitleFieldId.value", '') || '';
+        const selectedValue = _.get(this.props, "tableInfo.recordTitleFieldId.value", '') || ''; // map null to empty string for select
         return <Select className="recordTitleFieldSelect"
                        value={selectedValue}
                        options={choices}
