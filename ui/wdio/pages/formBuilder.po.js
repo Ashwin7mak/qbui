@@ -159,8 +159,8 @@ class formBuilderPage {
         while (!formsPO.viewFormContainerEl.isExisting()) {
             this.dirtyForm_Dismiss();
         }
-        //Need this to wait for container to slide away
-        return browser.pause(e2eConsts.shortWaitTimeMs);
+        //Need this to wait for leftNav and record to load back again
+        return browser.pause(e2eConsts.mediumWaitTimeMs);
     }
 
     dirtyForm_Dismiss() {
