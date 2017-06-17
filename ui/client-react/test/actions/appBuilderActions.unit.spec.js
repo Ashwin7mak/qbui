@@ -3,6 +3,6 @@ import * as types from '../../src/actions/types';
 
 describe('App Actions success workflow functions', () => {
     it('create showAppCreationDialog event', () => {
-        expect(AppBuilderActions.showAppCreationDialog()).toEqual(event(types.SHOW_APP_CREATION_DIALOG));
+        expect(AppBuilderActions.showAppCreationDialog()).toEqual(types.SHOW_APP_CREATION_DIALOG);
     });
 });

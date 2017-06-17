@@ -1,5 +1,4 @@
 import * as types from '../actions/types';
-import _ from 'lodash';
 
 const appBuilder = (state, action) => {
     switch (action.type) {
