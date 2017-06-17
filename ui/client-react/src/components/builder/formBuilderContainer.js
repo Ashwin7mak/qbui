@@ -32,6 +32,15 @@ import './formBuilderContainer.scss';
 
 let formBuilderContainerContent = null;
 
+/**
+ * This is a ref to the FormBuilder container. A few subcomponents need to access this ref.
+ * We don't want to store this in Redux because it is a large object and is not serializable which may cause issues:
+ * http://redux.js.org/docs/faq/OrganizingState.html#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state
+ *
+ * This function can be imported to those components that need access to the ref.
+ */
+export const getFormBuilderContainerContent = () => formBuilderContainerContent || {};
+
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
 
@@ -226,6 +235,8 @@ export class FormBuilderContainer extends Component {
         }
     }
 
+    setFormBuilderContainerRef = element => formBuilderContainerContent = element;
+
     render() {
         let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
@@ -268,7 +279,7 @@ export class FormBuilderContainer extends Component {
                     <FieldProperties appId={this.props.match.params.appId} app={this.props.app} tableId={this.props.match.params.tblId} formId={formId}>
                         <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}
                              className="formBuilderContainerContent"
-                             ref={element => formBuilderContainerContent = element}
+                             ref={this.setFormBuilderContainerRef}
                              role="button"
                              onKeyDown={this.updateChildrenTabIndex}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
@@ -277,7 +288,6 @@ export class FormBuilderContainer extends Component {
                                         <div className="formBuilderContainer">
                                             <QbForm
                                                 alternateFieldRenderer={DraggableField}
-                                                formBuilderContainerContentElement={formBuilderContainerContent}
                                                 formFocus={this.props.formFocus}
                                                 formBuilderUpdateChildrenTabIndex={this.props.formBuilderUpdateChildrenTabIndex}
                                                 edit={true}

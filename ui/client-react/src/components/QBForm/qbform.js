@@ -431,8 +431,6 @@ export const QBForm = React.createClass({
                     masterAppId={masterAppId}
                     masterFieldId={masterFieldId}
                     location={location}
-
-                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                 />
             </div>
         );

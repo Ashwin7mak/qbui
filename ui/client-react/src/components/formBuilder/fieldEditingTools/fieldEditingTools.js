@@ -11,6 +11,7 @@ import FieldUtils from '../../../utils/fieldUtils';
 import {getTable} from '../../../reducers/app';
 import {CONTEXT} from "../../../actions/context";
 import * as tabIndexConstants from '../tabindexConstants';
+import {getFormBuilderContainerContent} from '../../builder/formBuilderContainer';
 import "./fieldEditingTools.scss";
 
 /**
@@ -124,7 +125,7 @@ export class FieldEditingTools extends Component {
         let selectedFormElement = document.querySelector(".selectedFormElement");
         let isDragging = document.querySelector(".dragging");
         if (selectedFormElement && !isDragging) {
-            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop - 400;
+            getFormBuilderContainerContent.scrollTop = getFormBuilderContainerContent.scrollTop - 400;
         }
     };
 
@@ -135,7 +136,7 @@ export class FieldEditingTools extends Component {
         let selectedFormElement = document.querySelector(".selectedFormElement");
         let isDragging = document.querySelector(".dragging");
         if (selectedFormElement && !isDragging) {
-            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop + 400;
+            getFormBuilderContainerContent.scrollTop = getFormBuilderContainerContent.scrollTop + 400;
         }
     };
 
@@ -206,7 +207,6 @@ export class FieldEditingTools extends Component {
 }
 
 FieldEditingTools.propTypes = {
-    formBuilderContainerContentElement: PropTypes.object,
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     isDragging: PropTypes.bool,
