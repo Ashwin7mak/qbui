@@ -63,7 +63,7 @@ describe('Relationships - Navigate to child record tests: ', () => {
          */
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
-            return reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
         });
 
         /**
@@ -134,7 +134,7 @@ describe('Relationships - Navigate to child record tests: ', () => {
          */
         it('Empty child table is present when viewing a parent record with no children (so sad!)', () => {
             // Navigate to Table 3, Report 1, Record 2
-            reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 2);
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 2);
 
             // Do assertions on the child table form section
             let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);

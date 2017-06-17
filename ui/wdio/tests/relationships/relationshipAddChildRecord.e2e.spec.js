@@ -64,7 +64,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
          */
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
-            return reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
         });
 
         /**

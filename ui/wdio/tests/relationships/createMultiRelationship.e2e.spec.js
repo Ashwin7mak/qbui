@@ -143,7 +143,7 @@
          */
         beforeEach(function() {
             //Load the child table 'table 2' -> random record in view mode
-            return reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
         });
 
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
