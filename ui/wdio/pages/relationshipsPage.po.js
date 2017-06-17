@@ -331,6 +331,7 @@
          * Method to click on Relationship link in view record mode
          */
         clickOnRelationshipFieldValueLink: {value: function(element) {
+            element.element('.viewForm .cellWrapper .textLink').waitForExist();
             //Click on the relationship
             element.element('.viewForm .cellWrapper .textLink').moveToObject();
             // Needed for stabilize DOm after moveToObject
