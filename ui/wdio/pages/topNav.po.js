@@ -37,7 +37,8 @@
         },
         modifyThisForm: {
             get: function() {
-                return browser.element('.topNav .modifyForm');
+                browser.element('.modifyForm').waitForVisible();
+                return browser.element('.modifyForm');
             }
         },
         //Report issue option in Feedback button
