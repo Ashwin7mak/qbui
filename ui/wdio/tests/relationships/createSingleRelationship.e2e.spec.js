@@ -70,7 +70,7 @@
             childTableRecordValues = reportContentPO.getRecordValues(randomTable_2RecordId - 1, 1);
 
             //Load the random record of the parent table ie 'Table 1' and get the values of the record for verification of relation at the end
-            e2ePageBase.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
+            reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
             parentTableRecordValues = formsPO.getRecordValuesInViewForm('.viewForm');
         });
 
@@ -79,7 +79,7 @@
          */
         beforeEach(function() {
             //Load the child table 'table 2' -> random record in view mode
-            return e2ePageBase.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, randomTable_2RecordId);
+            return reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, randomTable_2RecordId);
         });
 
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button

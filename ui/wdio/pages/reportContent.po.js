@@ -352,8 +352,9 @@
          */
         openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
             //navigate to record page directly
-            var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
-            browser.url(requestRecordPageEndPoint);
+            //var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
+            //browser.url(requestRecordPageEndPoint);
+            e2ePageBase.loadRecordByIdInBrowser(realmName, appId, tableId, reportId, recordId);
             return formsPO.waitForViewFormsTableLoad();
         }},
 

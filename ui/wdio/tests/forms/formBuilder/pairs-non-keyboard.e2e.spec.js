@@ -43,7 +43,7 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                return e2ePageBase.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+                return reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
             });
 
             beforeEach(function() {

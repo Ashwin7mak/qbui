@@ -78,7 +78,7 @@ describe('Relationships - View child table on form tests: ', () => {
          */
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
-            return e2ePageBase.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
+            return reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
         });
 
         /**
@@ -129,7 +129,7 @@ describe('Relationships - View child table on form tests: ', () => {
          *  Navigating to a child record without context of a parent, shows a link to parent record
          */
         it('Navigating to a child record directly will show a link to the parent record', () => {
-            e2ePageBase.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
+            reportContentPO.loadRecordByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1, 1);
             let parentLinkText = relationshipsPO.parentRecordLinkEl;
             expect(parentLinkText.getText()).toEqual('1');
             // Click on the parent link just to make sure that it's clickable
