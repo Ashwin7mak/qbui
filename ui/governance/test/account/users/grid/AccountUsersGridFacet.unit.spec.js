@@ -1,6 +1,6 @@
 import React from "react";
 import jasmineEnzyme from "jasmine-enzyme";
-import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
+import {GetAccountUsersFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
 import _ from "lodash";
 import Locale from "../../../../../reuse/client/src/locales/locale";
 import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
@@ -15,7 +15,7 @@ export const FACET_FIELDID = {
 describe('Faceting Fields Values', () => {
 
     it('gets the facets based on QuickBase access status', () => {
-        expect(GetFacetFields(true, true)[FACET_FIELDID.QUICKBASE_ACCESS_STATUS]).toEqual(
+        expect(GetAccountUsersFacetFields(true, true)[FACET_FIELDID.QUICKBASE_ACCESS_STATUS]).toEqual(
             {
                 id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS,
                 name: Locale.getMessage("governance.account.users.accessStatus"),
@@ -31,7 +31,7 @@ describe('Faceting Fields Values', () => {
     });
 
     it('gets the facets based on QuickBase user status', () => {
-        expect(GetFacetFields(true, true)[FACET_FIELDID.QUICKBASE_USER_STATUS]).toEqual(
+        expect(GetAccountUsersFacetFields(true, true)[FACET_FIELDID.QUICKBASE_USER_STATUS]).toEqual(
             {
                 id:FACET_FIELDID.QUICKBASE_USER_STATUS,
                 name: Locale.getMessage("governance.account.users.userStatus"),
@@ -45,7 +45,7 @@ describe('Faceting Fields Values', () => {
     });
 
     it('gets the right info for user in group', () => {
-        expect(GetFacetFields(true, true)[FACET_FIELDID.INGROUP]).toEqual(
+        expect(GetAccountUsersFacetFields(true, true)[FACET_FIELDID.INGROUP]).toEqual(
             {
                 id:FACET_FIELDID.INGROUP,
                 name: Locale.getMessage("governance.account.users.inGroup"),
@@ -85,18 +85,18 @@ describe('Facet Fields Permissions', () => {
         Locale.getMessage("governance.account.users.realmApproved")];
 
     it("should get ONLY the Realm fields", ()=> {
-        let realmAdminFacets = GetFacetFields(false, true);
+        let realmAdminFacets = GetAccountUsersFacetFields(false, true);
         expect([...PERM_AGNOSTIC_FACETS(), ...REALM_ONLY_FACETS()]).toEqual(_.map(realmAdminFacets, (facet) => facet.name));
     });
 
     it("should get ONLY the Account fields", ()=> {
-        let accountFacets = GetFacetFields(true, false);
+        let accountFacets = GetAccountUsersFacetFields(true, false);
         expect([...PERM_AGNOSTIC_FACETS(), ...ACCOUNT_ONLY_FACETS()]).toEqual(_.map(accountFacets, (facet) => facet.name));
     });
 
     it("should get ALL the fields", ()=> {
         const ALL_FACETS = [...PERM_AGNOSTIC_FACETS(), ...ACCOUNT_ONLY_FACETS(), ...REALM_ONLY_FACETS()];
-        let allFacets = GetFacetFields(true, true);
+        let allFacets = GetAccountUsersFacetFields(true, true);
         expect(ALL_FACETS).toEqual(_.map(allFacets, (facet) => facet.name));
     });
 });

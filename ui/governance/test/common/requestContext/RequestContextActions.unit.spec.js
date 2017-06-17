@@ -9,6 +9,15 @@ import Promise from "bluebird";
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 
 describe('RequestContextActions', () => {
+    class mockLogger {
+        constructor() {}
+        logException() {}
+        debug() {}
+        warn() {}
+        error() {}
+        parseAndLogError() {}
+    }
+
     const mockWindowUtils = {
         update: url => url,
     };
@@ -16,10 +25,12 @@ describe('RequestContextActions', () => {
     beforeEach(() => {
         spyOn(mockWindowUtils, 'update');
         RequestContextActionsRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        RequestContextActionsRewireAPI.__Rewire__('Logger', mockLogger);
     });
 
     afterEach(() => {
         RequestContextActionsRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
+        RequestContextActionsRewireAPI.__ResetDependency__('Logger');
     });
 
     let middleware =  [thunk];

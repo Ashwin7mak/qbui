@@ -12,8 +12,6 @@ import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUser
 import * as SCHEMACONSTS from "../../../../client-react/src/constants/schema";
 import {FACET_FIELDS} from "../users/grid/AccountUsersGridFacet";
 
-let logger = new Logger();
-
 /**
  * Action when there is successful user from the backend
  * @param users
@@ -182,7 +180,7 @@ export const facetUser = (users, facetSelections) => {
  *
  * NOTE: In the future, this is going to be at the server
  */
-export const doUpdate = (gridId, gridState, _itemsPerPage) => {
+export const doUpdateUsers = (gridId, gridState, _itemsPerPage) => {
     return (dispatch, getState) => {
         let users = getState().AccountUsers ? getState().AccountUsers.users : [];
 
@@ -223,6 +221,7 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
  */
 export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
     return (dispatch) => {
+        let logger = new Logger();
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
         const promise = accountUsersService.getAccountUsers(accountId);
@@ -241,7 +240,7 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
             dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
 
             // run through the pipeline and update the grid
-            dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));
+            dispatch(doUpdateUsers(gridID, StandardGridState.defaultGridState, itemsPerPage));
 
         }).catch(error => {
             dispatch(failedAccountUsers(error));

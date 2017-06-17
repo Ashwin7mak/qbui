@@ -3,8 +3,8 @@ import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
 import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
+import {removeFieldFromForm} from '../../actions/formActions';
 import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
-import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
 import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
@@ -22,16 +22,19 @@ export const LinkToRecordFieldValueEditor = React.createClass({
     propTypes: {
         hideRelationshipDialog: PropTypes.func,
         newFormFieldId: PropTypes.string,
+        newRelationshipFieldIds: PropTypes.array,
         updateField: PropTypes.func,
         removeFieldFromForm: PropTypes.func,
         tblId: PropTypes.string,
-        tables: PropTypes.array,
+        app: PropTypes.object,
         formId: PropTypes.string,
+        fieldDef: PropTypes.object
     },
 
     getDefaultProps() {
         return {
-            formId: CONTEXT.FORM.VIEW
+            formId: CONTEXT.FORM.VIEW,
+            newRelationshipFieldIds: []
         };
     },
     getInitialState() {
@@ -40,11 +43,13 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         };
     },
 
-    /**
+     /**
      * parent table selected
      * @param tableId
+     * @param parentTableField
+     * @param childTableName
      */
-    relationshipSelected(tableId, parentTableField) {
+    relationshipSelected(tableId, parentTableField, childTableName) {
 
         this.props.hideRelationshipDialog();
 
@@ -56,6 +61,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         field.parentTableId = tableId;
         field.parentFieldId = parentTableField.id;
         field.parentFieldType = parentTableField.datatypeAttributes.type;
+        field.parentTableName = parentTable.name;
+        field.childTableName = childTableName;
 
         field.name = Locale.getMessage('fieldsDefaultLabels.LINK_TO_RECORD_FROM', {parentTable: parentTable.name});
 
@@ -103,11 +110,15 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      * @returns {*}
      */
     render() {
+
         if (this.props.newFormFieldId && this.props.newFormFieldId === this.props.fieldDef.id) {
             return (
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
                                                   app={this.props.app}
+                                                  fields={this.props.fields}
+                                                  newRelationshipFields={this.props.newRelationshipFieldIds}
+                                                  fieldsToDelete={this.props.fieldsToDelete}
                                                   tableSelected={this.relationshipSelected}
                                                   onCancel={this.cancelTableSelection}/>);
         } else {
@@ -120,6 +131,9 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 const mapStateToProps = (state) => {
     return {
         newFormFieldId: getDroppedNewFormFieldId(state),
+        newRelationshipFieldIds: state.relationshipBuilder.newRelationshipFieldIds,
+        fields: state.fields,
+        fieldsToDelete: _.get(state, "forms.view.formData.formMeta.fieldsToDelete", [])
     };
 };
 
