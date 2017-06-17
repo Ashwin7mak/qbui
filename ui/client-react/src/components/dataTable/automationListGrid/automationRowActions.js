@@ -42,21 +42,13 @@ const AutomationRowActions = React.createClass({
         }
     },
 
-    onClickToggleSelectedRow() {
+    onClickToggleSelectedRow() {},
 
-    },
+    onClickAddNewRow() {},
 
-    onClickAddNewRow() {
+    onCancelEditingRow() {},
 
-    },
-
-    onCancelEditingRow() {
-
-    },
-
-    onClickSaveRow() {
-
-    },
+    onClickSaveRow() {},
 
     render() {
         return <RowActionsReuse iconActionsNode={<QbAutomationIconActions onClickEditRowIcon={this.onClickEditRowIcon}
