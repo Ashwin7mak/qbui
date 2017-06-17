@@ -168,7 +168,7 @@
                 e2ePageBase.loadAppByIdInBrowser(realmName, app.id);
 
                 //Select table Table 1
-                tableCreatePO.selectTable('Table 1');
+                tableCreatePO.selectTable('table 1');
                 reportContentPO.waitForReportContent();
 
                 //Assert report title to be expected
