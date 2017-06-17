@@ -192,6 +192,7 @@ class formBuilderPage {
         }
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
 
