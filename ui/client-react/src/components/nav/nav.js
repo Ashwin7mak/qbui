@@ -31,7 +31,7 @@ import * as TableCreationActions from '../../actions/tableCreationActions';
 import {loadApp, loadApps} from '../../actions/appActions';
 
 import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
-import {getAppRoles} from '../../reducers/appRoles';
+import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -567,7 +567,7 @@ const mapStateToProps = (state, ownProps) => {
         getApp: (appId) => getApp(state.app, appId),
         getApps: () => getApps(state.app),
         appOwner: getAppOwner(state.app),
-        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
+        appRoles: getAppRoles(state.selectedApp),
         selectedAppId: getSelectedAppId(state.app),
         selectedTableId: getSelectedTableId(state.app),
         appUsers: getAppUsers(state.app),

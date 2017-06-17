@@ -583,4 +583,55 @@ describe('FieldUtils', () => {
             });
         });
     });
+
+    describe('isRecordTitleField', () => {
+        it('returns false if there is no table', () => {
+            expect(FieldUtils.isRecordTitleField(null, 2)).toEqual(false);
+        });
+
+        it('returns false if there is no record title on the table', () => {
+            const testApp = {tables: [{id: 1}]};
+
+            expect(FieldUtils.isRecordTitleField(testApp.tables[0], 2)).toEqual(false);
+        });
+
+        it('returns false if the current fieldId does not match the title field id for the table', () => {
+            const testApp = {tables: [{id: 1, recordTitleFieldId: 3}]};
+
+            expect(FieldUtils.isRecordTitleField(testApp.tables[0], 2)).toEqual(false);
+        });
+
+        it('returns false if the current fieldId matches the title field id for the table', () => {
+            const testApp = {tables: [{id: 1, recordTitleFieldId: 2}]};
+
+            expect(FieldUtils.isRecordTitleField(testApp.tables[0], 2));
+        });
+    });
+
+    describe('isDetailKeyField', () => {
+        it('returns false if there is no table', () => {
+            expect(FieldUtils.isDetailKeyField(null, 'app1', 'table1', 2)).toEqual(false);
+        });
+        it('returns false if there is no appId', () => {
+            expect(FieldUtils.isDetailKeyField([], null, 'table1', 2)).toEqual(false);
+        });
+        it('returns false if there is no tableId', () => {
+            expect(FieldUtils.isDetailKeyField([], 'app1', null, 2)).toEqual(false);
+        });
+        it('returns false if there is no fieldId', () => {
+            expect(FieldUtils.isDetailKeyField([], 'app1', 'table1', null)).toEqual(false);
+        });
+
+        it('returns false if there is fieldId is not a part of relationships', () => {
+            const relationships = [{detailAppId: 'app1', detailTableId: 'table1', detailFieldId: 1}];
+
+            expect(FieldUtils.isDetailKeyField(relationships, 'app1', 'table1', 2)).toEqual(false);
+        });
+
+        it('returns true if there is fieldId is a part of relationships', () => {
+            const relationships = [{detailAppId: 'app1', detailTableId: 'table1', detailFieldId: 2}, {detailAppId: 'app2', detailTableId: 'table2', detailFieldId: 3}];
+
+            expect(FieldUtils.isDetailKeyField(relationships, 'app1', 'table1', 2)).toEqual(true);
+        });
+    });
 });
