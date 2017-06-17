@@ -36,8 +36,8 @@ export class DraggableTokenInMenu extends Component {
     }
 
     clickToAddToForm = () => {
-        if (this.props.onClick) {
-            this.props.onClick(this.props);
+        if (this.props.onClickToken) {
+            this.props.onClickToken(this.props);
         }
     };
 
@@ -139,7 +139,7 @@ DraggableTokenInMenu.propTypes = {
     /**
      * Callback that is fired when the token is clicked or the user presses enter or space while focused on the token.
      * It will receive the element props as the first and only argument. */
-    onClick: PropTypes.func,
+    onClickToken: PropTypes.func,
 
     /**
      * Tabindex */

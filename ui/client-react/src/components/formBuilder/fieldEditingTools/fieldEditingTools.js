@@ -75,7 +75,7 @@ export class FieldEditingTools extends Component {
                     <div className="actionIcons">
                         <div className="deleteFieldIcon">
                             <QbToolTip i18nMessageKey={toolTipTextKey}>
-                                <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete} disabled={enableDelete}>
+                                <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete} disabled={!enableDelete}>
                                     <QbIcon className={deleteIconClasses.join(' ')} icon="clear-mini"/>
                                 </button>
                             </QbToolTip>

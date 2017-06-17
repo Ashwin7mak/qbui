@@ -63,7 +63,7 @@ export class DraggableFieldTokenInMenu extends Component {
         return (
             <DraggableTokenInMenu
                 {...this.props}
-                onClick={this.clickToAddToForm}
+                onClickToken={this.clickToAddToForm}
                 tabIndex={this.props.tabIndex}
                 onKeyDown={this.onEnterClickToAdd}
                 onHoverBeforeAdded={this.onHoverBeforeAdded}
