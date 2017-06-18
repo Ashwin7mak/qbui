@@ -252,7 +252,9 @@
          */
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
-            return this.editFormContainerEl.waitForVisible();
+            this.editFormContainerEl.waitForVisible();
+            //Need this for container to slide down completely
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
@@ -260,7 +262,9 @@
          *
          */
         waitForViewFormsTableLoad: {value: function() {
-            return this.viewFormContainerEl.waitForVisible();
+            this.viewFormContainerEl.waitForVisible();
+            //Need this for container to slide down completely
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
