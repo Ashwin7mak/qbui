@@ -86,9 +86,7 @@
             let fieldTypes = ['allTextFields', 'allNumericFields', 'allDateFields'];
 
             //go to appId page
-            browser.call(function() {
-                return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-            });
+            e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
 
             //create table via UI
             //Click on new table button
