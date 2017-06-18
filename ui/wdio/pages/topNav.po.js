@@ -37,7 +37,6 @@
         },
         modifyThisForm: {
             get: function() {
-                browser.element('.configMenu .modifyForm').waitForVisible();
                 return browser.element('.configMenu .modifyForm');
             }
         },

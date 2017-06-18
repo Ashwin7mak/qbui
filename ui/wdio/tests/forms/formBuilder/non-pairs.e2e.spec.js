@@ -245,9 +245,12 @@
                 expect(topNavPO.title.getText()).toBe('Modify form');
                 // go back to view record form
                 formBuilderPO.cancel();
+                // Open settings menu item
+                formBuilderPO.openMenu();
                 // verify the text of the invoking menu item
                 expect(topNavPO.modifyThisForm.getAttribute('textContent')).toBe('Modify this form');
-                reportContentPO.tableHomepageLink.click();
+                // Click again on setting icon to dismiss the menu
+                topNavPO.settingsBtn.click();
                 // verify that the menu option no longer exists
                 topNavPO.modifyThisForm.waitForVisible(null, true);
                 // verify that the form container no longer exists
