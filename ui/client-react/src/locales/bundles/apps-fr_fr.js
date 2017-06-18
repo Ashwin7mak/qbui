@@ -731,6 +731,9 @@ export default {
             featureNameExists: "Les noms des entités doivent être uniques",
             featureNameEmpty: "Les noms des entités doivent être blanc"
         },
+        appCreation: {
+            newApp: 'Nouvelle application'
+        },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
             newTableDescription: "Créer une nouvelle table lorsque vous souhaitez collecter un nouveau type d'information.",

@@ -9,6 +9,7 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
+import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
 let TablesList = React.createClass({
 
@@ -142,16 +143,10 @@ let TablesList = React.createClass({
      * @returns {XML}
      */
     getNewTableItem() {
-
-        return (
-            <li className="newTableItem link" key="newTable">
-                <a className="newTable leftNavLink" onClick={this.props.onCreateNewTable}>
-                    <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message="tableCreation.newTablePageTitle"/></span>
-                    <div className="hoverComponent">
-                        <I18nMessage message="tableCreation.newTablePageTitle"/>
-                    </div>
-                </a>
-            </li>);
+        return <CreateNewItemButton handleOnClick={this.props.onCreateNewTable}
+                                    message="tableCreation.newTablePageTitle"
+                                    className="newTable"
+        />;
     },
 
     render() {
@@ -174,8 +169,6 @@ let TablesList = React.createClass({
                 <ul className="tablesList">
                     {this.tablesList()}
                 </ul>
-
-
             </div>
         );
     }

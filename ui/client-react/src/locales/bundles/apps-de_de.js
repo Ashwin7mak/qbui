@@ -731,6 +731,9 @@ export default {
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         },
+        appCreation: {
+            newApp: 'Neue app'
+        },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
             newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
