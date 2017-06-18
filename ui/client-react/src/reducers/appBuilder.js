@@ -3,6 +3,7 @@ import * as types from '../actions/types';
 const appBuilder = (state = {}, action) => {
     switch (action.type) {
     case types.SHOW_APP_CREATION_DIALOG:
+        console.log('reducer called!!!');
         return {
             ...state,
             dialogOpen: true

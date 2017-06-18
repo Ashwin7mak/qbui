@@ -61,7 +61,7 @@ export const AppsList = React.createClass({
      * @returns {XML}
      */
     getNewAppItem() {
-        return <CreateNewItemButton handleOnClick={this.props.onCreateNewApp}
+        return <CreateNewItemButton handleOnClick={this.createNewApp}
                                     message="appCreation.newApp"
                                     className="newApp"
                 />;
@@ -80,9 +80,10 @@ export const AppsList = React.createClass({
      * open the create app wizard
      */
     createNewApp() {
-        if (this.allowCreateNewApp()) {
-            this.props.showAppCreationDialog();
-        }
+        // if (this.allowCreateNewApp()) {
+        //     this.props.showAppCreationDialog();
+        // }
+        this.props.showAppCreationDialog();
     },
 
     render() {
