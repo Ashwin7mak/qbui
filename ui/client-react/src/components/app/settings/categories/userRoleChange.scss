@@ -17,7 +17,7 @@
         display: none;
     }
     .fieldLabel {
-        margin-bottom: 10px;
+        margin-bottom: 2px;
         span {
             font-weight: bold;
         }
@@ -116,7 +116,8 @@
 
         .Select-option {
             &.is-focused {
-                background-color: $color-black-200;
+                background-color: $color-black-100;
+            ;
             }
         }
 

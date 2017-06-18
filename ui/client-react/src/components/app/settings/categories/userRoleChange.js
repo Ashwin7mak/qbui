@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {I18nMessage} from "../../../../utils/i18nMessage";
-import Locale from '../../../../locales/locales';
 import {toggleChangeUserRoleDialog} from '../../../../actions/appActions';
 import {removeUsersFromAppRole, assignUsersToAppRole} from '../../../../actions/appRoleActions';
 import  Select from 'react-select';
@@ -26,13 +25,13 @@ export class UserRoleChange extends React.Component {
 	 * dialog finished
 	 */
     onFinished = () => {
-		this.setState({savingRole: true});
+        this.setState({savingRole: true});
         const {appId, selectedUserRows} = this.props;
         this.props.removeUsersFromAppRole(appId, selectedUserRows).then(()=>{
             this.props.assignUsersToAppRole(appId, this.state.selectedRole, selectedUserRows).then(()=>{
-                this.props.toggleChangeUserRoleDialog(false);
                 this.setState({savingRole: false});
-                let msg = this.props.getSelectionTip(selectedUserRows > 1 ? "changeUserRole.successUserRole" : "changeUserRole.pluralSuccessUserRole");
+                this.props.toggleChangeUserRoleDialog(false);
+                let msg = this.props.getSelectionTip(selectedUserRows.length === 1 ? "changeUserRole.successUserRole" : "changeUserRole.pluralSuccessUserRole");
                 NotificationManager.success(msg);
                 this.props.clearSelectedUserRows();
             });
@@ -86,7 +85,6 @@ export class UserRoleChange extends React.Component {
 				showCancelButton={true}
 				showFinishedButton={true}
 				finishedButtonLabel={this.props.getSelectionTip(selectedUserRows.length < 2 ? "changeUserRole.changeUserRole" : "changeUserRole.pluralChangeUserRole")}>
-				{/*<Loader loadedClassName="transitionGroup" loaded={!this.state.savingRole} options={SpinnerConfigurations.CHANGE_ROLE}>*/}
 				<div className="userRoleContent">
 					<div className="title">{this.props.getSelectionTip(selectedUserRows.length < 2 ? "changeUserRole.userRoleTitle" : "changeUserRole.pluralUserRoleTitle")}</div>
 					<div className="description"><I18nMessage message="changeUserRole.userRoleDescription"/></div>
@@ -107,7 +105,6 @@ export class UserRoleChange extends React.Component {
 						</div>
 					</div>
 				</div>
-				{/*</Loader>*/}
 			</MultiStepDialog>);
     }
 }

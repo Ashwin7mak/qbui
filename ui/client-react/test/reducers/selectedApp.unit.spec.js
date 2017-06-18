@@ -19,7 +19,7 @@ describe('Test selectedApp reducer', () => {
         addedAppUser: [],
         isLoading: false,
         error: false,
-		changeUserRoleDialog: false,
+        changeUserRoleDialog: false,
     };
 
     const appRoles = [{"9": {"id": 9, "name": "none", "tableRights": {}, "fieldRights": {}, "description": "", "access": "NONE"}}];

@@ -1,7 +1,7 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {UserRoleChange, __RewireAPI__ as UserRoleChangeAPI} from '../../../../../src/components/app/settings/categories/userRoleChange';
-import {shallow, mount} from 'enzyme';
+import {UserRoleChange} from '../../../../../src/components/app/settings/categories/userRoleChange';
+import {shallow} from 'enzyme';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
 let component;
@@ -33,16 +33,10 @@ const appRoles = [
 ];
 const appId = '0duiiaaaazd';
 const roleId = 11;
-const selectedApp = {
-    name: 'Moz'
-};
+
 const selectedUserRows = [
 	{id: 'RDUII_UB', roleId: '10'}
 ];
-
-const userPanel =  {
-    getSelectedUser: ()=>{return 1;}
-};
 
 const mockParentFunctions = {
     onCancel() {},
