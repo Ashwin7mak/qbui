@@ -317,7 +317,7 @@
         selectFromParentPicker: {
             value: function(parentRecord) {
                 let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
-                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
+                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
                 });
 
                 if (fields !== []) {
@@ -332,13 +332,13 @@
          * Method to click on Relationship link in view record mode
          */
         clickOnRelationshipFieldValueLink: {value: function(element) {
-            element.element('.viewForm .cellWrapper .textLink').waitForExist();
+            element.element('.cellWrapper .textLink').waitForExist();
             //Click on the relationship
-            element.element('.viewForm .cellWrapper .textLink').moveToObject();
+            element.element('.cellWrapper .textLink').moveToObject();
             // Needed for stabilize DOm after moveToObject
             browser.pause(slideyRightyPause);
-            element.element('.viewForm .cellWrapper .textLink').waitForVisible();
-            return element.element('.viewForm .cellWrapper .textLink').click();
+            element.element('.cellWrapper .textLink').waitForVisible();
+            return element.element('.cellWrapper .textLink').click();
         }},
 
         /**
@@ -349,9 +349,9 @@
             let getEmbeddedReportChildRecordValues;
 
             //verify You land in view form since you edited a record from View form after saving
-            browser.element('.formElementContainer .field').waitForVisible();
-            let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
-                return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes('Get another record');
+            browser.element('.formTable.section-0 .formElement .field').waitForVisible();
+            let fields = browser.elements('.formTable.section-0 .formElement .field').value.filter(function(fieldLabel) {
+                return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
             });
 
             if (fields !== []) {
