@@ -66,7 +66,8 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open().getFieldLabels();
+                formBuilderPO.cancel();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify field name is not revised
                 expect(newFields).toEqual(originalFields);
             });
@@ -95,7 +96,8 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open().getFieldLabels();
+                formBuilderPO.cancel();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify that the first item has been restored
                 expect(newFields.indexOf(firstField)).toEqual(0);
             });
@@ -128,7 +130,8 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open().getFieldLabels();
+                formBuilderPO.cancel();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify new field is not present
                 expect(newFields).toEqual(originalFields);
             });
@@ -164,7 +167,8 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open().getFieldLabels();
+                formBuilderPO.cancel();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify lack of persistence
                 expect(newFields).toEqual(origFields);
             });
