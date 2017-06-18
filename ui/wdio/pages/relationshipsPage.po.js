@@ -387,7 +387,7 @@
             value: function(expectedTablesList, selectParentTable, selectField, verifyDefaultField) {
                 expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
                 //Verify title
-                expect(modalDialog.modalDialogTitle).toContain('Get another record');
+                expect(modalDialog.modalDialogTitle).toContain(e2eConsts.GET_ANOTHER_RECORD);
                 //Verify select tables drop down has all the tables except the one you're in
                 modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
                 let tableDropDownList = modalDialog.allDropDownListOptions;
