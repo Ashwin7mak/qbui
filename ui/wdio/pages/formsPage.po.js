@@ -252,9 +252,7 @@
          */
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
-            this.editFormContainerEl.waitForVisible();
-            // wait until you see settings button
-            return topNavPO.settingsBtn.waitForVisible();
+            return this.editFormContainerEl.waitForVisible();
         }},
 
         /**
@@ -262,9 +260,7 @@
          *
          */
         waitForViewFormsTableLoad: {value: function() {
-            this.viewFormContainerEl.waitForVisible();
-            // wait until you see settings button
-            return topNavPO.settingsBtn.waitForVisible();
+            return this.viewFormContainerEl.waitForVisible();
         }},
 
         /**
