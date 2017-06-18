@@ -165,7 +165,7 @@
                 newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
 
                 //go to app via url
-                 e2ePageBase.loadAppsInBrowser(realmName);
+                e2ePageBase.loadAppsInBrowser(realmName);
 
                 //select App
                 RequestAppsPage.selectApp(app.name);
