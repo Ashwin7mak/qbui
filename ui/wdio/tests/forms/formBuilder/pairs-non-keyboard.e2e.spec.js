@@ -5,7 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
-    let formsPO = requirePO('formsPage');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     let realmName;
     let realmId;
@@ -79,7 +79,10 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // save & reopen
-                let newFields = formBuilderPO.save().open().getFieldLabels();
+                formBuilderPO.save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify field name is revised
                 expect(newFields).toEqual(existingFields);
             });
@@ -104,7 +107,10 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
                 // save & reopen
-                let newFields = formBuilderPO.save().open().getFieldLabels();
+                formBuilderPO.save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify that the first item is still gone
                 expect(newFields).not.toContain(firstField);
             });
@@ -139,7 +145,10 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // save & reopen
-                let newFields = formBuilderPO.save().open().getFieldLabels();
+                formBuilderPO.save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify new field is present
                 expect(newFields).toEqual(existingFields);
             });
@@ -170,7 +179,10 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // save & reopen
-                let newFields = formBuilderPO.save().open().getFieldLabels();
+                formBuilderPO.save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 // verify persistence
                 expect(newFields).toEqual(movedFields);
             });
