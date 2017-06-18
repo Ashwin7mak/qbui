@@ -84,6 +84,10 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //If tablesList is not visible then again navigate to appId page
+        if (!browser.element('.tablesList').isExisting()) {
+            this.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, appId));
+        }
         //wait until you see newTable in left Nav
         return browser.element('.appHomePageBody .noRowsIcon').waitForVisible();
     };
