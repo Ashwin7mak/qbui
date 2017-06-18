@@ -13,7 +13,7 @@
     let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
     let notificationContainer = requirePO('/common/notificationContainer');
-    let reportInLineEditPO = requirePO('reportInLineEdit');
+    let topNavPO = requirePO('topNav');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -307,7 +307,8 @@
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
             //verify You land in view form
-            return formsPO.waitForViewFormsTableLoad();
+            formsPO.waitForViewFormsTableLoad();
+            return topNavPO.settingsBtn.waitForVisible();
         }},
 
         /**

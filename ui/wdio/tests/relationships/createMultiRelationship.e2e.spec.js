@@ -12,6 +12,7 @@
     let formBuilderPO = requirePO('formBuilder');
     let modalDialog = requirePO('/common/modalDialog');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let topNavPO = requirePO('topNav');
 
     let parentTable;
     let parentPickerTitleFieldValue = 'testTextValue';
@@ -186,6 +187,7 @@
                 notificationContainer.waitUntilNotificationContainerGoesAway();
                 //verify You land in view form since you edited a record from View form after saving
                 formsPO.waitForViewFormsTableLoad();
+                topNavPO.settingsBtn.waitForVisible();
 
                 //Verify the relationship by clicking on get another record from parent link in view record mode.
                 //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
