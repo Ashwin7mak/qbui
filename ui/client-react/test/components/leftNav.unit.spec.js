@@ -1,8 +1,9 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import LeftNav from '../../src/components/nav/leftNav';
+import LeftNav, {__RewireAPI__ as LeftNavRewireAPI} from '../../src/components/nav/leftNav';
 import {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
+import {AppsList} from '../../src/components/nav/appsListForLeftNav';
 import {MemoryRouter} from 'react-router-dom';
 
 var I18nMessageMock = React.createClass({
@@ -52,10 +53,12 @@ describe('Left Nav functions', () => {
     var component;
 
     beforeEach(() => {
+        LeftNavRewireAPI.__Rewire__('AppsList', AppsList);
         NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
+        LeftNavRewireAPI.__ResetDependency__('AppsList');
         NavItemRewireAPI.__ResetDependency__('I18nMessage');
     });
 
@@ -98,6 +101,13 @@ describe('Left Nav functions', () => {
 });
 
 describe('LeftNav', () => {
+    beforeEach(() => {
+        LeftNavRewireAPI.__Rewire__('AppsList', AppsList);
+    });
+
+    afterEach(() => {
+        LeftNavRewireAPI.__ResetDependency__('AppsList');
+    });
     let component;
     let validAppId = 'app1';
     let invalidAppId = 'doesnotexist';

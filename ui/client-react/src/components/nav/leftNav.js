@@ -2,7 +2,7 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import Button from 'react-bootstrap/lib/Button';
 import Loader  from 'react-loader';
-import AppsList from './appsList';
+import AppsList from './appsListForLeftNav';
 import TablesList from './tablesList';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
@@ -78,7 +78,7 @@ let LeftNav = React.createClass({
     renderNavContent() {
         // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
         if (this.props.appsListOpen || !AppUtils.appExists(this.props.selectedAppId, this.props.apps)) {
-            return <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  />;
+            return <AppsList {...this.props} key={"apps"} onSelectApp={this.onSelectApp}/>;
         } else {
             return <TablesList key={"tables"}
                                expanded={this.props.expanded}
