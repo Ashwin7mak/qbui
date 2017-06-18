@@ -332,13 +332,13 @@
          * Method to click on Relationship link in view record mode
          */
         clickOnRelationshipFieldValueLink: {value: function(element) {
-            element.element('.cellWrapper .textLink').waitForExist();
+            element.element('span.textField.viewElement.textLink').waitForExist();
             //Click on the relationship
-            element.element('.cellWrapper .textLink').moveToObject();
+            element.element('span.textField.viewElement.textLink').moveToObject();
             // Needed for stabilize DOm after moveToObject
             browser.pause(slideyRightyPause);
-            element.element('.cellWrapper .textLink').waitForVisible();
-            return element.element('.cellWrapper .textLink').click();
+            element.element('span.textField.viewElement.textLink').waitForVisible();
+            return element.element('span.textField.viewElement.textLink').click();
         }},
 
         /**
@@ -349,8 +349,8 @@
             let getEmbeddedReportChildRecordValues;
 
             //verify You land in view form since you edited a record from View form after saving
-            browser.element('.formTable.section-0 .formElement .field').waitForVisible();
-            let fields = browser.elements('.formTable.section-0 .formElement .field').value.filter(function(fieldLabel) {
+            browser.element('.viewForm .field').waitForVisible();
+            let fields = browser.elements('.viewForm .field').value.filter(function(fieldLabel) {
                 return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
             });
 
@@ -358,10 +358,10 @@
                 //Click on the relationship
                 this.clickOnRelationshipFieldValueLink(fields[0]);
                 //Wait until the view form drawer loads
-                browser.element('.drawer .section-0 .cellWrapper').waitForVisible();
+                browser.element('.drawer .formTable.section-0').waitForVisible();
 
                 //Verify the parent record values
-                getRecordValuesByClickingOnRelLink = formsPO.getRecordValuesInViewForm('.drawer .viewForm .section-0');
+                getRecordValuesByClickingOnRelLink = formsPO.getRecordValuesInViewForm('.drawer .formTable.section-0');
                 expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
 
                 //Verify the embeddedReport ie child record values
