@@ -5,7 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
-    let formsPO = requirePO('formsPage');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     let realmName;
     let realmId;
@@ -82,6 +82,8 @@
             it('move a field via keyboard & verify revised order after SAVE', function() {
                 let revisedOrder = formBuilderPO.KB_moveField(1, 2);
                 formBuilderPO.KB_save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
                 let newFields = formBuilderPO.open().getFieldLabels();
                 expect(newFields).toEqual(revisedOrder);
             });
@@ -95,7 +97,10 @@
             it('remove a field via keyboard & verify absence after SAVE', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // save & reopen
-                let newFields = formBuilderPO.save().open().getFieldLabels();
+                formBuilderPO.save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 expect(newFields).not.toContain(deletedField);
             });
         }

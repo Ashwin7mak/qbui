@@ -81,10 +81,11 @@
             ];
             //Create a new parent table and single record into new table
             let formBuilderFields = ['Number'];
-            let fieldTypes = ['allTextFields', 'allNumericFields', 'allDateFields'];
 
             //go to appId page
-            e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+            browser.call(function() {
+                return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+            });
 
             //create table via UI
             //Click on new table button
