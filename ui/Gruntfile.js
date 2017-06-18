@@ -608,6 +608,7 @@ module.exports = function(grunt) {
                     automations: [],
                     forms: [
                         './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/non-pairs-part2.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
                         './wdio/tests/forms/formAdd.e2e.spec.js',

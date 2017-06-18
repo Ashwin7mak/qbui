@@ -49,7 +49,7 @@ class formBuilderPage {
 
     get firstField() {
         // the first field (wait for it after open)
-        return browser.element('.field');
+        return browser.element('.formTable .field');
     }
 
     get formBuilderContainer() {
