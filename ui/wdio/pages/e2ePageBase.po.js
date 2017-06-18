@@ -68,8 +68,8 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.myappsBody');
+        //wait until apps links in leftNav is visible
+        return browser.element('.appsList .leftNavLabel').waitForVisible();
     };
 
     /**

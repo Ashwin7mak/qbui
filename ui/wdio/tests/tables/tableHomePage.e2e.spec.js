@@ -165,9 +165,10 @@
                 newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
 
                 //go to app via url
-                browser.call(function() {
-                    return e2ePageBase.loadAppByIdInBrowser(realmName, app.id);
-                });
+                 e2ePageBase.loadAppsInBrowser(realmName);
+
+                //select App
+                RequestAppsPage.selectApp(app.name);
 
                 //Select table Table 1
                 tableCreatePO.selectTable('table 1');
