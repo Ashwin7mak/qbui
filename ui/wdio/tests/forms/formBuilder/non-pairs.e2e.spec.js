@@ -256,7 +256,6 @@
                 // verify that the form container no longer exists
                 formBuilderPO.formBuilderContainer.waitForExist(null, true);
                 // get back to form builder so afterEach doesn't fail on Cancel
-                reportContentPO.clickOnRecordInReportTable(1);
                 formBuilderPO.open();
             });
 
