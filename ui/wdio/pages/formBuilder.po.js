@@ -4,13 +4,12 @@ let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
-let notificationContainer = requirePO('/common/notificationContainer');
 
 class formBuilderPage {
 
     get cancelBtn() {
         // CANCEL (form) button in footer bar
-        return browser.element('.saveOrCancelFooter .alternativeTrowserFooterButton');
+        return browser.element('.alternativeTrowserFooterButton');
     }
 
     get clearSearch() {
@@ -160,7 +159,8 @@ class formBuilderPage {
             this.dirtyForm_Dismiss();
         }
         //Need this to wait for leftNav and record to load back again
-        return browser.pause(e2eConsts.mediumWaitTimeMs);
+        browser.pause(e2eConsts.mediumWaitTimeMs);
+        return this;
     }
 
     dirtyForm_Dismiss() {
@@ -279,8 +279,7 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        //wait until save success container goes away
-        return notificationContainer.waitUntilNotificationContainerGoesAway();
+        return this;
     }
 
     search(text) {
