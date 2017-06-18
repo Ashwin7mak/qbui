@@ -279,7 +279,7 @@
         createRelationshipToParentTable: {value: function(parentTable, selectField) {
 
             //Select settings -> modify this form
-            formBuilderPO.open();
+            topNavPO.clickOnModifyFormLink();
 
             //Click on add a new record button
             formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);

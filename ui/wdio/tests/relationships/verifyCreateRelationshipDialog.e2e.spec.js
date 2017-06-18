@@ -128,7 +128,7 @@
 
        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
-            it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults. )', function() {
+            it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults.', function() {
                 let expectedTableList1 = ['Table 2', parentTable];
                 let expectedTableList2 = ['Table 2'];
 

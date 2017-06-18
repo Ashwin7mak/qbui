@@ -162,5 +162,29 @@
             }
         },
 
+        /**
+         * Method to verify settings drop down
+         */
+        clickOnSettingsBtn : {value: function() {
+            this.settingsBtn.waitForVisible();
+            //Click on settings gear Icon on table global actions
+            this.settingsBtn.click();
+            //Need this for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            return expect(browser.element('.menuHeader').getAttribute('textContent')).toContain('Settings');
+        }},
+
+        /**
+         * Method to click on table settings and properties link under tables gear icon in global actions
+         */
+        clickOnModifyFormLink : {value: function() {
+            this.clickOnSettingsBtn();
+            //Click on table properties and settings link
+            this.modifyThisForm.waitForVisible();
+            this.modifyThisForm.click();
+            return browser.element('.formTable .formElement.field').waitForVisible();
+        }},
+
     });
 }());
