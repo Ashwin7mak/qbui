@@ -355,10 +355,7 @@ export const RecordRoute = React.createClass({
                 editRec: recordId,
                 detailAppId: appId,
                 detailTableId: tblId,
-                detailReportId: rptId,
-                detailKeyFid: 3, //FIXME pass in from parent
-                detailKeyValue: 1, //FIXME pass in from parent
-                embeddedReport
+                detailReportId: rptId
             };
             const link = WindowHistoryUtils.pushWithQueries(queries);
         } else {
@@ -503,17 +500,16 @@ export const RecordRoute = React.createClass({
      * Push a new url to drill down one more level. Should be called when we want to open a drawer.
      * @param tblId
      * @param recId
-     * @param rptId
      * @param embeddedReportsUniqueId
      */
     //shold be removed as a param and instead be stored in react router state
-    handleDrillIntoChild(tblId, recId, rptId, embeddedReportsUniqueId) {
+    handleDrillIntoChild(tblId, recId, embeddedReportsUniqueId) {
         //todo : handle query params in the url
         const existingPath = this.props.location.pathname;
         const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
 
         // generate the next drilldown url segment representing the record we want to show in a drawer
-        const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, rptId, recId, embeddedReportsUniqueId);
+        const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, embeddedReportsUniqueId, recId);
         const link = existingPath + recordDrawerSegment;
         if (this.props.history) {
             this.props.history.push(link);

@@ -88,16 +88,12 @@ const UrlUtils = {
     /**
      * Return URL segment for a record to be displayed in a drawer.
      *
-     *   `sr_app_${appId}_table_${tableId}_report_${reportId}_record_${recordId}_embeddedReport_{uniqueEmbeddedReportId}`
+     *   `sr_app_${appId}_table_${tableId}_report_${reportId}_record_${recordId}`
      *
      * @return {string} URL of route for displaying a child report
      */
-    getRecordDrawerSegment(appId, tableId, reportId, recordId, uniqueEmbeddedReportId) {
-        if (uniqueEmbeddedReportId) {
-            return StringUtils.format(URL.DRAWER.RECORD_SEGMENT_WITH_EMBEDDED_REPORT, [...arguments]);
-        } else {
-            return StringUtils.format(URL.DRAWER.RECORD_SEGMENT, [...arguments]);
-        }
+    getRecordDrawerSegment(appId, tableId, reportId, recordId) {
+        return StringUtils.format(URL.DRAWER.RECORD_SEGMENT, [...arguments]);
     },
 
     /**
