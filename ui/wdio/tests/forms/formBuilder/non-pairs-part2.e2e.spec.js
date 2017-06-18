@@ -6,7 +6,7 @@
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
     let topNavPO = requirePO('topNav');
-    let formsPO = requirePO('formsPage');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     let realmName;
     let realmId;
@@ -150,7 +150,10 @@
                 // remove the first field
                 formBuilderPO.removeField(1);
                 // save & reopen
-                formBuilderPO.save().open();
+                formBuilderPO.save();
+                //wait until save success container goes away
+                notificationContainer.waitUntilNotificationContainerGoesAway();
+                formBuilderPO.open();
                 // open existing fields tab
                 formBuilderPO.tab_Existing.click();
                 // verify that the removed field still appears in the existing fields list
