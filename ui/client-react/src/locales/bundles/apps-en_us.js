@@ -736,6 +736,9 @@ export default {
             featureNameExists: "Feature names must be unique",
             featureNameEmpty: "Feature names must not be blank"
         },
+        appCreation: {
+            newApp: 'New app'
+        },
         tableCreation: {
             newTablePageTitle: "New Table",
             newTableDescription: "Create a new table when you want to collect a new type of information.",
