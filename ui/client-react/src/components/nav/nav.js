@@ -556,10 +556,8 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        setTimeout(() => {
-            this.props.showTableCreationDialog();
-        });
-    }
+        this.props.showTableCreationDialog();
+    },
 });
 
 const mapStateToProps = (state, ownProps) => {
