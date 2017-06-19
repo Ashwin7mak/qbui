@@ -15,7 +15,7 @@ const DRAG_PREVIEW_TIMEOUT = 30;
 // For now, there is only a view form and the forms store is keyed by this context and not the actual formId
 const formId = CONTEXT.FORM.VIEW;
 
-const DragAndDropField = DragAndDrop(FieldElement);
+export const DragAndDropField = DragAndDrop(FieldElement);
 
 
 /**
@@ -25,25 +25,39 @@ const DragAndDropField = DragAndDrop(FieldElement);
  * @returns {*}
  * @constructor
  */
-class DraggableField extends Component {
+export class DraggableField extends Component {
     static propTypes = {
         // Actions used to update state related to moving and selecting form elements
         moveFieldOnForm: PropTypes.func,
         selectFieldOnForm: PropTypes.func,
+        isInDraggingState: PropTypes.func,
+        endDraggingState: PropTypes.func,
+        updateFormAnimationState: PropTypes.func,
 
-        // The currently selected element on the form.
+        /**
+         * The currently selected element on the form. */
         selectedFormElement: PropTypes.object,
 
-        isTokenInMenuDragging: PropTypes.bool
+        /**
+         * Whether or not the token is dragging (helps control dragging state correctly) */
+        isTokenInMenuDragging: PropTypes.bool,
+
+        /**
+         * Where the element is located on the form. */
+        location: PropTypes.object,
     };
 
     beginDrag = dragItemProps => {
-        this.props.isInDraggingState(formId);
+        if (this.props.isInDraggingState) {
+            this.props.isInDraggingState(formId);
+        }
 
         // When a user starts dragging an element, we make sure that element gets selected so there aren't multiple or
         // incorrect selected elements.
         // Needed because a drag event will prevent a click event. Normally the click event would select the field.
-        this.props.selectFieldOnForm(formId, this.props.location);
+        if (this.props.selectFieldOnForm) {
+            this.props.selectFieldOnForm(formId, this.props.location);
+        }
 
         return dragItemProps;
     };
@@ -79,14 +93,24 @@ class DraggableField extends Component {
     };
 
     onHover = (dropTargetProps, dragItemProps) => {
-        if (!dragItemProps.containingElement || dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
+        // Exit the function if dropTarget or dragItem is not provided
+        if (!dragItemProps || !dropTargetProps) {
+            return;
+        }
+
+        if (!dragItemProps.containingElement || _.get(dragItemProps, 'containingElement.id') !== _.get(dropTargetProps, 'containingElement.id')) {
             this.handleFormReorder(dropTargetProps.location, dragItemProps);
         }
     };
 
     endDrag = () => {
-        this.props.endDraggingState(formId);
-        this.props.updateFormAnimationState(false);
+        if (this.props.endDraggingState) {
+            this.props.endDraggingState(formId);
+        }
+
+        if (this.props.updateFormAnimationState) {
+            this.props.updateFormAnimationState(false);
+        }
     };
 
     isDragging = item => {
