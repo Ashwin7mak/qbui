@@ -546,8 +546,25 @@
             }
             //Verify that fieldsOnForm array don't contain expectedFieldsNotPresentOnForm items
             expect(expectedFieldsNotPresentOnForm.indexOf(fieldsOnForm)).toBe(-1);
-        }}
+        }},
 
+        formCardInformSBP:{
+            get: function() {
+                browser.element('.cardViewList.cardViewListHolder .collapse .card').waitForVisible();
+                return browser.element('.cardViewList.cardViewListHolder .collapse .card');
+            }
+        },
+        // Edit record button on Small break point
+        editRecordOnSBP : {get: function() {return browser.element('.recordContainer .recordActionsContainer .iconActionButton.btn.btn-default');}},
+
+        /**
+         * Method to click on edit record pencil button on small break point.
+         */
+        clickEditRecordOnSBP : {value: function() {
+            //Click on form edit button
+            this.editRecordOnSBP.waitForVisible();
+            return this.editRecordOnSBP.click();
+        }}
     });
 
     module.exports = FormsPage;
