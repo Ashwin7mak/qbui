@@ -10,7 +10,7 @@ import ReportNameEditor from '../reportBuilder/reportNameEditor';
 import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
-import BuilderCustomDragLayer from '../../../../reuse/client/src/components/dragAndDrop/builderCustomDragLayer';
+import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
 import DraggableQbHeaderCell from '../dataTable/qbGrid/draggableQbHeaderCell';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
@@ -89,7 +89,7 @@ export class ReportBuilderContainer extends Component {
             <div className="reportBuilderContainer">
                 {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
                 <AppQbModal/>
-                <BuilderCustomDragLayer />
+                <FormBuilderCustomDragLayer />
                 <ReportFieldSelectMenu
                     className="reportBuilderFieldSelectMenu"
                     appId={appId}
