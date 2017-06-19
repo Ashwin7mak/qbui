@@ -91,7 +91,8 @@
             it('remove a field via keyboard & verify presence after CANCEL', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open().getFieldLabels();
+                formBuilderPO.cancel();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 expect(newFields).toContain(deletedField);
             });
             it('remove a field via keyboard & verify absence after SAVE', function() {
