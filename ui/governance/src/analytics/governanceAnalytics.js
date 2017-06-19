@@ -27,6 +27,7 @@ export class GovernanceAnalytics extends Component {
         }
     };
 
+
     /**
      * Updates Evergage about whether the user is a realm admin
      */
