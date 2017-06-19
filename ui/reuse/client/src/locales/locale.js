@@ -5,8 +5,6 @@ import config from 'APP/config/app.config';
 import StringUtils from 'APP/utils/stringUtils';
 // IMPORTS FROM CLIENT REACT
 
-let logger = new Logger();
-
 //  todo: this will need to change and get set based on the authenticated user language preference (which may
 //  todo: then affect how this object is implemented)...we do not want to use the browser as the source of
 //  todo: truth as the supported QuickBase languages will be a subset of the languages offered in the browser.
@@ -64,6 +62,7 @@ class Locale {
         }
 
         if (!Locale.isSupported(newLocale)) {
+            const logger = new Logger();
             logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
         } else {
             locale = newLocale;
@@ -116,6 +115,7 @@ class Locale {
 
         // value and nameForRecord are required. Use empty string (nameForRecord: '') for empty value.
         if (!params) {
+            const logger = new Logger();
             logger.warn('An object parameter and field is required to pluralize the input message.');
             return;
         }

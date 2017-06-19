@@ -4,12 +4,6 @@ import './facet.scss';
 import IconInputBox from '../iconInputBox/iconInputBox';
 import {connect} from 'react-redux';
 
-// IMPORTS FROM CLIENT REACT
-import Logger from "../../../../../client-react/src/utils/logger";
-// IMPORTS FROM CLIENT REACT
-
-let logger = new Logger();
-
 /*
  FilterSearchBox component takes user input for filtering a report.
  Takes the function to call on changes to search string, what he list is known as default is Records

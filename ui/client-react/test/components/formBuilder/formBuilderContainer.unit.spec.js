@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
 import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../../../src/components/builder/formBuilderContainer';
@@ -9,9 +9,10 @@ import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/f
 import {ExistingFieldsMenu, __RewireAPI__ as ExistingFieldsRewireAPI} from '../../../src/components/formBuilder/menus/existingFieldsMenu';
 import {__RewireAPI__ as ToolPaletteRewireAPI} from '../../../src/components/builder/builderMenus/toolPalette';
 import {ENTER_KEY, SPACE_KEY} from '../.././../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
-import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
+import ElementToken from '../../../../reuse/client/src/components/dragAndDrop/elementToken/elementToken';
 import Loader from 'react-loader';
 import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
+import {QBForm} from '../../../src/components/QBForm/qbform';
 
 const appId = "1";
 const tblId = "2";
@@ -56,9 +57,10 @@ var FieldPropertiesMock = React.createClass({
 describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        FormBuilderRewireAPI.__Rewire__('QbForm', QBForm);
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
-        NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
-        ExistingFieldsRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
+        NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', ElementToken);
+        ExistingFieldsRewireAPI.__Rewire__('FieldTokenInMenu', ElementToken);
         ToolPaletteRewireAPI.__Rewire__('ExistingFieldsMenu', ExistingFieldsMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test

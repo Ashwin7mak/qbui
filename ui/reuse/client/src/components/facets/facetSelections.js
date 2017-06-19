@@ -12,10 +12,8 @@
 * }
  * // using array as fieldids used for keys are not always sequential as a array would serve
 **/
-import Logger from '../../../../../client-react/src/utils/logger';
 import * as schemaConsts from '../../../../../client-react/src/constants/schema';
 import _ from 'lodash';
-let logger = new Logger();
 
 class FacetSelections {
     constructor() {

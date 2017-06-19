@@ -11,7 +11,7 @@ export class TokenInMenu extends Component {
 
         if (this.props.tooltipText) {
             return (
-                <div >
+                <div>
                     <Tooltip location="right" plainMessage={this.props.tooltipText}>
                         {elementToken}
                     </Tooltip>

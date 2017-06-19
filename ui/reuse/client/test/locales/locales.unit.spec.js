@@ -1,8 +1,18 @@
 import Locale, {__RewireAPI__ as LocaleRewireAPI} from 'REUSE/locales/locale';
-import ReuseBundleLoader from 'REUSE/locales/reuseBundleLoader';
+import ReuseBundleLoader, {__RewireAPI__ as ReuseBundleLoaderRewireAPI} from 'REUSE/locales/reuseBundleLoader';
+
+class MockLogger {error() {} warn() {}}
 
 describe('Locales', () => {
-    'use strict';
+    beforeEach(() => {
+        LocaleRewireAPI.__Rewire__('Logger', MockLogger);
+        ReuseBundleLoaderRewireAPI.__Rewire__('Logger', MockLogger);
+    });
+
+    afterEach(() => {
+        LocaleRewireAPI.__ResetDependency__('Logger', MockLogger);
+        ReuseBundleLoaderRewireAPI.__ResetDependency__('Logger', MockLogger);
+    });
 
     // This test is failing and need futher investigation.
     // Dragon team puts a story in the backlog (Jira ticket: MC-2292)

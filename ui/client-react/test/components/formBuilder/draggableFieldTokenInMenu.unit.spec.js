@@ -1,8 +1,8 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {DraggableTokenInMenu} from '../../../src/components/formBuilder/fieldToken/draggableTokenInMenu';
+import {DraggableTokenInMenu} from '../../../../reuse/client/src/components/dragAndDrop/elementToken/draggableTokenInMenu';
 
 let component;
 let instance;
@@ -16,7 +16,7 @@ const mockActions = {
     endDrag() {}
 };
 
-describe('DraggableTokenInMenu', () => {
+describe('DraggableFieldTokenInMenu', () => {
 
     beforeEach(() => {
         jasmineEnzyme();
@@ -27,7 +27,7 @@ describe('DraggableTokenInMenu', () => {
     });
 
     it('will invoke addFieldToForm when FieldToken node is clicked', () => {
-        component = shallow(<DraggableTokenInMenu title={title} onClick={mockActions.addFieldToForm} />);
+        component = shallow(<DraggableTokenInMenu title={title} onClickToken={mockActions.addFieldToForm} />);
         component.simulate('click');
 
         expect(mockActions.addFieldToForm).toHaveBeenCalledWith(component.instance().props);
@@ -39,7 +39,7 @@ describe('DraggableTokenInMenu', () => {
             preventDefault() {}
         };
 
-        component = shallow(<DraggableTokenInMenu title={title} onClick={mockActions.addFieldToForm} />);
+        component = shallow(<DraggableTokenInMenu title={title} onClickToken={mockActions.addFieldToForm} />);
         instance = component.instance();
         instance.onEnterClickToAdd(e);
 
@@ -52,7 +52,7 @@ describe('DraggableTokenInMenu', () => {
             preventDefault() {}
         };
 
-        component = shallow(<DraggableTokenInMenu title={title} onClick={mockActions.addFieldToForm} />);
+        component = shallow(<DraggableTokenInMenu title={title} onClickToken={mockActions.addFieldToForm} />);
         instance = component.instance();
         instance.onEnterClickToAdd(e);
 
@@ -65,7 +65,7 @@ describe('DraggableTokenInMenu', () => {
             preventDefault() {}
         };
 
-        component = shallow(<DraggableTokenInMenu title={title} onClick={mockActions.addFieldToForm} />);
+        component = shallow(<DraggableTokenInMenu title={title} onClickToken={mockActions.addFieldToForm} />);
         instance = component.instance();
         instance.onEnterClickToAdd(e);
 
