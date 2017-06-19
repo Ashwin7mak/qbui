@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
@@ -8,170 +9,25 @@ import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
-import CollapsedGroupsHelper from './collapsedGroupHelper';
+import {setCollapsedGroups, draggingColumnStart, draggingColumnEnd} from '../../../actions/qbGridActions';
 
 import Logger from 'APP/utils/logger';
 const logger = new Logger();
+
+import CollapsedGroupsHelper from './collapsedGroupHelper';
+const collapsedGroupHelper = new CollapsedGroupsHelper();
 
 import './qbGrid.scss';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
-export const QbGrid = React.createClass({
-    propTypes: {
-        /**
-         * The total number of columns displayed on the grid. Passed in as a prop to prevent recalculating this value
-         * multiple times across components */
-        numberOfColumns: PropTypes.number.isRequired,
+export class QbGrid extends Component {
 
-        /**
-         * The columns displayed on the grid. Use the ColumnTransformer class to help format data in a way that
-         * the QbGrid can display columns correctly
-         */
-        columns: PropTypes.array.isRequired,
-
-        /**
-         * The data for the rows displayed on the grid. Use the RowTransformer class to help format data in a way
-         * that the QbGrid can display rows correctly
-         */
-        rows: PropTypes.array.isRequired,
-
-        /**
-         * The id of the editing row. QbGrid assumes each row has a unique id property. */
-        editingRowId: PropTypes.number,
-
-        // TODO:: Refactor out isInlineEditOpen once agGrid is removed. See more detail in reportGrid.js
-        /**
-         * A boolean value indicating if inline editing is currently open*/
-        isInlineEditOpen: PropTypes.bool,
-
-        /**
-         * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
-        selectedRows: PropTypes.array,
-
-        /**
-         * Indicates if all the rows currently displayed in the grid are selected */
-        areAllRowsSelected: PropTypes.bool,
-
-        /**
-         * The action that occurs when a row is selected (e.g., by clicking the checkboxes in the first column) */
-        onClickToggleSelectedRow: PropTypes.func,
-
-        /**
-         * The action that occurs when the edit icon is clicked (in the first column) */
-        onClickEditIcon: PropTypes.func,
-
-        /**
-         * The action that occurs when the delete icon is clicked (in the first column) */
-        onClickDeleteIcon: PropTypes.func,
-
-        /**
-         * The action that selects/deselects all of the rows */
-        onClickToggleSelectAllRows: PropTypes.func,
-
-        /**
-         * A value that indicates whether the current row being edited is in a valid state. */
-        isEditingRowValid: PropTypes.bool,
-
-        /**
-         * A value indicating if the current row being edited is currently in a saving state */
-        isEditingRowSaving: PropTypes.bool,
-
-        /**
-         * An array of errors that affect the row currently being edited. This value is used to display a number
-         * of errors to fix to the user. I.e., "Please fix 3 errors" */
-        editingRowErrors: PropTypes.array,
-
-        /**
-         * The action to cancel editing a row */
-        onCancelEditingRow: PropTypes.func,
-
-        /**
-         * The action that will create a new row in the grid */
-        onClickAddNewRow: PropTypes.func,
-
-        /**
-         * The action that occurs when the user clicks save */
-        onClickSaveRow: PropTypes.func,
-
-        /**
-         * If the header cell is draggable, callback to when the column is hovering over another column. */
-        onHoverColumn: PropTypes.func,
-
-        /**
-         * If the header cell is draggable, callback to when the column begins dragging. */
-        onDragColumnStart: PropTypes.func,
-
-        /**
-         * If the header cell is draggable, callback to when the column stops dragging. */
-        onDragColumnEnd: PropTypes.func,
-
-        /**
-         * Header cell to be passed in to make QbGrid more reusable. */
-        headerRenderer: PropTypes.func.isRequired,
-
-        /**
-         * To make QbGrid flexible, it makes no assumptions about what is rendered inside of a cell.
-         * A cellRenderer (a React component) must be passed in.
-         * The cellRenderer component will have access to all the props in the row object.
-         */
-        cellRenderer: PropTypes.func.isRequired,
-
-        /**
-         * If there are properties common to all rows, they can be passed in as an addition prop. This is useful for event
-         * handlers that are the same across all rows. Instead of mapping them to each row object, you can add them once here and
-         * they will be available as props to the cellRenderer. */
-        commonCellProps: PropTypes.object,
-
-        /**
-         * A function used to compare changes to a cell. This function is used to improve the performance of the grid. A cell will
-         * only re-render if there are differences. */
-        compareCellChanges: PropTypes.func,
-
-        /**
-         * A menu that can be displayed next to the text in the header row. */
-        menuComponent: PropTypes.func,
-
-        /**
-         * Additional props that can be passed to the menu in addition to the column properties from the grid data */
-        menuProps: PropTypes.object,
-
-        /**
-         * Flag to include the first column that includes row specific actions.*/
-        showRowActionsColumn: PropTypes.bool,
-
-        // relationship phase-1, will need remove when we allow editing
-        phase1: PropTypes.bool
-    },
-
-    getDefaultProps() {
-        return {
-            numberOfColumns: 0,
-            columns: [],
-            rows: [],
-            editingRowId: null,
-            isInlineEditOpen: false,
-            isEditingRowValid: true,
-            isEditingRowSaving: false,
-            showRowActionsColumn: true
-        };
-    },
-
-    getInitialState() {
-        return {
-            collapsedGroups: []
-        };
-    },
-
-    componentWillMount() {
-        this.collapsedGroupHelper = new CollapsedGroupsHelper();
-    },
-
-    onClickAddNewRow() {
+    onClickAddNewRow = () => {
         if (this.props.onClickAddNewRow) {
             this.props.onClickAddNewRow(this.props.editingRowId);
         }
-    },
+    };
 
     /**
      * Renders the action cells. These are the cells that appear in the first column of the grid and have actions like
@@ -180,7 +36,7 @@ export const QbGrid = React.createClass({
      * @param rowProps
      * @returns {XML}
      */
-    getActionsCell(_cellDataRow, rowProps) {
+    getActionsCell = (_cellDataRow, rowProps) => {
         return <RowActions
             rowId={rowProps.rowData.id}
             onClickDeleteRowIcon={this.props.onClickDeleteIcon}
@@ -197,7 +53,7 @@ export const QbGrid = React.createClass({
             onClickSaveRow={this.props.onClickSaveRow}
             onClickToggleSelectedRow={this.onClickToggleSelectedRow}
         />;
-    },
+    };
 
     /**
      * The row actions in the first column should be sticky as the user scrolls left and right on the grid
@@ -208,7 +64,7 @@ export const QbGrid = React.createClass({
         return {
             isStickyCell: true
         };
-    },
+    }
 
     /**
      * A placeholder cell (to indicate columns can be added there) will get the correct styling.
@@ -219,34 +75,34 @@ export const QbGrid = React.createClass({
         return {
             isPlaceholderCell: true
         };
-    },
+    }
 
     /**
      * Render a single cell
      * @param cellData
      * @returns {ReactElement<P>|ClassicElement<P>|DOMElement<P>}
      */
-    renderCell(cellData) {
+    renderCell = (cellData) => {
         // The createElement function is used here instead of the shorthand JSX to build a component from a component class or function
         return React.createElement(this.props.cellRenderer, Object.assign({}, cellData, this.props.commonCellProps));
-    },
+    };
 
     /**
      * Gets all non-hidden columns.
      */
-    getVisibleColumns() {
+    getVisibleColumns = () => {
         let visibleColumns = this.props.columns.filter(column => {
             return !column.isHidden;
         });
         return visibleColumns.map(column => {
             return this.getColumn(column);
         });
-    },
+    };
 
     /**
      * Renders a single column.
      */
-    getColumn(column) {
+    getColumn = (column) => {
         try {
             column.addFormatter(this.renderCell);
             if (!this.props.phase1 && !column.isPlaceholder) {
@@ -264,14 +120,14 @@ export const QbGrid = React.createClass({
             logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
             return column;
         }
-    },
+    };
 
     /**
      * Adds properties to the row so that the row component can access information set on the QbGrid component.
      * @param row
      * @returns {*}
      */
-    addRowProps(row) {
+    addRowProps = (row) => {
         let classes = ['qbRow'];
         if (row.isEditing) {
             classes.push('editing');
@@ -294,16 +150,16 @@ export const QbGrid = React.createClass({
         }, row);
 
         return rowProps;
-    },
+    };
 
     /**
      * get the 1st column header (select-all toggle)
      * @returns {React}
      */
-    getCheckboxHeader() {
+    getCheckboxHeader = () => {
         let collapseAllIcon = null;
         if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {
-            let iconType = (this.collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
+            let iconType = (collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
 
             collapseAllIcon = (
                 <div className="collapseAllIcon">
@@ -323,20 +179,20 @@ export const QbGrid = React.createClass({
                 {collapseAllIcon}
             </div>
         );
-    },
+    };
 
     /**
      * Action that is fired when the selection checkbox in the first column for an individual row is clicked
      * @param id
      * @returns {function()}
      */
-    onClickToggleSelectedRow(id) {
+    onClickToggleSelectedRow = (id) => {
         return () => {
             if (this.props.onClickToggleSelectedRow) {
                 this.props.onClickToggleSelectedRow(id);
             }
         };
-    },
+    };
 
     /**
      * Returns a unique key that can be used for the row
@@ -350,15 +206,15 @@ export const QbGrid = React.createClass({
             return `newRow-${rowIndex}`;
         }
         return `row-${rowData.id}`;
-    },
+    }
 
-    toggleCollapseAllGroups() {
-        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseAllGroups()});
-    },
+    toggleCollapseAllGroups = () => {
+        this.props.setCollapsedGroups(collapsedGroupHelper.toggleCollapseAllGroups());
+    };
 
-    toggleCollapseGroup(subHeaderId) {
-        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseGroup(subHeaderId)});
-    },
+    toggleCollapseGroup = (subHeaderId) => {
+        this.props.setCollapsedGroups(collapsedGroupHelper.toggleCollapseGroup(subHeaderId));
+    };
 
     /**
      * stick the header and sticky first column when the grid scrolls
@@ -391,7 +247,7 @@ export const QbGrid = React.createClass({
                 }
             }
         }
-    },
+    }
 
     render() {
         let columns;
@@ -440,7 +296,7 @@ export const QbGrid = React.createClass({
 
                     <Table.Body className="qbTbody"
                         onRow={this.addRowProps}
-                        rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
+                        rows={collapsedGroupHelper.filterRows(this.props.rows)}
                         rowKey={this.getUniqueRowKey}
                         ref={body => {
                             this.tableRef = body && body.getRef().parentNode;
@@ -450,6 +306,147 @@ export const QbGrid = React.createClass({
             </Loader>
         );
     }
-});
+}
 
-export default QbGrid;
+QbGrid.propTypes = {
+    /**
+     * The total number of columns displayed on the grid. Passed in as a prop to prevent recalculating this value
+     * multiple times across components */
+    numberOfColumns: PropTypes.number.isRequired,
+
+    /**
+     * The columns displayed on the grid. Use the ColumnTransformer class to help format data in a way that
+     * the QbGrid can display columns correctly
+     */
+    columns: PropTypes.array.isRequired,
+
+    /**
+     * The data for the rows displayed on the grid. Use the RowTransformer class to help format data in a way
+     * that the QbGrid can display rows correctly
+     */
+    rows: PropTypes.array.isRequired,
+
+    /**
+     * The id of the editing row. QbGrid assumes each row has a unique id property. */
+    editingRowId: PropTypes.number,
+
+    // TODO:: Refactor out isInlineEditOpen once agGrid is removed. See more detail in reportGrid.js
+    /**
+     * A boolean value indicating if inline editing is currently open*/
+    isInlineEditOpen: PropTypes.bool,
+
+    /**
+     * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
+    selectedRows: PropTypes.array,
+
+    /**
+     * Indicates if all the rows currently displayed in the grid are selected */
+    areAllRowsSelected: PropTypes.bool,
+
+    /**
+     * The action that occurs when a row is selected (e.g., by clicking the checkboxes in the first column) */
+    onClickToggleSelectedRow: PropTypes.func,
+
+    /**
+     * The action that occurs when the edit icon is clicked (in the first column) */
+    onClickEditIcon: PropTypes.func,
+
+    /**
+     * The action that occurs when the delete icon is clicked (in the first column) */
+    onClickDeleteIcon: PropTypes.func,
+
+    /**
+     * The action that selects/deselects all of the rows */
+    onClickToggleSelectAllRows: PropTypes.func,
+
+    /**
+     * A value that indicates whether the current row being edited is in a valid state. */
+    isEditingRowValid: PropTypes.bool,
+
+    /**
+     * A value indicating if the current row being edited is currently in a saving state */
+    isEditingRowSaving: PropTypes.bool,
+
+    /**
+     * An array of errors that affect the row currently being edited. This value is used to display a number
+     * of errors to fix to the user. I.e., "Please fix 3 errors" */
+    editingRowErrors: PropTypes.array,
+
+    /**
+     * The action to cancel editing a row */
+    onCancelEditingRow: PropTypes.func,
+
+    /**
+     * The action that will create a new row in the grid */
+    onClickAddNewRow: PropTypes.func,
+
+    /**
+     * The action that occurs when the user clicks save */
+    onClickSaveRow: PropTypes.func,
+
+    /**
+     * If the header cell is draggable, callback to when the column is hovering over another column. */
+    onHoverColumn: PropTypes.func,
+
+    /**
+     * If the header cell is draggable, callback to when the column begins dragging. */
+    onDragColumnStart: PropTypes.func,
+
+    /**
+     * If the header cell is draggable, callback to when the column stops dragging. */
+    onDragColumnEnd: PropTypes.func,
+
+    /**
+     * Header cell to be passed in to make QbGrid more reusable. */
+    headerRenderer: PropTypes.func.isRequired,
+
+    /**
+     * To make QbGrid flexible, it makes no assumptions about what is rendered inside of a cell.
+     * A cellRenderer (a React component) must be passed in.
+     * The cellRenderer component will have access to all the props in the row object.
+     */
+    cellRenderer: PropTypes.func.isRequired,
+
+    /**
+     * If there are properties common to all rows, they can be passed in as an addition prop. This is useful for event
+     * handlers that are the same across all rows. Instead of mapping them to each row object, you can add them once here and
+     * they will be available as props to the cellRenderer. */
+    commonCellProps: PropTypes.object,
+
+    /**
+     * A function used to compare changes to a cell. This function is used to improve the performance of the grid. A cell will
+     * only re-render if there are differences. */
+    compareCellChanges: PropTypes.func,
+
+    /**
+     * A menu that can be displayed next to the text in the header row. */
+    menuComponent: PropTypes.func,
+
+    /**
+     * Additional props that can be passed to the menu in addition to the column properties from the grid data */
+    menuProps: PropTypes.object,
+
+    /**
+     * Flag to include the first column that includes row specific actions.*/
+    showRowActionsColumn: PropTypes.bool,
+
+    // relationship phase-1, will need remove when we allow editing
+    phase1: PropTypes.bool
+};
+
+QbGrid.defaultProps = {
+    numberOfColumns: 0,
+    columns: [],
+    rows: [],
+    editingRowId: null,
+    isInlineEditOpen: false,
+    isEditingRowValid: true,
+    isEditingRowSaving: false,
+    showRowActionsColumn: true
+};
+
+const mapDispatchToProps = {
+    setCollapsedGroups
+};
+
+export default connect(null, mapDispatchToProps)(QbGrid);

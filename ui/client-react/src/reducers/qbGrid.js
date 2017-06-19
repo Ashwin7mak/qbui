@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 
 const qbGrid = (
     state = {
+        collapsedGroups: [],
         labelBeingDragged: '',
         isDragging: false
     }, action) => {
@@ -21,6 +22,15 @@ const qbGrid = (
             labelBeingDragged: ''
         }
     }
+    case types.SET_COLLAPSED_GROUPS: {
+        return {
+            ...state,
+            collapsedGroups: action.content.collapsedGroups
+        }
+    }
+    default:
+        // return existing state by default in redux
+        return state;
     }
 };
 
