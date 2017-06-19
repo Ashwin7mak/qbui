@@ -88,7 +88,7 @@ describe('StandardGridToolBar', () => {
         let component = mount(
             <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 0}, searchTerm: mockSearchTerm}}})}>
                 <StandardGridToolBar
-                    doUpdate={Actions.doUpdate}
+                    doUpdate={AccountUsersActions.doUpdate}
                     doFacet={false}
                     id={"accountUsers"}
                     rowKey={"uid"}
