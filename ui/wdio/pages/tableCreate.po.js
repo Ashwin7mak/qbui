@@ -148,8 +148,8 @@
          */
         getAllTableFieldsList: {get: function() {
             //Wait until table container visible
-            browser.element('.tableInfo .sections .tableCreationPanel.dialogField').waitForVisible();
-            return browser.elements('.tableInfo .sections .tableCreationPanel.dialogField');
+            browser.element('.tableInfo.dialogCreationPanelInfo .sections .tableCreationPanel.dialogField').waitForVisible();
+            return browser.elements('.tableInfo.dialogCreationPanelInfo .sections .tableCreationPanel.dialogField');
         }},
 
         /**

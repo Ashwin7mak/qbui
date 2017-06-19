@@ -6,6 +6,11 @@ import * as CompConstants from '../../../../../client-react/src/constants/compon
 
 import './dialogFieldInput.scss';
 
+/**
+ * DialogFieldInput is used for the multiStepDialog which is currently being used to create
+ * new tables and new apps.
+ **/
+
 class DialogFieldInput extends React.Component {
 
     /**

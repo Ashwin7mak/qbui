@@ -200,7 +200,7 @@ class TableCreationPanel extends React.Component {
     render() {
 
         return (
-            <div className="dialogCreationPanelInfo">
+            <div className="tableInfo dialogCreationPanelInfo">
                 <div className="sections">
                     <DialogFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
                                       className="tableCreationPanel"
