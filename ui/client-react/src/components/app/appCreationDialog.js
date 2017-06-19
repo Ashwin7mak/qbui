@@ -56,7 +56,6 @@ AppCreationDialog.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    console.log('appCreationDialog: ', state);
     return {
         appDialogOpen: _.get(state.appBuilder, 'dialogOpen')
     };
