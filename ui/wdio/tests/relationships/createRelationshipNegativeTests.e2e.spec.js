@@ -89,7 +89,7 @@
                 formBuilderPO.open();
 
                 //Click on add a new record button
-                formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+                formBuilderPO.addNewField(GET_ANOTHER_RECORD);
 
                 //Verify all dialog contents and functionality
                 formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, PARENT_TABLE_WITHOUT_TITLE_FIELD, CHILD_TABLE, expectedFieldsList);

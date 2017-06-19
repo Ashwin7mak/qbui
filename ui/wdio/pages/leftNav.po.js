@@ -40,8 +40,8 @@
         // Left nav new table element
         leftNavNewTableEl:{
             get: function() {
-                browser.element('.newTableItem .iconUISturdy-add-new-stroke').waitForVisible();
-                return browser.element('.newTableItem .iconUISturdy-add-new-stroke');
+                browser.element('.newTable.newItemButton .iconUISturdy-add-new-stroke').waitForVisible();
+                return browser.element('.newTable.newItemButton .iconUISturdy-add-new-stroke');
             }
         },
         // Left nav new table cancle button

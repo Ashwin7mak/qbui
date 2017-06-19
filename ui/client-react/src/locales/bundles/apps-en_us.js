@@ -646,6 +646,8 @@ export default {
                 modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
+                removeTitleField: "This field cannot be removed until a different record title field is set",
+                removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
                 tooltips: {
@@ -679,6 +681,7 @@ export default {
                 }
             },
             existingFieldsToolTip: "Add {fieldName} to the form",
+            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} are on the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",
@@ -733,6 +736,9 @@ export default {
             noOverrides: "No overrides have been set, click 'Add New' to add one.",
             featureNameExists: "Feature names must be unique",
             featureNameEmpty: "Feature names must not be blank"
+        },
+        appCreation: {
+            newApp: 'New app'
         },
         tableCreation: {
             newTablePageTitle: "New Table",
