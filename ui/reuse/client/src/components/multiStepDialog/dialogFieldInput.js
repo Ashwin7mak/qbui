@@ -1,12 +1,12 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import QBToolTip from '../qbToolTip/qbToolTip';
-import ErrorWrapper from '../fields/errorWrapper';
-import * as CompConstants from '../../constants/componentConstants';
+import QBToolTip from '../toolTip/toolTip';
+import ErrorWrapper from '../../../../../client-react/src/components/fields/errorWrapper';
+import * as CompConstants from '../../../../../client-react/src/constants/componentConstants';
 
-import './tableFieldInput.scss';
+import './dialogFieldInput.scss';
 
-class TableFieldInput extends React.Component {
+class DialogFieldInput extends React.Component {
 
     /**
      * set focus to the input field if autofocus=true
@@ -74,7 +74,7 @@ class TableFieldInput extends React.Component {
         // create input (either input or textarea bsed on component)
         const input = React.createElement(this.props.component, inputProps);
 
-        const classes = ["tableField"];
+        const classes = [`${this.props.className} dialogField`];
 
         const showValidationError = this.showValidationError();
         if (showValidationError) {
@@ -83,8 +83,8 @@ class TableFieldInput extends React.Component {
 
         return (
             <div className={classes.join(" ")}>
-                <div className="tableFieldTitle">{this.props.required && "*"} {this.props.title}</div>
-                <div className="tableFieldInput">
+                <div className="dialogFieldTitle">{this.props.required && "*"} {this.props.title}</div>
+                <div className="dialogFieldInput">
 
                     <ErrorWrapper isInvalid={showValidationError}
                                     invalidMessage={this.props.validationError}>
@@ -95,10 +95,11 @@ class TableFieldInput extends React.Component {
     }
 }
 
-TableFieldInput.propTypes = {
+DialogFieldInput.propTypes = {
     component: PropTypes.any,
     title: PropTypes.string,
     value: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
     required: PropTypes.bool,
     rows: PropTypes.string,
     placeholder: PropTypes.string,
@@ -110,11 +111,11 @@ TableFieldInput.propTypes = {
     onBlur: PropTypes.func
 };
 
-TableFieldInput.defaultProps = {
+DialogFieldInput.defaultProps = {
     component: 'input',
     required: false,
     placeholder: '',
     autoFocus: false,
     hasFocus: false,
 };
-export default TableFieldInput;
+export default DialogFieldInput;

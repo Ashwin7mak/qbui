@@ -1,6 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import TableFieldInput from './tableFieldInput';
+import DialogFieldInput from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Locale from '../../locales/locales';
 import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
@@ -202,40 +202,43 @@ class TableCreationPanel extends React.Component {
         return (
             <div className="tableInfo">
                 <div className="sections">
-                    <TableFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
-                                     name="name"
-                                     placeholder={Locale.getMessage("tableCreation.tableNamePlaceholder")}
-                                     value={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.value : ""}
-                                     onChange={this.updateTableProperty}
-                                     onFocus={this.onFocusInput}
-                                     onBlur={this.onBlurInput}
-                                     required
-                                     autofocus
-                                     hasFocus={this.props.focusOn === "name"}
-                                     edited={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.edited : false}
-                                     validationError={this.props.validate && this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.validationError : null}/>
+                    <DialogFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
+                                      className="tableCreationPanel"
+                                      name="name"
+                                      placeholder={Locale.getMessage("tableCreation.tableNamePlaceholder")}
+                                      value={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.value : ""}
+                                      onChange={this.updateTableProperty}
+                                      onFocus={this.onFocusInput}
+                                      onBlur={this.onBlurInput}
+                                      required
+                                      autofocus
+                                      hasFocus={this.props.focusOn === "name"}
+                                      edited={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.edited : false}
+                                      validationError={this.props.validate && this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.validationError : null}/>
 
-                    <TableFieldInput title={Locale.getMessage("tableCreation.recordNameHeading")}
-                                     name="tableNoun"
-                                     placeholder={Locale.getMessage("tableCreation.recordNamePlaceholder")}
-                                     value={this.props.tableInfo && this.props.tableInfo.tableNoun ? this.props.tableInfo.tableNoun.value : ""}
-                                     onChange={this.updateTableProperty}
-                                     onFocus={this.onFocusInput}
-                                     onBlur={this.onBlurInput}
-                                     required
-                                     hasFocus={this.props.focusOn === "tableNoun"}
-                                     edited={this.props.tableInfo && this.props.tableInfo.tableNoun ? this.props.tableInfo.tableNoun.edited : false}
-                                     validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
+                    <DialogFieldInput title={Locale.getMessage("tableCreation.recordNameHeading")}
+                                      className="tableCreationPanel"
+                                      name="tableNoun"
+                                      placeholder={Locale.getMessage("tableCreation.recordNamePlaceholder")}
+                                      value={this.props.tableInfo && this.props.tableInfo.tableNoun ? this.props.tableInfo.tableNoun.value : ""}
+                                      onChange={this.updateTableProperty}
+                                      onFocus={this.onFocusInput}
+                                      onBlur={this.onBlurInput}
+                                      required
+                                      hasFocus={this.props.focusOn === "tableNoun"}
+                                      edited={this.props.tableInfo && this.props.tableInfo.tableNoun ? this.props.tableInfo.tableNoun.edited : false}
+                                      validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
 
                     {this.renderIconSection()}
 
-                    <TableFieldInput title={Locale.getMessage("tableCreation.descriptionHeading")}
-                                     name="description"
-                                     placeholder={Locale.getMessage("tableCreation.descriptionPlaceholder")}
-                                     value={this.props.tableInfo && this.props.tableInfo.description ? this.props.tableInfo.description.value : ""}
-                                     onChange={this.updateTableProperty}
-                                     component="textarea"
-                                     rows="7"/>
+                    <DialogFieldInput title={Locale.getMessage("tableCreation.descriptionHeading")}
+                                      className="tableCreationPanel"
+                                      name="description"
+                                      placeholder={Locale.getMessage("tableCreation.descriptionPlaceholder")}
+                                      value={this.props.tableInfo && this.props.tableInfo.description ? this.props.tableInfo.description.value : ""}
+                                      onChange={this.updateTableProperty}
+                                      component="textarea"
+                                      rows="7"/>
                 </div>
             </div>);
     }

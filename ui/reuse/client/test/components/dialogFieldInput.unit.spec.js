@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import TableFieldInput from '../../src/components/table/tableFieldInput';
+import TableFieldInput from '../../src/components/multiStepDialog/dialogFieldInput';
 import {Simulate} from 'react-addons-test-utils';
 
 let component;
@@ -33,7 +33,7 @@ describe('TableCreationDialog', () => {
         let inputs = component.find("input");
         expect(inputs).toBePresent();
 
-        expect(component.find('.tableField')).toBePresent();
+        expect(component.find('.dialogField')).toBePresent();
     });
 
     it('renders a TableFieldInput with validation error', () => {
@@ -49,7 +49,7 @@ describe('TableCreationDialog', () => {
                                              edited={true}
                                              validationError={"Should not be empty!"}/>);
 
-        expect(component.find('.tableField.validationFailed')).toBePresent();
+        expect(component.find('.dialogField.validationFailed')).toBePresent();
 
     });
 
@@ -66,7 +66,7 @@ describe('TableCreationDialog', () => {
                                              edited={false}
                                              validationError={"Should not be empty!"}/>);
 
-        expect(component.find('.tableField.validationFailed')).not.toBePresent();
+        expect(component.find('.dialogField.validationFailed')).not.toBePresent();
 
     });
 

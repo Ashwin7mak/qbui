@@ -80,7 +80,7 @@ describe('TableCreationPanel', () => {
 
         expect(component.find('.tableInfo')).toBePresent();
 
-        let inputFields = component.find(".tableFieldInput input");
+        let inputFields = component.find(".dialogFieldInput input");
         expect(inputFields).toBePresent();
 
         let input = inputFields.get(0);

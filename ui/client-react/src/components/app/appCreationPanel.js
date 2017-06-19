@@ -1,6 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import TableFieldInput from '../table/tableFieldInput';
+import DialogFieldInput from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 import Locale from '../../locales/locales';
 import _ from 'lodash';
 
@@ -21,11 +21,12 @@ class AppCreationPanel extends React.Component {
         return (
             <div className="tableInfo">
                 <div className="sections">
-                    <TableFieldInput title={Locale.getMessage("appCreation.appNameHeading")}
-                                     name="name"
-                                     placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
-                                     required
-                                     autofocus />
+                    <DialogFieldInput title={Locale.getMessage("appCreation.appNameHeading")}
+                                      className="appCreationPanel"
+                                      name="name"
+                                      placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
+                                      required
+                                      autofocus />
                 </div>
             </div>);
     }
