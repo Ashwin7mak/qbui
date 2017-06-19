@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import TableFieldInput from '../../src/components/multiStepDialog/dialogFieldInput';
+import DialogFieldInput from '../../src/components/multiStepDialog/dialogFieldInput';
 import {Simulate} from 'react-addons-test-utils';
 
 let component;
@@ -12,13 +12,13 @@ const mockParentFunctions = {
     onBlurInput() {}
 };
 
-describe('TableCreationDialog', () => {
+describe('DialogFieldInput', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
 
-    it('renders a TableFieldInput', () => {
-        component = shallow(<TableFieldInput title="Title"
+    it('renders a DialogFieldInput', () => {
+        component = shallow(<DialogFieldInput title="Title"
                          name="name"
                          placeholder="placeHolder"
                          value=""
@@ -36,8 +36,8 @@ describe('TableCreationDialog', () => {
         expect(component.find('.dialogField')).toBePresent();
     });
 
-    it('renders a TableFieldInput with validation error', () => {
-        component = shallow(<TableFieldInput title="Title"
+    it('renders a DialogFieldInput with validation error', () => {
+        component = shallow(<DialogFieldInput title="Title"
                                              name="name"
                                              placeholder="placeHolder"
                                              value=""
@@ -53,8 +53,8 @@ describe('TableCreationDialog', () => {
 
     });
 
-    it('renders an TableFieldInput with focus and a validation error', () => {
-        component = shallow(<TableFieldInput title="Title"
+    it('renders an DialogFieldInput with focus and a validation error', () => {
+        component = shallow(<DialogFieldInput title="Title"
                                              name="name"
                                              placeholder="placeHolder"
                                              value=""
@@ -70,11 +70,11 @@ describe('TableCreationDialog', () => {
 
     });
 
-    it('invokes callbacks from TableFieldInput', () => {
+    it('invokes callbacks from DialogFieldInput', () => {
         spyOn(mockParentFunctions, 'onFocusInput');
         spyOn(mockParentFunctions, 'updateTableProperty');
 
-        component = mount(<TableFieldInput title="Title"
+        component = mount(<DialogFieldInput title="Title"
                                              name="description"
                                              component="textarea"
                                              placeholder="placeHolder"
