@@ -61,9 +61,6 @@ const UrlUtils = {
     getHelpLink() {
         return `http://${URL.HELP_LINK_PATH}`;
     },
-    getGovernanceHelpLink() {
-        return `http://${URL.GOVERNANCE_HELP_LINK_PATH}`;
-    },
 
     /**
      * Build client url link to render a report

@@ -7,7 +7,7 @@ import TopNav from "../../../reuse/client/src/components/topNav/topNav";
 import LeftNav from "../common/leftNav/GovernanceLeftNav";
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
-import urlUtils from "../../../client-react/src/utils/urlUtils";
+import urlUtils from "../utils/urlUtils";
 
 import "./governanceAppShell.scss";
 
