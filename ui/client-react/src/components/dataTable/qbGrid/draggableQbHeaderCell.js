@@ -37,7 +37,7 @@ const headerTarget = {
 /**
  * A draggable header cell component to be used in the QbGrid
  */
-class DraggableQbHeaderCell extends Component {
+export class DraggableQbHeaderCell extends Component {
     /**
      * Using shallow compare to reduce the change this simple component re-renders
      * @param nextProps
