@@ -129,7 +129,6 @@ export class Analytics extends Component {
                 return this.logger.debug('Dataset was not provided to analytics component. Analytics have not been loaded.');
             }
 
-
             if (this.props.getLoggedInUser) {
                 this.props.getLoggedInUser();
             }

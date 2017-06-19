@@ -14,25 +14,16 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergageRealmAdminStatus = () => {
         if (this.props.currentUserId && _.has(this.props, 'isRealmAdmin')) {
-            _aaq.push(['setCustomField', 'is_realm_admin', this.props.isRealmAdmin, 'request']);
+            this._aaq.push(['setCustomField', 'is_realm_admin', this.props.isRealmAdmin, 'request']);
         }
     };
-
-    // /**
-    //  * Updates the accountId tracked by Evergage
-    //  */
-    // updateEvergageAccountId = () => {
-    //     if (_.has(this.props, 'accountId')) {
-    //         this._aaq.push(['setCompany', this.props.accountId]);
-    //     }
-    // };
 
     /**
      * Updates the subdomain name tracked by Evergage
      */
     updateEvergageSubdomainName = () => {
         if (_.has(this.props, 'subdomainName')) {
-            _aaq.push(['setCustomField', 'subdomainName', this.props.subdomainName, 'request']);
+            this._aaq.push(['setCustomField', 'subdomainName', this.props.subdomainName, 'request']);
         }
     };
 
@@ -41,7 +32,7 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergageTotalItems = () => {
         if (_.has(this.props, 'totalItems')) {
-            _aaq.push(['setCustomField', 'totalItems', this.props.totalItems, 'request']);
+            this._aaq.push(['setCustomField', 'totalItems', this.props.totalItems, 'request']);
         }
     };
 
@@ -50,7 +41,7 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergagePaidUsers = () => {
         if (_.has(this.props, 'paidUsers')) {
-            _aaq.push(['setCustomField', 'paidUsers', this.props.paidUsers, 'request']);
+            this._aaq.push(['setCustomField', 'paidUsers', this.props.paidUsers, 'request']);
         }
     };
 
@@ -59,7 +50,7 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergageDeniedUsers = () => {
         if (_.has(this.props, 'deniedUsers')) {
-            _aaq.push(['setCustomField', 'deniedUsers', this.props.paidUsers, 'request']);
+            this._aaq.push(['setCustomField', 'deniedUsers', this.props.paidUsers, 'request']);
         }
     };
 
@@ -68,7 +59,7 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergageTotalRealmUsers = () => {
         if (_.has(this.props, 'totalRealmUsers')) {
-            _aaq.push(['setCustomField', 'totalRealmUsers', this.props.paidUsers, 'request']);
+            this._aaq.push(['setCustomField', 'totalRealmUsers', this.props.paidUsers, 'request']);
         }
     };
 
@@ -81,11 +72,22 @@ export class GovernanceAnalytics extends Component {
         this.updateEvergageTotalRealmUsers
     ];
 
+
+
     // This component does not display anything.
     render() {
         return (
             <Analytics dataset={Config.evergageDataset}
-                       // userId={null}
+                       userId={this.props.currentUserId}
+                       accountId={this.props.accountId}
+                       subdomainName={this.props.subdomainName}
+                       isAdmin={this.props.isAdmin}
+                       isRealmAdmin={this.props.isRealmAdmin}
+                       totalItems={this.props.totalItems}
+                       paidUsers={this.props.paidUsers}
+                       deniedUsers={this.props.deniedUsers}
+                       deactivatedUsers={this.props.deactivatedUsers}
+                       totalRealmUsers={this.props.totalRealmUsers}
                        additionalUpdateFunctions={this.governanceUpdateFunctions} />
         );
     }
@@ -98,12 +100,6 @@ GovernanceAnalytics.propTypes = {
      * Typically, this is set using app configuration.
      */
     dataset: PropTypes.string,
-
-    /**
-     * A method used to obtain the userId
-     * Typically this is a redux action. See pre-made actions in reuse/client/src/components/user.
-     */
-    // getLoggedInUser: PropTypes.func,
 
     /**
      * The current app. Allows analytics to get information about the current app like the id and account.
