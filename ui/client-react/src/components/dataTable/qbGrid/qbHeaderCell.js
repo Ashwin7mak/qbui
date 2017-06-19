@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 
 /**
- * The header cell component used in the QbGrid
+ * A non-draggable header cell component to be used in the QbGrid
  */
 export class QbHeaderCell extends Component {
     /**

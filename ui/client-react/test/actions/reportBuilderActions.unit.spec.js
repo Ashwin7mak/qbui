@@ -73,12 +73,10 @@ describe('Report Builder actions', () => {
     });
 
     it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
-        const params = {
-            sourceLabel: 'Column A',
-            targetLabel: 'Column B'
-        };
-        const expectedAction = event(context, types.MOVE_COLUMN, params);
-        expect(reportBuilderActions.moveColumn(context, params)).toEqual(expectedAction);
+        let sourceLabel = 'Column A';
+        let targetLabel = 'Column B';
+        const expectedAction = event(context, types.MOVE_COLUMN, {sourceLabel, targetLabel});
+        expect(reportBuilderActions.moveColumn(context, sourceLabel, targetLabel)).toEqual(expectedAction);
     });
 
     it('changeReportName action dispatches type.CHANGE_REPORT_NAME', () => {

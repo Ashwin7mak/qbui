@@ -31,7 +31,7 @@ const headerTarget = {
 };
 
 /**
- * The header cell component used in the QbGrid
+ * A draggable header cell component to be used in the QbGrid
  */
 class QbHeaderCell extends Component {
     /**

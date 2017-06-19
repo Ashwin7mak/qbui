@@ -78,7 +78,6 @@ const requiredProps = {
     onCancelEditingRow: actions.onClickCancel,
     onClickSaveRow: actions.onClickSave,
     cellRenderer: testCellRenderer,
-    moveColumn: (context, params) => {}
 };
 
 let component;
@@ -342,22 +341,5 @@ describe('QbGrid', () => {
         // Displays subHeaders if there are any rows where isSubHeader is true
         let subHeader = TestUtils.findRenderedDOMComponentWithClass(component, 'groupHeader');
         expect(subHeader.innerText).toEqual(subHeaderRow.subHeaderLabel);
-    });
-
-    describe('onMoveColumn', () => {
-        it('calls the moveColumn prop', () => {
-            spyOn(requiredProps, 'moveColumn');
-            component = shallow(<QbGrid {...requiredProps}/>);
-            instance = component.instance();
-
-            let column = {
-                sourceLabel: 5,
-                targetLabel: 6
-            };
-
-            instance.onMoveColumn(column);
-
-            expect(requiredProps.moveColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, column);
-        });
     });
 });
