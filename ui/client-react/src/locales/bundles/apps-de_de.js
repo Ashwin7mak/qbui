@@ -638,6 +638,8 @@ export default {
                 modify: 'Formular ändern',
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
+                removeTitleField: "Dieses Feld kann nicht entfernt werden, bis ein anderes Datensatztitelfeld gesetzt ist",
+                removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
                 tooltips: {
@@ -724,6 +726,9 @@ export default {
             noOverrides: "Es wurden keine Overrides gesetzt",
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
+        },
+        appCreation: {
+            newApp: 'Neue app'
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",

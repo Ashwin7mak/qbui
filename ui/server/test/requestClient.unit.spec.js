@@ -14,14 +14,6 @@ describe('Validate that the request client provider', () => {
         should.exist(requestClient);
     });
 
-    it('returns a request client', () => {
-        let mockConfig = {'tracingEnabled': 'false'};
-        let client = requestClient.getClient(mockConfig);
-
-        assert.notEqual(client, undefined);
-        assert.notEqual(client, null);
-    });
-
     describe('based on environment config', () => {
         let traceSpy;
 
@@ -33,21 +25,42 @@ describe('Validate that the request client provider', () => {
             traceSpy.restore();
         });
 
+        const tracingOff = [
+            {
+                name: "returns a standard request client when tracing is disabled by the string 'false'",
+                mockConfig: {'tracingEnabled': 'false', 'tracingHost': 'xray'}
+            },
+            {
+                name: "returns a standard request client when tracing is disabled by the boolean false",
+                mockConfig: {'tracingEnabled': false, 'tracingHost': 'xray'}
+            },
+        ];
 
-        it('returns a standard request client', () => {
-            let mockConfig = {'tracingEnabled': 'false'};
+        const tracingOn = [
+            {
+                name: "returns an instrumented request client when tracing is enabled by the string 'true'",
+                mockConfig: {'tracingEnabled': 'true', 'tracingHost': 'xray'}
+            },
+            {
+                name: "returns an instrumented request client when tracing is enabled by the boolean true",
+                mockConfig: {'tracingEnabled': true, 'tracingHost': 'xray'}
+            },
+        ];
 
-            requestClient.getClient(mockConfig);
+        tracingOff.forEach(function(testCase) {
+            it(testCase.name, () => {
+                requestClient.getClient(testCase.mockConfig);
 
-            assert(traceSpy.notCalled);
+                assert(traceSpy.notCalled);
+            });
         });
 
-        it('returns an instrumented request client', () => {
-            let mockConfig = {'tracingEnabled': 'true'};
+        tracingOn.forEach(function(testCase) {
+            it(testCase.name, () => {
+                requestClient.getClient(testCase.mockConfig);
 
-            requestClient.getClient(mockConfig);
-
-            assert(traceSpy.called);
+                assert(traceSpy.called);
+            });
         });
     });
 });

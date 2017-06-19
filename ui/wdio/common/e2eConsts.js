@@ -206,7 +206,8 @@
          * Creates a mapping for two tables with all supported field types that can be passed into the test generators package
          */
         createDefaultTableMap() {
-            let table1Name = 'Table 1', table2Name = 'Table 2', table3Name = 'Parent Table A', table4Name = 'Child Table A';
+            let table1Name = 'Table 1', table2Name = 'Table 2', table3Name = 'Parent Table A',
+                table4Name = 'Child Table A', table5Name = 'GrandChild Table A';
 
             // Create the table schema (map object) to pass into the app generator
             var tableToFieldToFieldTypeMap = {};
@@ -335,6 +336,15 @@
                 dataType: consts.TEXT
             };
             tableToFieldToFieldTypeMap[table4Name]['Parent Record ID'] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.NUMERIC
+            };
+            tableToFieldToFieldTypeMap[table5Name] = {};
+            tableToFieldToFieldTypeMap[table5Name][e2eConsts.reportFieldNames[1]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.TEXT
+            };
+            tableToFieldToFieldTypeMap[table5Name]['Parent Record ID'] = {
                 fieldType: consts.SCALAR,
                 dataType: consts.NUMERIC
             };

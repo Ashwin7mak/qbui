@@ -105,6 +105,8 @@
             //select App
             RequestAppsPage.selectApp(testApp.name);
 
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+
             //Verify if the left nav search element is visible and clickable
             leftNavPO.clickLeftNavSearch();
 
@@ -127,7 +129,7 @@
             expect(leftNavPO.leftNavSearchInputBox.getText()).toBe('');
 
             //Verify it returned all tables after clearing search
-            expect(browser.elements('.leftNav .tablesList .leftNavLabel').value.length).toBe(5);
+            expect(tableCreatePO.getAllTableLeftNavLinksList.value.length).toBe(originalTableLinksCount);
 
             //Verify if the left nav search element is clickable
             leftNavPO.clickLeftNavSearch();
@@ -175,7 +177,7 @@
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
             //Verify new Table button displays in leftNav
-            expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
+            expect(browser.element('.newTable.newItemButton .newItem').isEnabled()).toBe(true);
         });
 
         it('Verify going to reports via left nav and verify left Nav in reports page', function() {
@@ -195,7 +197,7 @@
             expect(browser.element('.tablesHeading .iconUISturdy-search').isEnabled()).toBe(true);
 
             //Verify new Table button displays in leftNav
-            expect(browser.element('.newTableItem .newTable').isEnabled()).toBe(true);
+            expect(browser.element('.newTable.newItemButton .newItem').isEnabled()).toBe(true);
 
         });
 

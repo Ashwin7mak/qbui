@@ -10,6 +10,7 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
     let formsPagePO = requirePO('formsPage');
+    let reportInLineEditPO = requirePO('reportInLineEdit');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -32,6 +33,18 @@
         parentRecordLinkInDrawerEl: {
             get: function() {
                 return browser.element('.numericField.viewElement');
+            }
+        },
+        // returns the element displaying the add child button
+        addChildButton: {
+            get: function() {
+                return browser.element('.addChildBtn');
+            }
+        },
+        // returns the class for the element displaying the add child button but in a disabled state
+        addChildButtonDisabledClass: {
+            get: function() {
+                return '.addChildBtn.disabled';
             }
         },
         // Page Object functions
@@ -92,8 +105,8 @@
          */
         clickAddChildButton: {
             value: function() {
-                browser.waitForVisible('.addChildBtn');
-                browser.element('.addChildBtn').click();
+                this.addChildButton.waitForVisible();
+                this.addChildButton.click();
                 browser.waitForVisible('.recordTrowser');
             }
         },
@@ -255,7 +268,8 @@
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
             this.tableHomePageLinkEl.click();
-        }}
+        }
+        }
     });
 
     module.exports = relationshipsPage;
