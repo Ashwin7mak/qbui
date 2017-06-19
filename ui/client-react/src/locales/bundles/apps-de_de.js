@@ -730,7 +730,6 @@ export default {
         appCreation: {
             newApp: 'Neue app',
             newAppPageTitle: 'Neue App',
-            newAppTitle: "Nennen Sie Ihre App",
             finishedButtonLabel: "App erstellen",
             appNameHeading: "App Name",
             appNamePlaceHolder: "For example, \"Order Tracker\""
