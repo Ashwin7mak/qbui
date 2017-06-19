@@ -385,12 +385,15 @@ QbGrid.propTypes = {
     onClickSaveRow: PropTypes.func,
 
     /**
-     * If the header cell is draggable, callback to when the column is hovering over another column. */
-    onHoverColumn: PropTypes.func,
+     * Header cell to be passed in to make QbGrid more reusable.
+     * Use QbHeaderCell for a default non-draggable header.
+     * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use. */
+    headerRenderer: PropTypes.func.isRequired,
 
     /**
-     * Header cell to be passed in to make QbGrid more reusable. */
-    headerRenderer: PropTypes.func.isRequired,
+     * If the header cell is draggable (e.g. DraggableQbHeaderCell,
+     * callback to when the column is hovering over another column (e.g. a move column function). */
+    onHoverColumn: PropTypes.func,
 
     /**
      * To make QbGrid flexible, it makes no assumptions about what is rendered inside of a cell.
