@@ -32,10 +32,6 @@ class AppCreationPanel extends React.Component {
 }
 
 AppCreationPanel.propTypes = {
-    appTables: PropTypes.array.isRequired,
-    tableInfo: PropTypes.object.isRequired,
-    setEditingProperty: PropTypes.func.isRequired
-
 };
 
 export default AppCreationPanel;

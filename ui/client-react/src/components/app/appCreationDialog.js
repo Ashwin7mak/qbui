@@ -45,19 +45,13 @@ export class AppCreationDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage("appCreation.finishedButtonLabel")}
                                  titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
             <div className="tableCreationPanel">
-                <AppCreationTable tableInfo={this.props.tableInfo}
-                                    openIconChooser={this.props.openIconChooser}
-                                    closeIconChooser={this.props.closeIconChooser}
-                                    setTableProperty={this.props.setTableProperty}
-                                    setEditingProperty={this.props.setEditingProperty} />
+                <AppCreationTable />
             </div>
         </MultiStepDialog>);
     }
 }
 
 AppCreationDialog.propTypes = {
-    app: PropTypes.object.isRequired,
-    setEditingProperty: PropTypes.func.isRequired,
     hideAppCreationDialog: PropTypes.func.isRequired
 };
 
