@@ -27,7 +27,7 @@
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
         //Icon chooser
-        tableFieldIconChooser: {get: function() {return browser.element('.tableCreationPanel.dialogField.iconSelection .iconChooser.closed');}},
+        tableFieldIconChooser: {get: function() {return browser.element('.tableInfo.dialogCreationPanelInfo .dialogField.iconSelection .iconChooser.closed');}},
         //Icon chooser down arrow
         iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle');}},
         //Icon chooser search
