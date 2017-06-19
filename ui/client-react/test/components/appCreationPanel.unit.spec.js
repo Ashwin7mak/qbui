@@ -2,16 +2,15 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import AppCreationPanel from '../../src/components/app/appCreationPanel';
-import {Simulate} from 'react-addons-test-utils';
 
 let component;
 
-describe('TableCreationPanel', () => {
+describe('AppCreationPanel', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
 
-    it('renders a TableCreationPanel', () => {
+    it('renders a AppCreationPanel', () => {
         component = mount(<AppCreationPanel />);
 
         expect(component.find('.appCreationPanel.dialogCreationPanelInfo')).toBePresent();
