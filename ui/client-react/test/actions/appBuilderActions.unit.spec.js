@@ -6,7 +6,7 @@ describe('App Actions success workflow functions', () => {
         expect(AppBuilderActions.showAppCreationDialog()).toEqual({type: types.SHOW_APP_CREATION_DIALOG});
     });
 
-    it('create showAppCreationDialog event', () => {
+    it('create hideAppCreationDialog event', () => {
         expect(AppBuilderActions.hideAppCreationDialog()).toEqual({type: types.HIDE_APP_CREATION_DIALOG});
     });
 });
