@@ -90,6 +90,10 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            testAutomation: "Automatisation des tests",
+            copyAutomation: "Copier l'automatisation",
+            editAutomation: "Modifier l'automatisation",
+            deleteAutomation: "Supprimer l'automatisation",
             dontDelete: "Ne pas supprimer",
             deleteThisRecord: "Supprimer cet enregistrement?",
             deleteTheseSwitches: "Supprimer ces commutateurs?",
@@ -672,6 +676,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
+            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à {tableName} sont sur le formulaire",
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
