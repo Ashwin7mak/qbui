@@ -111,7 +111,7 @@
 
             //Add fields to the form
             formBuilderFields.forEach(function(formBuilderField) {
-                formBuilderPO.addNewFieldToFormByDoubleClicking(formBuilderField);
+                formBuilderPO.addNewField(formBuilderField);
             });
 
             //Click on forms save button
