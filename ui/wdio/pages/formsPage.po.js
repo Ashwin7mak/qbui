@@ -253,6 +253,7 @@
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
             this.editFormContainerEl.waitForVisible();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Need this for container to slide down completely
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
@@ -263,6 +264,7 @@
          */
         waitForViewFormsTableLoad: {value: function() {
             this.viewFormContainerEl.waitForVisible();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Need this for container to slide down completely
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
