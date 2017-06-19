@@ -76,7 +76,7 @@
         display: flex;
         flex-direction: row;
         flex: 1 0 auto;
-        align-items: flex-start;
+        align-items: center;
         color: $search-input-color;
 
         &.noFacets {
@@ -106,7 +106,7 @@
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                padding-bottom: 32px;
+                margin-left: 10px;
 
                 .loadedContent {
                     display: block;
@@ -122,10 +122,10 @@
                     text-align: right;
                     font-family: "Lato", Sans-Serif;
                     font-size: 14px;
+                    white-space: nowrap;
 
                     @include small-breakpoint {
                         color: $pagination-mobile-topbar-text-color;
-                        white-space: nowrap;
                         margin-left: 15px;
                         line-height: 40px;
                     }
@@ -144,7 +144,7 @@
         }
 
         .filterSearchBoxContainer {
-            flex-shrink: 0;
+            flex-shrink: 1;
 
             .filterSearchBox {
                 min-width: 60px;
