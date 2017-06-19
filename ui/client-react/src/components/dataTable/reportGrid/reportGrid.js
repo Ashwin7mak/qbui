@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import QbGrid from '../qbGrid/qbGrid';
+import QbHeaderCell from '../qbGrid/qbHeaderCell';
 import ReportColumnTransformer from './reportColumnTransformer';
 import ReportRowTransformer from './reportRowTransformer';
 import FieldUtils from 'APP/utils/fieldUtils';
@@ -11,6 +12,7 @@ import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import {I18nMessage} from 'APP/utils/i18nMessage';
 import Locale from 'APP/locales/locales';
 import {connect} from 'react-redux';
+import {moveColumn, draggingColumnStart, draggingColumnEnd} from '../../../actions/reportBuilderActions';
 import {getPendEdits} from '../../../reducers/record';
 import _ from 'lodash';
 
@@ -305,7 +307,7 @@ export const ReportGrid = React.createClass({
                     onStartEditingRow={this.startEditingRow}
                     editingRowId={editingRecordId}
                     isInlineEditOpen={isInLineEditOpen}
-                    isDraggable={this.props.isDraggable}
+                    isDraggable={false}
                     selectedRows={this.props.selectedRows}
                     areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
                     onClickToggleSelectedRow={this.props.toggleSelectedRow}
@@ -318,6 +320,7 @@ export const ReportGrid = React.createClass({
                     onClickAddNewRow={this.props.onRecordNewBlank}
                     onClickSaveRow={this.props.onClickRecordSave}
                     isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
+                    headerRenderer={QbHeaderCell}
                     cellRenderer={ReportCell}
                     commonCellProps={{
                         appUsers: this.props.appUsers,
@@ -363,8 +366,7 @@ const mapStateToProps = (state) => {
     return {
         report: state.report,
         record: state.record,
-        searchString: state.search && state.search.searchInput,
-        isDraggable: state.reportBuilder.isInBuilderMode
+        searchString: state.search && state.search.searchInput
     };
 };
 

@@ -1,9 +1,7 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
-import {DragDropContext} from 'react-dnd';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
-import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
@@ -11,9 +9,7 @@ import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
-import TouchBackend from 'react-dnd-touch-backend';
 import {moveColumn, draggingColumnStart, draggingColumnEnd} from '../../../actions/reportBuilderActions';
-import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
 
 import Logger from 'APP/utils/logger';
@@ -54,6 +50,18 @@ export const QbGrid = React.createClass({
         /**
          * Should this grid be draggable? */
         isDraggable: PropTypes.bool,
+
+        /**
+         * If isDraggable, callback to when the column is hovering over another column. */
+        onHoverColumn: PropTypes.func,
+
+        /**
+         * If isDraggable, callback to when the column begins dragging. */
+        onDragColumnStart: PropTypes.func,
+
+        /**
+         * If isDraggable, callback to when the column stops dragging. */
+        onDragColumnEnd: PropTypes.func,
 
         /**
          * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
@@ -104,6 +112,7 @@ export const QbGrid = React.createClass({
          * The action that occurs when the user clicks save */
         onClickSaveRow: PropTypes.func,
 
+        headerRenderer: PropTypes.func.isRequired,
         /**
          * To make QbGrid flexible, it makes no assumptions about what is rendered inside of a cell.
          * A cellRenderer (a React component) must be passed in.
@@ -258,7 +267,7 @@ export const QbGrid = React.createClass({
             if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            let c = column.getGridHeader(this.onMoveColumn, this.onDragColumnStart, this.onDragColumnEnd);
+            let c = column.getGridHeader(this.props.onHoverColumn, this.props.onDragColumnStart, this.props.onDragColumnEnd);
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
@@ -406,25 +415,6 @@ export const QbGrid = React.createClass({
         }
     },
 
-    /**
-     * Called when a column is dragged onto a target
-     * @param context
-     * @param sourceLabel
-     * @param targetLabel
-     * @param object which has the drag source and drop target
-     */
-    onMoveColumn(context, sourceLabel, targetLabel) {
-        this.props.moveColumn(context, sourceLabel, targetLabel);
-    },
-
-    onDragColumnStart(sourceLabel) {
-        this.props.draggingColumnStart(sourceLabel);
-    },
-
-    onDragColumnEnd() {
-        this.props.draggingColumnEnd();
-    },
-
     render() {
         let columns;
         if (this.props.showRowActionsColumn) {
@@ -434,8 +424,7 @@ export const QbGrid = React.createClass({
                     headerClass: "gridHeaderCell",
                     header: {
                         props: {
-                            scope: 'col',
-                            onMove: this.onMoveColumn
+                            scope: 'col'
                         },
                         label: this.getCheckboxHeader(),
                         transforms: [this.getActionCellProps],
@@ -461,7 +450,7 @@ export const QbGrid = React.createClass({
                     onScroll={this.handleScroll}
                     components={{
                         header: {
-                            cell: QbHeaderCell
+                            cell: this.props.headerRenderer
                         },
                         body: {
                             row: QbRow,
@@ -485,10 +474,4 @@ export const QbGrid = React.createClass({
     }
 });
 
-const mapDispatchToProps = {
-    moveColumn,
-    draggingColumnStart,
-    draggingColumnEnd
-};
-
-export default connect(null, mapDispatchToProps)(QbGrid);
+export default QbGrid;

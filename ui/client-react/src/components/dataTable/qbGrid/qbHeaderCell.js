@@ -26,7 +26,7 @@ const headerTarget = {
     hover(targetProps, monitor) {
         const sourceProps = monitor.getItem();
         if (sourceProps.label !== targetProps.label) {
-            targetProps.onMove(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
+            targetProps.onHover(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
         }
     }
 };
