@@ -134,6 +134,10 @@
                 });
             },
 
+            createApp: function(req) {
+                Promise.resolve();
+            },
+
             getApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
