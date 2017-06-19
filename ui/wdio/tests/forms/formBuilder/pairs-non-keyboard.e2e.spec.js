@@ -5,7 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
-    let notificationContainer = requirePO('/common/notificationContainer');
+    let formsPO = requirePO('formsPage');
 
     let realmName;
     let realmId;
@@ -43,7 +43,9 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+                reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+                //wait until view form is visible
+                return formsPO.viewFormContainerEl.waitForVisible();
             });
 
             beforeEach(function() {
@@ -66,8 +68,7 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // cancel & reopen
-                formBuilderPO.cancel();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify field name is not revised
                 expect(newFields).toEqual(originalFields);
             });
@@ -80,10 +81,7 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // save & reopen
-                formBuilderPO.save();
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify field name is revised
                 expect(newFields).toEqual(existingFields);
             });
@@ -96,8 +94,7 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
                 // cancel & reopen
-                formBuilderPO.cancel();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify that the first item has been restored
                 expect(newFields.indexOf(firstField)).toEqual(0);
             });
@@ -109,10 +106,7 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
                 // save & reopen
-                formBuilderPO.save();
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify that the first item is still gone
                 expect(newFields).not.toContain(firstField);
             });
@@ -130,8 +124,7 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // cancel & reopen
-                formBuilderPO.cancel();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify new field is not present
                 expect(newFields).toEqual(originalFields);
             });
@@ -148,10 +141,7 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // save & reopen
-                formBuilderPO.save();
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify new field is present
                 expect(newFields).toEqual(existingFields);
             });
@@ -167,8 +157,7 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // cancel & reopen
-                formBuilderPO.cancel();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify lack of persistence
                 expect(newFields).toEqual(origFields);
             });
@@ -183,10 +172,7 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // save & reopen
-                formBuilderPO.save();
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify persistence
                 expect(newFields).toEqual(movedFields);
             });
