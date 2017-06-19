@@ -1,6 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import QBToolTip from '../toolTip/toolTip';
+import QBToolTip from '../tooltip/tooltip';
 import ErrorWrapper from '../../../../../client-react/src/components/fields/errorWrapper';
 import * as CompConstants from '../../../../../client-react/src/constants/componentConstants';
 
