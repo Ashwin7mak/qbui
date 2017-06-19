@@ -113,8 +113,8 @@
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
                 // Click add user
                 modalDialog.modalDialogAddUserBtn.click();
-                // Click to close the Share with User modal
                 browser.pause(e2eConsts.shortWaitTimeMs);
+                // Click to close the Share with User modal
                 modalDialog.modalDialogCloseBtn.click();
             });
 
@@ -133,10 +133,10 @@
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
                 // Click add user
                 modalDialog.modalDialogAddUserBtn.click();
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click Copy link to Share with User
                 expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
                 // Click to close the Share with User modal
-                browser.pause(e2eConsts.shortWaitTimeMs);
                 modalDialog.modalDialogCloseBtn.click();
             });
 
@@ -155,10 +155,10 @@
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
                 // Click add user
                 modalDialog.modalDialogAddUserBtn.click();
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click Email to Share with User
                 expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
                 // Click to close the Share with User modal
-                browser.pause(e2eConsts.shortWaitTimeMs);
                 modalDialog.modalDialogCloseBtn.click();
             });
 
