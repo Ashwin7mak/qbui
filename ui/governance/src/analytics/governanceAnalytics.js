@@ -4,18 +4,10 @@ import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTot
 import Analytics from "../../../reuse/client/src/components/analytics/analytics";
 import Config from '../../../client-react/src/config/app.config';
 
+
 export class GovernanceAnalytics extends Component {
     // Evergage requires a global variable called _aaq
     _aaq = window._aaq || (window._aaq = []);
-
-    /**
-     * Updates Evergage about whether the user is an account admin
-     */
-    updateEvergageAccountAdminStatus = () => {
-        if (this.props.currentUserId && _.has(this.props, 'isAccountAdmin')) {
-            this._aaq.push(['setCustomField', 'is_account_admin', this.props.isAccountAdmin, 'request']);
-        }
-    };
 
     /**
      * Updates Evergage about whether the user is a realm admin
@@ -72,7 +64,6 @@ export class GovernanceAnalytics extends Component {
     };
 
     governanceUpdateFunctions = [
-        this.updateEvergageAccountAdminStatus,
         this.updateEvergageRealmAdminStatus,
         this.updateEvergageSubdomainName,
         this.updateEvergageTotalItems,
@@ -88,7 +79,15 @@ export class GovernanceAnalytics extends Component {
         return (
             <Analytics dataset={Config.evergageDataset}
                        userId={this.props.currentUserId}
+                       accountId={this.props.accountId}
+                       subdomainName={this.props.subdomainName}
                        isAdmin={this.props.isAdmin}
+                       isRealmAdmin={this.props.isRealmAdmin}
+                       totalItems={this.props.totalItems}
+                       paidUsers={this.props.paidUsers}
+                       deniedUsers={this.props.deniedUsers}
+                       deactivatedUsers={this.props.deactivatedUsers}
+                       totalRealmUsers={this.props.totalRealmUsers}
                        additionalUpdateFunctions={this.governanceUpdateFunctions} />
         );
     }
