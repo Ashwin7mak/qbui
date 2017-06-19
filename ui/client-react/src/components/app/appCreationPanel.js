@@ -28,6 +28,12 @@ class AppCreationPanel extends React.Component {
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
                                       autofocus />
+
+                    <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
+                                      className="appCreationPanel"
+                                      name="description"
+                                      component="textarea"
+                                      rows="3"/>
                 </div>
             </div>);
     }
