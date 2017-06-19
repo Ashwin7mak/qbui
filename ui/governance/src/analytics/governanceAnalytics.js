@@ -27,7 +27,6 @@ export class GovernanceAnalytics extends Component {
         }
     };
 
-
     /**
      * Updates Evergage about whether the user is a realm admin
      */
@@ -93,8 +92,6 @@ export class GovernanceAnalytics extends Component {
         this.updateEvergageTotalRealmUsers
     ];
 
-
-
     // This component does not display anything.
     render() {
         return (
@@ -123,20 +120,55 @@ GovernanceAnalytics.propTypes = {
     dataset: PropTypes.string,
 
     /**
-     * The current app. Allows analytics to get information about the current app like the id and account.
+     * The current account ID for the current user
      */
-    user: PropTypes.shape({
-        accountId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-        subdomainName: PropTypes.string,
-        currentUserId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-        isAccountAdmin: PropTypes.boolean,
-        isRealmAdmin: PropTypes.boolean,
-        totalItems: PropTypes.number,
-        paidUsers: PropTypes.number,
-        deniedUsers: PropTypes.number,
-        deactivatedUsers: PropTypes.number,
-        totalRealmUsers: PropTypes.number
-    })
+    accountId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+    /**
+     * The subdomain name for the current user
+     */
+    subdomainName: PropTypes.string,
+
+    /**
+     * The UID of the current user
+     */
+    currentUserId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+    /**
+     * This is used to identify if the current user is an account admin
+     */
+    isAccountAdmin: PropTypes.bool,
+
+    /**
+     * This is used to identify if the current user is a realm admin
+     */
+    isRealmAdmin: PropTypes.bool,
+
+    /**
+     * The total number of items (rows) contained in the grid (example: total # of users)
+     */
+    totalItems: PropTypes.number,
+
+    /**
+     * The total number of paid users listed
+     */
+    paidUsers: PropTypes.number,
+
+    /**
+     * The total number of denied users listed
+     */
+    deniedUsers: PropTypes.number,
+
+    /**
+     * The total number of deactivated users listed
+     */
+    deactivatedUsers: PropTypes.number,
+
+    /**
+     * The total number of users in the realm directory
+     */
+    totalRealmUsers: PropTypes.number
+
 };
 
 const mapStateToProps = (state) => {
