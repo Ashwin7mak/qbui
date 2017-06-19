@@ -11,7 +11,9 @@ function initializeState() {
         isPendingEdit: false,
         isInBuilderMode: false,
         availableColumns: [],
-        addBeforeColumn: false
+        addBeforeColumn: false,
+        labelBeingDragged: '',
+        isDragging: false
     };
 }
 

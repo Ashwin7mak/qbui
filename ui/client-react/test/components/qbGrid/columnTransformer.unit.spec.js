@@ -74,13 +74,17 @@ describe('ColumnTransformer', () => {
                 label: testHeaderLabel,
                 onHover,
                 onDragStart,
-                onDragEnd
+                onDragEnd,
+                relatedField: {
+                    name: testHeaderLabel,
+                    datatypeAttributes: undefined
+                }
             }
         };
 
         it('converts the ColumnTransformer instance into a column object that can be consumed by QbGrid', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
-            expect(_.isEqual(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd), expectedOutput)).toEqual(true);
+            expect(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd)).toEqual(expectedOutput);
         });
 
         it('adds a cell formatter if it is set', () => {
@@ -93,7 +97,7 @@ describe('ColumnTransformer', () => {
                 }
             });
 
-            expect(_.isEqual(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd), expectedOutputWithFormatter)).toEqual(true);
+            expect(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd)).toEqual(expectedOutputWithFormatter);
         });
 
         it('adds a menu component if it is set', () => {
@@ -115,7 +119,7 @@ describe('ColumnTransformer', () => {
                 }
             });
 
-            expect(_.isEqual(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd), expectedOutputWithHeaderMenu)).toEqual(true);
+            expect(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd)).toEqual(expectedOutputWithHeaderMenu);
         });
     });
 });
