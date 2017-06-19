@@ -114,7 +114,7 @@
                 formBuilderPO.open();
 
                 //Click on add a new record button
-                formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+                formBuilderPO.addNewField(GET_ANOTHER_RECORD);
 
                 //Verify all dialog contents and functionality
                 formBuilderPO.verifyGetAnotherRecordRelationshipDialog(expectedTablesList, NEW_PARENT_TABLE, CHILD_TABLE, expectedFieldsList);
@@ -127,7 +127,7 @@
                 formBuilderPO.open();
 
                 //Click on add a new record button
-                formBuilderPO.addNewFieldToFormByDoubleClicking(GET_ANOTHER_RECORD);
+                formBuilderPO.addNewField(GET_ANOTHER_RECORD);
 
                 //Select table from table list
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, NEW_PARENT_TABLE);

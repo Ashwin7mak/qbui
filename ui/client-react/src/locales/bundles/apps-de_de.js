@@ -672,6 +672,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
+            existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",
@@ -726,6 +727,9 @@ export default {
             noOverrides: "Es wurden keine Overrides gesetzt",
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
+        },
+        appCreation: {
+            newApp: 'Neue app'
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",

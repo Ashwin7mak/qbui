@@ -2,7 +2,6 @@
     'use strict';
 
     let newStackAuthPO = requirePO('newStackAuth');
-    let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
     let topNavPO = requirePO('topNav');
@@ -59,45 +58,6 @@
             });
 
             // disabled
-            xit('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
-                //TODO: disabled pending MC-1424: Keyboard Nav for Adding New Field & ESC key enhancements
-                let selectedField = formBuilderPO.KB_selectField(2);
-                browser.keys([
-                    'Escape', // deselect field
-                    'Escape', // focus form builder
-                    'Shift', 'Tab', // focus NEW FIELD panel
-                    'Shift'] // release mod key
-                );
-                // verify that the field is still selected
-                expect(formBuilderPO.getSelectedFieldLabel()).toEqual(selectedField);
-                // TODO: select/add a new field via keyboard & verify that is inserted directly below the selected field
-            });
-
-            xit('check the REQUIRED checkbox, cancel & verify not checked', function() {
-                //TODO: disabled pending MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
-                let originalFields = formBuilderPO.getFieldLabels();
-                browser.moveToObject(formBuilderPO.getFieldLocator(1) + ' .draggableField', 1, 1);
-                browser.buttonDown();
-                browser.buttonUp();
-                // verify initial state of checkbox
-                // I had to define separate elements for checked & non-checked states, which is not ideal
-                formBuilderPO.fieldProperty_Required.waitForExist();
-                expect(formBuilderPO.requiredCheckboxChecked.isExisting()).toBe(false);
-                expect(formBuilderPO.requiredCheckboxNotChecked.isExisting()).toBe(true);
-                // revise the REQUIRED property (i.e. click the checkbox to make it checked)
-                formBuilderPO.fieldProperty_Required.click();
-                // this line fails even though the checkbox has been checked, so I logged the issue & disabled the test
-                formBuilderPO.requiredCheckboxChecked.waitForExist();
-                // cancel & reopen
-                formBuilderPO.cancel().open();
-                // verify REQUIRED checkbox is not checked
-                expect(formBuilderPO.requiredCheckboxChecked.isExisting()).toBe(false);
-            });
-
-            xit('check the REQUIRED checkbox, save & verify checked', function() {
-                //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
-            });
-
 
             xit('add a new field & verify that it does not appear in the existing fields list', function() {
                 // MC-3100: New fields appear immediately in Existing field tab
@@ -133,6 +93,25 @@
             });
 
             // one-offs
+
+            it('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
+                let newField = formBuilderPO.fieldTokenTitle.getText();
+                // verify (hope) that the 2nd field (where new field will be inserted) doesn't already match new field label
+                expect(formBuilderPO.getFieldLabels()[1]).not.toEqual(newField);
+                formBuilderPO.KB_selectField(1);
+                browser.keys([
+                    'Escape', // focus form container
+                    'Shift', 'Tab', 'Shift', // focus new field container & release mod key
+                    'Enter', // focus new field content
+                    'Tab', // focus search
+                    'Tab', // focus first new field
+                    'Enter', // add new field
+                ]);
+                // verify that the new field is selected & appears below the previous selection
+                expect(formBuilderPO.getSelectedFieldLabel()).toEqual(newField);
+                expect(formBuilderPO.getFieldLabels()[1]).toEqual(newField);
+            });
+
             it('select a field, add a new field, verify new field is added directly below selection', function() {
                 // store the list of fields before adding
                 let origFields = formBuilderPO.getFieldLabels();
@@ -210,7 +189,6 @@
                 }, true);
                 expect(lastField.isVisibleWithinViewport()).toBe(false);
                 // move cursor to first field & press MB1
-                //            firstField.click(); // shouldn't be necessary... but edge tends to hang here
                 browser.moveToObject(firstFieldLocator);
                 browser.buttonDown();
                 // drag DOWN down until autoscroll begins
@@ -304,6 +282,53 @@
                 topNavPO.topNavToggleHamburgerEl.click();
                 // verify existing fields tab is still selected
                 expect(formBuilderPO.tab_Active.getText()).toBe("Existing");
+            });
+
+            it('verify presence of all expected tokens & groups in new fields panel', function() {
+                // build an array of groups, each being an array of items within that group
+                // and compare that to the expected array
+                expect(
+                    formBuilderPO.activePanel.elements('.listOfElementsItemGroup').value.map(function(group) {
+                        return group.elements('.listOfElementsItem').value.map(function(item) {
+                            return item.getText();
+                        });
+                    })).toEqual([
+                    ['Text', 'Choice list'],
+                    ['Number', 'Currency', 'Percentage'],
+                    ['Date', 'Time stamp', 'Time of day', 'Duration'],
+                    ['Checkbox', 'User', 'URL', 'Email', 'Phone'],
+                    ['Get another record']]
+                );
+            });
+
+            it('add a new field from the collapsed NEW FIELDS panel', function() {
+                // verify that there are initially no collapsed field tokens
+                formBuilderPO.fieldTokenCollapsed.waitForExist(null, true);
+                // verify that (hopefully) the last existing field on the form
+                // doesn't have the same name as the first item in the NEW FIELDS list
+                let fields = formBuilderPO.getFieldLabels();
+                let newField = formBuilderPO.listOfElementsItem.getText();
+                expect(fields[fields.length - 1]).not.toBe(newField);
+                // set the expected result after adding new field
+                fields.push(newField);
+                // click on hamburger to collapse field panel
+                topNavPO.topNavToggleHamburgerEl.click();
+                // click on a collapsed new field token to add a new field
+                formBuilderPO.fieldTokenCollapsed.click();
+                // verify that the new field appears at the end of the revised fields list
+                expect(formBuilderPO.getFieldLabels()).toEqual(fields);
+            });
+
+            it('drag a new field onto the form & verify that it appears immediately  below the target field', function() {
+                let newField = formBuilderPO.fieldTokenTitle.getText();
+                let fields = formBuilderPO.getFieldLabels();
+                // verify (hope) that the first field label (where new field will be inserted) doesn't already match new field label
+                expect(fields[0]).not.toEqual(newField);
+                // drag first new field token onto first field on form
+                let newFields = formBuilderPO.dragNewFieldOntoForm(formBuilderPO.listOfElementsItem, formBuilderPO.firstField);
+                // verify that the new field is inserted below the existing one it was dragged to
+                fields.splice(0, 0, newField);
+                expect(newFields).toEqual(fields);
             });
         }
     });

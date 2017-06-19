@@ -52,6 +52,7 @@ class ToolPalette extends Component {
                                 toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                                 toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                                 toolPaletteFocus={this.props.toolPaletteFocus}
+                                app={this.props.app}
                                 appId={this.props.appId}
                                 tblId={this.props.tableId} />
         );
