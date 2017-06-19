@@ -4,6 +4,7 @@ let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
+let loadingSpinner = requirePO('/common/loadingSpinner');
 
 class formBuilderPage {
 

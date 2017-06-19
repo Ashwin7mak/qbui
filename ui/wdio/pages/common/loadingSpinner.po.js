@@ -4,6 +4,17 @@
 
     module.exports = Object.create(e2ePageBase, {
         /**
+         * Method for spinner to dissaper
+         */
+        waitUntilLoadingSpinnerGoesAway: {
+            value: function() {
+                //wait until loading screen disappear
+                browser.waitForVisible('.loader .spinner', e2eConsts.longWaitTimeMs, true);
+                //Need this to stabilize DOM
+                return browser.pause(e2eConsts.shortWaitTimeMs);
+            }},
+
+        /**
          * Method for spinner to dissaper in leftNav
          */
         waitUntilLeftNavSpinnerGoesAway: {

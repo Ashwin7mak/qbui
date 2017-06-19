@@ -6,6 +6,7 @@
     'use strict';
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     module.exports = Object.create(e2ePageBase, {
         center: {
@@ -183,6 +184,7 @@
             //Click on table properties and settings link
             this.modifyThisForm.waitForVisible();
             this.modifyThisForm.click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             return browser.element('.formTable .formElement.field').waitForVisible();
         }},
 

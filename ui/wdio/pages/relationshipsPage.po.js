@@ -282,7 +282,7 @@
             topNavPO.clickOnModifyFormLink();
 
             //Click on add a new record button
-            formBuilderPO.addNewFieldToFormByDoubleClicking(e2eConsts.GET_ANOTHER_RECORD);
+            formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
 
             //Select table from table list of add a record dialog
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
