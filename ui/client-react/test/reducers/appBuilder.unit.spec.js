@@ -16,7 +16,7 @@ describe('App Creation', () => {
         expect(state.dialogOpen).toBe(true);
     });
 
-    it('will show the app creation dialog', () => {
+    it('will hide the app creation dialog', () => {
         const state = reducer(storeState, {type: types.HIDE_APP_CREATION_DIALOG});
 
         expect(state.dialogOpen).toBe(false);
