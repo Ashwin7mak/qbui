@@ -1,63 +1,35 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import TestUtils, {Simulate} from 'react-addons-test-utils';
-
+import {shallow} from 'enzyme';
 import {AppCreationDialog} from '../../src/components/app/appCreationDialog';
+import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 
 let component;
-let domComponent;
+let instance;
 
-const mockParentFunctions = {
+let mockActions = {
+    hideAppCreationDialog() {}
 };
 
-        render() {
-            const tableCreationProps = getTableProps(this.state.pageIndex);
-            return (
-                <TableCreationDialog app={app}
-                                     tableCreation={tableCreationProps}
-                                     tableInfo={tableCreationProps.tableInfo}
-                                     setEditingProperty={mockParentFunctions.setEditingProperty}
-                                     setTableProperty={mockParentFunctions.setTableProperty}
-                                     hideTableCreationDialog={mockParentFunctions.hideDialog}
-                                     createTable={mockParentFunctions.createTable}
-                                     onTableCreated={mockParentFunctions.tableCreated}
-                />
-            );
-        }
-    });
-}
-
-function buildMockParentComponent(options) {
-    return TestUtils.renderIntoDocument(React.createElement(buildMockParent(options)));
-}
-
-describe('TableCreationDialog', () => {
+describe('AppCreationDialog', () => {
     beforeEach(() => {
+        spyOn(mockActions, 'hideAppCreationDialog');
         jasmineEnzyme();
     });
 
-    afterEach(() => {
-        // Remove modal from the dom after every test to reset
-        let modalInDom = document.querySelector('.tableCreationDialog.creationDialog');
-        if (modalInDom) {
-            modalInDom.parentNode.removeChild(modalInDom);
-        }
+    it('renders a AppCreationDialog', () => {
+        component = shallow(<AppCreationDialog />);
+
+        expect(component).toBePresent();
+        expect(component.find(MultiStepDialog).length).toEqual(1);
     });
 
-    it('renders a TableCreationDialog', () => {
-        component = buildMockParentComponent();
+    it('will invoke hideAppCreationDialog action when onCancel is called', () => {
+        component = shallow(<AppCreationDialog hideAppCreationDialog={mockActions.hideAppCreationDialog} />);
 
-        domComponent = document.querySelector('.tableCreationDialog.creationDialog');
+        instance = component.instance();
+        instance.onCancel();
 
-        expect(domComponent).not.toBeNull();
-    });
-
-    it('cancels the TableCreationDialog', () => {
-        component = buildMockParentComponent();
-
-        domComponent = document.querySelector('.tableCreationDialog.creationDialog');
-
-        let cancelButton = domComponent.querySelector('.cancelButton');
-        Simulate.click(cancelButton);
+        expect(mockActions.hideAppCreationDialog).toHaveBeenCalled();
     });
 });

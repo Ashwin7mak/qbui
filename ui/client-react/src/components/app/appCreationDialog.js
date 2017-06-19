@@ -3,7 +3,6 @@ import {PropTypes} from 'react';
 import AppCreationTable from './appCreationPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
-import {I18nMessage} from "../../utils/i18nMessage";
 import * as AppBuilderActions from '../../actions/appBuilderActions';
 import Locale from '../../locales/locales';
 import _ from 'lodash';
