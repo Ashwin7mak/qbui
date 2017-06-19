@@ -73,7 +73,10 @@ const actions = {
     onClickCancel() {},
     onClickEdit() {},
     onClickSave() {},
-    onClickToggle() {}
+    onClickToggle() {},
+    setCollapsedGroups() {},
+    draggingColumnStart() {},
+    draggingColumnEnd() {}
 };
 
 const testCellRenderer = (props) => {
@@ -85,7 +88,10 @@ const requiredProps = {
     onCancelEditingRow: actions.onClickCancel,
     onClickSaveRow: actions.onClickSave,
     cellRenderer: testCellRenderer,
-    headerRenderer: QbHeaderCell
+    headerRenderer: QbHeaderCell,
+    setCollapsedGroups: actions.setCollapsedGroups,
+    draggingColumnStart: actions.draggingColumnStart,
+    draggingColumnEnd: actions.draggingColumnEnd
 };
 
 let component;
