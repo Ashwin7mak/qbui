@@ -19,8 +19,13 @@ describe('HelpButton', () => {
         expect(component.find(Icon)).toHaveProp('icon', 'help');
     });
 
-    it('has the correct href', () => {
+    it('has the correct default href', () => {
         component = shallow(<HelpButton/>);
         expect(component.find({href: UrlUtils.getHelpLink()})).toBePresent();
+    });
+
+    it('has the correct href if passed as a prop', () => {
+        component = shallow(<HelpButton link="www.google.com"/>);
+        expect(component.find({href: "www.google.com"})).toBePresent();
     });
 });
