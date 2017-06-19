@@ -105,9 +105,9 @@ export const Nav = React.createClass({
 
         let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/report/${rptId}`;
 
-        this.props.updateReportRedirectRoute(CONTEXT.REPORT.NAV, _.get(this.props, 'location.pathname'));
+        this.props.updateReportRedirectRoute(_.get(this.props, 'location.pathname'));
 
-        this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
+        this.props.enterBuilderMode();
 
         this.props.history.push(link);
     },
@@ -594,10 +594,10 @@ const mapDispatchToProps = (dispatch) => {
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
-        enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
+        enterBuilderMode: () => dispatch(enterBuilderMode()),
         loadApps: () => dispatch(loadApps()),
         loadApp: (appId) => dispatch(loadApp(appId)),
-        updateReportRedirectRoute: (context, route) => dispatch(updateReportRedirectRoute(context, route))
+        updateReportRedirectRoute: (route) => dispatch(updateReportRedirectRoute(route))
     };
 };
 

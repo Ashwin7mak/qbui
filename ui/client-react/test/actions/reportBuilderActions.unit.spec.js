@@ -60,16 +60,17 @@ describe('Report Builder actions', () => {
     });
 
     it('should create an action to enter builder mode', () => {
-        expect(reportBuilderActions.enterBuilderMode(context)).toEqual(event(context, types.ENTER_BUILDER_MODE, {}));
+        expect(reportBuilderActions.enterBuilderMode()).toEqual({type: types.ENTER_BUILDER_MODE});
     });
 
     it('should create an action to exit builder mode', () => {
-        expect(reportBuilderActions.exitBuilderMode(context)).toEqual(event(context, types.EXIT_BUILDER_MODE, {}));
+        expect(reportBuilderActions.exitBuilderMode()).toEqual({type: types.EXIT_BUILDER_MODE});
     });
 
     it('updateReportRedirectRoute action dispatches type.UPDATE_REPORT_REDIRECT_ROUTE', () => {
         let route = 'localhost';
-        expect(reportBuilderActions.updateReportRedirectRoute(context, route)).toEqual(event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route}));
+        expect(reportBuilderActions.updateReportRedirectRoute(route))
+            .toEqual({type: types.UPDATE_REPORT_REDIRECT_ROUTE, content: {route}});
     });
 
     it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
@@ -126,11 +127,11 @@ describe('Test ReportBuilderActions function success workflow', () => {
 
     it('refreshFieldSelectMenu action dispatches type:REFRESH_FIELD_SELECT_MENU', (done) => {
         const expectedActions = [
-            event(context, types.REFRESH_FIELD_SELECT_MENU, {response: mockResponseGetFields})
+            {type: types.REFRESH_FIELD_SELECT_MENU, content: {response: mockResponseGetFields}}
         ];
         const store = mockReportsStore({});
 
-        return store.dispatch(reportBuilderActions.refreshFieldSelectMenu(context, appId, tblId)).then(
+        return store.dispatch(reportBuilderActions.refreshFieldSelectMenu(appId, tblId)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
@@ -143,7 +144,7 @@ describe('Test ReportBuilderActions function success workflow', () => {
 
     it('save report', (done) => {
         const expectedAction = [
-            event(null, types.SET_IS_PENDING_EDIT_TO_FALSE)
+            {type: types.SET_IS_PENDING_EDIT_TO_FALSE}
         ];
         const store = mockReportsStore({});
 

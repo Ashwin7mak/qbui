@@ -24,7 +24,7 @@ export class ReportFieldSelectMenu extends Component {
     }
 
     refreshMenuContent = () => {
-        this.props.refreshFieldSelectMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId);
+        this.props.refreshFieldSelectMenu(this.props.appId, this.props.tblId);
     };
 
     getHiddenColumns = () => {
@@ -119,8 +119,8 @@ const mapDispatchToProps = (dispatch) => {
         refreshFieldSelectMenu: (context, appId, tblId) => {
             dispatch(refreshFieldSelectMenu(context, appId, tblId));
         },
-        addColumnFromExistingField: (context, requestedColumn, addBefore) => {
-            dispatch(addColumnFromExistingField(context, requestedColumn, addBefore));
+        addColumnFromExistingField: (requestedColumn, addBefore) => {
+            dispatch(addColumnFromExistingField(requestedColumn, addBefore));
         }
     };
 };
