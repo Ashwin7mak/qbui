@@ -6,7 +6,7 @@
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
     let topNavPO = requirePO('topNav');
-    let formsPO = requirePO('formsPage');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     let realmName;
     let realmId;
