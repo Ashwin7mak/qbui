@@ -138,8 +138,8 @@
         }},
         getReportListUlEl: {
             get: function() {
-                browser.element('.qbPanelBody .reportItems .reportLink').waitForVisible();
-                return browser.elements('.qbPanelBody .reportItems .reportLink');
+                browser.element('.qbPanel.open .reportItems .reportLink').waitForVisible();
+                return browser.elements('.qbPanel.open .reportItems .reportLink');
             }
         },
         /**
@@ -466,8 +466,8 @@
 
             if (allReports !== []) {
                 //Click on the report
-                allReports[0].element('.iconUISturdy-report-table').waitForVisible();
-                allReports[0].element('.iconUISturdy-report-table').click();
+                allReports[0].waitForVisible();
+                allReports[0].click();
                 //wait for container to slide away
                 browser.pause(e2eConsts.mediumWaitTimeMs);
                 //wait for reportContent to load
