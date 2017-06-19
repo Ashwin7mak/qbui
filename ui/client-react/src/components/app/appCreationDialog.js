@@ -27,7 +27,7 @@ export class AppCreationDialog extends React.Component {
      * last page has finished
      */
     onFinished = () => {
-        //Create app here
+        //This is the button that creates the app here
     };
 
     /**
