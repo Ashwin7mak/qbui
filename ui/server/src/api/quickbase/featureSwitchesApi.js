@@ -4,14 +4,16 @@
 (function() {
     'use strict';
 
+    let defaultRequest = require('request');
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
     let log = require('../../logger').getLogger();
     let _ = require('lodash');
 
-    module.exports = function(config, useMockStore) {
+    module.exports = function(config, useFileBasedStore) {
         var APPLICATION_JSON = 'application/json';
         var CONTENT_TYPE = 'Content-Type';
+        let configBasedFSApi = require('./configBasedFeatureSwitches')(config);
 
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
@@ -20,7 +22,7 @@
         let cookieUtils = require('../../utility/cookieUtils');
         let ob32Utils = require('../../utility/ob32Utils');
         let CookieConsts = require('../../../../common/src/constants');
-        let mockApi = require('./mock/mockFeatureSwitchesApi')(config);
+        let request = defaultRequest;
 
         let featureSwitchesApi = {
 
@@ -37,6 +39,10 @@
              */
             setRequestHelperObject: function(requestHelperOverride) {
                 requestHelper = requestHelperOverride;
+            },
+
+            rejectWithHttpStatus: function(errCode) {
+                return Promise.reject({response:{message:'Config based feature switches cannot be created/modified via API', status:errCode, errors: answer}});
             },
 
             /**
@@ -96,14 +102,52 @@
             },
 
             /**
+             * get feature switch states for realm (and app)
+             * @param req
+             * @param appId get states based on the app (optional)
+             * @returns {Promise}
+             */
+            getFeatureSwitchStates: function(req, appId) {
+                return new Promise((resolve, reject) => {
+                    let realmId = null;
+                    let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];
+                    if (ticketCookie) {
+                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
+                    }
+                    if (useFileBasedStore) {
+                        resolve(configBasedFSApi.getFeatureSwitchStates(req, realmId, appId));
+                    } else if (requestHelper.getRequestAWSHost()) {
+                        let opts = this.getFeatureSwitchStatesRequestOpts(req, realmId, appId);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                let featureStates = JSON.parse(response.body);
+                                resolve(featureStates);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.getFeatureSwitchStates(): Error retrieving feature switches.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.getFeatureSwitchStates(): unexpected error retrieving feature switches.', ex, true);
+                            reject(ex);
+                        });
+                    } else {
+                        resolve([]);
+                    }
+                });
+            },
+
+            /**
              * get feature switches and overrides for admins
              * @param req
              * @returns {Promise}
              */
             getFeatureSwitches: function(req) {
                 return new Promise((resolve, reject) => {
-                    if (useMockStore) {
-                        resolve(mockApi.getFeatureSwitches(req));
+                    if (useFileBasedStore) {
+                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req);
 
@@ -132,9 +176,8 @@
              */
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
-                    if (useMockStore) {
-                        resolve(mockApi.createFeatureSwitch(req));
-
+                    if (useFileBasedStore) {
+                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req);
 
@@ -165,8 +208,8 @@
             updateFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (useMockStore) {
-                        resolve(mockApi.updateFeatureSwitch(req, featureSwitchId));
+                    if (useFileBasedStore) {
+                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, false, featureSwitchId);
 
@@ -196,8 +239,8 @@
             deleteFeatureSwitches: function(req, ids) {
 
                 return new Promise((resolve, reject) => {
-                    if (useMockStore) {
-                        resolve(mockApi.deleteFeatureSwitches(req));
+                    if (useFileBasedStore) {
+                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
 
                         let opts = this.getFeatureSwitchesRequestOpts(req, false, null, null, true);
@@ -228,9 +271,8 @@
             createFeatureSwitchOverride: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (useMockStore) {
-                        resolve(mockApi.createFeatureSwitchOverride(req, featureSwitchId));
-
+                    if (useFileBasedStore) {
+                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId);
 
@@ -262,10 +304,8 @@
             updateFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
 
                 return new Promise((resolve, reject) => {
-                    if (useMockStore) {
-
-                        resolve(mockApi.updateFeatureSwitchOverride(req, featureSwitchId, overrideId));
-
+                    if (useFileBasedStore) {
+                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, overrideId);
 
@@ -297,9 +337,8 @@
             deleteFeatureSwitchOverrides: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (useMockStore) {
-                        resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId));
-
+                    if (useFileBasedStore) {
+                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, null, true);
 
@@ -318,45 +357,8 @@
                         });
                     }
                 });
-            },
-
-            /**
-             * get feature switch states for realm (and app)
-             * @param req
-             * @param appId get states based on the app (optional)
-             * @returns {Promise}
-             */
-            getFeatureSwitchStates: function(req, appId) {
-                return new Promise((resolve, reject) => {
-                    let realmId = null;
-                    let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];
-                    if (ticketCookie) {
-                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
-                    }
-                    if (useMockStore) {
-                        resolve(mockApi.getFeatureSwitchStates(req, realmId, appId));
-                    } else if (requestHelper.getRequestAWSHost()) {
-                        let opts = this.getFeatureSwitchStatesRequestOpts(req, realmId, appId);
-
-                        //  make the api request to get the app rights
-                        requestHelper.executeRequest({}, opts).then(
-                            (response) => {
-                                let featureStates = JSON.parse(response.body);
-                                resolve(featureStates);
-                            },
-                            (error) => {
-                                log.error({req: req}, "getFeatureSwitches.getFeatureSwitchStates(): Error retrieving feature switches.");
-                                reject(error);
-                            }
-                        ).catch((ex) => {
-                            requestHelper.logUnexpectedError('getFeatureSwitches.getFeatureSwitchStates(): unexpected error retrieving feature switches.', ex, true);
-                            reject(ex);
-                        });
-                    } else {
-                        resolve([]);
-                    }
-                });
             }
+
         };
 
         return featureSwitchesApi;

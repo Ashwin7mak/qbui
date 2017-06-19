@@ -97,10 +97,10 @@
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
 
-        /**
-         * mock data for feature switches for local testing
-         */
-        //featureSwitchesMockData: './server/mockData/featureSwitches.json'
+         /**
+          * configuration based feature switches
+          */
+         featureSwitchConfig: './featureSwitch/e2e.featureSwitches.json'
 
         /**
          * AWS api gateway to lambda functions for feature switches

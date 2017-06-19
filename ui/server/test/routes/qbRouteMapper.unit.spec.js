@@ -180,15 +180,6 @@ describe('Qb Route Mapper Unit Test', function() {
         const expectedDefined = publicRoutesOnly ? false : true;
         return [
             {message: 'GET request to the feature states endpoint', request: '/qbui/featureStates', expectedPath: '/api/api/v1/featureStates', route: routes.FEATURE_STATES, method: routeMapper.fetchGetFunctionForRoute(routes.FEATURE_STATES), expectedDefined: expectedDefined, httpVerb: 'GET'},
-
-            {message: 'GET request to the feature switches endpoint', request: '/qbui/admin/featureSwitches', expectedPath: '/api/api/v1/admin/featureSwitches', route: routes.FEATURE_SWITCHES, method: routeMapper.fetchGetFunctionForRoute(routes.FEATURE_SWITCHES), expectedDefined: expectedDefined, httpVerb: 'GET'},
-            {message: 'POST request to feature switches endpoint', request: '/qbui/admin/featureSwitches', expectedPath: '/api/api/v1/admin/featureSwitches', route: routes.FEATURE_SWITCHES, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_SWITCHES), expectedDefined: expectedDefined, httpVerb: 'POST'},
-            {message: 'PUT request to feature switches endpoint', request: '/qbui/admin/featureSwitches/1', expectedPath: '/api/api/v1/admin/featureSwitches/1', route: routes.FEATURE_SWITCH, method: routeMapper.fetchPutFunctionForRoute(routes.FEATURE_SWITCH), expectedDefined: expectedDefined, httpVerb: 'PUT'},
-            {message: 'POST request to feature switches bulk endpoint', request: '/qbui/admin/featureSwitches/bulk', expectedPath: '/api/api/v1/admin/featureSwitches/bulk', route: routes.FEATURE_SWITCHES_BULK, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_SWITCHES_BULK), expectedDefined: expectedDefined, httpVerb: 'POST'},
-
-            {message: 'POST request to feature overrides endpoint', request: '/qbui/admin/featureSwitches/1/overrides', expectedPath: '/api/api/v1/admin/featureSwitches/1/overrides', route: routes.FEATURE_OVERRIDES, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_OVERRIDES), expectedDefined: expectedDefined, httpVerb: 'POST'},
-            {message: 'PUT request to feature overrides endpoint', request: '/qbui/admin/featureSwitches/1/overrides/1', expectedPath: '/api/api/v1/admin/featureSwitches/1/overrides/1', route: routes.FEATURE_OVERRIDE, method: routeMapper.fetchPutFunctionForRoute(routes.FEATURE_OVERRIDE), expectedDefined: expectedDefined, httpVerb: 'PUT'},
-            {message: 'POST request to feature overrides bulk endpoint', request: '/qbui/admin/featureSwitches/1/overrides/bulk', expectedPath: '/api/api/v1/admin/featureSwitches/1/overrides/bulk', route: routes.FEATURE_OVERRIDES_BULK, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_OVERRIDES_BULK), expectedDefined: expectedDefined, httpVerb: 'POST'}
         ];
     }
 
@@ -303,6 +294,82 @@ describe('Qb Route Mapper Unit Test', function() {
                     }
                     //verify that we have properly mutated the request string
                     assert.equal(originalReq.url, expectedPath, entry.message);
+                }
+            }
+            done();
+        });
+    }
+
+
+
+    function featureSwitchesPathModificationProviderNegative(routeMapper, publicRoutesOnly) {
+        //  none of these routes should be defined if exposing only public routes
+        const expectedDefined = publicRoutesOnly ? false : true;
+        return [
+            {message: 'GET request to the feature switches endpoint', request: '/qbui/admin/featureSwitches', expectedPath: '/api/api/v1/admin/featureSwitches', route: routes.FEATURE_SWITCHES, method: routeMapper.fetchGetFunctionForRoute(routes.FEATURE_SWITCHES), expectedDefined: expectedDefined, httpVerb: 'GET'},
+            {message: 'POST request to feature switches endpoint', request: '/qbui/admin/featureSwitches', expectedPath: '/api/api/v1/admin/featureSwitches', route: routes.FEATURE_SWITCHES, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_SWITCHES), expectedDefined: expectedDefined, httpVerb: 'POST'},
+            {message: 'PUT request to feature switches endpoint', request: '/qbui/admin/featureSwitches/1', expectedPath: '/api/api/v1/admin/featureSwitches/1', route: routes.FEATURE_SWITCH, method: routeMapper.fetchPutFunctionForRoute(routes.FEATURE_SWITCH), expectedDefined: expectedDefined, httpVerb: 'PUT'},
+            {message: 'POST request to feature switches bulk endpoint', request: '/qbui/admin/featureSwitches/bulk', expectedPath: '/api/api/v1/admin/featureSwitches/bulk', route: routes.FEATURE_SWITCHES_BULK, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_SWITCHES_BULK), expectedDefined: expectedDefined, httpVerb: 'POST'},
+
+            {message: 'POST request to feature overrides endpoint', request: '/qbui/admin/featureSwitches/1/overrides', expectedPath: '/api/api/v1/admin/featureSwitches/1/overrides', route: routes.FEATURE_OVERRIDES, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_OVERRIDES), expectedDefined: expectedDefined, httpVerb: 'POST'},
+            {message: 'PUT request to feature overrides endpoint', request: '/qbui/admin/featureSwitches/1/overrides/1', expectedPath: '/api/api/v1/admin/featureSwitches/1/overrides/1', route: routes.FEATURE_OVERRIDE, method: routeMapper.fetchPutFunctionForRoute(routes.FEATURE_OVERRIDE), expectedDefined: expectedDefined, httpVerb: 'PUT'},
+            {message: 'POST request to feature overrides bulk endpoint', request: '/qbui/admin/featureSwitches/1/overrides/bulk', expectedPath: '/api/api/v1/admin/featureSwitches/1/overrides/bulk', route: routes.FEATURE_OVERRIDES_BULK, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_OVERRIDES_BULK), expectedDefined: expectedDefined, httpVerb: 'POST'}
+        ];
+    }
+
+    /**
+     * ensure we dont accidentally enable service based feature switch endpoints.
+     * @param entry
+     */
+    describe('test feasture switch service based endpoints are not enabled', function() {
+        config.publicRoutesOnly = true;
+        let routeMapper = require('../../src/routes/qbRouteMapper')(config);
+        routeMapper.setRequest(requestStub);
+        featureSwitchesPathModificationProviderNegative(routeMapper, config.publicRoutesOnly).forEach(function(entry) {
+            runTestCase(entry);
+        });
+    });
+
+    /**
+     * ensure that the path is undefined
+     * @param entry
+     */
+    function runTestCaseNegative(entry) {
+        it('Test case: ' + entry.message, function(done) {
+            var expectedPath = entry.expectedPath;
+
+            //mock out the request and response objects with some utility methods they need in this flow
+            var originalReq = {
+                params: {
+                    reportId: entry.request && entry.request.indexOf('default/results') !== -1 ? 'default' : '1'
+                }
+            };
+
+            originalReq.method = originalReq.url = entry.request;
+            originalReq.route = {path: entry.route};
+            originalReq.headers = {};
+
+            var res = {
+                send: function() {
+                    return '';
+                },
+                status: function() {
+                    return {
+                        send: function() {}
+                    };
+                }
+            };
+
+            var method = entry.method;
+            var expectedDefined = entry.expectedDefined;
+
+            requestStub.yields(null, {statusCode: 200}, {login: 'cleo'});
+
+            if (expectedDefined) {
+                if (method === undefined) {
+                    done();
+                } else {
+                    assert.fail();
                 }
             }
             done();

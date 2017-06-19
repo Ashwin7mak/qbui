@@ -44,9 +44,9 @@
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
 
-        // initialize the feature switches API, use mock API if config.featureSwitchesMockData is defined
+        // initialize the feature switches API, use mock API if config.featureSwitchConfig is defined
         // (unit tests can override this through the 2nd parameter)
-        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
+        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchConfig);
         rolesApi = require('../api/quickbase/rolesApi')(config);
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
@@ -89,7 +89,11 @@
                 requestFunctions[routes.APP_ROLES] = getAppRoles;
                 requestFunctions[routes.APP_COMPONENTS] = getAppComponents;
 
-                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
+                /***
+                 *  Shall be enabled when this epic is worked on :
+                 *  https://quickbase.atlassian.net/browse/MC-1189
+                 */
+                // requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
                 requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
 
                 requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
@@ -152,10 +156,14 @@
             //  With multiple node instances, want to have the option of deploying an instance
             //  where only 'public' routes are defined.
             if (config.publicRoutesOnly !== true) {
-                requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
-                requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
-                requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-                requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+                /***
+                 *  Shall be enabled when this epic is worked on :
+                 *  https://quickbase.atlassian.net/browse/MC-1189
+                 */
+                // requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
+                // requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
+                // requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
+                // requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
                 requestFunctions[routes.RECORDS] = createSingleRecord;
                 requestFunctions[routes.RECORDS_BULK] = forwardApiRequest;
@@ -176,10 +184,10 @@
 
             //  With multiple node instances, want to have the option of deploying an instance
             //  where only 'public' routes are defined.
-            if (config.publicRoutesOnly !== true) {
-                requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
-                requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
-            }
+            // if (config.publicRoutesOnly !== true) {
+            //     requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
+            //     requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+            // }
 
             return requestFunctions;
         }

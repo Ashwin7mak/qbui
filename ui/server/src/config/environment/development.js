@@ -64,5 +64,11 @@
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
 
+
+        /**
+         * configuration based feature switches
+         */
+        featureSwitchConfig: './local.featureSwitches.json'
+
     };
 }());

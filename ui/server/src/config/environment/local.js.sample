@@ -108,9 +108,9 @@
         tracingHost: ''
 
         /**
-         * mock data for feature switches for local testing
+         * configuration based feature switches
          */
-        //featureSwitchesMockData: './server/mockData/featureSwitches.json'
+        featureSwitchConfig: './featureSwitch/local.featureSwitches.json'
 
         /**
          * AWS api gateway to lambda functions for feature switches

@@ -105,5 +105,10 @@
          */
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
+
+        /**
+         * configuration based feature switches
+         */
+        featureSwitchConfig: './featureSwitch/ci.featureSwitches.json'
     };
 }());
