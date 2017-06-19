@@ -9,8 +9,6 @@ import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
-import {moveColumn, draggingColumnStart, draggingColumnEnd} from '../../../actions/reportBuilderActions';
-import {connect} from 'react-redux';
 
 import Logger from 'APP/utils/logger';
 const logger = new Logger();
@@ -46,22 +44,6 @@ export const QbGrid = React.createClass({
         /**
          * A boolean value indicating if inline editing is currently open*/
         isInlineEditOpen: PropTypes.bool,
-
-        /**
-         * Should this grid be draggable? */
-        isDraggable: PropTypes.bool,
-
-        /**
-         * If isDraggable, callback to when the column is hovering over another column. */
-        onHoverColumn: PropTypes.func,
-
-        /**
-         * If isDraggable, callback to when the column begins dragging. */
-        onDragColumnStart: PropTypes.func,
-
-        /**
-         * If isDraggable, callback to when the column stops dragging. */
-        onDragColumnEnd: PropTypes.func,
 
         /**
          * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
@@ -112,7 +94,22 @@ export const QbGrid = React.createClass({
          * The action that occurs when the user clicks save */
         onClickSaveRow: PropTypes.func,
 
+        /**
+         * If the header cell is draggable, callback to when the column is hovering over another column. */
+        onHoverColumn: PropTypes.func,
+
+        /**
+         * If the header cell is draggable, callback to when the column begins dragging. */
+        onDragColumnStart: PropTypes.func,
+
+        /**
+         * If the header cell is draggable, callback to when the column stops dragging. */
+        onDragColumnEnd: PropTypes.func,
+
+        /**
+         * Header cell to be passed in to make QbGrid more reusable. */
         headerRenderer: PropTypes.func.isRequired,
+
         /**
          * To make QbGrid flexible, it makes no assumptions about what is rendered inside of a cell.
          * A cellRenderer (a React component) must be passed in.
@@ -156,8 +153,7 @@ export const QbGrid = React.createClass({
             isInlineEditOpen: false,
             isEditingRowValid: true,
             isEditingRowSaving: false,
-            showRowActionsColumn: true,
-            isDraggable: false
+            showRowActionsColumn: true
         };
     },
 
@@ -226,17 +222,6 @@ export const QbGrid = React.createClass({
     },
 
     /**
-     * If the grid is draggable, header cells need to show a move cursor.
-     * This function adds the isDraggable:true prop to qbHeaderCell
-     * @returns {{isDraggable: boolean}}
-     */
-    getDraggableCellProps() {
-        return {
-            isDraggable: true
-        };
-    },
-
-    /**
      * Render a single cell
      * @param cellData
      * @returns {ReactElement<P>|ClassicElement<P>|DOMElement<P>}
@@ -271,13 +256,6 @@ export const QbGrid = React.createClass({
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
-            }
-            if (this.props.isDraggable) {
-                if (c.header.transforms) {
-                    c.header.transforms.push(this.getDraggableCellProps);
-                } else {
-                    c.header.transforms = [this.getDraggableCellProps];
-                }
             }
             return c;
         } catch (err) {

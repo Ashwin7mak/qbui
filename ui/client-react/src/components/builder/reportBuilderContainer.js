@@ -11,7 +11,7 @@ import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import BuilderCustomDragLayer from '../../../../reuse/client/src/components/dragAndDrop/builderCustomDragLayer';
-import QbHeaderCell from '../dataTable/qbGrid/qbHeaderCell';
+import DraggableQbHeaderCell from '../dataTable/qbGrid/draggableQbHeaderCell';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
@@ -64,7 +64,7 @@ export class ReportBuilderContainer extends Component {
                 onHoverColumn={this.props.moveColumn}
                 onDragColumnStart={this.props.draggingColumnStart}
                 onDragColumnEnd={this.props.draggingColumnEnd}
-                headerRenderer={QbHeaderCell}
+                headerRenderer={DraggableQbHeaderCell}
                 cellRenderer={ReportCell}
                 menuComponent={ReportColumnHeaderMenu}
                 showRowActionsColumn={false}

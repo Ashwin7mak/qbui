@@ -1,6 +1,4 @@
 import React, {PropTypes} from 'react';
-import {DragDropContext} from 'react-dnd';
-import TouchBackend from 'react-dnd-touch-backend';
 import QbGrid from '../qbGrid/qbGrid';
 import QbHeaderCell from '../qbGrid/qbHeaderCell';
 import ReportColumnTransformer from './reportColumnTransformer';
@@ -12,7 +10,6 @@ import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import {I18nMessage} from 'APP/utils/i18nMessage';
 import Locale from 'APP/locales/locales';
 import {connect} from 'react-redux';
-import {moveColumn, draggingColumnStart, draggingColumnEnd} from '../../../actions/reportBuilderActions';
 import {getPendEdits} from '../../../reducers/record';
 import _ from 'lodash';
 
@@ -370,4 +367,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(connect(mapStateToProps)(ReportGrid));
+export default connect(mapStateToProps)(ReportGrid);
