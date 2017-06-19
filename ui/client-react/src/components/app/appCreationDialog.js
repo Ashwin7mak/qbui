@@ -18,24 +18,19 @@ export class AppCreationDialog extends React.Component {
 
     constructor(props) {
         super(props);
-
-        // bind to fix context for event handlers
-
-        this.onFinished = this.onFinished.bind(this);
-        this.onCancel = this.onCancel.bind(this);
     }
 
     /**
      * cancel
      */
-    onCancel() {
+    onCancel = () => {
         this.props.hideTableCreationDialog();
     }
 
     /**
      * last page has finished
      */
-    onFinished() {
+    onFinished = () => {
 
         const tableInfo = {
             name: this.props.tableInfo.name.value,
@@ -63,7 +58,7 @@ export class AppCreationDialog extends React.Component {
                 NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
             });
 
-    }
+    };
 
     /**
      * check for any validation errors in tableInfo
@@ -77,13 +72,13 @@ export class AppCreationDialog extends React.Component {
     /**
      * get table names for app
      */
-    getExistingTableNames() {
+    getExistingTableNames = () => {
         let appTablesNames = [];
         if (_.has(this.props.app, 'tables')) {
             appTablesNames = this.props.app.tables.map((table) => table.name);
         }
         return appTablesNames;
-    }
+    };
 
     /**
      * render the multi-step modal dialog for creating a table
@@ -103,12 +98,11 @@ export class AppCreationDialog extends React.Component {
                                  classes={classes.join(' ')}
                                  onCancel={this.onCancel}
                                  onFinished={this.onFinished}
-                                 finishedButtonLabel={Locale.getMessage("tableCreation.finishedButtonLabel")}
+                                 finishedButtonLabel={Locale.getMessage("appCreation.finishedButtonLabel")}
                                  canProceed={this.isValid()}
-                                 titles={[Locale.getMessage("tableCreation.newTablePageTitle")]}>
+                                 titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
             <div className="tableCreationPanel">
-                <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
-                <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
+                <div className="title"><I18nMessage message="appCreation.newAppTitle"/></div>
                 <TableCreationPanel tableInfo={this.props.tableInfo}
                                     openIconChooser={this.props.openIconChooser}
                                     closeIconChooser={this.props.closeIconChooser}

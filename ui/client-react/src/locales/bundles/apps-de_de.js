@@ -728,7 +728,10 @@ export default {
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         },
         appCreation: {
-            newApp: 'Neue app'
+            newApp: 'Neue app',
+            newAppPageTitle: 'Neue App',
+            newAppTitle: "Nennen Sie Ihre App",
+            finishedButtonLabel: "App erstellen"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",

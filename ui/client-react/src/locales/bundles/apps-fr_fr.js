@@ -728,7 +728,10 @@ export default {
             featureNameEmpty: "Les noms des entités doivent être blanc"
         },
         appCreation: {
-            newApp: 'Nouvelle application'
+            newApp: 'Nouvelle application',
+            newAppPageTitle: 'Nouvelle Application',
+            newAppTitle: "Nommez votre application",
+            finishedButtonLabel: "Créer une application"
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
