@@ -17,7 +17,7 @@ describe('AppCreationDialog', () => {
         jasmineEnzyme();
     });
 
-    it('renders a AppCreationDialog', () => {
+    it('renders an AppCreationDialog', () => {
         component = shallow(<AppCreationDialog />);
 
         expect(component).toBePresent();
