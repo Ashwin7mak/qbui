@@ -9,6 +9,8 @@
 
     var e2ePageBase = requirePO('e2ePageBase');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
+    let topNavPO = requirePO('topNav');
 
     var sText = 'testTextValue';
     var sUrl = 'http://www.yahoo.com';
@@ -204,7 +206,7 @@
          */
         getAllParentRecordFields: {
             value: function() {
-                return this.editFormContainerEl.elements('.Select-value');
+                return this.editFormContainerEl.elements('.cellWrapper .multiChoiceContainer .Select-arrow-zone');
             }
         },
 
@@ -250,7 +252,10 @@
          */
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
-            return browser.waitForVisible('.editForm', browser.waitforTimeout);
+            this.editFormContainerEl.waitForVisible();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            //Need this for container to slide down completely
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
@@ -258,8 +263,33 @@
          *
          */
         waitForViewFormsTableLoad: {value: function() {
-            // wait for view form
-            return browser.waitForVisible('.viewForm', browser.waitforTimeout);
+            this.viewFormContainerEl.waitForVisible();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            //Need this for container to slide down completely
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /**
+         * Method to get record values from view form mode
+         *
+         */
+        getRecordValuesInViewForm: {value: function(elementClassName) {
+            var recordValues = [];
+            browser.element(elementClassName).elements('.cellWrapper').value.filter(function(record) {
+                recordValues.push(record.getAttribute('textContent'));
+            });
+            return recordValues;
+        }},
+
+        /**
+         * Method to get all fields from view form
+         */
+        getAllFieldsInViewForm: {value: function() {
+            let fields = [];
+            browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
+                return fields.push(fieldLabel.element('.fieldLabel').getAttribute('textContent'));
+            });
+            return fields;
         }},
 
         /**
@@ -300,7 +330,9 @@
             //click on the edit pencil in view form actions
             this.editPencilBtnOnStageInViewForm.click();
             //wait until edit form is visible
-            return this.editFormContainerEl.waitForVisible();
+            this.editFormContainerEl.waitForVisible();
+            //Need this to stabilize container
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
@@ -329,8 +361,7 @@
             //Need this to stabilize
             browser.pause(e2eConsts.shortWaitTimeMs);
             //get all options from the list
-            browser.waitForVisible('.Select-option');
-            var option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
+            let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
                 return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
@@ -375,12 +406,12 @@
          */
         enterFormValues: {
             value: function(fieldType, parentValue) {
-            //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
+                //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
                 var i;
                 if (!parentValue) {
                     parentValue = 1;
                 }
-            //get all input fields in the form
+                //get all input fields in the form
                 if (fieldType === 'allTextFields') {
                     this.setFormInputValue(this.getAllTextFields(), sText);
                 } else if (fieldType === 'allEmailFields') {
@@ -396,7 +427,7 @@
                 } else if (fieldType === 'allTimeFields') {
                     this.setDropDownValue(this.getAllTimeInputFields(), sTime);
                 } else if (fieldType === 'allDateFields') {
-                //get all date field input validators
+                    //get all date field input validators
                     var dateFields = this.getAllDateInputFields();
                     for (i = 0; i < dateFields.value.length; i++) {
                         if (browserName === 'safari') {
@@ -406,10 +437,10 @@
                         }
                     }
                 } else if (fieldType === 'allCheckboxFields') {
-                //get all checkbox fields on form
+                    //get all checkbox fields on form
                     var checkboxFields = this.getAllCheckboxFields();
                     for (i = 0; i < checkboxFields.value.length; i++) {
-                    //if checkbox not selected then check it.
+                        //if checkbox not selected then check it.
                         if (checkboxFields.value[i].element('input').isSelected() === false) {
                             checkboxFields.value[i].element('label').click();
                         }
@@ -535,8 +566,7 @@
             }
             //Verify that fieldsOnForm array don't contain expectedFieldsNotPresentOnForm items
             expect(expectedFieldsNotPresentOnForm.indexOf(fieldsOnForm)).toBe(-1);
-        }}
-
+        }},
     });
 
     module.exports = FormsPage;

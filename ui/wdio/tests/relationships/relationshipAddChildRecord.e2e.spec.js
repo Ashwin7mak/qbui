@@ -64,10 +64,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
          */
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
-            reportContentPO.waitForLeftNavLoaded();
-            //wait until view form is visible
-            return formsPagePO.viewFormContainerEl.waitForVisible();
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
         });
 
         /**

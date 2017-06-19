@@ -135,8 +135,7 @@
             loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
             //wait until loading screen disappear in report Content
             loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-            //Wait until new table button visible
-            this.newTableBtn.waitForVisible();
+            //Wait until table label displayed
             browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
             return browser.elements('.tablesList .withSecondary .leftNavLabel');
         }},
@@ -159,7 +158,7 @@
         selectTable: {value: function(tableName) {
             //filter table names from leftNav links
             let results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
-                return table.getAttribute('textContent') === tableName;
+                return table.getAttribute('textContent').includes(tableName);
             });
 
             if (results !== []) {
