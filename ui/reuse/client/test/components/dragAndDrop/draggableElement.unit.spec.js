@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import DraggableElement, {__RewireAPI__ as DraggableElementRewireAPI} from '../../../src/components/formBuilder/draggableElement';
+import DraggableElement, {__RewireAPI__ as DraggableElementRewireAPI} from '../../../src/components/dragAndDrop/draggableElement';
 
 const mockDragSource = (_types, _fieldDragSource, _collect) => component => component;
 const MockFieldComponent = props => <div className="mockField" />;
