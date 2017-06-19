@@ -33,7 +33,7 @@ const headerTarget = {
 /**
  * A draggable header cell component to be used in the QbGrid
  */
-class QbHeaderCell extends Component {
+class DraggableQbHeaderCell extends Component {
     /**
      * Using shallow compare to reduce the change this simple component re-renders
      * @param nextProps
@@ -60,7 +60,7 @@ class QbHeaderCell extends Component {
     }
 }
 
-QbHeaderCell.propTypes = {
+DraggableQbHeaderCell.propTypes = {
     /**
      * Include any additional classes. */
     classes: React.PropTypes.array,
@@ -74,7 +74,7 @@ QbHeaderCell.propTypes = {
 };
 
 // Provide default val
-QbHeaderCell.defaultProps = {
+DraggableQbHeaderCell.defaultProps = {
     classes: []
 };
 
@@ -92,4 +92,4 @@ const dropTarget = DropTarget(
     })
 );
 
-export default dragSource(dropTarget(QbHeaderCell));
+export default dragSource(dropTarget(DraggableQbHeaderCell));

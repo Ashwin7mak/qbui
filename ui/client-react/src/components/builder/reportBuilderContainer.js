@@ -61,7 +61,6 @@ export class ReportBuilderContainer extends Component {
                 numberOfColumns={columns.length}
                 columns={columns}
                 rows={rows}
-                isDraggable={true}
                 onHoverColumn={this.props.moveColumn}
                 onDragColumnStart={this.props.draggingColumnStart}
                 onDragColumnEnd={this.props.draggingColumnEnd}
