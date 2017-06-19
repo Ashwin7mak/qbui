@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {getLoggedInUserId, getLoggedInUserAdminStatus, getLoggedInUserEmail} from 'REUSE/reducers/userReducer';
+import {getLoggedInUserId, getLoggedInUserAdminStatus} from 'REUSE/reducers/userReducer';
 import {getLoggedInUser} from 'REUSE/actions/userActions';
 
 // IMPORT FROM CLIENT REACT
@@ -76,10 +76,6 @@ export class Analytics extends Component {
         if (this.props.userId) {
             this._aaq.push(['setUser', this.props.userId]);
             this._aaq.push(['gReqUID', this.props.userId]);
-        }
-
-        if (this.props.email) {
-            this._aaq.push(['gReqUserEmail', this.props.userEmail]);
         }
     };
 
@@ -178,12 +174,6 @@ Analytics.propTypes = {
     userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
-     * The email of the currently logged in user to be used with Evergage.
-     * Typically this is passed as a prop from Redux (user reducer)
-     */
-    userEmail: PropTypes.string,
-
-    /**
      * Boolean indicating whether the current user is an admin.
      * Typically this is passed as a prop from Redux (user reducer)
      */
@@ -208,7 +198,6 @@ Analytics.propTypes = {
 const mapStateToProps = state => {
     return {
         userId: getLoggedInUserId(state),
-        userEmail: getLoggedInUserEmail(state),
         isAdmin: getLoggedInUserAdminStatus(state)
     };
 };
