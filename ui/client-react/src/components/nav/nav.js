@@ -506,7 +506,7 @@ export const Nav = React.createClass({
             }
 
             {selectedAppId && <TableCreationDialog app={selectedApp} onTableCreated={this.tableCreated}/>}
-            {<AppCreationDialog app={selectedApp} />}
+            {<AppCreationDialog />}
 
         </div>);
     },
