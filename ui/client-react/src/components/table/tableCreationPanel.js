@@ -9,7 +9,7 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
 import _ from 'lodash';
 
-import './tableCreationPanel.scss';
+import './dialogCreationPanel.scss';
 
 class TableCreationPanel extends React.Component {
 
@@ -200,7 +200,7 @@ class TableCreationPanel extends React.Component {
     render() {
 
         return (
-            <div className="tableInfo">
+            <div className="dialogCreationPanelInfo">
                 <div className="sections">
                     <DialogFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
                                       className="tableCreationPanel"

@@ -4,7 +4,7 @@ import DialogFieldInput from '../../../../reuse/client/src/components/multiStepD
 import Locale from '../../locales/locales';
 import _ from 'lodash';
 
-import '../table/tableCreationPanel.scss';
+import '../table/dialogCreationPanel.scss';
 
 class AppCreationPanel extends React.Component {
 
@@ -19,7 +19,7 @@ class AppCreationPanel extends React.Component {
     render() {
 
         return (
-            <div className="tableInfo">
+            <div className="appCreationPanel dialogCreationPanelInfo">
                 <div className="sections">
                     <DialogFieldInput title={Locale.getMessage("appCreation.appNameHeading")}
                                       className="appCreationPanel"

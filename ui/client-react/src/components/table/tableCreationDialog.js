@@ -12,7 +12,7 @@ import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 
-import './tableCreationDialog.scss';
+import './creationDialog.scss';
 
 export class TableCreationDialog extends React.Component {
 
@@ -93,7 +93,7 @@ export class TableCreationDialog extends React.Component {
      */
     render() {
 
-        const classes = ['tableCreationDialog'];
+        const classes = ['tableCreationDialog creationDialog'];
 
         // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
         if (this.props.tableCreation.iconChooserOpen) {
@@ -108,7 +108,7 @@ export class TableCreationDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage("tableCreation.finishedButtonLabel")}
                                  canProceed={this.isValid()}
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle")]}>
-                <div className="tableCreationPanel">
+                <div className="dialogCreationPanel">
                     <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
                     <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
                     <TableCreationPanel tableInfo={this.props.tableInfo}

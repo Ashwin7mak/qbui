@@ -69,7 +69,7 @@ describe('TableCreationDialog', () => {
 
     afterEach(() => {
         // Remove modal from the dom after every test to reset
-        let modalInDom = document.querySelector('.tableCreationDialog');
+        let modalInDom = document.querySelector('.tableCreationDialog.creationDialog');
         if (modalInDom) {
             modalInDom.parentNode.removeChild(modalInDom);
         }
@@ -78,7 +78,7 @@ describe('TableCreationDialog', () => {
     it('renders a TableCreationDialog', () => {
         component = buildMockParentComponent();
 
-        domComponent = document.querySelector('.tableCreationDialog');
+        domComponent = document.querySelector('.tableCreationDialog.creationDialog');
 
         expect(domComponent).not.toBeNull();
     });
@@ -86,7 +86,7 @@ describe('TableCreationDialog', () => {
     it('cancels the TableCreationDialog', () => {
         component = buildMockParentComponent();
 
-        domComponent = document.querySelector('.tableCreationDialog');
+        domComponent = document.querySelector('.tableCreationDialog.creationDialog');
 
         let cancelButton = domComponent.querySelector('.cancelButton');
         Simulate.click(cancelButton);

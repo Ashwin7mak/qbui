@@ -8,7 +8,7 @@ import * as AppBuilderActions from '../../actions/appBuilderActions';
 import Locale from '../../locales/locales';
 import _ from 'lodash';
 
-import '../table/tableCreationDialog.scss';
+import '../table/creationDialog.scss';
 
 export class AppCreationDialog extends React.Component {
 
@@ -36,7 +36,7 @@ export class AppCreationDialog extends React.Component {
      */
     render() {
 
-        const classes = ['tableCreationDialog'];
+        const classes = ['appCreationDialog creationDialog'];
 
         return (<MultiStepDialog show={this.props.appDialogOpen}
                                  classes={classes.join(' ')}
@@ -44,7 +44,7 @@ export class AppCreationDialog extends React.Component {
                                  onFinished={this.onFinished}
                                  finishedButtonLabel={Locale.getMessage("appCreation.finishedButtonLabel")}
                                  titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
-            <div className="tableCreationPanel">
+            <div className="dialogCreationPanel">
                 <AppCreationTable />
             </div>
         </MultiStepDialog>);

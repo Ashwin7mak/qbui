@@ -1,6 +1,6 @@
 @import '../../assets/css/_qbVariables';
 
-.tableCreationPanel {
+.dialogCreationPanel {
 
     .title {
         color: $color-black-700;
@@ -16,7 +16,7 @@
 
 @include not-small-breakpoint {
 
-    .multiStepModal.tableCreationDialog .modal-dialog {
+    .multiStepModal.creationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 355px;
@@ -24,14 +24,14 @@
         width: 840px;
     }
 
-    .multiStepModal.tableCreationDialog.allowOverflow .loadedContent {
+    .multiStepModal.creationDialog.allowOverflow .loadedContent {
         overflow: visible;
     }
 }
 
 @include medium-breakpoint {
 
-    .multiStepModal.tableCreationDialog .modal-dialog {
+    .multiStepModal.creationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 350px;
@@ -43,7 +43,7 @@
 /* some initial small styles in case we support small */
 @include small-breakpoint {
 
-    .multiStepModal.tableCreationDialog .modal-dialog {
+    .multiStepModal.creationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 550px;
