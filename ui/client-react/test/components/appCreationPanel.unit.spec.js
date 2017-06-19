@@ -10,7 +10,7 @@ describe('AppCreationPanel', () => {
         jasmineEnzyme();
     });
 
-    it('renders a AppCreationPanel', () => {
+    it('renders an AppCreationPanel', () => {
         component = mount(<AppCreationPanel />);
 
         expect(component.find('.appCreationPanel.dialogCreationPanelInfo')).toBePresent();
