@@ -737,7 +737,7 @@ export default {
             newAppPageTitle: 'Neue App',
             finishedButtonLabel: "App erstellen",
             appNameHeading: "App Name",
-            appNamePlaceHolder: "For example, \"Order Tracker\"",
+            appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
             descriptionHeading: "App Beschreibung"
         },
         tableCreation: {
