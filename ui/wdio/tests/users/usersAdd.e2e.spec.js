@@ -76,105 +76,106 @@
         /**
          * Adds a new user by Username, assigns role and verifies the user was added.
          */
-        it('Add new user by "Screename" to application with default role "Participant" ', function() {
+        // it is a known issue that browser.keys does not work for E2E on safari and FF so they will not run these tests
+        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+            it('Add new user by "Screename" to application with default role "Participant" ', function () {
 
-            // Click on add a new user button
-            UsersTablePage.newUserBtn.click();
-            expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-            var appName = testApp.name;
-            expect(modalDialog.modalDialogAddUserTitle).toContain(appName);
-            // Search for known user
-            UsersTablePage.selecthUser(searchUserName);
-            // Select user
-            UsersTablePage.userAddSearcMenu.click();
-            // Click add user
-            modalDialog.modalDialogAddUserBtn.click();
-            browser.pause(e2eConsts.shortWaitTimeMs);
-            expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-            expect(modalDialog.modalDialogShareTitle).toContain("Your app has");
-            // Click No Thanks to Share with User
-            modalDialog.modalDialogNoThanksButton.click();
-        });
+                // Click on add a new user button
+                UsersTablePage.newUserBtn.click();
+                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                var appName = testApp.name;
+                expect(modalDialog.modalDialogAddUserTitle).toContain(appName);
+                // Search for known user
+                UsersTablePage.selecthUser(searchUserName);
+                // Select user
+                UsersTablePage.userAddSearcMenu.click();
+                // Click add user
+                modalDialog.modalDialogAddUserBtn.click();
+                browser.pause(e2eConsts.shortWaitTimeMs);
+                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                expect(modalDialog.modalDialogShareTitle).toContain("Your app has");
+                // Click No Thanks to Share with User
+                modalDialog.modalDialogNoThanksButton.click();
+            });
 
-        /**
-         * Adds a new user by Username, assigns role and verifies the user was added.
-         */
-        it('Add new user by "First Name" to application with role "Viewer" ', function() {
+            /**
+             * Adds a new user by Username, assigns role and verifies the user was added.
+             */
+            it('Add new user by "First Name" to application with role "Viewer" ', function () {
 
-            // Click on add a new user button
-            UsersTablePage.newUserBtn.click();
-            // Search for known user
-            UsersTablePage.selecthUser(searchFirstName);
-            // Select user
-            UsersTablePage.userAddSearcMenu.click();
-            // Select "Viewer" role
-            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
-            // Click add user
-            modalDialog.modalDialogAddUserBtn.click();
-            // Click to close the Share with User modal
-            browser.pause(e2eConsts.shortWaitTimeMs);
-            modalDialog.modalDialogCloseBtn.click();
-        });
+                // Click on add a new user button
+                UsersTablePage.newUserBtn.click();
+                // Search for known user
+                UsersTablePage.selecthUser(searchFirstName);
+                // Select user
+                UsersTablePage.userAddSearcMenu.click();
+                // Select "Viewer" role
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
+                // Click add user
+                modalDialog.modalDialogAddUserBtn.click();
+                // Click to close the Share with User modal
+                browser.pause(e2eConsts.shortWaitTimeMs);
+                modalDialog.modalDialogCloseBtn.click();
+            });
 
-        /**
-         * Adds a new user by Username, assigns role and verifies the user was added.
-         */
-        it('Add new user by "Email" to application with role "Administrator" ', function() {
+            /**
+             * Adds a new user by Username, assigns role and verifies the user was added.
+             */
+            it('Add new user by "Email" to application with role "Administrator" ', function () {
 
-            // Click on add a new user button
-            UsersTablePage.newUserBtn.click();
-            // Search for known user
-            UsersTablePage.selecthUser(searchEmail);
-            // Select user
-            UsersTablePage.userAddSearcMenu.click();
-            // Select "Viewer" role
-            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
-            // Click add user
-            modalDialog.modalDialogAddUserBtn.click();
-            // Click Copy link to Share with User
-            expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
-            // Click to close the Share with User modal
-            browser.pause(e2eConsts.shortWaitTimeMs);
-            modalDialog.modalDialogCloseBtn.click();
-        });
+                // Click on add a new user button
+                UsersTablePage.newUserBtn.click();
+                // Search for known user
+                UsersTablePage.selecthUser(searchEmail);
+                // Select user
+                UsersTablePage.userAddSearcMenu.click();
+                // Select "Viewer" role
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
+                // Click add user
+                modalDialog.modalDialogAddUserBtn.click();
+                // Click Copy link to Share with User
+                expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
+                // Click to close the Share with User modal
+                browser.pause(e2eConsts.shortWaitTimeMs);
+                modalDialog.modalDialogCloseBtn.click();
+            });
 
-        /**
-         * Adds a new user by Username, assigns role and verifies the user was added.
-         */
-        it('Add new user by "Last Name" to application with role "none" ', function() {
+            /**
+             * Adds a new user by Username, assigns role and verifies the user was added.
+             */
+            it('Add new user by "Last Name" to application with role "none" ', function () {
 
-            // Click on add a new user button
-            UsersTablePage.newUserBtn.click();
-            // Search for known user
-            UsersTablePage.selecthUser(searchLastName);
-            // Select user
-            UsersTablePage.userAddSearcMenu.click();
-            // Select "Viewer" role
-            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
-            // Click add user
-            modalDialog.modalDialogAddUserBtn.click();
-            // Click Email to Share with User
-            expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
-            // Click to close the Share with User modal
-            browser.pause(e2eConsts.shortWaitTimeMs);
-            modalDialog.modalDialogCloseBtn.click();
-        });
+                // Click on add a new user button
+                UsersTablePage.newUserBtn.click();
+                // Search for known user
+                UsersTablePage.selecthUser(searchLastName);
+                // Select user
+                UsersTablePage.userAddSearcMenu.click();
+                // Select "Viewer" role
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
+                // Click add user
+                modalDialog.modalDialogAddUserBtn.click();
+                // Click Email to Share with User
+                expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
+                // Click to close the Share with User modal
+                browser.pause(e2eConsts.shortWaitTimeMs);
+                modalDialog.modalDialogCloseBtn.click();
+            });
 
-        /**
-         * Attempts to add a invalid user and cancels
-         */
-        it('Add new user by invalid user to application and cancel', function() {
+            /**
+             * Attempts to add a invalid user and cancels
+             */
+            it('Add new user by invalid user to application and cancel', function () {
 
-            // Click on add a new user button
-            UsersTablePage.newUserBtn.click();
-            // Search for known user
-            UsersTablePage.selecthUser(searchCrap);
-            // Verify Add new user button disabled
-            expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
-            // Click Cancel
-            modalDialog.modalDialogCancelBtn.click();
-
-        });
-
+                // Click on add a new user button
+                UsersTablePage.newUserBtn.click();
+                // Search for known user
+                UsersTablePage.selecthUser(searchCrap);
+                // Verify Add new user button disabled
+                expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
+                // Click Cancel
+                modalDialog.modalDialogCancelBtn.click();
+            });
+        }
     });
 }());
