@@ -214,6 +214,7 @@ class formBuilderPage {
             // return this.getSelectedFieldLabel() === source.getText();
             return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getFieldLabels();
     }
 
