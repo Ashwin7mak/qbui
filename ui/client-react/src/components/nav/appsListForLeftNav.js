@@ -80,10 +80,10 @@ export const AppsList = React.createClass({
      * open the create app wizard
      */
     createNewApp() {
-        // if (this.allowCreateNewApp()) {
-        //     this.props.showAppCreationDialog();
-        // }
-        this.props.showAppCreationDialog();
+        debugger;
+        if (this.allowCreateNewApp()) {
+            this.props.showAppCreationDialog();
+        }
     },
 
     render() {
@@ -110,13 +110,16 @@ export const AppsList = React.createClass({
     }
 });
 
+const mapStateToProps = (state) => ({
+    getApp: (appId) => getApp(state.app, appId),
+});
+
 const mapDispatchToProps = {
     showAppCreationDialog,
-    getApp,
     getSelectedAppId
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(AppsList);
