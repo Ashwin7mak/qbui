@@ -8,7 +8,9 @@ import {CONTEXT} from '../../../actions/context';
 const headerSource = {
     beginDrag(props) {
         let {label, relatedField} = props;
-        props.onDragStart(label);
+        if (props.onDragStart) {
+            props.onDragStart(label);
+        }
         return {label, relatedField};
     },
 
@@ -17,14 +19,16 @@ const headerSource = {
     },
 
     endDrag(props) {
-        props.onDragEnd();
+        if (props.onDragEnd) {
+            props.onDragEnd();
+        }
     }
 };
 
 const headerTarget = {
     hover(targetProps, monitor) {
         const sourceProps = monitor.getItem();
-        if (sourceProps.label !== targetProps.label) {
+        if ((sourceProps.label !== targetProps.label) && targetProps.onHover) {
             targetProps.onHover(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
         }
     }

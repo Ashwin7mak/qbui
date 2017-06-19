@@ -108,7 +108,7 @@ export class QbGrid extends Component {
             if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            let c = column.getGridHeader(this.props.onHoverColumn, this.props.onDragColumnStart, this.props.onDragColumnEnd);
+            let c = column.getGridHeader(this.props.onHoverColumn, this.props.draggingColumnStart, this.props.draggingColumnEnd);
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
@@ -389,14 +389,6 @@ QbGrid.propTypes = {
     onHoverColumn: PropTypes.func,
 
     /**
-     * If the header cell is draggable, callback to when the column begins dragging. */
-    onDragColumnStart: PropTypes.func,
-
-    /**
-     * If the header cell is draggable, callback to when the column stops dragging. */
-    onDragColumnEnd: PropTypes.func,
-
-    /**
      * Header cell to be passed in to make QbGrid more reusable. */
     headerRenderer: PropTypes.func.isRequired,
 
@@ -446,7 +438,9 @@ QbGrid.defaultProps = {
 };
 
 const mapDispatchToProps = {
-    setCollapsedGroups
+    setCollapsedGroups,
+    draggingColumnStart,
+    draggingColumnEnd
 };
 
 export default connect(null, mapDispatchToProps)(QbGrid);

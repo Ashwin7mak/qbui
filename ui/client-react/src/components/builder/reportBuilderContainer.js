@@ -15,7 +15,6 @@ import DraggableQbHeaderCell from '../dataTable/qbGrid/draggableQbHeaderCell';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
-import {draggingColumnStart, draggingColumnEnd} from '../../actions/qbGridActions';
 import {exitBuilderMode, moveColumn} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import AppQbModal from '../qbModal/appQbModal';
@@ -62,8 +61,6 @@ export class ReportBuilderContainer extends Component {
                 columns={columns}
                 rows={rows}
                 onHoverColumn={this.props.moveColumn}
-                onDragColumnStart={this.props.draggingColumnStart}
-                onDragColumnEnd={this.props.draggingColumnEnd}
                 headerRenderer={DraggableQbHeaderCell}
                 cellRenderer={ReportCell}
                 menuComponent={ReportColumnHeaderMenu}
@@ -161,9 +158,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     exitBuilderMode,
     loadDynamicReport,
-    moveColumn,
-    draggingColumnStart,
-    draggingColumnEnd
+    moveColumn
 };
 
 export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(
