@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 
 import user from '../../../reuse/client/src/reducers/userReducer';
 import app from './app';
+import appBuilder from './appBuilder';
 import fields from './fields';
 import forms from './forms';
 import relationshipBuilder from './relationshipBuilder';
@@ -24,6 +25,7 @@ import users from './users';
 // combine individual reducers into a single root reducer (qbui)
 export default combineReducers({
     app,
+    appBuilder,
     user,
     animation,
     automation,

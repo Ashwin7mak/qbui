@@ -7,6 +7,11 @@ let modalDialog = requirePO('/common/modalDialog');
 
 class formBuilderPage {
 
+    get activePanel() {
+        // The active FIELDS panel
+        return browser.element(".tabbedSideNav .rc-tabs-tabpane-active");
+    }
+
     get cancelBtn() {
         // CANCEL (form) button in footer bar
         return browser.element('.alternativeTrowserFooterButton');
@@ -42,6 +47,11 @@ class formBuilderPage {
         return browser.element('.fieldTokenDragging');
     }
 
+    get fieldTokenCollapsed() {
+        // the token which appears when dragging a field to another position
+        return browser.element('.fieldTokenCollapsed');
+    }
+
     get fieldTokenTitle() {
         // the label of the first NEW FIELD token
         return browser.element('.fieldTokenTitle');
@@ -49,7 +59,7 @@ class formBuilderPage {
 
     get firstField() {
         // the first field (wait for it after open)
-        return browser.element('.formTable .field');
+        return browser.element('.field');
     }
 
     get formBuilderContainer() {
@@ -74,12 +84,14 @@ class formBuilderPage {
 
     get requiredCheckboxChecked() {
         // The MUST BE FILLED IN checkbox in its CHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:checked');
+        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
+        return browser.element('.checkboxPropertyContainer input:checked');
     }
 
     get requiredCheckboxNotChecked() {
         // The MUST BE FILLED IN checkbox in its UNCHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
+        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
+        return browser.element('.checkboxPropertyContainer input:not(:checked)');
     }
 
     get saveBtn() {
@@ -141,14 +153,15 @@ class formBuilderPage {
         return browser.element(tab_Field);
     }
 
-    get addAnotherRecordDialogTitle() {
-        // TITLE for add another record dialog
-        return browser.element('.modal-dialog .modal-title');
-    }
-
     get title() {
         // The name of the form, as displayed at the top of the form builder
         return browser.element('.formContainer .qbPanelHeaderTitleText');
+    }
+
+    // methods
+
+    addNewField(label) {
+        browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
     }
 
     cancel() {
@@ -177,7 +190,31 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        formsPO.viewFormContainerEl.waitForExist();
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
+    }
+
+    dragNewFieldOntoForm(source, target) {
+        // Clicks on the specified new field token and drags it to the specified target field
+        let sourceLabel = source.getText();
+        source.moveToObject();
+        browser.buttonDown();
+        browser.pause(e2eConsts.shortWaitTimeMs);
+        // move to target & jiggle
+        target.moveToObject();
+        target.moveToObject(5, 5);
+        // release button
+        browser.buttonUp();
+        // wait for the new field to replace the target
+        browser.waitUntil(function() {
+            // can't use THIS here?
+            // return this.getSelectedFieldLabel() === source.getText();
+            return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
+        }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+        return this.getFieldLabels();
     }
 
     getFieldLocator(index) {
@@ -225,6 +262,11 @@ class formBuilderPage {
         return this.selectedField.element('./..').getText();
     }
 
+    getRequiredCheckboxState() {
+        // gets checked status of the MUST BE FILLED IN checkbox
+        return this.requiredCheckboxChecked.isExisting();
+    }
+
     moveByName(source, target) {
         // Clicks on the specified source field label and drags it to the specified target field label
         let labels = this.getFieldLabels();
@@ -242,7 +284,10 @@ class formBuilderPage {
         browser.pause(e2eConsts.shortWaitTimeMs);
         topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
-        this.firstField.waitForVisible();
+        // this.firstField.waitForExist();
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        expect(this.tab_Active.getText()).toBe("New");
         return this;
     }
 
@@ -279,6 +324,8 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -307,6 +354,14 @@ class formBuilderPage {
         browser.buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
+    }
+
+    setRequiredCheckboxState(state) {
+        // Clicks on the MUST BE FILLED IN checkbox IF NECESSARY to make the checked state match the specified value
+        if ((!state && this.requiredCheckboxChecked.isExisting()) || (state && this.requiredCheckboxNotChecked.isExisting())) {
+            this.fieldProperty_Required.click();
+        }
+        return this;
     }
 
     setViewportSize(size, resizeViewport) {
@@ -338,20 +393,9 @@ class formBuilderPage {
         return this.getFieldLabels();
     }
 
-    addNewFieldToFormByDoubleClicking(fieldToSelect) {
-        //get all field tokens
-        var token = browser.elements('.fieldToken .fieldTokenTitle').value.filter(function(tokenTitle) {
-            return tokenTitle.getAttribute('textContent') === fieldToSelect;
-        });
-
-        if (token !== []) {
-            //scroll to a field.
-            browser.execute("return arguments[0].scrollIntoView(true);", token[0]);
-            //Click on filtered save button
-            return token[0].doubleClick();
-        } else {
-            throw new Error('field with name ' + fieldToSelect + " not found on the new list in form builder");
-        }
+    stripAsterisk(label) {
+        // strips the leading '* ' from a field label if necessary
+        return label.replace('* ', ''); // not limited to leading chars but simple
     }
 
     /**
@@ -396,7 +440,10 @@ class formBuilderPage {
             'Escape', // defocus field
             'Escape' // close page
         ]);
-        return this.dirtyForm_Dismiss();
+        while (!formsPO.viewFormContainerEl.isExisting()) {
+            this.dirtyForm_Dismiss();
+        }
+        return this;
     }
 
     KB_focusField(index) {
@@ -455,12 +502,17 @@ class formBuilderPage {
         return deletedField;
     }
 
-    KB_save(index) {
+    KB_save() {
         // save form via keyboard
-        //browser.keys(['Command', 's', 'Command']);
-        // cmd above doesn't work on EDGE...
-        // todo: figure out this problem; not reproducible manually
-        this.save();
+        if (browserName === 'MicrosoftEdge') {
+            // COMMAND key w/EDGE works locally but not in sauce...?
+            browser.keys(['Control', 's', 'Control']);
+        } else {
+            browser.keys(['Command', 's', 'Command']);
+        }
+        formsPO.viewFormContainerEl.waitForExist();
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 
