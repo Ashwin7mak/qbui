@@ -8,7 +8,6 @@ import LeftNav from "../common/leftNav/GovernanceLeftNav";
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
 import GovernanceAnalytics from "../analytics/governanceAnalytics";
-import Config from '../../../client-react/src/config/app.config';
 
 import "./governanceAppShell.scss";
 
@@ -16,7 +15,7 @@ export class GovernanceAppShell extends Component {
     render() {
         return (
             <AppShell functionalAreaName="governance">
-                <GovernanceAnalytics dataset={Config.evergageDataset} />
+                <GovernanceAnalytics />
                 <LeftNav
                     isNavCollapsed={this.props.isNavCollapsed}
                     isNavOpen={this.props.isNavOpen}
