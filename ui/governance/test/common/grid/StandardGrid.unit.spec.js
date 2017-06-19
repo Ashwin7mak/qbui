@@ -73,7 +73,7 @@ describe('StandardGrid', () => {
             <StandardGrid
                 columns={columns}
                 getFacetFields={()=>{}}
-                doUpdate={Actions.doUpdate}
+                doUpdate={AccountUsersActions.doUpdate}
                 items={null}
                 id={"accountUsers"}
                 rowKey={"uid"}
@@ -88,7 +88,7 @@ describe('StandardGrid', () => {
         let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
         expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
-        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(Actions.doUpdate);
+        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdate);
 
     });
 
@@ -110,7 +110,7 @@ describe('StandardGrid', () => {
             <StandardGrid
                 columns={columns}
                 getFacetFields={()=>{}}
-                doUpdate={Actions.doUpdate}
+                doUpdate={AccountUsersActions.doUpdate}
                 items={[]}
                 id={"accountUsers"}
                 rowKey={"uid"}
@@ -123,7 +123,7 @@ describe('StandardGrid', () => {
         let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
         expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
-        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(Actions.doUpdate);
+        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdate);
 
     });
 
