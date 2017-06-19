@@ -7,9 +7,7 @@ const reportBuilder = (
         isPendingEdit: false,
         isInBuilderMode: false,
         availableColumns: [],
-        addBeforeColumn: false,
-        labelBeingDragged: '',
-        isDragging: false
+        addBeforeColumn: false
     }, action) => {
 
     switch (action.type) {
@@ -62,20 +60,6 @@ const reportBuilder = (
             ...state,
             isPendingEdit: true
         };
-    }
-    case types.DRAGGING_COLUMN_START: {
-        return {
-            ...state,
-            isDragging: true,
-            labelBeingDragged: action.content.sourceLabel
-        }
-    }
-    case types.DRAGGING_COLUMN_END: {
-        return {
-            ...state,
-            isDragging: false,
-            labelBeingDragged: ''
-        }
     }
     default:
         // return existing state by default in redux

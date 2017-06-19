@@ -124,19 +124,6 @@ export const moveColumn = (context, sourceLabel, targetLabel) => {
     return event(context, types.MOVE_COLUMN, {sourceLabel, targetLabel});
 };
 
-export const draggingColumnStart = sourceLabel => {
-    return {
-        type: types.DRAGGING_COLUMN_START,
-        content: {sourceLabel}
-    };
-};
-
-export const draggingColumnEnd = () => {
-    return {
-        type: types.DRAGGING_COLUMN_END
-    };
-};
-
 /**
  * Change the reportName of the report
  * @param context

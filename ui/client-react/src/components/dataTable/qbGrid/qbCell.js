@@ -21,7 +21,7 @@ export class QbCell extends Component {
         if (this.props.isStickyCell) {
             classes.push('stickyCell');
         }
-        if (this.props.isPlaceholderCell || (this.props.label === this.props.headerLabelBeingDragged)) {
+        if (this.props.isPlaceholderCell || (this.props.label === this.props.labelBeingDragged)) {
             classes.push('placeholderCell');
         }
         // this is a tad bit hacky, remove when EmbeddedReportToolsAndContent supports editing
@@ -49,7 +49,7 @@ QbCell.defaultProps = {
 
 const mapStateToProps = (state) => {
     return {
-        headerLabelBeingDragged: state.reportBuilder.labelBeingDragged
+        labelBeingDragged: state.qbGrid.labelBeingDragged
     }
 };
 

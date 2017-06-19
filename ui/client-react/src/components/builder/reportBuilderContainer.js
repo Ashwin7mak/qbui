@@ -15,7 +15,8 @@ import DraggableQbHeaderCell from '../dataTable/qbGrid/draggableQbHeaderCell';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
-import {exitBuilderMode, moveColumn, draggingColumnStart, draggingColumnEnd} from '../../actions/reportBuilderActions';
+import {draggingColumnStart, draggingColumnEnd} from '../../actions/qbGridActions';
+import {exitBuilderMode, moveColumn} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import AppQbModal from '../qbModal/appQbModal';
 
