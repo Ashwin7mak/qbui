@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
-import DraggableItemTypes from '../../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
+import DraggableItemTypes from '../../formBuilder/draggableItemTypes';
 import {CONTEXT} from '../../../actions/context';
 
 const headerSource = {
