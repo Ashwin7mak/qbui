@@ -115,5 +115,112 @@
 
             });
         });
+
+        function getAllDropDownListOptions() {
+            let listOptions = [];
+            //get the list of all drop down options
+            browser.waitForVisible('.Select-menu-outer');
+            browser.elements('.Select-option').value.filter(function(optionText) {
+                listOptions.push(optionText.element('div div').getText());
+            });
+            return listOptions;
+        }
+
+        /**
+         * Method to click on modal dialog any drop down arrow
+         */
+        function selectItemFromModalDialogDropDownList(element, listOption) {
+            //Expand the drop down
+            this.clickOnDropDownDownArrowToExpand(element);
+            //wait until you see select outer menu
+            browser.waitForVisible('.Select-menu-outer');
+            //get all options from the list
+            var option = browser.elements('.Select-option').value.filter(function(optionText) {
+                return optionText.element('div div').getText().includes(listOption);
+            });
+
+            if (option !== []) {
+                //Click on filtered option
+                option[0].element('div div').waitForVisible();
+                option[0].element('div div').click();
+                //wait until select menu outer
+                return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
+            } else {
+                throw new Error('Option with name ' + listOption + " not found in the list");
+            }
+        }
+
+        /**
+         * Data provider for table field validation testCases.
+         */
+        function recordTitleFieldPickerTestCases() {
+            let aTextField = {name:'Text',
+                type:'SCALAR',
+                datatypeAttributes:{
+                    type:'TEXT'
+                }};
+            return [
+                {
+                    message: 'with just built in fields; expect record Id to be the only field on list',
+                    table: {name: "Table for TitlePicker 1"},
+                    expectedDefaultSelection: "Default to Table for TitlePicker 1 + ID",
+                    uiTable: false
+                },
+                {
+                    message: 'with a couple of custom fields; expect record Id + other fields to show on list',
+                    table: {name: "Table for TitlePicker 2", fields: [aTextField, aTextField]},
+                    expectedDefaultSelection: "Default to Table for TitlePicker 1 + ID",
+                    uiTable: false
+                },
+                {
+                    message: 'with record title field; expect record title field selected',
+                    table: {name: "Table for TitlePicker 3"},
+                    expectedDefaultSelection: "Record title",
+                    uiTable: true
+                }
+            ];
+        }
+
+
+        recordTitleFieldPickerTestCases().forEach(function(testCase) {
+            it('Edit table ' + testCase.message, function() {
+
+                let createTablePromise = testCase.uiTable ? e2eBase.tableService.createTableInUI(testApp.id, testCase.table) : e2eBase.tableService.createTableInCore(testApp.id, testCase.table);
+                //create the table with the specific fields
+                return createTablePromise.then(
+                    (tableId) => {
+                        //go to the table settings page for the table
+                        e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+                        e2ePageBase.loadTableByIdInBrowser(realmName, testApp.id, tableId);
+                        tableCreatePO.clickOnModifyTableSettingsLink();
+                        let pickerfield = browser.element('.recordTitleFieldSelect');
+                        //check the selected value
+                        expect(pickerfield.element('.Select-value-label').getText()).toEqual(testCase.expectedDefaultSelection);
+
+                        //check the expected list fields on the record title field picker drop down
+                        pickerfield.click();
+                        //get the fields in the table - all of non built in fields + record id should show up
+                        return e2eBase.tableService.getTableFields(testApp.id, tableId).then(
+                            (fields) => {
+                                let fieldLabels = _.map(fields, field => field.name);
+                                expect(fieldLabels).toContain(getAllDropDownListOptions());
+                                //select one and reset
+                                selectItemFromModalDialogDropDownList(pickerfield, fieldLabels[0]);
+                                tableCreatePO.clickOnEditTableResetBtn();
+                                //make sure the selection goes back to default selection
+                                expect(pickerfield.element('.Select-value-label').getText()).toEqual(testCase.expectedDefaultSelection);
+                                //select one and apply to test it was saved
+                                selectItemFromModalDialogDropDownList(pickerfield, fieldLabels[0]);
+                                tableCreatePO.clickOnEditTableApplyBtn();
+                                //TODO make sure the selection goes back to default selection
+
+                            }
+                        );
+                    }
+                ).catch(ex => {
+                    browser.logger.error('Error creating table:' + JSON.stringify(ex));
+                });
+            });
+        });
     });
 }());
