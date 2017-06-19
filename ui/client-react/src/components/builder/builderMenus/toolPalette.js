@@ -48,6 +48,7 @@ class ToolPalette extends Component {
                             toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                             toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                             toolPaletteFocus={this.props.toolPaletteFocus}
+                            app={this.props.app}
                             appId={_.get(this.props, 'app.id', null)}
                             tblId={_.get(this.props, 'formMeta.tableId', null)}/>
     );

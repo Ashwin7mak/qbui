@@ -10,7 +10,10 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
     let formsPagePO = requirePO('formsPage');
-    let reportInLineEditPO = requirePO('reportInLineEdit');
+    let formBuilderPO = requirePO('formBuilder');
+    let modalDialog = requirePO('/common/modalDialog');
+    let notificationContainer = requirePO('/common/notificationContainer');
+    let topNavPO = requirePO('topNav');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -107,7 +110,7 @@
             value: function() {
                 this.addChildButton.waitForVisible();
                 this.addChildButton.click();
-                browser.waitForVisible('.recordTrowser');
+                return browser.waitForVisible('.recordTrowser');
             }
         },
 
@@ -136,7 +139,7 @@
                 // Click Save on the form
                 formsPagePO.clickFormSaveBtn();
                 // wait until report rows in table are loaded
-                reportContentPO.waitForReportContent();
+                return reportContentPO.waitForReportContent();
             }
         },
 
@@ -147,7 +150,7 @@
             formsPO.viewFormContainerEl.waitForVisible();
             browser.waitForVisible('.textField.viewElement.textLink');
             let linkEl = this.parentRecordLinkEl;
-            linkEl.click();
+            return linkEl.click();
         }},
         /**
          * While viewing a parent record on a form get the values of each record in the child table
@@ -222,12 +225,12 @@
                 //TODO: Handle multiple links to parent(s)
                 // Use the specific form section
                 formSectionEl.waitForVisible();
-                formSectionEl.element(linkToParentLocatorString).click();
+                return formSectionEl.element(linkToParentLocatorString).click();
             } else {
                 //TODO: Handle multiple links to parent(s)
                 // Try to find something clickable on the form
                 browser.waitForVisible(linkToParentLocatorString);
-                browser.element(linkToParentLocatorString).click();
+                return browser.element(linkToParentLocatorString).click();
             }
         }},
 
@@ -257,7 +260,7 @@
             this.iconActionsCloseDrawerButtonEl.waitForVisible();
             this.viewFormTableEl.waitForExist();
             this.iconActionsCloseDrawerButtonEl.click();
-            browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
+            return browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
         }},
 
         /**
@@ -267,10 +270,151 @@
             this.tableHomePageLinkEl.waitForVisible();
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
-            this.tableHomePageLinkEl.click();
-        }
-        }
-    });
+            return this.tableHomePageLinkEl.click();
+        }},
 
+        /**
+         * Method to create relationship using add another record button via form builder
+         */
+        createRelationshipToParentTable: {value: function(parentTable, selectField) {
+
+            //Select settings -> modify this form
+            topNavPO.clickOnModifyFormLink();
+
+            //Click on add a new record button
+            formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
+
+            //Select table from table list of add a record dialog
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
+
+            //Select Field form field dropdown
+            if (selectField !== '') {
+                //Click on advanced settings of add a record dialog
+                modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                //Select field to link to parent table (This will be either titleField or recordId)
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+            }
+
+            //Click Add To form button
+            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+
+            //Verify the get another record got added to the form builder
+            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable);
+
+            //Save the form builder
+            formBuilderPO.save();
+            //wait until save success container goes away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
+            //verify You land in view form
+            formsPO.waitForViewFormsTableLoad();
+            return topNavPO.settingsBtn.waitForVisible();
+        }},
+
+        /**
+         * Method to select a record via parent picker
+         */
+        selectFromParentPicker: {
+            value: function(parentRecord) {
+                let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
+                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
+                });
+
+                if (fields !== []) {
+                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').waitForVisible();
+                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').click();
+                    return formsPO.selectFromList(parentRecord);
+                }
+
+            }},
+
+        /**
+         * Method to click on Relationship link in view record mode
+         */
+        clickOnRelationshipFieldValueLink: {value: function(element) {
+            element.element('span.textField.viewElement.textLink').waitForExist();
+            //Click on the relationship
+            element.element('span.textField.viewElement.textLink').moveToObject();
+            // Needed for stabilize DOm after moveToObject
+            browser.pause(slideyRightyPause);
+            element.element('span.textField.viewElement.textLink').waitForVisible();
+            return element.element('span.textField.viewElement.textLink').click();
+        }},
+
+        /**
+         * Method to verify relationship link in view record mode
+         */
+        verifyParentRecordRelationship: {value: function(expectedParentRecordFieldValues, expectedChildTableRecordValues) {
+            let getRecordValuesByClickingOnRelLink;
+            let getEmbeddedReportChildRecordValues;
+
+            //verify You land in view form since you edited a record from View form after saving
+            browser.element('.viewForm .field').waitForVisible();
+            let fields = browser.elements('.viewForm .field').value.filter(function(fieldLabel) {
+                return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
+            });
+
+            if (fields !== []) {
+                //Click on the relationship
+                this.clickOnRelationshipFieldValueLink(fields[0]);
+                //Wait until the view form drawer loads
+                browser.element('.drawer .formTable.section-0').waitForVisible();
+
+                //Verify the parent record values
+                getRecordValuesByClickingOnRelLink = formsPO.getRecordValuesInViewForm('.drawer .formTable.section-0');
+                expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
+
+                //Verify the embeddedReport ie child record values
+                //get first cell value
+                getEmbeddedReportChildRecordValues = reportContentPO.getRecordValues(0, 0);
+                //Just verify the first value to make sure selected record shows up
+                expect(getEmbeddedReportChildRecordValues).toEqual(expectedChildTableRecordValues);
+
+                //close the View record drawer
+                browser.element('.closeDrawer').click();
+                //wait until drawer screen disappear
+                return browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+            }
+
+        }},
+
+        /**
+         * Verift the Get another record relationship dialog selectTables list and select the parentTable
+         * @param expectedTablesList to verify the select table drop down list
+         * @param parentTable table to select
+         */
+        verifyTablesAndFieldsFromCreateRelationshipDialog: {
+            value: function(expectedTablesList, selectParentTable, selectField, verifyDefaultField) {
+                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                //Verify title
+                expect(modalDialog.modalDialogTitle).toContain(e2eConsts.GET_ANOTHER_RECORD);
+                //Verify select tables drop down has all the tables except the one you're in
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+                let tableDropDownList = modalDialog.allDropDownListOptions;
+                expect(tableDropDownList).toEqual(expectedTablesList);
+                //click again on the arrow to collapse the outer menu
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+                //Select the table
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, selectParentTable);
+
+                //Select Field form field dropdown
+                if (selectField !== '') {
+                    //Click on advanced settings of add a record dialog
+                    modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                    //Select field to link to parent table (This will be either titleField or recordId)
+                    modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+                }
+                if (verifyDefaultField !== '') {
+                    //Click on advanced settings of add a record dialog
+                    modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                    //Verify the default field selected
+                    modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').waitForVisible();
+                    expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(verifyDefaultField);
+                }
+            }}
+
+    });
     module.exports = relationshipsPage;
 }());

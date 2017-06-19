@@ -114,13 +114,12 @@ class ListOfElements extends Component {
         if (this.state.activeFieldFilter) {
             return this.renderFilteredFieldsList();
         }
-        if (this.props.elements) {
+        if (this.props.elements && this.props.elements.length > 0) {
             return this.props.elements.map((element, index) => {
                 if (element.children) {
                     return (
                         <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
-                            {this.props.hideTitle ? null :
-                                <h6 className="listOfElementsItemHeader">{element.title}</h6>}
+                            {!this.props.hideTitle && <h6 className="listOfElementsItemHeader">{element.title}</h6>}
                             {this.props.animateChildren ?
                                 <FlipMove typeName="ul" className="animatedListOfElementsItemList">
                                     {this.renderElements(element.children)}
@@ -132,9 +131,14 @@ class ListOfElements extends Component {
                         </li>
                     );
                 }
-
                 return this.renderElements([element]);
             });
+        } else {
+            return (
+                <li key="emptyStateMessage" className="emptyStateMessage">
+                    {this.props.emptyMessage}
+                </li>
+            );
         }
     };
 
@@ -146,7 +150,7 @@ class ListOfElements extends Component {
             document.activeElement.tagName !== "BUTTON") {
             this.listOfElementsContainer.focus();
         }
-    }
+    };
 
     render() {
         return (
