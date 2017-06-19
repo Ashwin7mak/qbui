@@ -21,7 +21,13 @@ class ToolPalette extends Component {
         const tables = _.get(this.props, "app.tables", []);
         const tableId = _.get(this.props, "formMeta.tableId", null);
         const relationships = _.get(this.props, "formMeta.relationships", []);
-        const includeNewRelationship = RelationshipUtils.canCreateNewParentRelationship(tableId, tables, relationships);
+        const newRelationshipFieldIds = _.get(this.props, "newRelationshipFieldIds", []);
+
+        const fieldsToDelete = _.get(this.props, "formMeta.fieldsToDelete", []);
+
+        const table = _.find(tables, {id: tableId});
+
+        const validParentTables = RelationshipUtils.getValidParentTablesForRelationship(this.props.app, table, this.props.fields, newRelationshipFieldIds, fieldsToDelete);
 
         return (
             <NewFieldsMenu isCollapsed={this.props.isCollapsed}
@@ -32,7 +38,7 @@ class ToolPalette extends Component {
                            toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                            toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                            toolPaletteFocus={this.props.toolPaletteFocus}
-                           includeNewRelationship={includeNewRelationship}/>);
+                           includeNewRelationship={validParentTables.length > 0}/>);
     };
 
     renderExistingFieldsMenu = () => (
@@ -42,6 +48,7 @@ class ToolPalette extends Component {
                             toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                             toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                             toolPaletteFocus={this.props.toolPaletteFocus}
+                            app={this.props.app}
                             appId={_.get(this.props, 'app.id', null)}
                             tblId={_.get(this.props, 'formMeta.tableId', null)}/>
     );
@@ -87,6 +94,16 @@ ToolPalette.propTypes = {
     /**
      * Display the menu is an open state (only affects small breakpoint) */
     isOpen: PropTypes.bool,
+
+    /**
+     * newly added relationship field IDs
+     */
+    newRelationshipFieldIds: PropTypes.array,
+
+    /**
+     * fields
+     */
+    fields: PropTypes.array
 };
 
 export default ToolPalette;

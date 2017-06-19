@@ -210,6 +210,7 @@ export const ReportRoute = React.createClass({
                     {this.getHeader()}
 
                     <ReportToolsAndContent
+                        className="reportToolsAndContentContainer"
                         params={this.props.match.params}
                         reportData={reportData}
                         appUsers={this.props.appUsers}
@@ -225,7 +226,7 @@ export const ReportRoute = React.createClass({
                         scrollingReport={this.props.scrollingReport}
                         loadDynamicReport={this.loadDynamicReport}
                         noRowsUI={true}
-                        handleDrillIntoChild={this.handleDrillIntoChild}
+                        handleDrillIntoChild={this.props.uniqueId && this.handleDrillIntoChild}
                     />
 
                     {this.props.isDrawerContext && this.getDrawerContainer()}

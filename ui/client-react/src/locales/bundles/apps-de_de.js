@@ -49,8 +49,8 @@ export default {
                 removeButton: "Entfernen",
                 cancel: "Stornieren",
                 plural: "Benutzer",
-                usersRemovedFromAppRole: "{numOfUsers} Benutzer aus der App-Rolle entfernt",
-                userRemovedFromAppRole: "Benutzer aus der App-Rolle entfernt",
+                usersRemovedFromAppRole: "{numOfUsers} Benutzer wurden aus der App entfernt",
+                userRemovedFromAppRole: "Benutzer wurde aus der App entfernt",
                 userAdded: "Benutzer hinzugefügt",
                 userAddError: "Fehler beim Hinzufügen von Benutzer",
                 userRemovingError: "Fehler beim Entfernen des Benutzers",
@@ -198,8 +198,7 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen",
-                helpTooltip: "Hilfe",
+                feedbackTooltip: "Teilen Sie Ideen und Fragen"
             }
 
         },
@@ -237,9 +236,13 @@ export default {
                 success: "Rekord genehmigt.",
                 error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automatisierungstest erfolgreich.",
                 error: "Beim Testen dieser Automatisierung ist ein Fehler aufgetreten."
+            },
+            saveAutomation: {
+                success: "Automatisierung wurde erfolgreich.",
+                error: "Beim Speichern dieser Automatisierung ist ein Fehler aufgetreten."
             },
             automationList: {
                 nameHeader: "Name",
@@ -257,6 +260,17 @@ export default {
                 actions: {
                     email: "Eine E-Mail senden"
                 }
+            },
+            automationEdit: {
+                stageHeading: "Automatisierung ändern: {automationName}",
+                nameHeader: "Name",
+                emailSectionHeader: "Eine E-Mail senden",
+                toHeader: "Benachrichtige wer",
+                subjectHeader: "Fach",
+                bodyHeader: "Nachricht"
+            },
+            automationBuilder: {
+                modify: 'Automatisierung ändern'
             }
         },
         relationship: {
@@ -608,7 +622,7 @@ export default {
             name: "Name",
             required: "Muss ausgefüllt werden",
             multiChoice: "Wahlen",
-            unique: "Muss einmalige Werte haben",
+            unique: "Muss einzigartig sein",
             linkToRecord: "Link zu einem Datensatz in der Tabelle",
             connectedTo: "Auf {fieldName}-Feld verbunden"
         },
@@ -624,6 +638,8 @@ export default {
                 modify: 'Formular ändern',
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
+                removeTitleField: "Dieses Feld kann nicht entfernt werden, bis ein anderes Datensatztitelfeld gesetzt ist",
+                removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
                 tooltips: {
@@ -656,6 +672,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
+            existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",
@@ -710,6 +727,9 @@ export default {
             noOverrides: "Es wurden keine Overrides gesetzt",
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
+        },
+        appCreation: {
+            newApp: 'Neue app'
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
@@ -785,7 +805,7 @@ export default {
             title: "Benutzer hinzufügen",
             description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
             searching: "Suchen...",
-            userSuccessTitle: "Deine App hat neuen Benutzer!",
+            userSuccessTitle: "Deine App hat einen neuen Benutzer!",
             userSuccessText: "Lassen Sie sie wissen, dass sie Zugang zu Ihrer App haben, indem Sie den Link mit ihnen teilen.",
             copy: "Kopieren",
             email: "Email",

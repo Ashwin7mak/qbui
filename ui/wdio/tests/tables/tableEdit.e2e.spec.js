@@ -102,6 +102,9 @@
             });
 
             tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
+
+            //Go back to apps page link
+            tableCreatePO.clickBackToAppsLink();
         });
 
         it('Verify Reset functionality in edit table mode', function() {
@@ -133,7 +136,7 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Click on apply button in edit table mode
+            //Click on reset button in edit table mode
             tableCreatePO.clickOnEditTableResetBtn();
 
             //Click on back to apps page link
@@ -150,114 +153,6 @@
 
             //Verify originalFieldNames and newFieldsNames are same
             expect(originalFieldValues).toEqual(newFieldValues);
-        });
-
-        it('Add a new table and then edit that table', function() {
-            //****************
-            //*Add a table
-            //***************
-            var tableName = rawValueGenerator.generateStringWithFixLength(5);
-            var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
-            var tableFields = [
-                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
-                {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
-            ];
-            var newTableFields = [
-                {fieldTitle: tableNameFieldTitleText, fieldValue: 'New ' + tableName},
-                {fieldTitle: recordNameFieldTitleText, fieldValue: 'New ' + tableRecord},
-            ];
-
-            //Click on new table button
-            tableCreatePO.clickCreateNewTable();
-            //Wait until table container visible
-            modalDialog.modalDialogContainer.waitForVisible();
-
-            //Choose an Icon from Icon picker
-            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-            //Verify the choosed icon in closed combo
-            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
-
-            //Enter table field values
-            tableFields.forEach(function(tableField) {
-                //Enter field values
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //Click on finished button and make sure it landed in edit Form container page
-            modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
-            tableCreatePO.waitUntilNotificationContainerGoesAway();
-
-            //Click OK button on create table dialogue
-            modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
-
-            //Click on forms Cancel button
-            formsPO.clickFormCancelBtn();
-            tableCreatePO.newTableBtn.waitForVisible();
-
-            //****************
-            //*Verify the table field values created above in Edit mode
-            //***************
-            //Select Table and make sure it lands in reports page
-            tableCreatePO.selectTable(tableName);
-
-            //Click on edit table settings and properties link under global actions gear
-            tableCreatePO.clickOnModifyTableSettingsLink();
-
-            //Verify the created table field values in Edit mode.
-            //Verify field values that were added while create
-            tableFields.forEach(function(tableField) {
-                //Enter field values
-                tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //verify icon chooser shows up the value selected
-            expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toContain(iconChoosedClassName);
-
-            //****************
-            //*Edit the newely added table with new values
-            //***************
-            //Select the new icon from icon chooser
-            var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-            //Verify the choosed icon in closed combo
-            tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
-
-            //Enter table invalid field values
-            newTableFields.forEach(function(tableField) {
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //Click on apply button in edit table mode
-            tableCreatePO.clickOnEditTableApplyBtn();
-
-            //Verify new table field values
-            newTableFields.forEach(function(tableField) {
-                //Enter field values
-                tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-            });
-            expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toContain(newIconChoosedClassName);
-
-            //Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
-            expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain('New ' + tableName);
-        });
-
-        it('Verify that only ADMIN can edit a new table', function() {
-            //get user authentication
-            e2ePageBase.getUserAuthentication(realmName, realmId, userId);
-
-            // Load the app in the realm
-            e2ePageBase.loadAppsInBrowser(realmName);
-
-            //Select app
-            RequestAppsPage.selectApp(testApp.name);
-
-            //Select table to delete ('Table 1' here) and make sure it lands in reports page
-            tableCreatePO.selectTable('Table 1');
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
-
-            //Verify settings icon not available for user other than ADMIN
-            expect(browser.isExisting('.topNav .iconUISturdy-settings')).toBe(false);
-            expect(browser.isVisible('.topNav .iconUISturdy-settings')).toBe(false);
         });
     });
 }());

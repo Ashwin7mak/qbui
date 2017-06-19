@@ -2,7 +2,7 @@ import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
 import {StandardGrid} from "../../../src/common/grid/standardGrid";
-import * as Actions from "../../../src/account/users/AccountUsersActions";
+import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import * as Table from 'reactabular-table';
@@ -37,7 +37,7 @@ describe('StandardGrid', () => {
             <StandardGrid
                 columns={columns}
                 getFacetFields={()=>{}}
-                doUpdate={Actions.doUpdate}
+                doUpdate={AccountUsersActions.doUpdateUsers}
                 items={items}
                 id={"accountUsers"}
                 rowKey={"uid"}
@@ -49,7 +49,7 @@ describe('StandardGrid', () => {
         let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
         expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
-        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(Actions.doUpdate);
+        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdateUsers);
 
         expect(StandardGridShallow.find('.qbGrid')).toBePresent();
         expect(StandardGridShallow.find('.noItemsExist')).not.toBePresent();
@@ -147,7 +147,7 @@ describe('StandardGrid', () => {
             <StandardGrid
                 columns={columns}
                 getFacetFields={()=>{}}
-                doUpdate={Actions.doUpdate}
+                doUpdate={AccountUsersActions.doUpdateUsers}
                 items={items}
                 id={"accountUsers"}
                 rowKey={"uid"}

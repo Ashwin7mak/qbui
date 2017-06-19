@@ -54,9 +54,9 @@
         javaHost: 'http://localhost:8080',
         eeHost: 'http://localhost:8081',
 
-        // Use these settings if you want to connect your qbui code to the trunk integration environment
-        //javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
-        //eeHost: 'https://t.experienceengine.trunk.newstack.quickbaserocks.com',
+        // Use these settings if you want to connect your qbui code to the INT1 integration environment
+        //javaHost: 'https://localhost.int1-ecs.newstack.quickbaserocks.com',
+        //eeHost: 'https://t.int1-ecs.newstack.quickbaserocks.com',
 
         eeHostEnable: true,
 
@@ -100,6 +100,12 @@
          */
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
+
+        // Turn on/off inbound and outbound request tracing
+        tracingEnabled: false,
+
+        // Tracing host name
+        tracingHost: ''
 
         /**
          * mock data for feature switches for local testing
