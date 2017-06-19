@@ -34,10 +34,6 @@ import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId,
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
-import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppCreationDialog from '../app/appCreationDialog';
 
