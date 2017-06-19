@@ -80,7 +80,6 @@ export const AppsList = React.createClass({
      * open the create app wizard
      */
     createNewApp() {
-        debugger;
         if (this.allowCreateNewApp()) {
             this.props.showAppCreationDialog();
         }
