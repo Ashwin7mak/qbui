@@ -676,6 +676,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
+            existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",
