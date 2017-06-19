@@ -150,7 +150,7 @@ class TableCreationPanel extends React.Component {
      */
     renderIconSection() {
 
-        return (<div className="tableField iconSelection">
+        return (<div className="dialogField iconSelection">
             <IconChooser selectedIcon={this.props.tableInfo && this.props.tableInfo.tableIcon ? this.props.tableInfo.tableIcon.value : null}
                          isOpen={this.props.iconChooserOpen}
                          onOpen={this.props.openIconChooser}
@@ -160,7 +160,7 @@ class TableCreationPanel extends React.Component {
                          iconsByTag={tableIconsByTag}
                          onSelect={this.selectIcon} />
 
-            <div className="tableFieldTitle suggestedIcons">
+            <div className="dialogFieldTitle suggestedIcons">
                 <div><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
                 {this.getSuggestedIcons()}
             </div>
