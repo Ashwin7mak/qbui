@@ -5,7 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
-    let notificationContainer = requirePO('/common/notificationContainer');
+    let formsPO = requirePO('formsPage');
 
     let realmName;
     let realmId;
@@ -43,7 +43,9 @@
                     browser.logger.info(err.toString());
                 }
                 // view first record of first report
-                return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+                reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
+                //wait until view form is visible
+                return formsPO.viewFormContainerEl.waitForVisible();
             });
 
             beforeEach(function() {
@@ -82,8 +84,6 @@
             it('move a field via keyboard & verify revised order after SAVE', function() {
                 let revisedOrder = formBuilderPO.KB_moveField(1, 2);
                 formBuilderPO.KB_save();
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
                 let newFields = formBuilderPO.open().getFieldLabels();
                 expect(newFields).toEqual(revisedOrder);
             });
@@ -91,17 +91,13 @@
             it('remove a field via keyboard & verify presence after CANCEL', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // cancel & reopen
-                formBuilderPO.cancel();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 expect(newFields).toContain(deletedField);
             });
             it('remove a field via keyboard & verify absence after SAVE', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // save & reopen
-                formBuilderPO.save();
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
-                let newFields = formBuilderPO.open().getFieldLabels();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 expect(newFields).not.toContain(deletedField);
             });
         }
