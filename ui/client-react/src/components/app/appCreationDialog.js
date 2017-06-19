@@ -1,6 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import TableCreationPanel from '../table/tableCreationPanel';
+import AppCreationTable from './appCreationPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
@@ -103,7 +103,7 @@ export class AppCreationDialog extends React.Component {
                                  titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
             <div className="tableCreationPanel">
                 <div className="title"><I18nMessage message="appCreation.newAppTitle"/></div>
-                <TableCreationPanel tableInfo={this.props.tableInfo}
+                <AppCreationTable tableInfo={this.props.tableInfo}
                                     openIconChooser={this.props.openIconChooser}
                                     closeIconChooser={this.props.closeIconChooser}
                                     setTableProperty={this.props.setTableProperty}
