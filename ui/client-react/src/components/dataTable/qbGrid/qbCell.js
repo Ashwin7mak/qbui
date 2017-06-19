@@ -49,7 +49,7 @@ QbCell.defaultProps = {
 
 const mapStateToProps = (state) => {
     return {
-        labelBeingDragged: state.qbGrid.labelBeingDragged
+        labelBeingDragged: _.get(state.qbGrid, 'labelBeingDragged', '')
     }
 };
 

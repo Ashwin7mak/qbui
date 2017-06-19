@@ -8,10 +8,17 @@ import _ from 'lodash';
 import {QbGrid} from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
+import QbHeaderCell from '../../../src/components/dataTable/qbGrid/qbHeaderCell';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
-import {CONTEXT} from '../../../src/actions/context';
+
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 const testColumns = [
     new ColumnTransformer('Header 1', 1, 'header1class', false),
@@ -78,6 +85,7 @@ const requiredProps = {
     onCancelEditingRow: actions.onClickCancel,
     onClickSaveRow: actions.onClickSave,
     cellRenderer: testCellRenderer,
+    headerRenderer: QbHeaderCell
 };
 
 let component;
@@ -95,7 +103,7 @@ describe('QbGrid', () => {
     });
 
     it('pass props to reactabular to display rows', () => {
-        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer}/>);
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} headerRenderer={QbHeaderCell}/>);
         instance = component.instance();
 
         let TableBody = component.find(Table.Body);
@@ -103,14 +111,14 @@ describe('QbGrid', () => {
     });
 
     it('adds a first column for row actions to the columns passed in through props', () => {
-        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer}/>);
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} headerRenderer={QbHeaderCell}/>);
 
         let TableProvider = component.find(Table.Provider);
         expect(TableProvider.props().columns.length).toEqual(testColumns.length + 1);
     });
 
     it('does not add a first column for row actions when showRowActionsColumn prop is false', () => {
-        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} showRowActionsColumn={false} />);
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer}  headerRenderer={QbHeaderCell} showRowActionsColumn={false} />);
 
         let TableProvider = component.find(Table.Provider);
         expect(TableProvider.props().columns.length).toEqual(testColumns.length);
@@ -124,6 +132,7 @@ describe('QbGrid', () => {
                 columns={testColumns}
                 rows={testRows}
                 cellRenderer={testCellRenderer}
+                headerRenderer={QbHeaderCell}
                 compareCellChanges={actions.compareCellChanges}
             />);
             instance = component.instance();
@@ -169,6 +178,7 @@ describe('QbGrid', () => {
                 columns={testColumns}
                 rows={testRows}
                 cellRenderer={testCellRenderer}
+                headerRenderer={QbHeaderCell}
                 compareCellChanges={actions.compareCellChanges}
             />);
             instance = component.instance();
@@ -310,15 +320,19 @@ describe('QbGrid', () => {
 
     it('displays a grid based on passed in rows and columns', () => {
         let rowsWithHeader = [...testRows, subHeaderRow];
+        let store = mockStore({qbGrid: {labelBeingDragged: 'label'}});
 
         // Using test utils in this class because we want to check the rendered DOM for the whole grid and not unit test shallow component
-        component = TestUtils.renderIntoDocument(<QbGrid
-            {...requiredProps}
-            numberOfColumns={testColumns.length}
-            columns={testColumns}
-            rows={rowsWithHeader}
-            cellRenderer={testCellRenderer}
-        />);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <QbGrid
+                {...requiredProps}
+                numberOfColumns={testColumns.length}
+                columns={testColumns}
+                rows={rowsWithHeader}
+                cellRenderer={testCellRenderer}
+                headerRenderer={QbHeaderCell}/>
+            </Provider>);
 
         // Displays headers/columns
         let headers = TestUtils.scryRenderedDOMComponentsWithClass(component, 'qbHeaderCell');

@@ -4,7 +4,7 @@ import shallowCompare from 'react-addons-shallow-compare';
 /**
  * A non-draggable header cell component to be used in the QbGrid
  */
-export class QbHeaderCell extends Component {
+class QbHeaderCell extends Component {
     /**
      * Using shallow compare to reduce the change this simple component re-renders
      * @param nextProps
