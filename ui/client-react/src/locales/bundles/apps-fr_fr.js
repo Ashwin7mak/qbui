@@ -672,6 +672,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
+            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à {tableName} sont sur le formulaire",
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
