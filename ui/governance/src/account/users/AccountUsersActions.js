@@ -12,8 +12,6 @@ import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUser
 import * as SCHEMACONSTS from "../../../../client-react/src/constants/schema";
 import {FACET_FIELDS} from "../users/grid/AccountUsersGridFacet";
 
-let logger = new Logger();
-
 /**
  * Action when there is successful user from the backend
  * @param users
@@ -223,6 +221,7 @@ export const doUpdateUsers = (gridId, gridState, _itemsPerPage) => {
  */
 export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
     return (dispatch) => {
+        let logger = new Logger();
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
         const promise = accountUsersService.getAccountUsers(accountId);

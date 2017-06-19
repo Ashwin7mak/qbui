@@ -638,6 +638,8 @@ export default {
                 modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
+                removeTitleField: "Ce champ ne peut pas être supprimé tant qu'un champ de titre d'enregistrement différent n'est pas réglé",
+                removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
                 tooltips: {
@@ -670,6 +672,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
+            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à {tableName} sont sur le formulaire",
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
@@ -724,6 +727,9 @@ export default {
             noOverrides: "Aucune substitution n'a été définie",
             featureNameExists: "Les noms des entités doivent être uniques",
             featureNameEmpty: "Les noms des entités doivent être blanc"
+        },
+        appCreation: {
+            newApp: 'Nouvelle application'
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
