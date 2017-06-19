@@ -10,11 +10,20 @@ export class GovernanceAnalytics extends Component {
     _aaq = window._aaq || (window._aaq = []);
 
     /**
-     * Updates Evergage about whether the user is a realm admin
+     * Updates Evergage about the account ID of the user
+     */
+    updateEvergageAccountID = () => {
+        if (_.has(this.props, 'accountId')) {
+            this._aaq.push(['setCustomField', 'accountId', this.props.accountId, 'request']);
+        }
+    };
+
+    /**
+     * Updates Evergage about whether the user is an Account admin
      */
     updateEvergageAccountAdminStatus = () => {
         if (this.props.currentUserId && _.has(this.props, 'isAccountAdmin')) {
-            this._aaq.push(['setCustomField', 'is_account_admin', this.props.isAccountAdmin, 'request']);
+            this._aaq.push(['setCustomField', 'has_app_admin', this.props.isAccountAdmin, 'request']);
         }
     };
 
@@ -73,6 +82,7 @@ export class GovernanceAnalytics extends Component {
     };
 
     governanceUpdateFunctions = [
+        this.updateEvergageAccountID,
         this.updateEvergageAccountAdminStatus,
         this.updateEvergageRealmAdminStatus,
         this.updateEvergageSubdomainName,
@@ -91,7 +101,7 @@ export class GovernanceAnalytics extends Component {
                        userId={this.props.currentUserId}
                        accountId={this.props.accountId}
                        subdomainName={this.props.subdomainName}
-                       isAccountAdmin={this.props.isAccountAdmin}
+                       isAdmin={this.props.isAccountAdmin}
                        isRealmAdmin={this.props.isRealmAdmin}
                        totalItems={this.props.totalItems}
                        paidUsers={this.props.paidUsers}
