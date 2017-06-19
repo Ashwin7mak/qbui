@@ -11,7 +11,7 @@ const mockConnectDropTarget = component => component;
 let DroppableComponent;
 let component;
 
-describe('DroppableFormElement', () => {
+describe('DroppableElement', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
