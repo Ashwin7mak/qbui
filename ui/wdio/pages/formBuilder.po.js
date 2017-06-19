@@ -1,10 +1,10 @@
+'use strict';
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
-
-let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
 
@@ -35,8 +35,6 @@ class formBuilderPage {
 
     get fieldProperty_Required() {
         // REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
-        // to get its state, use getRequiredCheckboxState
-        // to set its state, use setRequiredCheckboxState
         return browser.element('.checkboxPropertyContainer .checkbox');
     }
 
@@ -169,10 +167,13 @@ class formBuilderPage {
 
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
+        this.cancelBtn.waitForVisible();
         this.cancelBtn.click();
         while (!formsPO.viewFormContainerEl.isExisting()) {
             this.dirtyForm_Dismiss();
         }
+        //Need this to wait for leftNav and record to load back again
+        browser.pause(e2eConsts.mediumWaitTimeMs);
         return this;
     }
 
@@ -224,7 +225,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        this.firstField.waitForExist();
+        this.firstField.waitForVisible();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
@@ -280,6 +281,9 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
+        //Need to stabilize the menu
+        browser.pause(e2eConsts.shortWaitTimeMs);
+        topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
         // this.firstField.waitForExist();
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
