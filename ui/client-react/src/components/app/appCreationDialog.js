@@ -51,12 +51,13 @@ export class AppCreationDialog extends React.Component {
 }
 
 AppCreationDialog.propTypes = {
-    hideAppCreationDialog: PropTypes.func.isRequired
+    hideAppCreationDialog: PropTypes.func.isRequired,
+    appDialogOpen: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
     return {
-        appDialogOpen: _.get(state.appBuilder, 'dialogOpen')
+        appDialogOpen: _.get(state.appBuilder, 'dialogOpen', false)
     };
 };
 
