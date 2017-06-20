@@ -34,6 +34,7 @@ import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
 import TableCreationDialog from '../table/tableCreationDialog';
+import AppCreationDialog from '../app/appCreationDialog';
 
 import AppUtils from '../../utils/appUtils';
 
@@ -498,6 +499,7 @@ export const Nav = React.createClass({
             }
 
             {selectedAppId && <TableCreationDialog app={selectedApp} onTableCreated={this.tableCreated}/>}
+            {<AppCreationDialog />}
 
         </div>);
     },
