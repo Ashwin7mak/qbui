@@ -33,7 +33,7 @@ const headerTarget = {
             if ((sourceProps.label !== targetProps.label) && sourceProps.label && targetProps.onHover) {
                 // if both labels are present, we want to swap to columns already in the table
                 targetProps.onHover(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
-            } else {
+            } else if (sourceProps.onHover) {
                 // if not present, we are dragging a token in and want to call the source's onHover
                 sourceProps.onHover(targetProps, sourceProps);
             }

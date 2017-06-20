@@ -53,7 +53,13 @@ export class ReportFieldSelectMenu extends Component {
                     return {
                         onHover: props.onHover,
                         title: props.title,
-                        type: props.type
+                        type: props.type,
+                        relatedField: {
+                            name: props.title,
+                            datatypeAttributes: {
+                                type: props.type
+                            }
+                        }
                     };
                 }),
                 onHover: (((dropTargetProps, dragItemProps) => {
