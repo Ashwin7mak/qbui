@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {MemoryRouter} from 'react-router-dom';
 import {BuilderWrapper, __RewireAPI__ as BuilderWrapperRewireAPI}  from '../../../src/components/builder/builderWrapper';
-
+import jasmineEnzyme from 'jasmine-enzyme';
 import {mount} from 'enzyme';
 
 import _ from 'lodash';
@@ -29,20 +28,22 @@ const defaultProps = {
 };
 let props = {};
 
-var MockGlobalActions = React.createClass({
+const MockGlobalActions = React.createClass({
     render: function() {
         return (
             <div>Global Actions</div>
         );
     }
 });
-var MockTableReadyDialog = React.createClass({
+const MockTableReadyDialog = React.createClass({
     render: function() {
         return (
             <div>Table Ready Dialog</div>
         );
     }
 });
+
+const MockLocale = {getMessage: messageKey => messageKey};
 
 function setSpyOn() {
     spyOn(props, 'getApp').and.callThrough();
@@ -57,12 +58,13 @@ function resetSpyOn() {
 }
 
 describe('BuilderWrapper tests', () => {
-    'use strict';
     let component;
 
     beforeEach(() => {
+        jasmineEnzyme();
         BuilderWrapperRewireAPI.__Rewire__('GlobalActions', MockGlobalActions);
         BuilderWrapperRewireAPI.__Rewire__('TableReadyDialog', MockTableReadyDialog);
+        BuilderWrapperRewireAPI.__Rewire__('Locale', MockLocale);
     });
 
     afterEach(() => {
@@ -102,6 +104,17 @@ describe('BuilderWrapper tests', () => {
         component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
         expect(component).toBeDefined();
         expect(props.getApp).toHaveBeenCalled();
+    });
+
+    it('renders an automation route with the correct title', () => {
+        props.location.pathname = '/some/automation/path';
+        props = _.clone(defaultProps);
+        setSpyOn();
+
+        component = mount(<MemoryRouter><BuilderWrapper {...props}/></MemoryRouter>);
+        expect(component).toBeDefined();
+        expect(props.getApp).toHaveBeenCalled();
+        expect(component.find(BuilderWrapper).find('TopNav')).toHaveProp('title', 'automation.automationBuilder.modify');
     });
 
     it('test render of child routes', () => {
