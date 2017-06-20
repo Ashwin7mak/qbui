@@ -6,6 +6,7 @@
     'use strict';
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     module.exports = Object.create(e2ePageBase, {
         center: {
@@ -37,7 +38,7 @@
         },
         modifyThisForm: {
             get: function() {
-                return browser.element('.topNav .modifyForm');
+                return browser.element('.configMenu .modifyForm');
             }
         },
         //Report issue option in Feedback button
@@ -161,6 +162,31 @@
                 return this.topNavToggleHamburgerEl.click();
             }
         },
+
+        /**
+         * Method to verify settings drop down
+         */
+        clickOnSettingsBtn : {value: function() {
+            this.settingsBtn.waitForVisible();
+            //Click on settings gear Icon on table global actions
+            this.settingsBtn.click();
+            //Need this for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            return expect(browser.element('.menuHeader').getAttribute('textContent')).toContain('Settings');
+        }},
+
+        /**
+         * Method to click on table settings and properties link under tables gear icon in global actions
+         */
+        clickOnModifyFormLink : {value: function() {
+            this.clickOnSettingsBtn();
+            //Click on table properties and settings link
+            this.modifyThisForm.waitForVisible();
+            this.modifyThisForm.click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            return browser.element('.formTable .formElement.field').waitForVisible();
+        }},
 
     });
 }());

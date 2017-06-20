@@ -3,6 +3,13 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {AutomationListRoute, __RewireAPI__ as AutomationListRouteRewireAPI}  from '../../src/components/automation/settings/automationListRoute';
 import {MemoryRouter, Link} from 'react-router-dom';
+import TestUtils from 'react-addons-test-utils';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
 
 const sampleApp = {id: 'app1', tables: []};
 const sampleAuto1 = {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL"};
@@ -12,6 +19,7 @@ const sampleAuto3 = {id: 'auto3', name: 'Auto 3', active: false, type: "CUSTOM"}
 const props = {
     app: sampleApp,
     loadAutomations: (context, appId) => {},
+    testAutomation: (automationId) => {},
     automations: []
 };
 
@@ -55,7 +63,7 @@ describe('AutomationListRoute', () => {
     describe('AutomationListRoute without automations', () => {
         beforeEach(() => {
             jasmineEnzyme();
-            component = mount(<AutomationListRoute {...props}/>);
+            component = shallow(<AutomationListRoute {...props}/>);
         });
 
         afterEach(() => {
@@ -73,30 +81,18 @@ describe('AutomationListRoute', () => {
     });
 
     describe('AutomationListRoute with automations', () => {
-        beforeEach(() => {
+        it('test render of automations grid', () => {
             jasmineEnzyme();
-            component = mount(<MemoryRouter><AutomationListRoute {...propsWithAutos}/></MemoryRouter>);
+            const initialState = {};
+            const store = mockStore(initialState);
+            component = shallow(
+                <Provider store={store}>
+                    <AutomationListRoute
+                        {...propsWithAutos}
+                    />
+                </Provider>
+            );
+            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         });
-
-        afterEach(() => {
-        });
-
-        it('test table contains automations', () => {
-            let autoTDs = component.find("td");
-            expect(autoTDs.length).toEqual(6);
-        });
-
-        it('test names and active status of automations', () => {
-            let autoTDs = component.find("td");
-
-            let i = 0;
-            expect(autoTDs.at(i++).find(Link)).toHaveText("Auto 1");
-            expect(autoTDs.at(i++)).toHaveText("Yes");
-            expect(autoTDs.at(i++)).not.toBeEmpty();
-            expect(autoTDs.at(i++).find(Link)).toHaveText("Auto 2");
-            expect(autoTDs.at(i++)).toHaveText("No");
-            expect(autoTDs.at(i++)).not.toBeEmpty();
-        });
-
     });
 });

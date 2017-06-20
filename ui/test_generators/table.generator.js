@@ -15,6 +15,7 @@
     var DATA_TYPE_CONST = 'dataType';
     var DATA_ATTR_CONST = 'dataAttr';
     var MULTICHOICE_CONST = 'multipleChoice';
+    var DEFAULTVAL_CONST = 'defaultValue';
     var REQUIRED_CONST = 'required';
     var UNIQUE_CONST = 'unique';
 
@@ -312,6 +313,10 @@
             if (fieldNameToTypeMap[fieldName][UNIQUE_CONST]) {
                 uniqueSetting = fieldNameToTypeMap[fieldName][UNIQUE_CONST];
             }
+            var defaultsVal;
+            if (fieldNameToTypeMap[fieldName][DEFAULTVAL_CONST]) {
+                defaultsVal = fieldNameToTypeMap[fieldName][DEFAULTVAL_CONST];
+            }
 
             if (fieldName.includes('User')) {
                 field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
@@ -333,6 +338,9 @@
             }
             if (uniqueSetting !== undefined) {
                 field.unique = uniqueSetting;
+            }
+            if (defaultsVal !== undefined) {
+                field.defaultValue = Object.assign({}, defaultsVal);
             }
 
             builderInstance.withField(field);
