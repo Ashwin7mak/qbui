@@ -202,7 +202,8 @@ export default {
                 feedbackMenuButton: "Donnez votre avis",
                 feedbackMenuTitle: "Retour d'information",
                 reportFeedBackButton: "Signaler un problème",
-                feedbackTooltip: "Partagez des idées et des problèmes"
+                feedbackTooltip: "Partagez des idées et des problèmes",
+                helpTooltip: "Aidez-moi",
             }
         },
         fields: {
@@ -825,7 +826,11 @@ export default {
             addUser: "ajouter",
             selectAUser:"Sélectionnez un utilisateur",
             selectUsers: "Sélectionnez les utilisateurs",
-            assignRole: "Attribuer un rôle"
+            assignRole: "Attribuer un rôle",
+            searchPromptText: "Tapez pour rechercher",
+            name: "Prénom",
+            role: "Rôle",
+            userName: "Nom d'utilisateur"
         }
     }
 };

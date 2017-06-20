@@ -827,7 +827,11 @@ export default {
             addUser: "hinzufügen",
             selectAUser:"Wählen Sie einen Benutzer aus",
             selectUsers: "Benutzer auswählen",
-            assignRole: "Rolle zuweisen"
+            assignRole: "Rolle zuweisen",
+            searchPromptText: "Tippe um zu suchen",
+            name: "Name",
+            role: "Rolle",
+            userName: "Benutzername"
         }
     }
 };

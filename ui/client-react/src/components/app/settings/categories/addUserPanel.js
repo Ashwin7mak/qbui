@@ -82,6 +82,7 @@ class addUserPanel extends React.Component {
                             searchUsers={this.props.searchUsers}
                             isValid={this.props.isValid}
                             existingUsers={this.props.existingUsers}
+                            searchPromptText={Locale.getMessage('addUserToApp.searchPromptText')}
                             ref={(fieldValueEditor) => {this.fieldValueEditor = fieldValueEditor;}}
                         />
                     </dd>

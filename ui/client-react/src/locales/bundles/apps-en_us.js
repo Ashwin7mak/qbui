@@ -836,7 +836,11 @@ export default {
             addUser: "add",
             selectAUser:"Select a user",
             selectUsers: "Select users",
-            assignRole: "Assign role"
+            assignRole: "Assign role",
+            searchPromptText: "Type to search",
+            name: "Name",
+            role: "Role",
+            userName: "User name"
         }
     }
 };
