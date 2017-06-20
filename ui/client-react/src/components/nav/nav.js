@@ -3,7 +3,6 @@ import {Route} from 'react-router-dom';
 
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
-import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import {enterBuilderMode, updateReportRedirectRoute} from '../../../src/actions/reportBuilderActions';
@@ -34,10 +33,6 @@ import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId,
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
-import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 
 import AppUtils from '../../utils/appUtils';
@@ -467,8 +462,6 @@ export const Nav = React.createClass({
                 />
                 {this.props.routes &&
                 <div className="mainContent" >
-                    <TempMainErrorMessages apps={appsList} appsLoading={isAppsLoading} selectedAppId={selectedAppId} />
-
                     <Switch>
                         { this.props.routes.map((route, i) => {
                                 //insert the child route passed in by the router
