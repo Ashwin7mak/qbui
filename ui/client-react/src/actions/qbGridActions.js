@@ -12,10 +12,3 @@ export const draggingColumnEnd = () => {
         type: types.DRAGGING_COLUMN_END
     };
 };
-
-export const setCollapsedGroups = collapsedGroups => {
-    return {
-        type: types.SET_COLLAPSED_GROUPS,
-        content: {collapsedGroups}
-    }
-};

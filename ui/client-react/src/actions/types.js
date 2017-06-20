@@ -124,7 +124,6 @@ export const EXIT_BUILDER_MODE = 'EXIT_BUILDER_MODE';
 //  ******** qbGrid actions ********
 export const DRAGGING_COLUMN_START = 'DRAGGING_COLUMN_START';
 export const DRAGGING_COLUMN_END = 'DRAGGING_COLUMN_END';
-export const SET_COLLAPSED_GROUPS = 'SET_COLLAPSED_GROUPS';
 
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';

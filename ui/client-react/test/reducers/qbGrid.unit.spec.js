@@ -7,7 +7,6 @@ const sourceLabel = 'source';
 
 function initializeState() {
     initialState = {
-        collapsedGroups: [],
         labelBeingDragged: '',
         isDragging: false
     };
@@ -34,11 +33,5 @@ describe('reportBuilder reducer', () => {
         const state = reducer(initialState, {type: types.DRAGGING_COLUMN_END});
         expect(state.labelBeingDragged).toEqual('');
         expect(state.isDragging).toBeFalsy();
-    });
-
-    it('SET_COLLAPSED_GROUPS sets collapsedGroups to the new collapsed group', () => {
-        const newCollapsedGroups = [];
-        const state = reducer(initialState, {type: types.SET_COLLAPSED_GROUPS, content: {collapsedGroups: newCollapsedGroups}});
-        expect(state.collapsedGroups).toEqual(newCollapsedGroups);
     });
 });

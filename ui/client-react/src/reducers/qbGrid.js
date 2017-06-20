@@ -2,7 +2,6 @@ import * as types from '../actions/types';
 
 const qbGrid = (
     state = {
-        collapsedGroups: [],
         labelBeingDragged: '',
         isDragging: false
     }, action) => {
@@ -20,12 +19,6 @@ const qbGrid = (
             ...state,
             isDragging: false,
             labelBeingDragged: ''
-        }
-    }
-    case types.SET_COLLAPSED_GROUPS: {
-        return {
-            ...state,
-            collapsedGroups: action.content.collapsedGroups
         }
     }
     default:

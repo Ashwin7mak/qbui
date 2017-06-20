@@ -9,7 +9,7 @@ import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
-import {setCollapsedGroups, draggingColumnStart, draggingColumnEnd} from '../../../actions/qbGridActions';
+import {draggingColumnStart, draggingColumnEnd} from '../../../actions/qbGridActions';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 import Logger from 'APP/utils/logger';
 const logger = new Logger();
@@ -462,16 +462,9 @@ QbGrid.defaultProps = {
     showRowActionsColumn: true
 };
 
-const mapStateToProps = (state) => {
-    return {
-        collapsedGroups: state.qbGrid.collapsedGroups
-    }
-};
-
 const mapDispatchToProps = {
-    setCollapsedGroups,
     draggingColumnStart,
     draggingColumnEnd
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(QbGrid);
+export default connect(null, mapDispatchToProps)(QbGrid);
