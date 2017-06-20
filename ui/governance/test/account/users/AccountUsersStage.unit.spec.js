@@ -1,9 +1,10 @@
 import React from "react";
 import {mount} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import AccountUsersStage from "../../../src/account/users/AccountUsersStage";
+import AccountUsersStage, {__RewireAPI__ as AccountUsersStageRewireAPI} from "../../../src/account/users/AccountUsersStage";
 import Locale from "../../../../reuse/client/src/locales/locale";
 import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
+import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../../src/account/users/AccountUsersReducer";
 
 let component;
 
@@ -12,10 +13,12 @@ describe('AccountUsersStage', () => {
 
     beforeEach(() => {
         jasmineEnzyme();
+        AccountUsersStageRewireAPI.__Rewire__('AccountUsersStage', () => {return <div></div>;});
         GovernanceBundleLoader.changeLocale('en-us');
     });
 
     afterEach(() => {
+        AccountUsersStageRewireAPI.__ResetDependency__('AccountUsersStage');
         GovernanceBundleLoader.changeLocale('en-us');
     });
 
