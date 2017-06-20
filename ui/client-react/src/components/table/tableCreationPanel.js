@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import DialogFieldInput from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
+import {DIALOG_FIELD_INPUT_COMPONENT_TYPE} from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Locale from '../../locales/locales';
 import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
@@ -237,7 +238,7 @@ class TableCreationPanel extends React.Component {
                                       placeholder={Locale.getMessage("tableCreation.descriptionPlaceholder")}
                                       value={this.props.tableInfo && this.props.tableInfo.description ? this.props.tableInfo.description.value : ""}
                                       onChange={this.updateTableProperty}
-                                      component="textarea"
+                                      component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="7"/>
                 </div>
             </div>);

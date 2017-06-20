@@ -6,6 +6,10 @@ import * as CompConstants from '../../../../../client-react/src/constants/compon
 
 import './dialogFieldInput.scss';
 
+export const DIALOG_FIELD_INPUT_COMPONENT_TYPE = {
+    textarea: 'textarea'
+};
+
 /**
  * DialogFieldInput is used for the multiStepDialog which is currently being used to create
  * new tables and new apps.

@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import DialogFieldInput from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
+import {DIALOG_FIELD_INPUT_COMPONENT_TYPE} from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 import Locale from '../../locales/locales';
 import _ from 'lodash';
 
@@ -27,7 +28,7 @@ class AppCreationPanel extends React.Component {
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
                                       className="appCreationPanel"
                                       name="description"
-                                      component="textarea"
+                                      component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3"/>
                 </div>
             </div>);
