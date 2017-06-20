@@ -59,6 +59,10 @@ export const createApp = (app) => {
     };
 };
 
-export const showAppCreationDialog = () => {
-    return types.SHOW_APP_CREATION_DIALOG;
-};
+export const showAppCreationDialog = () => ({
+    type: types.SHOW_APP_CREATION_DIALOG
+});
+
+export const hideAppCreationDialog = () => ({
+    type: types.HIDE_APP_CREATION_DIALOG
+});

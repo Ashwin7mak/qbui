@@ -22,6 +22,7 @@ export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
 //  **** App Builder actions ****
 export const SHOW_APP_CREATION_DIALOG = 'SHOW_APP_CREATION_DIALOG';
+export const HIDE_APP_CREATION_DIALOG = 'HIDE_APP_CREATION_DIALOG';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';

@@ -103,6 +103,10 @@ describe('App Actions event functions', () => {
     });
 
     it('create showAppCreationDialog event', () => {
-        expect(AppBuilderActions.showAppCreationDialog()).toEqual(types.SHOW_APP_CREATION_DIALOG);
+        expect(AppBuilderActions.showAppCreationDialog()).toEqual({type: types.SHOW_APP_CREATION_DIALOG});
+    });
+
+    it('create hideAppCreationDialog event', () => {
+        expect(AppBuilderActions.hideAppCreationDialog()).toEqual({type: types.HIDE_APP_CREATION_DIALOG});
     });
 });

@@ -66,7 +66,8 @@ const actions = {
     onClickCancel() {},
     onClickEdit() {},
     onClickSave() {},
-    onClickToggle() {}
+    onClickToggle() {},
+    onClickTestRow() {}
 };
 
 const testCellRenderer = (props) => {
@@ -196,11 +197,10 @@ describe('QbGrid', () => {
 
     describe('getCheckboxHeader', () => {
         it('has a checked checkbox when all rows are selected', () => {
-            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={rowIds} areAllRowsSelected={true} />);
+            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={rowIds} areAllRowsSelected={true}/>);
             instance = component.instance();
 
             let headerComponent = instance.getCheckboxHeader();
-
             expect(shallow(headerComponent).find('input')).toBeChecked();
         });
 
@@ -247,9 +247,21 @@ describe('QbGrid', () => {
                 onClickDeleteRowIcon: actions.onClickDelete,
                 onClickEditRowIcon: actions.onClickEdit,
                 onClickSaveRow: actions.onClickSave,
+                onClickTestRowIcon: actions.onClickTestRow(),
                 onClickToggleSelectedRow: instance.onClickToggleSelectedRow,
-                rowId: editingRow.id
+                rowId: editingRow.id,
+                isMultiSelectDisabled: false
             });
+        });
+
+        it('gets a row action cell without multiselect', () => {
+            component = shallow(<QbGrid
+                {...requiredProps}
+                isMultiSelectDisabled={true}
+            />);
+            instance = component.instance();
+            let actionCell = instance.getActionsCell(null, {rowData: editingRow});
+            expect(actionCell.props.isMultiSelectDisabled).toBe(true);
         });
     });
 
@@ -263,6 +275,7 @@ describe('QbGrid', () => {
             });
         });
     });
+
 
     describe('getPlaceholderCellProps', () => {
         it('adds the isPlaceholderCell prop to placeholder cells so the component can add the appropriate class', () => {
