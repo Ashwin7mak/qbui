@@ -78,7 +78,7 @@
          */
         // it is a known issue that browser.keys does not work for E2E on safari and FF so they will not run these tests
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
-            it('Add new user by "Screename" to application with default role "Participant" ', function () {
+            it('Add new user by "Screename" to application with default role "Participant" ', function() {
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
@@ -101,7 +101,7 @@
             /**
              * Adds a new user by Username, assigns role and verifies the user was added.
              */
-            it('Add new user by "First Name" to application with role "Viewer" ', function () {
+            it('Add new user by "First Name" to application with role "Viewer" ', function() {
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
@@ -121,7 +121,7 @@
             /**
              * Adds a new user by Username, assigns role and verifies the user was added.
              */
-            it('Add new user by "Email" to application with role "Administrator" ', function () {
+            it('Add new user by "Email" to application with role "Administrator" ', function() {
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
@@ -143,7 +143,7 @@
             /**
              * Adds a new user by Username, assigns role and verifies the user was added.
              */
-            it('Add new user by "Last Name" to application with role "none" ', function () {
+            it('Add new user by "Last Name" to application with role "none" ', function() {
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
@@ -165,7 +165,7 @@
             /**
              * Attempts to add a invalid user and cancels
              */
-            it('Add new user by invalid user to application and cancel', function () {
+            it('Add new user by invalid user to application and cancel', function() {
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();

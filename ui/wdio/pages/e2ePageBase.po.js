@@ -139,6 +139,10 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //If user report is not visible then again navigate to user page
+        if (!browser.element('.userManagementContainer').isExisting()) {
+            this.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, appId));
+        }
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
     };
