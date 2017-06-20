@@ -30,7 +30,9 @@ export const EmbeddedReportToolsAndContent = React.createClass({
         /** The fid of the field containing the foreignkey. */
         detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         /** The value entered in the foreignkey field. */
-        detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        /** The display value entered in the foreignkey field. */
+        detailKeyDisplay: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     },
 
     /**
