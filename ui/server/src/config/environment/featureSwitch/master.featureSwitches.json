@@ -1,14 +1,15 @@
 [
   {
-    "name": "Feature B",
+    "name": "Feature A",
     "defaultOn": false,
+    "description": "description",
     "RealmsOveride":[
       {
         "realmId": "1234567",
         "overrideStateOn": true
       },
       {
-        "realmId": "id",
+        "realmId": "987654",
         "overrideStateOn": true
       }
     ]

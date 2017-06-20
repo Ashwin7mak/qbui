@@ -66,9 +66,13 @@
 
 
         /**
-         * configuration based feature switches
+         * Override master.featureSwitches by overriding specific features in
+         * local.override.featureSwitches.json.sample.
+         * Note: overrides are overridden based on their names, ensure overrides
+         * have same name including spacing.
          */
-        featureSwitchConfig: './local.featureSwitches.json'
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/local.override.featureSwitches.json.sample'
+        //masterOverrideTurnFeaturesOn:true
 
     };
 }());

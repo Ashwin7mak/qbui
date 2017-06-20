@@ -1,0 +1,7 @@
+[
+  {
+    "name": "Feature A",
+    "defaultOn": false,
+    "description": "description"
+  }
+]

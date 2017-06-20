@@ -107,10 +107,16 @@
         // Tracing host name
         tracingHost: ''
 
+
         /**
-         * configuration based feature switches
+         * Override master.featureSwitches by overriding specific features in
+         * local.override.featureSwitches.json.
+         * Note: overrides are overridden based on their names, ensure overrides
+         * have same name including spacing.
          */
-        featureSwitchConfig: './featureSwitch/local.featureSwitches.json'
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/local.override.featureSwitches.json'
+        // masterOverrideTurnFeaturesOn:true
+
 
         /**
          * AWS api gateway to lambda functions for feature switches
