@@ -5,7 +5,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import DefaultTopNavGlobalActions from 'REUSE/components/topNav/defaultTopNavGlobalActions';
 import UserFeedBack from 'REUSE/components/topNav/supportingComponents/userFeedBack';
 import HelpButton from 'REUSE/components/topNav/supportingComponents/helpButton';
-import UserDropDown from 'REUSE/components/topNav/supportingComponents/userDropDown';
+import {UserDropDown, __RewireAPI__ as UserDropDownRewireAPI} from 'REUSE/components/topNav/supportingComponents/userDropDown';
 import ReGlobalAction from 'REUSE/components/globalAction/globalAction';
 
 let component;

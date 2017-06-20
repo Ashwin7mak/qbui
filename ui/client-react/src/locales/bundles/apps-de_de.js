@@ -198,7 +198,8 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen"
+                feedbackTooltip: "Teilen Sie Ideen und Fragen",
+                helpTooltip: "Hilfe"
             }
 
         },

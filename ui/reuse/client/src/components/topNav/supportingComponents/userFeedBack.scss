@@ -20,8 +20,15 @@
             }
         }
     }
+    .feedBackTitle {
+        display: none
+    }
 
     @include small-breakpoint {
+        .feedBackTitle {
+            display: inline
+        }
+
         .dropdown-menu {
 
             margin-bottom: 0px;

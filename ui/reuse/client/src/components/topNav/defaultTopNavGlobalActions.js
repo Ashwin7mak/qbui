@@ -8,7 +8,6 @@ import HelpButton from './supportingComponents/helpButton';
 // Needs to be refactored once these components are added to the reuse library
 import Locale from 'APP/locales/locales';
 import WindowLocationUtils from 'APP/utils/windowLocationUtils';
-import Breakpoints from 'APP/utils/breakpoints';
 // IMPORTING FROM CLIENT REACT
 
 import './defaultTopNavGlobalActions.scss';
@@ -29,51 +28,6 @@ class DefaultTopNavGlobalActions extends Component {
      * (MenuItem href is currently incompatible with react-fastclick) */
     signOutUser = () => {
         WindowLocationUtils.update(signOutHref);
-    }
-
-    /**
-     * helper method to create the help button
-     * created this because its one of the buttons that is reordered depending on breakpoint!
-     * @returns {XML}
-     */
-    createHelpButton = () => {
-        return (<li className="link globalAction"><HelpButton/></li>);
-    }
-
-    /**
-     * helper method to create the user dropdown
-     * created this because its one of the buttons that is reordered depending on breakpoint!
-     * @returns {XML}
-     */
-    createUserDropdown = () => {
-        return (
-            <li className="link globalAction withDropdown">
-                <UserDropDown
-                    supportedLocales={Locale.getSupportedLocales()}
-                    changeLocale={this.props.changeLocale}
-                    startTabIndex={this.props.startTabIndex}
-                    signOutUser={this.signOutUser}
-                    app={this.props.app}
-                    shouldOpenMenusUp={this.props.shouldOpenMenusUp}
-                    position = {"center"}
-                />
-            </li>
-        );
-    }
-
-    /**
-     * depending on breakpoint we want to order the globalNav buttons differently
-     * use this method to reorder as needed!
-     * @returns {Array}
-     */
-    orderByBreakpoint = () => {
-        let buttons = [];
-        if (Breakpoints.isNotSmallBreakpoint()) {
-            buttons.push(this.createHelpButton(), this.createUserDropdown());
-        } else {
-            buttons.push(this.createUserDropdown(), this.createHelpButton());
-        }
-        return buttons;
     }
 
     //if small break point need to add margin-top to feedback, help
@@ -100,7 +54,18 @@ class DefaultTopNavGlobalActions extends Component {
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     ))}
-                    {this.orderByBreakpoint()}
+                    <li className="link globalAction"><HelpButton/></li>
+                    <li className="link globalAction withDropdown">
+                        <UserDropDown
+                            supportedLocales={Locale.getSupportedLocales()}
+                            changeLocale={this.props.changeLocale}
+                            startTabIndex={this.props.startTabIndex}
+                            signOutUser={this.signOutUser}
+                            app={this.props.app}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                            position = {"center"}
+                        />
+                    </li>
                 </ul>
             </div>
         );

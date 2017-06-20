@@ -4,7 +4,6 @@ import DropDown from 'react-bootstrap/lib/Dropdown';
 import Icon from 'REUSE/components/icon/icon';
 import {I18nMessage} from 'REUSE/utils/i18nMessage';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 import {getLoggedInUserDropDownText} from '../../../reducers/userReducer';
 import './userDropDown.scss';
 
@@ -53,8 +52,6 @@ class UserDropDown extends Component {
         ];
     }
 
-    //new method to determine what should show?
-
     render() {
         const {startTabIndex, app, signOutUser} = this.props;
 
@@ -100,7 +97,7 @@ const mapStateToProps = (state) => ({
     loggedInUserDisplay: getLoggedInUserDropDownText(state)
 });
 
-export default withRouter(connect(
+export default connect(
     mapStateToProps,
     null
-)(UserDropDown));
+)(UserDropDown);

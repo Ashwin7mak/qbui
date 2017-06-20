@@ -16,15 +16,18 @@
         display: inline-block;
         text-overflow: ellipsis;
         max-width: 40ch;
+        vertical-align: middle;
+        line-height: 40px;
     }
 
     .userDropDownIcon {
-        margin-bottom: 33px;
+        vertical-align: middle;
     }
 
     @include small-breakpoint {
         .navLabel {
             max-width: 20ch;
+            line-height: unset;
         }
 
         .userDropDownIcon {
