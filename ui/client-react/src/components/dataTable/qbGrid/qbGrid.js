@@ -10,11 +10,9 @@ import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import {setCollapsedGroups, draggingColumnStart, draggingColumnEnd} from '../../../actions/qbGridActions';
-
+import CollapsedGroupsHelper from './collapsedGroupHelper';
 import Logger from 'APP/utils/logger';
 const logger = new Logger();
-
-import CollapsedGroupsHelper from './collapsedGroupHelper';
 
 import './qbGrid.scss';
 
@@ -443,7 +441,14 @@ QbGrid.propTypes = {
     showRowActionsColumn: PropTypes.bool,
 
     // relationship phase-1, will need remove when we allow editing
-    phase1: PropTypes.bool
+    phase1: PropTypes.bool,
+
+    // Custom propery renderer for automation grid
+    rowActionsRenderer: PropTypes.func,
+
+    /**
+     * Not all Grids require multiselect, this option will hide the checkboxes if set to false */
+    isMultiSelectDisabled: PropTypes.bool
 };
 
 QbGrid.defaultProps = {
