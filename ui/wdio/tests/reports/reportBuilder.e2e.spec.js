@@ -133,7 +133,7 @@
                 reportBuilderPO.clickFieldToken();
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+                expect(columnsListInitial.length + 1).toEqual(columnsListUpdated.length);
                 // clicks on cancel
                 reportBuilderPO.clickCancel();
                 // column label list must be equal to the initial list without the added column
@@ -151,7 +151,7 @@
 
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
                 // clicks on cancel
                 reportBuilderPO.clickCancel();
 
@@ -169,7 +169,7 @@
                 reportBuilderPO.clickFieldToken();
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
                 // clicks on cancel
                 reportBuilderPO.clickCancel();
 
@@ -256,6 +256,8 @@
                 expect(currentColumns[3]).toEqual(newColumnLabels[2]);
                 // save
                 reportBuilderPO.clickSave();
+
+                reportBuilderPO.getReportContainer();
                 // verify that the table has retained its saved state
                 let columnsAfterSave = reportBuilderPO.getHeaderLabels();
                 // verify that the hidden column is not in the table
@@ -275,12 +277,14 @@
                 reportBuilderPO.clickFieldToken();
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+                expect(columnsListInitial.length + 1).toEqual(columnsListUpdated.length);
                 // clicks on save
                 reportBuilderPO.clickSave();
+
+                reportBuilderPO.getReportContainer();
                 // column label list must be equal to the initial list with the added column
                 let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+                expect(columnsListInitial.length + 1).toEqual(columnsAfterReopen.length);
             });
 
             it('verify add column by add before and SAVE', function() {
@@ -293,13 +297,13 @@
 
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
                 // clicks on save
                 reportBuilderPO.clickSave();
-
+                reportBuilderPO.getReportContainer();
                 // column label list must be equal to the initial list with the added column
                 let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+                expect(columnsListInitial.length + 1).toEqual(columnsAfterReopen.length);
             });
 
             it('verify add column by add after and SAVE', function() {
@@ -311,13 +315,14 @@
                 reportBuilderPO.clickFieldToken();
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
                 // clicks on save
                 reportBuilderPO.clickSave();
+                reportBuilderPO.getReportContainer();
 
                 // column label list must be equal to the initial list without the added column
                 let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+                expect(columnsListInitial.length + 1).toEqual(columnsAfterReopen.length);
             });
         }
 
@@ -339,6 +344,8 @@
                 expect(hiddenColumns).not.toContain(toBeHiddenColumnLabel);
                 // click save
                 reportBuilderPO.clickSave();
+
+                reportBuilderPO.getReportContainer();
                 // store the list of columns after hiding and canceling
                 let columnsAfterHideAndSave = reportBuilderPO.getHeaderLabels();
                 // verify that columns are the same length

@@ -75,12 +75,17 @@ class reportBuilderPage {
         return '.qbHeaderCell:nth-child(' + index + ')';
     }
 
+    getReportContainer() {
+        // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
+        let reportContainerIsExisting = browser.waitForExist('.reportContainer');
+        return reportContainerIsExisting;
+    }
+
     clickCancel() {
         this.cancelButton.waitForVisible();
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
         this.dirtyForm_Dismiss();
-        browser.pause(fiveSeconds);
         return this;
     }
 
@@ -104,44 +109,32 @@ class reportBuilderPage {
     clickSave() {
         this.saveButton.waitForVisible();
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
-        this.saveButton.click();
-        browser.pause(fiveSeconds);
-        return this;
+        return this.saveButton.click();
     }
 
     clickFieldToken() {
         this.fieldToken.waitForVisible();
-        this.fieldToken.click();
-        browser.pause(fiveSeconds);
-        return this;
+        return this.fieldToken.click();
     }
 
     clickHeaderMenu() {
         this.headerMenu.waitForVisible();
-        this.headerMenu.click();
-        browser.pause(fiveSeconds);
-        return this;
+        return this.headerMenu.click();
     }
 
     clickHideMenuOption() {
         this.hideMenuOption.waitForVisible();
-        this.hideMenuOption.click();
-        browser.pause(fiveSeconds);
-        return this;
+        return this.hideMenuOption.click();
     }
 
     clickAddColumnBeforeMenuOption() {
         this.addColumnBeforeMenuOption.waitForVisible();
-        this.addColumnBeforeMenuOption.click();
-        browser.pause(fiveSeconds);
-        return this;
+        return this.addColumnBeforeMenuOption.click();
     }
 
     clickAddColumnAfterMenuOption() {
         this.addColumnAfterMenuOption.waitForVisible();
-        this.addColumnAfterMenuOption.click();
-        browser.pause(fiveSeconds);
-        return this;
+        return this.addColumnAfterMenuOption.click();
     }
 
     /**
@@ -150,12 +143,10 @@ class reportBuilderPage {
     enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
-        browser.pause(fiveSeconds);
         reportContentPO.settingsIcon.click();
         topNavPO.modifyThisForm.waitForExist(fiveSeconds);
         topNavPO.modifyThisForm.click();
         this.reportBuilderContainer.waitForVisible();
-        browser.pause(fiveSeconds);
         return this;
     }
 
@@ -165,7 +156,6 @@ class reportBuilderPage {
     reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
-        browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
     }
 
