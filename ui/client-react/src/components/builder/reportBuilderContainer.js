@@ -50,7 +50,13 @@ export class ReportBuilderContainer extends Component {
         this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams);
     }
 
-    getReportBuilderContent(columns, rows) {
+    moveColumn = (source, target) => {
+        if (source.label && target.label) {
+            this.props.moveColumn(CONTEXT.REPORT.NAV, source.label, target.label);
+        }
+    };
+
+    getReportBuilderContent = (columns, rows) => {
         let {appId, tblId, rptId} = this.props.match.params;
         let sortFids = (this.props.reportData && this.props.reportData.data) ? this.props.reportData.data.sortFids : [];
         let loading = columns.length === 0;
@@ -60,7 +66,7 @@ export class ReportBuilderContainer extends Component {
                 numberOfColumns={columns.length}
                 columns={columns}
                 rows={rows}
-                onHoverColumn={this.props.moveColumn}
+                onHoverColumn={this.moveColumn}
                 headerRenderer={DraggableQbHeaderCell}
                 cellRenderer={ReportCell}
                 menuComponent={ReportColumnHeaderMenu}

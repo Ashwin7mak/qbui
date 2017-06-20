@@ -3,7 +3,6 @@ import {getEmptyImage} from 'react-dnd-html5-backend';
 import {DragSource, DropTarget} from 'react-dnd';
 import shallowCompare from 'react-addons-shallow-compare';
 import DraggableItemTypes from '../../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
-import {CONTEXT} from '../../../actions/context';
 
 const headerSource = {
     beginDrag(props) {
@@ -29,7 +28,7 @@ const headerTarget = {
     hover(targetProps, monitor) {
         const sourceProps = monitor.getItem();
         if ((sourceProps.label !== targetProps.label) && targetProps.onHover) {
-            targetProps.onHover(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
+            targetProps.onHover(sourceProps, targetProps);
         }
     }
 };
