@@ -1,5 +1,6 @@
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
+import * as PerformanceTimingActions from "../../../src/analytics/performanceTimingActions";
 import {__RewireAPI__ as AccountUsersActionsRewireAPI} from "../../../src/account/users/AccountUsersActions";
 import * as types from "../../../src/app/actionTypes";
 import * as gridTypes from "../../../src/common/grid/standardGridActionTypes";
@@ -113,8 +114,11 @@ describe('Account Users Actions Tests', () => {
             const expectedActions = [
                 {type: types.GET_USERS_FETCHING},
                 {type: types.GET_USERS_SUCCESS, users: ACCOUNT_USERS_DATA(true)},
-                {type: gridTypes.SET_TOTAL_ITEMS, gridId: mockGridID, totalItems: ACCOUNT_USERS_DATA().length}
+                {type: gridTypes.SET_TOTAL_ITEMS, gridId: mockGridID, totalItems: ACCOUNT_USERS_DATA().length},
+                {type: types.GET_TOTAL_TIME, payload: jasmine.any(String)},
+                {type: types.GET_TOTAL_GRID_LOAD_TIME, payload: jasmine.any(String)}
             ];
+
             // expect the dummy data when the fetchAccountUsers is called
             const store = mockStore({});
             return store.dispatch(AccountUsersActions.fetchAccountUsers(mockAccountId, mockGridID, mockItemsPerPage))
