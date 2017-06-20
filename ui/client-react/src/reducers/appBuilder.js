@@ -62,7 +62,7 @@ export const getAppNameValue = (state) => _.get(state.appBuilder, 'name', '');
 export const getAppDescriptionValue = (state) => _.get(state.appBuilder, 'description', '');
 
 export const getNewAppInfo = (state) => {
-    if (_.get(state.appBuilder, 'name').length > 0) {
+    if (_.get(state.appBuilder, 'name', '').length > 0) {
         return {
             name: _.get(state.appBuilder, 'name')
         };
