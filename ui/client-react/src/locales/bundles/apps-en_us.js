@@ -59,8 +59,8 @@ export default {
                 userRemovingError: "Error removing user",
                 emailBody: "Email body goes here",
                 emailSubject: "Email subject goes here",
-                settingsRole: "Change {value} role",
-                settingsRoles: "Change {value} roles"
+                changeUserRole: "Change {value} role",
+                changeUserRoles: "Change {value} roles"
             }
         },
         appMenu: {

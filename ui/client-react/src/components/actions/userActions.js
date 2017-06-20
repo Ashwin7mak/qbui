@@ -121,7 +121,7 @@ export class UserActions extends React.Component {
                     <div className="actionIcons">
                         <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true} identifier="mail"/>
                         {this.getEmailAction()}
-                        <ActionIcon icon="change-user-role" tip={this.getSelectionTip(numSelectedRows > 1 ? "app.users.settingsRoles" : "app.users.settingsRole")} onClick={()=>{this.props.toggleChangeUserRoleDialog(true);}} identifier="change-user-role"/>
+                        <ActionIcon icon="change-user-role" tip={this.getSelectionTip(numSelectedRows > 1 ? "app.users.changeUserRoles" : "app.users.changeUserRole")} onClick={()=>{this.props.toggleChangeUserRoleDialog(true);}} identifier="change-user-role"/>
                         <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(numSelectedRows > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
                    </div>
                 </div>
