@@ -45,7 +45,8 @@ export const createApp = (app) => {
 
             appService.createApp(app).then(
                 response => {
-                    dispatch(createAppSuccess(response));
+                    //  TODO: not sure if this is the correct response in include in event
+                    dispatch(createAppSuccess(response.data));
                     resolve(response);
                 }
             ).catch(error => {
