@@ -51,78 +51,85 @@ describe('App Creation Dialog', () => {
         expect(state.dialogOpen).toBe(false);
     });
 
-    describe('App Creation Selector', () => {
-        describe('getIsDialogOpenState', () => {
-            it('will return true for dialogOpen state if it is true', () => {
-                let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockState);
+    it('will set the app name property', () => {
+        const state = reducer(storeState, {type: types.SET_APP_PROPERTY, property: 'name', value: 'mockAppName'});
 
-                expect(openDialog).toEqual(true);
-            });
+        expect(state.name).toBe('mockAppName');
+    });
+});
 
-            it('will return false for dialogOpen if there is no dialogOpen state', () => {
-                let openDialog = AppBuilderSelectors.getIsDialogOpenState({});
 
-                expect(openDialog).toEqual(false);
-            });
+describe('App Creation Selector', () => {
+    describe('getIsDialogOpenState', () => {
+        it('will return true for dialogOpen state if it is true', () => {
+            let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockState);
 
-            it('will return false for dialogOpen if the dialogOpen state is false', () => {
-                let mockCloneState = _.cloneDeep(mockState);
-                mockCloneState.appBuilder.dialogOpen = false;
-                let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockCloneState);
-
-                expect(openDialog).toEqual(false);
-            });
+            expect(openDialog).toEqual(true);
         });
 
-        describe('getAppNameValue', () => {
-            it('will return app name if there is an app name', () => {
-                let result = AppBuilderSelectors.getAppNameValue(mockState);
+        it('will return false for dialogOpen if there is no dialogOpen state', () => {
+            let openDialog = AppBuilderSelectors.getIsDialogOpenState({});
 
-                expect(result).toEqual(mockState.appBuilder.name);
-            });
-
-            it('will return an empty string if there is no app name', () => {
-                let cloneMockState = _.cloneDeep(mockState);
-                cloneMockState.appBuilder.name = '';
-
-                let result = AppBuilderSelectors.getAppNameValue(cloneMockState);
-
-                expect(result).toEqual('');
-            });
+            expect(openDialog).toEqual(false);
         });
 
-        describe('getAppDescriptionValue', () => {
-            it('will return app description if there is an app description', () => {
-                let result = AppBuilderSelectors.getAppDescriptionValue(mockState);
+        it('will return false for dialogOpen if the dialogOpen state is false', () => {
+            let mockCloneState = _.cloneDeep(mockState);
+            mockCloneState.appBuilder.dialogOpen = false;
+            let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockCloneState);
 
-                expect(result).toEqual(mockState.appBuilder.description);
-            });
+            expect(openDialog).toEqual(false);
+        });
+    });
 
-            it('will return an empty string if there is no app description', () => {
-                let cloneMockState = _.cloneDeep(mockState);
-                cloneMockState.appBuilder.description = '';
+    describe('getAppNameValue', () => {
+        it('will return app name if there is an app name', () => {
+            let result = AppBuilderSelectors.getAppNameValue(mockState);
 
-                let result = AppBuilderSelectors.getAppDescriptionValue(cloneMockState);
-
-                expect(result).toEqual('');
-            });
+            expect(result).toEqual(mockState.appBuilder.name);
         });
 
-        describe('getNewAppInfo', () => {
-            it('will return a new app object if there is an app obejct', () => {
-                let result = AppBuilderSelectors.getNewAppInfo(mockState);
+        it('will return an empty string if there is no app name', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name = '';
 
-                expect(result).toEqual({name: 'Mock App Name'});
-            });
+            let result = AppBuilderSelectors.getAppNameValue(cloneMockState);
 
-            it('will return null if there is no new app object', () => {
-                let cloneMockState = _.cloneDeep(mockState);
-                cloneMockState.appBuilder.name = '';
+            expect(result).toEqual('');
+        });
+    });
 
-                let result = AppBuilderSelectors.getNewAppInfo(cloneMockState);
+    describe('getAppDescriptionValue', () => {
+        it('will return app description if there is an app description', () => {
+            let result = AppBuilderSelectors.getAppDescriptionValue(mockState);
 
-                expect(result).toEqual(null);
-            });
+            expect(result).toEqual(mockState.appBuilder.description);
+        });
+
+        it('will return an empty string if there is no app description', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.description = '';
+
+            let result = AppBuilderSelectors.getAppDescriptionValue(cloneMockState);
+
+            expect(result).toEqual('');
+        });
+    });
+
+    describe('getNewAppInfo', () => {
+        it('will return a new app object if there is an app obejct', () => {
+            let result = AppBuilderSelectors.getNewAppInfo(mockState);
+
+            expect(result).toEqual({name: 'Mock App Name'});
+        });
+
+        it('will return null if there is no new app object', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name = '';
+
+            let result = AppBuilderSelectors.getNewAppInfo(cloneMockState);
+
+            expect(result).toEqual(null);
         });
     });
 });
