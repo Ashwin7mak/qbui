@@ -19,6 +19,7 @@ const childReportId = 3;
 const childTableName = 'child table';
 const detailKeyFid = 4;
 const detailKeyValue = 5;
+const detailKeyDisplay = 5;
 const type = Consts.REPORT_FORM_TYPE.CHILD_REPORT;
 const childReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
@@ -32,6 +33,7 @@ const MockChildReport = (props) => {
         childTableName,
         detailKeyFid,
         detailKeyValue,
+        detailKeyDisplay,
         type
     }, props);
 
@@ -87,7 +89,8 @@ describe('ChildReport', () => {
         "childTableId",
         "childReportId",
         "detailKeyFid",
-        "detailKeyValue"
+        "detailKeyValue",
+        "detailKeyDisplay"
     ].forEach(prop => {
         it(`does not render if ${prop} is not defined`, () => {
             const props = {};

@@ -136,9 +136,10 @@ describe('UrlUtils', () => {
             let rptId = '3';
             let detailKeyFid = '4';
             let detailKeyValue = '5';
-            let url = StringUtils.format(CHILD_REPORT_LINK, [appId, tblId, rptId, detailKeyFid, detailKeyValue]);
+            let detailKeyDisplay = '6';
+            let url = StringUtils.format(CHILD_REPORT_LINK, [appId, tblId, rptId, detailKeyFid, detailKeyValue, detailKeyDisplay]);
 
-            expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, detailKeyFid, detailKeyValue)).toEqual(url);
+            expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, detailKeyFid, detailKeyValue, detailKeyDisplay)).toEqual(url);
         });
     });
 
