@@ -627,6 +627,10 @@ $edit-icon-font-size: 18px;
         .qbRow:last-of-type.willEdit .qbCell:not(.stickyCell) {
             border-bottom: 1px solid $grid-onpencil-row-border-color;
         }
+
+        .qbRow:first-of-type.willEdit .qbCell:not(.stickyCell):not(.placeholderCell) {
+            border-top: none;
+        }
     }
 
 

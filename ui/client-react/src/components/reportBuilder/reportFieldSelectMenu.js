@@ -7,7 +7,7 @@ import {refreshFieldSelectMenu, addColumnFromExistingField} from '../../actions/
 import ReportUtils from '../../utils/reportUtils';
 import FieldFormats from '../../utils/fieldFormats';
 
-import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
+import {TokenInMenu} from '../../../../reuse/client/src/components/dragAndDrop/elementToken/tokenInMenu';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
 import Locale from '../../../../reuse/client/src/locales/locale';
 import SideMenu from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
@@ -73,7 +73,7 @@ export class ReportFieldSelectMenu extends Component {
                     </div>
                     }
                 <ListOfElements
-                    renderer={FieldTokenInMenu}
+                    renderer={TokenInMenu}
                     elements={elements}
                 />
             </div>

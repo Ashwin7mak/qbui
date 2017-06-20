@@ -47,7 +47,8 @@ export class QbGrid extends Component {
      * @returns {XML}
      */
     getActionsCell = (_cellDataRow, rowProps) => {
-        return <RowActions
+        const RowActionsRenderer = this.props.rowActionsRenderer || RowActions;
+        return <RowActionsRenderer
             rowId={rowProps.rowData.id}
             onClickDeleteRowIcon={this.props.onClickDeleteIcon}
             onClickEditRowIcon={this.props.onClickEditIcon}
@@ -62,7 +63,9 @@ export class QbGrid extends Component {
             onClickAddNewRow={this.onClickAddNewRow}
             onClickSaveRow={this.props.onClickSaveRow}
             onClickToggleSelectedRow={this.onClickToggleSelectedRow}
-        />;
+            onClickTestRowIcon={this.props.onClickTestRowIcon}
+            isMultiSelectDisabled={this.props.isMultiSelectDisabled}
+            />;
     };
 
     /**
@@ -180,12 +183,12 @@ export class QbGrid extends Component {
 
         return (
             <div className="actionHeader">
-                <input
+                {!this.props.isMultiSelectDisabled ? <input
                     type="checkbox"
                     className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
                     checked={this.props.areAllRowsSelected}
                     onChange={this.props.onClickToggleSelectAllRows}
-                />
+                /> : null }
                 {collapseAllIcon}
             </div>
         );
@@ -283,13 +286,17 @@ export class QbGrid extends Component {
         } else {
             columns = this.getVisibleColumns();
         }
-        return (
 
+        let className = "qbGrid";
+        className += this.props.isInlineEditOpen ? ' inlineEditing' : '';
+        className += this.props.isMultiSelectDisabled ? ' isMultiSelectDisabled' : '';
+
+        return (
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.QB_GRID}>
                 <Table.Provider
                     ref="qbGridTable"
                     // Turn off hover effects when in inline editing mode
-                    className={`qbGrid${this.props.isInlineEditOpen ? ' inlineEditing' : ''}`}
+                    className={className}
                     columns={columns}
                     onScroll={this.handleScroll}
                     components={{

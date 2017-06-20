@@ -7,10 +7,7 @@ import './facet.scss';
 // IMPORTS FROM CLIENT REACT
 import thwartClicksWrapper from '../../../../../client-react/src/components/hoc/thwartClicksWrapper';
 import closeOnEscape from '../../../../../client-react/src/components/hoc/catchEscapeKey';
-import Logger from "../../../../../client-react/src/utils/logger";
 // IMPORTS FROM CLIENT REACT
-
-let logger = new Logger();
 
 /**
  * NOTE: Most likely, you want to use the `GenericFacetMenu`. Check out that component first before using this one.
