@@ -46,18 +46,26 @@ const appBuilder = (
     case types.SET_APP_PROPERTY:
         return {
             ...state,
-            [action.property]: {[action.property]: action.value}
+            [action.property]: action.value
         };
     default:
         return state;
     }
 };
+
 export default appBuilder;
 
 export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'dialogOpen', false);
 
-export const getAppNameValue = (state) => _.get(state.appBuilder, 'name.name', '');
+export const getAppNameValue = (state) => _.get(state.appBuilder, 'name', '');
 
-export const getAppDescriptionValue = (state) => _.get(state.appBuilder, 'description.description', '');
+export const getAppDescriptionValue = (state) => _.get(state.appBuilder, 'description', '');
 
-export const getNewAppInfo = (state) => _.get(state.appBuilder, 'name', undefined);
+export const getNewAppInfo = (state) => {
+    if (_.get(state.appBuilder, 'name').length > 0) {
+        return {
+            name: _.get(state.appBuilder, 'name')
+        };
+    }
+    return null;
+};
