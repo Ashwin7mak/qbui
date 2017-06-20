@@ -44,7 +44,7 @@ export class DraggableQbHeaderCell extends Component {
      */
     shouldComponentUpdate(nextProps) {
         return shallowCompare(this, nextProps);
-    };
+    }
 
     componentDidMount() {
         this.props.connectDragPreview(getEmptyImage());

@@ -29,7 +29,7 @@ export class QbGrid extends Component {
          */
         this.state = {
             collapsedGroups: []
-        }
+        };
     }
 
     componentWillMount() {

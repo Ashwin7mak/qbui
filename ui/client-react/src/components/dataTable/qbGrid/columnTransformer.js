@@ -73,8 +73,8 @@ class ColumnTransformer {
                 onDragEnd,
                 relatedField: {
                     name: this.headerLabel,
-                    datatypeAttributes: this.headerMenuProps && this.headerMenuProps.fieldDef
-                    && this.headerMenuProps.fieldDef.datatypeAttributes
+                    datatypeAttributes: this.headerMenuProps && this.headerMenuProps.fieldDef &&
+                    this.headerMenuProps.fieldDef.datatypeAttributes
                 }
 
             }

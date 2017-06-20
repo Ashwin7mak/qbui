@@ -12,14 +12,14 @@ const qbGrid = (
             ...state,
             isDragging: true,
             labelBeingDragged: action.content.sourceLabel
-        }
+        };
     }
     case types.DRAGGING_COLUMN_END: {
         return {
             ...state,
             isDragging: false,
             labelBeingDragged: ''
-        }
+        };
     }
     default:
         // return existing state by default in redux
