@@ -79,7 +79,7 @@ class DialogFieldInput extends React.Component {
         // create input (either input or textarea bsed on component)
         const input = React.createElement(this.props.component, inputProps);
 
-        const classes = [`${this.props.className} dialogField`];
+        const classes = [this.props.className, "dialogField"];
 
         const showValidationError = this.showValidationError();
         if (showValidationError) {
