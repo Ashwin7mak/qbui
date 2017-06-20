@@ -76,7 +76,6 @@ AccountUsersStage.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
         paidUsers: getTotalPaidUsers(state),
         deniedUsers: getTotalDeniedUsers(state),
