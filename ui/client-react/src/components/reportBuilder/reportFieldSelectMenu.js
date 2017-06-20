@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import {CONTEXT} from '../../actions/context';
-import {refreshFieldSelectMenu, addColumnFromExistingField, insertPlaceholderColumn} from '../../actions/reportBuilderActions';
-
+import {refreshFieldSelectMenu, addColumnFromExistingField, insertPlaceholderColumn, moveColumn} from '../../actions/reportBuilderActions';
+import {draggingColumnStart, draggingColumnEnd} from '../../actions/qbGridActions';
 import ReportUtils from '../../utils/reportUtils';
 import FieldFormats from '../../utils/fieldFormats';
 
@@ -49,6 +49,10 @@ export class ReportFieldSelectMenu extends Component {
                 onClick: (() => {
                     this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[i], this.props.menu.addBeforeColumn);
                 }),
+                onHoverBeforeAdded: (() => {
+                    this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[i], this.props.menu.addBeforeColumn);
+                    this.props.draggingColumnStart(hiddenColumns[i].headerName);
+                }),
                 beginDrag: ((props) => {
                     return {
                         onHover: props.onHover,
@@ -62,11 +66,13 @@ export class ReportFieldSelectMenu extends Component {
                         }
                     };
                 }),
-                onHover: (((dropTargetProps, dragItemProps) => {
-                    this.props.insertPlaceholderColumn(CONTEXT.REPORT.NAV, dropTargetProps.label, true);
+                onHover: (((targetProps, sourceProps) => {
+                    if ((sourceProps.title !== targetProps.label) && sourceProps.title && targetProps.label) {
+                        this.props.moveColumn(CONTEXT.REPORT.NAV, sourceProps.title, targetProps.label);
+                    }
                 })),
                 endDrag: (() => {
-                    this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[i], this.props.menu.addBeforeColumn);
+                    this.props.draggingColumnEnd();
                 })
             });
         }
@@ -136,7 +142,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     refreshFieldSelectMenu,
     addColumnFromExistingField,
-    insertPlaceholderColumn
+    insertPlaceholderColumn,
+    moveColumn,
+    draggingColumnStart,
+    draggingColumnEnd
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportFieldSelectMenu);

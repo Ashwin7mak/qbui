@@ -16,7 +16,7 @@ const headerSource = {
     },
 
     isDragging(sourceProps, monitor) {
-        return sourceProps.label === monitor.getItem().label;
+        return sourceProps.label === monitor.getItem().label || sourceProps.label === monitor.getItem().title;
     },
 
     endDrag(props) {
