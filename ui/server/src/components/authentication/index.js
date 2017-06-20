@@ -50,15 +50,27 @@
 
                 // If federated then SignOut of the legacy and land in that legacy sign in page
                 if (isFederated && req.headers.accept !== consts.APPLICATION_JSON && req.headers.accept !== consts.APPLICATION_XML) {
-                    // Clear the federation cookies because we are no longer signed in here
-                    res.cookie(consts.COOKIES.ISFEDERATED, "", {domain: hostname, expires: new Date(0)});
-                    res.clearCookie(consts.COOKIES.ISFEDERATED);
 
-                    // Redirect
-                    var redirectUrl = requestHelper.getLegacyRealmBase(req) + routeHelper.getSignoutLegacyStackRoute();
-                    res.redirect(redirectUrl);
-                    log.info({req: req, res: res});
-                    return;
+                    // Pull the legacy stack url from configs
+                    let legacyBase = requestHelper.getLegacyHost();
+
+                    if (legacyBase && legacyBase.length !== 0) {
+
+                        if (legacyBase.charAt(0) === '.') {
+                            legacyBase = legacyBase.substring(1);
+                        }
+
+                        // Clear the federation cookies because we are no longer signed in here
+                        res.cookie(consts.COOKIES.ISFEDERATED, "", {domain: legacyBase, expires: new Date(0), httpOnly: true, secure: true});
+                        res.clearCookie(consts.COOKIES.ISFEDERATED);
+
+                        // Redirect
+                        var redirectUrl = requestHelper.getLegacyRealmBase(req) + routeHelper.getSignoutLegacyStackRoute();
+                        res.redirect(redirectUrl);
+                        log.info({req: req, res: res});
+
+                        return;
+                    }
                 }
 
                 processAuthentication(req, res, viewFilePath, statusCode, message);

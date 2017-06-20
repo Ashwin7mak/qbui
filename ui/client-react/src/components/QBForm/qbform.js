@@ -8,23 +8,20 @@ import FieldElement from './fieldElement';
 import Locale from '../../locales/locales';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
-import DragAndDropField from '../formBuilder/dragAndDropField';
 import ChildReport from './childReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
 import {removeFieldFromForm} from '../../actions/formActions';
+import {updateFormAnimationState} from '../../actions/animationActions';
 import * as SchemaConsts from "../../constants/schema";
-
 import * as FieldsReducer from '../../reducers/fields';
 
 import {connect} from 'react-redux';
 
 import './qbform.scss';
 import './tabs.scss';
-
-const DragDropFieldElement = DragAndDropField(FieldElement);
 
 /*
  Custom QuickBase Form component that has 1 property.
@@ -61,7 +58,14 @@ export const QBForm = React.createClass({
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
         hasAnimation: PropTypes.bool,
-        goToParent: React.PropTypes.func, //handles drill down to parent
+
+        /**
+         * By default, the form uses FieldElement to render each field. You can optionally pass in a different renderer. */
+        alternateFieldRenderer: PropTypes.func,
+
+        /** handles drill down to parent */
+        goToParent: React.PropTypes.func,
+
         uniqueId: React.PropTypes.string
     },
 
@@ -282,11 +286,11 @@ export const QBForm = React.createClass({
     },
 
     setAnimationRunning() {
-        return this.props.updateAnimationState(true);
+        return this.props.updateFormAnimationState(true);
     },
 
     setAnimationStopped() {
-        return this.props.updateAnimationState(false);
+        return this.props.updateFormAnimationState(false);
     },
 
     /**
@@ -412,7 +416,7 @@ export const QBForm = React.createClass({
         }
         */
 
-        let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
+        let CurrentFieldElement = this.props.alternateFieldRenderer || FieldElement;
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -422,14 +426,7 @@ export const QBForm = React.createClass({
         return (
             <div key={containingElement.id} className="formElementContainer">
                 <CurrentFieldElement
-                    selectedField={this.props.selectedField}
                     tabIndex={tabIndex}
-                    location={location}
-                    orderIndex={FormFieldElement.orderIndex}
-                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
-                    beginDrag={this.props.beginDrag}
-                    handleFormReorder={this.props.handleFormReorder}
-                    containingElement={containingElement}
                     element={FormFieldElement}
                     key={`fieldElement-${containingElement.id}`}
                     idKey={"fe-" + this.props.idKey}
@@ -448,12 +445,17 @@ export const QBForm = React.createClass({
                     tblId={this.props.tblId}
                     appUsers={this.props.appUsers}
                     recId={recId}
-                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, this.props.app.id, this.props.tblId, relatedField, location);}}
                     goToParent={goToParent}
                     masterTableId={masterTableId}
                     masterAppId={masterAppId}
                     masterFieldId={masterFieldId}
+                    location={location}
+
+                    // Props below required for LinkToFieldValueEditor in builder
+                    // TODO:: Refactor LinkToRecordFieldValueEditor builder functions to custom component
+                    // Also see props added to FieldValueEditor
+                    formId={this.props.formId}
+                    removeFieldFromForm={this.props.removeFieldFromForm}
                 />
             </div>
         );
@@ -464,7 +466,6 @@ export const QBForm = React.createClass({
      * @returns {XML}
      * @param id
      * @param FormTextElement
-     * @param style
      */
     createTextElement(id, FormTextElement) {
         return <div key={id} className="formElementContainer formElement text">{FormTextElement.displayText}</div>;
@@ -475,7 +476,6 @@ export const QBForm = React.createClass({
      * @returns {XML}
      * @param id
      * @param ReferenceElement
-     * @param style
      */
     createChildReportElement(id, ReferenceElement) {
         // Find the relationship object for this element.
@@ -668,14 +668,13 @@ function buildUserField(id, fieldValue, name) {
 
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || ownProps.uniqueId || CONTEXT.FORM.VIEW);
-    let currentForm = _.get(state, `forms[${formId}]`, {});
+
     return {
         fields: state.fields,
-        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
         relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : []
     };
 };
 
 export default connect(
-    mapStateToProps, {removeFieldFromForm}
+    mapStateToProps, {removeFieldFromForm, updateFormAnimationState}
 )(QBForm);

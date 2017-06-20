@@ -1,20 +1,7 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import DraggableItemTypes from './draggableItemTypes';
 import {DropTarget} from 'react-dnd';
-
-/**
- * State is connected directly to this dragDrop component to improve performance of drag and drop animations.
- * If the animation state is passed from above, the whole screen re-renders on every reorder animation. This way, only
- * the affected DOM nodes are re-rendered.
- * @param state
- * @returns {{isAnimating: (boolean|*)}}
- */
-const mapStateToProps = state => {
-    return {
-        isAnimating: state.animation.isFormAnimating
-    };
-};
 
 /**
  * Describes what happens during drop events. The drop function returns an object that can be accessed in the EndDrag
@@ -25,10 +12,7 @@ const mapStateToProps = state => {
  */
 const formTarget = {
     drop(props) {
-        return {
-            containingElement: props.containingElement,
-            location: props.location
-        };
+        return props;
     },
 
     hover(dropTargetProps, monitor) {
@@ -44,11 +28,6 @@ const formTarget = {
 
         if (dragItemProps.onHover) {
             dragItemProps.onHover(dropTargetProps, dragItemProps);
-        }
-
-        // Don't allow dropping an element on itself (determined by the unique id attached to each element)
-        if (!dragItemProps.containingElement || dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
-            dropTargetProps.handleFormReorder(dropTargetProps.location, dragItemProps);
         }
     }
 };
@@ -70,13 +49,23 @@ function collect(connectDropSource, monitor) {
 
 /**
  * A higher order component that will return a droppable version of the element passed in.
- * @param FieldComponent
+ * @param ReactComponent
  * @param connected Whether or not to connect this component to the redux state. Pass in false to help with unit testing.
+ * @param types The types of elements this droppable field will accept.
  * @returns {*}
  * @constructor
  */
-const DroppableElement = (FieldComponent, connected = true) => {
-    class component extends React.Component {
+const DroppableElement = (ReactComponent, types = [DraggableItemTypes.FIELD]) => {
+    class component extends Component {
+        static propTypes = {
+            /**
+             * onHover will not be called if isAnimating is true. This can be helpful to prevent double onHovers while
+             * elments are animating to their new position. */
+            isAnimating: PropTypes.bool,
+
+            onHover: PropTypes.func
+        };
+
         render() {
             const {connectDropTarget, isOver, canDrop} = this.props;
 
@@ -85,25 +74,14 @@ const DroppableElement = (FieldComponent, connected = true) => {
 
             return connectDropTarget(
                 <div className={classNames.join(' ')}>
-                    <FieldComponent {...this.props} />
+                    <ReactComponent {...this.props} />
                 </div>
             );
         }
     }
 
-    component.propTypes = {
-        location: PropTypes.object.isRequired,
-        containingElement: PropTypes.object.isRequired
-    };
-
     // The first argument could be an array of draggable types (e.g., could add tabs and sections here)
-    let wrappedComponent = DropTarget(DraggableItemTypes.FIELD, formTarget, collect)(component);
-
-    if (connected) {
-        return connect(mapStateToProps)(wrappedComponent);
-    }
-
-    return wrappedComponent;
+    return DropTarget(types, formTarget, collect)(component);
 };
 
 export default DroppableElement;
