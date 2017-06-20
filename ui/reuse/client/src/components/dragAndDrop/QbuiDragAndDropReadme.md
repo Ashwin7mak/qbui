@@ -15,7 +15,7 @@ handled the drag and drop behavior. This pattern followed many of the available 
 1. The methods that handled drag and drop had many arguments to account for the various states a component might be in while dragging.
 2. The entire chain of components, from the top level down to the draggable component, had a lot of knowledge about the data types
 and structure for the draggable items. This was necessary to pass the correct props back up to the top-level parent component.
-3. It was difficult to make modifications to the behavior without touching every component in the change. Extending or modifying
+3. It was difficult to make modifications to the behavior without touching every component in the chain. Extending or modifying
 behavior was difficult.
 4. Creating special cases was almost impossible without odd hacks. If one item in a list needed to be different, it was hard to intercept
 the methods in time to redirect the behavior.
