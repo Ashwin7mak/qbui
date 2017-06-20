@@ -347,15 +347,17 @@ export const RecordRoute = React.createClass({
      */
     openRecordForEdit() {
         if (this.props.isDrawerContext) {
-            // FIXME: embeddedReport => embeddedReportId
             const urlPath = this.props.match.url;
-            const {appId, tblId, rptId, recordId, embeddedReport} = this.props.match.params;
+            const {appId, tblId, recordId} = this.props.match.params;
+
+            // TODO: we should pass the actual rptId as rptId and separately pass in embeddedReport
+            let rptId = _.get(this.props, `embeddedReports[this.props.match.params.rptId].rptId`, 0);
 
             const queries = {
                 editRec: recordId,
                 detailAppId: appId,
                 detailTableId: tblId,
-                detailReportId: 0 //FIXME use real rptId
+                detailReportId: rptId
             };
             const link = WindowHistoryUtils.pushWithQueries(queries);
         } else {
