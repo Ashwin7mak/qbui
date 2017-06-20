@@ -25,3 +25,11 @@ export const GET_USERS_SUCCESS =  `${REQUEST_SUCCESS}GET_USERS`;
 export const REQUEST_CONTEXT_FETCHING = `${REQUEST_FETCHING}REQUEST_CONTEXT`;
 export const REQUEST_CONTEXT_FAILURE = `${REQUEST_FAILURE}REQUEST_CONTEXT`;
 export const REQUEST_CONTEXT_SUCCESS = `${REQUEST_SUCCESS}REQUEST_CONTEXT`;
+
+/**
+ * Actions for retrieving the total time from when the user hits the url,
+ * until the grid is actually loaded with the data and also the total time
+ * taken to load the grid
+ */
+export const GET_TOTAL_TIME = 'GET_TOTAL_TIME';
+export const GET_TOTAL_GRID_LOAD_TIME = 'GET_TOTAL_GRID_LOAD_TIME';

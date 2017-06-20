@@ -11,6 +11,7 @@ import * as Formatters from "./grid/AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import * as SCHEMACONSTS from "../../../../client-react/src/constants/schema";
 import {FACET_FIELDS} from "../users/grid/AccountUsersGridFacet";
+import {totalTime, gridLoadTime} from "../../analytics/performanceTimingActions";
 
 /**
  * Action when there is successful user from the backend
@@ -224,10 +225,11 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
         let logger = new Logger();
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
+
         const promise = accountUsersService.getAccountUsers(accountId);
 
         dispatch(fetchingAccountUsers());
-
+        let startTime = window.performance.now();
         return promise.then(response => {
             _.each(response.data, item => {
                 item.id = item.uid;
@@ -241,6 +243,11 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
 
             // run through the pipeline and update the grid
             dispatch(doUpdateUsers(gridID, StandardGridState.defaultGridState, itemsPerPage));
+            let endTime = window.performance.now();
+            let totalTimeTaken = (endTime / 1000).toFixed(2) + " seconds";
+            let totalTimeTakenForGrid = ((endTime - startTime) / 1000).toFixed(2) + " seconds";
+            dispatch(totalTime(totalTimeTaken));
+            dispatch(gridLoadTime(totalTimeTakenForGrid));
 
         }).catch(error => {
             dispatch(failedAccountUsers(error));

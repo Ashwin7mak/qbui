@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../src/account/users/AccountUsersReducer";
 import Analytics from "../../../reuse/client/src/components/analytics/analytics";
 import Config from '../../../client-react/src/config/app.config';
-
+import {getTotalLoadingTime, getTotalGridLoadingTime} from "../analytics/performanceTimingReducer";
 
 export class GovernanceAnalytics extends Component {
     // Evergage requires a global variable called _aaq
@@ -81,6 +81,24 @@ export class GovernanceAnalytics extends Component {
         }
     };
 
+    /**
+     * Gets the total time taken from page load to fetching grid data
+     */
+    updateEvergageTotalTimeTaken = () => {
+        if (_.has(this.props, 'totalTimeTaken')) {
+            this._aaq.push(['setCustomField', 'totalTimeTaken', this.props.totalTimeTaken, 'request']);
+        }
+    };
+
+    /**
+     * Gets the total time taken from grid load to fetching grid data
+     */
+    updateEvergageTotalGridTimeTaken = () => {
+        if (_.has(this.props, 'totalGridLoadTime')) {
+            this._aaq.push(['setCustomField', 'totalGridLoadTime', this.props.totalGridLoadTime, 'request']);
+        }
+    };
+
     governanceUpdateFunctions = [
         this.updateEvergageAccountID,
         this.updateEvergageAccountAdminStatus,
@@ -89,12 +107,11 @@ export class GovernanceAnalytics extends Component {
         this.updateEvergageTotalItems,
         this.updateEvergagePaidUsers,
         this.updateEvergageDeniedUsers,
-        this.updateEvergageTotalRealmUsers
+        this.updateEvergageTotalRealmUsers,
+        this.updateEvergageTotalTimeTaken,
+        this.updateEvergageTotalGridTimeTaken
     ];
 
-
-
-    // This component does not display anything.
     render() {
         return (
             <Analytics dataset={Config.evergageDataset}
@@ -151,7 +168,9 @@ const mapStateToProps = (state) => {
         paidUsers: getTotalPaidUsers(state),
         deniedUsers: getTotalDeniedUsers(state),
         deactivatedUsers: getTotalDeactivatedUsers(state),
-        totalRealmUsers: getTotalRealmUsers(state)
+        totalRealmUsers: getTotalRealmUsers(state),
+        totalTimeTaken: getTotalLoadingTime(state),
+        totalGridLoadTime: getTotalGridLoadingTime(state)
     };
 };
 

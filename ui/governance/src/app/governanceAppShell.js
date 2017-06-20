@@ -12,6 +12,7 @@ import GovernanceAnalytics from "../analytics/governanceAnalytics";
 import "./governanceAppShell.scss";
 
 export class GovernanceAppShell extends Component {
+
     render() {
         return (
             <AppShell functionalAreaName="governance">
