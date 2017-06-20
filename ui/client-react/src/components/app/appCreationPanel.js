@@ -44,7 +44,7 @@ export class AppCreationPanel extends React.Component {
                                       value={this.props.appDescription}
                                       onChange={this.updateAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
-                                      rows="3"/>
+                                      rows="3" />
                 </div>
             </div>);
     }
