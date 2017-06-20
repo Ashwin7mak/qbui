@@ -25,13 +25,14 @@ export class AppCreationPanel extends React.Component {
      * @returns {XML}
      */
     render() {
-
+        console.log('appName: ', this.props.appName);
         return (
             <div className="appCreationPanel dialogCreationPanelInfo">
                 <div className="sections">
                     <DialogFieldInput title={Locale.getMessage("appCreation.appNameHeading")}
                                       className="appCreationPanel"
                                       name="name"
+                                      value={this.props.appName}
                                       onChange={this.updateAppProperty}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
@@ -51,6 +52,7 @@ export class AppCreationPanel extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
+        appName: AppBuilderSelectors.getNameValue(state)
     };
 };
 

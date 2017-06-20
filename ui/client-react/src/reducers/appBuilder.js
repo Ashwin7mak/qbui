@@ -40,9 +40,9 @@ const appBuilder = (
         };
 
     case types.SET_APP_PROPERTY:
-        console.log('SET_APP_PROPERTY action: ', action);
         return {
-            ...state
+            ...state,
+            [action.property]: {appName: action.value}
         };
     default:
         return state;
@@ -51,3 +51,5 @@ const appBuilder = (
 export default appBuilder;
 
 export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'dialogOpen', false);
+
+export const getNameValue = (state) => _.get(state.appBuilder, 'name.appName', '');
