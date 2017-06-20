@@ -132,7 +132,7 @@ export const TablePropertiesRoute = React.createClass({
             <div>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
-                <div className="tableInfoPanel">
+                <div className="dialogCreationPanelInfo">
                     <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
                                         iconChooserOpen={this.props.tableProperties.iconChooserOpen}
                                         openIconChooser={this.props.openIconChooser}
