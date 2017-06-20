@@ -2,12 +2,12 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import {CONTEXT} from '../../actions/context';
-import {refreshFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportBuilderActions';
+import {refreshFieldSelectMenu, addColumnFromExistingField, insertPlaceholderColumn} from '../../actions/reportBuilderActions';
 
 import ReportUtils from '../../utils/reportUtils';
 import FieldFormats from '../../utils/fieldFormats';
 
-import {TokenInMenu} from '../../../../reuse/client/src/components/dragAndDrop/elementToken/tokenInMenu';
+import DraggableTokenInMenu from '../../../../reuse/client/src/components/dragAndDrop/elementToken/draggableTokenInMenu';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
 import Locale from '../../../../reuse/client/src/locales/locale';
 import SideMenu from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
@@ -48,6 +48,19 @@ export class ReportFieldSelectMenu extends Component {
                 type: type,
                 onClick: (() => {
                     this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[i], this.props.menu.addBeforeColumn);
+                }),
+                beginDrag: ((props) => {
+                    return {
+                        onHover: props.onHover,
+                        title: props.title,
+                        type: props.type
+                    };
+                }),
+                onHover: (((dropTargetProps, dragItemProps) => {
+                    this.props.insertPlaceholderColumn(CONTEXT.REPORT.NAV, dropTargetProps.label, true);
+                })),
+                endDrag: (() => {
+                    this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[i], this.props.menu.addBeforeColumn);
                 })
             });
         }
@@ -73,7 +86,7 @@ export class ReportFieldSelectMenu extends Component {
                     </div>
                     }
                 <ListOfElements
-                    renderer={TokenInMenu}
+                    renderer={DraggableTokenInMenu}
                     elements={elements}
                 />
             </div>
@@ -114,15 +127,10 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        refreshFieldSelectMenu: (context, appId, tblId) => {
-            dispatch(refreshFieldSelectMenu(context, appId, tblId));
-        },
-        addColumnFromExistingField: (requestedColumn, addBefore) => {
-            dispatch(addColumnFromExistingField(requestedColumn, addBefore));
-        }
-    };
+const mapDispatchToProps = {
+    refreshFieldSelectMenu,
+    addColumnFromExistingField,
+    insertPlaceholderColumn
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportFieldSelectMenu);

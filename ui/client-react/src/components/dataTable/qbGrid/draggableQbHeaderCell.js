@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import {DragSource, DropTarget} from 'react-dnd';
+import _ from 'lodash';
 import shallowCompare from 'react-addons-shallow-compare';
 import DraggableItemTypes from '../../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
 import {CONTEXT} from '../../../actions/context';
@@ -28,8 +29,14 @@ const headerSource = {
 const headerTarget = {
     hover(targetProps, monitor) {
         const sourceProps = monitor.getItem();
-        if ((sourceProps.label !== targetProps.label) && targetProps.onHover) {
-            targetProps.onHover(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
+        if (targetProps.label) {
+            if ((sourceProps.label !== targetProps.label) && sourceProps.label && targetProps.onHover) {
+                // if both labels are present, we want to swap to columns already in the table
+                targetProps.onHover(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
+            } else {
+                // if not present, we are dragging a token in and want to call the source's onHover
+                sourceProps.onHover(targetProps, sourceProps);
+            }
         }
     }
 };
