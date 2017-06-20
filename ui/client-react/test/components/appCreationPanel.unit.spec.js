@@ -14,6 +14,5 @@ describe('AppCreationPanel', () => {
         component = mount(<AppCreationPanel />);
 
         expect(component.find('.appCreationPanel.dialogCreationPanelInfo')).toBePresent();
-        expect(component.find('.appCreationPanel.dialogField').length).toEqual(2);
     });
 });
