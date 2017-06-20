@@ -66,9 +66,6 @@ class DefaultTopNavGlobalActions extends Component {
                             position = {"center"}
                         />
                     </li>
-                    <li className="link globalAction">
-                        <HelpButton link={this.props.helpButtonLink}/>
-                    </li>
                 </ul>
             </div>
         );

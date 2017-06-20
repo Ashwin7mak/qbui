@@ -15,7 +15,7 @@
         white-space: nowrap;
         display: inline-block;
         text-overflow: ellipsis;
-        max-width: 40ch;
+        //max-width: 40ch;
         vertical-align: middle;
         line-height: 40px;
     }
@@ -26,24 +26,27 @@
 
     @include small-breakpoint {
         .navLabel {
-            max-width: 20ch;
+            //max-width: 14ch;
             line-height: unset;
         }
 
         .userDropDownIcon {
-            margin-bottom: 0px;
+            margin-bottom: 0;
         }
 
         .dropdown-menu {
 
-            margin-bottom: 0px;
+            margin-bottom: 0;
             border-radius: 2px;
 
             &:before {
                 all: unset;
             }
-
             &:after {
+                top: 0;
+            }
+
+            &:before {
                 position: absolute;
                 bottom: -6px;
                 left: 9px;
@@ -65,13 +68,13 @@
 
         .dropdown-menu[aria-labelledby="nav-right-dropdown"]{
             &:before {
-                right: auto;
-                left: 9px;
+                right:9px;
+                left:auto;
             }
 
             &:after {
-                right: auto;
-                left: 9px;
+                right:9px;
+                left:auto;
             }
         }
 
