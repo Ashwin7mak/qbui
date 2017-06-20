@@ -5,7 +5,7 @@ import Locale from '../../locales/locales';
 import _ from 'lodash';
 
 import './appCreationPanel.scss';
-import '../table/dialogCreationPanel.scss';
+import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
 class AppCreationPanel extends React.Component {
 

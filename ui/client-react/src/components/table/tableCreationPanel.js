@@ -9,7 +9,7 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
 import _ from 'lodash';
 
-import './dialogCreationPanel.scss';
+import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
 class TableCreationPanel extends React.Component {
 

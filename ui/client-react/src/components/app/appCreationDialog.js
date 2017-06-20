@@ -7,7 +7,7 @@ import * as AppBuilderActions from '../../actions/appBuilderActions';
 import Locale from '../../locales/locales';
 import _ from 'lodash';
 
-import '../table/creationDialog.scss';
+import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
 
 export class AppCreationDialog extends React.Component {
 

@@ -12,7 +12,7 @@ import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 
-import './creationDialog.scss';
+import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
 
 export class TableCreationDialog extends React.Component {
 
