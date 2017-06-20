@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import _ from 'lodash';
 
 const appBuilder = (state = {}, action) => {
     switch (action.type) {
@@ -18,3 +19,5 @@ const appBuilder = (state = {}, action) => {
     }
 };
 export default appBuilder;
+
+export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'dialogOpen', false);

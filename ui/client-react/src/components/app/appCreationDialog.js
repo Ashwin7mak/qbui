@@ -4,6 +4,7 @@ import AppCreationTable from './appCreationPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import * as AppBuilderActions from '../../actions/appBuilderActions';
+import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
 import _ from 'lodash';
 
@@ -57,7 +58,7 @@ AppCreationDialog.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        appDialogOpen: _.get(state.appBuilder, 'dialogOpen', false)
+        appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state)
     };
 };
 
