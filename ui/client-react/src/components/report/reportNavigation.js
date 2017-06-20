@@ -58,15 +58,14 @@ var ReportNavigation = React.createClass({
 
         let navBar = "report.reportNavigationBar";
         if (showComponent) {
-            return (    <Pagination isPreviousDisabled={this.props.pageStart === 1}
+            return (<Pagination isPreviousDisabled={this.props.pageStart === 1}
                                     isNextDisabled={this.props.recordsCount === this.props.pageEnd}
                                     onClickPrevious={this.props.getPreviousReportPage}
                                     onClickNext={this.props.getNextReportPage}
                                     startRecord={this.props.pageStart}
                                     endRecord={this.props.pageEnd}
                                     isHidden={!this.props.reportData}
-                        />
-                    );
+                />);
         }
         return (<div className="spacer"></div>);
     }
