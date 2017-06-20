@@ -13,9 +13,7 @@ import AppUtils from '../../utils/appUtils';
 export const AppsList = React.createClass({
 
     propTypes: {
-        apps: React.PropTypes.array.isRequired,
-        onSelectApp: React.PropTypes.func.isRequired,
-        onCreateNewApp: React.PropTypes.func
+        apps: React.PropTypes.array.isRequired
     },
     getInitialState() {
         return {
@@ -68,21 +66,10 @@ export const AppsList = React.createClass({
     },
 
     /**
-     * is user able to create a new app from the left nav
-     * @returns {*}
-     */
-    allowCreateNewApp() {
-        const app = this.props.getApp(this.props.selectedAppId);
-        return app && AppUtils.hasAdminAccess(app.accessRights);
-    },
-
-    /**
      * open the create app wizard
      */
     createNewApp() {
-        if (this.allowCreateNewApp()) {
-            this.props.showAppCreationDialog();
-        }
+        this.props.showAppCreationDialog();
     },
 
     render() {
