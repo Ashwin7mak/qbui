@@ -26,6 +26,7 @@ export class AppCreationPanel extends React.Component {
      */
     render() {
         console.log('appName: ', this.props.appName);
+        console.log('appDescription: ', this.props.appDescription);
         return (
             <div className="appCreationPanel dialogCreationPanelInfo">
                 <div className="sections">
@@ -41,6 +42,7 @@ export class AppCreationPanel extends React.Component {
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
                                       className="appCreationPanel"
                                       name="description"
+                                      value={this.props.appDescription}
                                       onChange={this.updateAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3"/>
@@ -52,7 +54,8 @@ export class AppCreationPanel extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        appName: AppBuilderSelectors.getNameValue(state)
+        appName: AppBuilderSelectors.getAppNameValue(state),
+        appDescription: AppBuilderSelectors.getAppDescriptionValue(state)
     };
 };
 

@@ -52,6 +52,8 @@ export default appBuilder;
 
 export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'dialogOpen', false);
 
-export const getNameValue = (state) => _.get(state.appBuilder, 'name.name', '');
+export const getAppNameValue = (state) => _.get(state.appBuilder, 'name.name', '');
+
+export const getAppDescriptionValue = (state) => _.get(state.appBuilder, 'description.description', '');
 
 export const getNewAppInfo = (state) => _.get(state.appBuilder, 'name', undefined);
