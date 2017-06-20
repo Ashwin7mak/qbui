@@ -44,7 +44,6 @@ export const createApp = (app) => {
             dispatch(createNewApp());
 
             const appService = new AppService();
-
             appService.createApp(app).then(
                 response => {
                     dispatch(createAppSuccess(response));
