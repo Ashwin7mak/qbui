@@ -91,8 +91,6 @@
                 UsersTablePage.userAddSearcMenu.click();
                 // Click add user
                 modalDialog.modalDialogAddUserBtn.click();
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                expect(modalDialog.modalDialogShareTitle).toContain("Your app has");
                 // Click No Thanks to Share with User
                 modalDialog.modalDialogNoThanksButton.click();
             });
