@@ -182,6 +182,13 @@ describe('Nav Unit tests', () => {
         expect(tableCreationDialog.length).toBe(1);
     });
 
+    it('will not render TableCreation if mockSelectedAppId is null', () => {
+        let component = mount(<Nav {...props}/>);
+
+        let tableCreationDialog = component.find(TableCreationDialogMock);
+        expect(tableCreationDialog.length).toBe(0);
+    });
+
     it('renders the loading screen while no apps are loaded', () => {
         let cloneProps = _.clone(props);
         cloneProps.isAppsLoading = true;
