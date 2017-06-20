@@ -3,7 +3,7 @@ import TokenInMenu from './tokenInMenu';
 import {ENTER_KEY, SPACE_KEY} from '../../keyboardShortcuts/keyCodeConstants';
 import DraggableElement from '../draggableElement';
 
-const FieldToken = DraggableElement(TokenInMenu);
+export const FieldToken = DraggableElement(TokenInMenu);
 
 /**
  * This is a base component that can be composed into custom implementations for dragging specific types of elements
@@ -35,16 +35,16 @@ export class DraggableTokenInMenu extends Component {
         };
     }
 
-    clickToAddToForm = () => {
+    clickToAdd = () => {
         if (this.props.onClickToken) {
             this.props.onClickToken(this.props);
         }
     };
 
-    // Calls the clickToAddToForm method when user uses enter or space key.
+    // Calls the clickToAdd method when user uses enter or space key.
     onEnterClickToAdd = (e) => {
         if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
-            this.clickToAddToForm();
+            this.clickToAdd();
             e.preventDefault();
         }
     };
@@ -81,7 +81,7 @@ export class DraggableTokenInMenu extends Component {
     render() {
         return (
             <div className="fieldTokenInMenuWrapper"
-                 onClick={this.clickToAddToForm}
+                 onClick={this.clickToAdd}
                  tabIndex={this.props.tabIndex}
                  onKeyDown={this.onEnterClickToAdd}>
                 <FieldToken
