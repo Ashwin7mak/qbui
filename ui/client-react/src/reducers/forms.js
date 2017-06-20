@@ -539,12 +539,12 @@ export const getExistingFields = (state, id, appId, tblId) => {
         }
 
         // Skip fields that are already on the form
-        if (_.includes(currentForm.formData.formMeta.fields, field.id)) {
+        if (_.includes(_.get(currentForm, 'formData.formMeta.fields', []), field.id)) {
             return formFields;
         }
 
         // Skip fields that are marked for deletion from schema
-        if (_.includes(currentForm.formData.formMeta.fieldsToDelete, field.id)) {
+        if (_.includes(_.get(currentForm, 'formData.formMeta.fieldsToDelete', []), field.id)) {
             return formFields;
         }
 

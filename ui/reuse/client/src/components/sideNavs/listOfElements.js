@@ -153,7 +153,7 @@ class ListOfElements extends Component {
             document.activeElement.tagName !== "BUTTON") {
             this.listOfElementsContainer.focus();
         }
-    };
+    }
 
     render() {
         return (
