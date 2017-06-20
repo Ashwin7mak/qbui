@@ -40,8 +40,8 @@
         // Left nav new table element
         leftNavNewTableEl:{
             get: function() {
-                browser.element('.newTableItem .iconUISturdy-add-new-stroke').waitForVisible();
-                return browser.element('.newTableItem .iconUISturdy-add-new-stroke');
+                browser.element('.newTable.newItemButton .iconUISturdy-add-new-stroke').waitForVisible();
+                return browser.element('.newTable.newItemButton .iconUISturdy-add-new-stroke');
             }
         },
         // Left nav new table cancle button
@@ -68,15 +68,15 @@
         // Left nav new table fields
         leftNavNewTableFields:{
             get: function() {
-                browser.element('.modal-body .tableField .tableFieldInput').waitForVisible();
-                return browser.elements('.modal-body .tableField .tableFieldInput');
+                browser.element('.modal-body .tableCreationPanel.dialogField .dialogFieldInput').waitForVisible();
+                return browser.elements('.modal-body .tableCreationPanel.dialogField .dialogFieldInput');
             }
         },
         // Left nav new table dropdown icon button
         leftNavNewTableIconSelect:{
             get: function() {
-                browser.element('.modal-body .tableField .iconChooser').waitForVisible();
-                return browser.element('.modal-body .tableField .iconChooser');
+                browser.element('.modal-body .tableCreationPanel.dialogField .iconChooser').waitForVisible();
+                return browser.element('.modal-body .tableCreationPanel.dialogField .iconChooser');
             }
         },
         // Left nav mini report icon beside table name

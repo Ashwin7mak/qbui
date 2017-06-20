@@ -19,9 +19,10 @@ class RowActions extends Component {
     render() {
         return <RowActionsReuse iconActionsNode={<QbIconActions onClickEditRowIcon={this.onClickEditRowIcon}
                                                                 onClickDeleteRowIcon={this.onClickDeleteRowIcon}
-                                                />}
-                                                {...this.props}
-                />;
+        />}
+                                {...this.props}
+        />;
+
     }
 }
 

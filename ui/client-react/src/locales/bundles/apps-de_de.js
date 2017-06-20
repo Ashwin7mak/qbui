@@ -90,6 +90,10 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
+            testAutomation: "Testautomatisierung",
+            copyAutomation: "Kopiere Automation",
+            editAutomation: "Automatisierung bearbeiten",
+            deleteAutomation: "Automatisierung löschen",
             dontDelete: "Nicht löschen",
             deleteThisRecord: "Löschen Sie diesen Datensatz?",
             deleteTheseSwitches: "Löschen sie diesen Schaltet?",
@@ -638,6 +642,8 @@ export default {
                 modify: 'Formular ändern',
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
+                removeTitleField: "Dieses Feld kann nicht entfernt werden, bis ein anderes Datensatztitelfeld gesetzt ist",
+                removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
                 tooltips: {
@@ -670,6 +676,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
+            existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",
@@ -724,6 +731,14 @@ export default {
             noOverrides: "Es wurden keine Overrides gesetzt",
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
+        },
+        appCreation: {
+            newApp: 'Neue app',
+            newAppPageTitle: 'Neue App',
+            finishedButtonLabel: "App erstellen",
+            appNameHeading: "App Name",
+            appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
+            descriptionHeading: "App Beschreibung"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",

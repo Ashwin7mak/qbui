@@ -75,9 +75,10 @@ class ChildReport extends React.Component {
     }
 
     render() {
-        const {appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
+        const {appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue, detailKeyDisplay} = this.props;
         let validProps = [appId, childAppId,  childTableId, childReportId, detailKeyFid].every(prop => prop || typeof prop === 'number');
         validProps = validProps && !_.isUndefined(detailKeyValue);
+        validProps = validProps && !_.isUndefined(detailKeyDisplay);
         let rowOfButtons = false;
 
         let tableName;
@@ -125,6 +126,8 @@ ChildReport.propTypes = {
     detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /** The value entered in the foreignkey field. */
     detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    /** The display value entered in the foreignkey field. */
+    detailKeyDisplay: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     type: PropTypes.oneOf([Consts.REPORT_FORM_TYPE.CHILD_REPORT, Consts.REPORT_FORM_TYPE.REPORT_LINK])
 };
 
