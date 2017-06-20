@@ -127,6 +127,9 @@ export const FieldElement = React.createClass({
                                              location={this.props.location}
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
                                              tabIndex={this.props.tabIndex}
+
+                                             // Props below required for LinkToFieldValueEditor in builder
+                                             formId={this.props.formId}
                                              removeFieldFromForm={this.props.removeFieldFromForm}
             />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field

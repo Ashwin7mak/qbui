@@ -7,6 +7,7 @@ import TopNav from "../../../reuse/client/src/components/topNav/topNav";
 import LeftNav from "../common/leftNav/GovernanceLeftNav";
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
+import urlUtils from "../utils/urlUtils";
 
 import "./governanceAppShell.scss";
 
@@ -25,6 +26,7 @@ export class GovernanceAppShell extends Component {
                             dropdownIcon="user"
                             dropdownMsg="globalActions.user"
                             hasFeedback={false}
+                            helpButtonLink={urlUtils.getGovernanceHelpLink()}
                         />
                     }/>
                     <Switch>

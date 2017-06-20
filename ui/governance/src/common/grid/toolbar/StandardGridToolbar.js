@@ -58,7 +58,7 @@ export class StandardGridToolBar extends Component {
                     <div className="standardRightToolBar">
                         <div className="standardGridItemsCount">
                             <div className="itemsCount">
-                                {this.props.totalItems &&
+                                {this.props.totalItems !== 0 &&
                                     <StandardGridItemsCount totalItems={this.props.totalItems}
                                                             totalFilteredItems={this.props.totalFilteredItems}
                                                             itemTypePlural={this.props.itemTypePlural}

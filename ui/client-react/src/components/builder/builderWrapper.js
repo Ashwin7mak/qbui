@@ -68,6 +68,9 @@ export const BuilderWrapper = React.createClass({
         }
 
         const app = this.getSelectedApp();
+        const appId = _.get(this.props, "match.params.appId");
+        const tableId = _.get(this.props, "match.params.tblId");
+
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
@@ -83,7 +86,7 @@ export const BuilderWrapper = React.createClass({
                         <Switch>
                             {
                                 this.props.routes.map((route, i) => {
-                                    return RouteWithSubRoutes(route, i, {app});
+                                    return RouteWithSubRoutes(route, i, {app, appId, tableId});
                                 })
                             }
                         </Switch>
@@ -101,12 +104,10 @@ const mapStateToProps = (state) => ({
     selectedAppId: getSelectedAppId(state.app)
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        loadApp: (appId) => dispatch(loadApp(appId)),
-        loadApps: () => dispatch(loadApps()),
-        toggleNav: () => dispatch(commonNavActions('builder').toggleNav())
-    };
-};
+const mapDispatchToProps = ({
+    loadApp,
+    loadApps,
+    ...commonNavActions('builder')
+});
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BuilderWrapper));

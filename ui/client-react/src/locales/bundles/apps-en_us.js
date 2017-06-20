@@ -93,6 +93,10 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
+            testAutomation: "Test Automation",
+            copyAutomation: "Copy Automation",
+            editAutomation: "Edit Automation",
+            deleteAutomation: "Delete Automation",
             dontDelete: "Don't delete",
             deleteThisRecord: "Delete this record?",
             deleteTheseSwitches: "Delete these feature switches?",
@@ -681,6 +685,7 @@ export default {
                 }
             },
             existingFieldsToolTip: "Add {fieldName} to the form",
+            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} are on the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",

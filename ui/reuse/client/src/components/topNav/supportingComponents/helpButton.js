@@ -8,13 +8,20 @@ import Tooltip from '../../tooltip/tooltip';
 /**
  * A Link to the Help Page.
  */
-const ReHelpButton = () => (
+const ReHelpButton = (props) => (
     <Tooltip bsRole="toggle" tipId="help" i18nMessageKey="header.menu.helpTooltip" key="help" location="bottom">
-        <a href={UrlUtils.getHelpLink()} target="_blank" className="globalActionLink reHelpButton">
+        <a href={props.link ? props.link : UrlUtils.getHelpLink()} target="_blank" className="globalActionLink reHelpButton">
             <Icon icon="help" />
             <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
         </a>
     </Tooltip>
 );
+
+ReHelpButton.propTypes = {
+    /**
+     * Optionally pass in a url for the Help Button link if it differs from {@link HELP_LINK_PATH}
+     */
+    link: React.PropTypes.string
+};
 
 export default ReHelpButton;

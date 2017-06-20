@@ -1,28 +1,25 @@
 import React, {PropTypes} from 'react';
 import {supportedNewFieldTypesWithProperties} from '../newFieldTypes';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
-import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
+import DraggableFieldTokenInMenu from '../draggableFieldTokenInMenu';
 
-const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex,
-                        toolPaletteFocus, toolPaletteTabIndex, includeNewRelationship, beginDrag, endDrag}) => {
+const NewFieldsMenu = (props) => {
 
     // don't include table data connections section until we know it's allowed
-    let omittedFieldGroups = includeNewRelationship ? [] : ['tableDataConnections'];
+    let omittedFieldGroups = props.includeNewRelationship ? [] : ['tableDataConnections'];
 
     return (
         <ListOfElements
-            tabIndex={toolPaletteTabIndex}
-            childrenTabIndex={toolPaletteChildrenTabIndex}
-            toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
-            hasKeyBoardFocus={toolPaletteFocus}
-            renderer={FieldTokenInMenu}
-            isCollapsed={isCollapsed}
-            isOpen={isOpen}
+            tabIndex={props.toolPaletteTabIndex}
+            childrenTabIndex={props.toolPaletteChildrenTabIndex}
+            toggleChildrenTabIndex={props.toggleToolPaletteChildrenTabIndex}
+            hasKeyBoardFocus={props.toolPaletteFocus}
+            renderer={DraggableFieldTokenInMenu}
+            isCollapsed={props.isCollapsed}
+            isOpen={props.isOpen}
             elements={supportedNewFieldTypesWithProperties(omittedFieldGroups)}
             isFilterable={true}
             hideTitle={true}
-            beginDrag={beginDrag}
-            endDrag={endDrag}
         />);
 };
 
@@ -36,20 +33,24 @@ NewFieldsMenu.propTypes = {
     isOpen: PropTypes.bool,
 
     /**
-     * Sets the tabIndex for the listOfElement tab*/
-    toolPaletteTabIndex: PropTypes.number,
+     * Sets the tabIndex for the listOfElement tab */
+    toolPaletteTabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
-     * Sets the tabIndex for the listOfElement tab*/
-    toolPaletteChildrenTabIndex: PropTypes.number,
+     * Sets the tabIndex for the listOfElement tab */
+    toolPaletteChildrenTabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
-     * Toggles tool Palette children*/
+     * Toggles tool Palette children */
     toggleToolPaletteChildrenTabIndex: PropTypes.func,
 
     /**
-     * Focus for palette for keybaord nav*/
+     * Focus for palette for keyboard nav */
     toolPaletteFocus: PropTypes.bool,
+
+    /**
+     * Determines whether the "Add New Relationship" field type appears in the list. */
+    includeNewRelationship: PropTypes.bool
 
 };
 
