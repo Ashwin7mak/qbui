@@ -27,7 +27,6 @@ class ColumnTransformer {
         this.classes = headerClasses;
         this.isHidden = isHidden;
         this.isPlaceholder = isPlaceholder;
-        console.log(this);
     }
 
     /**
