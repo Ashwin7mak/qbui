@@ -11,7 +11,7 @@
     let modalDialog = requirePO('/common/modalDialog');
     let ReportTableActionsPO = requirePO('reportTableActions');
 
-    describe('@smoke Users - Remove user(s) tests: ', function() {
+    describe('Users - Remove user(s) tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
