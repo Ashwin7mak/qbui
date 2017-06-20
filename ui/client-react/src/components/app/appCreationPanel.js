@@ -8,11 +8,6 @@ import './appCreationPanel.scss';
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
 class AppCreationPanel extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     /**
      * render the app settings UI
      * @returns {XML}
@@ -38,8 +33,5 @@ class AppCreationPanel extends React.Component {
             </div>);
     }
 }
-
-AppCreationPanel.propTypes = {
-};
 
 export default AppCreationPanel;
