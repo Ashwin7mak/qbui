@@ -733,7 +733,12 @@ export default {
             featureNameEmpty: "Les noms des entités doivent être blanc"
         },
         appCreation: {
-            newApp: 'Nouvelle application'
+            newApp: 'Nouvelle application',
+            newAppPageTitle: 'Nouvelle Application',
+            finishedButtonLabel: "Créer une application",
+            appNameHeading: "Nom de l'application,",
+            appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
+            descriptionHeading: "Description de l'application"
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
