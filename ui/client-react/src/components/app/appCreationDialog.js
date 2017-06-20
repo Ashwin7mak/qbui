@@ -33,16 +33,18 @@ export class AppCreationDialog extends React.Component {
 
         const classes = ['appCreationDialog creationDialog'];
 
-        return (<MultiStepDialog show={this.props.appDialogOpen}
+        return (
+            <MultiStepDialog show={this.props.appDialogOpen}
                                  classes={classes.join(' ')}
                                  onCancel={this.onCancel}
                                  onFinished={this.onFinished}
                                  finishedButtonLabel={Locale.getMessage("appCreation.finishedButtonLabel")}
                                  titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
-            <div className="dialogCreationPanel">
-                <AppCreationTable />
-            </div>
-        </MultiStepDialog>);
+                <div className="dialogCreationPanel">
+                    <AppCreationTable />
+                </div>
+            </MultiStepDialog>
+        );
     }
 }
 
