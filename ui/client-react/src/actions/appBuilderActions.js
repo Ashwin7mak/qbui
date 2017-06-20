@@ -2,14 +2,6 @@ import * as types from '../actions/types';
 import AppService from '../services/appService';
 import Logger from '../utils/logger';
 
-export const showAppCreationDialog = () => ({
-    type: types.SHOW_APP_CREATION_DIALOG
-});
-
-export const hideAppCreationDialog = () => ({
-    type: types.HIDE_APP_CREATION_DIALOG
-});
-
 /**
  * Create new app event.   Used to inform that a new
  * app is getting created on the servers.
@@ -66,3 +58,11 @@ export const createApp = (app) => {
         });
     };
 };
+
+export const showAppCreationDialog = () => ({
+    type: types.SHOW_APP_CREATION_DIALOG
+});
+
+export const hideAppCreationDialog = () => ({
+    type: types.HIDE_APP_CREATION_DIALOG
+});
