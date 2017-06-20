@@ -1,14 +1,17 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
 import {DragLayer} from 'react-dnd';
-import FieldFormats from '../../utils/fieldFormats';
 import draggableItemTypes from './draggableItemTypes';
-import FieldToken from './fieldToken/fieldToken';
-import Locale from '../../locales/locales';
-import consts from '../../../../common/src/constants';
-import Device from '../../utils/device';
+import ElementToken from './elementToken/elementToken';
+import Locale from '../../locales/locale';
 import _ from 'lodash';
 
-// Values from fieldToken.scss
+// IMPORT FROM CLIENT-REACT
+import consts from '../../../../../common/src/constants';
+import Device from '../../../../../client-react/src/utils/device';
+import FieldFormats from '../../../../../client-react/src/utils/fieldFormats';
+// IMPORT FROM CLIENT-REACT
+
+// Values from elementToken.scss
 export const TOKEN_WIDTH = 250;
 export const TOKEN_HEIGHT = 30;
 export const TOKEN_ICON_WIDTH = 35;
@@ -57,18 +60,18 @@ function getItemStyles(props) {
     };
 }
 
-export class FormBuilderCustomDragLayer extends Component {
-    renderItem(type, item) {
-        let fieldType = (_.has(item, 'relatedField.datatypeAttributes') ? FieldFormats.getFormatType(item.relatedField) : consts.TEXT);
-        let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`fieldsDefaultLabels.${fieldType}`));
+export class BuilderCustomDragLayer extends Component {
+    renderItem = (type, item) => {
         switch (type) {
         case draggableItemTypes.FIELD :
-            // Show the FieldToken in its dragging state. Always dragging as part of customDragLayer so hardcoded to true.
-            return (<FieldToken title={label} type={fieldType} isDragging={true} />);
+            let fieldType = (_.has(item, 'relatedField.datatypeAttributes') ? FieldFormats.getFormatType(item.relatedField) : consts.TEXT);
+            let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`fieldsDefaultLabels.${fieldType}`));
+            // Show the ElementToken in its dragging state. Always dragging as part of customDragLayer so hardcoded to true.
+            return (<ElementToken title={label} type={fieldType} isDragging={true} />);
         default :
             return null;
         }
-    }
+    };
 
     render() {
         const {item, itemType, isDragging} = this.props;
@@ -87,4 +90,4 @@ export class FormBuilderCustomDragLayer extends Component {
     }
 }
 
-export default DragLayer(collect)(FormBuilderCustomDragLayer);
+export default DragLayer(collect)(BuilderCustomDragLayer);
