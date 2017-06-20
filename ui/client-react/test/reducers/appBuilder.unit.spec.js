@@ -25,23 +25,25 @@ describe('App Creation', () => {
         expect(state.dialogOpen).toBe(false);
     });
 
-    it('will return true for dialogOpen state if it is true', () => {
-        let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockState);
+    describe('App Creation Selector', () => {
+        it('will return true for dialogOpen state if it is true', () => {
+            let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockState);
 
-        expect(openDialog).toEqual(true);
-    });
+            expect(openDialog).toEqual(true);
+        });
 
-    it('will return false for dialogOpen if there is no dialogOpen state', () => {
-        let openDialog = AppBuilderSelectors.getIsDialogOpenState({});
+        it('will return false for dialogOpen if there is no dialogOpen state', () => {
+            let openDialog = AppBuilderSelectors.getIsDialogOpenState({});
 
-        expect(openDialog).toEqual(false);
-    });
+            expect(openDialog).toEqual(false);
+        });
 
-    it('will return false for dialogOpen if the dialogOpen state is false', () => {
-        let mockCloneState = _.cloneDeep(mockState);
-        mockCloneState.appBuilder.dialogOpen = false;
-        let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockCloneState);
+        it('will return false for dialogOpen if the dialogOpen state is false', () => {
+            let mockCloneState = _.cloneDeep(mockState);
+            mockCloneState.appBuilder.dialogOpen = false;
+            let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockCloneState);
 
-        expect(openDialog).toEqual(false);
+            expect(openDialog).toEqual(false);
+        });
     });
 });
