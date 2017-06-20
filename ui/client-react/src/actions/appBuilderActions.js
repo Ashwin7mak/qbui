@@ -1,4 +1,6 @@
 import * as types from '../actions/types';
+import AppService from '../services/appService';
+import Logger from '../utils/logger';
 
 export const showAppCreationDialog = () => ({
     type: types.SHOW_APP_CREATION_DIALOG
