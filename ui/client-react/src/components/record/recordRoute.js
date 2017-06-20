@@ -355,7 +355,7 @@ export const RecordRoute = React.createClass({
                 editRec: recordId,
                 detailAppId: appId,
                 detailTableId: tblId,
-                detailReportId: rptId
+                detailReportId: 0 //FIXME use real rptId
             };
             const link = WindowHistoryUtils.pushWithQueries(queries);
         } else {
