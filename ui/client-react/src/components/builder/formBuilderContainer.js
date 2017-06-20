@@ -297,6 +297,7 @@ export class FormBuilderContainer extends Component {
                                                 app={this.props.app}
                                                 tblId={this.props.match.params.tblId}
                                                 appUsers={[]}
+                                                formId={formId}
                                             />
                                         </div>
                                     </Loader>

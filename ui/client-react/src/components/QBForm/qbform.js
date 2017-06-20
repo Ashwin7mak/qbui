@@ -450,6 +450,12 @@ export const QBForm = React.createClass({
                     masterAppId={masterAppId}
                     masterFieldId={masterFieldId}
                     location={location}
+
+                    // Props below required for LinkToFieldValueEditor in builder
+                    // TODO:: Refactor LinkToRecordFieldValueEditor builder functions to custom component
+                    // Also see props added to FieldValueEditor
+                    formId={this.props.formId}
+                    removeFieldFromForm={this.props.removeFieldFromForm}
                 />
             </div>
         );
