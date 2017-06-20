@@ -15,13 +15,23 @@ import Logger from 'APP/utils/logger';
 const logger = new Logger();
 
 import CollapsedGroupsHelper from './collapsedGroupHelper';
-const collapsedGroupHelper = new CollapsedGroupsHelper();
 
 import './qbGrid.scss';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
 export class QbGrid extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            collapsedGroups: []
+        }
+    }
+
+    componentWillMount() {
+        this.collapsedGroupHelper = new CollapsedGroupsHelper();
+    }
 
     onClickAddNewRow = () => {
         if (this.props.onClickAddNewRow) {
@@ -159,7 +169,7 @@ export class QbGrid extends Component {
     getCheckboxHeader = () => {
         let collapseAllIcon = null;
         if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {
-            let iconType = (collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
+            let iconType = (this.collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
 
             collapseAllIcon = (
                 <div className="collapseAllIcon">
@@ -209,11 +219,11 @@ export class QbGrid extends Component {
     }
 
     toggleCollapseAllGroups = () => {
-        this.props.setCollapsedGroups(collapsedGroupHelper.toggleCollapseAllGroups());
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseAllGroups()});
     };
 
     toggleCollapseGroup = (subHeaderId) => {
-        this.props.setCollapsedGroups(collapsedGroupHelper.toggleCollapseGroup(subHeaderId));
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseGroup(subHeaderId)});
     };
 
     /**
@@ -296,7 +306,7 @@ export class QbGrid extends Component {
 
                     <Table.Body className="qbTbody"
                         onRow={this.addRowProps}
-                        rows={collapsedGroupHelper.filterRows(this.props.rows)}
+                        rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
                         rowKey={this.getUniqueRowKey}
                         ref={body => {
                             this.tableRef = body && body.getRef().parentNode;
@@ -440,10 +450,16 @@ QbGrid.defaultProps = {
     showRowActionsColumn: true
 };
 
+const mapStateToProps = (state) => {
+    return {
+        collapsedGroups: state.qbGrid.collapsedGroups
+    }
+};
+
 const mapDispatchToProps = {
     setCollapsedGroups,
     draggingColumnStart,
     draggingColumnEnd
 };
 
-export default connect(null, mapDispatchToProps)(QbGrid);
+export default connect(mapStateToProps, mapDispatchToProps)(QbGrid);
