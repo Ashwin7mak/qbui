@@ -125,6 +125,8 @@ export class GovernanceAnalytics extends Component {
                        deniedUsers={this.props.deniedUsers}
                        deactivatedUsers={this.props.deactivatedUsers}
                        totalRealmUsers={this.props.totalRealmUsers}
+                       totalTimeTaken={this.props.totalTimeTaken}
+                       totalGridLoadTime={this.props.totalGridLoadTime}
                        additionalUpdateFunctions={this.governanceUpdateFunctions} />
         );
     }
