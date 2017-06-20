@@ -5,8 +5,6 @@ import Logger from 'APP/utils/logger';
 import Locale from './locale';
 import _ from 'lodash';
 
-let logger = new Logger();
-
 /**
  * The bundle loader class that is specific to the reuse library Functional Area.
  * Each functional area has its own localized string bundles. These need to be loaded
@@ -29,6 +27,7 @@ class ReuseBundleLoader {
         try {
             // verify that locale is valid
             if (!Locale.isSupported(newLocale)) {
+                const logger = new Logger();
                 logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
             } else {
 
@@ -49,10 +48,12 @@ class ReuseBundleLoader {
                         break;
                     }
                 } catch (e) {
+                    const logger = new Logger();
                     logger.error('Error fetching reuse locale bundle:', e);
                 }
 
                 if (!newBundle) {
+                    const logger = new Logger();
                     logger.warn('Locale (' + newLocale + ') is invalid or not supported.  Using default: en-us');
                     newBundle = require('./bundles/reuse-en_us');
                 }
@@ -60,6 +61,7 @@ class ReuseBundleLoader {
                 Locale.changeLocale(newLocale, newBundle.default);
             }
         } catch (e) {
+            const logger = new Logger();
             logger.error('Error changing locale..Locale not changed --> ', e);
         }
     }

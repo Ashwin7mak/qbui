@@ -64,4 +64,11 @@ describe('DefaultTopNavGlobalActions', () => {
 
         expect(component.find('.reHelpButton')).toBePresent();
     });
+
+    it('has a help button with a link prop if helpButtonLink is specified', () => {
+        const url = `www.google.com`;
+        component = shallow(<DefaultTopNavGlobalActions helpButtonLink={url}/>);
+        expect(component.find(HelpButton)).toBePresent();
+        expect(component.find(HelpButton)).toHaveProp('link', url);
+    });
 });

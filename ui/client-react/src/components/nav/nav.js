@@ -34,11 +34,8 @@ import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId,
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
-import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
+import AppCreationDialog from '../app/appCreationDialog';
 
 import AppUtils from '../../utils/appUtils';
 
@@ -505,6 +502,7 @@ export const Nav = React.createClass({
             }
 
             {selectedAppId && <TableCreationDialog app={selectedApp} onTableCreated={this.tableCreated}/>}
+            {<AppCreationDialog />}
 
         </div>);
     },
@@ -556,10 +554,8 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        setTimeout(() => {
-            this.props.showTableCreationDialog();
-        });
-    }
+        this.props.showTableCreationDialog();
+    },
 });
 
 const mapStateToProps = (state, ownProps) => {

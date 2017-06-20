@@ -93,6 +93,10 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
+            testAutomation: "Test Automation",
+            copyAutomation: "Copy Automation",
+            editAutomation: "Edit Automation",
+            deleteAutomation: "Delete Automation",
             dontDelete: "Don't delete",
             deleteThisRecord: "Delete this record?",
             deleteTheseSwitches: "Delete these feature switches?",
@@ -682,6 +686,7 @@ export default {
                 }
             },
             existingFieldsToolTip: "Add {fieldName} to the form",
+            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} are on the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",
@@ -736,6 +741,14 @@ export default {
             noOverrides: "No overrides have been set, click 'Add New' to add one.",
             featureNameExists: "Feature names must be unique",
             featureNameEmpty: "Feature names must not be blank"
+        },
+        appCreation: {
+            newApp: "New app",
+            newAppPageTitle: "New App",
+            finishedButtonLabel: "Create app",
+            appNameHeading: "App name",
+            appNamePlaceHolder: "For example, \"Order Tracker\"",
+            descriptionHeading: "App description"
         },
         tableCreation: {
             newTablePageTitle: "New Table",

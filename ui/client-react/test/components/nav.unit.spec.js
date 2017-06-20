@@ -3,12 +3,19 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import * as ShellActions from '../../src/actions/shellActions';
 import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
+import {AppCreationDialog} from '../../src/components/app/appCreationDialog';
+import {TableCreationDialog} from '../../src/components/table/tableCreationDialog';
 import {mount, shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+import {NEW_TABLE_IDS_KEY} from '../../src/constants/localStorage';
+import * as UrlConsts from "../../src/constants/urlConstants";
+
 
 import _ from 'lodash';
 import {CONTEXT} from '../../src/actions/context';
 
 let smallBreakpoint = false;
+
 class BreakpointsMock {
     static isSmallBreakpoint() {
         return smallBreakpoint;
@@ -53,6 +60,9 @@ const query = {
 
 describe('Nav Unit tests', () => {
     'use strict';
+    beforeEach(() => {
+        jasmineEnzyme();
+    });
 
     let props = {
         toggleAppsList: (state) => {},
@@ -88,7 +98,8 @@ describe('Nav Unit tests', () => {
             params: {
                 appId: '1',
                 tblId: '2',
-                recordId: '3'
+                recordId: '3',
+                rptId: '4'
             }
         },
         shell: {
@@ -124,6 +135,7 @@ describe('Nav Unit tests', () => {
         spyOn(props, 'enterBuilderMode').and.callThrough();
         spyOn(props, 'loadApps').and.callThrough();
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
+        NavRewireAPI.__Rewire__('AppCreationDialog', AppCreationDialog);
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
@@ -142,6 +154,7 @@ describe('Nav Unit tests', () => {
         props.enterBuilderMode.calls.reset();
         props.loadApps.calls.reset();
         NavRewireAPI.__ResetDependency__('LeftNav');
+        NavRewireAPI.__ResetDependency__('AppCreationDialog');
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
         NavRewireAPI.__ResetDependency__('TopNav');
@@ -156,11 +169,24 @@ describe('Nav Unit tests', () => {
     });
 
     it('test renders large by default', () => {
-        let component = mount(<Nav {...props}/>);
+        let cloneProps = _.cloneDeep(props);
+        cloneProps.selectedAppId = 'mockSelectedAppId';
+        let component = mount(<Nav {...cloneProps}/>);
         let leftNav = component.find('.leftMenu');
         expect(leftNav.length).toBe(1);
         let topNav = component.find('.topNav');
         expect(topNav.length).toBe(1);
+        let appCreationDialog = component.find(AppCreationDialog);
+        expect(appCreationDialog.length).toBe(1);
+        let tableCreationDialog = component.find(TableCreationDialogMock);
+        expect(tableCreationDialog.length).toBe(1);
+    });
+
+    it('will not render TableCreation if mockSelectedAppId is null', () => {
+        let component = mount(<Nav {...props}/>);
+
+        let tableCreationDialog = component.find(TableCreationDialogMock);
+        expect(tableCreationDialog.length).toBe(0);
     });
 
     it('renders the loading screen while no apps are loaded', () => {
@@ -307,5 +333,76 @@ describe('Nav Unit tests', () => {
         component.navigateToReportBuilder();
 
         expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);
+    });
+
+    describe('app and table creation ', () => {
+        it('ensures a table was created and both sessionStorage getItem and setItem were called', () => {
+            spyOn(window.sessionStorage, 'getItem');
+            spyOn(window.sessionStorage, 'setItem');
+            spyOn(props, 'loadApp');
+            spyOn(props, 'showTableReadyDialog');
+
+            let component = shallow(<Nav {...props} />);
+            let instance = component.instance();
+            instance.tableCreated();
+
+            expect(props.loadApp).toHaveBeenCalledWith(props.selectedAppId);
+            expect(window.sessionStorage.getItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY);
+            expect(window.sessionStorage.setItem).toHaveBeenCalledWith(NEW_TABLE_IDS_KEY, '');
+            expect(props.showTableReadyDialog).toHaveBeenCalled();
+        });
+
+        it('invokes showTableCreationDialog when createNewTable is called', () => {
+            spyOn(props, 'showTableCreationDialog');
+
+            let component = shallow(<Nav {...props} />);
+            let instance = component.instance();
+            instance.createNewTable();
+
+            expect(props.showTableCreationDialog).toHaveBeenCalled();
+        });
+    });
+
+    describe('updateRecordTrowser ', () => {
+        it('will invoke loadForm with childAppId, childTableId, childReportId, formType, editRec, showTrowser', () => {
+            let cloneProps = _.cloneDeep(props);
+            cloneProps.location.query = {
+                [UrlConsts.DETAIL_APPID]: {},
+                [UrlConsts.DETAIL_TABLEID]: {},
+                [UrlConsts.DETAIL_KEY_FID]: {},
+                [UrlConsts.EDIT_RECORD_KEY]: {},
+                [UrlConsts.DETAIL_REPORTID]: {}
+            };
+
+            let component = shallow(<Nav {...cloneProps} />);
+
+            let instance = component.instance();
+            instance.updateRecordTrowser();
+
+            expect(props.loadForm).toHaveBeenCalledWith({}, {}, {}, 'edit', {}, true);
+        });
+
+        it('will invoke loadForm with appId, tblId, rptId, formType, editRec, showTrowser', () => {
+            let cloneProps = _.cloneDeep(props);
+            cloneProps.location.query = {[UrlConsts.EDIT_RECORD_KEY]: {}};
+
+            let component = shallow(<Nav {...cloneProps} />);
+
+            let instance = component.instance();
+            instance.updateRecordTrowser();
+
+            expect(props.loadForm).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId, props.match.params.rptId, 'edit', {}, true);
+        });
+
+        it('will NOT invoke loadForm because there is not an edit record query parameter or the trowser is open or there is no new record id', () => {
+            let cloneProps = _.cloneDeep(props);
+            cloneProps.location.query = {};
+            let component = shallow(<Nav {...cloneProps} />);
+
+            let instance = component.instance();
+            instance.updateRecordTrowser();
+
+            expect(props.loadForm).not.toHaveBeenCalled();
+        });
     });
 });
