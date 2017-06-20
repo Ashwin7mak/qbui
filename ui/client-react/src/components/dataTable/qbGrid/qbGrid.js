@@ -22,6 +22,11 @@ export class QbGrid extends Component {
     constructor(props) {
         super(props);
 
+        /**
+         * Internal state is used to here to prevent re-rendering messing with collapsing of grouped headers.
+         * If this is placed in the QbGrid reducer, collapsing headers does not work because of the use of lodash's uniqueId
+         * for each group header name. If internal state is not kept, the headers will get new uniqueIds and never collapse.
+         */
         this.state = {
             collapsedGroups: []
         }
