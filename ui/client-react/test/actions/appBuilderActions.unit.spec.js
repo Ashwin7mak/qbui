@@ -50,7 +50,7 @@ describe('Create app workflows', () => {
 
         const expectedActions = [
             {type: types.CREATE_APP},
-            {type: types.CREATE_APP_SUCCESS, app: successResponse}
+            {type: types.CREATE_APP_SUCCESS, app: successResponse.data}
         ];
 
         const app = {name:'appName'};
