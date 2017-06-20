@@ -40,13 +40,12 @@ export const createApp = (app) => {
         const logger = new Logger();
 
         return new Promise((resolve, reject) => {
-
             dispatch(createNewApp());
-
             const appService = new AppService();
             appService.createApp(app).then(
                 response => {
-                    dispatch(createAppSuccess(response));
+                    //  TODO: not sure if this is the correct response in include in event
+                    dispatch(createAppSuccess(response.data));
                     resolve(response);
                 }
             ).catch(error => {
