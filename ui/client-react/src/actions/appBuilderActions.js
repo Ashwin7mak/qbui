@@ -40,9 +40,7 @@ export const createApp = (app) => {
         const logger = new Logger();
 
         return new Promise((resolve, reject) => {
-
             dispatch(createNewApp());
-
             const appService = new AppService();
 
             appService.createApp(app).then(
