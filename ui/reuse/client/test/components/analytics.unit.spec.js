@@ -1,8 +1,8 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {Analytics, EVERGAGE_ACCOUNT_NAME, ANALYTICS_SCRIPT_ID} from 'REUSE/components/analytics/analytics';
+import {Analytics, EVERGAGE_ACCOUNT_NAME, ANALYTICS_SCRIPT_ID, __RewireAPI__ as AnalyticsRewireAPI} from 'REUSE/components/analytics/analytics';
 
 const mockDataset = 'unitTest'; // Use a non-existing dataset in case test accidentally makes a call to Everage
 
@@ -12,11 +12,19 @@ const mockExistingScriptElement = {
     }
 };
 
+class mockLogger {error() {}}
+
 let component;
 
 describe('Analytics', () => {
     beforeEach(() => {
         jasmineEnzyme();
+
+        AnalyticsRewireAPI.__Rewire__('Logger', mockLogger);
+    });
+
+    afterEach(() => {
+        AnalyticsRewireAPI.__ResetDependency__('Logger');
     });
 
     it('does not add more than one everage script to the page', () => {

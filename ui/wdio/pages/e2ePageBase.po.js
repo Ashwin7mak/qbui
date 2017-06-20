@@ -6,6 +6,7 @@
     'use strict';
     var reportContentPO = requirePO('reportContent');
     let loadingSpinner = requirePO('/common/loadingSpinner');
+    let topNavPO = requirePO('topNav');
 
     function PageBase() {
         // Define common locators that all pages share here
@@ -67,8 +68,8 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.myappsBody');
+        //wait until apps links in leftNav is visible
+        return browser.element('.appsList .leftNavLabel').waitForVisible();
     };
 
     /**
@@ -83,8 +84,12 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.appHomePageBody');
+        //If tablesList is not visible then again navigate to appId page
+        if (!browser.element('.tablesList').isExisting()) {
+            this.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, appId));
+        }
+        //wait until you see newTable in left Nav
+        return browser.element('.appHomePageBody .noRowsIcon').waitForVisible();
     };
 
     /**
@@ -100,8 +105,8 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.reportContent .loadedContent');
+        //wait until records count loaded
+        return browser.element('.reportToolbar .loadedContent .recordsCount').waitForVisible();
     };
 
     /**

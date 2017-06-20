@@ -83,9 +83,10 @@ export class StandardGrid extends Component {
                 >
                     <Table.Header className="qbHeader"/>
 
+                    {/*If there is no data at all, render an empty grid, else render this.props.items*/}
                     <Table.Body
                         className="qbTbody"
-                        rows={this.props.items}
+                        rows={_.isNull(this.props.items) ? [] : this.props.items}
                         rowKey={this.getUniqueRowKey.bind(this)}
                         onRow={onRowFn}
                         ref={this.bodyRef}
@@ -132,7 +133,8 @@ export class StandardGrid extends Component {
                                      itemTypeSingular={this.props.itemTypeSingular}
                                      itemsPerPage={this.props.itemsPerPage}
                 />
-                {!_.isEmpty(this.props.items) ? this.renderItemsExist() : this.renderNoItemsExist()}
+                {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
+                {!_.isNull(this.props.items) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
             </div>
         );
     }
@@ -205,15 +207,8 @@ StandardGrid.propTypes = {
     noItemsFound: PropTypes.string
 };
 
-
 StandardGrid.defaultProps = {
-    shouldFacet: true,
-    facetFields:[],
-    shouldSearch: true
-};
-
-StandardGrid.defaultProps = {
-    items: [],
+    items: null,
     /**
      * Provide the Header Menu Transformations.
      * You can append more menu like the "Sort" to the column
@@ -223,7 +218,10 @@ StandardGrid.defaultProps = {
         {
             menuItemsClasses: [SortMenuItems]
         }
-    ]
+    ],
+    shouldFacet: true,
+    facetFields:[],
+    shouldSearch: true
 };
 
 const mapStateToProps = (state, props) => {
