@@ -22,8 +22,8 @@ export class AppCreationDialog extends React.Component {
      * last page has finished
      */
     onFinished = () => {
-        if (this.props.createApp) {
-            this.props.createApp({"name": "Pet Dragons"});
+        if (this.props.createApp && this.props.newApp) {
+            this.props.createApp(this.props.newApp);
         }
     };
 
@@ -57,7 +57,8 @@ AppCreationDialog.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state)
+        appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state),
+        newApp: AppBuilderSelectors.getNewAppInfo(state)
     };
 };
 
