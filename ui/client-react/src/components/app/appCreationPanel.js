@@ -25,8 +25,6 @@ export class AppCreationPanel extends React.Component {
      * @returns {XML}
      */
     render() {
-        console.log('appName: ', this.props.appName);
-        console.log('appDescription: ', this.props.appDescription);
         return (
             <div className="appCreationPanel dialogCreationPanelInfo">
                 <div className="sections">
