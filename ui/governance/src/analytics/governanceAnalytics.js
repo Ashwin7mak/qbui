@@ -68,7 +68,7 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergageDeniedUsers = () => {
         if (_.has(this.props, 'deniedUsers')) {
-            this._aaq.push(['setCustomField', 'deniedUsers', this.props.paidUsers, 'request']);
+            this._aaq.push(['setCustomField', 'deniedUsers', this.props.deniedUsers, 'request']);
         }
     };
 
@@ -77,7 +77,7 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergageTotalRealmUsers = () => {
         if (_.has(this.props, 'totalRealmUsers')) {
-            this._aaq.push(['setCustomField', 'totalRealmUsers', this.props.paidUsers, 'request']);
+            this._aaq.push(['setCustomField', 'totalRealmUsers', this.props.totalRealmUsers, 'request']);
         }
     };
 
@@ -186,7 +186,17 @@ GovernanceAnalytics.propTypes = {
     /**
      * The total number of users in the realm directory
      */
-    totalRealmUsers: PropTypes.number
+    totalRealmUsers: PropTypes.number,
+
+    /**
+     * The total time taken for the page to load until the grid is fully loaded
+     */
+    totalTimeTaken: PropTypes.string,
+
+    /**
+     * The total time taken for the grid to load
+     */
+    totalGridLoadTime: PropTypes.string
 
 };
 
