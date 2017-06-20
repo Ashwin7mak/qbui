@@ -106,7 +106,7 @@ describe('GovernanceAnalytics', () => {
                 it(`updates ${testCase.description}`, () => {
                     spyOn(window._aaq, 'push');
 
-                    component = shallow(<GovernanceAnalytics dataset={mockDataset} {...testCase.props} />);
+                    component = shallow(<GovernanceAnalytics {...testCase.props} />);
                     component.instance()[testCase.testFunction]();
 
                     expect(window._aaq.push).toHaveBeenCalledWith(testCase.expectedArguments);
@@ -115,7 +115,7 @@ describe('GovernanceAnalytics', () => {
                 it(`does not update ${testCase.description} if the prop is not provided`, () => {
                     spyOn(window._aaq, 'push');
 
-                    component = shallow(<GovernanceAnalytics dataset={mockDataset} />);
+                    component = shallow(<GovernanceAnalytics />);
                     component.instance()[testCase.testFunction]();
 
                     expect(window._aaq.push).not.toHaveBeenCalled();
