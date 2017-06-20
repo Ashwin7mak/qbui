@@ -72,7 +72,7 @@ class addUserPanel extends React.Component {
         return (
             <div className = "panelContainer">
                 <div className="selectUser panel-items">
-                    <dt>Select users</dt>
+                    <dt>{Locale.getMessage('addUserToApp.selectUsers')}</dt>
                     <dd>
                         <UserFieldValueEditor
                             appUsers={appUsers}
@@ -87,7 +87,7 @@ class addUserPanel extends React.Component {
                     </dd>
                 </div>
                 <div className="assignRole panel-items">
-                    <dt>Assign role</dt>
+                    <dt>{Locale.getMessage('addUserToApp.assignRole')}</dt>
                     <Select
                         autofocus
                         options={this.getRoles()}

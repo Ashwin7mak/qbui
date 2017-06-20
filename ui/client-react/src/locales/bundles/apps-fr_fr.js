@@ -202,8 +202,7 @@ export default {
                 feedbackMenuButton: "Donnez votre avis",
                 feedbackMenuTitle: "Retour d'information",
                 reportFeedBackButton: "Signaler un problème",
-                feedbackTooltip: "Partagez des idées et des problèmes",
-                helpTooltip: "Aidez-moi",
+                feedbackTooltip: "Partagez des idées et des problèmes"
             }
         },
         fields: {
@@ -822,7 +821,11 @@ export default {
             userSuccessDialogOK: "Non merci",
             copied: "Lien copié",
             messageSubject:"Lien vers le {nom de l'application} Application",
-            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
+            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}",
+            addUser: "ajouter",
+            selectAUser:"Sélectionnez un utilisateur",
+            selectUsers: "Sélectionnez les utilisateurs",
+            assignRole: "Attribuer un rôle"
         }
     }
 };

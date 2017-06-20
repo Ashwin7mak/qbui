@@ -83,8 +83,8 @@ export class AddUserDialog extends React.Component {
                                  onCancel={this.onCancel}
                                  onFinished={this.onFinished}
                                  canProceed={this.state.isValid}
-                                 finishedTooltip={"Select a user"}
-                                 finishedButtonLabel="Add"
+                                 finishedTooltip={Locale.getMessage('addUserToApp.selectAUser')}
+                                 finishedButtonLabel={Locale.getMessage('addUserToApp.addUser')}
         >
             <div className="addUserPanel">
                 <div className="title"><I18nMessage message="addUserToApp.title"/> {this.props.selectedApp.name}</div>
