@@ -75,7 +75,6 @@ const actions = {
     onClickSave() {},
     onClickToggle() {},
     onClickTestRow() {},
-    setCollapsedGroups() {},
     draggingColumnStart() {},
     draggingColumnEnd() {}
 };
@@ -90,9 +89,10 @@ const requiredProps = {
     onClickSaveRow: actions.onClickSave,
     cellRenderer: testCellRenderer,
     headerRenderer: QbHeaderCell,
-    setCollapsedGroups: actions.setCollapsedGroups,
     draggingColumnStart: actions.draggingColumnStart,
-    draggingColumnEnd: actions.draggingColumnEnd
+    draggingColumnEnd: actions.draggingColumnEnd,
+    onClickTestRowIon: actions.onClickTestRow,
+    isMultiSelectDisabled: false
 };
 
 let component;
@@ -250,21 +250,21 @@ describe('QbGrid', () => {
             let actionCell = instance.getActionsCell(null, {rowData: editingRow});
 
             expect(actionCell.props).toEqual({
-                editingRowErrors: [1],
-                editingRowId: editingRow.id,
-                isEditing: true,
-                isEditingRowSaving: true,
-                isEditingRowValid: true,
-                isInlineEditOpen: true,
-                isSelected: editingRow.isSelected,
-                onCancelEditingRow: actions.onClickCancel,
-                onClickAddNewRow: instance.onClickAddNewRow,
+                rowId: editingRow.id,
                 onClickDeleteRowIcon: actions.onClickDelete,
                 onClickEditRowIcon: actions.onClickEdit,
+                isEditing: true,
+                editingRowId: editingRow.id,
+                isEditingRowValid: true,
+                isEditingRowSaving: true,
+                isInlineEditOpen: true,
+                isSelected: editingRow.isSelected,
+                editingRowErrors: [1],
+                onCancelEditingRow: actions.onClickCancel,
+                onClickAddNewRow: instance.onClickAddNewRow,
                 onClickSaveRow: actions.onClickSave,
-                onClickTestRowIcon: actions.onClickTestRow(),
                 onClickToggleSelectedRow: instance.onClickToggleSelectedRow,
-                rowId: editingRow.id,
+                onClickTestRowIcon: actions.onClickTestRow(),
                 isMultiSelectDisabled: false
             });
         });
