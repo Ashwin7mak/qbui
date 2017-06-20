@@ -655,16 +655,25 @@ describe('Validate tablesApi', function() {
         let replaceTablePropsStub = null;
         let patchTableResp = {};
         let replaceTablePropsResp = {body: '{"tableNoun": "test"}'};
+        let getFieldsStub = null;
+        let patchFieldStub = null;
+        let getFieldsResp = {id: 6};
+        let patchFieldResp = {};
         let errorPromise = Promise.reject({error: 'some error'});
 
         beforeEach(function() {
             patchTableStub = sinon.stub(tablesApi, 'patchTable');
             replaceTablePropsStub = sinon.stub(tablesApi, 'replaceTableProperties');
+            getFieldsStub = sinon.stub(fieldsApi, 'getField');
+            patchFieldStub = sinon.stub(fieldsApi, 'patchField');
             req.body = {name: 'name', tableNoun: 'noun', description: 'desc', tableIcon: 'icon'};
             req.url = 'apps/123/tables/456';
             req.method = 'patch';
+            req.params = {tableId: 456};
             patchTableStub.returns(Promise.resolve(patchTableResp));
             replaceTablePropsStub.returns(Promise.resolve(replaceTablePropsResp));
+            getFieldsStub.returns(Promise.resolve(getFieldsResp));
+            patchFieldStub.returns(Promise.resolve(patchFieldResp));
         });
 
         afterEach(function() {
@@ -672,6 +681,8 @@ describe('Validate tablesApi', function() {
             req.rawBody = {};
             patchTableStub.restore();
             replaceTablePropsStub.restore();
+            getFieldsStub.restore();
+            patchFieldStub.restore();
         });
 
         it('success return results ', function(done) {
@@ -733,6 +744,57 @@ describe('Validate tablesApi', function() {
                 },
                 function(error) {
                     done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails if getField fails', function(done) {
+            getFieldsStub.restore();
+            getFieldsStub.returns(errorPromise);
+            req.body = {name: 'name', tableNoun: 'noun', description: 'desc', tableIcon: 'icon', recordTitleFieldId: 6};
+            let promise = tablesApi.updateTable(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error('Unexpected success promise return when getField failed'));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails if patchField fails', function(done) {
+            patchFieldStub.returns(errorPromise);
+            req.body = {name: 'name', tableNoun: 'noun', description: 'desc', tableIcon: 'icon', recordTitleFieldId: 6};
+            let promise = tablesApi.updateTable(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error('Unexpected success promise return when patchTable failed'));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('doesnt call getField if record title wasnt updated', function(done) {
+            getFieldsStub.restore();
+            getFieldsStub = sinon.spy(fieldsApi, 'getField');
+            req.body = {tableNoun: 'noun', description: 'desc', tableIcon: 'icon'};
+            let promise = tablesApi.updateTable(req);
+
+            promise.then(
+                function(response) {
+                    assert.equal(getFieldsStub.callCount, 0);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Unexpected failure promise return when testing updateTable success'));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
