@@ -49,7 +49,7 @@ describe('StandardGridToolBar', () => {
         expect(component.find(StandardGridItemsCount)).toBePresent();
     });
 
-    it('should not render with navigation but render with search and itemsCount component', () => {
+    it('should render the search and itemsCount component but not the navigation component', () => {
 
         let mockSearchTerm = "test search";
 
@@ -79,5 +79,37 @@ describe('StandardGridToolBar', () => {
         expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
 
         expect(component.find(StandardGridItemsCount)).toBePresent();
+    });
+
+    it('should render with search component but not the navigation and itemsCount component', () => {
+
+        let mockSearchTerm = "test search";
+
+        let component = mount(
+            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 0}, searchTerm: mockSearchTerm}}})}>
+                <StandardGridToolBar
+                    doUpdate={AccountUsersActions.doUpdate}
+                    doFacet={false}
+                    id={"accountUsers"}
+                    rowKey={"uid"}
+                    itemTypePlural= "users"
+                    itemTypeSingular="user"
+                    itemsPerPage={0}
+                />
+            </Provider>);
+
+        expect(component).toBeDefined();
+        expect(component.length).toBeTruthy();
+
+        let StandardGridNavigationComponent = component.find(StandardGridNavigation);
+        expect(StandardGridNavigationComponent).not.toBePresent();
+
+        let StandardGridSearchComponent = component.find(GenericFilterSearchBox);
+        expect(StandardGridSearchComponent).toBeDefined();
+        expect(StandardGridSearchComponent.length).toBeTruthy();
+        expect(StandardGridSearchComponent.props().placeholder).toEqual("Search users");
+        expect(StandardGridSearchComponent).toHaveProp('searchTerm', mockSearchTerm);
+
+        expect(component.find(StandardGridItemsCount)).not.toBePresent();
     });
 });

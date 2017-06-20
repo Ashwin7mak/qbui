@@ -244,7 +244,7 @@ const forms = (
         let relatedRelationship = false;
         let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
 
-        if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
+        if (field.tableId && Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
             relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
         }
 
@@ -533,13 +533,18 @@ export const getExistingFields = (state, id, appId, tblId) => {
             return formFields;
         }
 
+        // Skip any new fields
+        if (_.isString(field.id) && field.id.indexOf('new') >= 0) {
+            return formFields;
+        }
+
         // Skip fields that are already on the form
-        if (_.includes(currentForm.formData.formMeta.fields, field.id)) {
+        if (_.includes(_.get(currentForm, 'formData.formMeta.fields', []), field.id)) {
             return formFields;
         }
 
         // Skip fields that are marked for deletion from schema
-        if (_.includes(currentForm.formData.formMeta.fieldsToDelete, field.id)) {
+        if (_.includes(_.get(currentForm, 'formData.formMeta.fieldsToDelete', []), field.id)) {
             return formFields;
         }
 

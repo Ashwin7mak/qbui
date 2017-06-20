@@ -7,7 +7,7 @@
     //By giving it a border the same size as the focus border and a transparent background,
     //it keeps the container from 'jumping' on focus
     border: $stroke-width-thick solid transparent;
-    box-shadow: 0 0 4px 0px rgba($color-black-100, 0);
+    box-shadow: 0 0 4px 0 rgba($color-black-100, 0);
     position: absolute;
     height: 100%;
     width: 335px;
