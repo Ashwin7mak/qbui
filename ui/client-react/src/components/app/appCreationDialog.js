@@ -22,7 +22,9 @@ export class AppCreationDialog extends React.Component {
      * last page has finished
      */
     onFinished = () => {
-        //This is the button that creates the app here
+        if (this.props.createApp) {
+            this.props.createApp({"name": "Pet Dragons"});
+        }
     };
 
     /**
@@ -60,7 +62,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    hideAppCreationDialog: AppBuilderActions.hideAppCreationDialog
+    hideAppCreationDialog: AppBuilderActions.hideAppCreationDialog,
+    createApp: AppBuilderActions.createApp
 };
 
 export default connect(

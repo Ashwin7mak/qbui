@@ -59,6 +59,12 @@ export const createApp = (app) => {
     };
 };
 
+export const setAppProperty = (property, value) => ({
+    type: types.SET_APP_PROPERTY,
+    property,
+    value
+});
+
 export const showAppCreationDialog = () => ({
     type: types.SHOW_APP_CREATION_DIALOG
 });

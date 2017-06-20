@@ -38,6 +38,12 @@ const appBuilder = (
             ...state,
             dialogOpen: false
         };
+
+    case types.SET_APP_PROPERTY:
+        console.log('SET_APP_PROPERTY action: ', action);
+        return {
+            ...state
+        };
     default:
         return state;
     }

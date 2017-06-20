@@ -2,13 +2,24 @@ import React from 'react';
 import {PropTypes} from 'react';
 import DialogFieldInput from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 import {DIALOG_FIELD_INPUT_COMPONENT_TYPE} from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
+import {connect} from 'react-redux';
+import * as AppBuilderActions from '../../actions/appBuilderActions';
+import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
 import _ from 'lodash';
 
 import './appCreationPanel.scss';
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
-class AppCreationPanel extends React.Component {
+export class AppCreationPanel extends React.Component {
+
+    /**
+     * onChange
+     * */
+    updateAppProperty = (property, value) => {
+        this.props.setAppProperty(property, value);
+    };
+
     /**
      * render the app settings UI
      * @returns {XML}
@@ -21,6 +32,7 @@ class AppCreationPanel extends React.Component {
                     <DialogFieldInput title={Locale.getMessage("appCreation.appNameHeading")}
                                       className="appCreationPanel"
                                       name="name"
+                                      onChange={this.updateAppProperty}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
                                       autofocus />
@@ -28,6 +40,7 @@ class AppCreationPanel extends React.Component {
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
                                       className="appCreationPanel"
                                       name="description"
+                                      onChange={this.updateAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3"/>
                 </div>
@@ -35,4 +48,17 @@ class AppCreationPanel extends React.Component {
     }
 }
 
-export default AppCreationPanel;
+
+const mapStateToProps = (state) => {
+    return {
+    };
+};
+
+const mapDispatchToProps = {
+    setAppProperty: AppBuilderActions.setAppProperty
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppCreationPanel);
