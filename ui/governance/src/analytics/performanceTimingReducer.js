@@ -25,9 +25,9 @@ const performanceTimingReducer = (state = initialState, action) => {
     }
 };
 
-export const getTotalLoadingTime = state => state && state.performanceTimingReducer ? state.performanceTimingReducer.totalTimeTaken : "0 seconds";
+export const getTotalLoadingTime = state => _.get(state, 'performanceTiming.totalTimeTaken', '0 seconds');
 
-export const getTotalGridLoadingTime = state => state && state.performanceTimingReducer ? state.performanceTimingReducer.totalGridLoadTime : "0 seconds";
+export const getTotalGridLoadingTime = state => _.get(state, 'performanceTiming.totalGridLoadTime', '0 seconds');
 
 export default performanceTimingReducer;
 

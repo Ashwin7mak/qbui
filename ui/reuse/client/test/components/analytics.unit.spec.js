@@ -101,6 +101,10 @@ describe('Analytics', () => {
         expect(instance.updateEvergage).toHaveBeenCalled();
     });
 
+    it('updates Evergage even when email is not passed in', () => {
+
+    });
+
     describe('functions that update evergage', () => {
         beforeEach(() => {
             // Don't add the script to the page during these tests

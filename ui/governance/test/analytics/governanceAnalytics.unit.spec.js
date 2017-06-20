@@ -17,13 +17,8 @@ describe('GovernanceAnalytics', () => {
     });
 
     it('should contain the main Analytics component', () => {
-        let govComponent = shallow(
-            <GovernanceAnalytics />
-        );
-        expect(govComponent).toBeDefined();
-        expect(govComponent.length).toBeTruthy();
-
-        expect(govComponent.find(Analytics)).toBeDefined();
+        let govComponent = shallow(<GovernanceAnalytics />);
+        expect(govComponent.find(Analytics)).toBePresent();
     });
 
     describe('functions that update evergage for governance analytics', () => {

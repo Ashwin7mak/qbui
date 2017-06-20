@@ -41,6 +41,10 @@ export class Analytics extends Component {
         ];
     }
 
+    static defaultProps = {
+        additionalUpdateFunctions: []
+    };
+
     /**
      * Setup script copied from the Evergage documentation.
      * Setup script available in Evergage Account -> Choose Dataset -> Settings -> Javascript
@@ -202,7 +206,13 @@ Analytics.propTypes = {
         id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         ownerId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         accountId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-    })
+    }),
+
+    /**
+     *  The additional props that needs to be passed to EverGage.
+     *  Typically, this is an array.
+     */
+    additionalUpdateFunctions: PropTypes.array
 };
 
 const mapStateToProps = state => {

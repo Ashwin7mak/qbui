@@ -229,6 +229,7 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
         const promise = accountUsersService.getAccountUsers(accountId);
 
         dispatch(fetchingAccountUsers());
+        // TODO: Refactor the promise to a Higher order promise to start the timer
         let startTime = window.performance.now();
         return promise.then(response => {
             _.each(response.data, item => {

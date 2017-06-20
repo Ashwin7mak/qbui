@@ -13,21 +13,21 @@ let component;
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-let pluralProps = {
+const pluralProps = {
     paidUsers: 11,
     deniedUsers: 5,
     deactivatedUsers: 2,
     totalRealmUsers: 26
 };
 
-let singularProp = {
+const singularProp = {
     paidUsers: 1,
     deniedUsers: 1,
     deactivatedUsers: 1,
     totalRealmUsers: 7
 };
 
-let initialState = {
+const initialState = {
     AccountUsers: {
         status: {
             error: null,

@@ -12,5 +12,5 @@ export default combineReducers({
     AccountUsers,
     RequestContext,
     facets: facetMenuReducer,
-    performanceTimingReducer
+    performanceTiming: performanceTimingReducer
 });

@@ -113,6 +113,7 @@ export class GovernanceAnalytics extends Component {
     ];
 
     render() {
+        console.log(this.props);
         return (
             <Analytics dataset={Config.evergageDataset}
                        userId={this.props.currentUserId}
