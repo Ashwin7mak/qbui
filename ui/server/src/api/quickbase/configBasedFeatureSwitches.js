@@ -78,6 +78,6 @@
             }
         };
 
-        return <configBasedFeatureSwitchesApi></configBasedFeatureSwitchesApi>;
+        return configBasedFeatureSwitchesApi;
     };
 }());
