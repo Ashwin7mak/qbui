@@ -27,6 +27,7 @@ class ColumnTransformer {
         this.classes = headerClasses;
         this.isHidden = isHidden;
         this.isPlaceholder = isPlaceholder;
+        console.log(this);
     }
 
     /**
@@ -73,7 +74,8 @@ class ColumnTransformer {
                 onDragEnd,
                 relatedField: {
                     name: this.headerLabel,
-                    datatypeAttributes: this.fieldDef && this.fieldDef.datatypeAttributes
+                    datatypeAttributes: this.headerMenuProps && this.headerMenuProps.fieldDef
+                    && this.headerMenuProps.fieldDef.datatypeAttributes
                 }
 
             }
