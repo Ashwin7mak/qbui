@@ -1,4 +1,6 @@
 import * as types from '../actions/types';
+import AppService from '../services/appService';
+import Logger from '../utils/logger';
 
 /**
  * Create new app event.   Used to inform that a new
