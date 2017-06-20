@@ -6,7 +6,6 @@ import SearchBox from '../search/searchBox';
 import {connect} from "react-redux";
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
-import {getApp, getSelectedAppId} from '../../reducers/app';
 
 import AppUtils from '../../utils/appUtils';
 
@@ -96,16 +95,11 @@ export const AppsList = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => ({
-    getApp: (appId) => getApp(state.app, appId),
-});
-
 const mapDispatchToProps = {
-    showAppCreationDialog,
-    getSelectedAppId
+    showAppCreationDialog
 };
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(AppsList);
