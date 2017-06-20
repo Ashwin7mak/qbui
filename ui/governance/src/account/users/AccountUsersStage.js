@@ -11,7 +11,7 @@ import "./AccountUsersStage.scss";
 /**
  * The stage for the AccountUsers page
  */
-class AccountUsersStage extends Component {
+export class AccountUsersStage extends Component {
 
     render() {
 
@@ -75,18 +75,14 @@ AccountUsersStage.propTypes = {
 
 };
 
-AccountUsersStage.defaultProps = {
-    paidUsers: 0,
-    deniedUsers: 0,
-    deactivatedUsers: 0,
-    totalRealmUsers: 0
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+        paidUsers: getTotalPaidUsers(state),
+        deniedUsers: getTotalDeniedUsers(state),
+        deactivatedUsers: getTotalDeactivatedUsers(state),
+        totalRealmUsers: getTotalRealmUsers(state)
+    };
 };
-
-const mapStateToProps = (state) => ({
-    paidUsers: getTotalPaidUsers(state),
-    deniedUsers: getTotalDeniedUsers(state),
-    deactivatedUsers: getTotalDeactivatedUsers(state),
-    totalRealmUsers: getTotalRealmUsers(state)
-});
 
 export default connect(mapStateToProps)(AccountUsersStage);
