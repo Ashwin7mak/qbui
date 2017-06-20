@@ -11,11 +11,6 @@ import _ from 'lodash';
 import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
 
 export class AppCreationDialog extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     /**
      * cancel
      */
