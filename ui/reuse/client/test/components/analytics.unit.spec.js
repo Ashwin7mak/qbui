@@ -101,7 +101,35 @@ describe('Analytics', () => {
         expect(instance.updateEvergage).toHaveBeenCalled();
     });
 
+    it('updates Evergage even when email is passed in', () => {
+        spyOn(document, 'getElementById').and.returnValue(true);
+
+        const testFirstUserId = 1;
+        // const testSecondUserId = 2;
+
+        component = shallow(<Analytics dataset={mockDataset} userEmail={"test@test.com"} userId={testFirstUserId} />, {lifecycleExperimental: true});
+        let instance = component.instance();
+        spyOn(instance, 'updateEvergage').and.callThrough();
+        component.setProps({userId: testFirstUserId});
+
+        component.setProps({userEmail: 'test2@test.com'});
+
+        expect(instance.updateEvergage).toHaveBeenCalled();
+
+    });
+
     it('updates Evergage even when email is not passed in', () => {
+        spyOn(document, 'getElementById').and.returnValue(true);
+
+        const testFirstUserId = 1;
+        // const testSecondUserId = 2;
+
+        component = shallow(<Analytics dataset={mockDataset} userId={testFirstUserId} />, {lifecycleExperimental: true});
+        let instance = component.instance();
+        spyOn(instance, 'updateEvergage').and.callThrough();
+        component.setProps({userId: testFirstUserId});
+
+        expect(instance.updateEvergage).toHaveBeenCalled();
 
     });
 

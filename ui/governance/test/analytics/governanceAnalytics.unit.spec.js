@@ -9,7 +9,6 @@ import {GovernanceAnalytics} from '../../src/analytics/governanceAnalytics';
 import {Analytics} from '../../../reuse/client/src/components/analytics/analytics';
 
 let component;
-const mockDataset = 'unitTest';
 
 describe('GovernanceAnalytics', () => {
     beforeEach(() => {
@@ -18,7 +17,7 @@ describe('GovernanceAnalytics', () => {
 
     it('should contain the main Analytics component', () => {
         let govComponent = shallow(<GovernanceAnalytics />);
-        expect(govComponent.find(Analytics)).toBePresent();
+        expect(govComponent.find(Analytics)).toBeDefined();
     });
 
     describe('functions that update evergage for governance analytics', () => {
