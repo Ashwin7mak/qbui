@@ -187,8 +187,7 @@ const app = (
             return {
                 ...state,
                 app: action.app,
-                apps: setAppInApps(action.app),
-                selected: setSelectedApp(action.app.id)
+                apps: setAppInApps(action.app)
             };
         }
         return state;
