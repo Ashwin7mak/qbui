@@ -55,7 +55,7 @@ class DefaultTopNavGlobalActions extends Component {
                         />
                     ))}
                     <li className="link globalAction"><HelpButton/></li>
-                    <li className="link globalAction withDropdown">
+                    <li className="link globalAction withUserDropdown">
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
                             changeLocale={this.props.changeLocale}

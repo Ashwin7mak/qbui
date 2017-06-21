@@ -80,3 +80,9 @@
 
     }
 }
+
+.withUserDropdown {
+    @include small-breakpoint {
+        max-width: 33%;
+    }
+}
