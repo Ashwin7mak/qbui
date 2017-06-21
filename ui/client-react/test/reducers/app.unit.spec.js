@@ -408,3 +408,23 @@ describe('Test app reducer - get app table tests', () => {
         });
     });
 });
+
+describe('Test app reducer - create new app tests', () => {
+    const newApp = {'id':'1'};
+    const appTests = [
+        {'name': 'add app to store', app:newApp},
+        {'name': 'add bad app object to store', app:null}
+    ];
+    appTests.forEach(testCase => {
+        it(testCase.name, () => {
+            const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS, app:testCase.app});
+            if (testCase.app === null) {
+                expect(AppReducer.getApps(state).length).toEqual(0);
+                expect(AppReducer.getApp(state, newApp.id)).toEqual(null);
+            } else {
+                expect(AppReducer.getApps(state).length).toEqual(1);
+                expect(AppReducer.getApp(state, newApp.id)).toEqual(newApp);
+            }
+        });
+    });
+});

@@ -20,13 +20,12 @@ const appBuilder = (
     case types.CREATE_APP_SUCCESS:
         return {
             ...state,
-            appInfo: action.app,
             savingApp: false
         };
 
     case types.CREATE_APP_FAILED:
         return {
-            //  TODO: should the error condition to be added to state or is the promise reject enough
+            //  TODO: depending on XD design, should the error condition be added to state or is the promise reject enough
             ...state,
             savingApp: false
         };
