@@ -106,7 +106,7 @@ $edit-icon-font-size: 18px;
         }
     }
     // adjust sizing when no checkbox is present
-    &.disableMultiSelect .qbHeaderCell {
+    &.isMultiSelectDisabled .qbHeaderCell {
         min-width: 30px;
     }
 
@@ -233,8 +233,9 @@ $edit-icon-font-size: 18px;
     }
 
     // Adjust alignment of icons when checkbox is not present
-    &.disableMultiSelect .qbRow .stickyCell {
+    &.isMultiSelectDisabled .qbRow .stickyCell {
         padding-left: 10px;
+        padding-right: 0;
     }
 
     //== header row above groups of rows
