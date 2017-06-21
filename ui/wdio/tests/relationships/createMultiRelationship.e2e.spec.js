@@ -16,8 +16,7 @@
 
     let parentTable;
     let parentPickerTitleFieldValue = 'testTextValue';
-    let randomTable_1RecordId = rawValueGenerator.generateInt(1, 10);
-    let randomTable_2RecordId = rawValueGenerator.generateInt(1, 10);
+    let childTableRecordId = rawValueGenerator.generateInt(1, 5);
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
@@ -27,8 +26,8 @@
         let realmName;
         let realmId;
         let testApp;
-        let parentTableRecordValues;
-        let childTableRecordValues;
+        let expectedParentTableRecordValues;
+        let expectedChildTableRecordValues;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -108,6 +107,7 @@
 
             //Click OK button on create table dialogue
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+            modalDialog.waitUntilModalDialogSlideAway();
 
             //Add fields to the form
             formBuilderFields.forEach(function(formBuilderField) {
@@ -133,8 +133,8 @@
             reportContentPO.waitForReportContent();
 
             //Get record values of child Table
-            parentTableRecordValues = reportContentPO.getRecordValues(0);
-            parentTableRecordValues.shift();
+            expectedParentTableRecordValues = reportContentPO.getRecordValues(0);
+            expectedParentTableRecordValues.shift();
 
             return parentTable;
         });
@@ -144,7 +144,7 @@
          */
         beforeEach(function() {
             //Load the child table 'table 2' -> random record in view mode
-            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, childTableRecordId);
         });
 
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
@@ -156,7 +156,7 @@
 
                 //Verify that the create relationship button is visible since app has 3 tables and relationship exists between only 2 tables
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) > -1).toBe(true);
+                expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(true);
 
                 //Click on forms Cancel button
                 formsPO.clickFormCancelBtn();
@@ -166,32 +166,11 @@
             it('App with only 3 tables - Create multi relationship', function() {
 
                 //Get child record first Value
-                childTableRecordValues = browser.element('.cellWrapper').getAttribute('textContent');
+                expectedChildTableRecordValues = browser.element('.cellWrapper').getAttribute('textContent');
 
                 //create relationship between parent and child table.
                 //NOTE: I am not selecting any field here because 'titleField' should be selected as default
-                relationshipsPO.createRelationshipToParentTable(parentTable, '');
-
-                //Select record from parent picker
-                //click on the edit pencil on the child record
-                formsPO.clickRecordEditPencilInViewForm();
-
-                //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
-                formsPO.enterFormValues('allPhoneFields');
-                //Select titleField value from parent picker
-                relationshipsPO.selectFromParentPicker(parentPickerTitleFieldValue);
-
-                //Click Save on the form
-                formsPO.clickFormSaveBtn();
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
-                //verify You land in view form since you edited a record from View form after saving
-                formsPO.waitForViewFormsTableLoad();
-                topNavPO.settingsBtn.waitForVisible();
-
-                //Verify the relationship by clicking on get another record from parent link in view record mode.
-                //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected.
-                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues, childTableRecordValues);
+                relationshipsPO.createRelationshipToParentTable(parentTable, '', parentPickerTitleFieldValue, expectedParentTableRecordValues, expectedChildTableRecordValues);
             });
 
             it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {
@@ -200,7 +179,7 @@
 
                 //Verify that the create relationship button is not visible.
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) === -1).toBe(true);
+                expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(false);
 
                 //Click on forms Cancel button
                 formsPO.clickFormCancelBtn();

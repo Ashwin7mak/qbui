@@ -162,7 +162,8 @@ class formBuilderPage {
     // methods
 
     addNewField(label) {
-        return browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
+        browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
+        return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
     }
 
     cancel() {
@@ -397,40 +398,6 @@ class formBuilderPage {
     stripAsterisk(label) {
         // strips the leading '* ' from a field label if necessary
         return label.replace('* ', ''); // not limited to leading chars but simple
-    }
-
-    /**
-     * Verify the Get another record relationship dialog titles, descriptions and functionality
-     * @param expectedTablesList to verify the select table drop down list
-     * @param parentTable table to select
-     * @param childTable table to verify that I am inside this table while creating relationship
-     * @param expectedFieldsList to verify the fields from advanced settings select dropdown
-     */
-    verifyGetAnotherRecordRelationshipDialog(expectedTablesList, parentTable, childTable, expectedFieldsList) {
-        expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-        //Verify title
-        expect(modalDialog.modalDialogTitle).toContain('Get another record');
-        //Verify select tables drop down has all the tables except the one you're in
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
-        let tableDropDownList = modalDialog.allDropDownListOptions;
-        expect(tableDropDownList).toEqual(expectedTablesList);
-        //click again on the arrow to collapse the outer menu
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
-        //Select the table
-        modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
-        //Click on advanced settings
-        modalDialog.clickModalDialogAdvancedSettingsToggle();
-        //Click on advanced setting field drop down
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
-        //Verify select drop down has just record id
-        let selectFieldDropDownList = modalDialog.allDropDownListOptions;
-        expect(selectFieldDropDownList).toEqual(expectedFieldsList);
-        //Finally close the dialog
-        modalDialog.modalDialogCloseBtn.click();
-        //Verify the dialog got closed
-        browser.waitForVisible('.modal-dialog .iconUISturdy-close', e2eConsts.longWaitTimeMs, true);
-        //Close the form builder
-        this.cancel();
     }
 
     KB_cancel() {

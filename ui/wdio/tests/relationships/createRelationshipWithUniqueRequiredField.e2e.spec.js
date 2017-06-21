@@ -14,11 +14,12 @@
     let modalDialog = requirePO('/common/modalDialog');
     let loadingSpinner = requirePO('/common/loadingSpinner');
 
-    let parentTableRecordValues;
-    let childTableRecordValues;
+    let expectedParentTableRecordValues;
+    let expectedChildTableRecordValues;
     const PARENT_TABLE = 'Table 1';
-    let randomTable_1RecordId = rawValueGenerator.generateInt(1, 4);
-    let randomTable_2RecordId = rawValueGenerator.generateInt(1, 4);
+    let uniqueRequiredTextField = 'Text Field';
+    let randomParentTableRecordId = rawValueGenerator.generateInt(1, 4);
+    let randomChildTableRecordId = rawValueGenerator.generateInt(1, 4);
 
 
     describe('Relationships - Create relationship with unique and required field Tests :', function() {
@@ -70,11 +71,11 @@
         beforeAll(function() {
             //Load the child table 'table 2' report
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
-            childTableRecordValues = reportContentPO.getRecordValues(randomTable_2RecordId - 1, 1);
+            expectedChildTableRecordValues = reportContentPO.getRecordValues(randomChildTableRecordId - 1, 1);
 
             //Load the random record of the parent table ie 'Table 1' and get the values of the record for verification of relation at the end
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomTable_1RecordId);
-            parentTableRecordValues = formsPO.getRecordValuesInViewForm('.viewForm');
+            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomParentTableRecordId);
+            expectedParentTableRecordValues = relationshipsPO.getValuesFromFormSection(relationshipsPO.getFormSectionEl());
         });
 
         /**
@@ -82,13 +83,13 @@
          */
         beforeEach(function() {
             //Load the child table 'table 2' -> random record in view mode
-            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, randomTable_2RecordId);
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, randomChildTableRecordId);
         });
 
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
 
-            it('Verify numeric field not displayed in field list as it is just an required field and not an unique field', function() {
+            it('Verify numeric and numeric currency field not displayed in field list as it is just an required field and not an unique field', function() {
                 //Select settings -> modify this form
                 topNavPO.clickOnModifyFormLink();
 
@@ -101,7 +102,7 @@
                 //Click on advanced settings of add a record dialog
                 modalDialog.clickModalDialogAdvancedSettingsToggle();
 
-                //Verify select tables drop down has all the tables except the one you're in
+                //Click on fields select drop down
                 modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
 
                 //Verify Numeric and currency fields are not part of fields list since they are just set as either only unique or only required
@@ -124,28 +125,7 @@
 
                 //create relationship between parent and child table
                 //NOTE: Select Text Field as this is set to unique and required field
-                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, 'Text Field');
-
-                //Select record from parent picker
-                //click on the edit pencil on the child record
-                formsPO.clickRecordEditPencilInViewForm();
-
-                //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
-                formsPO.enterFormValues('allPhoneFields');
-                //Select text field record from parent picker
-                relationshipsPO.selectFromParentPicker(parentTableRecordValues[0]);
-
-                //Click Save on the form
-                formsPO.clickFormSaveBtn();
-
-                //wait until save success container goes away
-                notificationContainer.waitUntilNotificationContainerGoesAway();
-                //verify You land in view form since you edited a record from View form after saving
-                formsPO.waitForViewFormsTableLoad();
-
-                //Verify the relationship by clicking on get another record from parent link in view record mode.
-                //Clicking on relationship link will open a drawer and verify the record is equal to the parent record I selected and also verify childEmbbeded report
-                relationshipsPO.verifyParentRecordRelationship(parentTableRecordValues, childTableRecordValues);
+                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '', uniqueRequiredTextField, expectedParentTableRecordValues, expectedChildTableRecordValues);
 
             });
         }
