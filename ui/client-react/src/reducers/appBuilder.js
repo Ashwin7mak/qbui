@@ -1,6 +1,8 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
 
+let cloneState;
+
 const appBuilder = (
     //  default states
     state = {
@@ -12,40 +14,49 @@ const appBuilder = (
     switch (action.type) {
 
     case types.CREATE_APP:
+        cloneState = _.cloneDeep(state);
         return {
-            ...state,
+            ...cloneState,
             savingApp: true
         };
 
     case types.CREATE_APP_SUCCESS:
+        cloneState = _.cloneDeep(state);
+        cloneState.name = '';
+        cloneState.description = '';
+        cloneState.dialogOpen = false;
         return {
-            ...state,
+            ...cloneState,
             savingApp: false,
             dialogOpen: false
         };
 
     case types.CREATE_APP_FAILED:
+        cloneState = _.cloneDeep(state);
         return {
             //  TODO: depending on XD design, should the error condition be added to state or is the promise reject enough
-            ...state,
+            ...cloneState,
             savingApp: false
         };
 
     case types.SHOW_APP_CREATION_DIALOG:
+        cloneState = _.cloneDeep(state);
         return {
-            ...state,
+            ...cloneState,
             dialogOpen: true
         };
 
     case types.HIDE_APP_CREATION_DIALOG:
+        cloneState = _.cloneDeep(state);
         return {
-            ...state,
+            ...cloneState,
             dialogOpen: false
         };
 
     case types.SET_APP_PROPERTY:
+        cloneState = _.cloneDeep(state);
         return {
-            ...state,
+            ...cloneState,
             [action.property]: action.value
         };
     default:
