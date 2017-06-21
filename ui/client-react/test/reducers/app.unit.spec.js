@@ -412,8 +412,8 @@ describe('Test app reducer - get app table tests', () => {
 describe('Test app reducer - create new app tests', () => {
     const newApp = {'id': '1'};
     const appTests = [
-        {'name': 'add app to store', app:newApp},
-        {'name': 'add bad app object to store', app:null}
+        {'name': 'add app to store', app: newApp},
+        {'name': 'add bad app object to store', app: null}
     ];
     appTests.forEach(testCase => {
         it(testCase.name, () => {
