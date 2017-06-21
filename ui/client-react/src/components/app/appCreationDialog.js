@@ -16,7 +16,7 @@ export class AppCreationDialog extends React.Component {
      */
     onCancel = () => {
         this.props.hideAppCreationDialog();
-    }
+    };
 
     /**
      * last page has finished
@@ -24,6 +24,7 @@ export class AppCreationDialog extends React.Component {
     onFinished = () => {
         if (this.props.createApp && this.props.newApp) {
             this.props.createApp(this.props.newApp);
+            this.props.hideAppCreationDialog();
         }
     };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import {AppCreationDialog, __RewireAPI__ as AppCreationDialogRewireAPI} from '../../src/components/app/appCreationDialog';
 import {AppCreationPanel} from '../../src/components/app/appCreationPanel';
 import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
@@ -41,21 +41,27 @@ describe('AppCreationDialog', () => {
         expect(mockActions.hideAppCreationDialog).toHaveBeenCalled();
     });
 
-    it('will invoke createApp action when onFinished is called', () => {
-        component = shallow(<AppCreationDialog createApp={mockActions.createApp} newApp={{}}/>);
+    it('will invoke createApp action and hideAppCreationDialog when onFinished is called', () => {
+        component = shallow(<AppCreationDialog createApp={mockActions.createApp}
+                                               newApp={{}}
+                                               hideAppCreationDialog={mockActions.hideAppCreationDialog}/>);
 
         instance = component.instance();
         instance.onFinished();
 
         expect(mockActions.createApp).toHaveBeenCalledWith({});
+        expect(mockActions.hideAppCreationDialog).toHaveBeenCalledWith({});
     });
 
-    it('will NOT invoke createApp action when onFinished is called if there are no new apps', () => {
-        component = shallow(<AppCreationDialog createApp={mockActions.createApp} newApp={null}/>);
+    it('will NOT invoke createApp action or hideAppCreationDialog action when onFinished is called if there are no new apps', () => {
+        component = shallow(<AppCreationDialog createApp={mockActions.createApp}
+                                               newApp={null}
+                                               hideAppCreationDialog={mockActions.hideAppCreationDialog}/>);
 
         instance = component.instance();
         instance.onFinished();
 
         expect(mockActions.createApp).not.toHaveBeenCalled();
+        expect(mockActions.hideAppCreationDialog).not.toHaveBeenCalled();
     });
 });

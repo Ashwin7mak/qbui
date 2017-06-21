@@ -62,9 +62,13 @@ export const getAppNameValue = (state) => _.get(state.appBuilder, 'name', '');
 export const getAppDescriptionValue = (state) => _.get(state.appBuilder, 'description', '');
 
 export const getNewAppInfo = (state) => {
-    if (_.get(state.appBuilder, 'name', '').length > 0) {
+    //TODO: Description will need to be added to the return object, but there is currently no endpoint for it
+    let description =  getAppDescriptionValue(state);
+    let name = getAppNameValue(state);
+
+    if (name.length > 0) {
         return {
-            name: _.get(state.appBuilder, 'name')
+            name: name
         };
     }
     return null;
