@@ -2,7 +2,11 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import TestUtils from 'react-addons-test-utils';
-import {FeatureSwitchOverridesRoute} from '../../src/components/featureSwitches/featureSwitchOverridesRoute';
+import {FeatureSwitchOverridesRoute, __RewireAPI__ as FeatureSwitchRewireAPI} from '../../src/components/featureSwitches/featureSwitchOverridesRoute';
+
+const mockPromiseAll = {
+    all: () => ({then: callback => callback()})
+};
 
 describe('FeatureSwitchOverridesRoute', () => {
     let component;
@@ -52,6 +56,8 @@ describe('FeatureSwitchOverridesRoute', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
+        FeatureSwitchRewireAPI.__Rewire__('Promise', mockPromiseAll);
+
         props = createProps();
 
         spyOn(props, 'getSwitches');
@@ -69,6 +75,8 @@ describe('FeatureSwitchOverridesRoute', () => {
         props.updateOverride.calls.reset();
         props.overrideUpdated.calls.reset();
         props.deleteOverrides.calls.reset();
+
+        FeatureSwitchRewireAPI.__ResetDependency__('Promise');
     });
 
     it('test render of component ', () => {
