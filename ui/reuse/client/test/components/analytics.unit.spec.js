@@ -128,8 +128,9 @@ describe('Analytics', () => {
         expect(instance.updateEvergage).toHaveBeenCalled();
     });
 
-    it('updates Evergage even when email IS NOT passed in', () => {
+    it('updates Evergage userId even when email is not passed in', () => {
         spyOn(document, 'getElementById').and.returnValue(true);
+        spyOn(window._aaq, 'push');
 
         const testFirstUserId = 1;
 
@@ -139,6 +140,9 @@ describe('Analytics', () => {
         component.setProps({userId: testFirstUserId});
 
         expect(instance.updateEvergage).toHaveBeenCalled();
+
+        expect(window._aaq.push).toHaveBeenCalledWith([ 'setUser', 1 ]);
+        expect(window._aaq.push).toHaveBeenCalledWith([ 'gReqUID', 1 ]);
     });
 
     describe('functions that update evergage', () => {
