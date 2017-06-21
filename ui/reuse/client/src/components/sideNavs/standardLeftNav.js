@@ -12,7 +12,6 @@ import {LEFT_NAV_BAR} from 'APP/constants/spinnerConfigurations';
 import Breakpoints from 'APP/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
-import QbLogoImage from 'REUSE/assets/images/QB-logo.svg';
 import LogoImg from 'REUSE/assets/images/QB3-logo.svg';
 import './standardLeftNav.scss';
 
@@ -261,7 +260,7 @@ StandardLeftNav.defaultProps = {
     contextHeaderTitle: null,
     showContextHeaderToggle: false,
     isContextToggleDown: true,
-    brandingImage: QbLogoImage,
+    brandingImage: LogoImg,
     brandingImageAltText: 'QuickBase',
     navItems: [],
 };
