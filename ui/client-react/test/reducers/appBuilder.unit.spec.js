@@ -6,7 +6,7 @@ let storeState = {};
 
 let mockState = {
     appBuilder: {
-        dialogOpen: true,
+        isDialogOpen: true,
         name: 'Mock App Name',
         description: 'Mock App Name'
     }
@@ -14,8 +14,8 @@ let mockState = {
 
 describe('Test appBuilder reducer - initial state', () => {
     const initialState = {
-        savingApp: false,
-        dialogOpen: false
+        isSavingApp: false,
+        isDialogOpen: false
     };
     it('return default state', () => {
         const state = reducer(undefined, {});
@@ -26,18 +26,18 @@ describe('Test appBuilder reducer - initial state', () => {
 describe('App Creation', () => {
     it('create app', () => {
         const state = reducer(storeState, {type: types.CREATE_APP});
-        expect(state.savingApp).toBe(true);
+        expect(state.isSavingApp).toBe(true);
     });
     it('create app success', () => {
         const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS});
-        expect(state.savingApp).toBe(false);
-        expect(state.dialogOpen).toBe(false);
+        expect(state.isSavingApp).toBe(false);
+        expect(state.isDialogOpen).toBe(false);
         expect(state.name).toBe('');
         expect(state.description).toBe('');
     });
     it('create app failed', () => {
         const state = reducer(storeState, {type: types.CREATE_APP_FAILED});
-        expect(state.savingApp).toBe(false);
+        expect(state.isSavingApp).toBe(false);
     });
 });
 
@@ -45,13 +45,13 @@ describe('App Creation Dialog', () => {
     it('will show the app creation dialog', () => {
         const state = reducer(storeState, {type: types.SHOW_APP_CREATION_DIALOG});
 
-        expect(state.dialogOpen).toBe(true);
+        expect(state.isDialogOpen).toBe(true);
     });
 
     it('will hide the app creation dialog', () => {
         const state = reducer(storeState, {type: types.HIDE_APP_CREATION_DIALOG});
 
-        expect(state.dialogOpen).toBe(false);
+        expect(state.isDialogOpen).toBe(false);
     });
 
     it('will set the app name property', () => {
@@ -64,21 +64,21 @@ describe('App Creation Dialog', () => {
 
 describe('App Creation Selector', () => {
     describe('getIsDialogOpenState', () => {
-        it('will return true if dialogOpen is true', () => {
+        it('will return true if isDialogOpen is true', () => {
             let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockState);
 
             expect(openDialog).toEqual(true);
         });
 
-        it('will return false if dialogOpen is undefined', () => {
+        it('will return false if isDialogOpen is undefined', () => {
             let openDialog = AppBuilderSelectors.getIsDialogOpenState({});
 
             expect(openDialog).toEqual(false);
         });
 
-        it('will return false if dialogOpen is false', () => {
+        it('will return false if isDialogOpen is false', () => {
             let mockCloneState = _.cloneDeep(mockState);
-            mockCloneState.appBuilder.dialogOpen = false;
+            mockCloneState.appBuilder.isDialogOpen = false;
             let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockCloneState);
 
             expect(openDialog).toEqual(false);
