@@ -23,14 +23,27 @@ export const WindowHistoryUtils = {
         AppHistory.history.push(location.pathname + newParams);
     },
 
+    /**
+     * Given a params object, builds query string with key value pairs.
+     * param = {
+     *   name: 'Jon',
+     *   value: 33
+     * }
+     *   returns "?name=Jon&value=33"
+     *
+     * @param {string} urlQueryString string to parse for existing parameters
+     * @param params
+     * @returns {string}
+     */
     buildQueryString(urlQueryString, params) {
         let parsed = {};
         if (urlQueryString) {
+            // keep existing query strings
             parsed = queryString.parse(urlQueryString);
         }
         Object.keys(params).forEach(key => {
             // add the key:value pairs
-            // overwrites the value if the key already exists as a query
+            // overwrites the value in urlQueryString if the same key already exists
             parsed[key] = params[key];
         });
         return '?' + queryString.stringify(parsed);

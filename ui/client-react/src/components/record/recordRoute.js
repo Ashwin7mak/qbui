@@ -419,10 +419,15 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-        // // Currently page actions are disabled for child records shown in drawers.
-        // if (this.props.isDrawerContext) {
-        //     actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
-        // }
+        // Currently add new record action is disabled for child records shown in drawers.
+        if (this.props.isDrawerContext) {
+            actions = actions.map(action => {
+                if (action.className === 'addRecord') {
+                    return Object.assign(action, {disabled:true, onClick: null});
+                }
+                return action;
+            });
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
