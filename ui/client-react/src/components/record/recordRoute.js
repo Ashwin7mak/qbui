@@ -351,13 +351,19 @@ export const RecordRoute = React.createClass({
             const {appId, tblId, recordId} = this.props.match.params;
 
             // TODO: we should pass the actual rptId as rptId and separately pass in embeddedReport
-            let rptId = _.get(this.props, `embeddedReports[this.props.match.params.rptId].rptId`, 0);
+            let viewContextId;
+            let {rptId} = this.props.match.params;
+            if (typeof rptId !== 'number') {
+                viewContextId = this.props.uniqueId;
+                rptId = _.get(this.props, `embeddedReports[this.props.match.params.rptId].rptId`, 0);
+            }
 
             const queries = {
                 editRec: recordId,
                 detailAppId: appId,
                 detailTableId: tblId,
-                detailReportId: rptId
+                detailReportId: rptId,
+                viewContextId
             };
             const link = WindowHistoryUtils.pushWithQueries(queries);
         } else {

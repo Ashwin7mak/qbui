@@ -1,4 +1,5 @@
 import React from 'react';
+import queryString from 'query-string';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -133,7 +134,8 @@ export const RecordTrowser = React.createClass({
             // or add a new record
             //let promise;
             //let updateRecord = false;
-            const formType = CONTEXT.FORM.EDIT;
+            const parsedQueries = queryString.parse(location.search);
+            const formType = parsedQueries.viewContextId || CONTEXT.FORM.EDIT;
 
             //  open the 'modal working' spinner/window for the record's form
             this.props.saveForm(formType);
@@ -255,7 +257,7 @@ export const RecordTrowser = React.createClass({
                 //  need to call as the form.saving attribute is used to determine when to
                 //  open/close the 'modal working' spinner/window..
                 this.props.saveFormComplete(formType);
-                this.props.syncForm(CONTEXT.FORM.VIEW, obj.recId);
+                this.props.syncForm(formType, obj.recId);
 
 
                 if (next) {
