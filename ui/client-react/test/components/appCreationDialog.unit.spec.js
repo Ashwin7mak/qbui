@@ -41,12 +41,11 @@ describe('AppCreationDialog', () => {
         expect(mockActions.hideAppCreationDialog).toHaveBeenCalled();
     });
 
-    fit('will invoke createApp action when finish button is clicked', () => {
-        component = mount(<AppCreationDialog createApp={mockActions.createApp}
-                                             newApp={{}}
-                                             appDialogOpen={true} />);
+    fit('will invoke createApp action when onFinished is called', () => {
+        component = shallow(<AppCreationDialog createApp={mockActions.createApp} newApp={{}}/>);
 
-        component.find('.buttons').simulate('click');
+        instance = component.instance();
+        instance.onFinished();
 
         expect(mockActions.createApp).toHaveBeenCalledWith({});
     });
