@@ -83,10 +83,8 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
-            //Select report
-            reportContentPO.selectReport('Table 1', 0);
+
             //Go to reports page directly
-            //select report
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();

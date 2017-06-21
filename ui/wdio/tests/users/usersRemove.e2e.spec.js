@@ -59,7 +59,6 @@
             modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
             // Wait for modal to disappear
             browser.waitForExist('.notification-container-empty', e2eConsts.longWaitTimeMs, true);
-            browser.pause(e2eConsts.shortWaitTimeMs);
 
             //TODO: MC-3410 - Need a better way to verify user was removed
             // Check that the user was removed
@@ -80,7 +79,8 @@
             // Click on cancel button from the dialogue box
             modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
             // Wait for modal to disappear
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.waitForExist('.notification-container-empty', e2eConsts.longWaitTimeMs, true);
+
 
             //TODO: MC-3410 - Need a better way to verify user was removed
             // Check for the user not removed

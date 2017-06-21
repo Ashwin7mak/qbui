@@ -6,6 +6,7 @@
     'use strict';
     // Import the base page object
     let e2ePageBase = requirePO('./e2ePageBase');
+    let modalDialog = requirePO('/common/modalDialog');
     let UsersTablePage = Object.create(e2ePageBase, {
 
 
@@ -20,12 +21,6 @@
 
         // Add new user button
         newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
-
-        // Search for a new user search container
-        searchNewUser: {get: function() {return browser.element('.modal-dialog .Select-multi-value-wrapper');}},
-
-        // Add new user menu
-        userAddSearcMenu: {get: function() {return browser.element('.modal-dialog .Select-menu-outer');}},
 
         // Add new user clear searchbox entry
         userAddSearchBoxClear: {get: function() {return browser.element('.Select-clear');}},
@@ -98,13 +93,13 @@
          * Method to search for a user.
          *@param searchUser name
          */
-        selecthUser: {value: function(searchUser) {
+        selectUser: {value: function(searchUser) {
 
             //Wait until you see open User search
-            this.searchNewUser.waitForVisible();
+            this.modalDialogSearchNewUser.waitForVisible();
 
             //Click in search
-            this.searchNewUser.click();
+            this.modalDialogSearchNewUser.click();
 
             //Enter search value
             return browser.keys(searchUser);

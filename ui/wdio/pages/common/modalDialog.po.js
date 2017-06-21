@@ -9,6 +9,8 @@ class modalDialogWindow {
     get DONT_DELETE_BTN() {return  "Don't delete";}
     get REMOVE_BTN() {return  'Remove';}
     get ADD_TO_FORM_BTN() {return  'Add to form';}
+    get ADD_USER_BTN() {return  'Add';}
+    get NO_THANKS_BTN() {return  'No thanks';}
 
     get modalDialog() {
         // modal dialog
@@ -34,18 +36,6 @@ class modalDialogWindow {
         return browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail');
     }
 
-    get modalDialogCancelBtn() {
-        // modal dialog copy button
-        browser.element('.modal-footer .buttons .cancelButton.btn.btn-default').waitForVisible();
-        return browser.element('.modal-footer .buttons .cancelButton.btn.btn-default');
-    }
-
-    get modalDialogAddUserBtn() {
-        // modal dialog footer primary button
-        this.modalDialog.element('.buttons .finishedButton.btn.btn-primary').waitForVisible();
-        return this.modalDialog.element('.buttons .finishedButton.btn.btn-primary');
-    }
-
     get modalDialogContainer() {
         //modal dialog container
         this.modalDialog.element('.bodyContainer').waitForVisible();
@@ -58,18 +48,6 @@ class modalDialogWindow {
         return this.modalDialogContainer.element('.modal-title').getAttribute('textContent');
     }
 
-    get modalDialogAddUserTitle() {
-        // modal dialog title
-        this.modalDialogContainer.element('.title').waitForVisible();
-        return this.modalDialogContainer.element('.title').getAttribute('textContent');
-    }
-
-    get modalDialogShareTitle() {
-        // modal dialog title
-        this.modalDialogContainer.element('.titleText').waitForVisible();
-        return this.modalDialogContainer.element('.titleText').getAttribute('textContent');
-    }
-
     get modalDialogFooterButtons() {
         // modal dialog footer buttons
         this.modalDialog.element('.modal-footer .buttons button').waitForVisible();
@@ -80,12 +58,6 @@ class modalDialogWindow {
         // modal dialog footer primary button
         this.modalDialog.element('.modal-footer .buttons .primaryButton').waitForVisible();
         return this.modalDialog.element('.modal-footer .buttons .primaryButton');
-    }
-
-    get modalDialogNoThanksButton() {
-        // modal dialog footer primary button
-        this.modalDialog.element('.modal-footer .finishedText.btn.btn-primary').waitForVisible();
-        return this.modalDialog.element('.modal-footer .finishedText.btn.btn-primary');
     }
 
     get modalDialogSecondaryButton() {
@@ -116,6 +88,16 @@ class modalDialogWindow {
         //FieldSelector drop down arrow to expand the list
         this.modalDialog.element('.fieldSelector .Select-arrow-zone').waitForVisible();
         return this.modalDialog.element('.fieldSelector .Select-arrow-zone');
+    }
+
+    get modalDialogSearchNewUser() {
+        this.modalDialog.element('.modal-dialog .Select-multi-value-wrapper').waitForVisible();
+        return this.modalDialog.element('.modal-dialog .Select-multi-value-wrapper');
+    }
+
+    get modalDialogUserAddSearcMenu() {
+        this.modalDialog.element('.modal-dialog .Select-menu-outer').waitForVisible();
+        return this.modalDialog.element('.modal-dialog .Select-menu-outer');
     }
 
     get allDropDownListOptions() {
