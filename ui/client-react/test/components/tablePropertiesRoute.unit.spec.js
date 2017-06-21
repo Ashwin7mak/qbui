@@ -66,19 +66,22 @@ describe('TablePropertiesRoute functions', () => {
             expect(TestUtils.scryRenderedComponentsWithType(component, TableCreationPanelMock).length).toEqual(1);
         });
 
-        it('test buttons are not rendered if form is not dirty', () => {
+        it('test buttons are disabled if form is not dirty', () => {
             let buttonsPanel = TestUtils.scryRenderedDOMComponentsWithClass(component, "tableInfoButtons");
             expect(buttonsPanel.length).toEqual(1);
-            expect(buttonsPanel[0].className.indexOf("closed") !== -1).toBe(true);
+
+            let buttons = buttonsPanel[0].querySelectorAll("button[disabled]");
+            expect(buttons.length).toBe(2);
         });
 
-        it('test buttons are not rendered if form is dirty', () => {
+        it('test buttons are enabled if form is dirty', () => {
             let newProps = _.clone(props);
             newProps.isDirty = true;
             component = TestUtils.renderIntoDocument(<TablePropertiesRoute {...newProps}/>);
             let buttonsPanel = TestUtils.scryRenderedDOMComponentsWithClass(component, "tableInfoButtons");
             expect(buttonsPanel.length).toEqual(1);
-            expect(buttonsPanel[0].className.indexOf("open") !== -1).toBe(true);
+            let buttons = buttonsPanel[0].querySelectorAll("button:not([disabled])");
+            expect(buttons.length).toBe(2);
         });
 
         it('test render of delete icon on page bar', () => {
