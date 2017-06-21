@@ -44,8 +44,8 @@ export class AppCreationPanel extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        appName: AppBuilderSelectors.getAppNameValue(state),
-        appDescription: AppBuilderSelectors.getAppDescriptionValue(state)
+        appName: AppBuilderSelectors.getAppProperty(state, 'name'),
+        appDescription: AppBuilderSelectors.getAppProperty(state, 'description')
     };
 };
 

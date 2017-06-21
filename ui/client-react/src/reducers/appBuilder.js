@@ -59,14 +59,12 @@ export default appBuilder;
 
 export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'dialogOpen', false);
 
-export const getAppNameValue = (state) => _.get(state.appBuilder, 'name', '');
-
-export const getAppDescriptionValue = (state) => _.get(state.appBuilder, 'description', '');
+export const getAppProperty = (state, property) => _.get(state.appBuilder, property, '');
 
 export const getNewAppInfo = (state) => {
     //TODO: Description will need to be added to the return object, but there is currently no endpoint for it
-    let description =  getAppDescriptionValue(state);
-    let name = getAppNameValue(state);
+    let description =  getAppProperty(state, 'description');
+    let name = getAppProperty(state, 'name');
 
     if (name.length > 0) {
         return {

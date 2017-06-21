@@ -85,9 +85,9 @@ describe('App Creation Selector', () => {
         });
     });
 
-    describe('getAppNameValue', () => {
+    describe('getAppProperty', () => {
         it('will return app name if there is an app name', () => {
-            let result = AppBuilderSelectors.getAppNameValue(mockState);
+            let result = AppBuilderSelectors.getAppProperty(mockState, 'name');
 
             expect(result).toEqual(mockState.appBuilder.name);
         });
@@ -96,15 +96,13 @@ describe('App Creation Selector', () => {
             let cloneMockState = _.cloneDeep(mockState);
             cloneMockState.appBuilder.name = '';
 
-            let result = AppBuilderSelectors.getAppNameValue(cloneMockState);
+            let result = AppBuilderSelectors.getAppProperty(cloneMockState, 'name');
 
             expect(result).toEqual('');
         });
-    });
 
-    describe('getAppDescriptionValue', () => {
         it('will return app description if there is an app description', () => {
-            let result = AppBuilderSelectors.getAppDescriptionValue(mockState);
+            let result = AppBuilderSelectors.getAppProperty(mockState, 'description');
 
             expect(result).toEqual(mockState.appBuilder.description);
         });
@@ -113,7 +111,7 @@ describe('App Creation Selector', () => {
             let cloneMockState = _.cloneDeep(mockState);
             cloneMockState.appBuilder.description = '';
 
-            let result = AppBuilderSelectors.getAppDescriptionValue(cloneMockState);
+            let result = AppBuilderSelectors.getAppProperty(cloneMockState, 'description');
 
             expect(result).toEqual('');
         });
