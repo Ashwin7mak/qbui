@@ -7,7 +7,7 @@ import {CONTEXT} from '../../../actions/context';
 /**
  * A draggable header cell component to be used in the QbGrid
  */
-export class DraggableQbHeaderCell extends Component {
+export class DraggableReportHeaderCell extends Component {
     onHover = (dropTargetProps, dragItemProps) => {
         if (dragItemProps.label !== dropTargetProps.label) {
             this.props.moveColumn(CONTEXT.REPORT.NAV, dragItemProps.label, dropTargetProps.label);
@@ -23,7 +23,7 @@ export class DraggableQbHeaderCell extends Component {
     }
 }
 
-DraggableQbHeaderCell.propTypes = {
+DraggableReportHeaderCell.propTypes = {
     /**
      * Include any additional classes. */
     classes: React.PropTypes.array,
@@ -41,7 +41,7 @@ DraggableQbHeaderCell.propTypes = {
 };
 
 // Provide default val
-DraggableQbHeaderCell.defaultProps = {
+DraggableReportHeaderCell.defaultProps = {
     classes: []
 };
 
@@ -49,4 +49,4 @@ const mapDispatchToProps = {
     moveColumn
 };
 
-export default connect(null, mapDispatchToProps)(DraggableQbHeaderCell);
+export default connect(null, mapDispatchToProps)(DraggableReportHeaderCell);
