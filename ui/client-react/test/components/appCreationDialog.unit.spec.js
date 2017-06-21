@@ -49,4 +49,13 @@ describe('AppCreationDialog', () => {
 
         expect(mockActions.createApp).toHaveBeenCalledWith({});
     });
+
+    it('will NOT invoke createApp action when onFinished is called if there are no new apps', () => {
+        component = shallow(<AppCreationDialog createApp={mockActions.createApp} newApp={null}/>);
+
+        instance = component.instance();
+        instance.onFinished();
+
+        expect(mockActions.createApp).not.toHaveBeenCalled();
+    });
 });
