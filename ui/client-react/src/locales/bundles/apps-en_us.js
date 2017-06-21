@@ -789,7 +789,12 @@ export default {
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
             tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "The title field identifying each record",
+            recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
+            recordTitleFieldDefault: "Default to {recordName} + ID",
+            recordName: "Record Name"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."

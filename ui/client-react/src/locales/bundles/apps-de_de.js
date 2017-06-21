@@ -780,7 +780,12 @@ export default {
             tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
             tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "Das Titelfeld identifiziert jeden Datensatz",
+            recordTitleFieldDescription: "Wählen Sie das Feld aus, das als Überschrift angezeigt wird, wenn Sie einen Datensatz anzeigen oder bearbeiten. Dieses Feld muss ausgefüllt werden.",
+            recordTitleFieldDefault: "Standard auf Noun + ID",
+            recordName: "Datensatzname"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
