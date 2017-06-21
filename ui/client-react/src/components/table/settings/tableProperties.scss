@@ -29,9 +29,6 @@ $table-properties-panel-width: 776px;
     .dialogCreationPanelInfo {
         margin: 15px;
         max-width: $table-properties-panel-width;
-        display: flex;
-        flex-grow: 1;
-        flex-direction: column;
 
         .recordTitleFieldSection {
             flex-grow: 1;
