@@ -29,8 +29,10 @@ describe('App Creation', () => {
         expect(state.savingApp).toBe(true);
     });
     it('create app success', () => {
-        const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS});
+        const newApp = {'name':'newApp'};
+        const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS, app:newApp});
         expect(state.savingApp).toBe(false);
+        expect(state.appInfo).toBe(newApp);
     });
     it('create app failed', () => {
         const state = reducer(storeState, {type: types.CREATE_APP_FAILED});

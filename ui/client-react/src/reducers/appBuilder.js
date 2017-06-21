@@ -19,8 +19,8 @@ const appBuilder = (
 
     case types.CREATE_APP_SUCCESS:
         return {
-            //  TODO: what if any data to be added to state for the new app
             ...state,
+            appInfo: action.app,
             savingApp: false
         };
 
