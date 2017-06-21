@@ -87,7 +87,7 @@ export class AddUserDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage('addUserToApp.addUser')}
         >
             <div className="addUserPanel">
-                <div className="modal-title topTitle"><I18nMessage message="addUserToApp.title"/> {this.props.selectedApp.name}</div>
+                <div className="modal-title"><I18nMessage message="addUserToApp.title"/> {this.props.selectedApp.name}</div>
                 <div className="description"><I18nMessage message="addUserToApp.description"/></div>
                 <AddUserPanel appRoles={this.props.appRoles}
                               realmUsers={this.props.realmUsers}
