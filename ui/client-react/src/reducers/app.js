@@ -184,10 +184,11 @@ const app = (
     case types.CREATE_APP_SUCCESS:
         //  new app was created in builder..add it to apps list and select
         if (action.app) {
+            let newAppModel = new AppModel({app:action.app});
             return {
                 ...state,
-                app: action.app,
-                apps: setAppInApps(action.app)
+                app: newAppModel.getApp(),
+                apps: setAppInApps(newAppModel.getApp())
             };
         }
         return state;
