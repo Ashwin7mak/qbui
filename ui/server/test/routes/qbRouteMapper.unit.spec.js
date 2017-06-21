@@ -46,6 +46,7 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'GET request to app users endpoint', request: '/qbui/apps/fakeApp/users', expectedPath: '/api/api/v1/apps/fakeApp/users', route: routes.APP_USERS, method: routeMapper.fetchGetFunctionForRoute(routes.APP_USERS), expectedDefined: expectedDefined, httpVerb: 'GET'},
             {message: 'GET request to getReqUser endpoint', request: '/qbui/users/reqUser', expectedPath: '/api/api/v1/users/reqUser', route: routes.REQ_USER, method: routeMapper.fetchGetFunctionForRoute(routes.REQ_USER), expectedDefined: expectedDefined, httpVerb: 'GET'},
 
+            {message: 'POST request to apps endpoint', request: '/qbui/apps', expectedPath: '/api/api/v1/apps', route: routes.APPS, method: routeMapper.fetchPostFunctionForRoute(routes.APPS), expectedDefined: expectedDefined, httpVerb: 'POST'},
             {message: 'POST request to table components endpoint', request: '/qbui/apps/1/tables/tableComponents', expectedPath: '/api/api/v1/apps/1/tables/tableComponents', route: routes.TABLE_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routes.TABLE_COMPONENTS), expectedDefined: expectedDefined, httpVerb: 'POST'},
             {message: 'POST request to records endpoint', request: '/qbui/apps/fakeApp/tables/fakeTable/records', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records', route: routes.RECORDS, method: routeMapper.fetchPostFunctionForRoute(routes.RECORDS), expectedDefined: expectedDefined, httpVerb: 'POST'},
 

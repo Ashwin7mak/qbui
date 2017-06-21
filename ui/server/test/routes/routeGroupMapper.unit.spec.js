@@ -23,7 +23,7 @@ describe('Group Route Mapper Unit Test', function() {
         let testRoutes = [];
 
         //  for each route, define the request methods supported
-        testRoutes.push({message:'LH_V1: ' + routes.APPS, routeGroup:routeGroups.LH_V1, route:routes.APPS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.APPS, routeGroup:routeGroups.LH_V1, route:routes.APPS, DELETE:false, GET:true, POST:true, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.APP_USERS, routeGroup:routeGroups.LH_V1, route:routes.APP_USERS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.APP_ROLES, routeGroup:routeGroups.LH_V1, route:routes.APP_ROLES, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.FEATURE_OVERRIDE, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_OVERRIDE, DELETE:false, GET:false, POST:false, PUT:true, PATCH:false});
