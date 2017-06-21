@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../src/account/users/AccountUsersReducer";
 import Analytics from "../../../reuse/client/src/components/analytics/analytics";
 import Config from '../../../client-react/src/config/app.config';
-import {getTotalLoadingTime, getTotalGridLoadingTime} from "../analytics/performanceTimingReducer";
+import {getPageLoadTime, getGridLoadTime} from "../analytics/performanceTimingReducer";
 
 export class GovernanceAnalytics extends Component {
     // Evergage requires a global variable called _aaq
@@ -84,9 +84,9 @@ export class GovernanceAnalytics extends Component {
     /**
      * Gets the total time taken from page load to fetching grid data
      */
-    updateEvergageTotalTimeTaken = () => {
-        if (_.has(this.props, 'totalTimeTaken')) {
-            this._aaq.push(['setCustomField', 'totalTimeTaken', this.props.totalTimeTaken, 'request']);
+    updateEvergagePageLoadTime = () => {
+        if (_.has(this.props, 'pageLoadTime')) {
+            this._aaq.push(['setCustomField', 'pageLoadTime', this.props.pageLoadTime, 'request']);
         }
     };
 
@@ -94,8 +94,8 @@ export class GovernanceAnalytics extends Component {
      * Gets the total time taken from grid load to fetching grid data
      */
     updateEvergageTotalGridTimeTaken = () => {
-        if (_.has(this.props, 'totalGridLoadTime')) {
-            this._aaq.push(['setCustomField', 'totalGridLoadTime', this.props.totalGridLoadTime, 'request']);
+        if (_.has(this.props, 'gridLoadTime')) {
+            this._aaq.push(['setCustomField', 'totalGridLoadTime', this.props.gridLoadTime, 'request']);
         }
     };
 
@@ -108,7 +108,7 @@ export class GovernanceAnalytics extends Component {
         this.updateEvergagePaidUsers,
         this.updateEvergageDeniedUsers,
         this.updateEvergageTotalRealmUsers,
-        this.updateEvergageTotalTimeTaken,
+        this.updateEvergagePageLoadTime,
         this.updateEvergageTotalGridTimeTaken
     ];
 
@@ -125,8 +125,8 @@ export class GovernanceAnalytics extends Component {
                        deniedUsers={this.props.deniedUsers}
                        deactivatedUsers={this.props.deactivatedUsers}
                        totalRealmUsers={this.props.totalRealmUsers}
-                       totalTimeTaken={this.props.totalTimeTaken}
-                       totalGridLoadTime={this.props.totalGridLoadTime}
+                       pageLoadTime={this.props.pageLoadTime}
+                       gridLoadTime={this.props.gridLoadTime}
                        additionalUpdateFunctions={this.governanceUpdateFunctions} />
         );
     }
@@ -193,12 +193,12 @@ GovernanceAnalytics.propTypes = {
     /**
      * The total time taken for the page to load until the grid is fully loaded
      */
-    totalTimeTaken: PropTypes.string,
+    pageLoadTime: PropTypes.number,
 
     /**
-     * The total time taken for the grid to load
+     * The total time for the grid to load
      */
-    totalGridLoadTime: PropTypes.string
+    gridLoadTime: PropTypes.number
 
 };
 
@@ -216,8 +216,8 @@ const mapStateToProps = (state) => {
         deniedUsers: getTotalDeniedUsers(state),
         deactivatedUsers: getTotalDeactivatedUsers(state),
         totalRealmUsers: getTotalRealmUsers(state),
-        totalTimeTaken: getTotalLoadingTime(state),
-        totalGridLoadTime: getTotalGridLoadingTime(state)
+        pageLoadTime: getPageLoadTime(state),
+        gridLoadTime: getGridLoadTime(state)
     };
 };
 

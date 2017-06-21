@@ -1,11 +1,11 @@
 import * as types from "../app/actionTypes";
 
-export const totalTime = (payload) => ({
-    type: types.GET_TOTAL_TIME,
+export const pageLoadTime = (payload) => ({
+    type: types.GET_PAGE_LOAD_TIME,
     payload
 });
 
-export const gridLoadTime = (payload) => ({
-    type: types.GET_TOTAL_GRID_LOAD_TIME,
+export const gridStartTime = (payload) => ({
+    type: types.GET_GRID_START_TIME,
     payload
 });

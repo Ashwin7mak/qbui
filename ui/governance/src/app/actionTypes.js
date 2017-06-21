@@ -31,5 +31,5 @@ export const REQUEST_CONTEXT_SUCCESS = `${REQUEST_SUCCESS}REQUEST_CONTEXT`;
  * until the grid is actually loaded with the data and also the total time
  * taken to load the grid
  */
-export const GET_TOTAL_TIME = 'GET_TOTAL_TIME';
-export const GET_TOTAL_GRID_LOAD_TIME = 'GET_TOTAL_GRID_LOAD_TIME';
+export const GET_PAGE_LOAD_TIME = 'GET_PAGE_LOAD_TIME';
+export const GET_GRID_START_TIME = 'GET_GRID_START_TIME';

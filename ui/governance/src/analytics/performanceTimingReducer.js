@@ -2,22 +2,24 @@ import * as types from "../app/actionTypes";
 import _ from "lodash";
 
 let initialState = {
-    totalTimeTaken: " ",
-    totalGridLoadTime: " "
+    pageLoadTime: 0,
+    gridStartTime: 0
 };
 
 const performanceTimingReducer = (state = initialState, action) => {
-    let newState = _.cloneDeep(state);
-
     switch (action.type) {
-    case types.GET_TOTAL_TIME: {
-        newState.totalTimeTaken =  action.payload;
-        return newState;
+    case types.GET_PAGE_LOAD_TIME: {
+        return {
+            ...state,
+            pageLoadTime: action.payload
+        };
     }
 
-    case types.GET_TOTAL_GRID_LOAD_TIME: {
-        newState.totalGridLoadTime = action.payload;
-        return newState;
+    case types.GET_GRID_START_TIME: {
+        return {
+            ...state,
+            gridStartTime: action.payload
+        };
     }
 
     default:
@@ -25,9 +27,9 @@ const performanceTimingReducer = (state = initialState, action) => {
     }
 };
 
-export const getTotalLoadingTime = state => _.get(state, 'performanceTiming.totalTimeTaken', '0 seconds');
+export const getPageLoadTime = state => state.performanceTiming.pageLoadTime;
 
-export const getTotalGridLoadingTime = state => _.get(state, 'performanceTiming.totalGridLoadTime', '0 seconds');
+export const getGridLoadTime = state => (state.performanceTiming.pageLoadTime - state.performanceTiming.gridStartTime);
 
 export default performanceTimingReducer;
 

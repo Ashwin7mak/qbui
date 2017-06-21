@@ -1,9 +1,6 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import configureMockStore from "redux-mock-store";
-import thunk from "redux-thunk";
-import {Provider} from "react-redux";
 
 import {GovernanceAnalytics} from '../../src/analytics/governanceAnalytics';
 import {Analytics} from '../../../reuse/client/src/components/analytics/analytics';
@@ -82,16 +79,16 @@ describe('GovernanceAnalytics', () => {
                 expectedArguments: ['setCustomField', 'totalRealmUsers', 41, 'request']
             },
             {
-                testFunction: 'updateEvergageTotalTimeTaken',
+                testFunction: 'updateEvergagePageLoadTime',
                 description: 'the evergage total pageload time (until users loaded)',
-                props: {totalTimeTaken: "3 seconds"},
-                expectedArguments: ['setCustomField', 'totalTimeTaken', "3 seconds", 'request']
+                props: {pageLoadTime: 3.12},
+                expectedArguments: ['setCustomField', 'pageLoadTime', 3.12, 'request']
             },
             {
                 testFunction: 'updateEvergageTotalGridTimeTaken',
                 description: 'the evergage time to load the grid',
-                props: {totalGridLoadTime: "3 seconds"},
-                expectedArguments: ['setCustomField', 'totalGridLoadTime', "3 seconds", 'request']
+                props: {gridLoadTime: 3.12},
+                expectedArguments: ['setCustomField', 'totalGridLoadTime', 3.12, 'request']
             }
         ];
 

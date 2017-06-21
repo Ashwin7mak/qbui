@@ -113,10 +113,9 @@ describe('Account Users Actions Tests', () => {
         it('gets dummy users', (done) => {
             const expectedActions = [
                 {type: types.GET_USERS_FETCHING},
+                {type: types.GET_GRID_START_TIME, payload: jasmine.any(Number)},
                 {type: types.GET_USERS_SUCCESS, users: ACCOUNT_USERS_DATA(true)},
-                {type: gridTypes.SET_TOTAL_ITEMS, gridId: mockGridID, totalItems: ACCOUNT_USERS_DATA().length},
-                {type: types.GET_TOTAL_TIME, payload: jasmine.any(String)},
-                {type: types.GET_TOTAL_GRID_LOAD_TIME, payload: jasmine.any(String)}
+                {type: gridTypes.SET_TOTAL_ITEMS, gridId: mockGridID, totalItems: ACCOUNT_USERS_DATA().length}
             ];
 
             // expect the dummy data when the fetchAccountUsers is called
