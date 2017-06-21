@@ -34,11 +34,8 @@ import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId,
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
-import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
+import AppCreationDialog from '../app/appCreationDialog';
 
 import AppUtils from '../../utils/appUtils';
 
@@ -282,7 +279,6 @@ export const Nav = React.createClass({
             const showTrowser = true;
             const formType = "edit";
             // check for either editing a child in a drawer or creating a new child record
-            // TODO: editing parent in a drawer
             if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID]) {
                 let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
                 let childTableId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
@@ -505,6 +501,7 @@ export const Nav = React.createClass({
             }
 
             {selectedAppId && <TableCreationDialog app={selectedApp} onTableCreated={this.tableCreated}/>}
+            {<AppCreationDialog />}
 
         </div>);
     },

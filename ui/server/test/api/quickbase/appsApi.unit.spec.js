@@ -796,4 +796,80 @@ describe("Validate appsApi", function() {
         });
 
     });
+
+    describe('validate createApp function', function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, 'executeRequest');
+            appsApi.setRequestHelperObject(requestHelper);
+            req.url = 'apps/';
+            req.method = 'post';
+            req.rawBody = {name: 'test'};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body':'6'}));
+            let promise = appsApi.createApp(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, 6);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Unexpected failure promise return when testing createApp success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createApp: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = 'fail unit test case execution';
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = appsApi.createApp(req);
+
+            promise.then(
+                function() {
+                    done(new Error('Unexpected success promise return when testing createApp failure'));
+                },
+                function(error) {
+                    assert.equal(error, 'Error: fail unit test case execution');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createApp: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail catch exception return results ', function(done) {
+            executeReqStub.returns(Promise.resolve('bad response'));
+            let promise = appsApi.createApp(req);
+            promise.then(
+                function() {
+                    done(new Error('Unexpected success promise return when testing createApp failure'));
+                },
+                function(error) {
+                    let unexpectedToken = false;
+                    if (error && error.message) {
+                        unexpectedToken = error.message.indexOf('Unexpected token');
+                    }
+                    assert.ok(unexpectedToken !== -1);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createApp: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+    });
+
 });

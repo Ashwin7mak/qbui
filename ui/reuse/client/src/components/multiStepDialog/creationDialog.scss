@@ -1,6 +1,9 @@
 @import '../../assets/css/_qbVariables';
 
-.tableCreationPanel {
+//This is the style used for the creation dialog. The current creation dialog that uses these styles are
+//app creation and table creation
+
+.dialogCreationPanel {
 
     .title {
         color: $color-black-700;
@@ -12,11 +15,14 @@
         color: $color-black-500;
         font-size: 16px;
     }
+    .sections .iconSelection  .iconChooser.open {
+        height: 256px; // override the table settings style since it has a different height
+    }
 }
 
 @include not-small-breakpoint {
 
-    .multiStepModal.tableCreationDialog .modal-dialog {
+    .multiStepModal.creationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 355px;
@@ -24,14 +30,14 @@
         width: 840px;
     }
 
-    .multiStepModal.tableCreationDialog.allowOverflow .loadedContent {
+    .multiStepModal.creationDialog.allowOverflow .loadedContent {
         overflow: visible;
     }
 }
 
 @include medium-breakpoint {
 
-    .multiStepModal.tableCreationDialog .modal-dialog {
+    .multiStepModal.creationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 350px;
@@ -43,7 +49,7 @@
 /* some initial small styles in case we support small */
 @include small-breakpoint {
 
-    .multiStepModal.tableCreationDialog .modal-dialog {
+    .multiStepModal.creationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 550px;
@@ -52,10 +58,10 @@
         .iconChooser.open {
             width: 100%;
         }
-        .tableField {
+        .dialogField {
             width: 100%;
         }
-        .tableField:first-of-type {
+        .dialogField:first-of-type {
             padding-right: 0;
         }
     }

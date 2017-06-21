@@ -40,7 +40,7 @@ describe('TableCreationPanel', () => {
                                               validate={true}
                                               appTables={appTables} />);
 
-        expect(component.find('.tableInfo')).toBePresent();
+        expect(component.find('.tableInfo.dialogCreationPanelInfo')).toBePresent();
     });
 
     it('calls icon chooser callbacks when necessary', () => {
@@ -55,7 +55,7 @@ describe('TableCreationPanel', () => {
                                               validate={true}
                                               appTables={appTables} />);
 
-        expect(component.find('.tableInfo')).toBePresent();
+        expect(component.find('.tableInfo.dialogCreationPanelInfo')).toBePresent();
 
         let iconChooser = component.find(".iconChooser .showAllToggle");
         expect(iconChooser).toBePresent();
@@ -78,9 +78,9 @@ describe('TableCreationPanel', () => {
                                               validate={true}
                                               appTables={appTables} />);
 
-        expect(component.find('.tableInfo')).toBePresent();
+        expect(component.find('.tableInfo.dialogCreationPanelInfo')).toBePresent();
 
-        let inputFields = component.find(".tableFieldInput input");
+        let inputFields = component.find(".dialogFieldInput input");
         expect(inputFields).toBePresent();
 
         let input = inputFields.get(0);
