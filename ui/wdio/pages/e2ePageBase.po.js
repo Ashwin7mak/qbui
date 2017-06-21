@@ -105,6 +105,10 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //If tablesList is not visible then again navigate to appId page
+        if (!browser.element('.tablesList').isExisting()) {
+            this.navigateTo(e2eBase.getRequestTableEndpoint(realmName, appId, tableId));
+        }
         //wait until records count loaded
         return browser.element('.reportToolbar .loadedContent .recordsCount').waitForVisible();
     };
@@ -123,6 +127,10 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //If tablesList is not visible then again navigate to appId page
+        if (!browser.element('.tablesList').isExisting()) {
+            this.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        }
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
     };

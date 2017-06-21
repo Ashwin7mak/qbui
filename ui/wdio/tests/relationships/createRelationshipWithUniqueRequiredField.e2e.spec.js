@@ -46,7 +46,7 @@
                 return e2eBase.recordService.addRecordsToTable(testApp, 0, 5, false, false);
             }).then(function() {
                 //Add records into table 2
-               return e2eBase.recordService.addRecordsToTable(testApp, 1, 5, false, false);
+                return e2eBase.recordService.addRecordsToTable(testApp, 1, 5, false, false);
             }).then(function() {
                 //Create a form for each table
                 return e2eBase.formService.createDefaultForms(testApp);
@@ -106,7 +106,6 @@
 
                 //Verify Numeric and currency fields are not part of fields list since they are just set as either only unique or only required
                 let fieldDropDownList = modalDialog.allDropDownListOptions;
-                console.log("the fields list is:"+fieldDropDownList.includes('Numeric Field'))
                 expect(fieldDropDownList.includes('Numeric Field')).toBe(false);
                 expect(fieldDropDownList.includes('Numeric Currency Field')).toBe(false);
 
