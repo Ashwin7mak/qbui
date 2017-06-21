@@ -49,6 +49,12 @@ describe('GovernanceAnalytics', () => {
                 expectedArguments: ['setCustomField', 'is_realm_admin', true, 'request']
             },
             {
+                testFunction: 'updateEvergageCSRStatus',
+                description: 'the evergage CSR status',
+                props: {currentUserId: 22, isCSR: true},
+                expectedArguments: ['setCustomField', 'is_CSR', true, 'request']
+            },
+            {
                 testFunction: 'updateEvergageSubdomainName',
                 description: 'the evergage subdomain name',
                 props: {subdomainName: "test_subdomain_name"},

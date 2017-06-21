@@ -37,6 +37,15 @@ export class GovernanceAnalytics extends Component {
     };
 
     /**
+     * Updates Evergage about whether the user is a CSR
+     */
+    updateEvergageCSRStatus = () => {
+        if (this.props.currentUserId && _.has(this.props, 'isCSR')) {
+            this._aaq.push(['setCustomField', 'is_CSR', this.props.isCSR, 'request']);
+        }
+    };
+
+    /**
      * Updates the subdomain name tracked by Evergage
      */
     updateEvergageSubdomainName = () => {
@@ -103,6 +112,7 @@ export class GovernanceAnalytics extends Component {
         this.updateEvergageAccountID,
         this.updateEvergageAccountAdminStatus,
         this.updateEvergageRealmAdminStatus,
+        this.updateEvergageCSRStatus,
         this.updateEvergageSubdomainName,
         this.updateEvergageTotalItems,
         this.updateEvergagePaidUsers,
@@ -120,6 +130,7 @@ export class GovernanceAnalytics extends Component {
                        subdomainName={this.props.subdomainName}
                        isAdmin={this.props.isAccountAdmin}
                        isRealmAdmin={this.props.isRealmAdmin}
+                       isCSR={this.props.isCSR}
                        totalItems={this.props.totalItems}
                        paidUsers={this.props.paidUsers}
                        deniedUsers={this.props.deniedUsers}
@@ -164,6 +175,11 @@ GovernanceAnalytics.propTypes = {
      * This is used to identify if the current user is a realm admin
      */
     isRealmAdmin: PropTypes.bool,
+
+    /**
+     * This is used to identify if the current user is a CSR
+     */
+    isCSR: PropTypes.bool,
 
     /**
      * The total number of items (rows) contained in the grid (example: total # of users)
@@ -211,6 +227,7 @@ const mapStateToProps = (state) => {
         currentUserId: currentUser.id,
         isAccountAdmin: currentUser.isAccountAdmin,
         isRealmAdmin: currentUser.isRealmAdmin,
+        isCSR: currentUser.isCSR,
         totalItems: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0),
         paidUsers: getTotalPaidUsers(state),
         deniedUsers: getTotalDeniedUsers(state),
