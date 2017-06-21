@@ -6,8 +6,11 @@ import SearchBox from '../search/searchBox';
 import {connect} from "react-redux";
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
-
+import _ from 'lodash';
 import AppUtils from '../../utils/appUtils';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
+import "./leftNav.scss";
+import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
 
 export const AppsList = React.createClass({
 
@@ -33,7 +36,21 @@ export const AppsList = React.createClass({
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
+
+    isAppsEmpty() {
+        if (!_.isEmpty(this.props.app)) {
+            return this.getNewAppItem();
+        }
+    },
+    buildEmptyState()  {
+        if (_.isEmpty(this.props.app)) {
+            return Locale.getMessage('appCreation.emptyAppState');
+        }
+    },
+
     appList() {
+        //console.log('this.props', this.props);
+        //console.log(Locale.getMessage('appCreation.emptyAppState'));*/
         return this.props.apps && this.props.apps.map((app) => {
             app.icon = 'favicon';
             return this.searchMatches(app.name) &&
@@ -41,7 +58,8 @@ export const AppsList = React.createClass({
                          item={app}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
-                         open={true}  />;
+                         open={true}
+                         />;
         });
     },
     onClickApps() {
@@ -63,6 +81,18 @@ export const AppsList = React.createClass({
                                     className="newApp"
                 />;
     },
+
+    emptyStateCreateApp() {
+        return (
+            <div className="createNewApp">
+                <a className="newItem leftNavLink" onClick={this.createNewApp}>
+                    <Icon iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} classes="primaryIcon createNewAppIcon" icon={"add-new-filled"}/>
+                </a>
+                <p>Create an App</p>
+            </div>
+        );
+    },
+
 
     /**
      * open the create app wizard
@@ -88,8 +118,13 @@ export const AppsList = React.createClass({
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
+                <li className="emptyClass">
+                        {this.buildEmptyState()}
+                        {this.emptyStateCreateApp()}
+                </li>
+
                 {this.appList()}
-                {this.getNewAppItem()}
+                {this.isAppsEmpty()}
             </ul>
         );
     }

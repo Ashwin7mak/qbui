@@ -738,7 +738,8 @@ export default {
             finishedButtonLabel: "Créer une application",
             appNameHeading: "Nom de l'application,",
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
-            descriptionHeading: "Description de l'application"
+            descriptionHeading: "Description de l'application",
+            emptyAppState: "Vous n'avez pas encore d'applications."
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",

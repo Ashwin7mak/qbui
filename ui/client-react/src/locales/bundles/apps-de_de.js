@@ -738,7 +738,8 @@ export default {
             finishedButtonLabel: "App erstellen",
             appNameHeading: "App Name",
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
-            descriptionHeading: "App Beschreibung"
+            descriptionHeading: "App Beschreibung",
+            emptyAppState: "Du hast noch keine Apps."
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",

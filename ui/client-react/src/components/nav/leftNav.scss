@@ -15,6 +15,22 @@
     }
 }
 
+.createNewApp {
+   width: 228px;
+   height: 186px;
+   //border: solid 1px #b5b7b9;
+   .leftNavLink {
+    .iconUISturdy-add-new-filled {
+      text-align: center;
+      width: 68px;
+      height: 54px;
+      font-family: QuickBaseIconUISturdy;
+      font-size: 54px;
+      color: #00b1eb;
+    }
+  }
+}
+
 .leftNav.expanded {
     overflow: visible;
 }
