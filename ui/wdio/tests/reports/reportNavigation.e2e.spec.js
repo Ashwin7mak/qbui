@@ -37,9 +37,15 @@
             });
         });
 
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            // Load the List All report on Table 1
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
+        });
+
         it('Verify navigation in multi-page report', function() {
-            // open a multi-page report
-            e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
 
             // verify nav details on FIRST page
             reportSortPO.sortByRecordID();
