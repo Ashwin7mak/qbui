@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
@@ -9,7 +8,6 @@ import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
-import {draggingColumnStart, draggingColumnEnd} from '../../../actions/qbGridActions';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 import Logger from 'APP/utils/logger';
 const logger = new Logger();
@@ -68,7 +66,7 @@ export class QbGrid extends Component {
             onClickToggleSelectedRow={this.onClickToggleSelectedRow}
             onClickTestRowIcon={this.props.onClickTestRowIcon}
             isMultiSelectDisabled={this.props.isMultiSelectDisabled}
-            />;
+        />;
     };
 
     /**
@@ -124,7 +122,7 @@ export class QbGrid extends Component {
             if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            let c = column.getGridHeader(this.props.onHoverColumn, this.props.draggingColumnStart, this.props.draggingColumnEnd);
+            let c = column.getGridHeader();
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
@@ -187,11 +185,11 @@ export class QbGrid extends Component {
         return (
             <div className="actionHeader">
                 {!this.props.isMultiSelectDisabled ? <input
-                    type="checkbox"
-                    className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
-                    checked={this.props.areAllRowsSelected}
-                    onChange={this.props.onClickToggleSelectAllRows}
-                /> : null }
+                        type="checkbox"
+                        className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
+                        checked={this.props.areAllRowsSelected}
+                        onChange={this.props.onClickToggleSelectAllRows}
+                    /> : null }
                 {collapseAllIcon}
             </div>
         );
@@ -315,12 +313,12 @@ export class QbGrid extends Component {
                     <Table.Header className="qbHeader"/>
 
                     <Table.Body className="qbTbody"
-                        onRow={this.addRowProps}
-                        rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
-                        rowKey={this.getUniqueRowKey}
-                        ref={body => {
-                            this.tableRef = body && body.getRef().parentNode;
-                        }}
+                                onRow={this.addRowProps}
+                                rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
+                                rowKey={this.getUniqueRowKey}
+                                ref={body => {
+                                    this.tableRef = body && body.getRef().parentNode;
+                                }}
                     />
                 </Table.Provider>
             </Loader>
@@ -407,13 +405,8 @@ QbGrid.propTypes = {
     /**
      * Header cell to be passed in to make QbGrid more reusable.
      * Use QbHeaderCell for a default non-draggable header.
-     * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use. */
+     * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use). */
     headerRenderer: PropTypes.func.isRequired,
-
-    /**
-     * If the header cell is draggable (e.g. DraggableQbHeaderCell,
-     * callback to when the column is hovering over another column (e.g. a move column function). */
-    onHoverColumn: PropTypes.func,
 
     /**
      * To make QbGrid flexible, it makes no assumptions about what is rendered inside of a cell.
@@ -467,9 +460,4 @@ QbGrid.defaultProps = {
     showRowActionsColumn: true
 };
 
-const mapDispatchToProps = {
-    draggingColumnStart,
-    draggingColumnEnd
-};
-
-export default connect(null, mapDispatchToProps)(QbGrid);
+export default QbGrid;

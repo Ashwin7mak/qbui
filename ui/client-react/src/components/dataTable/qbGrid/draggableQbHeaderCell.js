@@ -1,50 +1,53 @@
 import React, {PropTypes, Component} from 'react';
-import {getEmptyImage} from 'react-dnd-html5-backend';
-import {DragSource, DropTarget} from 'react-dnd';
 import _ from 'lodash';
+import {connect} from 'react-redux';
+import QbHeaderCell from './qbHeaderCell';
 import shallowCompare from 'react-addons-shallow-compare';
-import DraggableItemTypes from '../../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
-import {CONTEXT} from '../../../actions/context';
+import {draggingColumnStart, draggingColumnEnd} from '../../../actions/qbGridActions';
+import DragAndDropElement from '../../../../../reuse/client/src/components/dragAndDrop/dragAndDropElement';
 
-const headerSource = {
-    beginDrag(props) {
-        let {label, relatedField} = props;
-        if (props.onDragStart) {
-            props.onDragStart(label);
-        }
-        return {label, relatedField};
-    },
-
-    isDragging(sourceProps, monitor) {
-        return sourceProps.label === monitor.getItem().label || sourceProps.label === monitor.getItem().title;
-    },
-
-    endDrag(props) {
-        if (props.onDragEnd) {
-            props.onDragEnd();
-        }
-    }
-};
-
-const headerTarget = {
-    hover(targetProps, monitor) {
-        const sourceProps = monitor.getItem();
-        if (targetProps.label) {
-            if ((sourceProps.label !== targetProps.label) && sourceProps.label && targetProps.onHover) {
-                // if both labels are present, we want to swap to columns already in the table
-                targetProps.onHover(CONTEXT.REPORT.NAV, sourceProps.label, targetProps.label);
-            } else if (sourceProps.onHover) {
-                // if not present, we are dragging a token in and want to call the source's onHover
-                sourceProps.onHover(targetProps, sourceProps);
-            }
-        }
-    }
-};
+export const DraggableHeaderCell = DragAndDropElement(QbHeaderCell);
 
 /**
- * A draggable header cell component to be used in the QbGrid
+ * This is a base component that can be composed into custom implementations for dragging specific headers on grids.
+ *
+ * See DraggableReportHeaderCell for the most common implementation for dragging header cells.
+ *
+ * A component which allows the header cell to be dragged. XD approved style is included in this implementation.
  */
 export class DraggableQbHeaderCell extends Component {
+    /**
+     * Called when the drag begins. Switches the column style to the style of a moving column for you.
+     * @param props
+     */
+    beginDrag = (props) => {
+        this.props.draggingColumnStart(props.label);
+
+        let {label, relatedField} = this.props;
+
+        let values;
+        if (this.props.beginDrag) {
+            values = this.props.beginDrag(props);
+        }
+        return {
+            ...values,
+            label,
+            relatedField
+        };
+    };
+
+    /**
+     * Called when the drag ends. Removes the style of a moving column for you.
+     * @param props
+     */
+    endDrag = (props) => {
+        this.props.draggingColumnEnd();
+
+        if (this.props.endDrag) {
+            this.props.endDrag(props);
+        }
+    };
+
     /**
      * Using shallow compare to reduce the change this simple component re-renders
      * @param nextProps
@@ -53,21 +56,26 @@ export class DraggableQbHeaderCell extends Component {
         return shallowCompare(this, nextProps);
     }
 
-    componentDidMount() {
-        this.props.connectDragPreview(getEmptyImage());
-    }
-
     render() {
-        const {connectDragSource, connectDropTarget, isDragging} = this.props;
-
         let classes = [...this.props.classes, 'qbHeaderCell', 'isDraggable'];
+
         if (this.props.isStickyCell) {
             classes.push(['stickyCell']);
         }
-        if (this.props.isPlaceholderCell || isDragging) {
+        if (this.props.isPlaceholderCell || this.props.label === this.props.labelBeingDragged) {
             classes.push('placeholderCell');
         }
-        return connectDragSource(connectDropTarget(<th className={classes.join(' ')} {...this.props} />));
+
+        return (
+            <th>
+                <DraggableHeaderCell
+                    {...this.props}
+                    classes={classes}
+                    beginDrag={this.beginDrag}
+                    onHover={this.props.onHover}
+                    endDrag={this.endDrag}
+                />
+            </th>);
     }
 }
 
@@ -75,13 +83,37 @@ DraggableQbHeaderCell.propTypes = {
     /**
      * Include any additional classes. */
     classes: React.PropTypes.array,
+
     /**
      * This props is to indicate a sticky cell. */
     isStickyCell: React.PropTypes.bool,
+
     /**
      * This prop is for styling of a placeholder cell.
      * Use it to indicate that a column with actual data can/should be placed there. */
-    isPlaceholderCell: React.PropTypes.bool
+    isPlaceholderCell: React.PropTypes.bool,
+
+    /**
+     * The label of this header cell
+     */
+    label: React.PropTypes.string,
+
+    /**
+     * Callback that is fired when the header cell is first picked up for dragging.
+     * It receives the element props as the first and only argument.
+     * It should return an object which will be available in onHover. */
+    beginDrag: React.PropTypes.func,
+
+    /**
+     * Callback that is fired anytime the header cell is dragged over a valid droppable area.
+     * It receives the drop target props as the first argument and the dragItem props as the second.
+     * Note: Only the object returned from 'beginDrag' are available as props. */
+    onHover: React.PropTypes.func,
+
+    /**
+     * Callback that is fired when the header cell is dropped.
+     * It receives the element props as the first and only argument. */
+    endDrag: React.PropTypes.func
 };
 
 // Provide default val
@@ -89,18 +121,15 @@ DraggableQbHeaderCell.defaultProps = {
     classes: []
 };
 
-const dragSource = DragSource(
-    DraggableItemTypes.FIELD, headerSource, (connect, monitor) => ({
-        connectDragSource: connect.dragSource(),
-        connectDragPreview: connect.dragPreview(),
-        isDragging: monitor.isDragging()
-    })
-);
+const mapStateToProps = (state) => {
+    return {
+        labelBeingDragged: _.get(state.qbGrid, 'labelBeingDragged', '')
+    };
+};
 
-const dropTarget = DropTarget(
-    DraggableItemTypes.FIELD, headerTarget, connect => ({
-        connectDropTarget: connect.dropTarget()
-    })
-);
+const mapDispatchToProps = {
+    draggingColumnStart,
+    draggingColumnEnd
+};
 
-export default dragSource(dropTarget(DraggableQbHeaderCell));
+export default connect(mapStateToProps, mapDispatchToProps)(DraggableQbHeaderCell);

@@ -11,11 +11,11 @@ import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import BuilderCustomDragLayer from '../../../../reuse/client/src/components/dragAndDrop/builderCustomDragLayer';
-import DraggableQbHeaderCell from '../dataTable/qbGrid/draggableQbHeaderCell';
+import DraggableReportHeaderCell from '../dataTable/reportGrid/draggableReportHeaderCell';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
-import {exitBuilderMode, moveColumn} from '../../actions/reportBuilderActions';
+import {exitBuilderMode} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import AppQbModal from '../qbModal/appQbModal';
 
@@ -50,7 +50,7 @@ export class ReportBuilderContainer extends Component {
         this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams);
     }
 
-    getReportBuilderContent(columns, rows) {
+    getReportBuilderContent = (columns, rows) => {
         let {appId, tblId, rptId} = this.props.match.params;
         let sortFids = (this.props.reportData && this.props.reportData.data) ? this.props.reportData.data.sortFids : [];
         let loading = columns.length === 0;
@@ -60,8 +60,7 @@ export class ReportBuilderContainer extends Component {
                 numberOfColumns={columns.length}
                 columns={columns}
                 rows={rows}
-                onHoverColumn={this.props.moveColumn}
-                headerRenderer={DraggableQbHeaderCell}
+                headerRenderer={DraggableReportHeaderCell}
                 cellRenderer={ReportCell}
                 menuComponent={ReportColumnHeaderMenu}
                 showRowActionsColumn={false}
@@ -157,8 +156,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     exitBuilderMode,
-    loadDynamicReport,
-    moveColumn
+    loadDynamicReport
 };
 
 export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(
