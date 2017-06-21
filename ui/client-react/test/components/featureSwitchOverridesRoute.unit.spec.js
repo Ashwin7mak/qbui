@@ -33,22 +33,26 @@ describe('FeatureSwitchOverridesRoute', () => {
 
     // We can force promises to execute synchronously by mocking the promise with an object that has a
     // `then` key, which is a function that immediately executes the callback.
-    const props = {
+    const createProps = () => ({
         match:{params: {id: 'fs-1'}},
         switches: sampleSwitches,
         error: null,
         overrides: sampleSwitches[0].overrides,
-        getSwitches: () => {},
+        getSwitches: () => ({then: callback => callback()}),
         setFeatureSwitchOverrides: () => {},
         createOverride: (name) => ({then: callback => callback('newId')}),
         updateOverride: () => ({then: callback => callback()}),
         overrideUpdated: () => {},
         deleteOverrides: (ids) => ({then: callback => callback()}),
         editOverride: () => {}
-    };
+    });
+
+    let props;
 
     beforeEach(() => {
         jasmineEnzyme();
+
+        props = createProps();
 
         spyOn(props, 'getSwitches');
         spyOn(props, 'setFeatureSwitchOverrides').and.callThrough();
