@@ -125,7 +125,7 @@
 
                 //create relationship between parent and child table
                 //NOTE: Select Text Field as this is set to unique and required field
-                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '', uniqueRequiredTextField, expectedParentTableRecordValues, expectedChildTableRecordValues);
+                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, uniqueRequiredTextField, expectedParentTableRecordValues[0], expectedParentTableRecordValues, expectedChildTableRecordValues);
 
             });
         }
