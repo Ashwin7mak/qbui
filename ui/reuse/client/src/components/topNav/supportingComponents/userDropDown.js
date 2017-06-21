@@ -18,7 +18,7 @@ const signOutMessage = 'header.menu.sign_out';
  * @param props
  * @constructor
  */
-class UserDropDown extends Component {
+export class UserDropDown extends Component {
     constructor(props) {
         super(props);
 
@@ -59,7 +59,7 @@ class UserDropDown extends Component {
             <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink" dropup={this.props.shouldOpenMenusUp} pullRight={true}>
                 <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
                     <Icon className="userDropDownIcon" icon={dropDownIcon}/>
-                    <span className="navLabel">123456789123456789</span>
+                    <span className="navLabel">{this.props.loggedInUserDisplay}</span>
                 </a>
 
                 <DropDown.Menu>
