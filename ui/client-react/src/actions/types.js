@@ -20,6 +20,13 @@ export const CLEAR_SELECTED_APP_TABLE = 'CLEAR_SELECTED_APP_TABLE';
 export const SELECT_APP_TABLE = 'SELECT_APP_TABLE';
 export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
+//  **** App Builder actions ****
+export const SHOW_APP_CREATION_DIALOG = 'SHOW_APP_CREATION_DIALOG';
+export const HIDE_APP_CREATION_DIALOG = 'HIDE_APP_CREATION_DIALOG';
+export const CREATE_APP = 'CREATE_APP';
+export const CREATE_APP_SUCCESS = 'CREATE_APP_SUCCESS';
+export const CREATE_APP_FAILED = 'CREATE_APP_FAILED';
+
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';

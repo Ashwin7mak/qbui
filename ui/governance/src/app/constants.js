@@ -7,7 +7,7 @@ export default {
         TICKET          : 'ticket'
     },
 
-    BASE_GOVERNANCE_URL: `/api/governance/v1`,
+    BASE_GOVERNANCE_URL: `/governance/api/v1`,
 
     USERS               : 'users',
     CONTEXT              : 'context',

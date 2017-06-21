@@ -372,37 +372,15 @@ div.leftNavTooltip {
                 width: 100%;
                 flex: 0 0 auto;
             }
+        }
 
-            .tablesList {
-                flex: 1 1 auto;
-                width: 100%;
-                overflow: auto;
-                padding: 0;
-                margin: 0;
-                border-top: 1px solid $leftnav-background-stroke-color;
-
-                .newTableItem {
-                    position: sticky;
-                    position: -webkit-sticky;
-                    bottom: 0;
-                    background-color: $leftnav-background-color;
-                    border-top: 1px solid $leftnav-background-stroke-color;
-                }
-                .newTable {
-                    cursor: pointer;
-                    line-height: 40px;
-
-                    &:hover {
-                        color: $left-nav-link-hover-color;
-                        background-color: $leftnav-table-selected-color;
-                    }
-                    .hoverComponent {
-                        span {
-                            padding-left: 15px;
-                        }
-                    }
-                }
-            }
+        .appsList, .tablesList {
+            flex: 1 1 auto;
+            width: 100%;
+            overflow: auto;
+            padding: 0;
+            margin: 0;
+            border-top: 1px solid $leftnav-background-stroke-color;
         }
     }
     /* This is so when you hover over the item, the entire contents shows like a tooltip... but we then cannot scroll when collapsed. Temporary fix */
@@ -468,7 +446,7 @@ div.leftNavTooltip {
         }
     }
 
-    ul.tablesList, ul.tablesHeading {
+    ul.tablesList, ul.tablesHeading, ul.appsList {
         li {
             a.right {
                 opacity: 0;
@@ -624,13 +602,6 @@ div.leftNavTooltip {
         transform: translate3d(300px, 0, 0);
         -webkit-transform: translate3d(300px, 0, 0);
     }
-
-    /* hide tables footer (add new table) for small */
-
-    .link.newTableItem {
-        display: none;
-    }
-
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/

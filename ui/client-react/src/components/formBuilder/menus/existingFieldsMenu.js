@@ -1,11 +1,18 @@
 import React, {PropTypes, Component} from 'react';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
-import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
+import DraggableFieldTokenInMenu from '../draggableFieldTokenInMenu';
 import {getFormByContext, getExistingFields} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
+import _ from 'lodash';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 
 export class ExistingFieldsMenu extends Component {
+
+    buildEmptyState = () => {
+        let table = _.find(_.get(this.props, 'app.tables', []), {id: this.props.tblId}) || {};
+        return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
+    };
 
     render = () => {
         let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
@@ -15,13 +22,14 @@ export class ExistingFieldsMenu extends Component {
                 childrenTabIndex={toolPaletteChildrenTabIndex}
                 toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
                 hasKeyBoardFocus={toolPaletteFocus}
-                renderer={FieldTokenInMenu}
+                renderer={DraggableFieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={[{children: existingFields, key: 'existingFields', title: 'Existing Fields'}]}
+                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'Existing Fields'}] : undefined}
                 isOpen={isOpen}
                 isFilterable={true}
                 hideTitle={true}
+                emptyMessage={this.buildEmptyState()}
             />
         );
     }
@@ -31,7 +39,8 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [];
     return {
-        existingFields: getExistingFields(state, currentFormId, ownProps.appId, ownProps.tblId)
+        existingFields: getExistingFields(state, currentFormId, ownProps.appId, ownProps.tblId),
+        numberOfFieldsOnForm: _.get(currentForm, 'formData.formMeta.numberOfFieldsOnForm', 1)
     };
 };
 
@@ -52,4 +61,3 @@ ExistingFieldsMenu.propTypes = {
 };
 
 export default connect(mapStateToProps)(ExistingFieldsMenu);
-

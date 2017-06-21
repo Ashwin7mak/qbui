@@ -51,8 +51,8 @@
          */
         it('Add a record via form', function() {
             var origRecordCount;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
-
+            var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
+            var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
             //Step 1 - Get the original records count in a report
             origRecordCount = formsPO.getRecordsCountInATable();
 
@@ -63,7 +63,9 @@
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
-
+            fieldTypes2.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
             //Step 4 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
