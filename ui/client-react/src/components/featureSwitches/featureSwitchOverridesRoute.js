@@ -10,6 +10,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
+import Promise from 'bluebird';
 
 import * as Table from 'reactabular-table';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
