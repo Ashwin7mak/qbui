@@ -12,6 +12,7 @@
     let modalDialog = requirePO('/common/modalDialog');
     let formsPO = requirePO('formsPage');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let topNavPO = requirePO('topNav');
 
     let parentTable;
     let newFieldsOnForm;
@@ -22,8 +23,6 @@
     const recordNameFieldTitleText = '* A record in the table is called';
     const descFieldTitleText = 'Description';
     const PARENT_TABLE2 = 'Table 2';
-    let randomTable_1RecordId = rawValueGenerator.generateInt(1, 10);
-    let randomTable_2RecordId = rawValueGenerator.generateInt(1, 10);
 
     describe('Relationships - Verify create relationship dialog Tests :', function() {
         let realmName;
@@ -104,6 +103,7 @@
 
             //Click OK button on create table dialogue
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
+            modalDialog.waitUntilModalDialogSlideAway();
 
             //Add fields to the form
             formBuilderFields.forEach(function(formBuilderField) {
@@ -133,7 +133,7 @@
                 let expectedTableList2 = ['Table 2'];
 
                 //Select settings -> modify this form
-                formBuilderPO.open();
+                topNavPO.clickOnModifyFormLink();
 
                 //Click on add a new record button
                 formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
@@ -153,6 +153,7 @@
 
                 //Add to form now
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+                modalDialog.waitUntilModalDialogSlideAway();
 
                 //Verify the get another record got added to the form builder
                 expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable);
@@ -165,13 +166,14 @@
 
                 //Add to form now
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+                modalDialog.waitUntilModalDialogSlideAway();
 
                 //Verify the get another record got added to the form builder
                 expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE2);
 
                 //Verify that the create relationship button is not visible since the child table has relationships to all tables in an app.
                 newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) === -1).toBe(true);
+                expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(false);
 
                 //Remove a field
                 let fieldsOnForm = formBuilderPO.getFieldLabels();
@@ -179,7 +181,7 @@
 
                 //Verify add another record button becomes available since relationship got deleted
                 newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.indexOf(e2eConsts.GET_ANOTHER_RECORD) > -1).toBe(true);
+                expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(true);
 
                 //add back the relationship which we removed and save
                 formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
@@ -188,6 +190,7 @@
 
                 //Add to form now
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+                modalDialog.waitUntilModalDialogSlideAway();
 
                 //Verify the get another record got added back to the form builder
                 expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + PARENT_TABLE2);

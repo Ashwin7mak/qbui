@@ -298,6 +298,7 @@
 
             //Click Add To form button
             modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+            modalDialog.waitUntilModalDialogSlideAway();
 
             //Verify the get another record got added to the form builder
             expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable);
