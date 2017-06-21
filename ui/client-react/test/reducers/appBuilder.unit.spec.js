@@ -31,6 +31,7 @@ describe('App Creation', () => {
     it('create app success', () => {
         const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS});
         expect(state.savingApp).toBe(false);
+        expect(state.dialogOpen).toBe(false);
     });
     it('create app failed', () => {
         const state = reducer(storeState, {type: types.CREATE_APP_FAILED});

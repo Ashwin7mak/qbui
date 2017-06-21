@@ -20,7 +20,8 @@ const appBuilder = (
     case types.CREATE_APP_SUCCESS:
         return {
             ...state,
-            savingApp: false
+            savingApp: false,
+            dialogOpen: false
         };
 
     case types.CREATE_APP_FAILED:
