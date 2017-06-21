@@ -16,9 +16,7 @@ export class AppCreationPanel extends React.Component {
      * onChange
      * */
     updateAppProperty = (property, value) => {
-        if (this.props.setAppProperty) {
-            this.props.setAppProperty(property, value);
-        }
+        this.props.setAppProperty(property, value);
     };
 
     /**
