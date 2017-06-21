@@ -14,13 +14,11 @@ class modalDialogWindow {
 
     get modalDialog() {
         // modal dialog
-        browser.element('.modal-dialog').waitForVisible();
         return browser.element('.modal-dialog');
     }
 
     get modalDialogCloseBtn() {
         // modal dialog
-        browser.element('.modal-dialog .iconUISturdy-close').waitForVisible();
         return browser.element('.modal-dialog .iconUISturdy-close');
     }
 
@@ -38,43 +36,36 @@ class modalDialogWindow {
 
     get modalDialogContainer() {
         //modal dialog container
-        this.modalDialog.element('.bodyContainer').waitForVisible();
         return this.modalDialog.element('.bodyContainer');
     }
 
     get modalDialogTitle() {
         // modal dialog title
-        this.modalDialogContainer.element('.modal-title').waitForVisible();
         return this.modalDialogContainer.element('.modal-title').getAttribute('textContent');
     }
 
     get modalDialogFooterButtons() {
         // modal dialog footer buttons
-        this.modalDialog.element('.modal-footer .buttons button').waitForVisible();
         return this.modalDialog.elements('.modal-footer .buttons button');
     }
 
     get modalDialogPrimaryButton() {
         // modal dialog footer primary button
-        this.modalDialog.element('.modal-footer .buttons .primaryButton').waitForVisible();
         return this.modalDialog.element('.modal-footer .buttons .primaryButton');
     }
 
     get modalDialogSecondaryButton() {
         // modal dialog footer secondary button
-        this.modalDialog.element('.modal-footer .buttons .secondaryButton').waitForVisible();
         return this.modalDialog.element('.modal-footer .buttons .secondaryButton');
     }
 
     get deletePromptTextField() {
         //Delete prompt textField
-        this.modalDialog.element('.deleteTableDialogContent .prompt .deletePrompt').waitForVisible();
         return this.modalDialog.element('.deleteTableDialogContent .prompt .deletePrompt');
     }
 
     get modalDialogTableSelectorDropDownArrow() {
         //TableSelector drop down arrow to expand the list
-        this.modalDialog.element('.tableSelector .Select-arrow-zone').waitForVisible();
         return this.modalDialog.element('.tableSelector .Select-arrow-zone');
     }
 
@@ -86,7 +77,6 @@ class modalDialogWindow {
 
     get modalDialogFieldSelectorDropDownArrow() {
         //FieldSelector drop down arrow to expand the list
-        this.modalDialog.element('.fieldSelector .Select-arrow-zone').waitForVisible();
         return this.modalDialog.element('.fieldSelector .Select-arrow-zone');
     }
 

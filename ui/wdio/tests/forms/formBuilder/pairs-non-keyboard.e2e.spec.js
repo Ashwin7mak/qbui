@@ -11,7 +11,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs', function() {
+    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs ( (chrome, edge))', function() {
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             beforeAll(function() {
                 /**
@@ -113,7 +113,7 @@
 
             it('add a new field to bottom of form & verify absence after CANCEL', function() {
                 let existingFields = formBuilderPO.getFieldLabels();
-                let newField = formBuilderPO.listOfElementsItem;
+                let newField = formBuilderPO.firstNewFieldToken;
                 // verify that (hopefully) the last existing field on the form
                 // doesn't have the same name as the first item in the NEW FIELDS list
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField.getText());
@@ -130,7 +130,7 @@
             });
             it('add a new field to bottom of form & verify presence after SAVE', function() {
                 let existingFields = formBuilderPO.getFieldLabels();
-                let newField = formBuilderPO.listOfElementsItem;
+                let newField = formBuilderPO.firstNewFieldToken;
                 // verify that (hopefully) the last existing field on the form
                 // doesn't have the same name as the first item in the NEW FIELDS list
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField);
