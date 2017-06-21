@@ -13,14 +13,6 @@ import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPa
 
 export class AppCreationPanel extends React.Component {
     /**
-     * onChange
-     * This captures the values from the DialogFieldInput and sets the app properties needed to create a new app
-     * */
-    updateAppProperty = (property, value) => {
-        this.props.setAppProperty(property, value);
-    };
-
-    /**
      * render the app settings UI
      * @returns {XML}
      */
@@ -32,7 +24,7 @@ export class AppCreationPanel extends React.Component {
                                       className="appCreationPanel"
                                       name="name"
                                       value={this.props.appName}
-                                      onChange={this.updateAppProperty}
+                                      onChange={this.props.setAppProperty}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
                                       autofocus />
@@ -41,7 +33,7 @@ export class AppCreationPanel extends React.Component {
                                       className="appCreationPanel"
                                       name="description"
                                       value={this.props.appDescription}
-                                      onChange={this.updateAppProperty}
+                                      onChange={ this.props.setAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3" />
                 </div>
