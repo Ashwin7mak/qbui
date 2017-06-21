@@ -1,7 +1,7 @@
 @import '../../assets/css/qbVariables';
 
 .facetsMenuContainer {
-    margin-left: 10px;
+    margin-left: 15px;
     display: flex;
     align-items: flex-start;
 
@@ -277,13 +277,6 @@
                 cursor: pointer;
             }
         }
-    }
-}
-
-@include medium-breakpoint {
-    .filterSearchBoxContainer .searchInputBox .searchInput {
-        padding-right: 5px;
-        width: 111px;
     }
 }
 
