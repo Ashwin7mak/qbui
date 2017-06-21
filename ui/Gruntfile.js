@@ -622,6 +622,7 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ],
                     relationships: [
+                        './wdio/tests/relationships/createRelationshipWithUniqueRequiredField.e2e.spec.js',
                         './wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
                         './wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
                         './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js',
