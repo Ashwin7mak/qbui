@@ -125,9 +125,9 @@ describe('Analytics', () => {
         component.setProps({userEmail: testEmail});
 
         expect(instance.updateEvergage).toHaveBeenCalled();
-        expect(window._aaq.push).toHaveBeenCalledWith([ 'setUser', testFirstUserId ]);
-        expect(window._aaq.push).toHaveBeenCalledWith([ 'gReqUID', testFirstUserId]);
-        expect(window._aaq.push).toHaveBeenCalledWith([ 'gReqUserEmail', testEmail]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['setUser', testFirstUserId]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUID', testFirstUserId]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUserEmail', testEmail]);
     });
 
     it('updates Evergage userId even when email is not passed in', () => {
@@ -143,8 +143,8 @@ describe('Analytics', () => {
 
         expect(instance.updateEvergage).toHaveBeenCalled();
 
-        expect(window._aaq.push).toHaveBeenCalledWith([ 'setUser', 1 ]);
-        expect(window._aaq.push).toHaveBeenCalledWith([ 'gReqUID', 1 ]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['setUser', 1]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUID', 1]);
     });
 
     describe('functions that update evergage', () => {
