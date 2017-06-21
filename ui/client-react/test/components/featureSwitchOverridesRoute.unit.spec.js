@@ -151,7 +151,7 @@ describe('FeatureSwitchOverridesRoute', () => {
         expect(props.deleteOverrides).toHaveBeenCalledWith("fs-1", ["ov-1", "ov-2"]);
     });
 
-    xit('test adding a new override ', () => {
+    it('test adding a new override ', () => {
 
         component = shallow(<FeatureSwitchOverridesRoute {...props} />);
 
