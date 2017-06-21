@@ -50,7 +50,7 @@ describe('AppCreationDialog', () => {
         instance.onFinished();
 
         expect(mockActions.createApp).toHaveBeenCalledWith({});
-        expect(mockActions.hideAppCreationDialog).toHaveBeenCalledWith({});
+        expect(mockActions.hideAppCreationDialog).toHaveBeenCalled();
     });
 
     it('will NOT invoke createApp action or hideAppCreationDialog action when onFinished is called if there are no new apps', () => {
