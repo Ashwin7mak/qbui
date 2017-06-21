@@ -14,6 +14,7 @@ import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPa
 export class AppCreationPanel extends React.Component {
     /**
      * onChange
+     * This captures the values from the DialogFieldInput and sets the app properties needed to create a new app
      * */
     updateAppProperty = (property, value) => {
         this.props.setAppProperty(property, value);
