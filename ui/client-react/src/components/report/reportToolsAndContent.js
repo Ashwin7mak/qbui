@@ -43,7 +43,8 @@ let AddRecordButton = React.createClass({
 export const UnconnectedReportToolsAndContent = React.createClass({
 
     //facetFields : {},
-    debounceInputMillis: 700, // a key send delay
+    // increasing time interval from 700 to 1500, for the end user to type in the search field
+    debounceInputMillis: 1500, // a key send delay
     // TODO: the tablePropertiesEndpoint on EE has the noun for records
     // get from table meta data
     nameForRecords: "Records",
