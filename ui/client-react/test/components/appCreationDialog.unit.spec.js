@@ -1,6 +1,6 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import {AppCreationDialog, __RewireAPI__ as AppCreationDialogRewireAPI} from '../../src/components/app/appCreationDialog';
 import {AppCreationPanel} from '../../src/components/app/appCreationPanel';
 import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
