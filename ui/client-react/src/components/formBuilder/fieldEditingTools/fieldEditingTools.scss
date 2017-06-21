@@ -1,25 +1,24 @@
 @import "../../../assets/css/qbVariables";
 
-$delete-button-position: 14%;
+$action-icons-position: 14%;
 
 .fieldEditingTools {
     opacity: 0;
     transition: opacity 0.4s;
-    border-radius: $border-radius-base;
     padding-left: 2px;
-    //By giving it a border the same size as the focus border and a transparent background,
-    //it keeps the container from 'jumping' on focus
-    border: $stroke-width-thick solid transparent;
-    box-shadow: 0 0 4px 0 rgba($color-black-100, 0);
     position: absolute;
     height: 100%;
     width: 335px;
+    z-index: $zindex-move-up-one;
+
+    .actionIcons {
+        position: absolute;
+        bottom: $action-icons-position;
+        padding-left: 295px;
+    }
 
     .deleteFieldIcon {
         font-size: $size-iconfont-large2;
-        position: absolute;
-        bottom: $delete-button-position;
-        padding-left: 295px;
 
         .qbIcon {
             color: $iconfont-on-light-normal-color;
@@ -39,6 +38,18 @@ $delete-button-position: 14%;
                 @include text-input-focus;
             }
         }
+    }
+
+    .fieldEditingToolsBorder {
+        border-radius: $border-radius-base;
+
+        //By giving it a border the same size as the focus border and a transparent background,
+        //it keeps the container from 'jumping' on focus
+        border: $stroke-width-thick solid transparent;
+        box-shadow: 0 0 4px 0 rgba($color-black-100, 0);
+
+        width: 100%;
+        height: 100%;
     }
 
     .tipChildWrapper {
@@ -63,12 +74,18 @@ $delete-button-position: 14%;
         //For keyboard nav
         opacity: 1;
         outline: none;
-        @include text-input-focus;
+
+        .fieldEditingToolsBorder {
+            @include text-input-focus;
+        }
     }
 
     &.selectedFormElement {
         opacity: 1;
-        @include text-input-focus-thick;
+
+        .fieldEditingToolsBorder {
+            @include text-input-focus-thick;
+        }
 
         .deleteFieldIcon {
             button {
@@ -83,13 +100,15 @@ $delete-button-position: 14%;
     }
 
     &:hover {
-        transition: 0s;
+        transition: 0.4s;
         opacity: 1;
-        padding-left: 3px;
-        border: $stroke-width-thin solid $input-text-focus-border-color;
+
+        .fieldEditingToolsBorder {
+            border: $stroke-width-thin solid $input-text-focus-border-color;
+        }
+
         .deleteFieldIcon {
             opacity: 1;
-            bottom: calc(#{$delete-button-position} + 1px);
 
             .qbIcon {
                 opacity: 1;
@@ -114,6 +133,7 @@ $delete-button-position: 14%;
             }
         }
     }
+
     &.isTablet {
         opacity: 1;
         //This is an extra check to keep this code from triggering firefox
@@ -126,20 +146,16 @@ $delete-button-position: 14%;
     }
 
     &.active {
-        box-shadow: none;
-        border: $stroke-width-thin dashed $color-black-300;
-        background-color: rgba($color-purple-600, 0.08);
         width: 335px;
-    }
 
-    &:active {
-        box-shadow: none;
-        border: $stroke-width-thin dashed $color-black-300;
-        background-color: rgba($dragPreview-background-color, 0.08);
-        width: 335px;
-        z-index: 2;
         .deleteFieldIcon .qbIcon {
             opacity: 0;
+        }
+
+        .fieldEditingToolsBorder {
+            box-shadow: none;
+            border: $stroke-width-thin dashed $color-black-300;
+            background-color: rgba($dragPreview-background-color, 0.08);
         }
     }
 }
