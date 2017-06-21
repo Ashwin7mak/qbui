@@ -278,6 +278,8 @@
          * Method to create relationship using add another record button via form builder
          */
         createRelationshipToParentTable: {value: function(parentTable, parentField, parentRecord, expectedParentRecordValues, expectedChildRecordValues) {
+            const fieldTypes = ['allPhoneFields', 'allParentRecordFields'];
+
             //Select settings -> modify this form
             topNavPO.clickOnModifyFormLink();
 
@@ -312,10 +314,10 @@
             //click on the edit pencil on the child record
             formsPO.clickRecordEditPencilInViewForm();
 
-            //TODO editing any field on form complains phone no not in right format. So editing phone no.I think there is a bug on this need to confirm .
-            formsPO.enterFormValues('allPhoneFields');
-            //Select parent record from parent picker
-            this.selectFromParentPicker(parentRecord);
+            //Select parent picker value
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType, parentRecord);
+            });
 
             //Click Save on the form
             formsPO.clickFormSaveBtn();
@@ -339,23 +341,6 @@
             console.log("expected child record values are: " + expectedChildRecordValues);
             return expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
         }},
-
-        /**
-         * Method to select a record via parent picker
-         */
-        selectFromParentPicker: {
-            value: function(parentRecord) {
-                let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
-                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
-                });
-
-                if (fields !== []) {
-                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').waitForVisible();
-                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').click();
-                    return formsPO.selectFromList(parentRecord);
-                }
-
-            }},
 
         /**
          * Verift the Get another record relationship dialog selectTables list and select the parentTable

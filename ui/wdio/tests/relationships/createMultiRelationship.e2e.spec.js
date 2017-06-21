@@ -152,7 +152,7 @@
 
             it('Verify create relationship button is visible even tough single relationship exists to 1 of the parent table', function() {
                 //Select settings -> modify this form
-                formBuilderPO.open();
+                topNavPO.clickOnModifyFormLink();
 
                 //Verify that the create relationship button is visible since app has 3 tables and relationship exists between only 2 tables
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
@@ -175,7 +175,7 @@
 
             it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {
                 //Select settings -> modify this form
-                formBuilderPO.open();
+                topNavPO.clickOnModifyFormLink();
 
                 //Verify that the create relationship button is not visible.
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();

@@ -10,6 +10,7 @@
     let relationshipsPO = requirePO('relationshipsPage');
     let formBuilderPO = requirePO('formBuilder');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let topNavPO = requirePO('topNav');
 
     let expectedParentTableRecordValues;
     let expectedChildRecordValues;
@@ -93,7 +94,7 @@
 
             it('Verify when relationship exists between 2 tables in an app unable to create one', function() {
                 //Select settings -> modify this form
-                formBuilderPO.open();
+                topNavPO.clickOnModifyFormLink();
 
                 //Verify that the create relationship button is not visible.
                 let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
