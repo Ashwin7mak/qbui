@@ -52,6 +52,8 @@ describe('App Creation Dialog', () => {
         const state = reducer(storeState, {type: types.HIDE_APP_CREATION_DIALOG});
 
         expect(state.isDialogOpen).toBe(false);
+        expect(state.name).toBe('');
+        expect(state.description).toBe('');
     });
 
     it('will set the app name property', () => {

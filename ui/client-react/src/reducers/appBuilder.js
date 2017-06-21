@@ -42,7 +42,9 @@ const appBuilder = (
     case types.HIDE_APP_CREATION_DIALOG:
         return {
             ...state,
-            isDialogOpen: false
+            isDialogOpen: false,
+            name: '',
+            description: ''
         };
 
     case types.SET_APP_PROPERTY:
