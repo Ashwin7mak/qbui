@@ -24,7 +24,6 @@ export class AppCreationDialog extends React.Component {
     onFinished = () => {
         if (this.props.createApp && this.props.newApp) {
             this.props.createApp(this.props.newApp);
-            this.props.hideAppCreationDialog();
         }
     };
 

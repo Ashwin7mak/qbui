@@ -43,25 +43,21 @@ describe('AppCreationDialog', () => {
 
     it('will invoke createApp action and hideAppCreationDialog when onFinished is called', () => {
         component = shallow(<AppCreationDialog createApp={mockActions.createApp}
-                                               newApp={{}}
-                                               hideAppCreationDialog={mockActions.hideAppCreationDialog}/>);
+                                               newApp={{}} />);
 
         instance = component.instance();
         instance.onFinished();
 
         expect(mockActions.createApp).toHaveBeenCalledWith({});
-        expect(mockActions.hideAppCreationDialog).toHaveBeenCalled();
     });
 
     it('will NOT invoke createApp action or hideAppCreationDialog action when onFinished is called if there are no new apps', () => {
         component = shallow(<AppCreationDialog createApp={mockActions.createApp}
-                                               newApp={null}
-                                               hideAppCreationDialog={mockActions.hideAppCreationDialog}/>);
+                                               newApp={null} />);
 
         instance = component.instance();
         instance.onFinished();
 
         expect(mockActions.createApp).not.toHaveBeenCalled();
-        expect(mockActions.hideAppCreationDialog).not.toHaveBeenCalled();
     });
 });
