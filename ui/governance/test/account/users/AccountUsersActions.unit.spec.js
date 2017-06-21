@@ -77,6 +77,7 @@ describe('Account Users Actions Tests', () => {
 
     describe('Fetch Actions', () => {
         let mockAccountId = 1, mockGridID = 1, mockItemsPerPage = 10;
+        let oldPerformance;
         const mockWindowUtils = {
             update: url => url,
         };
@@ -101,6 +102,13 @@ describe('Account Users Actions Tests', () => {
             AccountUsersActionsRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
             AccountUsersActionsRewireAPI.__Rewire__('Logger', mockLogger);
             GovernanceBundleLoader.changeLocale('en-us');
+
+            oldPerformance = window.performance;
+            window.performance = {
+                now: function() {
+                    return 10;
+                }
+            };
         });
 
         afterEach(() => {
@@ -108,6 +116,8 @@ describe('Account Users Actions Tests', () => {
             AccountUsersActionsRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
             AccountUsersActionsRewireAPI.__ResetDependency__('Logger');
             GovernanceBundleLoader.changeLocale('en-us');
+
+            window.performance = oldPerformance;
         });
 
         it('gets dummy users', (done) => {
