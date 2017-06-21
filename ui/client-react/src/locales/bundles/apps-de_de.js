@@ -202,7 +202,8 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen"
+                feedbackTooltip: "Teilen Sie Ideen und Fragen",
+                helpTooltip: "Hilfe"
             }
 
         },
@@ -733,7 +734,12 @@ export default {
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         },
         appCreation: {
-            newApp: 'Neue app'
+            newApp: 'Neue app',
+            newAppPageTitle: 'Neue App',
+            finishedButtonLabel: "App erstellen",
+            appNameHeading: "App Name",
+            appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
+            descriptionHeading: "App Beschreibung"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
@@ -774,7 +780,12 @@ export default {
             tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
             tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "Das Titelfeld identifiziert jeden Datensatz",
+            recordTitleFieldDescription: "Wählen Sie das Feld aus, das als Überschrift angezeigt wird, wenn Sie einen Datensatz anzeigen oder bearbeiten. Dieses Feld muss ausgefüllt werden.",
+            recordTitleFieldDefault: "Standard auf Noun + ID",
+            recordName: "Datensatzname"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"

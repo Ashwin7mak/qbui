@@ -6,16 +6,13 @@ import SearchBox from '../search/searchBox';
 import {connect} from "react-redux";
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
-import {getApp, getSelectedAppId} from '../../reducers/app';
 
 import AppUtils from '../../utils/appUtils';
 
 export const AppsList = React.createClass({
 
     propTypes: {
-        apps: React.PropTypes.array.isRequired,
-        onSelectApp: React.PropTypes.func.isRequired,
-        onCreateNewApp: React.PropTypes.func
+        apps: React.PropTypes.array.isRequired
     },
     getInitialState() {
         return {
@@ -61,28 +58,17 @@ export const AppsList = React.createClass({
      * @returns {XML}
      */
     getNewAppItem() {
-        return <CreateNewItemButton handleOnClick={this.props.onCreateNewApp}
+        return <CreateNewItemButton handleOnClick={this.createNewApp}
                                     message="appCreation.newApp"
                                     className="newApp"
                 />;
     },
 
     /**
-     * is user able to create a new app from the left nav
-     * @returns {*}
-     */
-    allowCreateNewApp() {
-        const app = this.props.getApp(this.props.selectedAppId);
-        return app && AppUtils.hasAdminAccess(app.accessRights);
-    },
-
-    /**
      * open the create app wizard
      */
     createNewApp() {
-        if (this.allowCreateNewApp()) {
-            this.props.showAppCreationDialog();
-        }
+        this.props.showAppCreationDialog();
     },
 
     render() {
@@ -110,9 +96,7 @@ export const AppsList = React.createClass({
 });
 
 const mapDispatchToProps = {
-    showAppCreationDialog,
-    getApp,
-    getSelectedAppId
+    showAppCreationDialog
 };
 
 export default connect(

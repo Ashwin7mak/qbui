@@ -41,7 +41,10 @@
         tracingEnabled: false,
 
         // Tracing host name. Environments must configure if setting explicitly
-        tracingHost: ''
+        tracingHost: '',
+
+        // Traced service name. Environments must configure if setting explicitly
+        tracingServiceName: ''
     };
 
     /**
