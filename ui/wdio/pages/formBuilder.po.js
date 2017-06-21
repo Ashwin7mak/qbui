@@ -23,6 +23,11 @@ class formBuilderPage {
         return browser.element('.clearSearch .searchIcon');
     }
 
+    get emptySearchResult() {
+        // the text in the fields panel when the search term returns no results
+        return browser.element('.emptySearchResult');
+    }
+
     get deleteFieldIcon() {
         // REMOVE (field from form) icon (when a field is selected or highlighted)
         return browser.element('.deleteFieldIcon');
@@ -55,11 +60,11 @@ class formBuilderPage {
 
     get fieldTokenTitle() {
         // the label of the first NEW FIELD token
-        return browser.element('.fieldTokenTitle');
+        return browser.element('.rc-tabs-tabpane-active .fieldTokenTitle');
     }
 
     get firstField() {
-        // the first field (wait for it after open)
+        // the first field on the form
         return browser.element('.field');
     }
 
@@ -68,9 +73,9 @@ class formBuilderPage {
         return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
     }
 
-    get firstNewFieldToken() {
+    get firstFieldToken() {
         // The FIRST field in the list of NEW FIELDs (left panel)
-        return browser.element('.listOfElementsItem');
+        return browser.element('.rc-tabs-tabpane-active .listOfElementsItem');
     }
 
     get formBuilderContainer() {
@@ -106,8 +111,8 @@ class formBuilderPage {
     }
 
     get searchInput() {
-        // SEARCH textbox in the NEW FIELDS panel
-        return browser.element('.searchInput');
+        // SEARCH textbox in the FIELDS panel
+        return browser.element('.rc-tabs-tabpane-active .searchInput');
     }
 
     get selectedField() {
@@ -144,10 +149,6 @@ class formBuilderPage {
     get tab_Active() {
         // The active FIELDS tab - needs a better locator
         return browser.element(".tabbedSideNav .rc-tabs-tab-active");
-    }
-
-    get tab_firstField() {
-        return browser.element(tab_Field);
     }
 
     get title() {
@@ -240,7 +241,7 @@ class formBuilderPage {
 
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
-        this.tab_firstField.waitForVisible();
+        this.firstFieldToken.waitForVisible();
         let labelEls = browser.elements(tab_Field);
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
@@ -252,7 +253,7 @@ class formBuilderPage {
         // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
         // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
         // this lets the message include the contents of the unexpectedly present list.
-        return this.tab_firstField.isExisting() ? this.getNewFieldLabels() : [];
+        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getSelectedFieldLabel() {
