@@ -55,11 +55,11 @@ export class GovernanceAnalytics extends Component {
     };
 
     /**
-     * Updates the totalItems tracked by Evergage
+     * Updates the totalUsers tracked by Evergage
      */
-    updateEvergageTotalItems = () => {
-        if (_.has(this.props, 'totalItems')) {
-            this._aaq.push(['setCustomField', 'totalItems', this.props.totalItems, 'request']);
+    updateEvergageTotalUsers = () => {
+        if (_.has(this.props, 'totalUsers')) {
+            this._aaq.push(['setCustomField', 'totalUsers', this.props.totalUsers, 'request']);
         }
     };
 
@@ -114,7 +114,7 @@ export class GovernanceAnalytics extends Component {
         this.updateEvergageRealmAdminStatus,
         this.updateEvergageCSRStatus,
         this.updateEvergageSubdomainName,
-        this.updateEvergageTotalItems,
+        this.updateEvergageTotalUsers,
         this.updateEvergagePaidUsers,
         this.updateEvergageDeniedUsers,
         this.updateEvergageTotalRealmUsers,
@@ -131,7 +131,7 @@ export class GovernanceAnalytics extends Component {
                        isAdmin={this.props.isAccountAdmin}
                        isRealmAdmin={this.props.isRealmAdmin}
                        isCSR={this.props.isCSR}
-                       totalItems={this.props.totalItems}
+                       totalUsers={this.props.totalUsers}
                        paidUsers={this.props.paidUsers}
                        deniedUsers={this.props.deniedUsers}
                        deactivatedUsers={this.props.deactivatedUsers}
@@ -182,9 +182,9 @@ GovernanceAnalytics.propTypes = {
     isCSR: PropTypes.bool,
 
     /**
-     * The total number of items (rows) contained in the grid (example: total # of users)
+     * The total number of users contained in the grid
      */
-    totalItems: PropTypes.number,
+    totalUsers: PropTypes.number,
 
     /**
      * The total number of paid users listed
@@ -228,7 +228,7 @@ const mapStateToProps = (state) => {
         isAccountAdmin: currentUser.isAccountAdmin,
         isRealmAdmin: currentUser.isRealmAdmin,
         isCSR: currentUser.isCSR,
-        totalItems: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0),
+        totalUsers: _.get(state, 'Grids.accountUsers.pagination.totalItems', 0),
         paidUsers: getTotalPaidUsers(state),
         deniedUsers: getTotalDeniedUsers(state),
         deactivatedUsers: getTotalDeactivatedUsers(state),

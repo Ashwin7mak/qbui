@@ -61,10 +61,10 @@ describe('GovernanceAnalytics', () => {
                 expectedArguments: ['setCustomField', 'subdomainName', "test_subdomain_name", 'request']
             },
             {
-                testFunction: 'updateEvergageTotalItems',
-                description: 'the evergage total number of items in the grid',
-                props: {totalItems: 20},
-                expectedArguments: ['setCustomField', 'totalItems', 20, 'request']
+                testFunction: 'updateEvergageTotalUsers',
+                description: 'the evergage total number of users in the grid',
+                props: {totalUsers: 20},
+                expectedArguments: ['setCustomField', 'totalUsers', 20, 'request']
             },
             {
                 testFunction: 'updateEvergagePaidUsers',
