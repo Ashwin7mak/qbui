@@ -56,7 +56,12 @@ export const createApp = (app) => {
         });
     };
 };
-
+/**
+ * setAppProperty captures the value from the inputs on appCreationPanel
+ * It is used to set the properties needed for creating a new app
+ * @param property
+ * @param value
+ * */
 export const setAppProperty = (property, value) => ({
     type: types.SET_APP_PROPERTY,
     property,
