@@ -11,7 +11,7 @@ function initializeState() {
     return {
         app: null,
         apps: [],
-        loading: false,
+        loading: true,
         error: false
     };
 }
@@ -52,7 +52,8 @@ describe('Test app reducer - clear selected app tests', () => {
                 selected: {
                     appId: null,
                     tblId: null
-                }
+                },
+                loading: false
             };
 
             const state = reducer(storeState, {type: types.CLEAR_SELECTED_APP});
@@ -88,7 +89,8 @@ describe('Test app reducer - clear selected app table tests', () => {
                 selected: {
                     appId: testCase.selectedApp || null,
                     tblId: null
-                }
+                },
+                loading: false
             };
 
             const state = reducer(storeState, {type: types.CLEAR_SELECTED_APP_TABLE});
@@ -405,6 +407,23 @@ describe('Test app reducer - get app table tests', () => {
         it(testCase.name, () => {
             const state = reducer(storeState, {type: types.LOAD_APP_SUCCESS, content: testCase.appData});
             expect(AppReducer.getTable(state, testCase.appId, testCase.tableId)).toEqual(testCase.table);
+        });
+    });
+});
+
+describe('App selectors', () => {
+    describe('getSelectedApp', () => {
+        it('returns the currently loaded app in state', () => {
+            const app = 'my test app';
+            const stateWithApp = {app: {app}};
+
+            expect(AppReducer.getSelectedApp(stateWithApp)).toEqual(app);
+        });
+
+        it('returns undefined if an app is not loaded', () => {
+            const stateWithoutApp = {app: {}};
+
+            expect(AppReducer.getSelectedApp(stateWithoutApp)).toEqual(undefined);
         });
     });
 });

@@ -8,7 +8,7 @@ const app = (
     state = {
         app: null,
         apps: [],
-        loading: false,
+        loading: true, // Defaulting to true prevents flashing of unloaded state
         error: false
     },
     action) => {
@@ -279,6 +279,10 @@ export const getIsAppsLoading = (state) => {
 
 export const getSelectedAppId = (state) => {
     return state.selected ? state.selected.appId : null;
+};
+
+export const getSelectedApp = (state) => {
+    return state.app.app;
 };
 
 export const getSelectedTableId = (state) => {
