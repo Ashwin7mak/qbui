@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import QBToolTip from '../qbToolTip/qbToolTip';
-import Logger from '../../utils/logger';
 
 import './sortAndGroup.scss';
 
@@ -19,29 +18,29 @@ const FieldChoice = React.createClass({
     propTypes: {
         // the selected field to show in the sort or group setting popover
         // or  null for empty not set place for new entry
-        field:React.PropTypes.object,
+        field: PropTypes.object,
 
         // the prefix message for the field: true it's 'then by'
         // if false it's just 'by'
-        then:React.PropTypes.bool,
+        then: PropTypes.bool,
 
         // the type string either sort or group
-        type:React.PropTypes.string,
+        type: PropTypes.string,
 
         // the index into the list of sort or group fields
-        index:React.PropTypes.number,
+        index: PropTypes.number,
 
         // the callback that is used when the field list should show for adding an
         // new selection, pass type string 'sort' or 'group' parameter
-        onShowFields: React.PropTypes.func,
+        onShowFields: PropTypes.func,
 
         // the callback that is used to change the fields order ascending / descending
         // passes in type, field index, isAscending bool, field object
-        onSetOrder: React.PropTypes.func,
+        onSetOrder: PropTypes.func,
 
         // the callback that is used  to remove a selected field
         // passes in type field indx, field object
-        onRemoveField: React.PropTypes.func
+        onRemoveField: PropTypes.func
     },
 
     render() {
@@ -65,6 +64,7 @@ const FieldChoice = React.createClass({
         }
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
+
         return (
             (<div className={"fieldChoice " + this.props.type + isEmpty} tabIndex="0"
                   onClick={!hasField ? this.props.onShowFields : null}>

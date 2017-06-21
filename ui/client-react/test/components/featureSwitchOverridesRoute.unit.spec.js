@@ -1,10 +1,10 @@
 import React from 'react';
+import {shallow, mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 import TestUtils from 'react-addons-test-utils';
 import {FeatureSwitchOverridesRoute} from '../../src/components/featureSwitches/featureSwitchOverridesRoute';
 
 describe('FeatureSwitchOverridesRoute', () => {
-    'use strict';
-
     let component;
 
     const sampleSwitches = [
@@ -45,6 +45,8 @@ describe('FeatureSwitchOverridesRoute', () => {
     };
 
     beforeEach(() => {
+        jasmineEnzyme();
+
         spyOn(props, 'getSwitches');
         spyOn(props, 'setFeatureSwitchOverrides').and.callThrough();
         spyOn(props, 'createOverride').and.callThrough();
@@ -111,35 +113,31 @@ describe('FeatureSwitchOverridesRoute', () => {
         expect(props.updateOverride).toHaveBeenCalled();
     });
 
-    xit('test deleting overrides ', () => {
+    it('test deleting overrides ', () => {
+        component = mount(<FeatureSwitchOverridesRoute {...props} />);
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchOverridesRoute {...props} />);
+        let checkbox = component.find('.selectAll');
+        checkbox.simulate('change', {target: {checked: true}});
 
-        let checkbox = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectAll");
+        let deleteButton = component.find('.deleteButton').first();
+        deleteButton.simulate('click');
 
-        TestUtils.Simulate.change(checkbox[0], {"target": {"checked": true}});
-
-        let deleteButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteButton");
-
-        TestUtils.Simulate.click(deleteButton[0]);
-
+        // Need to use test utils because this component opens outside of the current one (Modal on document)
         let confirmDelete = document.querySelectorAll(".confirmDeleteOverrides button.primaryButton");
         expect(confirmDelete.length).toBe(1);
         TestUtils.Simulate.click(confirmDelete[0]);
 
         expect(props.deleteOverrides).toHaveBeenCalledWith("fs-1", ["ov-1", "ov-2"]);
-
     });
 
     it('test adding a new override ', () => {
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchOverridesRoute {...props} />);
+        component = shallow(<FeatureSwitchOverridesRoute {...props} />);
 
-        let addButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "addButton");
+        let addButton = component.find('.addButton');
 
-        TestUtils.Simulate.click(addButton[0]);
+        addButton.simulate('click');
 
         expect(props.createOverride).toHaveBeenCalled();
-
     });
 });
