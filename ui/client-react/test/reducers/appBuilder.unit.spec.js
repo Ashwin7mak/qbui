@@ -64,19 +64,19 @@ describe('App Creation Dialog', () => {
 
 describe('App Creation Selector', () => {
     describe('getIsDialogOpenState', () => {
-        it('will return true for dialogOpen state if it is true', () => {
+        it('will return true if dialogOpen is true', () => {
             let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockState);
 
             expect(openDialog).toEqual(true);
         });
 
-        it('will return false for dialogOpen if there is no dialogOpen state', () => {
+        it('will return false if dialogOpen is undefined', () => {
             let openDialog = AppBuilderSelectors.getIsDialogOpenState({});
 
             expect(openDialog).toEqual(false);
         });
 
-        it('will return false for dialogOpen if the dialogOpen state is false', () => {
+        it('will return false if dialogOpen is false', () => {
             let mockCloneState = _.cloneDeep(mockState);
             mockCloneState.appBuilder.dialogOpen = false;
             let openDialog = AppBuilderSelectors.getIsDialogOpenState(mockCloneState);
