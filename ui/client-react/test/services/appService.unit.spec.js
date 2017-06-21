@@ -54,6 +54,14 @@ describe('AppService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 
+    it('test createApp function', () => {
+        let app = {'someAppObject':'someAppObject'};
+        let url = StringUtils.format(appService.API.CREATE_APP);
+
+        appService.createApp(app);
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, app);
+    });
+
     it('test createRelationship function', () => {
         let appId = "0duiiaaaaab";
         let relationship = {
