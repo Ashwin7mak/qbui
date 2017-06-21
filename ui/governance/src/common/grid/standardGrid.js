@@ -211,7 +211,12 @@ StandardGrid.propTypes = {
     /**
      *  The text to display if there are no items found
      */
-    noItemsFound: PropTypes.string
+    noItemsFound: PropTypes.string,
+
+    /**
+     *  Function that returns the page load time (as a number)
+     */
+    pageLoadTime: PropTypes.func
 };
 
 StandardGrid.defaultProps = {
