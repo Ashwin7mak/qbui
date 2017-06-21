@@ -7,7 +7,7 @@
     font-size: 14px;
     display: flex;
     align-items: center;
-    padding-bottom: 16px;
+    margin-left: 10px;
 
     .tipChildWrapper {
         width: auto;
@@ -40,8 +40,8 @@
 
     .pageNumbers {
         display: inline;
-        padding-left: 3px;
-        padding-right: 3px;
+        margin-left: -2px;
+        margin-right: -2px;
         white-space: nowrap;
     }
 
