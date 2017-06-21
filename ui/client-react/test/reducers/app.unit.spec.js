@@ -417,7 +417,7 @@ describe('Test app reducer - create new app tests', () => {
     ];
     appTests.forEach(testCase => {
         it(testCase.name, () => {
-            const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS, app:testCase.app});
+            const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS, app: testCase.app});
             if (testCase.app === null) {
                 expect(AppReducer.getApps(state).length).toEqual(0);
                 expect(AppReducer.getApp(state, newApp.id)).toEqual(null);
