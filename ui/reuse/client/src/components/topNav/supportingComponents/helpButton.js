@@ -10,7 +10,7 @@ import './helpButton.scss';
  */
 const ReHelpButton = (props) => (
     <Tooltip bsRole="toggle" tipId="help" i18nMessageKey="header.menu.helpTooltip" key="help" location="bottom">
-        <a href={UrlUtils.getHelpLink()} target="_blank" className="globalActionLink reHelpButton">
+        <a href={props.link ? props.link : UrlUtils.getHelpLink()} target="_blank" className="globalActionLink reHelpButton">
             <Icon icon="help" className="reHelpButtonHover"/>
             <span className="navLabel helpTitle reHelpButtonHover"><I18nMessage message="globalActions.help" /></span>
         </a>

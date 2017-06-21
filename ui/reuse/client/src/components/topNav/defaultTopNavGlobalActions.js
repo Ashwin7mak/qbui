@@ -54,7 +54,7 @@ class DefaultTopNavGlobalActions extends Component {
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     ))}
-                    <li className="link globalAction"><HelpButton/></li>
+                    <li className="link globalAction"><HelpButton link={this.props.helpButtonLink}/></li>
                     <li className="link globalAction withUserDropdown">
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
