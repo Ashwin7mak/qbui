@@ -20,13 +20,14 @@
 
             .userSuccessContent {
 
-                .topTitle {
+                .modal-title {
                     display: flex;
                     flex-direction: row;
                     align-items: center;
                     height: 120px;
                     color: $color-black-100;
                     background-color: $newTableDialog-highlight-color;
+                    padding: 0;
 
                     @include correctFontWeightForLightTextOnDarkBackground;
                     font-size: $font-size-h2;
