@@ -8,7 +8,8 @@ let component;
 
 let mockFuncs = {
     setAppProperty() {}
-}
+};
+
 describe('AppCreationPanel', () => {
     beforeEach(() => {
         spyOn(mockFuncs, 'setAppProperty');
@@ -32,7 +33,7 @@ describe('AppCreationPanel', () => {
     it('will invoke setAppProperty when app description input box is typed into', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}/>);
 
-        component.find('textarea').simulate('change', {target: {value: 'Mock App Description'}});;
+        component.find('textarea').simulate('change', {target: {value: 'Mock App Description'}});
 
         expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('description', 'Mock App Description');
     });
