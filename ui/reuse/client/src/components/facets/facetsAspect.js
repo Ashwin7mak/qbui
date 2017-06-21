@@ -4,13 +4,7 @@ import  {facetItemValueShape, facetShape} from './facetProps';
 import Icon from '../icon/icon';
 import _ from 'lodash';
 
-// IMPORTS FROM CLIENT REACT
-import Logger from '../../../../../client-react/src/utils/logger';
-// IMPORTS FROM CLIENT REACT
-
 import './facet.scss';
-
-let logger = new Logger();
 
 /**
  * FacetsAspect a value from fields facets

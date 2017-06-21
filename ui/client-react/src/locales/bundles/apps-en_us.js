@@ -742,7 +742,12 @@ export default {
             featureNameEmpty: "Feature names must not be blank"
         },
         appCreation: {
-            newApp: 'New app'
+            newApp: "New app",
+            newAppPageTitle: "New App",
+            finishedButtonLabel: "Create app",
+            appNameHeading: "App name",
+            appNamePlaceHolder: "For example, \"Order Tracker\"",
+            descriptionHeading: "App description"
         },
         tableCreation: {
             newTablePageTitle: "New Table",
