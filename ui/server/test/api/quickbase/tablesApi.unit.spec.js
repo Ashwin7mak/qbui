@@ -750,7 +750,6 @@ describe('Validate tablesApi', function() {
             });
         });
         it('fails if getField fails', function(done) {
-            getFieldsStub.restore();
             getFieldsStub.returns(errorPromise);
             req.body = {name: 'name', tableNoun: 'noun', description: 'desc', tableIcon: 'icon', recordTitleFieldId: 6};
             let promise = tablesApi.updateTable(req);
