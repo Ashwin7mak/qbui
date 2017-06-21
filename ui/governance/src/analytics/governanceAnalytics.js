@@ -23,7 +23,7 @@ export class GovernanceAnalytics extends Component {
      */
     updateEvergageAccountAdminStatus = () => {
         if (this.props.currentUserId && _.has(this.props, 'isAccountAdmin')) {
-            this._aaq.push(['setCustomField', 'has_app_admin', this.props.isAccountAdmin, 'request']);
+            this._aaq.push(['setCustomField', 'has_account_admin', this.props.isAccountAdmin, 'request']);
         }
     };
 

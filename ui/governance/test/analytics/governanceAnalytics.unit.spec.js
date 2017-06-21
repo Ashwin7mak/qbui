@@ -40,7 +40,7 @@ describe('GovernanceAnalytics', () => {
                 testFunction: 'updateEvergageAccountAdminStatus',
                 description: 'the evergage account admin status',
                 props: {currentUserId: 22, isAccountAdmin: true},
-                expectedArguments: ['setCustomField', 'has_app_admin', true, 'request']
+                expectedArguments: ['setCustomField', 'has_account_admin', true, 'request']
             },
             {
                 testFunction: 'updateEvergageRealmAdminStatus',
