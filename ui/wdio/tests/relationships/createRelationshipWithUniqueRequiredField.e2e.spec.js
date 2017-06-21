@@ -109,6 +109,9 @@
                 expect(fieldDropDownList.includes('Numeric Field')).toBe(false);
                 expect(fieldDropDownList.includes('Numeric Currency Field')).toBe(false);
 
+                //Collapse the drop down
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
+
                 //Cancel the create relationship dialog
                 modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
                 modalDialog.waitUntilModalDialogSlideAway();

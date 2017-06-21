@@ -402,7 +402,7 @@
                     //Click on advanced settings of add a record dialog
                     modalDialog.clickModalDialogAdvancedSettingsToggle();
 
-                    //Select field to link to parent table (This will be either titleField or recordId)
+                    //Select field to link to parent table (This will be either titleField or recordId or unique&required fields)
                     modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
                 }
                 if (verifyDefaultField !== '') {

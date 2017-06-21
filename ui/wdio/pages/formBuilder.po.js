@@ -162,7 +162,7 @@ class formBuilderPage {
     // methods
 
     addNewField(label) {
-        browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
+        return browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
     }
 
     cancel() {
