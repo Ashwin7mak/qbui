@@ -100,8 +100,7 @@ describe('Analytics', () => {
         const testFirstUserId = 1;
         const testSecondUserId = 2;
 
-        component = shallow(<Analytics dataset={mockDataset}
-                                       userId={testFirstUserId} />, {lifecycleExperimental: true});
+        component = shallow(<Analytics dataset={mockDataset} userId={testFirstUserId} />, {lifecycleExperimental: true});
         let instance = component.instance();
         spyOn(instance, 'updateEvergage').and.callThrough();
 
@@ -117,9 +116,7 @@ describe('Analytics', () => {
         const testFirstUserId = 1;
         const testEmail = 'test@test.com';
 
-        component = shallow(<Analytics dataset={mockDataset}
-                                       userEmail={"test@test.com"}
-                                       userId={testFirstUserId} />, {lifecycleExperimental: true});
+        component = shallow(<Analytics dataset={mockDataset} userEmail={"test@test.com"} userId={testFirstUserId} />, {lifecycleExperimental: true});
 
         let instance = component.instance();
         spyOn(instance, 'updateEvergage').and.callThrough();
