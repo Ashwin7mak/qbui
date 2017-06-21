@@ -89,11 +89,15 @@
         /**
          * Override master.featureSwitches by overriding specific features in
          * prod.override.featureSwitches.json.
-         * Note: overrides are overridden based on their names, ensure overrides
+         * Note: Feature Switches are overridden based on their names, ensure overrides
          * have same name including spacing.
          */
         // featureSwitchConfigOverride: '../../config/environment/featureSwitch/prod.override.featureSwitches.json'
-        // masterOverrideTurnFeaturesOn:true
+
+        /**
+         * Note: [Caution] Updating masterOverrideTurnFeaturesOn to be set to true will enable all feature switches to be turned on irrespective of overrides
+         */
+        // masterOverrideTurnFeaturesOn:false
 
     };
 }());

@@ -110,7 +110,7 @@
         /**
          * Override master.featureSwitches by overriding specific features in
          * ci.override.featureSwitches.json.
-         * Note: overrides are overridden based on their names, ensure overrides
+         * Note: Feature Switches are overridden based on their names, ensure overrides
          * have same name including spacing.
          */
         // featureSwitchConfigOverride: '../../config/environment/featureSwitch/ci.override.featureSwitches.json'

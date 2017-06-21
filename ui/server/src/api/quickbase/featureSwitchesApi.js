@@ -115,7 +115,7 @@
                         realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
                     }
                     if (useFileBasedStore) {
-                        resolve(configBasedFSApi.getFeatureSwitchStates(req, realmId, appId));
+                        resolve(configBasedFSApi.getFeatureSwitchStates(req, realmId));
                     } else if (requestHelper.getRequestAWSHost()) {
                         let opts = this.getFeatureSwitchStatesRequestOpts(req, realmId, appId);
 
