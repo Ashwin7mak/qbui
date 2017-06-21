@@ -112,8 +112,10 @@ describe('Analytics', () => {
 
     it('updates Evergage even when email IS passed in', () => {
         spyOn(document, 'getElementById').and.returnValue(true);
+        spyOn(window._aaq, 'push');
 
         const testFirstUserId = 1;
+        const testEmail = 'test@test.com';
 
         component = shallow(<Analytics dataset={mockDataset}
                                        userEmail={"test@test.com"}
@@ -123,9 +125,12 @@ describe('Analytics', () => {
         spyOn(instance, 'updateEvergage').and.callThrough();
         component.setProps({userId: testFirstUserId});
 
-        component.setProps({userEmail: 'test2@test.com'});
+        component.setProps({userEmail: testEmail});
 
         expect(instance.updateEvergage).toHaveBeenCalled();
+        expect(window._aaq.push).toHaveBeenCalledWith([ 'setUser', testFirstUserId ]);
+        expect(window._aaq.push).toHaveBeenCalledWith([ 'gReqUID', testFirstUserId]);
+        expect(window._aaq.push).toHaveBeenCalledWith([ 'gReqUserEmail', testEmail]);
     });
 
     it('updates Evergage userId even when email is not passed in', () => {
@@ -163,6 +168,12 @@ describe('Analytics', () => {
                 description: 'the evergage user',
                 props: {userId: 1},
                 expectedArguments: ['setUser', 1]
+            },
+            {
+                testFunction: 'updateEvergageUser',
+                description: 'the evergage user email',
+                props: {userEmail: 'testx@test.com'},
+                expectedArguments: ['gReqUserEmail', 'testx@test.com']
             },
             {
                 testFunction: 'updateEvergageAdminStatus',
