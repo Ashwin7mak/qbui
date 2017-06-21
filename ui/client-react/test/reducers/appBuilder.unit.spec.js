@@ -120,7 +120,7 @@ describe('App Creation Selector', () => {
     });
 
     describe('getNewAppInfo', () => {
-        it('will return a new app object if there is an app obejct', () => {
+        it('will return a new app object if there is an app object', () => {
             let result = AppBuilderSelectors.getNewAppInfo(mockState);
 
             expect(result).toEqual({name: 'Mock App Name'});
