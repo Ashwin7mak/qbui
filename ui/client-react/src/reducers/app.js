@@ -151,7 +151,6 @@ const app = (
             ...state,
             loading: false,
             error: false,
-            //  app is an appModel object
             app: appModel.getApp(),
             //  update app in apps list
             apps: setAppInApps(appModel.getApp()),
@@ -182,6 +181,17 @@ const app = (
             apps: appsModel.getApps(),
             selected: clearSelected()
         };
+    case types.CREATE_APP_SUCCESS:
+        //  new app was created in builder..add it to apps list and select
+        if (action.app) {
+            return {
+                ...state,
+                app: action.app,
+                apps: setAppInApps(action.app),
+                selected: setSelectedApp(action.app.id)
+            };
+        }
+        return state;
     case types.LOAD_APPS_ERROR:
         return {
             loading: false,
