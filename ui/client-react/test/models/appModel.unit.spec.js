@@ -34,7 +34,7 @@ describe('APP Model', () => {
 
     it('Initialize app model object with no data', () => {
         const emptyApp = {};
-        let appModel = new AppModel({app:emptyApp});
+        let appModel = new AppModel({app: emptyApp});
 
         expect(appModel.getApp()).toEqual(emptyApp);
         expect(appModel.getAppId()).toEqual(emptyApp.id);
