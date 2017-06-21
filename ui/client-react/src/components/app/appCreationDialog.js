@@ -22,7 +22,7 @@ export class AppCreationDialog extends React.Component {
      * last page has finished
      */
     onFinished = () => {
-        if (this.props.createApp && this.props.newApp) {
+        if (this.props.newApp) {
             this.props.createApp(this.props.newApp);
         }
     };
