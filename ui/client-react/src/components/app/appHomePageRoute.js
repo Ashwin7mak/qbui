@@ -8,7 +8,7 @@ import AlertBanner from '../../../../reuse/client/src/components/alertBanner/ale
 import Locale from '../../locales/locales';
 import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
 import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';
-import {getSelectedApp, getIsAppsLoading} from '../../reducers/app';
+import {getSelectedApp, getIsAppLoading} from '../../reducers/app';
 import {showTopNav} from '../../actions/shellActions';
 import Loader from 'react-loader';
 import {APP_HOMEPAGE_LOADING} from '../../constants/spinnerConfigurations';
@@ -74,11 +74,7 @@ export class AppHomePageRoute extends Component {
      * @returns {XML}
      */
     render() {
-        if (this.props.isLoading) {
-            return <Loader loaded={false} options={APP_HOMEPAGE_LOADING} />;
-        }
-
-        if (!this.props.app) {
+        if (!this.props.isLoading && !this.props.app) {
             return (
                 <AlertBanner isVisible={true}>{Locale.getMessage('errors.appNotFound')}</AlertBanner>
             );
@@ -103,7 +99,7 @@ const mapStateToProps = (state, props) => {
         notifyTableDeleted: getNeedToNotifyTableDeletion(state),
         tableJustDeleted: getTableJustDeleted(state),
         app: get(selectedApp, 'id') === get(props, 'match.params.appId') ? selectedApp : null,
-        isLoading: getIsAppsLoading(state)
+        isLoading: getIsAppLoading(state)
     };
 };
 

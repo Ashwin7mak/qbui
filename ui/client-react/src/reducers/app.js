@@ -8,7 +8,8 @@ const app = (
     state = {
         app: null,
         apps: [],
-        isLoading: true, // Defaulting to true prevents flashing of unloaded state
+        areAppsLoading: true, // Defaulting to true prevents flashing of unloaded state
+        isAppLoading: true, // Separate loading state so that the appHomePage doesn't show a partially loaded state when apps returns on first page load.
         error: false
     },
     action) => {
@@ -101,7 +102,7 @@ const app = (
     case types.CLEAR_SELECTED_APP:
         return {
             ...state,
-            isLoading: false,
+            isAppLoading: false,
             error: false,
             app: null,
             selected: clearSelected()
@@ -109,7 +110,7 @@ const app = (
     case types.CLEAR_SELECTED_APP_TABLE:
         return {
             ...state,
-            isLoading: false,
+            isAppLoading: false,
             error: false,
             selected: clearTableSelected()
         };
@@ -140,7 +141,7 @@ const app = (
         let appId = action.content.appId;
         return {
             ...state,
-            isLoading: true,
+            isAppLoading: true,
             error: false,
             app: null,
             selected: setSelectedApp(appId)
@@ -149,7 +150,7 @@ const app = (
         let appModel = new AppModel(action.content);
         return {
             ...state,
-            isLoading: false,
+            isAppLoading: false,
             error: false,
             //  app is an appModel object
             app: appModel.getApp(),
@@ -160,14 +161,15 @@ const app = (
     case types.LOAD_APP_ERROR:
         return {
             ...state,
-            isLoading: false,
+            isAppLoading: false,
             error: true,
             app: null,
             selected: setSelected()
         };
     case types.LOAD_APPS:
         return {
-            isLoading: true,
+            ...state,
+            areAppsLoading: true,
             error: false,
             app: null,
             apps: [],
@@ -176,7 +178,8 @@ const app = (
     case types.LOAD_APPS_SUCCESS:
         let appsModel = new AppsModel(action.content);
         return {
-            isLoading: false,
+            ...state,
+            areAppsLoading: false,
             error: false,
             app: null,
             apps: appsModel.getApps(),
@@ -184,7 +187,8 @@ const app = (
         };
     case types.LOAD_APPS_ERROR:
         return {
-            isLoading: false,
+            ...state,
+            areAppsLoading: false,
             error: true,
             app: null,
             apps: [],
@@ -193,20 +197,20 @@ const app = (
     case types.LOAD_APP_OWNER:
         return {
             ...state,
-            isLoading: true,
+            isAppLoading: true,
             error: false
         };
     case types.LOAD_APP_OWNER_SUCCESS:
         return {
             ...state,
-            isLoading: false,
+            isAppLoading: false,
             error: false,
             selected: setAppOwner(action.content)
         };
     case types.LOAD_APP_OWNER_ERROR:
         return {
             ...state,
-            isLoading: false,
+            isAppLoading: false,
             error: true
         };
     case types.ASSIGN_USERS_TO_APP_ROLE:
@@ -273,9 +277,9 @@ export const getTable = (state, appId, tableId) => {
     return _.find(appInState.tables, {id: tableId}) || null;
 };
 
-export const getIsAppsLoading = (state) => {
-    return state.app.isLoading;
-};
+export const getAreAppsLoading = state => state.app.areAppsLoading;
+
+export const getIsAppLoading = state => state.app.isAppLoading;
 
 export const getSelectedAppId = (state) => {
     return state.app.selected ? state.app.selected.appId : null;

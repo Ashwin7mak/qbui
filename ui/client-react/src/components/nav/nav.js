@@ -29,7 +29,7 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import {loadApp, loadApps} from '../../actions/appActions';
 
-import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
+import {getApp, getApps, getAreAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
@@ -353,9 +353,9 @@ export const Nav = React.createClass({
 
     render() {
         const appsList = this.props.getApps() || [];
-        const isAppsLoading = this.props.isAppsLoading;
+        const {areAppsLoading} = this.props;
 
-        if (appsList.length === 0 && isAppsLoading) {
+        if (appsList.length === 0 && areAppsLoading) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
             // therefore must be loaded using the dangerouslySetInnerHTML attribute
@@ -446,7 +446,7 @@ export const Nav = React.createClass({
                 expanded={this.props.shell.leftNavExpanded}
                 appsListOpen={this.props.shell.appsListOpen}
                 apps={appsList}
-                appsLoading={isAppsLoading}
+                appsLoading={areAppsLoading}
                 selectedAppId={selectedAppId}
                 selectedTableId={selectedTableId}
                 onSelectReports={this.onSelectTableReports}
@@ -473,7 +473,7 @@ export const Nav = React.createClass({
                                 key : this.props.match ? this.props.match.url : "",
                                 apps: appsList,
                                 selectedAppId: selectedAppId,
-                                appsLoading: isAppsLoading,
+                                appsLoading: areAppsLoading,
                                 reportData: reportsData,
                                 appUsers: this.props.appUsers,
                                 appUsersUnfiltered: this.props.appUnfilteredUsers,
@@ -565,7 +565,7 @@ const mapStateToProps = (state, ownProps) => {
         selectedTableId: getSelectedTableId(state),
         appUsers: getAppUsers(state),
         appUnfilteredUsers: getAppUnfilteredUsers(state),
-        isAppsLoading: getIsAppsLoading(state),
+        areAppsLoading: getAreAppsLoading(state),
         forms: state.forms,
         shell: state.shell,
         record: state.record,
