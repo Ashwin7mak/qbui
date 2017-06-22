@@ -505,7 +505,7 @@ describe('RecordRoute', () => {
             // this is what's called when user clicks on the edit pencil icon to start editing in trowser
             recordRoute.openRecordForEdit();
 
-            // adding query to url "?editRec=2" which will trigger the trowser to open
+            // adding query to url "?detailAppId=1&detailReportId=3&detailTableId=2&editRec=2&viewContextId=DRAWER123" which will trigger the trowser to open
             expect(windowHistoryUtilsMock.pushWithQueries).toHaveBeenCalledWith(queries);
 
             recordRouteRewire.__ResetDependency__('WindowHistoryUtils');
