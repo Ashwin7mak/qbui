@@ -249,8 +249,8 @@ const mapDispatchToProps = (dispatch, props) => ({
         dispatch(StandardGridActions.setSort(props.id, sortFid, asc, remove));
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
     },
-    pageLoadTime: (payload) => {
-        dispatch(pageLoadTime(parseFloat((window.performance.now() / 1000).toFixed(2))));
+    pageLoadTime: () => {
+        dispatch(pageLoadTime(_.round((window.performance.now() / 1000), 2)));
     }
 });
 

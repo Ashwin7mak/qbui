@@ -4,6 +4,7 @@ import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTot
 import {Analytics} from "../../../reuse/client/src/components/analytics/analytics";
 import Config from '../../../client-react/src/config/app.config';
 import {getPageLoadTime, getGridLoadTime} from "../analytics/performanceTimingReducer";
+import _ from "lodash";
 
 export class GovernanceAnalytics extends Component {
     // Evergage requires a global variable called _aaq
