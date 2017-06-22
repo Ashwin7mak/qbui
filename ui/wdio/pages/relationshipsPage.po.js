@@ -324,6 +324,8 @@
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
+            //Need this as link takes time to show up
+            browser.pause(e2eConsts.mediumWaitTimeMs);
 
             // Click on link to parent (via related Numeric Field)
             this.clickOnFormFieldLinkToParent(this.getFormSectionEl());
@@ -343,7 +345,9 @@
             //close the View record drawer
             browser.element('.closeDrawer').click();
             //wait until drawer screen disappear
-            return browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+            browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+            //Need this for drawer to slide away
+            return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
         /**
