@@ -27,6 +27,16 @@
         width: 100%;
 
         transition: opacity 0.3s 0.2s;
+
+        &:active {
+            background-color: transparent;
+            color: $leftnav-app-icon-color;
+        }
+
+        &:focus {
+            @include focus-shadow-thick;
+        }
+
     }
 
     &.menuHeaderCollapsed {

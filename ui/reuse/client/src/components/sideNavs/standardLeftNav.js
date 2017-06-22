@@ -58,6 +58,8 @@ class StandardLeftNav extends Component {
                     isToggleVisible={this.props.showContextHeaderToggle}
                     isToggleDown={this.props.isContextToggleDown}
                     isCollapsed={this.props.isCollapsed}
+                    backgroundColor={this.props.contextHeaderMenuBackgroundColor}
+                    onClickHeader={this.props.onClickContextHeader}
                 />
 
                 {this.renderPrimaryActions()}
@@ -144,6 +146,10 @@ StandardLeftNav.propTypes = {
     /**
      * Controls the direction of the toggle icon in the header. True for down. False for up. */
     isContextToggleDown: PropTypes.bool,
+
+    /**
+     * The background color (a hex value string) for the context header menu at the top of the nav. */
+    contextHeaderMenuBackgroundColor: PropTypes.string,
 
     /**
      * Callback that occurs when the context header is clicked */

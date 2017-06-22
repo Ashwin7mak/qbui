@@ -45,7 +45,16 @@ export class MenuHeader extends Component {
         /**
          * Sets the menu header into a collapsed state
          * (e.g., when the left nav is collapsed to a short width and only shows icons) */
-        isCollapsed: PropTypes.bool
+        isCollapsed: PropTypes.bool,
+
+        /**
+         * Callback that occurs when the menu header is clicked */
+        onClickHeader: PropTypes.func,
+
+        /**
+         * A valid hex color (e.g., #74489d) for the background color of the menu header.
+         * If not provided, it will use the default purple unless overriden in css. */
+        backgroundColor: PropTypes.string
     };
 
     static defaultProps = {
@@ -64,7 +73,7 @@ export class MenuHeader extends Component {
         return 17;
     }
 
-    renderContextHeaderTitle = () => {
+    renderMenuHeaderTitle = () => {
         const {title} = this.props;
 
         let titleElement = <span className="menuHeaderTitle">{title}</span>;
@@ -76,6 +85,18 @@ export class MenuHeader extends Component {
         }
 
         return titleElement;
+    };
+
+    menuStyles = () => {
+        const {backgroundColor} = this.props;
+
+        if (backgroundColor) {
+            return {
+                backgroundColor
+            };
+        }
+
+        return {};
     };
 
     render() {
@@ -100,14 +121,14 @@ export class MenuHeader extends Component {
         }
 
         return (
-            <div className={classes.join(' ')}>
+            <div className={classes.join(' ')} style={this.menuStyles()}>
                 <Button
                     className="menuHeaderButton"
-                    onClick={this.props.onClickContextHeader}
+                    onClick={this.props.onClickHeader}
                 >
                     {icon && <Icon icon={icon} iconFont={iconFont} className="menuHeaderIcon" />}
 
-                    {this.renderContextHeaderTitle()}
+                    {this.renderMenuHeaderTitle()}
 
                     {(isToggleVisible && !isCollapsed) &&
                     <Icon icon="caret-up" className={`menuHeaderToggle ${isToggleDown ? 'menuToggleDown' : ''}`} />}

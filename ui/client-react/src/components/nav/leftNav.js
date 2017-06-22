@@ -1,16 +1,16 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
-import Button from 'react-bootstrap/lib/Button';
 import Loader  from 'react-loader';
 import AppsList from './appsListForLeftNav';
 import TablesList from './tablesList';
-import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import LogoImg from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
 import {APPS_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import MenuHeader from 'REUSE/components/menuHeader/menuHeader';
+import _ from 'lodash';
 
 let LeftNav = React.createClass({
     propTypes: {
@@ -38,15 +38,18 @@ let LeftNav = React.createClass({
      */
     createAppsToggleArea() {
         let app = _.find(this.props.apps, {id: this.props.selectedAppId});
-        return (<div className="appsToggleArea">
-            {this.props.selectedAppId &&
-            <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
-                <QBicon icon={"favicon"}/>
-                <span className={"navLabel"}> {app ? app.name : ''}</span>
-                <QBicon className={"appsToggleIcon"} icon="caret-up"/>
-            </Button>
-            }
-        </div>);
+        return (
+            <div className="appsToggleArea">
+                {this.props.selectedAppId &&
+                <MenuHeader
+                    icon={_.get(app, 'icon', 'favicon')}
+                    title={_.get(app, 'name', '')} // navLabel
+                    backgroundColor={_.get(app, 'color', null)}
+                    onClickHeader={this.props.onToggleAppsList}
+                    isToggleDown={!this.props.appsListOpen}
+                />}
+            </div>
+        );
     },
 
     reloadAppsPage() {
@@ -62,7 +65,7 @@ let LeftNav = React.createClass({
      */
     createBranding() {
         return (<div className="branding" onClick={this.reloadAppsPage}>
-            <img className={"logo"} alt="QuickBase" src={LogoImg} />
+            <img className="logo" alt="QuickBase" src={LogoImg} />
         </div>);
     },
 
@@ -78,9 +81,9 @@ let LeftNav = React.createClass({
     renderNavContent() {
         // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
         if (this.props.appsListOpen || !AppUtils.appExists(this.props.selectedAppId, this.props.apps)) {
-            return <AppsList {...this.props} key={"apps"} onSelectApp={this.onSelectApp}/>;
+            return <AppsList {...this.props} key="apps" onSelectApp={this.onSelectApp}/>;
         } else {
-            return <TablesList key={"tables"}
+            return <TablesList key="tables"
                                expanded={this.props.expanded}
                                showReports={(id)=>{this.props.onSelectReports(id);} }
                                getAppTables={AppUtils.getAppTables}
@@ -93,10 +96,6 @@ let LeftNav = React.createClass({
         let classes = "leftNav";
         classes += (this.props.visible ? " open" : " closed");
         classes += (this.props.expanded ? " expanded" : " collapsed");
-
-        if (this.props.appsListOpen) {
-            classes += " appsListOpen";
-        }
 
         return (
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
