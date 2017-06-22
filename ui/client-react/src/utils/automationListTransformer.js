@@ -63,15 +63,15 @@ class AutomationListTransformer  {
         let id = automation.id;
         let active = automation.active ? Locale.getMessage("automation.automationList.activeYes") : Locale.getMessage("automation.automationList.activeNo");
         let cells = [
-            this.createCellForField(constants.AUTOMATION_LIST.NAME, automation.name, rowNumber, 1, false),
-            this.createCellForField(constants.AUTOMATION_LIST.DESCRIPTION, automation.description, rowNumber, 2, false),
-            this.createCellForField(constants.AUTOMATION_LIST.ACTIVE, active, rowNumber, 3, false),
-            this.createCellForField(constants.AUTOMATION_LIST.ID, id, rowNumber, 4, true)
+            this.createCellForField(constants.AUTOMATION_LIST.NAME, automation.name, rowNumber, 1, id, false),
+            this.createCellForField(constants.AUTOMATION_LIST.DESCRIPTION, automation.description, rowNumber, 2, id, false),
+            this.createCellForField(constants.AUTOMATION_LIST.ACTIVE, active, rowNumber, 3, id, false),
+            this.createCellForField(constants.AUTOMATION_LIST.ID, id, rowNumber, 4, id, true)
         ];
         return new RowTransformer(id, cells);
     }
 
-    static createCellForField(fieldName, fieldValue, rowId, cellId, isHidden) {
+    static createCellForField(fieldName, fieldValue, rowId, cellId, recordId, isHidden) {
         let cell = {
             defaultValue: fieldValue,
             display: fieldValue,
@@ -87,7 +87,7 @@ class AutomationListTransformer  {
             isPlaceholder: false,
             id: cellId,
             order: cellId,
-            recordId: rowId,
+            recordId: recordId,
             uniqueElementKey: rowId + "_" + cellId,
             value: fieldValue,
             fieldDef: {
