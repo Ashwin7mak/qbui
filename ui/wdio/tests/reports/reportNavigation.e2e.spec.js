@@ -50,6 +50,8 @@
 
             //Select table 2
             tableCreatePO.selectTable('Table 2');
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
 
             // verify nav details on FIRST page
             reportSortPO.sortByRecordID();
@@ -119,6 +121,8 @@
 
         it('Verify lack of navigation in single-page report', function() {
             tableCreatePO.selectTable('Table 1');
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
 
             // verify navigation components
             let expectedRecordCount = (e2eConsts.MAX_PAGING_SIZE - recOffset).toString() + ' records';
