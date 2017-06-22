@@ -6,22 +6,16 @@ import * as AccountUsersActions from "../../../src/account/users/AccountUsersAct
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import * as Table from 'reactabular-table';
+import thunk from "redux-thunk";
+import configureMockStore from "redux-mock-store";
 
-class mockQbCell extends React.Component {
-    render() {
-        return <div />;
-    }
-}
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('StandardGrid', () => {
 
     beforeEach(() => {
         jasmineEnzyme();
-        StandardGridRewireAPI.__Rewire__('QbCell', mockQbCell);
-    });
-
-    afterEach(() => {
-        StandardGridRewireAPI.__ResetDependency__('QbCell');
     });
 
     it('should render the grid', () => {
@@ -45,14 +39,16 @@ describe('StandardGrid', () => {
         }];
 
         let StandardGridShallow = shallow(
-            <StandardGrid
-                columns={columns}
-                getFacetFields={()=>{}}
-                doUpdate={AccountUsersActions.doUpdateUsers}
-                items={items}
-                id={"accountUsers"}
-                rowKey={"uid"}
-            />
+            <Provider store={mockStore({})}>
+                <StandardGrid
+                    columns={columns}
+                    getFacetFields={()=>{}}
+                    doUpdate={AccountUsersActions.doUpdateUsers}
+                    items={items}
+                    id={"accountUsers"}
+                    rowKey={"uid"}
+                />
+            </Provider>
         );
         expect(StandardGridShallow).toBeDefined();
         expect(StandardGridShallow.length).toBeTruthy();
