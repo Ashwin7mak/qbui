@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../src/account/users/AccountUsersReducer";
-import Analytics from "../../../reuse/client/src/components/analytics/analytics";
+import {Analytics} from "../../../reuse/client/src/components/analytics/analytics";
 import Config from '../../../client-react/src/config/app.config';
 import {getPageLoadTime, getGridLoadTime} from "../analytics/performanceTimingReducer";
 
@@ -128,7 +128,7 @@ export class GovernanceAnalytics extends Component {
                        userId={this.props.currentUserId}
                        accountId={this.props.accountId}
                        subdomainName={this.props.subdomainName}
-                       isAdmin={this.props.isAccountAdmin}
+                       isAccountAdmin={this.props.isAccountAdmin}
                        isRealmAdmin={this.props.isRealmAdmin}
                        isCSR={this.props.isCSR}
                        totalUsers={this.props.totalUsers}

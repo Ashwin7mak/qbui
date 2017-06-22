@@ -105,6 +105,10 @@ $edit-icon-font-size: 18px;
             width: 100%;
         }
     }
+    // adjust sizing when no checkbox is present
+    &.isMultiSelectDisabled .qbHeaderCell {
+        min-width: 30px;
+    }
 
     // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
     // contains the "select all" checkbox
@@ -226,6 +230,12 @@ $edit-icon-font-size: 18px;
         &:last-of-type {
             border-right: 1px dashed $color-purple-600;
         }
+    }
+
+    // Adjust alignment of icons when checkbox is not present
+    &.isMultiSelectDisabled .qbRow .stickyCell {
+        padding-left: 10px;
+        padding-right: 0;
     }
 
     //== header row above groups of rows

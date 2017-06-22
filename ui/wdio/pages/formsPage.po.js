@@ -329,6 +329,7 @@
             this.editPencilBtnOnStageInViewForm.waitForVisible();
             //click on the edit pencil in view form actions
             this.editPencilBtnOnStageInViewForm.click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until edit form is visible
             this.editFormContainerEl.waitForVisible();
             //Need this to stabilize container
