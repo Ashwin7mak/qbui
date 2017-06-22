@@ -71,7 +71,7 @@ describe('DefaultTopNavGlobalActions', () => {
     it('has a help button', () => {
         component = shallow(<DefaultTopNavGlobalActions/>);
 
-        expect(component.find('.reHelpButton')).toBePresent();
+        expect(component.find(HelpButton)).toBePresent();
     });
 
     it('has a help button with a link prop if helpButtonLink is specified', () => {
