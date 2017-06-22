@@ -23,6 +23,11 @@ class formBuilderPage {
         return browser.element('.clearSearch .searchIcon');
     }
 
+    get emptySearchResult() {
+        // the text in the fields panel when the search term returns no results
+        return browser.element('.emptySearchResult');
+    }
+
     get deleteFieldIcon() {
         // REMOVE (field from form) icon (when a field is selected or highlighted)
         return browser.element('.deleteFieldIcon');
@@ -55,27 +60,27 @@ class formBuilderPage {
 
     get fieldTokenTitle() {
         // the label of the first NEW FIELD token
-        return browser.element('.fieldTokenTitle');
+        return browser.element('.rc-tabs-tabpane-active .fieldTokenTitle');
     }
 
     get firstField() {
-        // the first field (wait for it after open)
+        // the first field on the form
         return browser.element('.field');
+    }
+
+    get firstNewFieldGroup() {
+        // The FIRST group in the list of NEW FIELDs (left panel)
+        return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
+    }
+
+    get firstFieldToken() {
+        // The FIRST field in the list of NEW FIELDs (left panel)
+        return browser.element('.rc-tabs-tabpane-active .listOfElementsItem');
     }
 
     get formBuilderContainer() {
         // the whole form builder page (all 3 panels)
         return browser.element('.formBuilderContainer');
-    }
-
-    get listOfElementsItemGroup() {
-        // The FIRST group in the list of NEW FIELDs (left panel)
-        return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
-    }
-
-    get listOfElementsItem() {
-        // The FIRST field in the list of NEW FIELDs (left panel)
-        return browser.element('.listOfElementsItem');
     }
 
     get modalDismiss() {
@@ -106,8 +111,8 @@ class formBuilderPage {
     }
 
     get searchInput() {
-        // SEARCH textbox in the NEW FIELDS panel
-        return browser.element('.searchInput');
+        // SEARCH textbox in the FIELDS panel
+        return browser.element('.rc-tabs-tabpane-active .searchInput');
     }
 
     get selectedField() {
@@ -127,11 +132,7 @@ class formBuilderPage {
 
     get tab_Existing() {
         // The EXISTING tab in leftNav
-        // return this.tabbedSideNav.element('div:contains("Existing")'); // invalid selector...?
-        // return this.tabbedSideNav.element('//div[contains(text(), "Existing"]'); // not found...?
-        // return this.tabbedSideNav.element('//div[contains(getAttribute("innerHTML"), "Existing")]'); // invalid xpath...?
         // ask Brandon to add a descriptive class name or id!
-        // return this.tabbedSideNav.element('div:nth-child(3) div'); // clicks on the bar, i.e. nth-child(1)...?
         return browser.element(".tabbedSideNav div div div:nth-child(3) div");
     }
 
@@ -148,10 +149,6 @@ class formBuilderPage {
     get tab_Active() {
         // The active FIELDS tab - needs a better locator
         return browser.element(".tabbedSideNav .rc-tabs-tab-active");
-    }
-
-    get tab_firstField() {
-        return browser.element(tab_Field);
     }
 
     get title() {
@@ -215,6 +212,7 @@ class formBuilderPage {
             // return this.getSelectedFieldLabel() === source.getText();
             return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getFieldLabels();
     }
 
@@ -243,7 +241,7 @@ class formBuilderPage {
 
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
-        this.tab_firstField.waitForVisible();
+        this.firstFieldToken.waitForVisible();
         let labelEls = browser.elements(tab_Field);
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
@@ -255,7 +253,7 @@ class formBuilderPage {
         // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
         // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
         // this lets the message include the contents of the unexpectedly present list.
-        return this.tab_firstField.isExisting() ? this.getNewFieldLabels() : [];
+        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getSelectedFieldLabel() {
@@ -338,7 +336,7 @@ class formBuilderPage {
             this.clearSearch.click();
         }
         // wait for groups to appear or disappear depending on whether we searched or cleared
-        this.listOfElementsItemGroup.waitForVisible(null, (text !== null));
+        this.firstNewFieldGroup.waitForVisible(null, (text !== null));
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getNewFieldLabels();
     }
