@@ -77,7 +77,7 @@ describe('AppsListForLeftNav', () => {
     });
 
     it('renders empty message when there are no apps', () => {
-        component = shallow(<AppsList apps={[]}/>);
+        component = mount(<AppsList apps={[]}/>);
 
         expect(component.find(CreateNewItemButton).length).toEqual(0);
         expect(component.find('.emptyState')).toBePresent();
@@ -85,7 +85,7 @@ describe('AppsListForLeftNav', () => {
     });
 
     it('renders empty message when apps are undefined', () => {
-        component = shallow(<AppsList/>);
+        component = mount(<AppsList/>);
 
         expect(component.find(CreateNewItemButton).length).toEqual(0);
         expect(component.find('.emptyState')).toBePresent();
