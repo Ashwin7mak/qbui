@@ -1,5 +1,4 @@
 import React, {PropTypes, Component} from 'react';
-import IconActions from '../actions/iconActions';
 import AppHomePage from './appHomePage';
 import PageTitle from '../pageTitle/pageTitle';
 import {connect} from 'react-redux';
@@ -57,14 +56,6 @@ export class AppHomePageRoute extends Component {
      */
     getSelectedAppName = () => {
         return get(this.props, 'app.name', null);
-    };
-
-    getPageActions = (maxButtonsBeforeMenu = 0) => {
-        const actions = [
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.customizePage', icon:'settings'}
-        ];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
     };
 
     getStageHeadline = () => {

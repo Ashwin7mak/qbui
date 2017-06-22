@@ -1,19 +1,19 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ConnectedAppHomePage, {AppHomePageRoute}  from '../../../src/components/app/appHomePageRoute';
+import ConnectedAppHomePage, {AppHomePageRoute, __RewireAPI__ as AppHomePageRewireAPI}  from '../../../src/components/app/appHomePageRoute';
 import HtmlUtils from '../../../src/utils/htmlUtils';
 import {DEFAULT_PAGE_TITLE} from '../../../src/constants/urlConstants';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+import Locale from '../../../src/locales/locales';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-//TODO this is a placeholder file to add tests as app home page gets built out
+const NotificationManagerMock = {success() {}};
 
-describe('AppHomePageRoute functions', () => {
-    'use strict';
+describe('AppHomePageRoute', () => {
 
     let component;
 
@@ -26,10 +26,13 @@ describe('AppHomePageRoute functions', () => {
 
     beforeEach(() => {
         spyOn(HtmlUtils, 'updatePageTitle');
+        AppHomePageRewireAPI.__Rewire__('NotificationManager', NotificationManagerMock);
     });
 
     afterEach(() => {
         HtmlUtils.updatePageTitle.calls.reset();
+
+        AppHomePageRewireAPI.__ResetDependency__('NotificationManager', NotificationManagerMock);
     });
 
     it('test render of component', () => {
@@ -84,6 +87,45 @@ describe('AppHomePageRoute functions', () => {
         );
 
         expect(HtmlUtils.updatePageTitle).toHaveBeenCalledWith(`${selectedAppName} - ${DEFAULT_PAGE_TITLE}`);
+    });
+
+    it('shows a message that a table was deleted on mount if notifyTableDeleted is true', () => {
+        spyOn(NotificationManagerMock, 'success');
+        const resetTableDeleteNotification = jasmine.createSpy('resetTableDeleteNotification');
+        const testTableName = 'test table';
+
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute
+            {...props}
+            isLoading={true}
+
+            notifyTableDeleted={true}
+            tableJustDeleted={testTableName}
+            resetTableDeleteNotification={resetTableDeleteNotification}
+        />);
+
+        expect(resetTableDeleteNotification).toHaveBeenCalled();
+        expect(NotificationManagerMock.success).toHaveBeenCalledWith(
+            Locale.getMessage('tableEdit.tableDeleted', {tableName: testTableName}),
+            Locale.getMessage('success')
+        );
+    });
+
+    it('does not show a notification regarding table creation if notifyTableDeleted is false', () => {
+        spyOn(NotificationManagerMock, 'success');
+        const resetTableDeleteNotification = jasmine.createSpy('resetTableDeleteNotification');
+        const testTableName = 'test table';
+
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute
+            {...props}
+            isLoading={true}
+
+            notifyTableDeleted={false}
+            tableJustDeleted={testTableName}
+            resetTableDeleteNotification={resetTableDeleteNotification}
+        />);
+
+        expect(resetTableDeleteNotification).not.toHaveBeenCalled();
+        expect(NotificationManagerMock.success).not.toHaveBeenCalled();
     });
 
     it('shows a loader if the app is not loaded yet', () => {
