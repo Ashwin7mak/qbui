@@ -67,7 +67,7 @@ export class MenuHeader extends Component {
     renderContextHeaderTitle = () => {
         const {title} = this.props;
 
-        let titleElement = <span className="contextHeaderTitle">{title}</span>;
+        let titleElement = <span className="menuHeaderTitle">{title}</span>;
 
         if (title && title.length > this.getMaxCharactersBeforeTooltip()) {
             return (
@@ -81,18 +81,18 @@ export class MenuHeader extends Component {
     render() {
         const {isVisible, isSmall, icon, iconFont, isToggleVisible, isToggleDown, isCollapsed} = this.props;
 
-        let classes = ['contextHeader'];
+        let classes = ['menuHeader'];
 
         if (!isVisible) {
-            classes.push('contextHeaderHidden');
+            classes.push('menuHeaderHidden');
         }
 
         if (isCollapsed) {
-            classes.push('contextHeaderCollapsed');
+            classes.push('menuHeaderCollapsed');
         }
 
         if (isSmall && !isCollapsed) {
-            classes.push('contextHeaderSmall');
+            classes.push('menuHeaderSmall');
         }
 
         if (icon) {
@@ -102,15 +102,15 @@ export class MenuHeader extends Component {
         return (
             <div className={classes.join(' ')}>
                 <Button
-                    className="contextHeaderButton"
+                    className="menuHeaderButton"
                     onClick={this.props.onClickContextHeader}
                 >
-                    {icon && <Icon icon={icon} iconFont={iconFont} className="contextHeaderIcon" />}
+                    {icon && <Icon icon={icon} iconFont={iconFont} className="menuHeaderIcon" />}
 
                     {this.renderContextHeaderTitle()}
 
                     {(isToggleVisible && !isCollapsed) &&
-                    <Icon icon="caret-up" className={`contextHeaderToggle ${isToggleDown ? 'contextToggleDown' : ''}`} />}
+                    <Icon icon="caret-up" className={`menuHeaderToggle ${isToggleDown ? 'menuToggleDown' : ''}`} />}
                 </Button>
             </div>
         );

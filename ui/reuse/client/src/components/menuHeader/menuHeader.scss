@@ -1,6 +1,6 @@
 @import "../../assets/css/qbVariables";
 
-.contextHeader {
+.menuHeader {
     flex: 0 0 auto; // Don't shrink this on a short window.
     background-color: $leftnav-app-background-color; // Default for the left nav
     @include correctFontWeightForLightTextOnDarkBackground;
@@ -9,7 +9,7 @@
 
     transition: max-height 0.3s;
 
-    .contextHeaderButton {
+    .menuHeaderButton {
         opacity: 1;
         overflow: hidden;
         background-color: transparent;
@@ -29,22 +29,22 @@
         transition: opacity 0.3s 0.2s;
     }
 
-    &.contextHeaderCollapsed {
+    &.menuHeaderCollapsed {
         max-height: 40px;
 
         transition: max-height 0.3s 0.1s;
 
-        .contextHeaderButton {
+        .menuHeaderButton {
             padding: 5px 10px;
         }
 
-        .contextHeaderTitle {
+        .menuHeaderTitle {
             opacity: 0;
 
             transition: opacity 0.1s;
         }
 
-        .contextHeaderIcon {
+        .menuHeaderIcon {
             font-size: 20px;
             width: 100%;
 
@@ -52,24 +52,24 @@
         }
     }
 
-    &.contextHeaderHidden {
+    &.menuHeaderHidden {
         max-height: 40px;
 
         transition: max-height 0.3s 0.3s;
 
-        .contextHeaderButton {
+        .menuHeaderButton {
             opacity: 0;
             transition: opacity 0.3s 0s; // Need a 0 here to override the 0.2s delay above
         }
     }
 
-    &.contextHeaderSmall {
+    &.menuHeaderSmall {
         max-height: 40px;
         display: flex;
 
         transition: max-height 0.3s 0.1s;
 
-        .contextHeaderButton {
+        .menuHeaderButton {
             display: flex;
             flex-direction: row;
             padding: 0 10px;
@@ -78,7 +78,7 @@
             justify-content: center;
         }
 
-        .contextHeaderIcon {
+        .menuHeaderIcon {
             font-size: 24px;
             width: 24px;
             flex-grow: 0;
@@ -87,17 +87,17 @@
             align-self: center;
         }
 
-        .contextHeaderToggle {
+        .menuHeaderToggle {
             bottom: 12px;
         }
     }
 
-    .contextHeaderIcon {
+    .menuHeaderIcon {
         font-size: 40px;
         width: 40px;
     }
 
-    .contextHeaderTitle {
+    .menuHeaderTitle {
         opacity: 1;
         display: block;
         overflow: hidden;
@@ -106,7 +106,7 @@
         transition: opacity 0.1s 0.2s;
     }
 
-    .contextHeaderToggle {
+    .menuHeaderToggle {
         position: absolute;
         right: 10px;
         bottom: 16px;
@@ -116,7 +116,7 @@
         transition: transform 0.3s ease-in;
         transform: rotate(0);
 
-        &.contextToggleDown {
+        &.menuToggleDown {
             transform: rotate(-180deg);
         }
     }

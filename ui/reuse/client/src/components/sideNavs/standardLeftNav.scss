@@ -18,6 +18,7 @@
     // Prevents the nav from collapsing (i.e., branding appears at the top) when loading nav items
     .loader {
         flex: 1 auto;
+        margin-top: 50px;
     }
 
     // NOTE: When global actions are present, they should look very similar to primary actions.
