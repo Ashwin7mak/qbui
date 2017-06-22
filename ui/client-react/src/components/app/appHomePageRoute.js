@@ -89,7 +89,7 @@ export class AppHomePageRoute extends Component {
 
         if (!this.props.isLoading && !this.props.app) {
             return (
-                <AlertBanner show={true}>{Locale.getMessage('errors.appNotFound')}</AlertBanner>
+                <AlertBanner isVisible={true}>{Locale.getMessage('errors.appNotFound')}</AlertBanner>
             );
         }
 
