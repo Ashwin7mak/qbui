@@ -686,7 +686,7 @@ export default {
                 }
             },
             existingFieldsToolTip: "Add {fieldName} to the form",
-            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} are on the form",
+            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} table are on the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",
@@ -749,6 +749,10 @@ export default {
             appNameHeading: "App name",
             appNamePlaceHolder: "For example, \"Order Tracker\"",
             descriptionHeading: "App description"
+        },
+        emptyAppState: {
+            message: "You don't have any apps yet.",
+            createNewApp: "Create an app"
         },
         tableCreation: {
             newTablePageTitle: "New Table",
