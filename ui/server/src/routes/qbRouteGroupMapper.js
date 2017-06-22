@@ -38,16 +38,16 @@
         {route: routes.FEATURE_STATES, methods: [constants.GET]},
 
         /***
-         *  Shall be enabled when this epic is worked on :
+         * These api's are not being used at this time.
          *  https://quickbase.atlassian.net/browse/MC-1189
          */
-        // {route: routes.FEATURE_SWITCH, methods: [constants.PUT]},
-        // {route: routes.FEATURE_SWITCHES, methods: [constants.GET, constants.POST]},
-        // {route: routes.FEATURE_OVERRIDE, methods: [constants.PUT]},
-        // {route: routes.FEATURE_OVERRIDES, methods: [constants.POST]},
-        // {route: routes.FEATURE_SWITCHES_BULK, methods: [constants.POST]},
-        // {route: routes.FEATURE_OVERRIDES_BULK, methods: [constants.POST]},
-
+        {route: routes.FEATURE_SWITCH, methods: [constants.PUT]},
+        {route: routes.FEATURE_SWITCHES, methods: [constants.GET, constants.POST]},
+        {route: routes.FEATURE_OVERRIDE, methods: [constants.PUT]},
+        {route: routes.FEATURE_OVERRIDES, methods: [constants.POST]},
+        {route: routes.FEATURE_SWITCHES_BULK, methods: [constants.POST]},
+        {route: routes.FEATURE_OVERRIDES_BULK, methods: [constants.POST]},
+        /***************************/
         {route: routes.FORM_AND_RECORD_COMPONENTS, methods: [constants.GET]},
         {route: routes.FORM_COMPONENTS, methods: [constants.GET]},
 

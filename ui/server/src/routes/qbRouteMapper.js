@@ -88,13 +88,13 @@
                 requestFunctions[routes.APP_USERS] = getAppUsers;
                 requestFunctions[routes.APP_ROLES] = getAppRoles;
                 requestFunctions[routes.APP_COMPONENTS] = getAppComponents;
+                requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
 
                 /***
-                 *  Shall be enabled when this epic is worked on :
+                 *  CRUD on feature switches unused until this epic is worked on :
                  *  https://quickbase.atlassian.net/browse/MC-1189
                  */
-                // requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
-                requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
+                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
 
                 requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
                 requestFunctions[routes.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
@@ -156,14 +156,10 @@
             //  With multiple node instances, want to have the option of deploying an instance
             //  where only 'public' routes are defined.
             if (config.publicRoutesOnly !== true) {
-                /***
-                 *  Shall be enabled when this epic is worked on :
-                 *  https://quickbase.atlassian.net/browse/MC-1189
-                 */
-                // requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
-                // requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
-                // requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-                // requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+                requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
+                requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
+                requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
+                requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
                 requestFunctions[routes.APPS] = createApp;
                 requestFunctions[routes.RECORDS] = createSingleRecord;
@@ -185,10 +181,10 @@
 
             //  With multiple node instances, want to have the option of deploying an instance
             //  where only 'public' routes are defined.
-            // if (config.publicRoutesOnly !== true) {
-            //     requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
-            //     requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
-            // }
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
+                requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+            }
 
             return requestFunctions;
         }

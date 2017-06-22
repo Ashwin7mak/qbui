@@ -26,19 +26,13 @@ describe('Group Route Mapper Unit Test', function() {
         testRoutes.push({message:'LH_V1: ' + routes.APPS, routeGroup:routeGroups.LH_V1, route:routes.APPS, DELETE:false, GET:true, POST:true, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.APP_USERS, routeGroup:routeGroups.LH_V1, route:routes.APP_USERS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.APP_ROLES, routeGroup:routeGroups.LH_V1, route:routes.APP_ROLES, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.FEATURE_OVERRIDE, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_OVERRIDE, DELETE:false, GET:false, POST:false, PUT:true, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.FEATURE_OVERRIDES, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_OVERRIDES, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.FEATURE_OVERRIDES_BULK, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_OVERRIDES_BULK, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.FEATURE_STATES, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_STATES, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
-
-        /***
-         *  should be enabled when this epic is worked on :
-         *  https://quickbase.atlassian.net/browse/MC-1189
-         */
-        // testRoutes.push({message:'LH_V1: ' + routes.FEATURE_OVERRIDE, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_OVERRIDE, DELETE:false, GET:false, POST:false, PUT:true, PATCH:false});
-        // testRoutes.push({message:'LH_V1: ' + routes.FEATURE_OVERRIDES, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_OVERRIDES, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
-        // testRoutes.push({message:'LH_V1: ' + routes.FEATURE_OVERRIDES_BULK, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_OVERRIDES_BULK, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
-        // testRoutes.push({message:'LH_V1: ' + routes.FEATURE_SWITCH, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_SWITCH, DELETE:false, GET:false, POST:false, PUT:true, PATCH:false});
-        // testRoutes.push({message:'LH_V1: ' + routes.FEATURE_SWITCHES, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_SWITCHES, DELETE:false, GET:true, POST:true, PUT:false, PATCH:false});
-        // testRoutes.push({message:'LH_V1: ' + routes.FEATURE_SWITCHES_BULK, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_SWITCHES_BULK, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
-
+        testRoutes.push({message:'LH_V1: ' + routes.FEATURE_SWITCH, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_SWITCH, DELETE:false, GET:false, POST:false, PUT:true, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.FEATURE_SWITCHES, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_SWITCHES, DELETE:false, GET:true, POST:true, PUT:false, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.FEATURE_SWITCHES_BULK, routeGroup:routeGroups.LH_V1, route:routes.FEATURE_SWITCHES_BULK, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.FORM_COMPONENTS, routeGroup:routeGroups.LH_V1, route:routes.FORM_COMPONENTS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.FORM_AND_RECORD_COMPONENTS, routeGroup:routeGroups.LH_V1, route:routes.FORM_AND_RECORD_COMPONENTS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.RECORD, routeGroup:routeGroups.LH_V1, route:routes.RECORD, DELETE:true, GET:true, POST:false, PUT:false, PATCH:true});
