@@ -250,7 +250,7 @@ const mapDispatchToProps = (dispatch, props) => ({
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
     },
     pageLoadTime: () => {
-        dispatch(pageLoadTime(+((window.performance.now() / 1000).toFixed(2))));
+        dispatch(pageLoadTime(_.round((window.performance.now() / 1000), 2)));
     }
 });
 
