@@ -233,7 +233,7 @@ export class QbGrid extends Component {
     /**
      * stick the header and sticky first column when the grid scrolls
      */
-    handleScroll() {
+    handleScroll = () => {
 
         let scrolled = this.tableRef;
         if (scrolled) {

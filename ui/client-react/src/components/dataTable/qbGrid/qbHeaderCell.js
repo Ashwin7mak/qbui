@@ -21,7 +21,11 @@ class QbHeaderCell extends Component {
         if (this.props.isPlaceholderCell) {
             classes.push('placeholderCell');
         }
-        return <th className={classes.join(' ')} {...this.props} />;
+        if (this.props.draggingColumnStart) {
+            return <div className={classes.join(' ')} {...this.props} />;
+        } else {
+            return <th className={classes.join(' ')} {...this.props} />;
+        }
     }
 }
 
