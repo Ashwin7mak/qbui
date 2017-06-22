@@ -1,6 +1,5 @@
-import queryString from 'query-string';
-
 import AppHistory from '../globals/appHistory';
+import windowLocationUtils from './windowLocationUtils';
 
 export const WindowHistoryUtils = {
     /**
@@ -17,36 +16,10 @@ export const WindowHistoryUtils = {
      * @param {Object} params
      */
     pushWithQueries(params = {}) {
-        const urlQueryString = location.search;
+        const urlQueryString = windowLocationUtils.getSearch();
         let newParams = this.buildQueryString(urlQueryString, params);
 
-        AppHistory.history.push(location.pathname + newParams);
-    },
-
-    /**
-     * Given a params object, builds query string with key value pairs.
-     * param = {
-     *   name: 'Jon',
-     *   value: 33
-     * }
-     *   returns "?name=Jon&value=33"
-     *
-     * @param {string} urlQueryString string to parse for existing parameters
-     * @param params
-     * @returns {string}
-     */
-    buildQueryString(urlQueryString, params) {
-        let parsed = {};
-        if (urlQueryString) {
-            // keep existing query strings
-            parsed = queryString.parse(urlQueryString);
-        }
-        Object.keys(params).forEach(key => {
-            // add the key:value pairs
-            // overwrites the value in urlQueryString if the same key already exists
-            parsed[key] = params[key];
-        });
-        return '?' + queryString.stringify(parsed);
+        AppHistory.history.push(windowLocationUtils.getPathname() + newParams);
     },
 
     /**
@@ -54,6 +27,6 @@ export const WindowHistoryUtils = {
      */
     pushWithoutQuery() {
 
-        AppHistory.history.push(location.pathname);
+        AppHistory.history.push(windowLocationUtils.getPathname());
     }
 };
