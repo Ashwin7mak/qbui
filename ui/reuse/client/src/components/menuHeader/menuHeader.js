@@ -4,6 +4,12 @@ import Icon, {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
 import Tooltip from 'REUSE/components/tooltip/tooltip';
 import Button from 'react-bootstrap/lib/Button';
 
+import './menuHeader.scss';
+
+/**
+ * A header that typically appears at the top of LeftNavs (see StandardLeftNav for an example)
+ * It can display text along with an icon.
+ */
 export class MenuHeader extends Component {
     static propTypes = {
         /**
@@ -103,7 +109,8 @@ export class MenuHeader extends Component {
 
                     {this.renderContextHeaderTitle()}
 
-                    {isToggleVisible && <Icon icon="caret-up" className={`contextHeaderToggle ${isToggleDown ? 'contextToggleDown' : ''}`} />}
+                    {(isToggleVisible && !isCollapsed) &&
+                    <Icon icon="caret-up" className={`contextHeaderToggle ${isToggleDown ? 'contextToggleDown' : ''}`} />}
                 </Button>
             </div>
         );
