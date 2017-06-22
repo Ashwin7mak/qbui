@@ -828,7 +828,7 @@ export default {
             copied: "Lien copié",
             messageSubject:"Lien vers le {nom de l'application} Application",
             messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}",
-            addUser: "ajouter",
+            addUser: "Ajouter",
             selectAUser:"Sélectionnez un utilisateur",
             selectUsers: "Sélectionnez les utilisateurs",
             assignRole: "Attribuer un rôle",
