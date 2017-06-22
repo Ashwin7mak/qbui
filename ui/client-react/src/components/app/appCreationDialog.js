@@ -1,6 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import AppCreationTable from './appCreationPanel';
+import AppCreationPanel from './appCreationPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import * as AppBuilderActions from '../../actions/appBuilderActions';
@@ -16,13 +16,15 @@ export class AppCreationDialog extends React.Component {
      */
     onCancel = () => {
         this.props.hideAppCreationDialog();
-    }
+    };
 
     /**
      * last page has finished
      */
     onFinished = () => {
-        //This is the button that creates the app here
+        if (this.props.app) {
+            this.props.createApp(this.props.app);
+        }
     };
 
     /**
@@ -41,7 +43,7 @@ export class AppCreationDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage("appCreation.finishedButtonLabel")}
                                  titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
                 <div className="dialogCreationPanel">
-                    <AppCreationTable />
+                    <AppCreationPanel />
                 </div>
             </MultiStepDialog>
         );
@@ -55,12 +57,14 @@ AppCreationDialog.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state)
+        appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state),
+        app: AppBuilderSelectors.getNewAppInfo(state)
     };
 };
 
 const mapDispatchToProps = {
-    hideAppCreationDialog: AppBuilderActions.hideAppCreationDialog
+    hideAppCreationDialog: AppBuilderActions.hideAppCreationDialog,
+    createApp: AppBuilderActions.createApp
 };
 
 export default connect(

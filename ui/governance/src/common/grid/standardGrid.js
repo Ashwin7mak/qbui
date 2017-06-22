@@ -8,6 +8,7 @@ import QbCell from "../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
+import {pageLoadTime} from "../../analytics/performanceTimingActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
@@ -67,6 +68,12 @@ export class StandardGrid extends Component {
 
     bodyRef = (body) => {
         this.tableRef = body && body.getRef().parentNode;
+    };
+
+    componentDidUpdate = () => {
+        if (this.props.items) {
+            this.props.pageLoadTime();
+        }
     };
 
     /**
@@ -204,7 +211,12 @@ StandardGrid.propTypes = {
     /**
      *  The text to display if there are no items found
      */
-    noItemsFound: PropTypes.string
+    noItemsFound: PropTypes.string,
+
+    /**
+     *  Function that returns the page load time (as a number)
+     */
+    pageLoadTime: PropTypes.func
 };
 
 StandardGrid.defaultProps = {
@@ -236,6 +248,9 @@ const mapDispatchToProps = (dispatch, props) => ({
     setSort(sortFid, asc, remove) {
         dispatch(StandardGridActions.setSort(props.id, sortFid, asc, remove));
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
+    },
+    pageLoadTime: (payload) => {
+        dispatch(pageLoadTime(parseFloat((window.performance.now() / 1000).toFixed(2))));
     }
 });
 
