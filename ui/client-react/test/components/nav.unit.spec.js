@@ -191,7 +191,7 @@ describe('Nav Unit tests', () => {
 
     it('renders the loading screen while no apps are loaded', () => {
         let cloneProps = _.clone(props);
-        cloneProps.isAppsLoading = true;
+        cloneProps.areAppsLoading = true;
 
         let component = TestUtils.renderIntoDocument(<Nav {...cloneProps}/>);
         let domComponent = ReactDOM.findDOMNode(component);
