@@ -520,9 +520,6 @@ export default {
                 showAdditionalInfo: "Voir les détails",
                 hideAdditionalInfo: "Cacher les détails"
             },
-            noTables: {
-                noTables: "Il n'y a pas tables. "
-            },
             supportLink: {
                 text: "Contactez notre équipe de soins"
             }

@@ -526,9 +526,6 @@ export default {
                 showAdditionalInfo: "View details",
                 hideAdditionalInfo: "Hide details"
             },
-            noTables: {
-                noTables: "There are no tables in the app. "
-            },
             supportLink: {
                 text: "Contact our Care team"
             }
