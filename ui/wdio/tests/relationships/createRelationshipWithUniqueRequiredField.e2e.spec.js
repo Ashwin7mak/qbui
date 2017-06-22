@@ -107,8 +107,8 @@
 
                 //Verify Numeric and currency fields are not part of fields list since they are just set as either only unique or only required
                 let fieldDropDownList = modalDialog.allDropDownListOptions;
-                expect(fieldDropDownList.includes('Numeric Field')).toBe(false);
-                expect(fieldDropDownList.includes('Numeric Currency Field')).toBe(false);
+                expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[2])).toBe(false);
+                expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[3])).toBe(false);
 
                 //Collapse the drop down
                 modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);

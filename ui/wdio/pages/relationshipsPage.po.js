@@ -278,7 +278,6 @@
          * Method to create relationship using add another record button via form builder
          */
         createRelationshipToParentTable: {value: function(parentTable, parentField, parentRecord, expectedParentRecordValues, expectedChildRecordValues) {
-            const fieldTypes = ['allPhoneFields', 'allParentRecordFields'];
 
             //Select settings -> modify this form
             topNavPO.clickOnModifyFormLink();
@@ -315,6 +314,7 @@
             formsPO.clickRecordEditPencilInViewForm();
 
             //Select parent picker value
+            const fieldTypes = ['allPhoneFields', 'allParentRecordFields'];
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType, parentRecord);
             });
