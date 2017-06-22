@@ -16,7 +16,6 @@ const EmptyStateForLeftNav = ({handleOnClick, emptyMessage, icon, iconMessage, c
 );
 
 EmptyStateForLeftNav.propTypes = {
-    listOfItems: PropTypes.array.isRequired,
     handleOnClick: PropTypes.func.isRequired,
     emptyMessage: PropTypes.string.isRequired,
     className: PropTypes.string.isRequired,
