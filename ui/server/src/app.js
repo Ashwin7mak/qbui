@@ -102,7 +102,8 @@
      * This should always be defined as the last middleware before the routing declaration.
      */
     if (tracingEnabled) {
-        app.use(trace.express.openSegment('UI'));
+        const tracingServiceName = require('./utility/configUtils').parseStringConfigValue(config.tracingServiceName);
+        app.use(trace.express.openSegment(tracingServiceName));
     }
 
     require('./routes')(app, config);

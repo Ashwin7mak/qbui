@@ -265,6 +265,7 @@ const UserFieldValueEditor = React.createClass({
                 loadingPlaceholder={this.props.loadingPlaceholder}
                 autosize={false}
                 clearable={false}
+                searchPromptText={this.props.searchPromptText}
                 onBlur={this.onBlur}/>
         );
     }

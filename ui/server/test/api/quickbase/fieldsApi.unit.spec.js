@@ -309,4 +309,113 @@ describe("Validate fieldsApi", function() {
             });
         });
     });
+
+    describe("validate patchField function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            fieldsApi.setRequestHelperObject(requestHelper);
+            req.url = 'tables/123/fields/4';
+            req.method = 'patch';
+            req.rawBody = {name: "test", type: 'TEXT'};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': ''}));
+            let promise = fieldsApi.patchField(req, '123', 4);
+
+            promise.then(
+                function(response) {
+                    assert.equal(response.body, '');
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing patchField success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('patchField: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = fieldsApi.patchField(req, '123', 4);
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing patchField failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('patchField: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("validate getField function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            fieldsApi.setRequestHelperObject(requestHelper);
+            req.url = 'tables/123/fields/4';
+            req.method = 'get';
+            req.rawBody = {name: "test", type: 'TEXT'};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id": "6"}'}));
+            let promise = fieldsApi.getField(req, '123', 4);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {id: 6});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getField success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getField: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = fieldsApi.getField(req, '123', 4);
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing getField failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getField: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
 });

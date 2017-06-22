@@ -36,7 +36,7 @@
         //edit table apply btn
         editTableApplyBtn : {get: function() {return browser.element('button.primaryButton');}},
         //edit table resest btn
-        editTableResetBtn : {get: function() {return browser.element('a.secondaryButton');}},
+        editTableResetBtn : {get: function() {return browser.element('button.secondaryButton');}},
 
         // settings Icon under globalActions
         settingsBtn : {get: function() {return browser.element('.iconUISturdy-settings');}},
