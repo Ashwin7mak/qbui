@@ -365,23 +365,27 @@
             tableToFieldToFieldTypeMap[table1Name] = {};
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[1]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.TEXT
+                dataType: consts.TEXT,
+                unique: true,
+                required: true
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[2]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.NUMERIC
+                dataType: consts.NUMERIC,
+                required: true
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[3]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.CURRENCY
+                dataType: consts.CURRENCY,
+                unique: true,
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[4]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.PERCENT
+                dataType: consts.PERCENT,
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[5]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.RATING
+                dataType: consts.RATING,
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[6]] = {
                 fieldType: consts.SCALAR,

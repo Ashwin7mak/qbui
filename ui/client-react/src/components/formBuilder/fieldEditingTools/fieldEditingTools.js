@@ -71,16 +71,14 @@ export class FieldEditingTools extends Component {
 
         //Hide deleteFieldIcon if it is the last field on the form
         return (
-            <div>
+            <div className="actionIcons">
                 {this.props.numberOfFieldsOnForm > 1 &&
-                    <div className="actionIcons">
-                        <div className="deleteFieldIcon">
-                            <QbToolTip i18nMessageKey={toolTipTextKey}>
-                                <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete} disabled={!enableDelete}>
-                                    <QbIcon className={deleteIconClasses.join(' ')} icon="clear-mini"/>
-                                </button>
-                            </QbToolTip>
-                        </div>
+                    <div className="deleteFieldIcon">
+                        <QbToolTip i18nMessageKey={toolTipTextKey}>
+                            <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete} disabled={!enableDelete}>
+                                <QbIcon className={deleteIconClasses.join(' ')} icon="clear-mini"/>
+                            </button>
+                        </QbToolTip>
                     </div>
                 }
             </div>
@@ -198,9 +196,11 @@ export class FieldEditingTools extends Component {
                 role="button"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
-                onKeyDown={this.selectedCurrentField} >
-
+                onKeyDown={this.selectedCurrentField}
+            >
                 {this.renderActionIcons()}
+                {/* The border is separate so that changes to the border width do not push around the actions (e.g., delete button */}
+                <div className="fieldEditingToolsBorder" />
             </div>
         );
     }

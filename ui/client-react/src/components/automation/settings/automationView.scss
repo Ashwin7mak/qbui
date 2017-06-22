@@ -27,13 +27,6 @@ $table-properties-panel-width: 776px;
     padding: 24px;
     background-color: $panel-background-color;
     border: solid 1px $panel-border-color;
-    .qbGrid .qbRow .stickyCell {
-        padding-left: 10px;
-    }
-
-    .qbGrid .qbHeaderCell {
-        min-width: 30px;
-    }
 }
 
 .automationView--section {

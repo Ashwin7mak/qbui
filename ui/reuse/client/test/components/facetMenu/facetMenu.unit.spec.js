@@ -61,7 +61,6 @@ describe('FacetMenu', () => {
         let facetToken = component.find('.facetToken');
 
         expect(facetToken).toIncludeText(testFacetName);
-        console.log('TEXT  ' + facetToken.find('.facetSelections').text());
         expect(facetToken.find('.facetSelections .selectedTokenName').length).toEqual(1);
         expect(facetToken.find('.facetSelections .selectedTokenName')).toIncludeText(testFacetSelectedValue);
     });
