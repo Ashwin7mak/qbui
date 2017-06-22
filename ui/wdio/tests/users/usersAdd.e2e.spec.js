@@ -82,9 +82,9 @@
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
-                // expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
                 var appName = testApp.name;
-                // expect(modalDialog.modalDialogTitle).toContain(appName);
+                expect(modalDialog.modalDialogTitle).toContain(appName);
                 // Search for known user
                 modalDialog.selectUser(searchUserName);
                 // Select user
@@ -92,7 +92,7 @@
                 // Add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
                 // Click No Thanks to Share with User
-                // modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
+                modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
             });
 
             /**

@@ -9,7 +9,7 @@ class modalDialogWindow {
     get DONT_DELETE_BTN() {return  "Don't delete";}
     get REMOVE_BTN() {return  'Remove';}
     get ADD_TO_FORM_BTN() {return  'Add to form';}
-    get ADD_USER_BTN() {return  'Add';}
+    get ADD_USER_BTN() {return  'add';}
     get NO_THANKS_BTN() {return  'No thanks';}
 
     get modalDialog() {
@@ -174,7 +174,8 @@ class modalDialogWindow {
         });
 
         if (btns !== []) {
-            btns[0].waitForVisible();
+            expect(btns[0].isVisible()).toBe(true);
+            console.log(btns[0]);
             //Click on filtered button
             return btns[0].click();
         } else {
