@@ -7,10 +7,8 @@ import {connect} from "react-redux";
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import _ from 'lodash';
-import AppUtils from '../../utils/appUtils';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import "./leftNav.scss";
-import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
 
 export const AppsList = React.createClass({
 
@@ -36,30 +34,19 @@ export const AppsList = React.createClass({
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
-
-    isAppsEmpty() {
-        if (!_.isEmpty(this.props.app)) {
-            return this.getNewAppItem();
-        }
-    },
     buildEmptyState()  {
-        if (_.isEmpty(this.props.app)) {
-            return Locale.getMessage('appCreation.emptyAppState');
-        }
+        return Locale.getMessage('emptyAppState.message');
     },
-
     appList() {
-        //console.log('this.props', this.props);
-        //console.log(Locale.getMessage('appCreation.emptyAppState'));*/
         return this.props.apps && this.props.apps.map((app) => {
             app.icon = 'favicon';
             return this.searchMatches(app.name) &&
-                <NavItem key={app.id}
-                         item={app}
-                         onSelect={this.props.onSelectApp}
-                         selected={app.id === this.props.selectedAppId}
-                         open={true}
-                         />;
+                    <NavItem key={app.id}
+                             item={app}
+                             onSelect={this.props.onSelectApp}
+                             selected={app.id === this.props.selectedAppId}
+                             open={true}
+                    />;
         });
     },
     onClickApps() {
@@ -79,20 +66,43 @@ export const AppsList = React.createClass({
         return <CreateNewItemButton handleOnClick={this.createNewApp}
                                     message="appCreation.newApp"
                                     className="newApp"
-                />;
+        />;
     },
 
-    emptyStateCreateApp() {
+    /**
+     * returns icon when the appList is empty
+     */
+    emptyStateAppIcon() {
         return (
             <div className="createNewApp">
-                <a className="newItem leftNavLink" onClick={this.createNewApp}>
-                    <Icon iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} classes="primaryIcon createNewAppIcon" icon={"add-new-filled"}/>
-                </a>
-                <p>Create an App</p>
+                <div className="appIcon" onClick={this.createNewApp}>
+                    <Icon iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} classes="primaryIcon createNewAppIcon" icon="add-new-filled"/>
+                    <li className="newApp">{Locale.getMessage('emptyAppState.createNewApp')}</li>
+                </div>
             </div>
         );
     },
 
+    /**
+     * returns the message when there are no apps otherwise returns the appList when there are apps
+     */
+    emptyAppMessage() {
+        if (_.isEmpty(this.props.apps)) {
+            return (
+                <div className="emptyState">
+                    {this.buildEmptyState()}
+                    {this.emptyStateAppIcon()}
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    {this.appList()}
+                    {this.getNewAppItem()}
+                </div>
+            );
+        }
+    },
 
     /**
      * open the create app wizard
@@ -118,13 +128,7 @@ export const AppsList = React.createClass({
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
-                <li className="emptyClass">
-                        {this.buildEmptyState()}
-                        {this.emptyStateCreateApp()}
-                </li>
-
-                {this.appList()}
-                {this.isAppsEmpty()}
+                <li>{this.emptyAppMessage()}</li>
             </ul>
         );
     }

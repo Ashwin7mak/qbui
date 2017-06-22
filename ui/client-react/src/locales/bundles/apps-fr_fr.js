@@ -676,7 +676,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
-            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à {tableName} sont sur le formulaire",
+            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à la table {tableName} sont sur le formulaire",
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
@@ -738,8 +738,11 @@ export default {
             finishedButtonLabel: "Créer une application",
             appNameHeading: "Nom de l'application,",
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
-            descriptionHeading: "Description de l'application",
-            emptyAppState: "Vous n'avez pas encore d'applications."
+            descriptionHeading: "Description de l'application"
+        },
+        emptyAppState: {
+            message: "Vous n'avez pas encore d'applications.",
+            createNewApp: "Créer une application"
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",

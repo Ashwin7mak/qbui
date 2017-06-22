@@ -6,6 +6,7 @@ import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/n
 import {Link} from 'react-router-dom';
 import CreateNewItemButton from '../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import SearchBox from '../../src/components/search/searchBox';
+import Locale from '../../src/locales/locales';
 
 let component;
 let instance;
@@ -37,14 +38,6 @@ describe('AppsListForLeftNav', () => {
         NavItemRewireAPI.__ResetDependency__('Link');
     });
 
-    it('renders a new app button', () => {
-        component = shallow(<AppsList />);
-
-        expect(component.find(SearchBox).length).toEqual(1);
-        expect(component.find(NavItem).length).toEqual(1);
-        expect(component.find(CreateNewItemButton).length).toEqual(1);
-    });
-
     it('renders a list of apps', () => {
         component = shallow(<AppsList apps={apps}/>);
 
@@ -72,5 +65,31 @@ describe('AppsListForLeftNav', () => {
         instance.createNewApp();
 
         expect(mockFuncs.showAppCreationDialog).toHaveBeenCalled();
+    });
+
+    it('renders a new app button', () => {
+        component = shallow(<AppsList apps={apps}/>);
+
+        expect(component.find(SearchBox).length).toEqual(1);
+        expect(component.find(NavItem).length).toEqual(4);
+        expect(component.find(CreateNewItemButton).length).toEqual(1);
+        expect(component.find('.emptyState').length).toEqual(0);
+        expect(component.find('.appIcon').length).toEqual(0);
+    });
+
+    it('renders empty message when there are no apps', () => {
+        component = shallow(<AppsList apps={[]}/>);
+
+        expect(component.find(CreateNewItemButton).length).toEqual(0);
+        expect(component.find('.emptyState').length).toEqual(1);
+        expect(component.find('.appIcon').length).toEqual(1);
+    });
+
+    it('renders empty message when apps are undefined', () => {
+        component = shallow(<AppsList/>);
+
+        expect(component.find(CreateNewItemButton).length).toEqual(0);
+        expect(component.find('.emptyState').length).toEqual(1);
+        expect(component.find('.appIcon').length).toEqual(1);
     });
 });
