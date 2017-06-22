@@ -469,42 +469,5 @@ describe('RecordRoute', () => {
 
             recordRouteRewire.__ResetDependency__('WindowHistoryUtils');
         });
-
-        it('start edit in trowser by ', () => {
-            const windowHistoryUtilsMock = {
-                pushWithQueries: jasmine.createSpy('pushWithQueries')
-            };
-            recordRouteRewire.__Rewire__('WindowHistoryUtils', windowHistoryUtilsMock);
-
-            component = shallow(
-                <MemoryRouter>
-                    <Provider store={store}>
-                        <RecordRoute match={{params:routeParams}}
-                                     reportData={reportData}
-                                     router={router}
-                                     {...props}
-                                     isDrawerContext={true}
-                                     uniqueId="DRAWER123"/>
-                    </Provider>
-                </MemoryRouter>
-            );
-
-            const recordRoute = component.dive().dive().dive().instance();
-
-            // this is what's called when user clicks on the edit pencil icon to start editing in trowser
-            recordRoute.openRecordForEdit();
-
-            // adding query to url "?editRec=2&detailAppId=1&detailTableId=2&detailReportId=0&viewContextId=DRAWER123"
-            // which will trigger the trowser to open and allow editing child record
-            expect(windowHistoryUtilsMock.pushWithQueries).toHaveBeenCalledWith({
-                editRec: '2',
-                detailAppId: '1',
-                detailTableId: '2',
-                detailReportId: 0,
-                viewContextId: 'DRAWER123'
-            });
-
-            recordRouteRewire.__ResetDependency__('WindowHistoryUtils');
-        });
     });
 });
