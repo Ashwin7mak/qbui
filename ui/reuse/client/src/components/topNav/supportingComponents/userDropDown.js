@@ -19,13 +19,7 @@ const signOutMessage = 'header.menu.sign_out';
  * @constructor
  */
 export class UserDropDown extends Component {
-    constructor(props) {
-        super(props);
-
-        this.renderLocalesList = this.renderLocalesList.bind(this);
-    }
-
-    renderLocalesList() {
+    renderLocalesList = () => {
         const {supportedLocales, changeLocale} = this.props;
 
         if (!changeLocale || !supportedLocales || supportedLocales.length === 0) {
@@ -50,7 +44,7 @@ export class UserDropDown extends Component {
             }),
             <MenuItem divider key="localeBottomMenuDivider"/>
         ];
-    }
+    };
 
     render() {
         const {startTabIndex, app, signOutUser} = this.props;

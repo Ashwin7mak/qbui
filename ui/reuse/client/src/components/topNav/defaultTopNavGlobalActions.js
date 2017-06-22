@@ -21,7 +21,7 @@ const signOutHref = '/qbase/signout';
  * Alternatively, pass in additional top bar elements by wrapping them with this component as children: <ReDefaultTopNavGlobalActions> <div>CustomMenuItem</div> </ReDefaultTopNavGlobalActions>
  * Check out the propTypes for other values you can change if you need.
  * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
-class DefaultTopNavGlobalActions extends Component {
+export class DefaultTopNavGlobalActions extends Component {
 
     /**
      * A link to sign the user out
