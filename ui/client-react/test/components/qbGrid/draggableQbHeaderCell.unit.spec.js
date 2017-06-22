@@ -8,10 +8,12 @@ let component;
 
 const props = {
     connectDragSource: (obj) => {return obj;},
-    connectDropTarget: (obj) => {return obj;}
+    connectDropTarget: (obj) => {return obj;},
+    draggingColumnStart: () => {},
+    draggingColumnEnd: () => {}
 };
 
-describe('QbHeaderCell', () => {
+describe('DraggableQbHeaderCell', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });

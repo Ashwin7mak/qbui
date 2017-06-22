@@ -7,9 +7,6 @@ const testCellIdentifierValue = 'Halloweentown';
 const testFormatter = (cell) => 'Nightmare Before Christmas';
 const TestHeaderComponent = React.createClass({render() {return <h1>Sally</h1>;}});
 const testHeaderProps = {type: 'Rag Doll', stuffing: 'Fall Leaves'};
-const onHover = () => {};
-const onDragStart = () => {};
-const onDragEnd = () => {};
 
 describe('ColumnTransformer', () => {
     describe('new', () => {
@@ -72,9 +69,6 @@ describe('ColumnTransformer', () => {
             },
             props: {
                 label: testHeaderLabel,
-                onHover,
-                onDragStart,
-                onDragEnd,
                 relatedField: {
                     name: testHeaderLabel,
                     datatypeAttributes: undefined
@@ -84,7 +78,7 @@ describe('ColumnTransformer', () => {
 
         it('converts the ColumnTransformer instance into a column object that can be consumed by QbGrid', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
-            expect(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd)).toEqual(expectedOutput);
+            expect(columnTransformer.getGridHeader()).toEqual(expectedOutput);
         });
 
         it('adds a cell formatter if it is set', () => {
@@ -97,7 +91,7 @@ describe('ColumnTransformer', () => {
                 }
             });
 
-            expect(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd)).toEqual(expectedOutputWithFormatter);
+            expect(columnTransformer.getGridHeader()).toEqual(expectedOutputWithFormatter);
         });
 
         it('adds a menu component if it is set', () => {
@@ -119,7 +113,7 @@ describe('ColumnTransformer', () => {
                 }
             });
 
-            expect(columnTransformer.getGridHeader(onHover, onDragStart, onDragEnd)).toEqual(expectedOutputWithHeaderMenu);
+            expect(columnTransformer.getGridHeader()).toEqual(expectedOutputWithHeaderMenu);
         });
     });
 });
