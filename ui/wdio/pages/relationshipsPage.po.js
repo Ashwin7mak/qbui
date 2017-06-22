@@ -321,6 +321,7 @@
 
             //Click Save on the form
             formsPO.clickFormSaveBtn();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
 
