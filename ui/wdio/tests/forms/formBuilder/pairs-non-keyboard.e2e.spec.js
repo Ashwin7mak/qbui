@@ -11,7 +11,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs', function() {
+    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs ( (chrome, edge))', function() {
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             beforeAll(function() {
                 /**
@@ -58,7 +58,6 @@
             });
 
             // pos/neg pairs
-
             it('rename a field, verify no revision after CANCEL', function() {
                 let originalFields = formBuilderPO.getFieldLabels();
                 formBuilderPO.selectFieldByIndex(1);
@@ -67,7 +66,7 @@
                 formBuilderPO.fieldProperty_Name.setValue(testString);
                 //  verify that the field label was revised
                 let existingFields = formBuilderPO.getFieldLabels();
-                expect(formBuilderPO.stripAsterisk(existingFields[0])).toEqual(testString);
+                expect(existingFields[0]).toEqual(testString);
                 // cancel & reopen
                 let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify field name is not revised
@@ -80,30 +79,11 @@
                 formBuilderPO.fieldProperty_Name.setValue(testString);
                 //  verify that the field label was revised
                 let existingFields = formBuilderPO.getFieldLabels();
-                expect(formBuilderPO.stripAsterisk(existingFields[0])).toEqual(testString);
+                expect(existingFields[0]).toEqual(testString);
                 // save & reopen
                 let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify field name is revised
                 expect(newFields).toEqual(existingFields);
-            });
-
-            it('check the REQUIRED checkbox, cancel & verify not checked', function() {
-                formBuilderPO.selectFieldByIndex(1);
-                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
-                formBuilderPO.setRequiredCheckboxState(true);
-                // cancel, reopen, reselect
-                formBuilderPO.cancel().open().selectFieldByIndex(1);
-                // verify REQUIRED checkbox IS NOT checked
-                expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
-            });
-            it('check the REQUIRED checkbox, save & verify checked', function() {
-                formBuilderPO.selectFieldByIndex(1);
-                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
-                formBuilderPO.setRequiredCheckboxState(true);
-                // save, reopen, reselect
-                formBuilderPO.save().open().selectFieldByIndex(1);
-                // verify REQUIRED checkbox IS checked
-                expect(formBuilderPO.getRequiredCheckboxState()).toBe(true);
             });
 
             it('remove a field with mouse & verify presence after CANCEL', function() {
@@ -133,7 +113,7 @@
 
             it('add a new field to bottom of form & verify absence after CANCEL', function() {
                 let existingFields = formBuilderPO.getFieldLabels();
-                let newField = formBuilderPO.listOfElementsItem;
+                let newField = formBuilderPO.firstNewFieldToken;
                 // verify that (hopefully) the last existing field on the form
                 // doesn't have the same name as the first item in the NEW FIELDS list
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField.getText());
@@ -150,7 +130,7 @@
             });
             it('add a new field to bottom of form & verify presence after SAVE', function() {
                 let existingFields = formBuilderPO.getFieldLabels();
-                let newField = formBuilderPO.listOfElementsItem;
+                let newField = formBuilderPO.firstNewFieldToken;
                 // verify that (hopefully) the last existing field on the form
                 // doesn't have the same name as the first item in the NEW FIELDS list
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField);

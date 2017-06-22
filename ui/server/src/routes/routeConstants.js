@@ -53,7 +53,7 @@
             CORE: '/api/api/v1',
             NODE: '/qbui',
             EE: '/ee/v1',
-            GOVERNANCE: '/api/governance/:version',
+            GOVERNANCE: '/governance/api/:version',
             WORKFLOW: {
                 FLOW_MANAGER: '/we/api/v1',
                 AUTOMATION: '/we/workflow'
@@ -102,8 +102,7 @@
 
         REQ_USER                    : context.client.QBUI + '/users/reqUser',
 
-        GOVERNANCE_ACCOUNT_USERS    : context.api.GOVERNANCE + '/:accountId/users',
-        // the account id is an optional parameter
+        GOVERNANCE_ACCOUNT_USERS    : context.api.GOVERNANCE + '/:accountId/users', // the account id is an optional parameter
         GOVERNANCE_CONTEXT          : context.api.GOVERNANCE + '/context'
     };
 

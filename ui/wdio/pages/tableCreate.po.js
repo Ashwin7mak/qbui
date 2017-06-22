@@ -27,7 +27,7 @@
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
         //Icon chooser
-        tableFieldIconChooser: {get: function() {return browser.element('.tableField.iconSelection .iconChooser.closed');}},
+        tableFieldIconChooser: {get: function() {return browser.element('.tableInfo.dialogCreationPanelInfo .dialogField.iconSelection .iconChooser.closed');}},
         //Icon chooser down arrow
         iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle');}},
         //Icon chooser search
@@ -36,7 +36,7 @@
         //edit table apply btn
         editTableApplyBtn : {get: function() {return browser.element('button.primaryButton');}},
         //edit table resest btn
-        editTableResetBtn : {get: function() {return browser.element('a.secondaryButton');}},
+        editTableResetBtn : {get: function() {return browser.element('button.secondaryButton');}},
 
         // settings Icon under globalActions
         settingsBtn : {get: function() {return browser.element('.iconUISturdy-settings');}},
@@ -135,8 +135,7 @@
             loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
             //wait until loading screen disappear in report Content
             loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-            //Wait until new table button visible
-            this.newTableBtn.waitForVisible();
+            //Wait until table label displayed
             browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
             return browser.elements('.tablesList .withSecondary .leftNavLabel');
         }},
@@ -148,8 +147,8 @@
          */
         getAllTableFieldsList: {get: function() {
             //Wait until table container visible
-            browser.element('.tableInfo .sections .tableField').waitForVisible();
-            return browser.elements('.tableInfo .sections .tableField');
+            browser.element('.tableInfo.dialogCreationPanelInfo .sections .tableCreationPanel.dialogField').waitForVisible();
+            return browser.elements('.tableInfo.dialogCreationPanelInfo .sections .tableCreationPanel.dialogField');
         }},
 
         /**
@@ -159,7 +158,7 @@
         selectTable: {value: function(tableName) {
             //filter table names from leftNav links
             let results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
-                return table.getAttribute('textContent') === tableName;
+                return table.getAttribute('textContent').includes(tableName);
             });
 
             if (results !== []) {
@@ -270,25 +269,25 @@
         enterTableFieldValue : {value: function(tableField, fieldValue) {
             //Filter all fields in create new table dialogue
             let results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
+                return field.element('.dialogFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
                 //Enter values for 'table name' field
                 if (tableField.includes(tableNameFieldTitle)) {
                     //verify title of the field
-                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    expect(results[0].element('.dialogFieldTitle').getAttribute('textContent')).toContain(tableField);
+                    this.setInputValue(results[0], '.dialogFieldInput input', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
-                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    expect(results[0].element('.dialogFieldTitle').getAttribute('textContent')).toContain(tableField);
+                    this.setInputValue(results[0], '.dialogFieldInput input', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
-                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
+                    expect(results[0].element('.dialogFieldTitle').getAttribute('textContent')).toContain(tableField);
+                    this.setInputValue(results[0], '.dialogFieldInput textarea', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
@@ -303,20 +302,20 @@
         verifyTableFieldValues : {value: function(tableField, expectedFieldValue) {
             //Filter all fields in create new table dialogue
             let results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
+                return field.element('.dialogFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
                 //Enter values for 'table name' field
                 if (tableField.includes(tableNameFieldTitle)) {
                     //Verify the table name field value
-                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.dialogFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the record field value
-                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.dialogFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('Description')) {
                     //Verify the description field value
-                    expect(results[0].element('.tableFieldInput textarea').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.dialogFieldInput textarea').getAttribute('value')).toContain(expectedFieldValue);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));
@@ -327,13 +326,13 @@
             let allTableFieldValues = [];
 
             //Get all textField input values tableName, A record in the table is called
-            browser.element('.tableFieldInput input').waitForVisible();
-            browser.elements('.tableFieldInput input').value.map(function(elm) {
+            browser.element('.dialogFieldInput input').waitForVisible();
+            browser.elements('.dialogFieldInput input').value.map(function(elm) {
                 allTableFieldValues.push(elm.getAttribute('value'));
             });
 
             //Get all textarea input values description
-            browser.elements('.tableFieldInput textarea').value.map(function(elm) {
+            browser.elements('.dialogFieldInput textarea').value.map(function(elm) {
                 allTableFieldValues.push(elm.getAttribute('value'));
             });
             return allTableFieldValues;
@@ -354,15 +353,15 @@
                 //Enter values for 'table name' field
                 if (tableField.includes(tableNameFieldTitle)) {
                     //Verify the placeholder inside input
-                    expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toContain(expectedPlaceHolder);
+                    expect(results[0].element('.dialogFieldInput input').getAttribute('placeholder')).toContain(expectedPlaceHolder);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the placeholder inside input
-                    expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toContain(expectedPlaceHolder);
+                    expect(results[0].element('.dialogFieldInput input').getAttribute('placeholder')).toContain(expectedPlaceHolder);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //Verify the placeholder inside input
-                    expect(results[0].element('.tableFieldInput textarea').getAttribute('placeholder')).toContain(expectedPlaceHolder);
+                    expect(results[0].element('.dialogFieldInput textarea').getAttribute('placeholder')).toContain(expectedPlaceHolder);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));
@@ -387,7 +386,7 @@
                 //moveToObject not working in firefox and edge but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
                 if (browserName === 'chrome') {
                     //Hover over to an element and verify the field error
-                    results[0].moveToObject('.tableFieldInput');
+                    results[0].moveToObject('.dialogFieldInput');
                     browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
                     expect(results[0].element('.invalidInput').getAttribute('textContent')).toContain(errorMsg);
                     return results[0].click();
@@ -427,7 +426,7 @@
             //Click on table properties and settings link
             this.modifyTableSettingsLink.waitForVisible();
             this.modifyTableSettingsLink.click();
-            return browser.element('.tableFieldInput').waitForVisible();
+            return browser.element('.dialogFieldInput').waitForVisible();
         }},
 
         /**

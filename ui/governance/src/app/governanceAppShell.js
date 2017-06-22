@@ -7,13 +7,17 @@ import TopNav from "../../../reuse/client/src/components/topNav/topNav";
 import LeftNav from "../common/leftNav/GovernanceLeftNav";
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
+import GovernanceAnalytics from "../analytics/governanceAnalytics";
+import urlUtils from "../utils/urlUtils";
 
 import "./governanceAppShell.scss";
 
 export class GovernanceAppShell extends Component {
+
     render() {
         return (
             <AppShell functionalAreaName="governance">
+                <GovernanceAnalytics />
                 <LeftNav
                     isNavCollapsed={this.props.isNavCollapsed}
                     isNavOpen={this.props.isNavOpen}
@@ -25,6 +29,7 @@ export class GovernanceAppShell extends Component {
                             dropdownIcon="user"
                             dropdownMsg="globalActions.user"
                             hasFeedback={false}
+                            helpButtonLink={urlUtils.getGovernanceHelpLink()}
                         />
                     }/>
                     <Switch>
@@ -46,9 +51,11 @@ GovernanceAppShell.propTypes = {
     toggleNav: PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({
-    isNavOpen: state.Nav.isNavOpen,
-    isNavCollapsed: state.Nav.isNavCollapsed
-});
+const mapStateToProps = (state) => {
+    return {
+        isNavOpen: state.Nav.isNavOpen,
+        isNavCollapsed: state.Nav.isNavCollapsed,
+    };
+};
 
 export default connect(mapStateToProps, {toggleNav})(GovernanceAppShell);

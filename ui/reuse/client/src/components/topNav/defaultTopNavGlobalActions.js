@@ -64,7 +64,9 @@ class DefaultTopNavGlobalActions extends Component {
                         />
                     </li>
 
-                    <li className="link globalAction"><HelpButton/></li>
+                    <li className="link globalAction">
+                        <HelpButton link={this.props.helpButtonLink}/>
+                    </li>
                 </ul>
             </div>
         );
@@ -107,7 +109,12 @@ DefaultTopNavGlobalActions.propTypes = {
      * Determines which direction dropdowns on the global actions should open. For example, on large screens, the
      * dropdown should open down (false) because the nav is at the top of the screen. However, on small screens, it should be true
      * because the nav is at the bottom on small screens. */
-    shouldOpenMenusUp: React.PropTypes.bool
+    shouldOpenMenusUp: React.PropTypes.bool,
+
+    /**
+     * Optionally pass in a url for the Help Button link if it differs from {@link HELP_LINK_PATH}
+     */
+    helpButtonLink: React.PropTypes.string
 };
 
 DefaultTopNavGlobalActions.defaultProps = {
