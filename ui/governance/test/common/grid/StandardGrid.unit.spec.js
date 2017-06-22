@@ -1,16 +1,27 @@
 import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import {StandardGrid} from "../../../src/common/grid/standardGrid";
+import {StandardGrid, __RewireAPI__ as StandardGridRewireAPI} from "../../../src/common/grid/standardGrid";
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import * as Table from 'reactabular-table';
 
+class mockQbCell extends React.Component {
+    render() {
+        return <div />;
+    }
+}
+
 describe('StandardGrid', () => {
 
     beforeEach(() => {
         jasmineEnzyme();
+        StandardGridRewireAPI.__Rewire__('QbCell', mockQbCell);
+    });
+
+    afterEach(() => {
+        StandardGridRewireAPI.__ResetDependency__('QbCell');
     });
 
     it('should render the grid', () => {
