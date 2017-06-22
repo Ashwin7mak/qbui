@@ -38,7 +38,7 @@
         },
         modifyThisForm: {
             get: function() {
-                return browser.element('.configMenu .modifyForm');
+                return browser.element('a.modifyForm');
             }
         },
         //Report issue option in Feedback button
@@ -169,11 +169,7 @@
         clickOnSettingsBtn : {value: function() {
             this.settingsBtn.waitForVisible();
             //Click on settings gear Icon on table global actions
-            this.settingsBtn.click();
-            //Need this for container to slide down
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
-            return expect(browser.element('.menuHeader').getAttribute('textContent')).toContain('Settings');
+            return this.settingsBtn.click();
         }},
 
         /**
@@ -181,6 +177,8 @@
          */
         clickOnModifyFormLink : {value: function() {
             this.clickOnSettingsBtn();
+            //Need this for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
             //Click on table properties and settings link
             this.modifyThisForm.waitForVisible();
             this.modifyThisForm.click();

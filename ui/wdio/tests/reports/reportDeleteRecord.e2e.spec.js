@@ -102,8 +102,7 @@
 
                 // Step 2: Click on delete button from the dialogue box
                 modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
-                //Need this to wait for delete success container to slide away
-                browser.pause(e2eConsts.mediumWaitTimeMs);
+                modalDialog.waitUntilModalDialogSlideAway();
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);
