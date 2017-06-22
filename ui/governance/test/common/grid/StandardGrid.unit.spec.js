@@ -2,16 +2,10 @@ import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
 import {StandardGrid} from "../../../src/common/grid/standardGrid";
+import {QbCell} from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
-import * as Table from 'reactabular-table';
-
-class mockQbCell extends React.Component {
-    render() {
-        return <div />;
-    }
-}
 
 describe('StandardGrid', () => {
 
@@ -19,7 +13,7 @@ describe('StandardGrid', () => {
         jasmineEnzyme();
     });
 
-    xit('should render the grid', () => {
+    it('should render the grid', () => {
         let columns = [{
             property: 'firstName',
             header: {
@@ -47,6 +41,7 @@ describe('StandardGrid', () => {
                 items={items}
                 id={"accountUsers"}
                 rowKey={"uid"}
+                cellRenderer={QbCell}
             />
         );
         expect(StandardGridShallow).toBeDefined();
@@ -83,12 +78,11 @@ describe('StandardGrid', () => {
                 items={null}
                 id={"accountUsers"}
                 rowKey={"uid"}
+                cellRenderer={QbCell}
             />
         );
         expect(StandardGridShallow).toBeDefined();
         expect(StandardGridShallow.length).toBeTruthy();
-        let TableBody = StandardGridShallow.find(Table.Body);
-        expect(TableBody).toHaveProp('rows', []);
 
 
         let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
@@ -120,6 +114,7 @@ describe('StandardGrid', () => {
                 items={[]}
                 id={"accountUsers"}
                 rowKey={"uid"}
+                cellRenderer={QbCell}
             />
         );
         expect(StandardGridShallow).toBeDefined();
@@ -157,6 +152,7 @@ describe('StandardGrid', () => {
                 items={items}
                 id={"accountUsers"}
                 rowKey={"uid"}
+                cellRenderer={QbCell}
             />
         );
         expect(StandardGridShallow).toBeDefined();
