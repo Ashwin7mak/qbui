@@ -326,11 +326,9 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        //wait until form builder spinner goes away
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-        //wait until leftNav loaded
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        formsPO.viewFormContainerEl.waitForVisible();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 
