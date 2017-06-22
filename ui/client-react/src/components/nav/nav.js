@@ -111,8 +111,7 @@ export const Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [];
-        let selectedApp = this.getSelectedApp();
-        let selectedTableId = this.props.selectedTableId;
+        let {selectedApp, selectedTableId} = this.props;
 
         let isAdmin = selectedApp ? AppUtils.hasAdminAccess(selectedApp.accessRights) : false;
 
@@ -179,11 +178,6 @@ export const Nav = React.createClass({
         this.props.hideTrowser();
     },
 
-    getSelectedApp() {
-        const selectedAppId = this.props.selectedAppId;
-        return this.props.getApp(selectedAppId);
-    },
-
     getEditingApp() {
         const appsList = this.props.getApps() || [];
         const selectedAppId = this.props.selectedAppId;
@@ -218,7 +212,7 @@ export const Nav = React.createClass({
      */
     getSelectedTable(tableId) {
         if (tableId) {
-            const app = this.getSelectedApp();
+            const app = this.props.selectedApp;
             if (app) {
                 return _.find(app.tables, (t) => t.id === tableId);
             }
@@ -228,7 +222,7 @@ export const Nav = React.createClass({
 
 
     aReportIsSelected() {
-        let selectedApp = this.getSelectedApp();
+        let selectedApp = this.props.selectedApp;
         let reportData = this.getReportsData();
         return (selectedApp && reportData && reportData.rptId && reportData.data && reportData.data.name);
     },
@@ -331,27 +325,6 @@ export const Nav = React.createClass({
         return getPendEdits(this.props.record);
     },
 
-/*
-    // Commenting out this function to render the top nav items in the center.
-    // These items weren't enabled yet and were simply placeholders. We will need
-    // to put some of them back so, leaving the code here for now.
-    getCenterGlobalActions() {
-        return (
-            <ButtonGroup className="navItem">
-                <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
-                    <Button tabIndex="2" className="disabled">
-                        <Icon icon="search" />
-                    </Button>
-                </Tooltip>
-
-                <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                    <Button tabIndex="3" className="disabled"><Icon icon="star-full" /></Button>
-                </Tooltip>
-            </ButtonGroup>
-        );
-    },
-*/
-
     render() {
         const appsList = this.props.getApps() || [];
         const isAppsLoading = this.props.isAppsLoading;
@@ -380,9 +353,7 @@ export const Nav = React.createClass({
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
 
-        const selectedAppId = this.props.selectedAppId;
-        const selectedApp = this.getSelectedApp();
-        const selectedTableId = this.props.selectedTableId;
+        const {selectedAppId, selectedTableId, selectedApp} = this.props;
 
         let editingAppId = this.props.match.params.appId;
         let editingTblId = this.props.match.params.tblId;
@@ -449,6 +420,7 @@ export const Nav = React.createClass({
                 apps={appsList}
                 appsLoading={isAppsLoading}
                 selectedAppId={selectedAppId}
+                selectedApp={selectedApp}
                 selectedTableId={selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 onToggleAppsList={this.toggleAppsList}
@@ -547,7 +519,7 @@ export const Nav = React.createClass({
      * @returns {*}
      */
     allowCreateNewTable() {
-        const app = this.getSelectedApp();
+        const app = this.props.selectedApp;
         return app && AppUtils.hasAdminAccess(app.accessRights);
     },
     /**
@@ -558,13 +530,15 @@ export const Nav = React.createClass({
     },
 });
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
+    const selectedAppId = getSelectedAppId(state.app);
+
     return {
-        getApp: (appId) => getApp(state.app, appId),
+        selectedApp: getApp(state.app, selectedAppId),
         getApps: () => getApps(state.app),
         appOwner: getAppOwner(state.app),
         appRoles: getAppRoles(state.selectedApp),
-        selectedAppId: getSelectedAppId(state.app),
+        selectedAppId,
         selectedTableId: getSelectedTableId(state.app),
         appUsers: getAppUsers(state.app),
         appUnfilteredUsers: getAppUnfilteredUsers(state.app),

@@ -61,6 +61,7 @@ export const AppsList = React.createClass({
         return <CreateNewItemButton handleOnClick={this.createNewApp}
                                     message="appCreation.newApp"
                                     className="newApp"
+                                    key="newAppButton"
                 />;
     },
 
