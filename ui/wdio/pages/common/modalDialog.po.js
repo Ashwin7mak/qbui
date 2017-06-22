@@ -9,7 +9,7 @@ class modalDialogWindow {
     get DONT_DELETE_BTN() {return  "Don't delete";}
     get REMOVE_BTN() {return  'Remove';}
     get ADD_TO_FORM_BTN() {return  'Add to form';}
-    get ADD_USER_BTN() {return  'add';}
+    get ADD_USER_BTN() {return  'Add';}
     get NO_THANKS_BTN() {return  'No thanks';}
 
     get modalDialog() {

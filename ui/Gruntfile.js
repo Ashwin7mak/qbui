@@ -604,7 +604,6 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
-                    './wdio/tests/users/usersTable.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
