@@ -347,16 +347,11 @@ export const RecordRoute = React.createClass({
      */
     openRecordForEdit() {
         if (this.props.isDrawerContext) {
-            const urlPath = this.props.match.url;
             const {appId, tblId, recordId} = this.props.match.params;
 
             // TODO: we should pass the actual rptId as rptId and separately pass in embeddedReport
-            let viewContextId;
-            let {rptId} = this.props.match.params;
-            if (typeof rptId !== 'number') {
-                viewContextId = this.props.uniqueId;
-                rptId = _.get(this.props, `embeddedReports[this.props.match.params.rptId].rptId`, 0);
-            }
+            const viewContextId=this.props.uniqueId;
+            const rptId = _.get(this.props, `embeddedReports[this.props.match.params.rptId].rptId`, 0);
 
             const queries = {
                 editRec: recordId,
@@ -365,7 +360,7 @@ export const RecordRoute = React.createClass({
                 detailReportId: rptId,
                 viewContextId
             };
-            const link = WindowHistoryUtils.pushWithQueries(queries);
+            WindowHistoryUtils.pushWithQueries(queries);
         } else {
             // convert to  a number from a string
             const recordId = +this.props.match.params.recordId;

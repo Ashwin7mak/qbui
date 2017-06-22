@@ -279,7 +279,7 @@ export const Nav = React.createClass({
             const showTrowser = true;
             const formType = "edit";
             // check for either editing a child in a drawer or creating a new child record
-            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID]) {
+            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID] && this.props.location.query[UrlConsts.DETAIL_REPORTID]) {
                 let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
                 let childTableId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
                 let childReportId = this.props.location.query[UrlConsts.DETAIL_REPORTID];

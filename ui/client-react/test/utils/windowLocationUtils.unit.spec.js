@@ -50,7 +50,7 @@ describe('WindowLocationUtils', () => {
         expect(result).toContain('name=Dude');
         expect(result).toContain('object=rug');
         expect(result).toMatch(/^\?/);
-        //contains 2 ampersands
+        //contains 3 ampersands
         expect(result).toMatch(/.*&.*&.*&.*/);
     });
 });
