@@ -81,11 +81,11 @@ class modalDialogWindow {
     }
 
     get modalDialogSearchNewUser() {
-        this.modalDialog.element('.modal-dialog .Select-multi-value-wrapper').waitForVisible();
+        // this.modalDialog.element('.modal-dialog .Select-multi-value-wrapper').waitForVisible();
         return this.modalDialog.element('.modal-dialog .Select-multi-value-wrapper');
     }
 
-    get modalDialogUserAddSearcMenu() {
+    get modalDialogUserAddSearchMenu() {
         this.modalDialog.element('.modal-dialog .Select-menu-outer').waitForVisible();
         return this.modalDialog.element('.modal-dialog .Select-menu-outer');
     }
@@ -118,6 +118,22 @@ class modalDialogWindow {
         //Click on drop down arrow to expand the list
         element.waitForVisible();
         return element.click();
+    }
+
+    /**
+     * Method to search for a user in user modal.
+     *@param searchUser name
+     */
+    selectUser(searchUser) {
+
+        //Wait until you see open User search
+        this.modalDialogSearchNewUser.waitForVisible();
+
+        //Click in search
+        this.modalDialogSearchNewUser.click();
+
+        //Enter search value
+        return browser.keys(searchUser);
     }
 
     /**
@@ -158,7 +174,6 @@ class modalDialogWindow {
         });
 
         if (btns !== []) {
-            btns[0].waitForEnabled(e2eConsts.shortWaitTimeMs);
             btns[0].waitForVisible();
             //Click on filtered button
             return btns[0].click();

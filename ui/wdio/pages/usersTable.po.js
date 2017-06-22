@@ -88,22 +88,6 @@
             for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
             return colHeaders;
         }},
-
-        /**
-         * Method to search for a user.
-         *@param searchUser name
-         */
-        selectUser: {value: function(searchUser) {
-
-            //Wait until you see open User search
-            this.modalDialogSearchNewUser.waitForVisible();
-
-            //Click in search
-            this.modalDialogSearchNewUser.click();
-
-            //Enter search value
-            return browser.keys(searchUser);
-        }},
     });
     module.exports = UsersTablePage;
 }());

@@ -78,24 +78,21 @@
          */
         // it is a known issue that browser.keys does not work for E2E on safari and FF so they will not run these tests
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
-            xit('Add new user by "Screename" to application with default role "Participant" ', function() {
+            it('Add new user by "User Name" to application with default role "Participant" ', function() {
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
-                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                // expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
                 var appName = testApp.name;
-                //TODO: Disabled until modal is updated in progress
-                expect(modalDialog.modalDialogTitle).toContain(appName);
+                // expect(modalDialog.modalDialogTitle).toContain(appName);
                 // Search for known user
-                UsersTablePage.selectUser(searchUserName);
+                modalDialog.selectUser(searchUserName);
                 // Select user
-                modalDialog.modalDialogUserAddSearcMenu.click();
-                // Click add user
+                modalDialog.modalDialogUserAddSearchMenu.click();
+                // Add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                modalDialog.waitUntilModalDialogSlideAway();
                 // Click No Thanks to Share with User
-                modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
-                modalDialog.waitUntilModalDialogSlideAway();
+                // modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
             });
 
             /**
@@ -106,14 +103,13 @@
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 // Search for known user
-                UsersTablePage.selectUser(searchFirstName);
+                modalDialog.selectUser(searchFirstName);
                 // Select user
-                modalDialog.modalDialogUserAddSearcMenu.click();
+                modalDialog.modalDialogUserAddSearchMenu.click();
                 // Select "Viewer" role
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
                 // Click add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                modalDialog.waitUntilModalDialogSlideAway();
                 browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click to close the Share with User modal
                 modalDialog.modalDialogCloseBtn.click();
@@ -127,14 +123,13 @@
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 // Search for known user
-                UsersTablePage.selectUser(searchEmail);
+                modalDialog.selectUser(searchEmail);
                 // Select user
-                modalDialog.modalDialogUserAddSearcMenu.click();
+                modalDialog.modalDialogUserAddSearchMenu.click();
                 // Select "Administrator" role
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
                 // Click add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                modalDialog.waitUntilModalDialogSlideAway();
                 browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click Copy link to Share with User
                 expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
@@ -150,14 +145,13 @@
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 // Search for known user
-                UsersTablePage.selectUser(searchLastName);
+                modalDialog.selectUser(searchLastName);
                 // Select user
-                modalDialog.modalDialogUserAddSearcMenu.click();
+                modalDialog.modalDialogUserAddSearchMenu.click();
                 // Select "None" role
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
                 // Click add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                modalDialog.waitUntilModalDialogSlideAway();
                 browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click Email to Share with User
                 expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
@@ -173,12 +167,11 @@
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 // Search for known user
-                UsersTablePage.selectUser(searchCrap);
+                modalDialog.selectUser(searchCrap);
                 // Verify Add new user button disabled
                 expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
                 // Click Cancel
                 modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
-                modalDialog.waitUntilModalDialogSlideAway();
             });
         }
     });
