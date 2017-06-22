@@ -739,7 +739,8 @@ export default {
             finishedButtonLabel: "App erstellen",
             appNameHeading: "App Name",
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
-            descriptionHeading: "App Beschreibung"
+            descriptionHeading: "App Beschreibung",
+            appCreationFailed: "App konnte nicht erstellt werden"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
