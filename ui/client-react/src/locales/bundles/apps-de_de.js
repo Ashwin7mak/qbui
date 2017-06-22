@@ -830,7 +830,7 @@ export default {
             copied: "Link kopiert",
             messageSubject:"Link zum {App Name} App",
             messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}",
-            addUser: "hinzufügen",
+            addUser: "Hinzufügen",
             selectAUser:"Wählen Sie einen Benutzer aus",
             selectUsers: "Benutzer auswählen",
             assignRole: "Rolle zuweisen",
