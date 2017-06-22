@@ -744,7 +744,6 @@ export default {
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
             newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
-            newTableTitle: "Nennen Sie Ihren Tisch",
 
             summaryDescription: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld.",
             summaryTitle: "Drag & Drop Felder, die Sie hinzufügen möchten, um Ihre Tabelle auf das Formular. Sie können die Felder in der Reihenfolge anordnen, in der die Leute sie benutzen möchten.",

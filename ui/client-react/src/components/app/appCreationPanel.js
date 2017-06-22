@@ -7,7 +7,6 @@ import * as AppBuilderActions from '../../actions/appBuilderActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
 
-import './appCreationPanel.scss';
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
 export class AppCreationPanel extends React.Component {
