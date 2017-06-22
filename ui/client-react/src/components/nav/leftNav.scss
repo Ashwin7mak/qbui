@@ -49,53 +49,6 @@
     }
 }
 
-.emptyState {
-    text-align: center;
-    border: dashed 1px $color-black-400;
-    width: 200px;
-    height: 186px;
-    margin-left: 9px;
-    margin-right: 6px;
-    padding-top: 26px;
-}
-
-.createNewApp {
-    .appIcon {
-        .iconUISturdy-add-new-filled {
-            font-size: 56px;
-            color: $color-cyan-500;
-            padding-top: 26px;
-            margin-left: -17px;
-
-            &:hover {
-                color: $default-hover-color;
-            }
-
-            &:active {
-                color: $color-cyan-600;
-            }
-        }
-    }
-}
-
-.newApp {
-    width: 180px;
-    height: 30px;
-    font-size: $size-iconfont-small;
-    text-align: center;
-    color: $color-cyan-500;
-    padding-top: 13px;
-    margin-left: 11px;
-
-    &:hover {
-        color: $default-hover-color;
-    }
-
-    &:active {
-        color: $color-cyan-600;
-    }
-}
-
 .leftNav .link.selected {
     a.leftNavLink {
         color: $leftnav-table-selected-color;
@@ -187,7 +140,6 @@ div.leftNavTooltip {
         display: block;
     }
 }
-
 
 
 /* collapsed nav overrides */

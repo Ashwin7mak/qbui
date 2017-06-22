@@ -6,9 +6,7 @@ import SearchBox from '../search/searchBox';
 import {connect} from "react-redux";
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
-import _ from 'lodash';
-import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
-import "./leftNav.scss";
+import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
 
 export const AppsList = React.createClass({
 
@@ -33,9 +31,6 @@ export const AppsList = React.createClass({
     },
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
-    },
-    buildEmptyStateMessage()  {
-        return Locale.getMessage('emptyAppState.message');
     },
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
@@ -64,44 +59,9 @@ export const AppsList = React.createClass({
      */
     getNewAppItem() {
         return <CreateNewItemButton handleOnClick={this.createNewApp}
-                                    message="appCreation.newApp"
+                                    emptyMessage="appCreation.newApp"
                                     className="newApp"
         />;
-    },
-
-    /**
-     * returns icon when the appList is empty
-     */
-    emptyStateAppIcon() {
-        return (
-            <div className="createNewApp">
-                <div className="appIcon" onClick={this.createNewApp}>
-                    <Icon iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} classes="primaryIcon createNewAppIcon" icon="add-new-filled"/>
-                    <li className="newApp">{Locale.getMessage('emptyAppState.createNewApp')}</li>
-                </div>
-            </div>
-        );
-    },
-
-    /**
-     * returns the message and a new icon to create apps when there are no apps otherwise returns the appList
-     */
-    emptyAppMessage() {
-        if (_.isEmpty(this.props.apps)) {
-            return (
-                <div className="emptyState">
-                    {this.buildEmptyStateMessage()}
-                    {this.emptyStateAppIcon()}
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    {this.appList()}
-                    {this.getNewAppItem()}
-                </div>
-            );
-        }
     },
 
     /**
@@ -128,7 +88,20 @@ export const AppsList = React.createClass({
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
-                <li>{this.emptyAppMessage()}</li>
+                {<EmptyStateForLeftNav /> ?
+                    <EmptyStateForLeftNav listOfItems={this.props.apps}
+                                          handleOnClick={this.createNewApp}
+                                          emptyMessage="emptyAppState.message"
+                                          className="emptyState"
+                                          icon="add-new-filled"
+                                          iconMessage="emptyAppState.createNewApp"
+                    /> :
+                    <div>
+                        {this.appList()}
+                        {this.getNewAppItem()}
+                    </div>
+                }
+
             </ul>
         );
     }
