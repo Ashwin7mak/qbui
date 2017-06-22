@@ -142,7 +142,7 @@ export const TablePropertiesRoute = React.createClass({
         return <Loader loadedClassName="tablePropertiesLoaded" loaded={loaded}>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
-                <div className="tableInfoPanel">
+                <div className="dialogCreationPanelInfo">
                     <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
                                         iconChooserOpen={this.props.tableProperties.iconChooserOpen}
                                         openIconChooser={this.props.openIconChooser}
@@ -156,7 +156,7 @@ export const TablePropertiesRoute = React.createClass({
                     <RecordTitleFieldSelection tableInfo={this.props.tableProperties.tableInfo} onChange={this.updateRecordTitleField} />
 
                     <div className="tableInfoButtons">
-                        <Button disabled={!this.canApplyChanges()} className="secondaryButton resetButton" onClick={this.resetTableProperties}>
+                        <Button disabled={!this.props.isDirty} className="secondaryButton resetButton" onClick={this.resetTableProperties}>
                             <I18nMessage message="nav.reset"/>
                         </Button>
                         <Button disabled={!this.canApplyChanges()} className="primaryButton" bsStyle="primary" onClick={this.updateTable}>

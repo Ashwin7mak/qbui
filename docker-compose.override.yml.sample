@@ -49,9 +49,9 @@ services:
     ports:
       - "5533:5432"
   we:
-  # Workflow Engine container
     build:
-      # Build image from the parent project directory
+      # Build image from the WorkflowEngine project directory.
+      # This path will have to match where WorkflowEngine is checked out on your laptop
       context: ../WorkflowEngine
       dockerfile: Dockerfile
     depends_on:

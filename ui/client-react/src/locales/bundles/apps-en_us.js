@@ -207,7 +207,8 @@ export default {
                 feedbackMenuButton: "Give feedback",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
-                feedbackTooltip: "Share ideas and issues"
+                feedbackTooltip: "Share ideas and issues",
+                helpTooltip: "Help"
             }
         },
         fields: {
@@ -742,7 +743,12 @@ export default {
             featureNameEmpty: "Feature names must not be blank"
         },
         appCreation: {
-            newApp: 'New app'
+            newApp: "New app",
+            newAppPageTitle: "New App",
+            finishedButtonLabel: "Create app",
+            appNameHeading: "App name",
+            appNamePlaceHolder: "For example, \"Order Tracker\"",
+            descriptionHeading: "App description"
         },
         tableCreation: {
             newTablePageTitle: "New Table",
@@ -832,7 +838,15 @@ export default {
             userSuccessDialogOK: "No thanks",
             copied: "Link copied",
             messageSubject:"Link to the {appName} app",
-            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
+            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}",
+            addUser: "add",
+            selectAUser:"Select a user",
+            selectUsers: "Select users",
+            assignRole: "Assign role",
+            searchPromptText: "Type to search",
+            name: "Name",
+            role: "Role",
+            userName: "User name"
         }
     }
 };
