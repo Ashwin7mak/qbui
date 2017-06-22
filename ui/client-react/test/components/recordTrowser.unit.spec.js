@@ -290,4 +290,15 @@ describe('RecordTrowser functions', () => {
 
         expect(instance.saveClicked).not.toHaveBeenCalled();
     });
+
+    it('when RecordChanges empty while creating a new record,clicking on save and add another,should not hide the trowser', () => {
+        props.recId = null;
+        let component = mount(<RecordTrowser {...props} record={storeContent.record}/>);
+        let saveAndAddAnotherButton = component.find('.alternativeTrowserFooterButton');
+        expect(saveAndAddAnotherButton.length).toBe(1);
+        saveAndAddAnotherButton.simulate('click');
+        expect(props.saveForm).toHaveBeenCalledWith('edit');
+        expect(props.onHideTrowser).not.toHaveBeenCalled();
+    });
+
 });

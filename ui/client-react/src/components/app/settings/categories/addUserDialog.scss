@@ -2,11 +2,12 @@
 
 .addUserPanel {
 
-    .title {
+    .modal-title {
         color: $add-user-dialog-modal;
         font-size: $font-size-h3;
         padding-top: $spacing-small;
         padding-bottom: $spacing-x-small;
+        padding-left: 0;
     }
     .description {
         color: $ghost-text-color;

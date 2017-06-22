@@ -72,7 +72,7 @@ class addUserPanel extends React.Component {
         return (
             <div className = "panelContainer">
                 <div className="selectUser panel-items">
-                    <dt>Select users</dt>
+                    <dt>{Locale.getMessage('addUserToApp.selectUsers')}</dt>
                     <dd>
                         <UserFieldValueEditor
                             appUsers={appUsers}
@@ -82,6 +82,7 @@ class addUserPanel extends React.Component {
                             searchUsers={this.props.searchUsers}
                             isValid={this.props.isValid}
                             existingUsers={this.props.existingUsers}
+                            searchPromptText={Locale.getMessage('addUserToApp.searchPromptText')}
                             ref={(fieldValueEditor) => {this.fieldValueEditor = fieldValueEditor;}}
                         />
                     </dd>

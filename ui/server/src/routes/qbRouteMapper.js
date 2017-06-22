@@ -157,6 +157,7 @@
                 requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
                 requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
+                requestFunctions[routes.APPS] = createApp;
                 requestFunctions[routes.RECORDS] = createSingleRecord;
                 requestFunctions[routes.RECORDS_BULK] = forwardApiRequest;
                 requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
@@ -783,6 +784,36 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Get App Users');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Create an app.  The request adds to both core and ee.
+     *
+     * @param req
+     * @param res
+     */
+    function createApp(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.createApp(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Create App');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Create App');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {

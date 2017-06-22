@@ -11,34 +11,22 @@ import FieldUtils from '../../../utils/fieldUtils';
 import {getTable} from '../../../reducers/app';
 import {CONTEXT} from "../../../actions/context";
 import * as tabIndexConstants from '../tabindexConstants';
+import {getFormBuilderContainerContent} from '../../builder/formBuilderContainer';
 import "./fieldEditingTools.scss";
 
 /**
  * Adds chrome around a field so that the field can be moved and edited.
  */
 export class FieldEditingTools extends Component {
-    constructor(props) {
-        super(props);
-
-        this.onClickDelete = this.onClickDelete.bind(this);
-        this.onClickField = this.onClickField.bind(this);
-        this.isFieldSelected = this.isFieldSelected.bind(this);
-        this.renderActionIcons = this.renderActionIcons.bind(this);
-
-        this.selectedCurrentField = this.selectedCurrentField.bind(this);
-        this.getSelectedFormElementContainer = this.getSelectedFormElementContainer.bind(this);
-        this.updateScrollLocation = this.updateScrollLocation.bind(this);
-    }
-
-    onClickDelete(e) {
+    onClickDelete = (e) => {
         if (this.props.removeFieldFromForm) {
             let appId = this.props.app ? this.props.app.id : null;
             return this.props.removeFieldFromForm(this.props.formId, appId, this.props.tblId, this.props.relatedField, this.props.location);
         }
         e.preventDefault();
-    }
+    };
 
-    onClickField(e) {
+    onClickField = (e) => {
         let selectedField = this.props.selectedField ? this.props.selectedField[0] : undefined;
 
         if (this.props.selectFieldOnForm &&
@@ -50,15 +38,15 @@ export class FieldEditingTools extends Component {
         if (e) {
             e.preventDefault();
         }
-    }
+    };
 
-    isFieldSelected() {
+    isFieldSelected = () => {
         if (this.props.selectedFields) {
             return this.props.selectedFields.find(selectedField => _.isEqual(selectedField, this.props.location));
         }
-    }
+    };
 
-    renderActionIcons() {
+    renderActionIcons = () => {
         let tabIndex = '-1';
 
         if (this.props.isDragging) {
@@ -67,37 +55,35 @@ export class FieldEditingTools extends Component {
 
         if (this.isFieldSelected() && this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
             tabIndex = tabIndexConstants.FORM_TAB_INDEX;
-        } else {
-            tabIndex = '-1';
         }
 
         let toolTipTextKey = "builder.formBuilder.removeField";
         let enableDelete = true;
+        let deleteIconClasses = [];
 
         if (FieldUtils.isRecordTitleField(this.props.table, this.props.fieldId)) {
             toolTipTextKey = "builder.formBuilder.removeTitleField";
             enableDelete = false;
+            deleteIconClasses.push('disabled');
         } else if (this.props.app && FieldUtils.isDetailKeyField(this.props.app.relationships, this.props.app.id, this.props.tblId, this.props.fieldId)) {
             toolTipTextKey = "builder.formBuilder.removeRelationshipField";
         }
 
         //Hide deleteFieldIcon if it is the last field on the form
-        return (<div>
+        return (
+            <div className="actionIcons">
                 {this.props.numberOfFieldsOnForm > 1 &&
-                <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey={toolTipTextKey}>
-                            {enableDelete ?
-                                <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}><QbIcon
-                                    icon="clear-mini"/></button> :
-                                <button disabled type="button" tabIndex={tabIndex}><QbIcon className="disabled" icon="clear-mini"/></button>
-                            }
+                            <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete} disabled={!enableDelete}>
+                                <QbIcon className={deleteIconClasses.join(' ')} icon="clear-mini"/>
+                            </button>
                         </QbToolTip>
                     </div>
-                </div>}
+                }
             </div>
         );
-    }
+    };
 
     componentDidMount() {
         /**
@@ -137,9 +123,9 @@ export class FieldEditingTools extends Component {
         let selectedFormElement = document.querySelector(".selectedFormElement");
         let isDragging = document.querySelector(".dragging");
         if (selectedFormElement && !isDragging) {
-            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop - 400;
+            getFormBuilderContainerContent.scrollTop = getFormBuilderContainerContent.scrollTop - 400;
         }
-    }
+    };
 
     scrollElementDownIntoView = () => {
         /**
@@ -148,11 +134,11 @@ export class FieldEditingTools extends Component {
         let selectedFormElement = document.querySelector(".selectedFormElement");
         let isDragging = document.querySelector(".dragging");
         if (selectedFormElement && !isDragging) {
-            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop + 400;
+            getFormBuilderContainerContent.scrollTop = getFormBuilderContainerContent.scrollTop + 400;
         }
-    }
+    };
 
-    updateScrollLocation() {
+    updateScrollLocation = () => {
         if (this.props.selectedFields && this.props.selectedFields[0]) {
             let selectedFormElement = this.getSelectedFormElementContainer();
             let selectedElementTop;
@@ -169,9 +155,9 @@ export class FieldEditingTools extends Component {
                 this.scrollElementUpIntoView();
             }
         }
-    }
+    };
 
-    selectedCurrentField(e) {
+    selectedCurrentField = (e) => {
         let isCurrentlySelectedField = true;
 
         if (this.props.selectedFields && this.props.selectedFields[0]) {
@@ -181,7 +167,7 @@ export class FieldEditingTools extends Component {
         if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && isCurrentlySelectedField) {
             this.onClickField(e);
         }
-    }
+    };
 
     render() {
         let tabIndex = this.props.formBuilderChildrenTabIndex ? this.props.formBuilderChildrenTabIndex : "-1";
@@ -210,16 +196,17 @@ export class FieldEditingTools extends Component {
                 role="button"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
-                onKeyDown={this.selectedCurrentField} >
-
+                onKeyDown={this.selectedCurrentField}
+            >
                 {this.renderActionIcons()}
+                {/* The border is separate so that changes to the border width do not push around the actions (e.g., delete button */}
+                <div className="fieldEditingToolsBorder" />
             </div>
         );
     }
 }
 
 FieldEditingTools.propTypes = {
-    formBuilderContainerContentElement: PropTypes.object,
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     isDragging: PropTypes.bool,
@@ -242,8 +229,8 @@ const mapStateToProps = (state, ownProps) => {
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
     let numberOfFieldsOnForm = (_.has(currentForm, "formData.formMeta.numberOfFieldsOnForm") ? currentForm.formData.formMeta.numberOfFieldsOnForm : 1);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
-    //If a new field is added to form builder we use the state isDragging to indicate whether or not it is in a dragon state,
-    //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragon state
+    //If a new field is added to form builder we use the state isDragging to indicate whether or not it is in a dragging state,
+    //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragging state
     let isDragging = ownProps.isDragging;
     if (!isDragging && _.has(currentForm, 'isDragging')) {
         isDragging = currentForm.isDragging;

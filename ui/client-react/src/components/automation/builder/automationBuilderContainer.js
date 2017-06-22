@@ -97,7 +97,8 @@ export class AutomationBuilderContainer extends Component {
     };
 
     onCancel = () => {
-        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}/${this.getAutomationId()}/${UrlConsts.AUTOMATION.VIEW}`;
+        //Navigate back to automation list on cancel.
+        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}`;
         NavigationUtils.goBackToPreviousLocation(link);
     };
 

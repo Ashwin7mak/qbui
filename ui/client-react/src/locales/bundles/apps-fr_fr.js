@@ -101,6 +101,10 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            testAutomation: "Automatisation des tests",
+            copyAutomation: "Copier l'automatisation",
+            editAutomation: "Modifier l'automatisation",
+            deleteAutomation: "Supprimer l'automatisation",
             dontDelete: "Ne pas supprimer",
             deleteThisRecord: "Supprimer cet enregistrement?",
             deleteTheseSwitches: "Supprimer ces commutateurs?",
@@ -740,7 +744,12 @@ export default {
             featureNameEmpty: "Les noms des entités doivent être blanc"
         },
         appCreation: {
-            newApp: 'Nouvelle application'
+            newApp: 'Nouvelle application',
+            newAppPageTitle: 'Nouvelle Application',
+            finishedButtonLabel: "Créer une application",
+            appNameHeading: "Nom de l'application,",
+            appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
+            descriptionHeading: "Description de l'application"
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
@@ -781,7 +790,12 @@ export default {
             tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
             tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs.",
 
-            tableReadyDialogOK: "D'accord"
+            tableReadyDialogOK: "D'accord",
+
+            recordTitleFieldHeading: "Le champ du titre identifiant chaque enregistrement",
+            recordTitleFieldDescription: "Choisissez le champ qui s'affiche comme titre lorsque vous visualisez ou modifiez un enregistrement. Ce champ doit être rempli.",
+            recordTitleFieldDefault: "Par défaut à Noun + ID",
+            recordName: "Nom de l'enregistrement"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
@@ -824,7 +838,15 @@ export default {
             userSuccessDialogOK: "Non merci",
             copied: "Lien copié",
             messageSubject:"Lien vers le {nom de l'application} Application",
-            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
-        },
+            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}",
+            addUser: "ajouter",
+            selectAUser:"Sélectionnez un utilisateur",
+            selectUsers: "Sélectionnez les utilisateurs",
+            assignRole: "Attribuer un rôle",
+            searchPromptText: "Tapez pour rechercher",
+            name: "Prénom",
+            role: "Rôle",
+            userName: "Nom d'utilisateur"
+        }
     }
 };

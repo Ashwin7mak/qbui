@@ -141,7 +141,7 @@ const routes = [
         ]
     },
     {
-        path: `${BUILDER_ROUTE}/app/:appId`,
+        path: `${BUILDER_ROUTE}/app/:appId/(table)?/:tblId?/`,
         component: BuilderWrapper,
         routes: [
             {

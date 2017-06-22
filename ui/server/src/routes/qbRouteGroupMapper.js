@@ -21,7 +21,7 @@
     //  debug
     routeList[routeGroups.DEBUG] = [
         {route: routes.APP_USERS, methods: [constants.GET]},
-        {route: routes.APPS, methods: [constants.GET]},
+        {route: routes.APPS, methods: [constants.GET, constants.POST]},
         {route: routes.APP_ROLES, methods: [constants.GET]}
     ];
 
@@ -31,7 +31,7 @@
      */
     routeList[routeGroups.LH_V1] = [
         //  For specific custom function routes, provide list of support http verb methods
-        {route: routes.APPS, methods: [constants.GET]},
+        {route: routes.APPS, methods: [constants.GET, constants.POST]},
         {route: routes.APP_USERS, methods: [constants.GET]},
         {route: routes.APP_ROLES, methods: [constants.GET]},
 
