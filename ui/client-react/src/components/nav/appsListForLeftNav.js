@@ -34,7 +34,7 @@ export const AppsList = React.createClass({
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
-    buildEmptyState()  {
+    buildEmptyStateMessage()  {
         return Locale.getMessage('emptyAppState.message');
     },
     appList() {
@@ -84,13 +84,13 @@ export const AppsList = React.createClass({
     },
 
     /**
-     * returns the message when there are no apps otherwise returns the appList when there are apps
+     * returns the message and a new icon to create apps when there are no apps otherwise returns the appList
      */
     emptyAppMessage() {
         if (_.isEmpty(this.props.apps)) {
             return (
                 <div className="emptyState">
-                    {this.buildEmptyState()}
+                    {this.buildEmptyStateMessage()}
                     {this.emptyStateAppIcon()}
                 </div>
             );
