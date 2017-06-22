@@ -1,5 +1,5 @@
 import AppHistory from '../globals/appHistory';
-import windowLocationUtils from './windowLocationUtils';
+import WindowLocationUtils from './windowLocationUtils';
 
 export const WindowHistoryUtils = {
     /**
@@ -16,10 +16,10 @@ export const WindowHistoryUtils = {
      * @param {Object} params
      */
     pushWithQueries(params = {}) {
-        const urlQueryString = windowLocationUtils.getSearch();
-        let newParams = this.buildQueryString(urlQueryString, params);
+        const urlQueryString = WindowLocationUtils.getSearch();
+        let newParams = WindowLocationUtils.buildQueryString(urlQueryString, params);
 
-        AppHistory.history.push(windowLocationUtils.getPathname() + newParams);
+        AppHistory.history.push(WindowLocationUtils.getPathname() + newParams);
     },
 
     /**
@@ -27,6 +27,6 @@ export const WindowHistoryUtils = {
      */
     pushWithoutQuery() {
 
-        AppHistory.history.push(windowLocationUtils.getPathname());
+        AppHistory.history.push(WindowLocationUtils.getPathname());
     }
 };
