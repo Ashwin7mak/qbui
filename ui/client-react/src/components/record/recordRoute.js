@@ -53,6 +53,14 @@ export const RecordRoute = React.createClass({
         return {hasDrawer: false};
     },
 
+    /***
+     * returns true if recordRoute is rendered in a drawer
+     * @return {boolean|*}
+     */
+    isRecordInDrawer() {
+        return this.props.hasDrawer || (this.props.isDrawerContext && this.props.location.pathname.includes('sr_app'));
+    },
+
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
         //selected table does not change when in a drawer
         if (!this.props.isDrawerContext) {
@@ -61,7 +69,7 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.location.pathname.includes('sr_app'))) {
+        if (this.isRecordInDrawer()) {
             this.props.loadForm(appId, this.props.match.params.tblId, rptId, 'view', this.props.match.params.recordId, this.props.uniqueId);
             const recordsArray = _.get(embeddedReport, 'data.records', []);
             this.navigateToRecord(this.props.match.params.recordId, embeddedReport, recordsArray);
@@ -413,15 +421,9 @@ export const RecordRoute = React.createClass({
         if (this.isAutomationEnabled()) {
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
-
-        // Currently add new record action is disabled for child records shown in drawers.
-        if (this.props.isDrawerContext) {
-            actions = actions.map(action => {
-                if (action.className === 'addRecord') {
-                    return Object.assign(action, {disabled:true, onClick: null});
-                }
-                return action;
-            });
+        //add record action is not to be shown in a drawer
+        if (this.isRecordInDrawer()) {
+            actions.splice(0, 1);
         }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
