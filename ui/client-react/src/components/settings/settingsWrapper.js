@@ -156,9 +156,9 @@ SettingsWrapper.propTypes = {
 const mapStateToProps = (state) => ({
     isNavCollapsed: !state.shell.leftNavExpanded,
     isOpen: state.shell.leftNavVisible,
-    selectedAppId: getSelectedAppId(state.app),
-    selectedTableId: getSelectedTableId(state.app),
-    getApp: (appId) => getApp(state.app, appId)
+    selectedAppId: getSelectedAppId(state),
+    selectedTableId: getSelectedTableId(state),
+    getApp: (appId) => getApp(state, appId)
 });
 
 const mapDispatchToProps = (dispatch) => {

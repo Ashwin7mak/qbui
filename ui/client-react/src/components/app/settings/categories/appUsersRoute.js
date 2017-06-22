@@ -199,14 +199,14 @@ export const AppUsersRoute = React.createClass({
 });
 
 const mapStateToProps = (state, ownProps) => {
-    let selectedAppId = getSelectedAppId(state.app);
+    let selectedAppId = getSelectedAppId(state);
     return {
-        unfilteredAppUsers: getAppUnfilteredUsers(state.app),
-        appUsers: getAppUsers(state.app),
+        unfilteredAppUsers: getAppUnfilteredUsers(state),
+        appUsers: getAppUsers(state),
         appRoles: getAppRoles(state.selectedApp),
         appId: selectedAppId,
-        selectedApp: getApp(state.app, selectedAppId),
-        appOwner: getAppOwner(state.app),
+        selectedApp: getApp(state, selectedAppId),
+        appOwner: getAppOwner(state),
         realmUsers: getSearchedUsers(state.users),
         openDialogStatus: getDialogStatus(state.users),
         roleIdToAdd: getRoleIdToAdd(state.users),

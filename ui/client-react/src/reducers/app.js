@@ -258,11 +258,11 @@ const app = (
 export default app;
 
 export const getApps = (state) => {
-    return state.apps;
+    return state.app.apps;
 };
 
 export const getApp = (state, appId) => {
-    return _.find(state.apps, (a) => a.id === appId) || null;
+    return _.find(state.app.apps, (a) => a.id === appId) || null;
 };
 
 export const getTable = (state, appId, tableId) => {
@@ -278,7 +278,7 @@ export const getIsAppsLoading = (state) => {
 };
 
 export const getSelectedAppId = (state) => {
-    return state.selected ? state.selected.appId : null;
+    return state.app.selected ? state.app.selected.appId : null;
 };
 
 export const getSelectedApp = (state) => {
@@ -286,14 +286,14 @@ export const getSelectedApp = (state) => {
 };
 
 export const getSelectedTableId = (state) => {
-    return state.selected ? state.selected.tblId : null;
+    return state.app.selected ? state.app.selected.tblId : null;
 };
 
 export const getAppUsers = (state) => {
     let appUsers = [];
-    if (state.app) {
+    if (state.app.app) {
         let appModel = new AppModel();
-        appModel.setApp(state.app);
+        appModel.setApp(state.app.app);
         appUsers = appModel.getUsers();
     }
     return appUsers;
@@ -301,16 +301,16 @@ export const getAppUsers = (state) => {
 
 export const getAppUnfilteredUsers = (state) => {
     let appUnfilteredUsers = [];
-    if (state.app) {
+    if (state.app.app) {
         let appModel = new AppModel();
-        appModel.setApp(state.app);
+        appModel.setApp(state.app.app);
         appUnfilteredUsers = appModel.getUnfilteredUsers();
     }
     return appUnfilteredUsers;
 };
 
 export const getAppOwner = (state) => {
-    return state.selected ? state.selected.appOwner : null;
+    return state.app.selected ? state.app.selected.appOwner : null;
 };
 
 

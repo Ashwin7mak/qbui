@@ -557,14 +557,14 @@ export const Nav = React.createClass({
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        getApp: (appId) => getApp(state.app, appId),
-        getApps: () => getApps(state.app),
-        appOwner: getAppOwner(state.app),
+        getApp: (appId) => getApp(state, appId),
+        getApps: () => getApps(state),
+        appOwner: getAppOwner(state),
         appRoles: getAppRoles(state.selectedApp),
-        selectedAppId: getSelectedAppId(state.app),
-        selectedTableId: getSelectedTableId(state.app),
-        appUsers: getAppUsers(state.app),
-        appUnfilteredUsers: getAppUnfilteredUsers(state.app),
+        selectedAppId: getSelectedAppId(state),
+        selectedTableId: getSelectedTableId(state),
+        appUsers: getAppUsers(state),
+        appUnfilteredUsers: getAppUnfilteredUsers(state),
         isAppsLoading: getIsAppsLoading(state),
         forms: state.forms,
         shell: state.shell,
