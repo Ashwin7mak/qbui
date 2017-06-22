@@ -216,7 +216,6 @@
 
                 // initiate autoscroll DOWN
                 while (firstField.isVisible()) {
-                    // while (firstField.isVisibleWithinViewport()) {
                     browser.moveTo(null, 0, 2);
                 }
 
@@ -389,7 +388,6 @@
             });
 
             it('reload page with changes, verify presence of browser alert', function() {
-                // formBuilderPO.firstFieldToken.waitForVisible()
                 formBuilderPO.firstFieldToken.click();
                 // wait for selected field visibility (nothing was selected previously)
                 formBuilderPO.selectedField.waitForVisible();
@@ -455,11 +453,26 @@
                 expect(formBuilderPO.searchInput.getAttribute("value")).toBe(newLabel);
             });
 
-            // todo: it('multichoice edit', function() {
-            // });
+            it('save new multichoice option & verify persistence', function() {
+                formBuilderPO.dragNewFieldOntoForm(
+                    formBuilderPO.getFieldToken('Choice list'),
+                    formBuilderPO.firstField);
+                // set focus to end of text in editor & add new option
+                let testOption = "test option";
+                formBuilderPO.multiChoiceEditor.click();
+                formBuilderPO.multiChoiceEditor.keys([
+                    "Command", "ArrowDown", "Command", "Enter", testOption
+                ]);
+                // save, reopen, select first field
+                formBuilderPO.save().open().selectFieldByIndex(1);
+                let options = formBuilderPO.multiChoiceEditor.getText();
+                expect(options.endsWith(testOption)).toBe(true);
+            });
 
             // todo: it('automatic numbering', function() {
             // });
+
+            // todo: restore disabled tests - bad merge?
         }
     });
 }());

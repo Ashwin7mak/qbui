@@ -25,6 +25,7 @@ class formBuilderPage {
 
     get emptySearchResult() {
         // the text in the fields panel when the search term returns no results
+        // e.g. 'No fields matched "<searchterm>"
         return browser.element('.emptySearchResult');
     }
 
@@ -59,7 +60,7 @@ class formBuilderPage {
     }
 
     get fieldTokenTitle() {
-        // the label of the first NEW FIELD token
+        // the label of the first NEW or EXISTING field token (left panel)
         return browser.element('.rc-tabs-tabpane-active .fieldTokenTitle');
     }
 
@@ -74,7 +75,7 @@ class formBuilderPage {
     }
 
     get firstFieldToken() {
-        // The FIRST field in the list of NEW FIELDs (left panel)
+        // The FIRST field in the list of NEW or EXISTING fields (left panel)
         return browser.element('.rc-tabs-tabpane-active .listOfElementsItem');
     }
 
@@ -84,8 +85,13 @@ class formBuilderPage {
     }
 
     get modalDismiss() {
-        // DON'T SAVE button in the SAVE CHANGES? dlg
+        // DON'T SAVE button in the SAVE CHANGES? dialog
         return browser.element('.modal-dialog .middleButton');
+    }
+
+    get multiChoiceEditor() {
+        // The multiline choice editor in the FIELD PROPERTIES panel
+        return browser.element('.multiChoicePropertyContainer textarea');
     }
 
     get requiredCheckboxChecked() {
@@ -207,13 +213,20 @@ class formBuilderPage {
         // release button
         browser.buttonUp();
         // wait for the new field to replace the target
+        let targetLabel = browser.element('.formElementContainer .selectedFormElement').element('./..').getText();
         browser.waitUntil(function() {
-            // can't use THIS here?
-            // return this.getSelectedFieldLabel() === source.getText();
-            return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
-        }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+            return targetLabel.startsWith(sourceLabel); // ignore any 'helper' text (e.g. "Select..." for Choice list)
+        }, e2eConsts.mediumWaitTimeMs, 'Expected target label (' + targetLabel + ') to match source label (' + sourceLabel + ') after drag');
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getFieldLabels();
+    }
+
+    getExistingFieldLabels() {
+        // Gets the list of field labels from the EXISTING FIELD panel
+        // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
+        // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
+        // this lets the message include the contents of the unexpectedly present list.
+        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getFieldLocator(index) {
@@ -239,6 +252,11 @@ class formBuilderPage {
         }
     }
 
+    getFieldToken(label) {
+        // Returns the field token (left panel) with the specified label
+        return browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]');
+    }
+
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
         this.firstFieldToken.waitForVisible();
@@ -246,14 +264,6 @@ class formBuilderPage {
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
         });
-    }
-
-    getExistingFieldLabels() {
-        // Gets the list of field labels from the EXISTING FIELD panel
-        // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
-        // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
-        // this lets the message include the contents of the unexpectedly present list.
-        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getSelectedFieldLabel() {
