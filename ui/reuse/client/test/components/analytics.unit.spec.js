@@ -109,6 +109,44 @@ describe('Analytics', () => {
         expect(instance.updateEvergage).toHaveBeenCalled();
     });
 
+    it('updates Evergage even when email IS passed in', () => {
+        spyOn(document, 'getElementById').and.returnValue(true);
+        spyOn(window._aaq, 'push');
+
+        const testFirstUserId = 1;
+        const testEmail = 'test@test.com';
+
+        component = shallow(<Analytics dataset={mockDataset} userEmail={"test@test.com"} userId={testFirstUserId} />, {lifecycleExperimental: true});
+
+        let instance = component.instance();
+        spyOn(instance, 'updateEvergage').and.callThrough();
+        component.setProps({userId: testFirstUserId});
+
+        component.setProps({userEmail: testEmail});
+
+        expect(instance.updateEvergage).toHaveBeenCalled();
+        expect(window._aaq.push).toHaveBeenCalledWith(['setUser', testFirstUserId]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUID', testFirstUserId]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUserEmail', testEmail]);
+    });
+
+    it('updates Evergage userId even when email is not passed in', () => {
+        spyOn(document, 'getElementById').and.returnValue(true);
+        spyOn(window._aaq, 'push');
+
+        const testFirstUserId = 1;
+
+        component = shallow(<Analytics dataset={mockDataset} />, {lifecycleExperimental: true});
+        let instance = component.instance();
+        spyOn(instance, 'updateEvergage').and.callThrough();
+        component.setProps({userId: testFirstUserId});
+
+        expect(instance.updateEvergage).toHaveBeenCalled();
+
+        expect(window._aaq.push).toHaveBeenCalledWith(['setUser', 1]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUID', 1]);
+    });
+
     describe('functions that update evergage', () => {
         beforeEach(() => {
             // Don't add the script to the page during these tests
@@ -127,6 +165,12 @@ describe('Analytics', () => {
                 description: 'the evergage user',
                 props: {userId: 1},
                 expectedArguments: ['setUser', 1]
+            },
+            {
+                testFunction: 'updateEvergageUser',
+                description: 'the evergage user email',
+                props: {userEmail: 'testx@test.com'},
+                expectedArguments: ['gReqUserEmail', 'testx@test.com']
             },
             {
                 testFunction: 'updateEvergageAdminStatus',

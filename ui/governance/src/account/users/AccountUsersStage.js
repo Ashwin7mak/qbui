@@ -3,41 +3,19 @@ import Stage from "../../../../reuse/client/src/components/stage/stage";
 import StageHeader from "../../../../reuse/client/src/components/stage/stageHeader";
 import StageHeaderCount from "../../../../reuse/client/src/components/stage/stageHeaderCounts";
 import Locale from "../../../../reuse/client/src/locales/locale";
-import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
-import lodash from "lodash";
+import {connect} from "react-redux";
+import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "./AccountUsersReducer";
 
 import "./AccountUsersStage.scss";
 
 /**
  * The stage for the AccountUsers page
  */
-class AccountUsersStage extends Component {
-
-    /**
-     * Paid users are any users that have access to the app and are not internal Quick Base users
-     * @returns {*}
-     */
-    getTotalPaidUsers() {
-        return lodash.sumBy(this.props.users, user =>  (
-            user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));
-    }
-
-    getTotalDeniedUsers() {
-        return lodash.sumBy(this.props.users, user =>  (RealmUserAccountFlagConstants.IsDenied(user) ? 1 : 0));
-    }
-
-    getTotalDeactivatedUsers() {
-        return lodash.sumBy(this.props.users, user =>  (RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));
-    }
-
-    getTotalRealmUsers() {
-        return lodash.sumBy(this.props.users, user =>  (user.realmDirectoryFlags !== 0 ? 1 : 0));
-    }
+export class AccountUsersStage extends Component {
 
     render() {
-        let paidUsers = this.getTotalPaidUsers(),
-            deniedUsers = this.getTotalDeniedUsers(),
-            deactivatedUsers = this.getTotalDeactivatedUsers();
+
+        let {paidUsers, deniedUsers, deactivatedUsers, totalRealmUsers} = this.props;
 
         return (
             <Stage stageHeadline={
@@ -61,7 +39,7 @@ class AccountUsersStage extends Component {
                         {count: paidUsers, title: (paidUsers === 1 ? Locale.getMessage("governance.account.users.paidSeatSingular") : Locale.getMessage("governance.account.users.paidSeats"))},
                         {count: deniedUsers, title: (deniedUsers === 1 ? Locale.getMessage("governance.account.users.deniedUserSingular") : Locale.getMessage("governance.account.users.deniedUsers"))},
                         {count: deactivatedUsers, title: (deactivatedUsers === 1 ? Locale.getMessage("governance.account.users.deactivatedUserSingular") : Locale.getMessage("governance.account.users.deactivatedUsers"))},
-                        {count: this.getTotalRealmUsers(), title: Locale.getMessage("governance.account.users.realmDirectoryUsers")},
+                        {count: totalRealmUsers, title: Locale.getMessage("governance.account.users.realmDirectoryUsers")},
                     ]}
                 />
             </Stage>
@@ -70,11 +48,40 @@ class AccountUsersStage extends Component {
 }
 
 AccountUsersStage.propTypes = {
-    users: PropTypes.array,
+
+    /**
+     * Prop which contains the number of paid users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    paidUsers: PropTypes.number,
+
+    /**
+     * Prop which contains the number of denied users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    deniedUsers: PropTypes.number,
+
+    /**
+     * Prop which contains the number of deactivated users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    deactivatedUsers: PropTypes.number,
+
+    /**
+     * Prop which contains the total number of realm users
+     * Typically this is passed as a prop from Redux (AccountUsersReducer)
+     */
+    totalRealmUsers: PropTypes.number,
+
 };
 
-AccountUsersStage.defaultProps = {
-    users: []
+const mapStateToProps = (state) => {
+    return {
+        paidUsers: getTotalPaidUsers(state),
+        deniedUsers: getTotalDeniedUsers(state),
+        deactivatedUsers: getTotalDeactivatedUsers(state),
+        totalRealmUsers: getTotalRealmUsers(state)
+    };
 };
 
-export default AccountUsersStage;
+export default connect(mapStateToProps)(AccountUsersStage);

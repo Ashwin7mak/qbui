@@ -63,19 +63,19 @@ class formBuilderPage {
         return browser.element('.field');
     }
 
-    get formBuilderContainer() {
-        // the whole form builder page (all 3 panels)
-        return browser.element('.formBuilderContainer');
-    }
-
-    get listOfElementsItemGroup() {
+    get firstNewFieldGroup() {
         // The FIRST group in the list of NEW FIELDs (left panel)
         return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
     }
 
-    get listOfElementsItem() {
+    get firstNewFieldToken() {
         // The FIRST field in the list of NEW FIELDs (left panel)
         return browser.element('.listOfElementsItem');
+    }
+
+    get formBuilderContainer() {
+        // the whole form builder page (all 3 panels)
+        return browser.element('.formBuilderContainer');
     }
 
     get modalDismiss() {
@@ -127,11 +127,7 @@ class formBuilderPage {
 
     get tab_Existing() {
         // The EXISTING tab in leftNav
-        // return this.tabbedSideNav.element('div:contains("Existing")'); // invalid selector...?
-        // return this.tabbedSideNav.element('//div[contains(text(), "Existing"]'); // not found...?
-        // return this.tabbedSideNav.element('//div[contains(getAttribute("innerHTML"), "Existing")]'); // invalid xpath...?
         // ask Brandon to add a descriptive class name or id!
-        // return this.tabbedSideNav.element('div:nth-child(3) div'); // clicks on the bar, i.e. nth-child(1)...?
         return browser.element(".tabbedSideNav div div div:nth-child(3) div");
     }
 
@@ -215,6 +211,7 @@ class formBuilderPage {
             // return this.getSelectedFieldLabel() === source.getText();
             return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getFieldLabels();
     }
 
@@ -338,7 +335,7 @@ class formBuilderPage {
             this.clearSearch.click();
         }
         // wait for groups to appear or disappear depending on whether we searched or cleared
-        this.listOfElementsItemGroup.waitForVisible(null, (text !== null));
+        this.firstNewFieldGroup.waitForVisible(null, (text !== null));
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getNewFieldLabels();
     }

@@ -207,7 +207,8 @@ export default {
                 feedbackMenuButton: "Give feedback",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
-                feedbackTooltip: "Share ideas and issues"
+                feedbackTooltip: "Share ideas and issues",
+                helpTooltip: "Help"
             }
         },
         fields: {
@@ -792,7 +793,12 @@ export default {
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
             tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "The title field identifying each record",
+            recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
+            recordTitleFieldDefault: "Default to {recordName} + ID",
+            recordName: "Record Name"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
@@ -836,7 +842,15 @@ export default {
             userSuccessDialogOK: "No thanks",
             copied: "Link copied",
             messageSubject:"Link to the {appName} app",
-            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
+            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}",
+            addUser: "add",
+            selectAUser:"Select a user",
+            selectUsers: "Select users",
+            assignRole: "Assign role",
+            searchPromptText: "Type to search",
+            name: "Name",
+            role: "Role",
+            userName: "User name"
         }
     }
 };

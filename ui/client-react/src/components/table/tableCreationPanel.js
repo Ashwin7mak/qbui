@@ -162,7 +162,7 @@ class TableCreationPanel extends React.Component {
                          onSelect={this.selectIcon} />
 
             <div className="dialogFieldTitle suggestedIcons">
-                <div><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
+                <div className="tableFieldTitle"><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
                 {this.getSuggestedIcons()}
             </div>
         </div>);
@@ -250,8 +250,8 @@ TableCreationPanel.propTypes = {
     tableInfo: PropTypes.object.isRequired,
     openIconChooser: PropTypes.func,
     closeIconChooser: PropTypes.func,
-    setEditingProperty: PropTypes.func.isRequired
-
+    setEditingProperty: PropTypes.func.isRequired,
+    setTableProperty: PropTypes.func.isRequired
 };
 
 export default TableCreationPanel;
