@@ -130,7 +130,7 @@ describe('ReportFieldSelectMenu', () => {
     it('calls refresh in constructor', () => {
         component = mount(<ReportFieldSelectMenu {...testProps} appId={appId} tblId={tblId} reportData={reportData}/>);
 
-        expect(testProps.refreshFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, appId, tblId);
+        expect(testProps.refreshFieldSelectMenu).toHaveBeenCalledWith(appId, tblId);
     });
 
     it('has the correct columns in the list based on the reportData prop', () => {
