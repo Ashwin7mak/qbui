@@ -42,7 +42,6 @@ export const createApp = (app) => {
         return new Promise((resolve, reject) => {
             dispatch(createNewApp());
             const appService = new AppService();
-
             appService.createApp(app).then(
                 response => {
                     //  TODO: not sure if this is the correct response in include in event
@@ -57,6 +56,17 @@ export const createApp = (app) => {
         });
     };
 };
+/**
+ * setAppProperty captures the value from the inputs on appCreationPanel
+ * It is used to set the properties needed for creating a new app
+ * @param property
+ * @param value
+ * */
+export const setAppProperty = (property, value) => ({
+    type: types.SET_APP_PROPERTY,
+    property,
+    value
+});
 
 export const showAppCreationDialog = () => ({
     type: types.SHOW_APP_CREATION_DIALOG

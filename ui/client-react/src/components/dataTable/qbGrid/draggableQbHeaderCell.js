@@ -67,7 +67,7 @@ export class DraggableQbHeaderCell extends Component {
         }
 
         return (
-            <th>
+            <th className={classes.join(' ')}>
                 <DraggableHeaderCell
                     {...this.props}
                     classes={classes}

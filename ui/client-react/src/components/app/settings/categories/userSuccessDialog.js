@@ -48,7 +48,7 @@ class UserSuccessDialog extends React.Component {
                                  showFinishedText={true}
                                  finishedButtonLabel={Locale.getMessage("addUserToApp.userSuccessDialogOK")}>
             <div className="userSuccessContent">
-                <div className="topTitle">
+                <div className="modal-title">
                     <div className="addUserIcon">
                         <QbIcon icon="add-user" />
                     </div>

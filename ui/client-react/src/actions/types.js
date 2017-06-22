@@ -26,6 +26,7 @@ export const HIDE_APP_CREATION_DIALOG = 'HIDE_APP_CREATION_DIALOG';
 export const CREATE_APP = 'CREATE_APP';
 export const CREATE_APP_SUCCESS = 'CREATE_APP_SUCCESS';
 export const CREATE_APP_FAILED = 'CREATE_APP_FAILED';
+export const SET_APP_PROPERTY = 'SET_APP_PROPERTY';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';

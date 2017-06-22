@@ -827,7 +827,15 @@ export default {
             userSuccessDialogOK: "Non merci",
             copied: "Lien copié",
             messageSubject:"Lien vers le {nom de l'application} Application",
-            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
+            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}",
+            addUser: "ajouter",
+            selectAUser:"Sélectionnez un utilisateur",
+            selectUsers: "Sélectionnez les utilisateurs",
+            assignRole: "Attribuer un rôle",
+            searchPromptText: "Tapez pour rechercher",
+            name: "Prénom",
+            role: "Rôle",
+            userName: "Nom d'utilisateur"
         }
     }
 };
