@@ -565,7 +565,7 @@ const mapStateToProps = (state, ownProps) => {
         selectedTableId: getSelectedTableId(state.app),
         appUsers: getAppUsers(state.app),
         appUnfilteredUsers: getAppUnfilteredUsers(state.app),
-        isAppsLoading: getIsAppsLoading(state.app),
+        isAppsLoading: getIsAppsLoading(state),
         forms: state.forms,
         shell: state.shell,
         record: state.record,

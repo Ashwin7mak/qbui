@@ -56,7 +56,7 @@ export class AppHomePageRoute extends Component {
      * @returns {null|string}
      */
     getSelectedAppName = () => {
-        return get(this.props, 'app.name');
+        return get(this.props, 'app.name', null);
     };
 
     getPageActions = (maxButtonsBeforeMenu = 0) => {
@@ -111,8 +111,8 @@ const mapStateToProps = (state, props) => {
     return {
         notifyTableDeleted: getNeedToNotifyTableDeletion(state),
         tableJustDeleted: getTableJustDeleted(state),
-        app: selectedApp && selectedApp.id === get(props, 'match.params.appId') ? selectedApp : null,
-        isLoading: getIsAppsLoading(state.app)
+        app: get(selectedApp, 'id') === get(props, 'match.params.appId') ? selectedApp : null,
+        isLoading: getIsAppsLoading(state)
     };
 };
 

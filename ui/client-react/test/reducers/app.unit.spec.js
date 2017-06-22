@@ -11,7 +11,7 @@ function initializeState() {
     return {
         app: null,
         apps: [],
-        loading: true,
+        isLoading: true,
         error: false
     };
 }
@@ -53,7 +53,7 @@ describe('Test app reducer - clear selected app tests', () => {
                     appId: null,
                     tblId: null
                 },
-                loading: false
+                isLoading: false
             };
 
             const state = reducer(storeState, {type: types.CLEAR_SELECTED_APP});
@@ -90,7 +90,7 @@ describe('Test app reducer - clear selected app table tests', () => {
                     appId: testCase.selectedApp || null,
                     tblId: null
                 },
-                loading: false
+                isLoading: false
             };
 
             const state = reducer(storeState, {type: types.CLEAR_SELECTED_APP_TABLE});
@@ -157,8 +157,8 @@ describe('Test app reducer - load an app', () => {
         const appId = '1';
         const state = reducer(storeState, {type: types.LOAD_APP, content:{appId: appId}});
 
-        expect(state.loading).toBe(true);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(true);
+        expect(state.isLoading).toBe(true);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(true);
         expect(state.error).toBe(false);
         expect(state.app).toEqual(null);
         expect(state.selected.appId).toEqual(appId);
@@ -187,8 +187,8 @@ describe('Test app reducer - load an app', () => {
         const app = appModel.getApp();
 
         const state = reducer(storeState, {type: types.LOAD_APP_SUCCESS, content:appData});
-        expect(state.loading).toBe(false);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(false);
+        expect(state.isLoading).toBe(false);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(false);
         expect(state.error).toBe(false);
         expect(state.app).toEqual(app);
         expect(state.apps).toEqual(AppReducer.getApps(state));
@@ -202,8 +202,8 @@ describe('Test app reducer - load an app', () => {
         const appId = '1';
         const state = reducer(storeState, {type: types.LOAD_APP_ERROR});
 
-        expect(state.loading).toBe(false);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(false);
+        expect(state.isLoading).toBe(false);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(false);
         expect(state.error).toBe(true);
         expect(state.app).toEqual(null);
         expect(state.selected.appId).toEqual(null);
@@ -218,8 +218,8 @@ describe('Test app reducer - load list of apps', () => {
         const appId = '1';
         const state = reducer(storeState, {type: types.LOAD_APPS});
 
-        expect(state.loading).toBe(true);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(true);
+        expect(state.isLoading).toBe(true);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(true);
         expect(state.error).toBe(false);
         expect(state.app).toEqual(null);
         expect(state.apps).toEqual([]);
@@ -249,8 +249,8 @@ describe('Test app reducer - load list of apps', () => {
         const apps = appsModel.getApps();
 
         const state = reducer(storeState, {type: types.LOAD_APPS_SUCCESS, content:appsData});
-        expect(state.loading).toBe(false);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(false);
+        expect(state.isLoading).toBe(false);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(false);
         expect(state.error).toBe(false);
         expect(state.app).toEqual(null);
         expect(state.apps).toEqual(AppReducer.getApps(state));
@@ -261,8 +261,8 @@ describe('Test app reducer - load list of apps', () => {
         const appId = '1';
         const state = reducer(storeState, {type: types.LOAD_APPS_ERROR});
 
-        expect(state.loading).toBe(false);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(false);
+        expect(state.isLoading).toBe(false);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(false);
         expect(state.error).toBe(true);
         expect(state.app).toEqual(null);
         expect(state.apps).toEqual([]);
@@ -278,8 +278,8 @@ describe('Test app reducer - load app owner', () => {
         const appId = '1';
         const state = reducer(storeState, {type: types.LOAD_APP_OWNER});
 
-        expect(state.loading).toBe(true);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(true);
+        expect(state.isLoading).toBe(true);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(true);
         expect(state.error).toBe(false);
         expect(state.app).toEqual(null);
         expect(state.apps).toEqual([]);
@@ -312,8 +312,8 @@ describe('Test app reducer - load app owner', () => {
         const appId = '1';
         const state = reducer(storeState, {type: types.LOAD_APP_OWNER_ERROR});
 
-        expect(state.loading).toBe(false);
-        expect(AppReducer.getIsAppsLoading(state)).toBe(false);
+        expect(state.isLoading).toBe(false);
+        expect(AppReducer.getIsAppsLoading({app: state})).toBe(false);
         expect(state.error).toBe(true);
         expect(state.app).toEqual(null);
         expect(state.apps).toEqual([]);

@@ -104,7 +104,7 @@ describe('AppHomePageRoute functions', () => {
             tableProperties: {},
             app: {
                 app: {name: appName, id: 1},
-                loading: false
+                isLoading: false
             }
         };
 
@@ -118,6 +118,9 @@ describe('AppHomePageRoute functions', () => {
 
         let headline = TestUtils.findRenderedDOMComponentWithClass(component, 'appHeadLine');
         expect(headline.textContent).toContain(appName);
+
+        // Loading spinner should not be present when the app is loaded
+        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'loader').length).toEqual(0);
     });
 
     describe('getSelectedAppName', () => {
@@ -128,9 +131,9 @@ describe('AppHomePageRoute functions', () => {
                 expectedName: selectedAppName
             },
             {
-                description: 'returns undefined if there is not a currently selected app',
+                description: 'returns null if there is not a currently selected app',
                 app: null,
-                expectedName: undefined
+                expectedName: null
             }
         ];
 
