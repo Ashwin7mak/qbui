@@ -17,7 +17,7 @@ const EmptyStateForLeftNav = ({listOfItems, handleOnClick, emptyMessage, icon, i
         return (
             <div className="createNewIcon">
                 <div className="emptyStateIcon" onClick={handleOnClick}>
-                    <QBicon icons="add-new-filled" icon={icon}/>
+                    <QBicon icon={icon}/>
                     <li className="iconMessage">{Locale.getMessage(iconMessage)}</li>
                 </div>
             </div>

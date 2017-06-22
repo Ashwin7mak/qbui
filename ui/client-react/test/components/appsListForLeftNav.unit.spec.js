@@ -73,7 +73,7 @@ describe('AppsListForLeftNav', () => {
         expect(component.find(NavItem).length).toEqual(4);
         expect(component.find(CreateNewItemButton).length).toEqual(1);
         expect(component.find('.emptyState')).not.toBePresent();
-        expect(component.find('.appIcon')).not.toBePresent();
+        expect(component.find('.emptyStateIcon')).not.toBePresent();
     });
 
     it('renders empty message when there are no apps', () => {
@@ -81,7 +81,7 @@ describe('AppsListForLeftNav', () => {
 
         expect(component.find(CreateNewItemButton).length).toEqual(0);
         expect(component.find('.emptyState')).toBePresent();
-        expect(component.find('.appIcon')).toBePresent();
+        expect(component.find('.emptyStateIcon')).toBePresent();
     });
 
     it('renders empty message when apps are undefined', () => {
@@ -89,6 +89,6 @@ describe('AppsListForLeftNav', () => {
 
         expect(component.find(CreateNewItemButton).length).toEqual(0);
         expect(component.find('.emptyState')).toBePresent();
-        expect(component.find('.appIcon')).toBePresent();
+        expect(component.find('.emptyStateIcon')).toBePresent();
     });
 });
