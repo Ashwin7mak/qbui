@@ -14,9 +14,15 @@ import jasmineEnzyme from 'jasmine-enzyme';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-class BreakpointMock {
+class SmallBreakpointMock {
     static isSmallBreakpoint() {
         return true;
+    }
+}
+
+class LargeBreakpointMock {
+    static isSmallBreakpoint() {
+        return false;
     }
 }
 
@@ -382,7 +388,7 @@ describe('RecordRoute', () => {
         });
 
         it('small breakpoints has drawer transition from bottom', () => {
-            recordRouteRewire.__Rewire__('Breakpoints', BreakpointMock);
+            recordRouteRewire.__Rewire__('Breakpoints', SmallBreakpointMock);
 
             const uniqueId = "EMBEDDED734";
             const matchParams = {params: {appId: '1', tblId: '2', rptId: uniqueId, recordId: '2'}};
@@ -413,6 +419,8 @@ describe('RecordRoute', () => {
         });
 
         it('large breakpoints has drawer transition from right', () => {
+            recordRouteRewire.__Rewire__('Breakpoints', LargeBreakpointMock);
+
             const uniqueId = "EMBEDDED356";
             const matchParams = {params: {appId: '1', tblId: '2', rptId: uniqueId, recordId: '2'}};
 
