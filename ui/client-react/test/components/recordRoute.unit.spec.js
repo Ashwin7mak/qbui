@@ -469,5 +469,46 @@ describe('RecordRoute', () => {
 
             recordRouteRewire.__ResetDependency__('WindowHistoryUtils');
         });
+
+        it('start edit in trowser inside of a drawer by pushing new url with queries', () => {
+            const windowHistoryUtilsMock = {
+                pushWithQueries: jasmine.createSpy('pushWithQueries')
+            };
+            const uniqueId = 'DRAWER123';
+            const params = {appId: '1', tblId: '2', rptId: uniqueId, recordId: '2'};
+            const embeddedReports = {[uniqueId]: embeddedReport};
+            const queries = {
+                editRec: params.recordId,
+                detailAppId: params.appId,
+                detailTableId: params.tblId,
+                detailReportId: embeddedReport.rptId,
+                viewContextId: uniqueId
+            };
+            recordRouteRewire.__Rewire__('WindowHistoryUtils', windowHistoryUtilsMock);
+
+            component = shallow(
+                <MemoryRouter>
+                    <Provider store={store}>
+                        <RecordRoute match={{params: params}}
+                                     reportData={reportData}
+                                     router={router}
+                                     {...props}
+                                     isDrawerContext={true}
+                                     uniqueId={uniqueId}
+                                     embeddedReports={embeddedReports}/>
+                    </Provider>
+                </MemoryRouter>
+            );
+
+            const recordRoute = component.dive().dive().dive().instance();
+
+            // this is what's called when user clicks on the edit pencil icon to start editing in trowser
+            recordRoute.openRecordForEdit();
+
+            // adding query to url "?editRec=2" which will trigger the trowser to open
+            expect(windowHistoryUtilsMock.pushWithQueries).toHaveBeenCalledWith(queries);
+
+            recordRouteRewire.__ResetDependency__('WindowHistoryUtils');
+        });
     });
 });
