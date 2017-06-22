@@ -88,7 +88,7 @@ export const AppsList = React.createClass({
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
-                {<EmptyStateForLeftNav /> ?
+                {_.isEmpty(this.props.apps) ?
                     <EmptyStateForLeftNav listOfItems={this.props.apps}
                                           handleOnClick={this.createNewApp}
                                           emptyMessage="emptyAppState.message"
