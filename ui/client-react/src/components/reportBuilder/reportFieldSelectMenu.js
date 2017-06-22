@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {DropTarget} from 'react-dnd';
 
 import {CONTEXT} from '../../actions/context';
-import {refreshFieldSelectMenu, addColumnFromExistingField, insertPlaceholderColumn, moveColumn} from '../../actions/reportBuilderActions';
+import {refreshFieldSelectMenu, addColumnFromExistingField, insertPlaceholderColumn, moveColumn, hideColumn} from '../../actions/reportBuilderActions';
 import {draggingColumnStart, draggingColumnEnd} from '../../actions/qbGridActions';
 import ReportUtils from '../../utils/reportUtils';
 import FieldFormats from '../../utils/fieldFormats';
@@ -11,6 +12,7 @@ import DraggableTokenInMenu from '../../../../reuse/client/src/components/dragAn
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
 import Locale from '../../../../reuse/client/src/locales/locale';
 import SideMenu from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
+import DraggableItemTypes from '../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
 
 import './reportFieldSelectMenu.scss';
 
@@ -106,17 +108,25 @@ export class ReportFieldSelectMenu extends Component {
     };
 
     render() {
+        let {connectDropTarget} = this.props;
         return (
-            <SideMenu
-                baseClass="reportFieldSelectMenu"
-                sideMenuContent={this.getMenuContent()}
-                isCollapsed={this.props.isCollapsed}
-            >
-                {this.props.children}
-            </SideMenu>
+            connectDropTarget(
+                <div style={divStyle}>
+                    <SideMenu
+                        baseClass="reportFieldSelectMenu"
+                        sideMenuContent={this.getMenuContent()}
+                        isCollapsed={this.props.isCollapsed}
+                    >{this.props.children}
+                    </SideMenu>
+                </div>)
         );
     }
 }
+
+const divStyle = {
+    height: '100%',
+    width: '100%'
+};
 
 ReportFieldSelectMenu.propTypes = {
     /**
@@ -144,8 +154,26 @@ const mapDispatchToProps = {
     addColumnFromExistingField,
     insertPlaceholderColumn,
     moveColumn,
+    hideColumn,
     draggingColumnStart,
     draggingColumnEnd
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportFieldSelectMenu);
+const menuTarget = {
+    drop(dropTargetProps, monitor) {
+        let dragItemProps = monitor.getItem();
+        dropTargetProps.hideColumn(CONTEXT.REPORT.NAV, dragItemProps.relatedField.id);
+        return dropTargetProps;
+    }
+};
+
+function collect(connectDropSource, monitor) {
+    return {
+        connectDropTarget: connectDropSource.dropTarget(),
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop()
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)
+(DropTarget(DraggableItemTypes.FIELD, menuTarget, collect)(ReportFieldSelectMenu));
