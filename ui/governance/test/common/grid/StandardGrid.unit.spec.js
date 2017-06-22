@@ -6,6 +6,7 @@ import * as AccountUsersActions from "../../../src/account/users/AccountUsersAct
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import * as Table from 'reactabular-table';
+import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 import configureMockStore from "redux-mock-store";
 
