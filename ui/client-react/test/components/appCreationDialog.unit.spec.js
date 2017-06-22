@@ -41,7 +41,7 @@ describe('AppCreationDialog', () => {
         expect(mockActions.hideAppCreationDialog).toHaveBeenCalled();
     });
 
-    fit('will invoke createApp action and hideAppCreationDialog when onFinished is called', () => {
+    it('will invoke createApp action and hideAppCreationDialog when onFinished is called', () => {
         component = shallow(<AppCreationDialog createApp={mockActions.createApp}
                                                app={{}} />);
 
