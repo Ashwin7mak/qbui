@@ -2,11 +2,12 @@
 
 .userRoleContent {
 
-    .title {
+    .modal-title {
         color: $add-user-dialog-modal;
         font-size: $font-size-h2;
         padding-top: $spacing-small;
         padding-bottom: $spacing-x-small;
+        padding-left: $spacing-none;
     }
     .description {
         color: $ghost-text-color;

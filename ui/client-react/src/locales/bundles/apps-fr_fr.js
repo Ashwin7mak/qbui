@@ -40,6 +40,7 @@ export default {
             users: {
                 addUser: "Ajouter un nouvel utilisateur",
                 users: "Utilisateurs",
+                assignRole: "Attribuer un rôle",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
@@ -57,7 +58,15 @@ export default {
                 emailBody: "Le corps du courrier électronique va ici",
                 emailSubject: "Le sujet de l'email va ici",
                 changeUserRole: "Changement {valeur} rôle",
-                changeUserRoles: "Changement {valeur} les rôles"
+                changeUserRoles: "Changement {valeur} les rôles",
+                changeUserRoleButton: "Changement de rôle",
+                pluralChangeUserRoleButton: "Changer les rôles",
+                userRoleTitle: "Changer le rôle de {valeur} utilisateur",
+                pluralUserRoleTitle: "Changer le rôle de {valeur} utilisateurs",
+                userRoleDescription: "La modification du rôle peut affecter ce qu'un utilisateur peut afficher.",
+                userRoleText: "Changer le rôle vers",
+                successUserRole: "{valeur} Le rôle de l'utilisateur a été changé",
+                pluralSuccessUserRole: "{valeur} Les rôles des utilisateurs ont été modifiés",
             }
         },
         appMenu: {
@@ -817,15 +826,5 @@ export default {
             messageSubject:"Lien vers le {nom de l'application} Application",
             messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
         },
-        changeUserRole: {
-            changeUserRole: "Changement de rôle",
-            pluralChangeUserRole: "Changer les rôles",
-            userRoleTitle: "Changer le rôle de {valeur} utilisateur",
-            pluralUserRoleTitle: "Changer le rôle de {valeur} utilisateurs",
-            userRoleDescription: "La modification du rôle peut affecter ce qu'un utilisateur peut afficher.",
-            userRoleText: "Changer le rôle vers",
-            successUserRole: "{valeur} Le rôle de l'utilisateur a été changé",
-            pluralSuccessUserRole: "{valeur} Les rôles des utilisateurs ont été modifiés",
-        }
     }
 };

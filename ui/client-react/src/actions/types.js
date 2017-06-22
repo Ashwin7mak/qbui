@@ -22,8 +22,6 @@ export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
 //  **** App Builder actions ****
 export const SHOW_APP_CREATION_DIALOG = 'SHOW_APP_CREATION_DIALOG';
-// ********* App User actions *********
-export const TOGGLE_CHANGE_USER_ROLE = 'TOGGLE_CHANGE_USER_ROLE';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
@@ -131,12 +129,13 @@ export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
 //  ******** search actions ********
 export const SEARCH_INPUT = 'SEARCH_INPUT';
 
-//  ******** user actions **********
+//  ******** App User actions **********
 export const SEARCH_USERS_SUCCESS = 'SEARCH_USERS_SUCCESS';
 export const SEARCH_USERS_FAIL = 'SEARCH_USERS_FAIL';
 export const SET_USER_ROLE_TO_ADD = 'SET_USER_ROLE_TO_ADD';
 export const TOGGLE_ADD_USER_DIALOG = 'TOGGLE_ADD_USER_DIALOG';
 export const SELECT_USER_ROWS = 'SELECT_USER_ROWS';
+export const TOGGLE_CHANGE_USER_ROLE = 'TOGGLE_CHANGE_USER_ROLE';
 
 // **** feature switches ****
 export const SET_FEATURE_SWITCH_STATES = 'SET_FEATURE_SWITCH_STATES';
