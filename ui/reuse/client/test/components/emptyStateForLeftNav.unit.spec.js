@@ -18,7 +18,7 @@ describe('CreateNewItemButton', () => {
         component = mount(<EmptyStateForLeftNav emptyMessage="mockEmptyMessage"
                                                 handleOnClick={mockFunc.handleOnClick}
                                                 className="mockClassName"
-                                                icon="mock icon"
+                                                icon="mockIcon"
                                                 iconMessage="mockClass"/>);
 
         let iconButton = component.find('.emptyStateIcon');
@@ -27,7 +27,7 @@ describe('CreateNewItemButton', () => {
         expect(mockFunc.handleOnClick).toHaveBeenCalled();
         expect(component.props().emptyMessage).toBe('mockEmptyMessage');
         expect(component.props().className).toBe('mockClassName');
-        expect(component.props().icon).toBe('mock icon');
+        expect(component.props().icon).toBe('mockIcon');
         expect(component.props().iconMessage).toBe('mockClass');
     });
 });
