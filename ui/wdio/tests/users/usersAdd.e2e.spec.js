@@ -91,6 +91,7 @@
                 modalDialog.modalDialogUserAddSearchMenu.click();
                 // Add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click No Thanks to Share with User
                 modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
             });
