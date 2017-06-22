@@ -127,10 +127,6 @@
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         //wait until loading screen disappear in report Content
         loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //If tablesList is not visible then again navigate to appId page
-        if (!browser.element('.tablesList').isExisting()) {
-            this.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-        }
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
     };
