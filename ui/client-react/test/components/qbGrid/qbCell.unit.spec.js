@@ -52,7 +52,7 @@ describe('QbCell', () => {
     });
 
     it('renders a non-placeholder cell after the label has been dragged to a new column', () => {
-        component = mount(<QbCell label={label} labelBeingDragged={labelBeingDraggedSame} />);
+        component = shallow(<QbCell label={label} labelBeingDragged={labelBeingDraggedSame} />);
 
         expect(component).toHaveClassName('qbCell');
         expect(component).toHaveClassName('placeholderCell');
