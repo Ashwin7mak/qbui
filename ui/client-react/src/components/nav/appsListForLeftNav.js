@@ -36,12 +36,11 @@ export const AppsList = React.createClass({
         return this.props.apps && this.props.apps.map((app) => {
             app.icon = 'favicon';
             return this.searchMatches(app.name) &&
-                    <NavItem key={app.id}
-                             item={app}
-                             onSelect={this.props.onSelectApp}
-                             selected={app.id === this.props.selectedAppId}
-                             open={true}
-                    />;
+                <NavItem key={app.id}
+                         item={app}
+                         onSelect={this.props.onSelectApp}
+                         selected={app.id === this.props.selectedAppId}
+                         open={true}  />;
         });
     },
     onClickApps() {
@@ -59,9 +58,9 @@ export const AppsList = React.createClass({
      */
     getNewAppItem() {
         return <CreateNewItemButton handleOnClick={this.createNewApp}
-                                    emptyMessage="appCreation.newApp"
+                                    message="appCreation.newApp"
                                     className="newApp"
-        />;
+                />;
     },
 
     /**
@@ -89,8 +88,7 @@ export const AppsList = React.createClass({
                 </li>
 
                 {_.isEmpty(this.props.apps) ?
-                    <EmptyStateForLeftNav listOfItems={this.props.apps}
-                                          handleOnClick={this.createNewApp}
+                    <EmptyStateForLeftNav handleOnClick={this.createNewApp}
                                           emptyMessage="emptyAppState.message"
                                           className="emptyState"
                                           icon="add-new-filled"
