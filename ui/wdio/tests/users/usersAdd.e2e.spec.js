@@ -89,6 +89,8 @@
                 modalDialog.selectUser(searchUserName);
                 // Select user
                 modalDialog.modalDialogUserAddSearchMenu.click();
+                // Need some time for Add user button switch from disabled to active
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // Add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
                 browser.pause(e2eConsts.shortWaitTimeMs);
@@ -109,6 +111,8 @@
                 modalDialog.modalDialogUserAddSearchMenu.click();
                 // Select "Viewer" role
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
+                // Need some time for Add user button switch from disabled to active
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
                 browser.pause(e2eConsts.shortWaitTimeMs);
@@ -129,6 +133,8 @@
                 modalDialog.modalDialogUserAddSearchMenu.click();
                 // Select "Administrator" role
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
+                // Need some time for Add user button switch from disabled to active
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
                 browser.pause(e2eConsts.shortWaitTimeMs);
@@ -151,6 +157,8 @@
                 modalDialog.modalDialogUserAddSearchMenu.click();
                 // Select "None" role
                 modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
+                // Need some time for Add user button switch from disabled to active
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // Click add user
                 modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
                 browser.pause(e2eConsts.shortWaitTimeMs);
