@@ -322,10 +322,7 @@ const report = (state = [], action) => {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             let params = action.content;
-            let clickedColumnName = params.clickedColumnName;
-            let clickedColumnId = currentReport.data.columns.filter(column => {
-                return column.headerName === clickedColumnName;
-            })[0].id;
+            let clickedColumnId = params.clickedColumnId;
             let addBefore = params.addBeforeColumn;
             // remove the placeholder column if it exists
             _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
