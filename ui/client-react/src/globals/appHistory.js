@@ -385,7 +385,7 @@ class AppHistory {
     }
 
     _discardChangesForReportBuilder() {
-        self.store.dispatch(self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV));
+        self.store.dispatch(self.setReportBuilderPendingEditToFalse());
         self._continueToDestination();
     }
 

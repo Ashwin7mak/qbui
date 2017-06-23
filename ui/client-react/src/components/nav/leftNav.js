@@ -104,7 +104,7 @@ let LeftNav = React.createClass({
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
                 {this.createAppsToggleArea()}
 
-                <Loader loadedClassName="transitionGroup" loaded={!this.props.appsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
+                <Loader loadedClassName="transitionGroup" loaded={!this.props.areAppsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
                     {this.renderNavContent()}
                 </Loader>
 
