@@ -46,6 +46,7 @@ describe('AppCreationDialog', () => {
         spyOn(props, 'createAppFailed').and.callThrough();
         spyOn(props, 'toggleAppsList');
         spyOn(AppHistoryMock.history, 'push');
+        spyOn(mockNotificationManager, 'error');
     });
 
     afterEach(() => {
@@ -83,7 +84,7 @@ describe('AppCreationDialog', () => {
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
     });
 
-    it('will invoke createApp action when onFinished is called', () => {
+    it('will invoke not createApp action if createApp fails', () => {
         component = shallow(<AppCreationDialog createApp={props.createAppFailed}
                                                toggleAppsList={props.toggleAppsList}
                                                app={{}} />);
@@ -94,6 +95,7 @@ describe('AppCreationDialog', () => {
         expect(props.createApp).not.toHaveBeenCalled();
         expect(props.toggleAppsList).not.toHaveBeenCalled();
         expect(AppHistoryMock.history.push).not.toHaveBeenCalled();
+        expect(mockNotificationManager.error).toHaveBeenCalled();
     });
 
     it('will NOT invoke createApp action when onFinished is called if there are no new apps', () => {
