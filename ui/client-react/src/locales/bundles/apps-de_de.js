@@ -202,7 +202,8 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen"
+                feedbackTooltip: "Teilen Sie Ideen und Fragen",
+                helpTooltip: "Hilfe"
             }
 
         },
@@ -509,15 +510,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "Die App ist im Moment nicht verfügbar in Mercury. ",
-                inQuickBaseClassic: " in Quickbase Classic. ",
-                clickHere: "Öffnen Sie die App"
-            },
-            noApps: {
-                noApps: "Es gibt keine Apps in Mercury. ",
-                addApps: " hinzuzufügen Apps."
-            },
+            appNotFound: "Diese App existiert nicht. Wählen Sie eine andere App aus.",
             errorLoadingReport: {
                 message: "Dieser Bericht ist nicht verfügbar",
                 helpText: "Denn jetzt können Sie versuchen, einen anderen Bericht auswählen.",
@@ -527,10 +520,6 @@ export default {
                 stopGraphic: "Hör auf zu spielen",
                 showAdditionalInfo: "Details anzeigen",
                 hideAdditionalInfo: "Details ausblenden"
-            },
-            noTables: {
-                noTables: "Es gibt keine Tabellen. ",
-                createTablesInQuickBaseClassic: "Erstellen von Tabellen in "
             },
             supportLink: {
                 text: "Wenden Sie sich an unser Care-Team"
@@ -733,7 +722,12 @@ export default {
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         },
         appCreation: {
-            newApp: 'Neue app'
+            newApp: 'Neue app',
+            newAppPageTitle: 'Neue App',
+            finishedButtonLabel: "App erstellen",
+            appNameHeading: "App Name",
+            appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
+            descriptionHeading: "App Beschreibung"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
@@ -774,7 +768,12 @@ export default {
             tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
             tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "Das Titelfeld identifiziert jeden Datensatz",
+            recordTitleFieldDescription: "Wählen Sie das Feld aus, das als Überschrift angezeigt wird, wenn Sie einen Datensatz anzeigen oder bearbeiten. Dieses Feld muss ausgefüllt werden.",
+            recordTitleFieldDefault: "Standard auf Noun + ID",
+            recordName: "Datensatzname"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
@@ -818,7 +817,15 @@ export default {
             userSuccessDialogOK: "Nein Danke",
             copied: "Link kopiert",
             messageSubject:"Link zum {App Name} App",
-            messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}"
+            messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}",
+            addUser: "Hinzufügen",
+            selectAUser:"Wählen Sie einen Benutzer aus",
+            selectUsers: "Benutzer auswählen",
+            assignRole: "Rolle zuweisen",
+            searchPromptText: "Tippe um zu suchen",
+            name: "Name",
+            role: "Rolle",
+            userName: "Benutzername"
         }
     }
 };

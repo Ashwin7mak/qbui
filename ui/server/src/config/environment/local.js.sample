@@ -105,7 +105,10 @@
         tracingEnabled: false,
 
         // Tracing host name
-        tracingHost: ''
+        tracingHost: '',
+
+        // Tracing service name
+        tracingServiceName: ''
 
         /**
          * mock data for feature switches for local testing

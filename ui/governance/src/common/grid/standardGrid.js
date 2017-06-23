@@ -8,22 +8,12 @@ import QbCell from "../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
+import {pageLoadTime} from "../../analytics/performanceTimingActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import "./standardGrid.scss";
-
-// Sub-component pieces we will be using to override React Tabular's default components
-const tableSubComponents = {
-    header: {
-        cell: QbHeaderCell
-    },
-    body: {
-        row: QbRow,
-        cell: QbCell
-    }
-};
 
 // Helper function to return additional props to add to a row element
 const onRowFn = (row) => {
@@ -69,6 +59,12 @@ export class StandardGrid extends Component {
         this.tableRef = body && body.getRef().parentNode;
     };
 
+    componentDidUpdate = () => {
+        if (this.props.items) {
+            this.props.pageLoadTime();
+        }
+    };
+
     /**
      * Render the grid when items exist
      */
@@ -79,7 +75,15 @@ export class StandardGrid extends Component {
                     className="qbGrid"
                     columns={this.getColumns()}
                     onScroll={this.handleScroll}
-                    components={tableSubComponents}
+                    components={{
+                        header: {
+                            cell: this.props.headerRenderer
+                        },
+                        body: {
+                            row: QbRow,
+                            cell: this.props.cellRenderer
+                        }
+                    }}
                 >
                     <Table.Header className="qbHeader"/>
 
@@ -204,7 +208,23 @@ StandardGrid.propTypes = {
     /**
      *  The text to display if there are no items found
      */
-    noItemsFound: PropTypes.string
+    noItemsFound: PropTypes.string,
+
+    /**
+     *  Function that returns the page load time (as a number)
+     */
+    pageLoadTime: PropTypes.func,
+
+    /**
+     * Header cell to be passed in to make QbGrid more reusable.
+     * Use QbHeaderCell for a default non-draggable header.
+     * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use). */
+    headerRenderer: PropTypes.func,
+
+    /**
+     * Cell renderer.
+     */
+    cellRenderer: PropTypes.func
 };
 
 StandardGrid.defaultProps = {
@@ -221,7 +241,9 @@ StandardGrid.defaultProps = {
     ],
     shouldFacet: true,
     facetFields:[],
-    shouldSearch: true
+    shouldSearch: true,
+    headerRenderer: QbHeaderCell,
+    cellRenderer: QbCell
 };
 
 const mapStateToProps = (state, props) => {
@@ -236,6 +258,9 @@ const mapDispatchToProps = (dispatch, props) => ({
     setSort(sortFid, asc, remove) {
         dispatch(StandardGridActions.setSort(props.id, sortFid, asc, remove));
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
+    },
+    pageLoadTime: () => {
+        dispatch(pageLoadTime(_.round((window.performance.now() / 1000), 2)));
     }
 });
 

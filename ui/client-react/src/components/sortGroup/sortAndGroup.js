@@ -282,7 +282,6 @@ export const SortAndGroup = React.createClass({
 
     handleClickOutside() {
         this.applyAndHide();
-        //console.log('clicked outside on' + evt.target);
     },
 
 

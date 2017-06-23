@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {getLoggedInUserId, getLoggedInUserAdminStatus} from 'REUSE/reducers/userReducer';
+import {getLoggedInUserId, getLoggedInUserAdminStatus, getLoggedInUserEmail} from 'REUSE/reducers/userReducer';
 import {getLoggedInUser} from 'REUSE/actions/userActions';
 
 // IMPORT FROM CLIENT REACT
@@ -37,8 +37,13 @@ export class Analytics extends Component {
             this.updateAppManagerStatus,
             this.updateEvergageAccountId,
             this.updateEverageAppId,
+            ...props.additionalUpdateFunctions
         ];
     }
+
+    static defaultProps = {
+        additionalUpdateFunctions: []
+    };
 
     /**
      * Setup script copied from the Evergage documentation.
@@ -74,6 +79,11 @@ export class Analytics extends Component {
     updateEvergageUser = () => {
         if (this.props.userId) {
             this._aaq.push(['setUser', this.props.userId]);
+            this._aaq.push(['gReqUID', this.props.userId]);
+        }
+
+        if (this.props.userEmail) {
+            this._aaq.push(['gReqUserEmail', this.props.userEmail]);
         }
     };
 
@@ -122,7 +132,6 @@ export class Analytics extends Component {
             if (!this.props.dataset) {
                 return this.logger.debug('Dataset was not provided to analytics component. Analytics have not been loaded.');
             }
-
 
             if (this.props.getLoggedInUser) {
                 this.props.getLoggedInUser();
@@ -173,6 +182,12 @@ Analytics.propTypes = {
     userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
+    *  The email of the currently logged in user to be used with Evergage.
+    *  Typically this is passed as a prop from Redux (user reducer)
+    */
+    userEmail: PropTypes.string,
+
+    /**
      * Boolean indicating whether the current user is an admin.
      * Typically this is passed as a prop from Redux (user reducer)
      */
@@ -191,9 +206,21 @@ Analytics.propTypes = {
         id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         ownerId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         accountId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-    })
+    }),
+
+    /**
+     *  The additional props that needs to be passed to EverGage.
+     *  Typically, this is an array.
+     */
+    additionalUpdateFunctions: PropTypes.array
 };
 
-const mapStateToProps = state => ({userId: getLoggedInUserId(state), isAdmin: getLoggedInUserAdminStatus(state)});
+const mapStateToProps = state => {
+    return {
+        userId: getLoggedInUserId(state),
+        userEmail: getLoggedInUserEmail(state),
+        isAdmin: getLoggedInUserAdminStatus(state)
+    };
+};
 
 export default connect(mapStateToProps, {getLoggedInUser})(Analytics);

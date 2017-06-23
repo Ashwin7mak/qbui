@@ -1,15 +1,16 @@
 @import '../../assets/css/_qbVariables';
 
-.tableField {
+.dialogField {
     width: 50%;
     margin-bottom: 30px;
 
     &:first-of-type {
         padding-right: 20px;
     }
-    .tableFieldTitle {
+    .dialogFieldTitle {
         margin-bottom: 4px;
         color: $field-label-normal-color;
+        font-weight: bold;
     }
 
     input, textarea {
@@ -29,7 +30,7 @@
     }
 
     &.validationFailed {
-        .tableFieldTitle {
+        .dialogFieldTitle {
             color: $error-color;
         }
         input, input:focus {
@@ -42,9 +43,8 @@
 }
 
 @include small-breakpoint {
-    .tableField {
+    .dialogField {
         min-width: 50%;
         width: inherit;
     }
 }
-

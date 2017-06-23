@@ -108,6 +108,7 @@
             //Click on form Save button
             this.formCancelBtn.waitForVisible();
             this.formCancelBtn.click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Need this to wait for container to slide away
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
@@ -340,6 +341,7 @@
             this.editPencilBtnOnStageInViewForm.waitForVisible();
             //click on the edit pencil in view form actions
             this.editPencilBtnOnStageInViewForm.click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until edit form is visible
             this.editFormContainerEl.waitForVisible();
             //Need this to stabilize container

@@ -12,8 +12,14 @@ class AppModel {
 
         if (_.has(appData, 'app')) {
             this.app = appData.app;
-            this.setUsers(appData.users[0]);
-            this.setUnfilteredUsers(appData.users[1]);
+            if (Array.isArray(appData.users)) {
+                if (appData.users.length > 0) {
+                    this.setUsers(appData.users[0]);
+                }
+                if (appData.users.length > 1) {
+                    this.setUnfilteredUsers(appData.users[1]);
+                }
+            }
             this.app.link = `${APP_ROUTE}/${this.app.id}`;
 
             //  set the table icons if one is not already set
@@ -62,7 +68,8 @@ class AppModel {
     }
 
     setUnfilteredUsersByRole(unfilteredUsers, roleId) {
-        this.app.unfilteredUsers[roleId] = unfilteredUsers;
+        const unfilteredUsersList = this.getUnfilteredUsers();
+        unfilteredUsersList[roleId] = unfilteredUsers;
     }
 
 }

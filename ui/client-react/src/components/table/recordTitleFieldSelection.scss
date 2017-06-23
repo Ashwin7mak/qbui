@@ -1,0 +1,16 @@
+@import '../../assets/css/qbVariables';
+
+.recordTitleFieldSection {
+
+    margin-left: 2px;
+    margin-bottom: 8px;
+    .recordTitleFieldDescription {
+        margin-bottom: 15px;
+    }
+    .recordTitleFieldSelect {
+        max-width: 250px;
+        .Select-option:last-of-type {
+            border-top: 1px solid $color-black-400;
+        }
+    }
+}

@@ -22,7 +22,7 @@ export class ReportSaveOrCancelFooter extends Component {
         };
 
         this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef, this.props.redirectRoute);
-        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
+        this.props.exitBuilderMode();
     };
 
     closeReportBuilder = () => {
@@ -31,7 +31,7 @@ export class ReportSaveOrCancelFooter extends Component {
 
     onCancel = () => {
         this.closeReportBuilder();
-        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
+        this.props.exitBuilderMode();
     };
 
     getRightAlignedButtons() {

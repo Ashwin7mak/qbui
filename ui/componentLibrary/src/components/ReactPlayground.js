@@ -34,7 +34,7 @@ const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel').
 
 const Trowser = require('../../../client-react/src/components/trowser/trowser.js').default;
 const QBModal = require('../../../client-react/src/components/qbModal/qbModal.js').default;
-const AlertBanner = require('../../../client-react/src/components/alertBanner/alertBanner.js').default;
+const AlertBanner = require('../../../reuse/client/src/components/alertBanner/alertBanner.js').default;
 const PageTitle = require('../../../client-react/src/components/pageTitle/pageTitle.js').default;
 const InvisibleBackdrop = require('../../../client-react/src/components/qbModal/invisibleBackdrop.js').default;
 const PhoneFieldValueEditor = require('../../../client-react/src/components/fields/phoneFieldValueEditor.js').default;
