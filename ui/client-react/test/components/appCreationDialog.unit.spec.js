@@ -4,7 +4,6 @@ import {shallow} from 'enzyme';
 import {AppCreationDialog, __RewireAPI__ as AppCreationDialogRewireAPI} from '../../src/components/app/appCreationDialog';
 import {AppCreationPanel} from '../../src/components/app/appCreationPanel';
 import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
-import _ from 'lodash';
 
 let component;
 let instance;
