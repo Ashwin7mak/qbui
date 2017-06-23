@@ -527,9 +527,9 @@
                     expect(expectedRecordValues[7]).toBe(sDate.toString() + ' ' + sTime.toString());
                 }
                 //TODO time of day field not working on firefox verify. i do see it gets selected via automation. do manual testing to verify this
-                // if (platformName !== 'iOS' || browserName !== 'firefox') {
-                //     expect(expectedRecordValues[8]).toBe(sTime.toString());
-                // }
+                if (platformName !== 'iOS' && browserName !== 'firefox') {
+                    expect(expectedRecordValues[8]).toBe(sTime.toString());
+                }
                 //numeric duration field
                 expect(expectedRecordValues[9]).toBe('4.76142857142857 weeks');
                 //checkbox field
