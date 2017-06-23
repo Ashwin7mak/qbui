@@ -516,15 +516,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "The app is not available in Mercury right now. ",
-                inQuickBaseClassic: " in QuickBase Classic. ",
-                clickHere: "Open the app "
-            },
-            noApps: {
-                noApps: "There are no apps in Mercury. ",
-                addApps: " to add apps."
-            },
+            appNotFound: "That app does not exist. Select a different app.",
             errorLoadingReport: {
                 message: "That report is not available",
                 helpText: "For now, you can try selecting a different report.",
@@ -534,10 +526,6 @@ export default {
                 stopGraphic: "Stop playing",
                 showAdditionalInfo: "View details",
                 hideAdditionalInfo: "Hide details"
-            },
-            noTables: {
-                noTables: "There are no tables in the app. ",
-                createTablesInQuickBaseClassic: "Create tables in "
             },
             supportLink: {
                 text: "Contact our Care team"

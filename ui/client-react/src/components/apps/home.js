@@ -28,7 +28,7 @@ export const App = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        getApps: () => getApps(state.app)
+        getApps: () => getApps(state)
     };
 };
 
