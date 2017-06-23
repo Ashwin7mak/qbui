@@ -225,7 +225,7 @@ export class ReportColumnHeaderMenu extends Component {
     showAColumn(before) {
         if (!this.hasRequiredIds()) {return;}
 
-        this.props.insertPlaceholderColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.name, before);
+        this.props.insertPlaceholderColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id, before);
     }
 
     showAColumnBefore = () => {

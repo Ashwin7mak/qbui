@@ -57,14 +57,14 @@ export const refreshFieldSelectMenu = (appId, tblId) => {
  * Inserts a placeholder columns in the grid before/after the specified id.
  * Will remove any other placeholder columns in the grid.
  * @param context
- * @param clickedColumnName
+ * @param clickedColumnId
  * @param addBeforeColumn
  */
-export const insertPlaceholderColumn = (context, clickedColumnName, addBeforeColumn) => {
+export const insertPlaceholderColumn = (context, clickedColumnId, addBeforeColumn) => {
     return {
         id: context,
         type: types.INSERT_PLACEHOLDER_COLUMN,
-        content: {clickedColumnName, addBeforeColumn}
+        content: {clickedColumnId, addBeforeColumn}
     };
 };
 

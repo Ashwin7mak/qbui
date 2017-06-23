@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import {CONTEXT} from '../../actions/context';
-import {refreshFieldSelectMenu, addColumnFromExistingField, insertPlaceholderColumn, moveColumn, hideColumn} from '../../actions/reportBuilderActions';
+import {refreshFieldSelectMenu, addColumnFromExistingField, moveColumn, hideColumn} from '../../actions/reportBuilderActions';
 import {draggingColumnStart, draggingColumnEnd} from '../../actions/qbGridActions';
 import ReportUtils from '../../utils/reportUtils';
 import FieldFormats from '../../utils/fieldFormats';
@@ -147,7 +147,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     refreshFieldSelectMenu,
     addColumnFromExistingField,
-    insertPlaceholderColumn,
     moveColumn,
     hideColumn,
     draggingColumnStart,
