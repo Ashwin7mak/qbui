@@ -32,6 +32,7 @@ export class AppCreationDialog extends React.Component {
                 let appId = _.get(response, 'data.id', null);
                 //reroutes to app home page link
                 AppHistory.history.push(UrlUtils.getAppHomePageLink(appId));
+                this.props.toggleAppsList(false);
             }, (error) => {
                 // leave the dialog open but issue a growl indicating an error
                 NotificationManager.error(Locale.getMessage('appCreation.appCreationFailed'), Locale.getMessage('failed'));
