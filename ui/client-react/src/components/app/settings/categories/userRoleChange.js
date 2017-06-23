@@ -78,12 +78,12 @@ export class UserRoleChange extends React.Component {
 				show={this.props.changeUserRoleDialog}
 				classes="userRoleChange"
 				onFinished={this.onFinished}
+				titles={[this.props.getSelectionTip(selectedUserRows.length < 2 ? "app.users.userRoleTitle" : "app.users.pluralUserRoleTitle")]}
 				onCancel={()=>{this.props.toggleChangeUserRoleDialog(false);}}
 				showCancelButton={true}
 				showFinishedButton={true}
 				finishedButtonLabel={this.props.getSelectionTip(selectedUserRows.length < 2 ? "app.users.changeUserRoleButton" : "app.users.pluralChangeUserRoleButton")}>
 				<div className="userRoleContent">
-					<div className="modal-title">{this.props.getSelectionTip(selectedUserRows.length < 2 ? "app.users.userRoleTitle" : "app.users.pluralUserRoleTitle")}</div>
 					<div className="description"><I18nMessage message="app.users.userRoleDescription"/></div>
 					<div className="userRoleText">
 						<div className="userRoleDetails">

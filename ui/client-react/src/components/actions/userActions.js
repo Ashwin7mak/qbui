@@ -20,44 +20,36 @@ export class UserActions extends React.Component {
     constructor(props) {
         super(props);
         this.state = {confirmDeletesDialogOpen: false};
-        this.getEmailSubject = this.getEmailSubject.bind(this);
-        this.getEmailBody = this.getEmailBody.bind(this);
-        this.getSelectionTip = this.getSelectionTip.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.cancelBulkDelete = this.cancelBulkDelete.bind(this);
-        this.handleBulkDelete = this.handleBulkDelete.bind(this);
-        this.getConfirmDialog = this.getConfirmDialog.bind(this);
-        this.getEmailAction = this.getEmailAction.bind(this);
     }
-    getEmailSubject() {
+    getEmailSubject = () => {
         return Locale.getMessage('app.users.emailSubject');
     }
 
-    getEmailBody() {
+    getEmailBody = () => {
         return Locale.getMessage('app.users.emailBody');
     }
 
-    getSelectionTip(actionMsg) {
+    getSelectionTip = (actionMsg) => {
         return Locale.getPluralizedMessage(actionMsg, {value: this.props.selectedUserRows.length});
     }
 
     /**
      * delete the selected users, after confirmation if multiple users selected
      */
-    handleDelete() {
+    handleDelete = () => {
         this.setState({confirmDeletesDialogOpen: true});
     }
 
     /**
      * multiple user delete was cancelled from dialog
      */
-    cancelBulkDelete() {
+    cancelBulkDelete = ()=> {
         this.setState({confirmDeletesDialogOpen: false});
     }
     /**
      * this.props.selectedUserRows has the current selected rows with the unique identifier as the value in the array
      */
-    handleBulkDelete() {
+    handleBulkDelete = () => {
         const selectedRows = this.props.selectedUserRows;
         this.props.removeUsersFromAppRole(this.props.appId, selectedRows).then(
             (userIds) => {
@@ -83,7 +75,7 @@ export class UserActions extends React.Component {
      * render a QBModal
      * @returns {XML}
      */
-    getConfirmDialog() {
+    getConfirmDialog = () => {
 
         let msg;
         if (this.props.selectedUserRows.length > 1) {
@@ -104,7 +96,7 @@ export class UserActions extends React.Component {
                 type="delete"
                 title={msg}/>);
     }
-    getEmailAction() {
+    getEmailAction = () => {
         //TODO Email action is disabled for now until its implemented.
         return <ActionIcon icon="download-cloud" tip={Locale.getMessage("unimplemented.emailUsers")} disabled={true} identifier="download-cloud"/>;
     }
