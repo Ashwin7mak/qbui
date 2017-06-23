@@ -8,10 +8,17 @@ import _ from 'lodash';
 import {QbGrid} from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
+import QbHeaderCell from '../../../src/components/dataTable/qbGrid/qbHeaderCell';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
-import {CONTEXT} from '../../../src/actions/context';
+
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 const testColumns = [
     new ColumnTransformer('Header 1', 1, 'header1class', false),
@@ -67,7 +74,9 @@ const actions = {
     onClickEdit() {},
     onClickSave() {},
     onClickToggle() {},
-    onClickTestRow() {}
+    onClickTestRow() {},
+    draggingColumnStart() {},
+    draggingColumnEnd() {}
 };
 
 const testCellRenderer = (props) => {
@@ -79,7 +88,11 @@ const requiredProps = {
     onCancelEditingRow: actions.onClickCancel,
     onClickSaveRow: actions.onClickSave,
     cellRenderer: testCellRenderer,
-    moveColumn: (context, params) => {}
+    headerRenderer: QbHeaderCell,
+    draggingColumnStart: actions.draggingColumnStart,
+    draggingColumnEnd: actions.draggingColumnEnd,
+    onClickTestRowIon: actions.onClickTestRow,
+    isMultiSelectDisabled: false
 };
 
 let component;
@@ -97,7 +110,7 @@ describe('QbGrid', () => {
     });
 
     it('pass props to reactabular to display rows', () => {
-        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer}/>);
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} headerRenderer={QbHeaderCell}/>);
         instance = component.instance();
 
         let TableBody = component.find(Table.Body);
@@ -105,14 +118,14 @@ describe('QbGrid', () => {
     });
 
     it('adds a first column for row actions to the columns passed in through props', () => {
-        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer}/>);
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} headerRenderer={QbHeaderCell}/>);
 
         let TableProvider = component.find(Table.Provider);
         expect(TableProvider.props().columns.length).toEqual(testColumns.length + 1);
     });
 
     it('does not add a first column for row actions when showRowActionsColumn prop is false', () => {
-        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} showRowActionsColumn={false} />);
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer}  headerRenderer={QbHeaderCell} showRowActionsColumn={false} />);
 
         let TableProvider = component.find(Table.Provider);
         expect(TableProvider.props().columns.length).toEqual(testColumns.length);
@@ -126,6 +139,7 @@ describe('QbGrid', () => {
                 columns={testColumns}
                 rows={testRows}
                 cellRenderer={testCellRenderer}
+                headerRenderer={QbHeaderCell}
                 compareCellChanges={actions.compareCellChanges}
             />);
             instance = component.instance();
@@ -171,6 +185,7 @@ describe('QbGrid', () => {
                 columns={testColumns}
                 rows={testRows}
                 cellRenderer={testCellRenderer}
+                headerRenderer={QbHeaderCell}
                 compareCellChanges={actions.compareCellChanges}
             />);
             instance = component.instance();
@@ -235,21 +250,21 @@ describe('QbGrid', () => {
             let actionCell = instance.getActionsCell(null, {rowData: editingRow});
 
             expect(actionCell.props).toEqual({
-                editingRowErrors: [1],
-                editingRowId: editingRow.id,
-                isEditing: true,
-                isEditingRowSaving: true,
-                isEditingRowValid: true,
-                isInlineEditOpen: true,
-                isSelected: editingRow.isSelected,
-                onCancelEditingRow: actions.onClickCancel,
-                onClickAddNewRow: instance.onClickAddNewRow,
+                rowId: editingRow.id,
                 onClickDeleteRowIcon: actions.onClickDelete,
                 onClickEditRowIcon: actions.onClickEdit,
+                isEditing: true,
+                editingRowId: editingRow.id,
+                isEditingRowValid: true,
+                isEditingRowSaving: true,
+                isInlineEditOpen: true,
+                isSelected: editingRow.isSelected,
+                editingRowErrors: [1],
+                onCancelEditingRow: actions.onClickCancel,
+                onClickAddNewRow: instance.onClickAddNewRow,
                 onClickSaveRow: actions.onClickSave,
-                onClickTestRowIcon: actions.onClickTestRow(),
                 onClickToggleSelectedRow: instance.onClickToggleSelectedRow,
-                rowId: editingRow.id,
+                onClickTestRowIcon: actions.onClickTestRow(),
                 isMultiSelectDisabled: false
             });
         });
@@ -275,7 +290,6 @@ describe('QbGrid', () => {
             });
         });
     });
-
 
     describe('getPlaceholderCellProps', () => {
         it('adds the isPlaceholderCell prop to placeholder cells so the component can add the appropriate class', () => {
@@ -324,15 +338,19 @@ describe('QbGrid', () => {
 
     it('displays a grid based on passed in rows and columns', () => {
         let rowsWithHeader = [...testRows, subHeaderRow];
+        let store = mockStore({qbGrid: {labelBeingDragged: 'label'}});
 
         // Using test utils in this class because we want to check the rendered DOM for the whole grid and not unit test shallow component
-        component = TestUtils.renderIntoDocument(<QbGrid
-            {...requiredProps}
-            numberOfColumns={testColumns.length}
-            columns={testColumns}
-            rows={rowsWithHeader}
-            cellRenderer={testCellRenderer}
-        />);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <QbGrid
+                {...requiredProps}
+                numberOfColumns={testColumns.length}
+                columns={testColumns}
+                rows={rowsWithHeader}
+                cellRenderer={testCellRenderer}
+                headerRenderer={QbHeaderCell}/>
+            </Provider>);
 
         // Displays headers/columns
         let headers = TestUtils.scryRenderedDOMComponentsWithClass(component, 'qbHeaderCell');
@@ -355,22 +373,5 @@ describe('QbGrid', () => {
         // Displays subHeaders if there are any rows where isSubHeader is true
         let subHeader = TestUtils.findRenderedDOMComponentWithClass(component, 'groupHeader');
         expect(subHeader.innerText).toEqual(subHeaderRow.subHeaderLabel);
-    });
-
-    describe('onMoveColumn', () => {
-        it('calls the moveColumn prop', () => {
-            spyOn(requiredProps, 'moveColumn');
-            component = shallow(<QbGrid {...requiredProps}/>);
-            instance = component.instance();
-
-            let column = {
-                sourceLabel: 5,
-                targetLabel: 6
-            };
-
-            instance.onMoveColumn(column);
-
-            expect(requiredProps.moveColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, column);
-        });
     });
 });
