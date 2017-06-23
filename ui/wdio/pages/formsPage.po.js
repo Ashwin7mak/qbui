@@ -532,10 +532,20 @@
                 if (platformName !== 'iOS' && browserName !== 'firefox') {
                     expect(expectedRecordValues[8]).toBe(sTime.toString());
                 }
-                //numeric duration field
-                expect(expectedRecordValues[9]).toBe('4.76142857142857 weeks');
-                //checkbox field
-                expect(expectedRecordValues[10]).toBe(true);
+                if (platformName === 'iOS') {
+                    //numeric duration field
+                    expect(expectedRecordValues[9]).toBe('4.76142857142857 weeks');
+                } else {
+                    //numeric duration field
+                    expect(expectedRecordValues[9]).toBe('4.76142857142857  weeks');
+                }
+                if (platformName === 'iOS') {
+                    //checkbox field
+                    expect(expectedRecordValues[10]).toBe(true);
+                } else {
+                    //checkbox field
+                    expect(expectedRecordValues[10]).toBe('true');
+                }
                 //email field
                 expect(expectedRecordValues[11]).toBe('(508) 481-1015');
                 //phone field
