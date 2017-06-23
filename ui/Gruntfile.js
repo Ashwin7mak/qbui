@@ -599,6 +599,7 @@ module.exports = function(grunt) {
                     './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js',
                     './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js',
                     './wdio/tests/reports/reportBuilder.e2e.spec.js',
+                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
 
                     //TODO: MC-3410 - Need a better way to verify user was removed
                     './wdio/tests/users/usersRemove.e2e.spec.js',
@@ -636,7 +637,6 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
                         './wdio/tests/reports/reportTable.e2e.spec.js'
                     ],
                     tables: [
