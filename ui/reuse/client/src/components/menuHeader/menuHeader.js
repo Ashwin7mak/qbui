@@ -8,9 +8,11 @@ import {Motion, spring} from 'react-motion';
 import './menuHeader.scss';
 
 // STYLE Variables
-const largeHeight = 90;
-const smallHeight = 40;
-const defaultStyle = {height: smallHeight};
+const LARGE_HEIGHT = 90;
+const SMALL_HEIGHT = 40;
+const DEFAULT_STYLE = {height: SMALL_HEIGHT};
+const LETTERS_BEFORE_ELLIPSES = 17;
+const LETTERS_BEFORE_ELLIPSES_SMALL_BREAKPOINT = 27;
 
 /**
  * A header that typically appears at the top of LeftNavs (see StandardLeftNav for an example)
@@ -75,10 +77,10 @@ export class MenuHeader extends Component {
 
     getMaxCharactersBeforeTooltip() {
         if (Breakpoints.isSmallBreakpoint()) {
-            return 27;
+            return LETTERS_BEFORE_ELLIPSES_SMALL_BREAKPOINT;
         }
 
-        return 17;
+        return LETTERS_BEFORE_ELLIPSES;
     }
 
     renderMenuHeaderTitle = () => {
@@ -108,10 +110,10 @@ export class MenuHeader extends Component {
     animateStyles = () => {
         let {isSmall, isCollapsed} = this.props;
 
-        let height = defaultStyle.height;
+        let height = DEFAULT_STYLE.height;
 
         if (!isSmall && !isCollapsed) {
-            height = largeHeight;
+            height = LARGE_HEIGHT;
         }
 
         return {height: spring(height)};
@@ -140,7 +142,7 @@ export class MenuHeader extends Component {
         }
 
         return (
-            <Motion defaultStyle={defaultStyle} style={this.animateStyles()}>
+            <Motion defaultStyle={DEFAULT_STYLE} style={this.animateStyles()}>
                 {animatedStyle => (
                 <div className={classes.join(' ')} style={{...animatedStyle, ...this.getNonNumericStyles()}}>
                     <Button

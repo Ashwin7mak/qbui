@@ -153,6 +153,3 @@ describe('MenuHeader', () => {
         expect(component.find('.menuHeaderCollapsed')).not.toBePresent();
     });
 });
-
-
-
