@@ -100,8 +100,7 @@ describe('Analytics', () => {
         const testFirstUserId = 1;
         const testSecondUserId = 2;
 
-        component = shallow(<Analytics dataset={mockDataset}
-                                       userId={testFirstUserId} />, {lifecycleExperimental: true});
+        component = shallow(<Analytics dataset={mockDataset} userId={testFirstUserId} />, {lifecycleExperimental: true});
         let instance = component.instance();
         spyOn(instance, 'updateEvergage').and.callThrough();
 
@@ -112,24 +111,28 @@ describe('Analytics', () => {
 
     it('updates Evergage even when email IS passed in', () => {
         spyOn(document, 'getElementById').and.returnValue(true);
+        spyOn(window._aaq, 'push');
 
         const testFirstUserId = 1;
+        const testEmail = 'test@test.com';
 
-        component = shallow(<Analytics dataset={mockDataset}
-                                       userEmail={"test@test.com"}
-                                       userId={testFirstUserId} />, {lifecycleExperimental: true});
+        component = shallow(<Analytics dataset={mockDataset} userEmail={"test@test.com"} userId={testFirstUserId} />, {lifecycleExperimental: true});
 
         let instance = component.instance();
         spyOn(instance, 'updateEvergage').and.callThrough();
         component.setProps({userId: testFirstUserId});
 
-        component.setProps({userEmail: 'test2@test.com'});
+        component.setProps({userEmail: testEmail});
 
         expect(instance.updateEvergage).toHaveBeenCalled();
+        expect(window._aaq.push).toHaveBeenCalledWith(['setUser', testFirstUserId]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUID', testFirstUserId]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUserEmail', testEmail]);
     });
 
-    it('updates Evergage even when email IS NOT passed in', () => {
+    it('updates Evergage userId even when email is not passed in', () => {
         spyOn(document, 'getElementById').and.returnValue(true);
+        spyOn(window._aaq, 'push');
 
         const testFirstUserId = 1;
 
@@ -139,6 +142,9 @@ describe('Analytics', () => {
         component.setProps({userId: testFirstUserId});
 
         expect(instance.updateEvergage).toHaveBeenCalled();
+
+        expect(window._aaq.push).toHaveBeenCalledWith(['setUser', 1]);
+        expect(window._aaq.push).toHaveBeenCalledWith(['gReqUID', 1]);
     });
 
     describe('functions that update evergage', () => {
@@ -159,6 +165,12 @@ describe('Analytics', () => {
                 description: 'the evergage user',
                 props: {userId: 1},
                 expectedArguments: ['setUser', 1]
+            },
+            {
+                testFunction: 'updateEvergageUser',
+                description: 'the evergage user email',
+                props: {userEmail: 'testx@test.com'},
+                expectedArguments: ['gReqUserEmail', 'testx@test.com']
             },
             {
                 testFunction: 'updateEvergageAdminStatus',

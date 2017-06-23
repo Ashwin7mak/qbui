@@ -82,7 +82,7 @@ export class Analytics extends Component {
             this._aaq.push(['gReqUID', this.props.userId]);
         }
 
-        if (this.props.email) {
+        if (this.props.userEmail) {
             this._aaq.push(['gReqUserEmail', this.props.userEmail]);
         }
     };

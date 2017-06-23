@@ -1,6 +1,7 @@
 import reducer, {__RewireAPI__ as ReducerRewireAPI, getExistingFields} from '../../src/reducers/forms';
 import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import * as types from '../../src/actions/types';
+import {NEW_FIELD_PREFIX} from '../../src/constants/schema';
 import _ from 'lodash';
 
 describe('Forms reducer functions', () => {
@@ -565,12 +566,14 @@ describe('Forms reducer functions', () => {
     });
 
     describe('getExistingFields selector', () => {
+        const newFieldId = `${NEW_FIELD_PREFIX}10`;
+
         let mockGetFields = {
             getFields: () => {}
         };
 
         beforeEach(() => {
-            spyOn(mockGetFields, 'getFields').and.returnValue([{id: 6}, {id: 7}, {id: 8}, {id: 9, name: 'mockFieldName'}]);
+            spyOn(mockGetFields, 'getFields').and.returnValue([{id: 6}, {id: 7}, {id: 8}, {id: 9, name: 'mockFieldName'}, {id: newFieldId}]);
             ReducerRewireAPI.__Rewire__('getFields', mockGetFields.getFields);
         });
 
@@ -580,7 +583,7 @@ describe('Forms reducer functions', () => {
         const id = 'view';
         const state = {
             forms: {
-                view: {
+                [id]: {
                     formData: {
                         formMeta: {
                             fields: [6, 7, 8]
@@ -589,6 +592,17 @@ describe('Forms reducer functions', () => {
                 }
             }
         };
+
+        it('returns null if no form is available in state', () => {
+            expect(getExistingFields({forms: {}})).toEqual(null);
+        });
+
+        it('returns null if the form does not have fields on it yet (has not loaded)', () => {
+            let stateWithPartiallyLoadedForm = _.cloneDeep(state);
+            delete stateWithPartiallyLoadedForm.forms.view.formData.formMeta;
+
+            expect(getExistingFields(stateWithPartiallyLoadedForm, id)).toEqual(null);
+        });
 
         it('returns an array of fields that are not on a form', () => {
 
@@ -611,6 +625,13 @@ describe('Forms reducer functions', () => {
             }];
 
             expect(result).toEqual(expectedResult);
+        });
+
+        it('does not include any new fields (fields that are not persisted in the table schema)', () => {
+            let result = getExistingFields(state, id).map(formField => formField.containingElement.FormFieldElement.id);
+
+            expect(result).not.toContain(newFieldId);
+            expect(result).toContain(9); // 6, 7, 8 are on the form.
         });
 
         it('returns an empty array of existing fields if all fields are on a form', () => {

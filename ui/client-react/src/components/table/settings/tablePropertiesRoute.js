@@ -9,9 +9,11 @@ import IconActions from '../../../../../reuse/client/src/components/iconActions/
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import TableCreationPanel from '../tableCreationPanel';
+import RecordTitleFieldSelection from '../recordTitleFieldSelection';
 import QBModal from '../../qbModal/qbModal';
 import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable} from '../../../actions/tablePropertiesActions';
 import {updateAppTableProperties} from '../../../actions/appActions';
+
 import _ from 'lodash';
 
 import './tableProperties.scss';
@@ -45,6 +47,7 @@ export const TablePropertiesRoute = React.createClass({
         if (this.props.app && this.props.table) {
             this.props.loadTableProperties(this.props.table);
         }
+
     },
     componentWillReceiveProps(nextProps) {
         if (!_.isEqual(nextProps.table, this.props.table)) {
@@ -124,12 +127,19 @@ export const TablePropertiesRoute = React.createClass({
         return this.props.isDirty && !_.findKey(this.props.tableProperties.tableInfo, (field) => field.pendingValidationError);
     },
 
+    /**
+     * update the recordTitleFieldId in table info
+     * @param fid new field ID or null to unset it on the table
+     */
+    updateRecordTitleField(fid) {
+
+        this.props.setTableProperty("recordTitleFieldId", fid, null, null, true);
+    },
+
     render() {
         let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.table) || _.isUndefined(this.props.tableProperties) || _.isNull(this.props.tableProperties.tableInfo));
-        let isDirty = this.props.isDirty ? true : false;
-        let buttonsClasses = "tableInfoButtons " + (isDirty ? "open" : "closed");
-        return <Loader loaded={loaded}>
-            <div>
+
+        return <Loader loadedClassName="tablePropertiesLoaded" loaded={loaded}>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
                 <div className="dialogCreationPanelInfo">
@@ -141,17 +151,20 @@ export const TablePropertiesRoute = React.createClass({
                                         setEditingProperty={this.props.setEditingProperty}
                                         focusOn={this.props.tableProperties.editing}
                                         validate={this.props.tableProperties.isDirty}
-                                        appTables={this.getExistingTableNames()}
-                    />
-                    <div className={buttonsClasses}>
-                        <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage
-                            message="nav.reset"/></a>
-                        <Button disabled={!this.canApplyChanges()} className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage
-                            message="nav.apply"/></Button>
+                                        appTables={this.getExistingTableNames()}/>
+
+                    <RecordTitleFieldSelection tableInfo={this.props.tableProperties.tableInfo} onChange={this.updateRecordTitleField} />
+
+                    <div className="tableInfoButtons">
+                        <Button disabled={!this.props.isDirty} className="secondaryButton resetButton" onClick={this.resetTableProperties}>
+                            <I18nMessage message="nav.reset"/>
+                        </Button>
+                        <Button disabled={!this.canApplyChanges()} className="primaryButton" bsStyle="primary" onClick={this.updateTable}>
+                            <I18nMessage message="nav.apply"/>
+                        </Button>
                     </div>
                 </div>
                 {this.getConfirmDialog()}
-            </div>
         </Loader>;
     }
 });
@@ -164,7 +177,15 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable, updateAppTableProperties
+    updateTable,
+    loadTableProperties,
+    setTableProperty,
+    openIconChooser,
+    closeIconChooser,
+    setEditingProperty,
+    resetEditedTableProperties,
+    deleteTable,
+    updateAppTableProperties
 };
 
 export default connect(
