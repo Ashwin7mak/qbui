@@ -262,7 +262,9 @@ exports.config = {
         // Grab the browser name to use in spec files
         // See http://webdriver.io/guide/testrunner/browserobject.html for working with config file variables
         global.browserName = browser.desiredCapabilities.browserName;
-
+        // Grab the platform name to use in spec files
+        global.platformName = browser.desiredCapabilities.platformName;
+        
         // Grab the browser settings from the capabilities object and set the browser size
         if (browser.desiredCapabilities.breakpointSize) {
             var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
