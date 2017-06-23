@@ -9,7 +9,7 @@ import {CONTEXT} from '../../../actions/context';
  */
 export class DraggableReportHeaderCell extends Component {
     onHover = (dropTargetProps, dragItemProps) => {
-        if (dragItemProps.label !== dropTargetProps.label) {
+        if ((dragItemProps.label !== dropTargetProps.label) && dragItemProps.label && dropTargetProps.label) {
             this.props.moveColumn(CONTEXT.REPORT.NAV, dragItemProps.label, dropTargetProps.label);
         }
     };

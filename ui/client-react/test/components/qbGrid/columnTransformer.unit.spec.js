@@ -6,7 +6,14 @@ const testHeaderLabel = 'Jack Skellington';
 const testCellIdentifierValue = 'Halloweentown';
 const testFormatter = (cell) => 'Nightmare Before Christmas';
 const TestHeaderComponent = React.createClass({render() {return <h1>Sally</h1>;}});
-const testHeaderProps = {type: 'Rag Doll', stuffing: 'Fall Leaves'};
+const testHeaderProps = {
+    type: 'Rag Doll',
+    stuffing: 'Fall Leaves',
+    fieldDef: {
+        id: 1,
+        datatypeAttributes: {}
+    }
+};
 
 describe('ColumnTransformer', () => {
     describe('new', () => {
@@ -71,6 +78,7 @@ describe('ColumnTransformer', () => {
                 label: testHeaderLabel,
                 relatedField: {
                     name: testHeaderLabel,
+                    id: undefined,
                     datatypeAttributes: undefined
                 }
             }
@@ -110,6 +118,14 @@ describe('ColumnTransformer', () => {
                             </div>
                         </span>
                     )
+                },
+                props: {
+                    label: testHeaderLabel,
+                    relatedField: {
+                        name: testHeaderLabel,
+                        id: 1,
+                        datatypeAttributes: {}
+                    }
                 }
             });
 

@@ -175,6 +175,7 @@ class modalDialogWindow {
 
         if (btns !== []) {
             expect(btns[0].isVisible()).toBe(true);
+            btns[0].waitForVisible();
             //Click on filtered button
             return btns[0].click();
         } else {

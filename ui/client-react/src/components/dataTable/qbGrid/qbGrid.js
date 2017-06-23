@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
+import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
@@ -457,7 +458,8 @@ QbGrid.defaultProps = {
     isInlineEditOpen: false,
     isEditingRowValid: true,
     isEditingRowSaving: false,
-    showRowActionsColumn: true
+    showRowActionsColumn: true,
+    headerRenderer: QbHeaderCell
 };
 
 export default QbGrid;
