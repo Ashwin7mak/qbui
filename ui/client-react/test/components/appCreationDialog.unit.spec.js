@@ -10,7 +10,8 @@ let instance;
 
 let mockActions = {
     hideAppCreationDialog() {},
-    createApp() {}
+    createApp() {},
+    toggleAppsList() {}
 };
 
 
@@ -20,6 +21,7 @@ const AppHistoryMock = {
 
 let mockThen = {
     then(_response) {
+        mockActions.toggleAppsList();
         AppHistoryMock.history.push();
     }
 };
@@ -27,18 +29,18 @@ let mockThen = {
 describe('AppCreationDialog', () => {
     beforeEach(() => {
         AppCreationDialogRewireAPI.__Rewire__('AppCreationPanel', AppCreationPanel);
-        AppCreationDialogRewireAPI.__Rewire__('AppHistory', AppHistoryMock);
+        spyOn(mockThen, 'then').and.callThrough();
         spyOn(mockActions, 'hideAppCreationDialog');
         spyOn(mockActions, 'createApp').and.returnValue(mockThen);
-        spyOn(mockThen, 'then').and.callThrough();
         spyOn(AppHistoryMock.history, 'push');
+        spyOn(mockActions, 'toggleAppsList');
         jasmineEnzyme();
     });
 
     afterEach(() => {
         AppCreationDialogRewireAPI.__ResetDependency__('AppCreationPanel');
-        AppCreationDialogRewireAPI.__ResetDependency__('AppHistory');
         mockActions.createApp.calls.reset();
+        mockThen.then.calls.reset();
     });
 
     it('renders an AppCreationDialog', () => {
@@ -67,6 +69,7 @@ describe('AppCreationDialog', () => {
         expect(mockActions.createApp).toHaveBeenCalledWith({});
         expect(mockThen.then).toHaveBeenCalled();
         expect(AppHistoryMock.history.push).toHaveBeenCalled();
+        expect(mockActions.toggleAppsList).toHaveBeenCalled();
         done();
     });
 
