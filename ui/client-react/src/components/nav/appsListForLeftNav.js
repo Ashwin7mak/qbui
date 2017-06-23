@@ -91,7 +91,7 @@ export const AppsList = React.createClass({
                 {_.isEmpty(this.props.apps) ?
                     <EmptyStateForLeftNav handleOnClick={this.createNewApp}
                                           emptyMessage="emptyAppState.message"
-                                          className="appsListForLEftNav"
+                                          className="appsListForLeftNav"
                                           icon="add-new-filled"
                                           iconMessage="emptyAppState.createNewApp"
                     /> :

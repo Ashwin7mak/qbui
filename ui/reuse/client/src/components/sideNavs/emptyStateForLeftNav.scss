@@ -2,46 +2,41 @@
 
 .emptyState {
     text-align: center;
-    border: dashed 1px $color-black-400;
-    width: 200px;
-    height: 186px;
+    border: $stroke-width-thin dashed $error-message-border-color;
+    height: 170px;
     margin-left: 9px;
     margin-right: 6px;
-    padding-top: 26px;
-}
+    padding-top: 16px;
 
-.createNewIcon {
-    .emptyStateIcon {
-        .iconUISturdy-add-new-filled {
+    .createNewIcon {
+        .addNewIcon {
             font-size: 56px;
-            color: $color-cyan-500;
-            padding-top: 26px;
+            color: $add-user-button;
+            padding-top: 20px;
 
             &:hover {
                 color: $default-hover-color;
             }
 
             &:active {
-                color: $color-cyan-600;
+                color: $edit-icon-normal-color;
             }
         }
-    }
-}
 
-.iconMessage {
-    width: 180px;
-    height: 30px;
-    font-size: $size-iconfont-small;
-    text-align: center;
-    color: $color-cyan-500;
-    padding-top: 13px;
-    margin-left: 11px;
+        .iconMessage {
+            height: 30px;
+            font-size: $size-iconfont-small;
+            color: $add-user-button;
+            padding-top: 13px;
+            margin-left: 11px;
 
-    &:hover {
-        color: $default-hover-color;
-    }
+            &:hover {
+                color: $default-hover-color;
+            }
 
-    &:active {
-        color: $color-cyan-600;
+            &:active {
+                color: $edit-icon-normal-color;
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ describe('CreateNewItemButton', () => {
         spyOn(mockFunc, 'handleOnClick');
     });
 
-    it('it will invoke the handleOnClick function when clicked', () => {
+    it('will invoke the handleOnClick function when clicked', () => {
         component = mount(<EmptyStateForLeftNav emptyMessage="mockEmptyMessage"
                                                 handleOnClick={mockFunc.handleOnClick}
                                                 className="mockClassName"
@@ -25,9 +25,9 @@ describe('CreateNewItemButton', () => {
         iconButton.simulate('click');
 
         expect(mockFunc.handleOnClick).toHaveBeenCalled();
-        expect(component.props().emptyMessage).toBe('mockEmptyMessage');
-        expect(component.props().className).toBe('mockClassName');
-        expect(component.props().icon).toBe('mockIcon');
-        expect(component.props().iconMessage).toBe('mockClass');
+        expect(component).toHaveProp('emptyMessage', 'mockEmptyMessage');
+        expect(component).toHaveProp('className', 'mockClassName');
+        expect(component).toHaveProp('icon', 'mockIcon');
+        expect(component).toHaveProp('iconMessage', 'mockClass');
     });
 });
