@@ -273,8 +273,8 @@ export const Nav = React.createClass({
             // load the edit form and in a trowser
             const showTrowser = true;
             const formType = "edit";
-            // maybe a child create check
-            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID] && this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+            // check for either editing a child in a drawer or creating a new child record
+            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID] && this.props.location.query[UrlConsts.DETAIL_REPORTID]) {
                 let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
                 let childTableId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
                 let childReportId = this.props.location.query[UrlConsts.DETAIL_REPORTID];
@@ -343,8 +343,8 @@ export const Nav = React.createClass({
         if (this.props.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
-        const hasEditQuery = _.get(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`);
-        let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
+        const hasEditQuery = _.has(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`);
+        let editRecordId = _.get(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`, null);
         let editRecordIdForPageTitle = editRecordId;
 
         if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
@@ -359,8 +359,7 @@ export const Nav = React.createClass({
         let editingTblId = this.props.match.params.tblId;
         let editingRecId = editRecordId;
         if (this.props.location.query[UrlConsts.DETAIL_APPID] &&
-            this.props.location.query[UrlConsts.DETAIL_TABLEID] &&
-            this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+            this.props.location.query[UrlConsts.DETAIL_TABLEID]) {
             editingAppId  = this.props.location.query[UrlConsts.DETAIL_APPID];
             editingTblId  = this.props.location.query[UrlConsts.DETAIL_TABLEID];
         }

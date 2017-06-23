@@ -456,12 +456,14 @@ describe('Test app reducer - create new app tests', () => {
     appTests.forEach(testCase => {
         it(testCase.name, () => {
             const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS, app: testCase.app});
+            const selectorState = getSelectorState(state);
+
             if (testCase.app === null) {
-                expect(AppReducer.getApps(state).length).toEqual(0);
-                expect(AppReducer.getApp(state, newApp.id)).toEqual(null);
+                expect(AppReducer.getApps(selectorState).length).toEqual(0);
+                expect(AppReducer.getApp(selectorState, newApp.id)).toEqual(null);
             } else {
-                expect(AppReducer.getApps(state).length).toEqual(1);
-                expect(AppReducer.getApp(state, newApp.id)).toEqual(newApp);
+                expect(AppReducer.getApps(selectorState).length).toEqual(1);
+                expect(AppReducer.getApp(selectorState, newApp.id)).toEqual(newApp);
             }
         });
     });

@@ -130,7 +130,6 @@ class modalDialogWindow {
         });
 
         if (btns !== []) {
-            btns[0].waitForEnabled(e2eConsts.shortWaitTimeMs);
             btns[0].waitForVisible();
             //Click on filtered button
             return btns[0].click();
