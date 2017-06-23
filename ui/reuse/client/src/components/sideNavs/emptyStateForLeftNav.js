@@ -1,18 +1,16 @@
-import React, {PropTypes} from "react";
+import React, {PropTypes} from 'react';
 import Locale from '../../../../../client-react/src/locales/locales';
-import QBicon from '../icon/icon';
+import Icon from '../icon/icon';
 import './emptyStateForLeftNav.scss';
 
 const EmptyStateForLeftNav = ({handleOnClick, emptyMessage, icon, iconMessage, className}) => (
     <div className = {`${className} emptyState`}>
-        {Locale.getMessage(emptyMessage)}
-        <div className="createNewIcon">
-            <div className="emptyStateIcon" onClick={handleOnClick}>
-                <QBicon icon={icon}/>
-                <li className="iconMessage">{Locale.getMessage(iconMessage)}</li>
+        <p>{Locale.getMessage(emptyMessage)}</p>
+        <div className="createNewIcon" onClick={handleOnClick} role="button">
+                <Icon className={`${className} addNewIcon`} icon={icon}/>
+            <li className="iconMessage">{Locale.getMessage(iconMessage)}</li>
             </div>
         </div>
-    </div>
 );
 
 EmptyStateForLeftNav.propTypes = {
