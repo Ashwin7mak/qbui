@@ -162,6 +162,74 @@ describe("Validate configuration based featureSwitch Api", function() {
         });
     });
 
+    describe("Negative - expect failure when unable to read master json file ", function() {
+
+        it('success return results ', function(done) {
+
+            loadConfigFileStub.onCall(0).returns(Promise.reject(new Error(" invalid JSON")));
+
+            let promise = configBasedFSApi.getFeatureSwitchStates(req, '1234567');
+            let errorMessage = 'Could not read master feature switch configuration file due to: Error:  invalid JSON';
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getFeatureSwitchStates - negative invalid master JSON "));
+                },
+                function(error) {
+                    assert.deepEqual(error, errorMessage);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getFeatureSwitchStates: exception processing  - negative invalid master JSON ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("Negative  - expect failure when override file is configured but unable to read", function() {
+
+        it('success return results ', function(done) {
+            loadConfigFileStub.onCall(0).returns(Promise.resolve(masterData));
+            loadConfigFileStub.withArgs('someFile.json').onCall(0).returns(Promise.reject(new Error(" invalid JSON")));
+
+            let promise = configBasedFSApi.getFeatureSwitchStates(req, '1234567');
+            let errorMessage = 'Could not read override feature switch configuration file due to: Error:  invalid JSON';
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getFeatureSwitchStates - negative invalid override JSON "));
+                },
+                function(error) {
+                    assert.deepEqual(error, errorMessage);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getFeatureSwitchStates: exception processing  - negative invalid override JSON ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("Negative  - expect failure when override file is configured but file name is null", function() {
+
+        it('success return results ', function(done) {
+            let configNew = {featureSwitchConfigOverride: '', masterOverrideTurnFeaturesOn:true};
+            const configBasedFSApiNew = require('../../../src/api/quickbase/configBasedFeatureSwitches')(configNew);
+            loadConfigFileStub = sinon.stub(configBasedFSApiNew, "loadConfigFile");
+
+            loadConfigFileStub.onCall(0).returns(Promise.resolve(masterData));
+
+            let promise = configBasedFSApi.getFeatureSwitchStates(req, '1234567');
+            let errorMessage = 'Could not read override feature switch configuration file due to: Error:  invalid JSON';
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getFeatureSwitchStates - negative invalid override JSON "));
+                },
+                function(error) {
+                    assert.deepEqual(error, errorMessage);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getFeatureSwitchStates: exception processing  - negative invalid override JSON ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
 
     describe("validate getFeatureSwitchStates function - master override", function() {
 
@@ -193,7 +261,6 @@ describe("Validate configuration based featureSwitch Api", function() {
             });
         });
     });
-
 });
 
 

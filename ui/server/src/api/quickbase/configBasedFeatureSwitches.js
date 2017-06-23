@@ -6,6 +6,7 @@
     module.exports = function(config) {
 
         let constants = require('../../../../common/src/constants');
+        let log = require('../../logger').getLogger();
 
         let configBasedFeatureSwitchesApi = {
             getFeatureSwitchStates: function(req, realmId) {
@@ -55,17 +56,19 @@
                                         });
                                         resolve(this.transformFSStateForClient(states));
                                     },
-                                    () => {
-                                        resolve(this.transformFSStateForClient(states));
+                                    (error) => {
+                                        let errorMessage = 'Could not read override feature switch configuration file due to: ' + error;
+                                        log.error(errorMessage);
+                                        reject(errorMessage);
                                     }
                                 );
                             } else {
                                 resolve(this.transformFSStateForClient(states));
                             }
                         }, (error)=>    {
-                        log.info('Could not read master feature switch configuration file: ' + JsonfilePath +
-                                ' due to: ' + error);
-                        resolve(error);
+                        let errorMessage = 'Could not read master feature switch configuration file due to: ' + error;
+                        log.error(errorMessage);
+                        reject(errorMessage);
                     });
                 });
             },
@@ -75,18 +78,22 @@
              */
             loadConfigFile: function(JsonfilePath) {
                 return new Promise((resolve, reject) => {
-                    try {
-                        let overrideConfigData = require(JsonfilePath);
-                        if (overrideConfigData && Array.isArray(overrideConfigData)) {
-                            resolve(overrideConfigData);
-                        } else {
-                            resolve([]);
-                        }
+                    if (JsonfilePath) {
+                        try {
+                            let overrideConfigData = require(JsonfilePath);
+                            if (overrideConfigData && Array.isArray(overrideConfigData)) {
+                                resolve(overrideConfigData);
+                            } else {
+                                resolve([]);
+                            }
 
-                    } catch (err) {
-                        log.info('Could not read feature switch configuration file: ' + JsonfilePath +
-                        ' due to: ' + err);
-                        resolve(err);
+                        } catch (err) {
+                            log.error('Could not read feature switch configuration file: ' + JsonfilePath +
+                            ' due to: ' + err);
+                            reject(err);
+                        }
+                    } else {
+                        reject("Invalid JSON file path specified");
                     }
                 });
             },
