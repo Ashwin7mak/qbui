@@ -178,6 +178,34 @@
                     Promise.all(appPromises).then(
                         (responses) => {
                             let app = JSON.parse(responses[0].body);
+
+                            //  Add a random color and icon for now
+                            const icons = [
+                                'Beverage',
+                                'blood',
+                                'talk',
+                                'cupcake',
+                                'diamond',
+                                'Ping',
+                                'Plane',
+                                'Poetry',
+                                'Laws',
+                                'Geography'
+                            ];
+
+                            const colors = [
+                                '#006e93',
+                                '#488b00',
+                                '#bb5d00',
+                                '#8b1100',
+                                '#82004b',
+                                '#009deb',
+                                '#3e4245'
+                            ];
+
+                            app.icon = icons[_.random(0, icons.length - 1)];
+                            app.color = colors[_.random(0, colors.length - 1)];
+
                             if (responses.length > 1) {
                                 let tablesWithoutProps = [];
                                 this._mergeTableProps(app, responses[1], tablesWithoutProps);

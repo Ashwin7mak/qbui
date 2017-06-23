@@ -13,8 +13,8 @@ import MenuHeader from 'REUSE/components/menuHeader/menuHeader';
 import {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
 import _ from 'lodash';
 
-let LeftNav = React.createClass({
-    propTypes: {
+class LeftNav extends Component {
+    static propTypes = {
         expanded: PropTypes.bool,
         visible: PropTypes.bool,
         appsListOpen: PropTypes.bool.isRequired,
@@ -28,19 +28,17 @@ let LeftNav = React.createClass({
         globalActions: PropTypes.element,
         isAppLoading: PropTypes.bool,
         onAppsRoute: PropTypes.bool
-    },
+    };
 
-    getDefaultProps() {
-        return {
-            expanded: true,
-            visible: true
-        };
-    },
+    static defaultProps = {
+        expanded: true,
+        visible: true
+    };
 
     /**
      * create apps toggle section (if an app is selected)
      */
-    createAppsToggleArea() {
+    createAppsToggleArea = () => {
         const {selectedApp, isAppLoading, onToggleAppsList, appsListOpen, onAppsRoute, expanded} = this.props;
 
         // If there isn't an app selected, we don't want to show any icon.
@@ -65,35 +63,34 @@ let LeftNav = React.createClass({
                 />
             </div>
         );
-    },
+    };
 
     reloadAppsPage() {
         const origin = WindowLocationUtils.getOrigin();
         const link = `${origin}${APPS_ROUTE}`;
         WindowLocationUtils.update(link);
-    },
+    }
 
     /**
      * create a branding section
      * At some point in the future, customers will be able to specify their own branding image.
      * This is why we kept this as a method instead of coding it down in render();
      */
-    createBranding() {
+    createBranding = () => {
         return (<div className="branding" onClick={this.reloadAppsPage}>
             <img className="logo" alt="QuickBase" src={LogoImg} />
         </div>);
-    },
+    };
 
-
-    onSelectApp() {
+    onSelectApp = () => {
         this.props.onToggleAppsList(false);
-    },
+    };
 
-    swipedLeft() {
+    swipedLeft = () => {
         this.props.onNavClick();
-    },
+    };
 
-    renderNavContent() {
+    renderNavContent = () => {
         // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
         if (this.props.appsListOpen || !this.props.selectedApp) {
             return <AppsList {...this.props} key="apps" onSelectApp={this.onSelectApp}/>;
@@ -106,7 +103,7 @@ let LeftNav = React.createClass({
                                selectedAppId={this.props.selectedAppId}
                                {...this.props} />;
         }
-    },
+    };
 
     render() {
         let classes = "leftNav";
@@ -127,6 +124,6 @@ let LeftNav = React.createClass({
             </Swipeable>
         );
     }
-});
+}
 
 export default LeftNav;
