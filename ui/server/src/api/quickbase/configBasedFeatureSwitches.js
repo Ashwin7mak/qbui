@@ -10,6 +10,11 @@
         let configBasedFeatureSwitchesApi = {
             getFeatureSwitchStates: function(req, realmId) {
                 return new Promise((resolve, reject) => {
+                    /** Reading master configuration file and loading the feature switch states.
+                     * If override for the realm is specified- the state specified in the override takes precedence
+                     * If master override is set to true in the config file, then all feature switches are enabled.
+                     */
+
                     this.loadConfigFile('../../config/environment/featureSwitch/master.featureSwitches.json').then(
                         (featureSwitchesData) => {
                             let states = {};
@@ -27,6 +32,10 @@
                                     });
                                 }
                             });
+                            /** Reading env specific configuration file and loading the feature switch states.
+                             * If override for the realm is specified- the state specified in the override takes precedence
+                             * If master override is set to true in the config file, then all feature switches are enabled.
+                             */
                             if (config.featureSwitchConfigOverride) {
                                 this.loadConfigFile(config.featureSwitchConfigOverride).then(
                                     (overrideConfigData) => {
@@ -55,8 +64,8 @@
                             }
                         }, (error)=>    {
                         log.info('Could not read master feature switch configuration file: ' + JsonfilePath +
-                                ' due to: ' + err);
-                        resolve(err);
+                                ' due to: ' + error);
+                        resolve(error);
                     });
                 });
             },

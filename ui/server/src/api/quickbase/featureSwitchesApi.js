@@ -147,7 +147,7 @@
             getFeatureSwitches: function(req) {
                 return new Promise((resolve, reject) => {
                     if (useFileBasedStore) {
-                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
+                        return (this.rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req);
 
@@ -177,7 +177,7 @@
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
                     if (useFileBasedStore) {
-                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
+                        return (this.rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req);
 
@@ -209,7 +209,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (useFileBasedStore) {
-                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
+                        return (this.rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, false, featureSwitchId);
 
@@ -240,7 +240,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (useFileBasedStore) {
-                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
+                        return (this.rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
 
                         let opts = this.getFeatureSwitchesRequestOpts(req, false, null, null, true);
@@ -272,7 +272,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (useFileBasedStore) {
-                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
+                        return (this.rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId);
 
@@ -305,7 +305,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (useFileBasedStore) {
-                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
+                        return (this.rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, overrideId);
 
@@ -338,7 +338,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (useFileBasedStore) {
-                        reject(rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
+                        return (this.rejectWithHttpStatus(httpStatusCodes.METHOD_NOT_ALLOWED));
                     } else {
                         let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, null, true);
 
