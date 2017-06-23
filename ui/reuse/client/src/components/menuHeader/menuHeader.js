@@ -67,8 +67,10 @@ export class MenuHeader extends Component {
         isVisible: true,
         icon: null,
         iconFont: AVAILABLE_ICON_FONTS.DEFAULT,
-        isToggleVisible: true,
-        isToggleDown: true
+        isToggleVisible: false,
+        isToggleDown: true,
+        isSmall: true,
+        isCollapsed: false
     };
 
     getMaxCharactersBeforeTooltip() {
