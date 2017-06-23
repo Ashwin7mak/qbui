@@ -1,26 +1,29 @@
+/**
+ * E2E tests for the topNav of the Reports page
+ * cperikal 5/22/2017
+ */
 (function() {
     'use strict';
 
-    //Load the page Objects
-    var newStackAuthPO = requirePO('newStackAuth');
-    var e2ePageBase = requirePO('e2ePageBase');
-    var reportContentPO = requirePO('reportContent');
-    var formsPO = requirePO('formsPage');
+    let newStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let formsPO = requirePO('formsPage');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
+    let reportContentPO = requirePO('reportContent');
 
-    describe('Add and Edit a record via Form in mobile view', function() {
-        var realmName;
-        var realmId;
-        var testApp;
+    describe('Forms - Add Record Tests: ', function() {
+        let realmName;
+        let realmId;
+        let testApp;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
+
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
-            // No need to call done() anymore
             return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
-                // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
@@ -35,43 +38,71 @@
             });
         });
 
-        /**
-         * Before each it block reload the list all report (can be used as a way to reset state between tests)
-         */
         beforeEach(function() {
-            // Load the List All report on Table 1
-            return reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            //Navigate to reports home page
+            return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
         });
 
-        it('Add a record from the form', function() {
-            var origRecordCount;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
-            console.log("browser contexts are: " + browser.contexts());
-            browser.context(['WEBVIEW']);
+        it('Add a record via form', function() {
+            let origRecordCount;
+            let fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields', 'allTimeFields'];
+            let fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
 
-            //Step 2 - Click on Add Record Button on the report Stage
-            reportContentPO.clickAddRecordBtnSB();
+            // Get the original records count in a report
+            reportContentPO.waitForReportContentSB();
+            origRecordCount = formsPO.getRecordsCountInATable();
 
-            //Step 3 - enter form values
+            // Click on Add Record Button
+            formsPO.clickAddRecordOnSBP();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
+            // Enter form values
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
+            fieldTypes2.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
 
-            //Step 4 - Click Save on the form
+            // Click Save on the form
             formsPO.clickFormSaveBtn();
-            //wait until report rows in table are loaded
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
+            // Click on 1st record
+            formsPO.clickFormCardOnSBP();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
+            // Verify record got added
+            let recordValues = formsPO.getFieldValues();
+            formsPO.verifyFieldValuesInReportTable(['junk', ...recordValues]);
+
+            // Click on return button
+            formsPO.returnButtonOnSBP.waitForVisible();
+            formsPO.returnButtonOnSBP.click();
+
+            // Verify the count got increased by 1
             reportContentPO.waitForReportContentSB();
-
-            //Step 5 - Verify new record got added on the top of the table and verify the expected field values
-            var recordValues = reportContentPO.getRecordValues(0);
-            formsPO.verifyFieldValuesInReportTable(recordValues);
-
-            // Step 6 - Reload the report after saving row as the row is added at the last page
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
-            // Step 7 - Verify the records count got increased by 1
-            expect(browser.element('.recordsCount').getText()).toBe('6 Records');
+            let newRecordCount = formsPO.getRecordsCountInATable();
+            expect(newRecordCount).toBe(origRecordCount + 1);
         });
 
+        it('Click on close button on form', function() {
+
+            // Get the original records count in a report
+            reportContentPO.waitForReportContentSB();
+            let origRecordCount = formsPO.getRecordsCountInATable();
+
+            // Click on Add Record Button
+            formsPO.clickAddRecordOnSBP();
+
+            // Click cancel on the form
+            formsPO.clickFormCloseBtn();
+
+            // Verify the new record count is same as original record count
+            reportContentPO.waitForReportContentSB();
+            let newRecordCount = formsPO.getRecordsCountInATable();
+            expect(newRecordCount).toBe(origRecordCount);
+        });
     });
 }());
+
