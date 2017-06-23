@@ -4,6 +4,7 @@ import {shallow} from 'enzyme';
 import {AppCreationDialog, __RewireAPI__ as AppCreationDialogRewireAPI} from '../../src/components/app/appCreationDialog';
 import {AppCreationPanel} from '../../src/components/app/appCreationPanel';
 import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
+import _ from 'lodash';
 
 let component;
 let instance;
@@ -15,14 +16,12 @@ let mockActions = {
 
 
 const AppHistoryMock = {
-    history: {goBack() {}, push(_location) {}},
+    history: {push(_location) {}},
 };
 
 let mockThen = {
-    then() {
-        return {
-            data: {id: 1}
-        };
+    then(_response) {
+        AppHistoryMock.history.push();
     }
 };
 
@@ -68,6 +67,7 @@ describe('AppCreationDialog', () => {
 
         expect(mockActions.createApp).toHaveBeenCalledWith({});
         expect(mockThen.then).toHaveBeenCalled();
+        expect(AppHistoryMock.history.push).toHaveBeenCalled();
         done();
     });
 
