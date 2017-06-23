@@ -144,7 +144,7 @@ export const Record = React.createClass({
 const mapStateToProps = (state) => {
     return {
         record: state.record,
-        appUsers: getAppUsers(state.app)
+        appUsers: getAppUsers(state)
     };
 };
 const mapDispatchToProps = (dispatch) => {
