@@ -30,6 +30,7 @@ export class AppCreationDialog extends React.Component {
         if (this.props.app) {
             this.props.createApp(this.props.app).then((response) => {
                 let appId = _.get(response, 'data.id', null);
+                debugger;
                 //reroutes to app home page link
                 AppHistory.history.push(UrlUtils.getAppHomePageLink(appId));
             }, (error) => {

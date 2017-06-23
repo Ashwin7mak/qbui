@@ -13,16 +13,34 @@ let mockActions = {
     createApp() {}
 };
 
+
+const AppHistoryMock = {
+    history: {goBack() {}, push(_location) {}},
+};
+
+let mockThen = {
+    then() {
+        return {
+            data: {id: 1}
+        };
+    }
+};
+
 describe('AppCreationDialog', () => {
     beforeEach(() => {
         AppCreationDialogRewireAPI.__Rewire__('AppCreationPanel', AppCreationPanel);
+        AppCreationDialogRewireAPI.__Rewire__('AppHistory', AppHistoryMock);
         spyOn(mockActions, 'hideAppCreationDialog');
-        spyOn(mockActions, 'createApp');
+        spyOn(mockActions, 'createApp').and.returnValue(mockThen);
+        spyOn(mockThen, 'then').and.callThrough();
+        spyOn(AppHistoryMock.history, 'push');
         jasmineEnzyme();
     });
 
     afterEach(() => {
         AppCreationDialogRewireAPI.__ResetDependency__('AppCreationPanel');
+        AppCreationDialogRewireAPI.__ResetDependency__('AppHistory');
+        mockActions.createApp.calls.reset();
     });
 
     it('renders an AppCreationDialog', () => {
@@ -41,7 +59,7 @@ describe('AppCreationDialog', () => {
         expect(mockActions.hideAppCreationDialog).toHaveBeenCalled();
     });
 
-    it('will invoke createApp action and hideAppCreationDialog when onFinished is called', () => {
+    it('will invoke createApp action when onFinished is called', (done) => {
         component = shallow(<AppCreationDialog createApp={mockActions.createApp}
                                                app={{}} />);
 
@@ -49,9 +67,11 @@ describe('AppCreationDialog', () => {
         instance.onFinished();
 
         expect(mockActions.createApp).toHaveBeenCalledWith({});
+        expect(mockThen.then).toHaveBeenCalled();
+        done();
     });
 
-    it('will NOT invoke createApp action or hideAppCreationDialog action when onFinished is called if there are no new apps', () => {
+    it('will NOT invoke createApp action when onFinished is called if there are no new apps', () => {
         component = shallow(<AppCreationDialog createApp={mockActions.createApp}
                                                app={null} />);
 
