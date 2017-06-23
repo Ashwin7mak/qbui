@@ -493,6 +493,7 @@ describe('RecordRoute', () => {
                                      reportData={reportData}
                                      router={router}
                                      {...props}
+                                     location={{pathname:"path"}}
                                      isDrawerContext={true}
                                      uniqueId={uniqueId}
                                      embeddedReports={embeddedReports}/>
