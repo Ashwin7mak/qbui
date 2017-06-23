@@ -29,7 +29,7 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import {loadApp, loadApps} from '../../actions/appActions';
 
-import {getApp, getApps, getIsAppLoading, getAreAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
+import {getSelectedApp, getApps, getIsAppLoading, getAreAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
@@ -43,6 +43,8 @@ import {updateFormRedirectRoute} from '../../actions/formActions';
 
 import Analytics from '../../../../reuse/client/src/components/analytics/analytics';
 import Config from '../../config/app.config';
+
+import {APPS_ROUTE} from '../../constants/urlConstants';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -426,7 +428,9 @@ export const Nav = React.createClass({
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
                 onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
-                onNavClick={this.toggleNav}/>
+                onNavClick={this.toggleNav}
+                onAppsRoute={this.props.match.url === APPS_ROUTE}
+            />
 
             <div className="main" >
                 <TopNav // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
@@ -531,7 +535,7 @@ const mapStateToProps = state => {
     const selectedAppId = getSelectedAppId(state);
 
     return {
-        selectedApp: getApp(state, selectedAppId),
+        selectedApp: getSelectedApp(state),
         getApps: () => getApps(state),
         selectedAppId,
         isAppLoading: getIsAppLoading(state),

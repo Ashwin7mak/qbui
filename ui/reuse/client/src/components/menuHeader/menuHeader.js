@@ -3,8 +3,14 @@ import Breakpoints from 'APP/utils/breakpoints';
 import Icon, {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
 import Tooltip from 'REUSE/components/tooltip/tooltip';
 import Button from 'react-bootstrap/lib/Button';
+import {Motion, spring} from 'react-motion';
 
 import './menuHeader.scss';
+
+// STYLE Variables
+const largeHeight = 90;
+const smallHeight = 40;
+const defaultStyle = {height: smallHeight};
 
 /**
  * A header that typically appears at the top of LeftNavs (see StandardLeftNav for an example)
@@ -87,17 +93,28 @@ export class MenuHeader extends Component {
         return titleElement;
     };
 
-    menuStyles = () => {
-        const {backgroundColor} = this.props;
+    getNonNumericStyles = () => {
+        const styles = {};
 
-        if (backgroundColor) {
-            return {
-                backgroundColor
-            };
+        if (this.props.backgroundColor) {
+            styles.backgroundColor = this.props.backgroundColor;
         }
 
-        return {};
+        return styles;
     };
+
+    animateStyles = () => {
+        let {isSmall, isCollapsed} = this.props;
+
+        let height = defaultStyle.height;
+
+        if (!isSmall && !isCollapsed) {
+            height = largeHeight;
+        }
+
+        return {height: spring(height)};
+    };
+
 
     render() {
         const {isVisible, isSmall, icon, iconFont, isToggleVisible, isToggleDown, isCollapsed} = this.props;
@@ -121,19 +138,22 @@ export class MenuHeader extends Component {
         }
 
         return (
-            <div className={classes.join(' ')} style={this.menuStyles()}>
-                <Button
-                    className="menuHeaderButton"
-                    onClick={this.props.onClickHeader}
-                >
-                    {icon && <Icon icon={icon} iconFont={iconFont} className="menuHeaderIcon" />}
+            <Motion defaultStyle={defaultStyle} style={this.animateStyles()}>
+                {animatedStyle => (
+                <div className={classes.join(' ')} style={{...animatedStyle, ...this.getNonNumericStyles()}}>
+                    <Button
+                        className="menuHeaderButton"
+                        onClick={this.props.onClickHeader}
+                    >
+                        {icon && <Icon icon={icon} iconFont={iconFont} className="menuHeaderIcon" />}
 
-                    {this.renderMenuHeaderTitle()}
+                        {this.renderMenuHeaderTitle()}
 
-                    {(isToggleVisible && !isCollapsed) &&
-                    <Icon icon="caret-up" className={`menuHeaderToggle ${isToggleDown ? 'menuToggleDown' : ''}`} />}
-                </Button>
-            </div>
+                        {(isToggleVisible && !isCollapsed) &&
+                        <Icon icon="caret-up" className={`menuHeaderToggle ${isToggleDown ? 'menuToggleDown' : ''}`} />}
+                    </Button>
+                </div>)}
+            </Motion>
         );
     }
 }

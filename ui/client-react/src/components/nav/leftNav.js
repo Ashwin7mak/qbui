@@ -10,6 +10,7 @@ import LogoImg from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
 import {APPS_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import MenuHeader from 'REUSE/components/menuHeader/menuHeader';
+import {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
 import _ from 'lodash';
 
 let LeftNav = React.createClass({
@@ -24,7 +25,9 @@ let LeftNav = React.createClass({
         onSelect: PropTypes.func,
         onSelectReports: PropTypes.func,
         onCreateNewTable: PropTypes.func,
-        globalActions: PropTypes.element
+        globalActions: PropTypes.element,
+        isAppLoading: PropTypes.bool,
+        onAppsRoute: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -38,18 +41,28 @@ let LeftNav = React.createClass({
      * create apps toggle section (if an app is selected)
      */
     createAppsToggleArea() {
-        const app = this.props.selectedApp;
+        const {selectedApp, isAppLoading, onToggleAppsList, appsListOpen, onAppsRoute, expanded} = this.props;
+
+        // If there isn't an app selected, we don't want to show any icon.
+        // However, if there is an app that doesn't have an icon, we want to provide a default.
+        const appIcon = selectedApp ? _.get(selectedApp, 'icon', '1') : null;
+
+        const hideHeader = isAppLoading || !selectedApp;
 
         return (
             <div className="appsToggleArea">
-                {app &&
                 <MenuHeader
-                    icon={_.get(app, 'icon', 'favicon')}
-                    title={_.get(app, 'name', '')} // navLabel
-                    backgroundColor={_.get(app, 'color', null)}
-                    onClickHeader={this.props.onToggleAppsList}
-                    isToggleDown={!this.props.appsListOpen}
-                />}
+                    icon={appIcon}
+                    iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                    title={_.get(selectedApp, 'name', '')} // navLabel
+                    backgroundColor={_.get(selectedApp, 'color', null)}
+                    onClickHeader={onToggleAppsList}
+                    isToggleDown={!appsListOpen}
+                    isSmall={onAppsRoute}
+                    isToggleVisible={!hideHeader}
+                    isVisible={!hideHeader}
+                    isCollapsed={!expanded}
+                />
             </div>
         );
     },

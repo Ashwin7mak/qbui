@@ -4,10 +4,8 @@
     flex: 0 0 auto; // Don't shrink this on a short window.
     background-color: $leftnav-app-background-color; // Default for the left nav
     @include correctFontWeightForLightTextOnDarkBackground;
-    min-height: 40px;
-    max-height: 105px;
 
-    transition: max-height 0.3s, background-color 0.3s;
+    transition: background-color 0.3s;
 
     .menuHeaderButton {
         opacity: 1;
@@ -26,7 +24,7 @@
         font-size: 20px;
         width: 100%;
 
-        transition: opacity 0.3s 0.2s;
+        transition: opacity 0.4s 0.2s;
 
         &:active {
             background-color: transparent;
@@ -40,10 +38,6 @@
     }
 
     &.menuHeaderCollapsed {
-        max-height: 40px;
-
-        transition: max-height 0.3s 0.1s;
-
         .menuHeaderButton {
             padding: 5px 10px;
         }
@@ -51,7 +45,7 @@
         .menuHeaderTitle {
             opacity: 0;
 
-            transition: opacity 0.1s;
+            transition: opacity 0.3s;
         }
 
         .menuHeaderIcon {
@@ -63,21 +57,16 @@
     }
 
     &.menuHeaderHidden {
-        max-height: 40px;
-
-        transition: max-height 0.3s 0.3s;
-
         .menuHeaderButton {
             opacity: 0;
-            transition: opacity 0.3s 0s; // Need a 0 here to override the 0.2s delay above
+            transition: opacity 0.4s 0s; // Need a 0 here to override the 0.2s delay above
         }
     }
 
     &.menuHeaderSmall {
-        max-height: 40px;
         display: flex;
 
-        transition: max-height 0.3s 0.1s;
+        transition: background-color 0.3s;
 
         .menuHeaderButton {
             display: flex;
@@ -113,7 +102,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
 
-        transition: opacity 0.1s 0.2s;
+        transition: opacity 0.3s 0.2s;
     }
 
     .menuHeaderToggle {
