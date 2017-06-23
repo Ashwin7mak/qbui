@@ -516,15 +516,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "The app is not available in Mercury right now. ",
-                inQuickBaseClassic: " in QuickBase Classic. ",
-                clickHere: "Open the app "
-            },
-            noApps: {
-                noApps: "There are no apps in Mercury. ",
-                addApps: " to add apps."
-            },
+            appNotFound: "That app does not exist. Select a different app.",
             errorLoadingReport: {
                 message: "That report is not available",
                 helpText: "For now, you can try selecting a different report.",
@@ -534,10 +526,6 @@ export default {
                 stopGraphic: "Stop playing",
                 showAdditionalInfo: "View details",
                 hideAdditionalInfo: "Hide details"
-            },
-            noTables: {
-                noTables: "There are no tables in the app. ",
-                createTablesInQuickBaseClassic: "Create tables in "
             },
             supportLink: {
                 text: "Contact our Care team"
@@ -789,7 +777,12 @@ export default {
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
             tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "The title field identifying each record",
+            recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
+            recordTitleFieldDefault: "Default to {recordName} + ID",
+            recordName: "Record Name"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
@@ -833,7 +826,15 @@ export default {
             userSuccessDialogOK: "No thanks",
             copied: "Link copied",
             messageSubject:"Link to the {appName} app",
-            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
+            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}",
+            addUser: "Add",
+            selectAUser:"Select a user",
+            selectUsers: "Select users",
+            assignRole: "Assign role",
+            searchPromptText: "Type to search",
+            name: "Name",
+            role: "Role",
+            userName: "User name"
         }
     }
 };

@@ -16,7 +16,7 @@ const ReportCell = React.createClass({
         onCellClickEditIcon: PropTypes.func,
         fieldDef: PropTypes.object,
         uniqueElementKey: PropTypes.string,
-        recordId: PropTypes.number,
+        recordId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         cellClass: PropTypes.string,
         isEditing: PropTypes.bool,
         isInvalid: PropTypes.bool,

@@ -7,8 +7,6 @@ import {connect} from "react-redux";
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
-import AppUtils from '../../utils/appUtils';
-
 export const AppsList = React.createClass({
 
     propTypes: {

@@ -191,7 +191,7 @@ describe('Nav Unit tests', () => {
 
     it('renders the loading screen while no apps are loaded', () => {
         let cloneProps = _.clone(props);
-        cloneProps.isAppsLoading = true;
+        cloneProps.areAppsLoading = true;
 
         let component = TestUtils.renderIntoDocument(<Nav {...cloneProps}/>);
         let domComponent = ReactDOM.findDOMNode(component);
@@ -332,7 +332,7 @@ describe('Nav Unit tests', () => {
         let component = TestUtils.renderIntoDocument(<Nav {...props}location={testLocation} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
         component.navigateToReportBuilder();
 
-        expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);
+        expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });
 
     describe('app and table creation ', () => {

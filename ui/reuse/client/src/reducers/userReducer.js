@@ -27,6 +27,8 @@ export const getLoggedInUser = state => state.user;
 
 export const getLoggedInUserId = state => (state.user ? state.user.id : undefined);
 
+export const getLoggedInUserEmail = state => (state.user ? state.user.email : undefined);
+
 export const getLoggedInUserAdminStatus = state => (state.user ? state.user.administrator : undefined);
 
 export const getLoggedInUserLoaded = state => (state.user && state.user.id ? true : false);

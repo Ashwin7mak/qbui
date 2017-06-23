@@ -14,7 +14,6 @@ import FieldUtils from '../../../src/utils/fieldUtils';
 
 const testRecordId = 3;
 const requiredProps = {
-    isDraggable: false,
     primaryKeyName: 'Record ID#',
     appUsers: [],
     onEditRecordStart() {},
