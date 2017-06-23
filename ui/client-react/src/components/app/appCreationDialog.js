@@ -10,6 +10,8 @@ import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
 import AppHistory from '../../globals/appHistory';
 import {NotificationManager} from 'react-notifications';
+//The Promise import is needed for unit testing purposes, it makes it easier to rewire
+import Promise from 'bluebird';
 
 import _ from 'lodash';
 
