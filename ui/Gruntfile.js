@@ -607,10 +607,7 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
-                    './wdio/tests/users/usersTable.e2e.spec.js',
-                    './wdio/tests/relationships/createRelationshipWithUniqueRequiredField.e2e.spec.js',
-                    './wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
-                    './wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
+                    './wdio/tests/users/usersTable.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -626,6 +623,9 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ],
                     relationships: [
+                        './wdio/tests/relationships/createRelationshipWithUniqueRequiredField.e2e.spec.js',
+                        './wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
+                        './wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
                         './wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js',
                         './wdio/tests/relationships/verifyCreateRelationshipDialog.e2e.spec.js'
                     ],
