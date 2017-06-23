@@ -109,4 +109,8 @@ describe('App Actions event functions', () => {
     it('create hideAppCreationDialog event', () => {
         expect(AppBuilderActions.hideAppCreationDialog()).toEqual({type: types.HIDE_APP_CREATION_DIALOG});
     });
+
+    it('create setAppProperty event', () => {
+        expect(AppBuilderActions.setAppProperty('mockProperty', 'mockValue')).toEqual({type: types.SET_APP_PROPERTY, property: 'mockProperty', value: 'mockValue'});
+    });
 });

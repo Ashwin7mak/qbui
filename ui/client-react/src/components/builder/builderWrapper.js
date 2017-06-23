@@ -99,9 +99,9 @@ export const BuilderWrapper = React.createClass({
 });
 
 const mapStateToProps = (state) => ({
-    getApp: (appId) => getApp(state.app, appId),
-    getApps: () => getApps(state.app),
-    selectedAppId: getSelectedAppId(state.app)
+    getApp: (appId) => getApp(state, appId),
+    getApps: () => getApps(state),
+    selectedAppId: getSelectedAppId(state)
 });
 
 const mapDispatchToProps = ({

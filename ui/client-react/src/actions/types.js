@@ -26,6 +26,7 @@ export const HIDE_APP_CREATION_DIALOG = 'HIDE_APP_CREATION_DIALOG';
 export const CREATE_APP = 'CREATE_APP';
 export const CREATE_APP_SUCCESS = 'CREATE_APP_SUCCESS';
 export const CREATE_APP_FAILED = 'CREATE_APP_FAILED';
+export const SET_APP_PROPERTY = 'SET_APP_PROPERTY';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
@@ -124,6 +125,10 @@ export const MOVE_COLUMN = 'MOVE_COLUMN';
 export const CHANGE_REPORT_NAME = 'CHANGE_REPORT_NAME';
 export const ENTER_BUILDER_MODE = 'ENTER_BUILDER_MODE';
 export const EXIT_BUILDER_MODE = 'EXIT_BUILDER_MODE';
+
+//  ******** qbGrid actions ********
+export const DRAGGING_COLUMN_START = 'DRAGGING_COLUMN_START';
+export const DRAGGING_COLUMN_END = 'DRAGGING_COLUMN_END';
 
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';

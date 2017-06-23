@@ -11,17 +11,23 @@
     let formBuilderPO = requirePO('formBuilder');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let topNavPO = requirePO('topNav');
+    let modalDialog = requirePO('/common/modalDialog');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     let expectedParentTableRecordValues;
-    let expectedChildRecordValues;
+    let expectedChildTableRecordValues;
     const PARENT_TABLE = 'Table 1';
-    let randomParentTableRecordId = rawValueGenerator.generateInt(1, 5);
-    let randomChildTableRecordId = rawValueGenerator.generateInt(1, 5);
+    let uniqueRequiredTextField = 'Text Field';
+    let randomParentTableRecordId = rawValueGenerator.generateInt(1, 4);
+    let randomChildTableRecordId = rawValueGenerator.generateInt(1, 4);
 
-    describe('Relationships - Create single relationship Tests :', function() {
+
+    describe('Relationships - Create relationship with unique and required field Tests :', function() {
         let realmName;
         let realmId;
         let testApp;
+
+
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -38,10 +44,10 @@
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
                 //Add records into table 1
-                return e2eBase.recordService.addRecordsToTable(testApp, 0, 10, false, false);
+                return e2eBase.recordService.addRecordsToTable(testApp, 0, 5, false, false);
             }).then(function() {
                 //Add records into table 2
-                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10, false, false);
+                return e2eBase.recordService.addRecordsToTable(testApp, 1, 5, false, false);
             }).then(function() {
                 //Create a form for each table
                 return e2eBase.formService.createDefaultForms(testApp);
@@ -51,9 +57,6 @@
             }).then(function() {
                 // Create a Table 2 report
                 return e2eBase.reportService.createCustomReport(testApp.id, testApp.tables[1].id, 'Table 2 Report', null, null, null, null);
-            }).then(function() {
-                // Generate and add the default set of Users to the app
-                return e2eBase.userService.addDefaultUserListToApp(testApp.id);
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
@@ -68,7 +71,7 @@
         beforeAll(function() {
             //Load the child table 'table 2' report
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
-            expectedChildRecordValues = reportContentPO.getRecordValues(randomChildTableRecordId - 1, 1);
+            expectedChildTableRecordValues = reportContentPO.getRecordValues(randomChildTableRecordId - 1, 1);
 
             //Load the random record of the parent table ie 'Table 1' and get the values of the record for verification of relation at the end
             reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, randomParentTableRecordId);
@@ -86,22 +89,44 @@
         //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
 
-            it('App has just 2 tables - Create relationship between 2 tables(none of the table has title field)- recordId selected as default in create relationship dialog', function() {
-                //create relationship between parent and child table
-                //NOTE: I am not selecting any field here because 'Record ID' should be selected as default
-                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, '', randomParentTableRecordId, expectedParentTableRecordValues, expectedChildRecordValues);
-            });
-
-            it('Verify when relationship exists between 2 tables in an app unable to create one', function() {
+            it('Verify numeric and numeric currency field not displayed in field list as it is just an required field and not an unique field', function() {
                 //Select settings -> modify this form
                 topNavPO.clickOnModifyFormLink();
 
-                //Verify that the create relationship button is not visible.
-                let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(false);
+                //Click on add a new record button
+                formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
 
-                //Click on forms Cancel button
-                formsPO.clickFormCancelBtn();
+                //Select table from table list of add a record dialog
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, PARENT_TABLE);
+
+                //Click on advanced settings of add a record dialog
+                modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                //Click on fields select drop down
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
+
+                //Verify Numeric and currency fields are not part of fields list since they are just set as either only unique or only required
+                let fieldDropDownList = modalDialog.allDropDownListOptions;
+                expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[2])).toBe(false);
+                expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[3])).toBe(false);
+
+                //Collapse the drop down
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
+
+                //Cancel the create relationship dialog
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+                modalDialog.waitUntilModalDialogSlideAway();
+
+                //Cancel form builder
+                formBuilderPO.cancel();
+            });
+
+            it('Create relationship between 2 tables with TextField as it is set to unique and required field', function() {
+
+                //create relationship between parent and child table
+                //NOTE: Select Text Field as this is set to unique and required field
+                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, uniqueRequiredTextField, expectedParentTableRecordValues[0], expectedParentTableRecordValues, expectedChildTableRecordValues);
+
             });
         }
 
