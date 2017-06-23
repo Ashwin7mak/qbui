@@ -31,7 +31,10 @@ export class ReportFieldSelectMenu extends Component {
         let reportData = this.props.reportData;
         let columns = reportData.data ? reportData.data.columns : [];
         let visibleColumns = columns.filter(column => {
-            return !column.isHidden;
+            if (!(column.headerName === this.props.fieldBeingDragged)) {
+                return !column.isHidden;
+            }
+            return false;
         });
         let availableColumns = this.props.menu.availableColumns;
         return ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns);
@@ -140,6 +143,7 @@ ReportFieldSelectMenu.propTypes = {
 const mapStateToProps = (state) => {
     return {
         menu: state.reportBuilder,
+        fieldBeingDragged: state.reportBuilder.fieldBeingDragged,
         isCollapsed: state.builderNav.isNavCollapsed
     };
 };

@@ -7,10 +7,23 @@ const reportBuilder = (
         isPendingEdit: false,
         isInBuilderMode: false,
         availableColumns: [],
-        addBeforeColumn: false
+        addBeforeColumn: false,
+        fieldBeingDragged: ''
     }, action) => {
 
     switch (action.type) {
+    case types.DRAGGING_COLUMN_START: {
+        return {
+            ...state,
+            fieldBeingDragged: action.content.sourceLabel
+        };
+    }
+    case types.DRAGGING_COLUMN_END: {
+        return {
+            ...state,
+            fieldBeingDragged: ''
+        };
+    }
     case types.UPDATE_REPORT_REDIRECT_ROUTE: {
         return {
             ...state,
