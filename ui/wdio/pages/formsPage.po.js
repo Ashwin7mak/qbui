@@ -520,18 +520,20 @@
                 //numeric rating field
                 //TODO this needs to be fixed as UI accepts more than 1 decimal places and core takes just 1 decimal place.
                 //expect(expectedRecordValues[5]).toBe(sNumeric.toString());
-                //date field
-                expect(expectedRecordValues[6]).toBe(sDate.toString());
-                //date time field
-                expect(expectedRecordValues[7]).toBe(sDate.toString() + ' ' + sTime.toString());
-                //TODO time of day field not working on firefox verify. i do see it gets selected via automation. do manual testing to verify this
-                if (browserName !== 'firefox') {
-                    expect(expectedRecordValues[8]).toBe(sTime.toString());
+                if (platformName !== 'iOS') {
+                    //date field
+                    expect(expectedRecordValues[6]).toBe(sDate.toString());
+                    //date time field
+                    expect(expectedRecordValues[7]).toBe(sDate.toString() + ' ' + sTime.toString());
                 }
+                //TODO time of day field not working on firefox verify. i do see it gets selected via automation. do manual testing to verify this
+                // if (platformName !== 'iOS' || browserName !== 'firefox') {
+                //     expect(expectedRecordValues[8]).toBe(sTime.toString());
+                // }
                 //numeric duration field
-                expect(expectedRecordValues[9]).toBe('4.76142857142857  weeks');
+                expect(expectedRecordValues[9]).toBe('4.76142857142857 weeks');
                 //checkbox field
-                expect(expectedRecordValues[10]).toBe('true');
+                expect(expectedRecordValues[10]).toBe(true);
                 //email field
                 expect(expectedRecordValues[11]).toBe('(508) 481-1015');
                 //phone field
@@ -579,14 +581,20 @@
             expect(expectedFieldsNotPresentOnForm.indexOf(fieldsOnForm)).toBe(-1);
         }},
 
-        formCardInformSBP:{
+        formCardOnSBP:{
             get: function() {
                 browser.element('.cardViewList.cardViewListHolder .collapse .card').waitForVisible();
                 return browser.element('.cardViewList.cardViewListHolder .collapse .card');
             }
         },
         // Edit record button on Small break point
-        editRecordOnSBP : {get: function() {return browser.element('.recordContainer .recordActionsContainer .iconActionButton.btn.btn-default');}},
+        editRecordOnSBP : {get: function() {return browser.element('.recordActionsContainer .iconActions .tipChildWrapper .iconUISturdy-edit');}},
+
+        // Return button on Small break point
+        returnButtonOnSBP : {get: function() {return browser.element('.recordActionsContainer .iconActions .tipChildWrapper .iconUISturdy-return');}},
+
+        // Date field on Small Break Point
+        dateFieldOnSBP : {get: function() {return browser.element('.formContainer .qbPanelBody .cellWrapper .fieldValueEditor .dateCell');}},
 
         /**
          * Method to click on edit record pencil button on small break point.
@@ -595,6 +603,28 @@
             //Click on form edit button
             this.editRecordOnSBP.waitForVisible();
             return this.editRecordOnSBP.click();
+        }},
+        /**
+         * Method to click on form card on small break point.
+         */
+        clickFormCardOnSBP : {value: function() {
+            //Click on form edit button
+            this.formCardOnSBP.waitForVisible();
+            return this.formCardOnSBP.click();
+        }},
+
+        /**
+         * Method to get the values of the fields of form on small break point.
+         */
+        getFieldValues: {value: function() {
+            // Gets the list of field values from the form
+            let fields = browser.elements('.cellWrapper');
+            return fields.value.map(function(field) {
+                return field.element('div').getAttribute('class').split(' ').indexOf('checkbox') !== -1 ?
+                field.element('./..//span[contains(@class,"symbol")]').getAttribute('class').split(' ').indexOf('checked') !== -1 :
+                    field.getText();
+
+            });
         }}
     });
 
