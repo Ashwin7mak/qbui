@@ -79,7 +79,6 @@
             * Adds a new user by Username, assigns role and verifies the user was added.
             */
             it('Add new user by "User Name" to application with default role "Participant" ', function() {
-
                 // Add User with Role to app
                 UsersTablePage.addUserToApp(UserName);
             });
@@ -88,34 +87,30 @@
              * Adds a new user by Username, assigns role and verifies the user was added.
              */
             it('Add new user by "First Name" to application with role "Viewer" ', function() {
-
                 // Add User with Role to app
-                UsersTablePage.addUserAndRoleToApp(FirstName, "Viewer");
+                UsersTablePage.addUserWithRoleToApp(FirstName, "Viewer");
             });
 
             /**
              * Adds a new user by Username, assigns role and verifies the user was added.
              */
             it('Add new user by "Email" to application with role "Administrator" ', function() {
-
                 // Add User with Role to app
-                UsersTablePage.addUserAndRoleToApp(Email, "Administrator");
+                UsersTablePage.addUserWithRoleToApp(Email, "Administrator");
             });
 
             /**
              * Adds a new user by Username, assigns role and verifies the user was added.
              */
             it('Add new user by "Last Name" to application with role "none" ', function() {
-
                 // Add User with Role to app
-                UsersTablePage.addUserAndRoleToApp(LastName, "None");
+                UsersTablePage.addUserWithRoleToApp(LastName, "None");
             });
 
             /**
              * Attempts to add a invalid user and cancels
              */
             it('Add new user by invalid user to application and cancel', function() {
-
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);

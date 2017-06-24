@@ -109,14 +109,14 @@
             expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
             // Click Email to Share with User
             expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
-            expect(modalDialog.modalDialogTitle).toContain("Your app has");
+            expect(modalDialog.modalDialogTitle).toContain('Your app has');
             // Click to close the Share with User modal
             modalDialog.modalDialogCloseBtn.click();
         }},
         /**
          * Helper function to add user and role to app
          */
-        addUserAndRoleToApp: {value: function(user, role) {
+        addUserWithRoleToApp: {value: function(user, role) {
 
             // Click on add a new user button
             UsersTablePage.newUserBtn.click();
@@ -135,7 +135,7 @@
             expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
             // Click Email to Share with User
             expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
-            expect(modalDialog.modalDialogTitle).toContain("Your app has");
+            expect(modalDialog.modalDialogTitle).toContain('Your app has');
             // Click No Thanks to Share with User
             modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
         }},
