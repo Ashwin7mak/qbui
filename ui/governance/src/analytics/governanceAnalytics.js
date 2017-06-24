@@ -9,6 +9,11 @@ import _ from "lodash";
 export class GovernanceAnalytics extends Component {
 
     render() {
+        /*
+        Any of these prop_key_vals will be sent to Evergage whenever they change.
+        The given key is the name that will be used as the property for the event in
+        Evergage, and the value will be the value set to that property.
+         */
         let prop_key_vals = {
             "accountId": this.props.accountId,
             "has_account_admin": this.props.isAccountAdmin,
