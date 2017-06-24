@@ -88,7 +88,7 @@
              */
             it('Add new user by "First Name" to application with role "Viewer" ', function() {
                 // Add User with Role to app
-                UsersTablePage.addUserWithRoleToApp(FirstName, "Viewer");
+                UsersTablePage.addUserWithRoleToApp(FirstName, "Viewer", false);
             });
 
             /**
@@ -96,7 +96,7 @@
              */
             it('Add new user by "Email" to application with role "Administrator" ', function() {
                 // Add User with Role to app
-                UsersTablePage.addUserWithRoleToApp(Email, "Administrator");
+                UsersTablePage.addUserWithRoleToApp(Email, "Administrator", false);
             });
 
             /**
@@ -104,20 +104,25 @@
              */
             it('Add new user by "Last Name" to application with role "none" ', function() {
                 // Add User with Role to app
-                UsersTablePage.addUserWithRoleToApp(LastName, "None");
+                UsersTablePage.addUserWithRoleToApp(LastName, "None", false);
             });
 
             /**
              * Attempts to add a invalid user and cancels
              */
             it('Add new user by invalid user to application and cancel', function() {
+                UsersTablePage.addUserWithRoleToApp(Crap, "None", true);
+            });
+
+            /**
+             * Validates app name and add user button disabled
+             */
+            it('Should verify app name and add user button disabled', function() {
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
                 var appName = testApp.name;
                 expect(modalDialog.modalDialogTitle).toContain(appName);
-                // Search for known user
-                modalDialog.selectUser(Crap);
                 // Verify Add new user button disabled
                 expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
                 // Click Cancel
