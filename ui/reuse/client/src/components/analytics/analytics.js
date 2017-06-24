@@ -26,7 +26,7 @@ export class Analytics extends Component {
         super(props);
 
         // Evergage requires a global variable called _aaq
-        this._aaq = window._aaq || (window._aaq = []);
+        window._aaq = window._aaq || (window._aaq = []);
 
         // logger is set here so that unit test rewire will work
         this.logger = new Logger();
@@ -37,12 +37,11 @@ export class Analytics extends Component {
             this.updateAppManagerStatus,
             this.updateEvergageAccountId,
             this.updateEverageAppId,
-            ...props.additionalUpdateFunctions
         ];
     }
 
     static defaultProps = {
-        additionalUpdateFunctions: []
+        evergageUpdateProps: {}
     };
 
     /**
@@ -78,12 +77,12 @@ export class Analytics extends Component {
      */
     updateEvergageUser = () => {
         if (this.props.userId) {
-            this._aaq.push(['setUser', this.props.userId]);
-            this._aaq.push(['gReqUID', this.props.userId]);
+            window._aaq.push(['setUser', this.props.userId]);
+            window._aaq.push(['gReqUID', this.props.userId]);
         }
 
         if (this.props.userEmail) {
-            this._aaq.push(['gReqUserEmail', this.props.userEmail]);
+            window._aaq.push(['gReqUserEmail', this.props.userEmail]);
         }
     };
 
@@ -92,7 +91,7 @@ export class Analytics extends Component {
      */
     updateEvergageAdminStatus = () => {
         if (_.has(this.props, 'isAdmin')) {
-            this._aaq.push(['setCustomField', 'has_app_admin', this.props.isAdmin, 'request']);
+            window._aaq.push(['setCustomField', 'has_app_admin', this.props.isAdmin, 'request']);
         }
     };
 
@@ -102,7 +101,7 @@ export class Analytics extends Component {
     updateAppManagerStatus = () => {
         if (this.props.userId && _.has(this.props, 'app.ownerId')) {
             const isAppManager = (this.props.userId === this.props.app.ownerId);
-            this._aaq.push(['setCustomField', 'is_app_mgr', isAppManager, 'request']);
+            window._aaq.push(['setCustomField', 'is_app_mgr', isAppManager, 'request']);
         }
     };
 
@@ -111,7 +110,7 @@ export class Analytics extends Component {
      */
     updateEvergageAccountId = () => {
         if (_.has(this.props, 'app.accountId')) {
-            this._aaq.push(['setCompany', this.props.app.accountId]);
+            window._aaq.push(['setCompany', this.props.app.accountId]);
         }
     };
 
@@ -120,9 +119,41 @@ export class Analytics extends Component {
      */
     updateEverageAppId = () => {
         if (_.has(this.props, 'app.id')) {
-            this._aaq.push(['setCustomField', 'appid', this.props.app.id, 'request']);
+            window._aaq.push(['setCustomField', 'appid', this.props.app.id, 'request']);
         }
     };
+
+    /**
+     * Checks for diffs in the current props 'evergageUpdateProps' for changes in
+     * the new props before update, adding any updated props to the _aaq object
+     * @param nextProps - the props (key, value) pairs of props for Evergage
+     * @return String - lists the updated Evergage properties, empty string if no updates
+     */
+    getEvergageUpdates = (nextProps) => {
+        let updates = "";
+
+        _.forOwn(nextProps, (newValue, evergagePropName) => {
+            let oldPropVal = this.props['evergageUpdateProps'][evergagePropName];
+
+            if (oldPropVal !== newValue) {
+                window._aaq.push(['setCustomField', evergagePropName, newValue, 'request']);
+                updates += ' -- ' + evergagePropName;
+            }
+        });
+        return updates;
+    };
+
+    /**
+     * If updates received on the evergageProps, create a 'trackAction' to reflect the
+     * updated properties and to trigger an event in Evergage
+     * @param nextProps - the new props in the updated Analytics component
+     */
+    componentWillReceiveProps(nextProps) {
+        let updates = this.getEvergageUpdates(nextProps['evergageUpdateProps']);
+        if (updates.length) {
+            window._aaq.push(['trackAction','updated: ' + updates]);
+        }
+    }
 
     /**
      * Tracks the current user and places the Evergage script on the page.
@@ -209,10 +240,10 @@ Analytics.propTypes = {
     }),
 
     /**
-     *  The additional props that needs to be passed to EverGage.
-     *  Typically, this is an array.
+     *  The additional props that needs to be passed to Evergage.
+     *  An object containing key value pairs (evergageUpdateName, value)
      */
-    additionalUpdateFunctions: PropTypes.array
+    evergageUpdateProps: PropTypes.objectOf(PropTypes.any)
 };
 
 const mapStateToProps = state => {

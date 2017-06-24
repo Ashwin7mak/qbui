@@ -7,139 +7,26 @@ import {getPageLoadTime, getGridLoadTime} from "../analytics/performanceTimingRe
 import _ from "lodash";
 
 export class GovernanceAnalytics extends Component {
-    // Evergage requires a global variable called _aaq
-    _aaq = window._aaq || (window._aaq = []);
-
-    /**
-     * Updates Evergage about the account ID of the user
-     */
-    updateEvergageAccountID = () => {
-        if (_.has(this.props, 'accountId')) {
-            this._aaq.push(['setCustomField', 'accountId', this.props.accountId, 'request']);
-        }
-    };
-
-    /**
-     * Updates Evergage about whether the user is an Account admin
-     */
-    updateEvergageAccountAdminStatus = () => {
-        if (this.props.currentUserId && _.has(this.props, 'isAccountAdmin')) {
-            this._aaq.push(['setCustomField', 'has_account_admin', this.props.isAccountAdmin, 'request']);
-        }
-    };
-
-    /**
-     * Updates Evergage about whether the user is a realm admin
-     */
-    updateEvergageRealmAdminStatus = () => {
-        if (this.props.currentUserId && _.has(this.props, 'isRealmAdmin')) {
-            this._aaq.push(['setCustomField', 'is_realm_admin', this.props.isRealmAdmin, 'request']);
-        }
-    };
-
-    /**
-     * Updates Evergage about whether the user is a CSR
-     */
-    updateEvergageCSRStatus = () => {
-        if (this.props.currentUserId && _.has(this.props, 'isCSR')) {
-            this._aaq.push(['setCustomField', 'is_CSR', this.props.isCSR, 'request']);
-        }
-    };
-
-    /**
-     * Updates the subdomain name tracked by Evergage
-     */
-    updateEvergageSubdomainName = () => {
-        if (_.has(this.props, 'subdomainName')) {
-            this._aaq.push(['setCustomField', 'subdomainName', this.props.subdomainName, 'request']);
-        }
-    };
-
-    /**
-     * Updates the totalUsers tracked by Evergage
-     */
-    updateEvergageTotalUsers = () => {
-        if (_.has(this.props, 'totalUsers')) {
-            this._aaq.push(['setCustomField', 'totalUsers', this.props.totalUsers, 'request']);
-        }
-    };
-
-    /**
-     * Updates the paidUsers tracked by Evergage
-     */
-    updateEvergagePaidUsers = () => {
-        if (_.has(this.props, 'paidUsers')) {
-            this._aaq.push(['setCustomField', 'paidUsers', this.props.paidUsers, 'request']);
-        }
-    };
-
-    /**
-     * Updates the deniedUsers tracked by Evergage
-     */
-    updateEvergageDeniedUsers = () => {
-        if (_.has(this.props, 'deniedUsers')) {
-            this._aaq.push(['setCustomField', 'deniedUsers', this.props.deniedUsers, 'request']);
-        }
-    };
-
-    /**
-     * Updates the totalRealmUsers tracked by Evergage
-     */
-    updateEvergageTotalRealmUsers = () => {
-        if (_.has(this.props, 'totalRealmUsers')) {
-            this._aaq.push(['setCustomField', 'totalRealmUsers', this.props.totalRealmUsers, 'request']);
-        }
-    };
-
-    /**
-     * Gets the total time taken from page load to fetching grid data
-     */
-    updateEvergagePageLoadTime = () => {
-        if (_.has(this.props, 'pageLoadTime')) {
-            this._aaq.push(['setCustomField', 'pageLoadTime', this.props.pageLoadTime, 'request']);
-        }
-    };
-
-    /**
-     * Gets the total time taken from grid load to fetching grid data
-     */
-    updateEvergageTotalGridTimeTaken = () => {
-        if (_.has(this.props, 'gridLoadTime')) {
-            this._aaq.push(['setCustomField', 'totalGridLoadTime', this.props.gridLoadTime, 'request']);
-        }
-    };
-
-    governanceUpdateFunctions = [
-        this.updateEvergageAccountID,
-        this.updateEvergageAccountAdminStatus,
-        this.updateEvergageRealmAdminStatus,
-        this.updateEvergageCSRStatus,
-        this.updateEvergageSubdomainName,
-        this.updateEvergageTotalUsers,
-        this.updateEvergagePaidUsers,
-        this.updateEvergageDeniedUsers,
-        this.updateEvergageTotalRealmUsers,
-        this.updateEvergagePageLoadTime,
-        this.updateEvergageTotalGridTimeTaken
-    ];
 
     render() {
+        let prop_key_vals = {
+            "accountId": this.props.accountId,
+            "has_account_admin": this.props.isAccountAdmin,
+            "is_realm_admin": this.props.isRealmAdmin,
+            "is_CSR": this.props.isCSR,
+            "subdomainName": this.props.subdomainName,
+            "totalUsers": this.props.totalUsers,
+            "paidUsers": this.props.paidUsers,
+            "deniedUsers": this.props.deniedUsers,
+            "totalRealmUsers": this.props.totalRealmUsers,
+            "pageLoadTime": this.props.pageLoadTime,
+            "usersGridLoadTime": this.props.gridLoadTime
+        };
+
         return (
             <Analytics dataset={Config.evergageDataset}
                        userId={this.props.currentUserId}
-                       accountId={this.props.accountId}
-                       subdomainName={this.props.subdomainName}
-                       isAccountAdmin={this.props.isAccountAdmin}
-                       isRealmAdmin={this.props.isRealmAdmin}
-                       isCSR={this.props.isCSR}
-                       totalUsers={this.props.totalUsers}
-                       paidUsers={this.props.paidUsers}
-                       deniedUsers={this.props.deniedUsers}
-                       deactivatedUsers={this.props.deactivatedUsers}
-                       totalRealmUsers={this.props.totalRealmUsers}
-                       pageLoadTime={this.props.pageLoadTime}
-                       gridLoadTime={this.props.gridLoadTime}
-                       additionalUpdateFunctions={this.governanceUpdateFunctions} />
+                       evergageUpdateProps={prop_key_vals} />
         );
     }
 }
@@ -216,7 +103,6 @@ GovernanceAnalytics.propTypes = {
      * The total time for the grid to load
      */
     gridLoadTime: PropTypes.number
-
 };
 
 const mapStateToProps = (state) => {
