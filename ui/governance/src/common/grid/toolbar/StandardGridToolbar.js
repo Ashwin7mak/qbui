@@ -165,7 +165,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         onSearchChange: (searchEvent) => {
             dispatch(StandardGridActions.setSearch(ownProps.id, searchEvent.target.value));
-            dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
+            dispatch(StandardGridActions.doUpdateDebounced(ownProps.id, ownProps.doUpdate));
         },
 
         clearSearchTerm: () => {
