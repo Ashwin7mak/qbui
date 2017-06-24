@@ -133,7 +133,7 @@ export class Analytics extends Component {
         let updates = "";
 
         _.forOwn(nextProps, (newValue, evergagePropName) => {
-            let oldPropVal = this.props['evergageUpdateProps'][evergagePropName];
+            let oldPropVal = _.get(this.props.evergageUpdateProps, evergagePropName);
 
             if (oldPropVal !== newValue) {
                 window._aaq.push(['setCustomField', evergagePropName, newValue, 'request']);
@@ -149,9 +149,9 @@ export class Analytics extends Component {
      * @param nextProps - the new props in the updated Analytics component
      */
     componentWillReceiveProps(nextProps) {
-        let updates = this.getEvergageUpdates(nextProps['evergageUpdateProps']);
+        let updates = this.getEvergageUpdates(nextProps.evergageUpdateProps);
         if (updates.length) {
-            window._aaq.push(['trackAction','updated: ' + updates]);
+            window._aaq.push(['trackAction', 'updated: ' + updates]);
         }
     }
 

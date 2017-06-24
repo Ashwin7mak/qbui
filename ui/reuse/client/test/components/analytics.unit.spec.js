@@ -180,7 +180,7 @@ describe('Analytics', () => {
             component.setProps({evergageUpdateProps: {'test_name': test_value}});
             expect(instance.getEvergageUpdates).toHaveBeenCalled();
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', test_value, 'request']);
-            expect(window._aaq.push).toHaveBeenCalledWith(['trackAction','updated:  -- test_name']);
+            expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name']);
         });
 
         it('updates when there are multiple key value pairs in the evergageUpdateProps prop', () => {
@@ -196,7 +196,7 @@ describe('Analytics', () => {
             expect(instance.getEvergageUpdates).toHaveBeenCalled();
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', test_value, 'request']);
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name2', test_value2, 'request']);
-            expect(window._aaq.push).toHaveBeenCalledWith(['trackAction','updated:  -- test_name -- test_name2']);
+            expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name -- test_name2']);
         });
     });
 
