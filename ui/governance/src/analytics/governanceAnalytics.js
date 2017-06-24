@@ -18,6 +18,7 @@ export class GovernanceAnalytics extends Component {
             "totalUsers": this.props.totalUsers,
             "paidUsers": this.props.paidUsers,
             "deniedUsers": this.props.deniedUsers,
+            "deactivatedUsers": this.props.deactivatedUsers,
             "totalRealmUsers": this.props.totalRealmUsers,
             "pageLoadTime": this.props.pageLoadTime,
             "usersGridLoadTime": this.props.gridLoadTime
