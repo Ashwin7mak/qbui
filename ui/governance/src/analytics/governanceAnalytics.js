@@ -21,7 +21,7 @@ export class GovernanceAnalytics extends Component {
             "deactivatedUsers": this.props.deactivatedUsers,
             "totalRealmUsers": this.props.totalRealmUsers,
             "pageLoadTime": this.props.pageLoadTime,
-            "usersGridLoadTime": this.props.gridLoadTime
+            "usersGridLoadTime": this.props.usersGridLoadTime
         };
 
         return (
@@ -96,14 +96,14 @@ GovernanceAnalytics.propTypes = {
     totalRealmUsers: PropTypes.number,
 
     /**
-     * The total time taken for the page to load until the grid is fully loaded
+     * The time at which the page finishes rendering/re-rendering from the time the user hit the page
      */
     pageLoadTime: PropTypes.number,
 
     /**
-     * The total time for the grid to load
+     * The time at which the users grid finished rendering/re-rendering with data (including after searches)
      */
-    gridLoadTime: PropTypes.number
+    usersGridLoadTime: PropTypes.number
 };
 
 const mapStateToProps = (state) => {
@@ -122,7 +122,7 @@ const mapStateToProps = (state) => {
         deactivatedUsers: getTotalDeactivatedUsers(state),
         totalRealmUsers: getTotalRealmUsers(state),
         pageLoadTime: getPageLoadTime(state),
-        gridLoadTime: getGridLoadTime(state)
+        usersGridLoadTime: getGridLoadTime(state)
     };
 };
 
