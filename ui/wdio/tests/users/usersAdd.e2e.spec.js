@@ -18,11 +18,11 @@
         let user2 = e2eConsts.user2;
         let user3 = e2eConsts.user3;
         let user4 = e2eConsts.user4;
-        let searchUserName = "spiderman";
-        let searchFirstName = "Steve";
-        let searchEmail = "super";
-        let searchLastName = "King Sr.";
-        let searchCrap = "asdfasdf";
+        let UserName = "spiderman";
+        let FirstName = "Steve";
+        let Email = "super";
+        let LastName = "King Sr.";
+        let Crap = "asdfasdf";
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -73,29 +73,15 @@
             return e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
         });
 
-        /**
-         * Adds a new user by Username, assigns role and verifies the user was added.
-         */
         // it is a known issue that browser.keys does not work for E2E on safari and FF so they will not run these tests
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+            /**
+            * Adds a new user by Username, assigns role and verifies the user was added.
+            */
             it('Add new user by "User Name" to application with default role "Participant" ', function() {
 
-                // Click on add a new user button
-                UsersTablePage.newUserBtn.click();
-                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-                var appName = testApp.name;
-                expect(modalDialog.modalDialogTitle).toContain(appName);
-                // Search for known user
-                modalDialog.selectUser(searchUserName);
-                // Select user
-                modalDialog.modalDialogUserAddSearchMenu.click();
-                // Need some time for Add user button switch from disabled to active
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Add user
-                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Click No Thanks to Share with User
-                modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
+                // Add User with Role to app
+                UsersTablePage.addUserToApp(UserName);
             });
 
             /**
@@ -103,21 +89,8 @@
              */
             it('Add new user by "First Name" to application with role "Viewer" ', function() {
 
-                // Click on add a new user button
-                UsersTablePage.newUserBtn.click();
-                // Search for known user
-                modalDialog.selectUser(searchFirstName);
-                // Select user
-                modalDialog.modalDialogUserAddSearchMenu.click();
-                // Select "Viewer" role
-                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Viewer");
-                // Need some time for Add user button switch from disabled to active
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Click add user
-                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Click to close the Share with User modal
-                modalDialog.modalDialogCloseBtn.click();
+                // Add User with Role to app
+                UsersTablePage.addUserAndRoleToApp(FirstName, "Viewer");
             });
 
             /**
@@ -125,23 +98,8 @@
              */
             it('Add new user by "Email" to application with role "Administrator" ', function() {
 
-                // Click on add a new user button
-                UsersTablePage.newUserBtn.click();
-                // Search for known user
-                modalDialog.selectUser(searchEmail);
-                // Select user
-                modalDialog.modalDialogUserAddSearchMenu.click();
-                // Select "Administrator" role
-                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "Administrator");
-                // Need some time for Add user button switch from disabled to active
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Click add user
-                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Click Copy link to Share with User
-                expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
-                // Click to close the Share with User modal
-                modalDialog.modalDialogCloseBtn.click();
+                // Add User with Role to app
+                UsersTablePage.addUserAndRoleToApp(Email, "Administrator");
             });
 
             /**
@@ -149,23 +107,8 @@
              */
             it('Add new user by "Last Name" to application with role "none" ', function() {
 
-                // Click on add a new user button
-                UsersTablePage.newUserBtn.click();
-                // Search for known user
-                modalDialog.selectUser(searchLastName);
-                // Select user
-                modalDialog.modalDialogUserAddSearchMenu.click();
-                // Select "None" role
-                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, "None");
-                // Need some time for Add user button switch from disabled to active
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Click add user
-                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // Click Email to Share with User
-                expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
-                // Click to close the Share with User modal
-                modalDialog.modalDialogCloseBtn.click();
+                // Add User with Role to app
+                UsersTablePage.addUserAndRoleToApp(LastName, "None");
             });
 
             /**
@@ -175,8 +118,11 @@
 
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
+                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                var appName = testApp.name;
+                expect(modalDialog.modalDialogTitle).toContain(appName);
                 // Search for known user
-                modalDialog.selectUser(searchCrap);
+                modalDialog.selectUser(Crap);
                 // Verify Add new user button disabled
                 expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
                 // Click Cancel

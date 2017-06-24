@@ -88,6 +88,58 @@
             for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
             return colHeaders;
         }},
+
+        /**
+         * Helper function to add user and role to app
+         */
+        addUserToApp: {value: function(user) {
+
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for known user
+            modalDialog.selectUser(user);
+            // Select user
+            modalDialog.modalDialogUserAddSearchMenu.click();
+            // Need some time for Add user button switch from disabled to active
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            // Click add user
+            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            // Click Copy link to Share with User
+            expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
+            // Click Email to Share with User
+            expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
+            expect(modalDialog.modalDialogTitle).toContain("Your app has");
+            // Click to close the Share with User modal
+            modalDialog.modalDialogCloseBtn.click();
+        }},
+        /**
+         * Helper function to add user and role to app
+         */
+        addUserAndRoleToApp: {value: function(user, role) {
+
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for user
+            modalDialog.selectUser(user);
+            // Select user
+            modalDialog.modalDialogUserAddSearchMenu.click();
+            // Select role
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, role);
+            // Need some time for Add user button switch from disabled to active
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            // Click add user
+            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            // Click Copy link to Share with User
+            expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
+            // Click Email to Share with User
+            expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
+            expect(modalDialog.modalDialogTitle).toContain("Your app has");
+            // Click No Thanks to Share with User
+            modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
+        }},
+
     });
     module.exports = UsersTablePage;
 }());
