@@ -431,7 +431,19 @@
                 } else if (fieldType === 'allNumericFields') {
                     this.setFormInputValue(this.getAllNumericInputFields(), sNumeric);
                 } else if (fieldType === 'allTimeFields') {
-                    this.setDropDownValue(this.getAllTimeInputFields(), sTime);
+                    var timeFields = this.getAllTimeInputFields();
+                    for (i = 0; i < timeFields.value.length; i++) {
+                        browser.execute("return arguments[0].scrollIntoView(true);", timeFields.value[i]);
+                        //Need this to stabilize after scrolling to the element
+                        browser.pause(e2eConsts.shortWaitTimeMs);
+                        timeFields.value[i].waitForVisible();
+                        timeFields.value[i].click();
+                        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+                            browser.keys([sTime, 'Enter']);
+                        } else {
+                            this.selectFromList(sTime);
+                        }
+                    }
                 } else if (fieldType === 'allDateFields') {
                     //get all date field input validators
                     var dateFields = this.getAllDateInputFields();
