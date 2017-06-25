@@ -342,16 +342,16 @@
 
                 // Check you are on the right parent container
                 let actualParentRecordValues = this.getValuesFromFormSection(this.getFormSectionEl(true));
-                console.log("the parent record actual UI:"+actualParentRecordValues.sort())
-                console.log("the parent record expected :"+expectedParentRecordValues.sort())
+                console.log("the parent record actual UI:" + actualParentRecordValues.sort());
+                console.log("the parent record expected :" + expectedParentRecordValues.sort());
                 expect(actualParentRecordValues.sort()).toEqual(expectedParentRecordValues.sort());
 
                 //Verify the embedded child record values
                 // Confirm the values on the child form is the right record
                 reportContentPO.waitForReportContent();
                 let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
-                console.log("the child record actual UI:"+embeddedChildRecordValues[0])
-                console.log("the child record expected :"+expectedChildRecordValues[0])
+                console.log("the child record actual UI:" + embeddedChildRecordValues[0]);
+                console.log("the child record expected :" + expectedChildRecordValues[0]);
                 expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
 
                 ////close the View record drawer

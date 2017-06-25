@@ -146,44 +146,40 @@
             //Load the child table 'table 2' -> random record in view mode
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, childTableRecordId);
         });
+        it('Verify create relationship button is visible even tough single relationship exists to 1 of the parent table', function() {
+            //Select settings -> modify this form
+            topNavPO.clickOnModifyFormLink();
 
-        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
-        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+            //Verify that the create relationship button is visible since app has 3 tables and relationship exists between only 2 tables
+            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(true);
 
-            it('Verify create relationship button is visible even tough single relationship exists to 1 of the parent table', function() {
-                //Select settings -> modify this form
-                topNavPO.clickOnModifyFormLink();
+            //Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
 
-                //Verify that the create relationship button is visible since app has 3 tables and relationship exists between only 2 tables
-                let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(true);
+        });
 
-                //Click on forms Cancel button
-                formsPO.clickFormCancelBtn();
+        it('App with only 3 tables - Create multi relationship', function() {
 
-            });
+            //Get child record first Value
+            expectedChildTableRecordValues = browser.element('.cellWrapper').getAttribute('textContent');
 
-            it('App with only 3 tables - Create multi relationship', function() {
+            //create relationship between parent and child table.
+            //NOTE: I am not selecting any field here because 'titleField' should be selected as default
+            relationshipsPO.createRelationshipToParentTable(parentTable, '', parentPickerTitleFieldValue, expectedParentTableRecordValues, expectedChildTableRecordValues);
+        });
 
-                //Get child record first Value
-                expectedChildTableRecordValues = browser.element('.cellWrapper').getAttribute('textContent');
+        it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {
+            //Select settings -> modify this form
+            topNavPO.clickOnModifyFormLink();
 
-                //create relationship between parent and child table.
-                //NOTE: I am not selecting any field here because 'titleField' should be selected as default
-                relationshipsPO.createRelationshipToParentTable(parentTable, '', parentPickerTitleFieldValue, expectedParentTableRecordValues, expectedChildTableRecordValues);
-            });
+            //Verify that the create relationship button is not visible.
+            let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
+            expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(false);
 
-            it('Verify when relationship exists between child table and 2 parent tables in an app unable to create new relationship', function() {
-                //Select settings -> modify this form
-                topNavPO.clickOnModifyFormLink();
+            //Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
+        });
 
-                //Verify that the create relationship button is not visible.
-                let newFieldsOnForm = formBuilderPO.getNewFieldLabels();
-                expect(newFieldsOnForm.includes(e2eConsts.GET_ANOTHER_RECORD)).toBe(false);
-
-                //Click on forms Cancel button
-                formsPO.clickFormCancelBtn();
-            });
-        }
     });
 }());

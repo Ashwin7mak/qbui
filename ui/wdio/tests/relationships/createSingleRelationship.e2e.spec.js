@@ -83,9 +83,6 @@
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, randomChildTableRecordId);
         });
 
-        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
-        //if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
-
         it('App has just 2 tables - Create relationship between 2 tables(none of the table has title field)- recordId selected as default in create relationship dialog', function() {
             //create relationship between parent and child table
             //NOTE: I am not selecting any field here because 'Record ID' should be selected as default
@@ -103,7 +100,6 @@
             //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
         });
-        //}
 
     });
 }());

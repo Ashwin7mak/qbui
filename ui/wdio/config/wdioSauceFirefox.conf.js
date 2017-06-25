@@ -18,7 +18,6 @@ var config = {
             maxInstances: 10,
             exclude: [
                 //mouseMove not working in firefox and edge
-                './ui/wdio/tests/relationships/relationshipAddChildRecord.e2e.spec.js',
                 './ui/wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
                 './ui/wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
                 './ui/wdio/tests/relationships/verifyCreateRelationshipDialog.e2e.spec.js',

@@ -86,49 +86,45 @@
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1, randomChildTableRecordId);
         });
 
-        //mouseMoves not working on firefox latest driver and safari. Add To Record button is at the bottom so cannot navigate to it to double click on that button
-        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
+        it('Verify numeric and numeric currency field not displayed in field list as it is just an required field and not an unique field', function() {
+            //Select settings -> modify this form
+            topNavPO.clickOnModifyFormLink();
 
-            it('Verify numeric and numeric currency field not displayed in field list as it is just an required field and not an unique field', function() {
-                //Select settings -> modify this form
-                topNavPO.clickOnModifyFormLink();
+            //Click on add a new record button
+            formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
 
-                //Click on add a new record button
-                formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
+            //Select table from table list of add a record dialog
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, PARENT_TABLE);
 
-                //Select table from table list of add a record dialog
-                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, PARENT_TABLE);
+            //Click on advanced settings of add a record dialog
+            modalDialog.clickModalDialogAdvancedSettingsToggle();
 
-                //Click on advanced settings of add a record dialog
-                modalDialog.clickModalDialogAdvancedSettingsToggle();
+            //Click on fields select drop down
+            modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
 
-                //Click on fields select drop down
-                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
+            //Verify Numeric and currency fields are not part of fields list since they are just set as either only unique or only required
+            let fieldDropDownList = modalDialog.allDropDownListOptions;
+            expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[2])).toBe(false);
+            expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[3])).toBe(false);
 
-                //Verify Numeric and currency fields are not part of fields list since they are just set as either only unique or only required
-                let fieldDropDownList = modalDialog.allDropDownListOptions;
-                expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[2])).toBe(false);
-                expect(fieldDropDownList.includes(e2eConsts.reportFieldNames[3])).toBe(false);
+            //Collapse the drop down
+            modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
 
-                //Collapse the drop down
-                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
+            //Cancel the create relationship dialog
+            modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            modalDialog.waitUntilModalDialogSlideAway();
 
-                //Cancel the create relationship dialog
-                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
-                modalDialog.waitUntilModalDialogSlideAway();
+            //Cancel form builder
+            formBuilderPO.cancel();
+        });
 
-                //Cancel form builder
-                formBuilderPO.cancel();
-            });
+        it('Create relationship between 2 tables with TextField as it is set to unique and required field', function() {
 
-            it('Create relationship between 2 tables with TextField as it is set to unique and required field', function() {
+            //create relationship between parent and child table
+            //NOTE: Select Text Field as this is set to unique and required field
+            relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, uniqueRequiredTextField, expectedParentTableRecordValues[0], expectedParentTableRecordValues, expectedChildTableRecordValues);
 
-                //create relationship between parent and child table
-                //NOTE: Select Text Field as this is set to unique and required field
-                relationshipsPO.createRelationshipToParentTable(PARENT_TABLE, uniqueRequiredTextField, expectedParentTableRecordValues[0], expectedParentTableRecordValues, expectedChildTableRecordValues);
-
-            });
-        }
+        });
 
     });
 }());
