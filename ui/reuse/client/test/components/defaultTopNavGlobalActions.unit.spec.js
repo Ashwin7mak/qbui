@@ -26,7 +26,6 @@ describe('DefaultTopNavGlobalActions', () => {
 
     it('has a user dropdown menu', () => {
         component = shallow(<DefaultTopNavGlobalActions/>);
-        console.log(component.debug());
         expect(component.find('UserDropDownMock')).toBePresent();
     });
 
