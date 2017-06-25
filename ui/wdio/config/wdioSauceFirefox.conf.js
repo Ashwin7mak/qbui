@@ -15,10 +15,7 @@ var config = {
             breakpointSize: 'large',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 10,
-            exclude: [
-                './ui/wdio/tests/relationships/verifyCreateRelationshipDialog.e2e.spec.js',
-            ]
+            maxInstances: 10
         }
     ]
 };
