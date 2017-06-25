@@ -48,7 +48,7 @@ class userFeedBack extends Component {
 
 userFeedBack.propTypes = {
     startTabIndex: PropTypes.number,
-    shouldOpenMenusUp: PropTypes.bool
+    shouldOpenMenusUp: PropTypes.bool,
 };
 
 userFeedBack.defaultPropTypes = {
