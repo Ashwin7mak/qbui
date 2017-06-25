@@ -130,11 +130,8 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            //wait until loading screen disappear in leftNav
-
-            loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-            //wait until loading screen disappear in report Content
-            loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+            //wait until loading screen disappear
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Wait until table label displayed
             browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
             return browser.elements('.tablesList .withSecondary .leftNavLabel');
