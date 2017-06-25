@@ -161,6 +161,7 @@
             if (results !== []) {
                 //Click on filtered table name
                 results[0].click();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
                 //Wat until reports page is visible
                 return reportContentPO.reportContainerEl;
             }
