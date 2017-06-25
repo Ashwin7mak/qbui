@@ -1,3 +1,4 @@
+let loadingSpinner = requirePO('/common/loadingSpinner');
 class modalDialogWindow {
     //The methods below works for both qbModal dialog and also multiStepModal dialog.
     // Since the underlying className for both modal dialogs are 'modal-dialog'
@@ -179,6 +180,7 @@ class modalDialogWindow {
             btns[0].waitForVisible();
             //Click on filtered button
             btns[0].click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Need this to stabilize DOM
             return browser.pause(e2eConsts.shortWaitTimeMs);
         } else {
