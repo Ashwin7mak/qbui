@@ -21,7 +21,7 @@ describe('CreateNewItemButton', () => {
                                                 icon="mockIcon"
                                                 iconMessage="mockClass"/>);
 
-        let iconButton = component.find('.emptyStateIcon');
+        let iconButton = component.find('.createNewIcon');
         iconButton.simulate('click');
 
         expect(mockFunc.handleOnClick).toHaveBeenCalled();
