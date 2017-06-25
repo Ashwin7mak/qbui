@@ -17,11 +17,7 @@ var config = {
             shardTestFiles: true,
             maxInstances: 10,
             exclude: [
-                //mouseMove not working in firefox and edge
-                './ui/wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
-                './ui/wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
                 './ui/wdio/tests/relationships/verifyCreateRelationshipDialog.e2e.spec.js',
-                './ui/wdio/tests/relationships/createRelationshipWithUniqueRequiredField.e2e.spec.js',
             ]
         }
     ]
