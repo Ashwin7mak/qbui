@@ -177,7 +177,9 @@ class modalDialogWindow {
             expect(btns[0].isVisible()).toBe(true);
             btns[0].waitForVisible();
             //Click on filtered button
-            return btns[0].click();
+            btns[0].click();
+            //Need this to stabilize DOM
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         } else {
             throw new Error('button with name ' + btnName + " not found on the " + this.modalDialogTitle + " dialog box");
         }

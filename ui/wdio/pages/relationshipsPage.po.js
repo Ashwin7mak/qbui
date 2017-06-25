@@ -231,7 +231,11 @@
                 //TODO: Handle multiple links to parent(s)
                 // Try to find something clickable on the form
                 browser.waitForVisible(linkToParentLocatorString);
-                return browser.element(linkToParentLocatorString).click();
+                browser.element(linkToParentLocatorString).click();
+                this.slideyRightyEl.waitForVisible();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+                //Need this for stabilize DOM
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             }
         }},
 
@@ -321,34 +325,44 @@
 
             //Click Save on the form
             formsPO.clickFormSaveBtn();
-            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-            //wait until save success container goes away
-            notificationContainer.waitUntilNotificationContainerGoesAway();
             //Need this as link takes time to show up
             browser.pause(e2eConsts.mediumWaitTimeMs);
 
-            // Click on link to parent (via related Numeric Field)
-            this.clickOnFormFieldLinkToParent(this.getFormSectionEl());
+            //verify you see parent link on the view form
+            this.parentRecordLinkEl.waitForVisible();
 
-            // Slidey Righty comes up
-            this.slideyRightyEl.waitForVisible();
-            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-            // Check you are on the right parent container
-            let actualParentRecordValues = this.getValuesFromFormSection(this.getFormSectionEl(true));
-            expect(actualParentRecordValues.sort()).toEqual(expectedParentRecordValues.sort());
-
-            //Verify the embedded child record values
-            // Confirm the values on the child form is the right record
-            let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
-            expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
-
-            //close the View record drawer
-            browser.element('.closeDrawer').click();
-            //wait until drawer screen disappear
-            browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
-            //Need this for drawer to slide away
-            return browser.pause(e2eConsts.mediumWaitTimeMs);
+            //Verify the parent record and embedded child record
+            return this.verifyParentAndEmbeddedChildRecord(expectedParentRecordValues, expectedChildRecordValues);
         }},
+
+        verifyParentAndEmbeddedChildRecord : {
+            value: function(expectedParentRecordValues, expectedChildRecordValues) {
+                // Click on link to parentRecord link
+                this.clickOnFormFieldLinkToParent();
+
+                // Check you are on the right parent container
+                let actualParentRecordValues = this.getValuesFromFormSection(this.getFormSectionEl(true));
+                console.log("the parent record actual UI:"+actualParentRecordValues.sort())
+                console.log("the parent record expected :"+expectedParentRecordValues.sort())
+                expect(actualParentRecordValues.sort()).toEqual(expectedParentRecordValues.sort());
+
+                //Verify the embedded child record values
+                // Confirm the values on the child form is the right record
+                reportContentPO.waitForReportContent();
+                let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
+                console.log("the child record actual UI:"+embeddedChildRecordValues[0])
+                console.log("the child record expected :"+expectedChildRecordValues[0])
+                expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
+
+                ////close the View record drawer
+                //browser.element('.closeDrawer').click();
+                ////wait until drawer screen disappear
+                //browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+                ////Need this for drawer to slide away
+                //return browser.pause(e2eConsts.mediumWaitTimeMs);
+                this.closeSlideyRighty();
+
+            }},
 
         /**
          * Verift the Get another record relationship dialog selectTables list and select the parentTable
@@ -375,7 +389,7 @@
                     modalDialog.clickModalDialogAdvancedSettingsToggle();
 
                     //Select field to link to parent table (This will be either titleField or recordId or unique&required fields)
-                    modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+                    return modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
                 }
                 if (verifyDefaultField !== '') {
                     //Click on advanced settings of add a record dialog
@@ -383,7 +397,7 @@
 
                     //Verify the default field selected
                     modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').waitForVisible();
-                    expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(verifyDefaultField);
+                    return expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(verifyDefaultField);
                 }
             }}
 

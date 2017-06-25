@@ -10,7 +10,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     let loadingSpinner = requirePO('/common/loadingSpinner');
-    let topNavPO = requirePO('topNav');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     var sText = 'testTextValue';
     var sUrl = 'http://www.yahoo.com';
@@ -87,7 +87,10 @@
         clickFormSaveBtn : {value: function() {
             //Click on form Save button
             this.editFormSaveBtns.waitForVisible();
-            return this.clickBtnOnForm('Save');
+            this.clickBtnOnForm('Save');
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            //wait until save success container goes away
+            return notificationContainer.waitUntilNotificationContainerGoesAway();
         }},
 
         /**
