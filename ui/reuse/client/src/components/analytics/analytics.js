@@ -26,7 +26,7 @@ export class Analytics extends Component {
         super(props);
 
         // Evergage requires a global variable called _aaq
-        window._aaq = window._aaq || (window._aaq = []);
+        window._aaq = window._aaq || [];
 
         // logger is set here so that unit test rewire will work
         this.logger = new Logger();
@@ -126,13 +126,13 @@ export class Analytics extends Component {
     /**
      * Checks for diffs in the current props 'evergageUpdateProps' for changes in
      * the new props before update, adding any updated props to the _aaq object
-     * @param nextProps - the props (key, value) pairs of props for Evergage
+     * @param newEvergageUpdateProps - the new props (key, value) pairs of props for Evergage
      * @return String - lists the updated Evergage properties, empty string if no updates
      */
-    getEvergageUpdates = (nextProps) => {
-        let updates = "";
+    getEvergageUpdates = (newEvergageUpdateProps) => {
+        let updates = '';
 
-        _.forOwn(nextProps, (newValue, evergagePropName) => {
+        _.forOwn(newEvergageUpdateProps, (newValue, evergagePropName) => {
             let oldPropVal = _.get(this.props.evergageUpdateProps, evergagePropName);
 
             if (oldPropVal !== newValue) {
@@ -243,7 +243,7 @@ Analytics.propTypes = {
      *  The additional props that needs to be passed to Evergage.
      *  An object containing key value pairs (evergageUpdateName, value)
      */
-    evergageUpdateProps: PropTypes.objectOf(PropTypes.any)
+    evergageUpdateProps: PropTypes.object
 };
 
 const mapStateToProps = state => {

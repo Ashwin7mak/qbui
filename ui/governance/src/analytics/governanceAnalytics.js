@@ -14,25 +14,25 @@ export class GovernanceAnalytics extends Component {
         The given key is the name that will be used as the property for the event in
         Evergage, and the value will be the value set to that property.
          */
-        let prop_key_vals = {
-            "accountId": this.props.accountId,
-            "has_account_admin": this.props.isAccountAdmin,
-            "is_realm_admin": this.props.isRealmAdmin,
-            "is_CSR": this.props.isCSR,
-            "subdomainName": this.props.subdomainName,
-            "totalUsers": this.props.totalUsers,
-            "paidUsers": this.props.paidUsers,
-            "deniedUsers": this.props.deniedUsers,
-            "deactivatedUsers": this.props.deactivatedUsers,
-            "totalRealmUsers": this.props.totalRealmUsers,
-            "pageLoadTime": this.props.pageLoadTime,
-            "usersGridLoadTime": this.props.usersGridLoadTime
+        let propKeyVals = {
+            accountId: this.props.accountId,
+            has_account_admin: this.props.isAccountAdmin,
+            is_realm_admin: this.props.isRealmAdmin,
+            is_CSR: this.props.isCSR,
+            subdomainName: this.props.subdomainName,
+            totalUsers: this.props.totalUsers,
+            paidUsers: this.props.paidUsers,
+            deniedUsers: this.props.deniedUsers,
+            deactivatedUsers: this.props.deactivatedUsers,
+            totalRealmUsers: this.props.totalRealmUsers,
+            pageLoadTime: this.props.pageLoadTime,
+            usersGridLoadTime: this.props.usersGridLoadTime
         };
 
         return (
             <Analytics dataset={Config.evergageDataset}
                        userId={this.props.currentUserId}
-                       evergageUpdateProps={prop_key_vals} />
+                       evergageUpdateProps={propKeyVals} />
         );
     }
 }
