@@ -15,9 +15,10 @@ const mockLocale = {
 describe('CreateNewItemButton', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        spyOn(mockFunc, 'handleOnClick');
-        spyOn(mockLocale, 'locale').and.returnValue('mockLocaleMessage');
         EmptyStateForLeftNavRewireAPI.__Rewire__('Locale', mockLocale.locale);
+
+        spyOn(mockLocale.locale, 'getMessage').and.returnValue('mockLocaleMessage');
+        spyOn(mockFunc, 'handleOnClick');
     });
 
     afterEach(() => {
@@ -33,29 +34,30 @@ describe('CreateNewItemButton', () => {
         expect(mockFunc.handleOnClick).toHaveBeenCalled();
     });
 
-    fit('will return an empty Message when there are no elements ', () => {
-        component = mount(<EmptyStateForLeftNav apps={[]} emptyMessage="mockEmptyMessage"/>);
+    it('will return an empty Message when there are no elements ', () => {
+        component = mount(<EmptyStateForLeftNav emptyMessage="mockEmptyMessage"/>);
 
-        expect(component.props().emptyMessage).to.equal('mockEmptyMessage');
-        expect(component.find('.emptyState').text().toEqual('mockLocaleMessage'));
+        expect(component.props().emptyMessage).toEqual('mockEmptyMessage');
+        expect(component.find('.emptyState p').text()).toEqual('mockLocaleMessage');
     });
 
-    it('will return an empty Message when there are no elements', () => {
+    it('will return a functional area className are no elements', () => {
         component = shallow(<EmptyStateForLeftNav className="mockClassName"/>);
 
-        expect(component.find('.emptyMessage').text().toEqual('mockClassName'));
+        expect(component.find('.emptyState').hasClass('mockClassName')).toEqual(true);
     });
 
     it('will return icon when there are no elements', () => {
         component = shallow(<EmptyStateForLeftNav icon="mockIcon"/>);
 
-        expect(component.find('.addNewIcon').text().toEqual('mockIcon'));
+        expect(component.find('[icon="mockIcon"]'));
     });
 
     it('will return icon message when there are no elements', () => {
-        component = shallow(<EmptyStateForLeftNav iconMessage="mockIconMessage"/>);
+        component = mount(<EmptyStateForLeftNav iconMessage="mockIconMessage"/>);
 
-        expect(component.find('.iconMessage').text().toEqual('mockLocaleMessage'));
+        expect(component.props().iconMessage).toEqual('mockIconMessage');
+        expect(component.find('.iconMessage').text()).toEqual('mockLocaleMessage');
     });
 });
 
