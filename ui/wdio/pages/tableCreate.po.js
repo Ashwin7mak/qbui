@@ -237,8 +237,6 @@
             expect(modalDialog.modalDialogTitle).toContain('New Table');
             //Verify table header description
             expect(this.tableDescription.getAttribute('textContent')).toContain('Create a new table when you want to collect a new type of information.');
-            //Verify table title
-            expect(this.tableTitle.getAttribute('textContent')).toContain('Name your table');
             //Verify Icon choose is enabled
             expect(browser.isEnabled('.iconChooser.closed')).toBe(true);
             //Verify cancel button is enabled
