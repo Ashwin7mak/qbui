@@ -83,7 +83,7 @@ describe('AppCreationDialog', () => {
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
     });
 
-    it('will invoke not createApp action if createApp fails', () => {
+    it('will invoke NotificationManager if createApp action fails', () => {
         component = shallow(<AppCreationDialog createApp={mockProps.createAppFailed}
                                                toggleAppsList={mockProps.toggleAppsList}
                                                app={{}} />);
