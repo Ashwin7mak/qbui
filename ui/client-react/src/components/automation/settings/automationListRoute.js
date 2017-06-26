@@ -71,7 +71,6 @@ export class AutomationListRoute extends Component {
     openRowToView = (row) => {
         let automation = _.find(this.props.automations, {id: row});
         let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
-        console.log('YYY: ' + link);
         if (this.props.history) {
             this.props.history.push(link);
         }

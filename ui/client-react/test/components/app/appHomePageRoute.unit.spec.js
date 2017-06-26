@@ -1,13 +1,19 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import {AppHomePageRoute}  from '../../../src/components/app/appHomePageRoute';
+import ConnectedAppHomePage, {AppHomePageRoute, __RewireAPI__ as AppHomePageRewireAPI}  from '../../../src/components/app/appHomePageRoute';
 import HtmlUtils from '../../../src/utils/htmlUtils';
 import {DEFAULT_PAGE_TITLE} from '../../../src/constants/urlConstants';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
+import configureMockStore from 'redux-mock-store';
+import Locale from '../../../src/locales/locales';
 
-//TODO this is a placeholder file to add tests as app home page gets built out
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
-describe('AppHomePageRoute functions', () => {
-    'use strict';
+const NotificationManagerMock = {success() {}};
+
+describe('AppHomePageRoute', () => {
 
     let component;
 
@@ -17,22 +23,20 @@ describe('AppHomePageRoute functions', () => {
     const selectedAppId = 2;
     const selectedAppName = 'Adams';
     const selectedApp = {name: selectedAppName};
-    const apps = [
-        {id: 1, name: 'Washington'},
-        {id: selectedAppId, name: selectedAppName},
-        {id: 3, name: 'Jefferson'}
-    ];
 
     beforeEach(() => {
         spyOn(HtmlUtils, 'updatePageTitle');
+        AppHomePageRewireAPI.__Rewire__('NotificationManager', NotificationManagerMock);
     });
 
     afterEach(() => {
         HtmlUtils.updatePageTitle.calls.reset();
+
+        AppHomePageRewireAPI.__ResetDependency__('NotificationManager', NotificationManagerMock);
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} selectedApp={selectedApp}/>);
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} app={selectedApp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -43,7 +47,7 @@ describe('AppHomePageRoute functions', () => {
         };
 
 
-        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} match={{params}} selectedAppId={1} selectedApp={selectedApp}/>);
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} match={{params}} app={selectedApp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -58,7 +62,7 @@ describe('AppHomePageRoute functions', () => {
                 return {params, selectedAppId: 1};
             },
             render() {
-                return <AppHomePageRoute ref="ahp" match={{params:this.state.params}} selectedAppId={this.state.selectedAppId} {...props} selectedApp={selectedApp}/>;
+                return <AppHomePageRoute ref="ahp" match={{params: this.state.params}} {...props} app={selectedApp}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -79,44 +83,98 @@ describe('AppHomePageRoute functions', () => {
 
     it('sets the page title to the currently selected app', () => {
         component = TestUtils.renderIntoDocument(
-            <AppHomePageRoute {...props} apps={apps} selectedAppId={selectedAppId} selectedApp={selectedApp}/>
+            <AppHomePageRoute {...props} app={selectedApp}/>
         );
 
         expect(HtmlUtils.updatePageTitle).toHaveBeenCalledWith(`${selectedAppName} - ${DEFAULT_PAGE_TITLE}`);
     });
 
-    describe('getSelectedAppName', () => {
-        let nonExistingAppId = 4;
+    it('shows a message that a table was deleted on mount if notifyTableDeleted is true', () => {
+        spyOn(NotificationManagerMock, 'success');
+        const resetTableDeleteNotification = jasmine.createSpy('resetTableDeleteNotification');
+        const testTableName = 'test table';
 
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute
+            {...props}
+            isLoading={true}
+
+            notifyTableDeleted={true}
+            tableJustDeleted={testTableName}
+            resetTableDeleteNotification={resetTableDeleteNotification}
+        />);
+
+        expect(resetTableDeleteNotification).toHaveBeenCalled();
+        expect(NotificationManagerMock.success).toHaveBeenCalledWith(
+            Locale.getMessage('tableEdit.tableDeleted', {tableName: testTableName}),
+            Locale.getMessage('success')
+        );
+    });
+
+    it('does not show a notification regarding table creation if notifyTableDeleted is false', () => {
+        spyOn(NotificationManagerMock, 'success');
+        const resetTableDeleteNotification = jasmine.createSpy('resetTableDeleteNotification');
+        const testTableName = 'test table';
+
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute
+            {...props}
+            isLoading={true}
+
+            notifyTableDeleted={false}
+            tableJustDeleted={testTableName}
+            resetTableDeleteNotification={resetTableDeleteNotification}
+        />);
+
+        expect(resetTableDeleteNotification).not.toHaveBeenCalled();
+        expect(NotificationManagerMock.success).not.toHaveBeenCalled();
+    });
+
+    it('shows a loader if the app is not loaded yet', () => {
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} isLoading={true} />);
+
+        expect(TestUtils.findRenderedDOMComponentWithClass(component, 'loader')).not.toBeNull();
+    });
+
+    it('shows an error message if the app does not exist', () => {
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} isLoading={false} app={null} />);
+
+        expect(TestUtils.findRenderedDOMComponentWithClass(component, 'alertBanner')).not.toBeNull();
+    });
+
+    it('loads props from the store', () => {
+        const appName = 'test';
+        const currentState = {
+            tableProperties: {},
+            app: {
+                app: {name: appName, id: 1},
+                isLoading: false
+            }
+        };
+
+        const currentRouteParams = {params: {appId: 1}};
+
+        component = TestUtils.renderIntoDocument(
+            <Provider store={mockStore(currentState)}>
+                <ConnectedAppHomePage {...props} match={currentRouteParams} />
+            </Provider>
+        );
+
+        let headline = TestUtils.findRenderedDOMComponentWithClass(component, 'appHeadLine');
+        expect(headline.textContent).toContain(appName);
+
+        // Loading spinner should not be present when the app is loaded
+        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'loader').length).toEqual(0);
+    });
+
+    describe('getSelectedAppName', () => {
         let testCases = [
             {
                 description: 'returns the name of the currently selected app',
-                apps: apps,
-                selectedAppId: selectedAppId,
+                app: selectedApp,
                 expectedName: selectedAppName
             },
             {
-                description: 'returns null if the app does not exist',
-                apps: apps,
-                selectedAppId: nonExistingAppId,
-                expectedName: null
-            },
-            {
-                description: 'returns null if there are no apps',
-                apps: [],
-                selectedAppId: selectedAppId,
-                expectedName: null
-            },
-            {
-                description: 'returns null if apps is null',
-                apps: null,
-                selectedAppId: selectedAppId,
-                expectedName: null
-            },
-            {
                 description: 'returns null if there is not a currently selected app',
-                apps: apps,
-                selectedAppId: null,
+                app: null,
                 expectedName: null
             }
         ];
@@ -124,7 +182,7 @@ describe('AppHomePageRoute functions', () => {
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 component = TestUtils.renderIntoDocument(
-                    <AppHomePageRoute {...props} selectedAppId={testCase.selectedAppId} selectedApp={selectedApp} apps={testCase.apps}/>
+                    <AppHomePageRoute {...props} app={testCase.app} />
                 );
 
                 expect(component.getSelectedAppName()).toEqual(testCase.expectedName);

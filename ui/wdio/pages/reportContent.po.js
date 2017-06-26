@@ -117,6 +117,7 @@
          */
         waitForReportContent: {value: function() {
             // wait until you see .qbTbody
+            browser.element('.qbTbody').waitForExist();
             browser.element('.qbTbody').waitForVisible();
             return browser.element('.qbRow').waitForVisible();
         }},

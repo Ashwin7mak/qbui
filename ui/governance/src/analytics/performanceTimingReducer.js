@@ -29,7 +29,7 @@ const performanceTimingReducer = (state = initialState, action) => {
 
 export const getPageLoadTime = state => state.performanceTiming.pageLoadTime;
 
-export const getGridLoadTime = state => (state.performanceTiming.pageLoadTime - state.performanceTiming.gridStartTime);
+export const getGridLoadTime = state => _.round(_.subtract(state.performanceTiming.pageLoadTime, state.performanceTiming.gridStartTime), 2);
 
 export default performanceTimingReducer;
 

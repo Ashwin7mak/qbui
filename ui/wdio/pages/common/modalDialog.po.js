@@ -1,5 +1,3 @@
-'use strict';
-
 class modalDialogWindow {
     //The methods below works for both qbModal dialog and also multiStepModal dialog.
     // Since the underlying className for both modal dialogs are 'modal-dialog'
@@ -11,6 +9,8 @@ class modalDialogWindow {
     get DONT_DELETE_BTN() {return  "Don't delete";}
     get REMOVE_BTN() {return  'Remove';}
     get ADD_TO_FORM_BTN() {return  'Add to form';}
+    get ADD_USER_BTN() {return  'Add';}
+    get NO_THANKS_BTN() {return  'No thanks';}
 
     get modalDialog() {
         // modal dialog
@@ -20,6 +20,18 @@ class modalDialogWindow {
     get modalDialogCloseBtn() {
         // modal dialog
         return browser.element('.modal-dialog .iconUISturdy-close');
+    }
+
+    get modalDialogCopyBtn() {
+        // modal dialog copy button
+        browser.element('.tipChildWrapper .qbIcon.iconUISturdy-url').waitForVisible();
+        return browser.element('.tipChildWrapper .qbIcon.iconUISturdy-url');
+    }
+
+    get modalDialogMailBtn() {
+        // modal dialog copy button
+        browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail').waitForVisible();
+        return browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail');
     }
 
     get modalDialogContainer() {
@@ -57,9 +69,25 @@ class modalDialogWindow {
         return this.modalDialog.element('.tableSelector .Select-arrow-zone');
     }
 
+    get modalDialogRoleSelectorDropDownArrow() {
+        //TableSelector drop down arrow to expand the list
+        this.modalDialog.element('.assignRole .Select-arrow-zone').waitForVisible();
+        return this.modalDialog.element('.assignRole .Select-arrow-zone');
+    }
+
     get modalDialogFieldSelectorDropDownArrow() {
         //FieldSelector drop down arrow to expand the list
         return this.modalDialog.element('.fieldSelector .Select-arrow-zone');
+    }
+
+    get modalDialogSearchNewUser() {
+        // this.modalDialog.element('.modal-dialog .Select-multi-value-wrapper').waitForVisible();
+        return this.modalDialog.element('.modal-dialog .Select-multi-value-wrapper');
+    }
+
+    get modalDialogUserAddSearchMenu() {
+        this.modalDialog.element('.modal-dialog .Select-menu-outer').waitForVisible();
+        return this.modalDialog.element('.modal-dialog .Select-menu-outer');
     }
 
     get allDropDownListOptions() {
@@ -93,6 +121,22 @@ class modalDialogWindow {
     }
 
     /**
+     * Method to search for a user in user modal.
+     *@param searchUser name
+     */
+    selectUser(searchUser) {
+
+        //Wait until you see open User search
+        this.modalDialogSearchNewUser.waitForVisible();
+
+        //Click in search
+        this.modalDialogSearchNewUser.click();
+
+        //Enter search value
+        return browser.keys(searchUser);
+    }
+
+    /**
      * Method to click on modal dialog any drop down arrow
      */
     selectItemFromModalDialogDropDownList(element, listOption) {
@@ -102,13 +146,13 @@ class modalDialogWindow {
         browser.waitForVisible('.Select-menu-outer');
         //get all options from the list
         var option = browser.elements('.Select-option').value.filter(function(optionText) {
-            return optionText.element('div div').getText().includes(listOption);
+            return optionText.getAttribute('textContent').includes(listOption);
         });
 
         if (option !== []) {
             //Click on filtered option
-            option[0].element('div div').waitForVisible();
-            option[0].element('div div').click();
+            option[0].waitForVisible();
+            option[0].click();
             //wait until select menu outer
             return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
         } else {
@@ -130,7 +174,7 @@ class modalDialogWindow {
         });
 
         if (btns !== []) {
-            btns[0].waitForEnabled(e2eConsts.shortWaitTimeMs);
+            expect(btns[0].isVisible()).toBe(true);
             btns[0].waitForVisible();
             //Click on filtered button
             return btns[0].click();

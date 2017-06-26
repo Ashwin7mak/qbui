@@ -97,6 +97,7 @@
             //Click on form Save button
             this.formCancelBtn.waitForVisible();
             this.formCancelBtn.click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Need this to wait for container to slide away
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
