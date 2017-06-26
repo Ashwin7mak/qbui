@@ -5,12 +5,10 @@
 (function() {
     'use strict';
     // Import the base page object
-    var e2ePageBase = requirePO('./e2ePageBase');
+    let e2ePageBase = requirePO('./e2ePageBase');
+    let modalDialog = requirePO('/common/modalDialog');
+    let UsersTablePage = Object.create(e2ePageBase, {
 
-    var UsersTablePage = Object.create(e2ePageBase, {
-
-        // Container for just the field column headers
-        userContainerEl: {get: function() {return browser.elements('.userManagementReport .qbGrid .qbHeader');}},
 
         // List of all field column headers
         userHeaderElList: {get: function() {return browser.elements('.userManagementReport .qbGrid .qbHeader .qbHeaderCell');}},
@@ -24,21 +22,15 @@
         // Add new user button
         newUserBtn: {get: function() {return browser.element('.iconActionButton.addRecord');}},
 
+        // Add new user clear searchbox entry
+        userAddSearchBoxClear: {get: function() {return browser.element('.Select-clear');}},
+
         // User Stage
         userStageContainerEl: {get: function() {return browser.element('.layout-stage');}},
         userStageBtn: {get: function() {return browser.element('.toggleStage');}},
         userStageArea: {get: function() {return browser.element('.collapsedContent');}},
         userStageContentEl: {get: function() {return browser.element('.stage-showHide-content');}},
         userStageContent: {get: function() {return browser.element('.appUsersManagementContent');}},
-
-        /**
-         * Helper function that will get all of the field column headers from the user management report. Returns an array of strings.
-         */
-        getUserColumnHeaders: {value: function() {
-            var colHeaders = [];
-            for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
-            return colHeaders;
-        }},
 
         // Send invite email button
         userSendInviteEmail: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-mail');}},
@@ -87,7 +79,72 @@
                 return this.userStageBtn.click();
             }
         },
-    });
 
+        /**
+         * Helper function that will get all of the field column headers from the user management report. Returns an array of strings.
+         */
+        getUserColumnHeaders: {value: function() {
+            var colHeaders = [];
+            for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
+            return colHeaders;
+        }},
+
+        /**
+         * Helper function to add user and role to app
+         */
+        addUserToApp: {value: function(user) {
+
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for known user
+            modalDialog.selectUser(user);
+            // Select user
+            modalDialog.modalDialogUserAddSearchMenu.click();
+            // Need some time for Add user button switch from disabled to active
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            // Click add user
+            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            // Click Copy link to Share with User
+            expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
+            // Click Email to Share with User
+            expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
+            expect(modalDialog.modalDialogTitle).toContain('Your app has');
+            // Click to close the Share with User modal
+            modalDialog.modalDialogCloseBtn.click();
+        }},
+
+        /**
+         * Helper function to add user and role to app
+         */
+        addUserWithRoleToApp: {value: function(user, role, cancel) {
+
+            // Click on add a new user button
+            UsersTablePage.newUserBtn.click();
+            // Search for user
+            modalDialog.selectUser(user);
+            // Select user
+            modalDialog.modalDialogUserAddSearchMenu.click();
+            // Select role
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, role);
+            // Need some time for Add user button switch from disabled to active
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            if (true === cancel) {
+                // Click Cancel
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            } else {
+                // Click add user
+                modalDialog.clickOnModalDialogBtn(modalDialog.ADD_USER_BTN);
+                browser.pause(e2eConsts.shortWaitTimeMs);
+                // Click Copy link to Share with User
+                expect(modalDialog.modalDialogCopyBtn.isExisting()).toBe(true);
+                // Click Email to Share with User
+                expect(modalDialog.modalDialogMailBtn.isExisting()).toBe(true);
+                expect(modalDialog.modalDialogTitle).toContain('Your app has');
+                // Click No Thanks to Share with User
+                modalDialog.clickOnModalDialogBtn(modalDialog.NO_THANKS_BTN);
+            }
+        }},
+    });
     module.exports = UsersTablePage;
 }());

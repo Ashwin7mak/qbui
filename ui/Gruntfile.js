@@ -600,14 +600,13 @@ module.exports = function(grunt) {
                     './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js',
                     './wdio/tests/reports/reportBuilder.e2e.spec.js',
 
-                    //TODO: MC-3410 - Need a better way to verify user was removed
-                    './wdio/tests/users/usersRemove.e2e.spec.js',
-
                     //IN CI they are failing
                     './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
-                    './wdio/tests/users/usersTable.e2e.spec.js'
+                    './wdio/tests/relationships/createRelationshipWithUniqueRequiredField.e2e.spec.js',
+                    './wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
+                    './wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -648,7 +647,9 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     users: [
-
+                        './wdio/tests/users/usersTable.e2e.spec.js',
+                        './wdio/tests/users/usersRemove.e2e.spec.js',
+                        './wdio/tests/users/usersAdd.e2e.spec.js'
                     ]
                 }
             },

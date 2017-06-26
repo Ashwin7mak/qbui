@@ -321,8 +321,11 @@
 
             //Click Save on the form
             formsPO.clickFormSaveBtn();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
+            //Need this as link takes time to show up
+            browser.pause(e2eConsts.mediumWaitTimeMs);
 
             // Click on link to parent (via related Numeric Field)
             this.clickOnFormFieldLinkToParent(this.getFormSectionEl());
@@ -337,9 +340,14 @@
             //Verify the embedded child record values
             // Confirm the values on the child form is the right record
             let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
-            console.log("embedded child record values are: " + embeddedChildRecordValues);
-            console.log("expected child record values are: " + expectedChildRecordValues);
-            return expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
+            expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
+
+            //close the View record drawer
+            browser.element('.closeDrawer').click();
+            //wait until drawer screen disappear
+            browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
+            //Need this for drawer to slide away
+            return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
         /**

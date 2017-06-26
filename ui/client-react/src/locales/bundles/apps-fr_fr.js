@@ -509,15 +509,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "L'application est pas disponible dans Mercury en ce moment. ",
-                inQuickBaseClassic: " dans QuickBase Classic. ",
-                clickHere: "Ouvrez l'application"
-            },
-            noApps: {
-                noApps: "Il n'y a pas d'applications dans Mercury. ",
-                addApps: " d'ajouter des applications."
-            },
+            appNotFound: "Cette application n'existe pas. Sélectionnez une autre application.",
             errorLoadingReport: {
                 message: "Ce rapport n'est pas disponible",
                 helpText: "Pour l'instant, vous pouvez essayer Sélection d'un rapport différent.",
@@ -527,10 +519,6 @@ export default {
                 stopGraphic: "Arrête de jouer",
                 showAdditionalInfo: "Voir les détails",
                 hideAdditionalInfo: "Cacher les détails"
-            },
-            noTables: {
-                noTables: "Il n'y a pas tables. ",
-                createTablesInQuickBaseClassic: "Créer des tables dans ",
             },
             supportLink: {
                 text: "Contactez notre équipe de soins"
@@ -832,7 +820,7 @@ export default {
             copied: "Lien copié",
             messageSubject:"Lien vers le {nom de l'application} Application",
             messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}",
-            addUser: "ajouter",
+            addUser: "Ajouter",
             selectAUser:"Sélectionnez un utilisateur",
             selectUsers: "Sélectionnez les utilisateurs",
             assignRole: "Attribuer un rôle",
