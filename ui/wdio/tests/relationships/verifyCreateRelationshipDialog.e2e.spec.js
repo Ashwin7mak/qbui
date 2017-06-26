@@ -30,38 +30,38 @@ describe('Relationships - Verify create relationship dialog Tests :', function()
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
-        beforeAll(function () {
+        beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             var generatedApp = e2eBase.appService.generateAppFromMap(e2eConsts.basicTableMap());
             // Create the app via the API
-            return e2eBase.appService.createApp(generatedApp).then(function (createdApp) {
+            return e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-            }).then(function () {
+            }).then(function() {
                 //Add records into table 1
                 return e2eBase.recordService.addRecordsToTable(testApp, 0, 10, false, false);
-            }).then(function () {
+            }).then(function() {
                 //Add records into table 2
                 return e2eBase.recordService.addRecordsToTable(testApp, 1, 10, false, false);
-            }).then(function () {
+            }).then(function() {
                 //Create a form for each table
                 return e2eBase.formService.createDefaultForms(testApp);
-            }).then(function () {
+            }).then(function() {
                 // Create a Table 1 report
                 return e2eBase.reportService.createCustomReport(testApp.id, testApp.tables[0].id, 'Table 1 Report', null, null, null, null);
-            }).then(function () {
+            }).then(function() {
                 // Create a Table 2 report
                 return e2eBase.reportService.createCustomReport(testApp.id, testApp.tables[1].id, 'Table 2 Report', null, null, null, null);
-            }).then(function () {
+            }).then(function() {
                 // Generate and add the default set of Users to the app
                 return e2eBase.userService.addDefaultUserListToApp(testApp.id);
-            }).then(function () {
+            }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
-            }).catch(function (error) {
+            }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
@@ -69,7 +69,7 @@ describe('Relationships - Verify create relationship dialog Tests :', function()
             });
         });
 
-        beforeAll(function () {
+        beforeAll(function() {
             parentTable = rawValueGenerator.generateStringWithFixLength(5);
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: parentTable},
@@ -90,7 +90,7 @@ describe('Relationships - Verify create relationship dialog Tests :', function()
             tableCreatePO.clickCreateNewTable();
 
             //Enter table field values
-            tableFields.forEach(function (tableField) {
+            tableFields.forEach(function(tableField) {
                 //Enter field values
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
@@ -107,7 +107,7 @@ describe('Relationships - Verify create relationship dialog Tests :', function()
             modalDialog.waitUntilModalDialogSlideAway();
 
             //Add fields to the form
-            formBuilderFields.forEach(function (formBuilderField) {
+            formBuilderFields.forEach(function(formBuilderField) {
                 formBuilderPO.addNewField(formBuilderField);
             });
 
@@ -122,12 +122,12 @@ describe('Relationships - Verify create relationship dialog Tests :', function()
         /**
          * Before each it block reload the 1st record of list all report in view form mode
          */
-        beforeEach(function () {
+        beforeEach(function() {
             //Load the child table 'Table 1' -> record 1 in view mode
             return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1, 1);
         });
 
-        it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults.', function () {
+        it('Verify cancel dialog and reAdd 2 fields then delete a field and add field again flow. This also includes verifying default fields and changing defaults.', function() {
             let expectedTableList1 = ['Table 2', parentTable];
             let expectedTableList2 = ['Table 2'];
 
