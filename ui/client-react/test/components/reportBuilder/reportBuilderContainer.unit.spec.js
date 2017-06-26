@@ -10,7 +10,8 @@ const tableHomePageRptId = '0';
 
 const mockActions = {
     exitBuilderMode() {},
-    loadDynamicReport() {}
+    loadDynamicReport() {},
+    loadReport() {}
 };
 
 const previousLocation = '/somewhere/over/the/rainbow';
@@ -44,6 +45,17 @@ let testProps = {
 
     },
     reportData: reportData,
+    ...mockActions
+};
+
+let testPropsAfterReload = {
+    match: {
+        params: {
+            appId: appId,
+            tblId: tblId,
+            rptId: rptId
+        }
+    },
     ...mockActions
 };
 
@@ -111,6 +123,7 @@ describe('ReportBuilderContainer', () => {
         mockActions.loadDynamicReport.calls.reset();
     });
 
+
     it('renders the ReportFieldSelectMenu', () => {
         component = shallow(<ReportBuilderContainer {...testProps} />);
 
@@ -152,5 +165,11 @@ describe('ReportBuilderContainer', () => {
         let reportNameEditor = component.find('.reportBuilderSaveOrCancelFooter');
 
         expect(reportNameEditor).toBePresent();
+    });
+
+    it('loads report data via API call when report edit is done by hitting URL', () => {
+        spyOn(testPropsAfterReload,'loadReport');
+        component = shallow(<ReportBuilderContainer {...testPropsAfterReload} />);
+        expect(testPropsAfterReload.loadReport).toHaveBeenCalled();
     });
 });

@@ -26,7 +26,7 @@ export class ReportBuilderContainer extends Component {
     /**
      * Load a report on refresh
      */
-    componentDidMount() {
+    componentWillMount() {
         let {appId, tblId, rptId} = this.props.match.params;
         this.props.loadReport(CONTEXT.REPORT.NAV,appId,tblId,rptId,true,0,RECORD_SHOW_LIMIT);
     }
