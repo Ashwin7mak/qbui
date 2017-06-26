@@ -73,6 +73,7 @@
 
             // Verify record got Edited
             let recordValues = formsPO.getFieldValues();
+            // We have used 'junk' here to ignore the first element of the array which does not consists any values
             formsPO.verifyFieldValuesInReportTable(['junk', ...recordValues]);
 
             // Click on return button
