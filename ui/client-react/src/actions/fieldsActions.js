@@ -54,6 +54,18 @@ export const setFieldsPropertiesPendingEditToFalse = () => {
 };
 
 /**
+ * Mark the field that this has been set required only because this was chosen as record title field by the user in the form builder
+ * This indication helps decide when a user selects another field as record title field instead then the required prop should be unset.
+ * @returns {{type}}
+ */
+export const setRequiredForRecordTitleSelection = (appId, tblId, fieldId, state) => {
+    return {
+        appId, tblId, fieldId, state,
+        type: types.SET_IS_REQD_FOR_RECORD_TITLE
+    };
+};
+
+/**
  * Construct fields store update payload
  * @param field
  * @param appId

@@ -4,7 +4,24 @@
 $edit-field-padding: 5px;
 
 .formContainer {
-    padding: 10px;
+    display: flex;
+    min-width: 100%;
+    @include small-breakpoint {
+        display: block;
+    }
+
+    .formStage {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        z-index: 999;
+        background: #fff;
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+    }
+    .form {
+        padding: 10px;
+    }
 
     .formFooter {
         display: flex;

@@ -1,0 +1,20 @@
+@import '../../assets/css/qbVariables';
+
+.formStage {
+    .editableStage {
+        .titleField {
+            padding: 5px 25px;
+            border: $stroke-width-thin solid $color-black-300;
+            color: $color-black-700;
+            border-radius: 64px;
+
+            &:hover {
+                border: $stroke-width-thin solid $color-purple-600;
+                color: $color-purple-600;
+            }
+        }
+    }
+    .recordTitleFieldDescription {
+        margin-bottom: 10px;
+    }
+}

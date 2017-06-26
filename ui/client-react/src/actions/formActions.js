@@ -15,6 +15,7 @@ import {NEW_FORM_RECORD_ID, NEW_FIELD_PREFIX} from '../constants/schema';
 import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from './actionHelpers/transformFormData';
 import {saveAllNewFields, updateAllFieldsWithEdits, deleteField} from './fieldsActions';
+import {updateTable} from './tableActions';
 
 
 let logger = new Logger();
@@ -117,6 +118,13 @@ export const saveFormComplete = (id) => {
     };
 };
 
+export const setStageEditMode = (id, state) => {
+    return {
+        id,
+        state,
+        type: types.SET_STAGE_EDIT_MODE
+    }
+};
 
 /**
  * load a form, optionally with record data
@@ -489,6 +497,7 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, sho
         return dispatch(saveAllNewFields(appId, tblId, formType))
             .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
             .then(() => dispatch(deleteMarkedFields(appId, tblId, formMeta)))
+            .then(() => dispatch(updateTable(appId, tblId)))
             .then(() => {
                 return new Promise((resolve, reject) => {
                     if (appId && tblId) {

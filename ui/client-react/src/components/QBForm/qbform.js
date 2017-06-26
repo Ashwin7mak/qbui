@@ -13,9 +13,15 @@ import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
-import {removeFieldFromForm} from '../../actions/formActions';
+import {getTable} from '../../reducers/app';
+import {removeFieldFromForm, setStageEditMode} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import * as SchemaConsts from "../../constants/schema";
+import FormBuilderStage from './formBuilderStage';
+import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
+import closeOnEscape from '../hoc/catchEscapeKey';
+import QBIcon from '../../../../reuse/client/src/components/icon/icon';
+
 import * as FieldsReducer from '../../reducers/fields';
 
 import {connect} from 'react-redux';
@@ -525,6 +531,26 @@ export const QBForm = React.createClass({
         );
     },
 
+    onEditStage() {
+        this.props.setStageEditMode(this.props.formId, true);
+    },
+    closeEditStage() {
+        this.props.setStageEditMode(this.props.formId, false);
+    },
+    /**
+     * Create a form footer with built-in fields
+     */
+    createFormStage() {
+        let FormBuilderStageWrapped = thwartClicksWrapper(FormBuilderStage);
+        return this.props.editingForm ?
+            <FormBuilderStageWrapped table={this.props.table}
+                                     handleClickOutside={this.closeEditStage}
+                                     outsideClickIgnoreClass="formStage"
+                                     onEditStage={this.onEditStage}
+                                    editingStage={this.props.formData.editingStage}/> : null;
+    },
+
+
     /**
      * Create a form footer with built-in fields
      */
@@ -638,9 +664,13 @@ export const QBForm = React.createClass({
             );
         }
 
+        let formStage = this.createFormStage();
+        let classes = "form";
+        classes += this.props.edit ? " editForm" : " viewForm";
         return (
             <div className="formContainer">
-                <form className={this.props.edit ? "editForm" : "viewForm"}>
+                {formStage}
+                <form className={classes}>
                     {formContent}
                 </form>
                 <div>{formFooter}</div>
@@ -668,13 +698,14 @@ function buildUserField(id, fieldValue, name) {
 
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || ownProps.uniqueId || CONTEXT.FORM.VIEW);
-
+    let appId = ownProps.app ? ownProps.app.id : null;
     return {
         fields: state.fields,
-        relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : []
+        relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : [],
+        table : getTable(state, appId, ownProps.tblId)
     };
 };
 
 export default connect(
-    mapStateToProps, {removeFieldFromForm, updateFormAnimationState}
+    mapStateToProps, {removeFieldFromForm, updateFormAnimationState, setStageEditMode}
 )(QBForm);
