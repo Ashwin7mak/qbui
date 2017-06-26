@@ -523,6 +523,7 @@
                 //TODO this needs to be fixed as UI accepts more than 1 decimal places and core takes just 1 decimal place.
                 //expect(expectedRecordValues[5]).toBe(sNumeric.toString());
                 if (platformName !== 'iOS') {
+                    //TODO As the date and time fields on small break point are not user editable and having some bugs we are ignoring these fields on small break point, this needs to be fixed
                     //date field
                     expect(expectedRecordValues[6]).toBe(sDate.toString());
                     //date time field
@@ -539,13 +540,8 @@
                     //numeric duration field
                     expect(expectedRecordValues[9]).toBe('4.76142857142857  weeks');
                 }
-                if (platformName === 'iOS') {
-                    //checkbox field
-                    expect(expectedRecordValues[10]).toBe(true);
-                } else {
-                    //checkbox field
-                    expect(expectedRecordValues[10]).toBe('true');
-                }
+                //checkbox field
+                expect(expectedRecordValues[10]).toBe('true');
                 //email field
                 expect(expectedRecordValues[11]).toBe('(508) 481-1015');
                 //phone field
@@ -624,6 +620,22 @@
             this.formCardOnSBP.waitForVisible();
             return this.formCardOnSBP.click();
         }},
+        /**
+         * Method to check if the field is a checkbox on small break point.
+         */
+        isCheckbox: {value: function(field) {
+            return field.element('div').getAttribute('class').split(' ').indexOf('checkbox') !== -1;
+        }},
+        /**
+         * Method to check if the checkbox is checked
+         */
+        isChecked: {value: function(field) {
+            if (field.element('./..//span[contains(@class,"symbol")]').getAttribute('class').split(' ').indexOf('checked')){
+                return true;
+            } else {
+                return false;
+            }
+        }},
 
         /**
          * Method to get the values of the fields of form on small break point.
@@ -632,8 +644,7 @@
             // Gets the list of field values from the form
             let fields = browser.elements('.cellWrapper');
             return fields.value.map(function(field) {
-                return field.element('div').getAttribute('class').split(' ').indexOf('checkbox') !== -1 ?
-                field.element('./..//span[contains(@class,"symbol")]').getAttribute('class').split(' ').indexOf('checked') !== -1 :
+                return FormsPage.isCheckbox(field) ? FormsPage.isChecked(field).toString() :
                     field.getText();
 
             });
