@@ -95,8 +95,10 @@ class modalDialogWindow {
         let listOptions = [];
         //get the list of all drop down options
         browser.waitForVisible('.Select-menu-outer');
+        //wait untill you see 1 option since drop down loads onDemand now
+        browser.element('.Select-option').waitForVisible();
         browser.elements('.Select-option').value.filter(function(optionText) {
-            listOptions.push(optionText.element('div div').getText());
+            listOptions.push(optionText.getText());
         });
         return listOptions;
     }
@@ -145,6 +147,8 @@ class modalDialogWindow {
         this.clickOnDropDownDownArrowToExpand(element);
         //wait until you see select outer menu
         browser.waitForVisible('.Select-menu-outer');
+        //wait untill you see 1 option since drop down loads onDemand now
+        browser.element('.Select-option').waitForVisible();
         //get all options from the list
         var option = browser.elements('.Select-option').value.filter(function(optionText) {
             return optionText.getAttribute('textContent').includes(listOption);

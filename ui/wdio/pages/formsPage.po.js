@@ -363,8 +363,8 @@
          */
         selectFromList : {value: function(listOption) {
             browser.waitForVisible('.Select-menu-outer');
-            //Need this to stabilize
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            //wait untill you see 1 option since drop down loads onDemand now
+            browser.element('.Select-option').waitForVisible();
             //get all options from the list
             let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
                 return optionText.getAttribute('textContent').trim().includes(listOption);
