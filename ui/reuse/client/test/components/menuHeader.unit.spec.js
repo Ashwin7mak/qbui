@@ -40,7 +40,7 @@ describe('MenuHeader', () => {
         expect(component.find('.menuHeaderTitle')).toHaveText('');
         expect(component.find('.menuHeaderIcon')).not.toBePresent();
         expect(component.find('.menuHeaderToggle')).not.toBePresent();
-        expect(component.find('.menuHeader')).toHaveProp('style', {height: 40});
+        expect(component.find('.navMenuHeader')).toHaveProp('style', {height: 40});
     });
 
     it('shows a title', () => {
@@ -140,14 +140,14 @@ describe('MenuHeader', () => {
 
 
         // Title is hidden via CSS
-        expect(component.find('.menuHeader')).toHaveProp('style', {height: 40});
+        expect(component.find('.navMenuHeader')).toHaveProp('style', {height: 40});
     });
 
     it('displays as a large header', () => {
         component = shallow(<MenuHeader title={testTitle} isSmall={false} />);
         component = component.find(MotionMock).dive();
 
-        console.log(component.find('.menuHeader').props().style);
+        console.log(component.find('.navMenuHeader').props().style);
         expect(component.find('.menuHeader')).toHaveProp('style', {height: 90});
         expect(component.find('.menuHeaderSmall')).not.toBePresent();
         expect(component.find('.menuHeaderCollapsed')).not.toBePresent();

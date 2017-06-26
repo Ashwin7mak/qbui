@@ -123,7 +123,7 @@ export class MenuHeader extends Component {
     render() {
         const {isVisible, isSmall, icon, iconFont, isToggleVisible, isToggleDown, isCollapsed} = this.props;
 
-        let classes = ['menuHeader'];
+        let classes = ['navMenuHeader'];
 
         if (!isVisible) {
             classes.push('menuHeaderHidden');

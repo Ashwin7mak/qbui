@@ -1,6 +1,6 @@
 @import "../../assets/css/qbVariables";
 
-.menuHeader {
+.navMenuHeader {
     flex: 0 0 auto; // Don't shrink this on a short window.
     background-color: $leftnav-app-background-color; // Default for the left nav
     @include correctFontWeightForLightTextOnDarkBackground;
