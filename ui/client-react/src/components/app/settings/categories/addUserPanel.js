@@ -5,7 +5,7 @@ import './addUserDialog.scss';
 import constants from '../../../../../../common/src/constants';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 
-class addUserPanel extends React.Component {
+export class addUserPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
