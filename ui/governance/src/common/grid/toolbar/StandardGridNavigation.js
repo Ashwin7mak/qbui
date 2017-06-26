@@ -31,8 +31,18 @@ export class StandardGridNavigation extends Component {
         return this.props.paginationInfo.totalFilteredItems === 0 || this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
     };
 
+    /**
+     * Determines if pagination navigation should be visible
+     * @returns {boolean}
+     */
+    shouldNavigate = () => {
+        return this.props.paginationInfo.totalPages > 1;
+    };
+
+
     render() {
         return (
+            this.shouldNavigate() &&
             <Pagination startRecord={this.getStartItem()}
                         endRecord={this.getEndItem()}
                         onClickPrevious={this.props.getPreviousPage}
@@ -50,33 +60,11 @@ StandardGridNavigation.propTypes = {
      */
     id: PropTypes.string.isRequired,
 
-    firstItemIndexInCurrentPage: PropTypes.number,
-    lastItemIndexInCurrentPage: PropTypes.number,
-
-    /**
-     * The total items that we are displaying
-     */
-    totalFilteredItems: PropTypes.number,
-
-    /**
-     * Keep track of the total as well as current page
-     */
-    totalPages: PropTypes.number,
-    currentPage: PropTypes.number,
-
     /**
      * Navigation to previous or next pages
      */
     getPreviousPage :PropTypes.func.isRequired,
     getNextPage :PropTypes.func.isRequired
-};
-
-StandardGridNavigation.defaultProps = {
-    firstItemIndexInCurrentPage: 0,
-    lastItemIndexInCurrentPage: 0,
-    totalFilteredItems: 0,
-    totalPages: 0,
-    currentPage: 1,
 };
 
 const mapStateToProps = (state, ownProps) => {
