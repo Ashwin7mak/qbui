@@ -71,6 +71,17 @@ export const AppsList = React.createClass({
         this.props.showAppCreationDialog();
     },
 
+    renderResult() {
+        return _.isEmpty(this.props.apps) ?
+            <EmptyStateForLeftNav handleOnClick={this.createNewApp}
+                                  emptyMessage="emptyAppState.message"
+                                  className="appsListForLeftNav"
+                                  icon="add-new-filled"
+                                  iconMessage="emptyAppState.createNewApp"
+            /> :
+            this.getNewAppItem();
+    },
+
     render() {
         return (
             <ul className={"appsList"} >
@@ -88,18 +99,8 @@ export const AppsList = React.createClass({
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
-                {_.isEmpty(this.props.apps) ?
-                    <EmptyStateForLeftNav handleOnClick={this.createNewApp}
-                                          emptyMessage="emptyAppState.message"
-                                          className="appsListForLeftNav"
-                                          icon="add-new-filled"
-                                          iconMessage="emptyAppState.createNewApp"
-                    /> :
-                    <div>
-                        {this.appList()}
-                        {this.getNewAppItem()}
-                    </div>
-                }
+                {this.appList()}
+                {this.renderResult()}
 
             </ul>
         );
