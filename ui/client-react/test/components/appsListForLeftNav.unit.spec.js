@@ -5,7 +5,6 @@ import {AppsList} from '../../src/components/nav/appsListForLeftNav';
 import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 import {Link} from 'react-router-dom';
 import CreateNewItemButton from '../../../reuse/client/src/components/sideNavs/createNewItemButton';
-import EmptyStateForLeftNav from "../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav";
 import SearchBox from '../../src/components/search/searchBox';
 
 let component;
@@ -73,26 +72,26 @@ describe('AppsListForLeftNav', () => {
         expect(component.find(SearchBox).length).toEqual(1);
         expect(component.find(NavItem).length).toEqual(4);
         expect(component.find(CreateNewItemButton)).toBePresent();
-        expect(component.find(EmptyStateForLeftNav)).not.toBePresent();
         expect(component.find('.emptyState')).not.toBePresent();
         expect(component.find('.createNewIcon')).not.toBePresent();
+        expect(component.find('.iconMessage')).not.toBePresent();
     });
 
     it('renders empty message when there are no apps', () => {
         component = mount(<AppsList apps={[]}/>);
 
-        expect(component.find(EmptyStateForLeftNav)).toBePresent();
         expect(component.find(CreateNewItemButton)).not.toBePresent();
         expect(component.find('.emptyState')).toBePresent();
         expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
     });
 
     it('renders empty message when apps are undefined', () => {
         component = mount(<AppsList/>);
 
-        expect(component.find(EmptyStateForLeftNav)).toBePresent();
         expect(component.find(CreateNewItemButton)).not.toBePresent();
         expect(component.find('.emptyState')).toBePresent();
         expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
     });
 });
