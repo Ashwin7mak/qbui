@@ -164,7 +164,7 @@ describe('Analytics', () => {
 
             component = shallow(<Analytics dataset={mockDataset} evergageUpdateProps={{}} />);
             let instance = component.instance();
-            spyOn(instance, 'getEvergageUpdates').and.callThrough();
+            spyOn(instance, 'trackAction').and.callThrough();
 
             expect(window._aaq.push).not.toHaveBeenCalled();
         });
@@ -175,10 +175,10 @@ describe('Analytics', () => {
 
             component = shallow(<Analytics dataset={mockDataset} evergageUpdateProps={{}} />, {lifecycleExperimental: true});
             let instance = component.instance();
-            spyOn(instance, 'getEvergageUpdates').and.callThrough();
+            spyOn(instance, 'trackAction').and.callThrough();
 
             component.setProps({evergageUpdateProps: {'test_name': testValue}});
-            expect(instance.getEvergageUpdates).toHaveBeenCalled();
+            expect(instance.trackAction).toHaveBeenCalled();
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', testValue, 'request']);
             expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name']);
         });
@@ -190,10 +190,10 @@ describe('Analytics', () => {
 
             component = shallow(<Analytics dataset={mockDataset} evergageUpdateProps={{}} />, {lifecycleExperimental: true});
             let instance = component.instance();
-            spyOn(instance, 'getEvergageUpdates').and.callThrough();
+            spyOn(instance, 'trackAction').and.callThrough();
 
             component.setProps({evergageUpdateProps: {'test_name': testValue, 'test_name2': testValue2}});
-            expect(instance.getEvergageUpdates).toHaveBeenCalled();
+            expect(instance.trackAction).toHaveBeenCalled();
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', testValue, 'request']);
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name2', testValue2, 'request']);
             expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name -- test_name2']);
@@ -213,10 +213,10 @@ describe('Analytics', () => {
                                                'test_name2': testValue2,
                                                'test_name3': testValue3}} />, {lifecycleExperimental: true});
             let instance = component.instance();
-            spyOn(instance, 'getEvergageUpdates').and.callThrough();
+            spyOn(instance, 'trackAction').and.callThrough();
 
             component.setProps({evergageUpdateProps: {'test_name': testValueChanged, 'test_name2': testValue2Changed}});
-            expect(instance.getEvergageUpdates).toHaveBeenCalled();
+            expect(instance.trackAction).toHaveBeenCalled();
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', testValueChanged, 'request']);
             expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name2', testValue2Changed, 'request']);
             expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name -- test_name2']);

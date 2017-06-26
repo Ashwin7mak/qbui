@@ -27,7 +27,6 @@ describe('GovernanceAnalytics', () => {
         let analyticsComponent = govComponent.find(Analytics);
 
         expect(analyticsComponent).toBeDefined();
-        console.log('HELOOO', analyticsComponent.props());
         expect(analyticsComponent).toHaveProp('userId', userId);
         expect(analyticsComponent).toHaveProp('evergageUpdateProps');
 
