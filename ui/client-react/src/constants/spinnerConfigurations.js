@@ -89,4 +89,7 @@ export const CARD_VIEW_NAVIGATION =  SMALL_PALE_SPINNER;
 // Use on automation list screen
 export const AUTOMATION_LIST_LOADING = LARGE_ABSOLUTE_CENTERED_SPINNER;
 
+// Use on the main app home page
+export const APP_HOMEPAGE_LOADING = LARGE_ABSOLUTE_CENTERED_SPINNER;
+
 

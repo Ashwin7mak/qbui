@@ -5,6 +5,7 @@ import app from './app';
 import appBuilder from './appBuilder';
 import fields from './fields';
 import forms from './forms';
+import qbGrid from './qbGrid';
 import relationshipBuilder from './relationshipBuilder';
 import record from './record';
 import report from './report';
@@ -32,6 +33,7 @@ export default combineReducers({
     featureSwitches,
     fields,
     forms,
+    qbGrid,
     relationshipBuilder,
     record,
     report,

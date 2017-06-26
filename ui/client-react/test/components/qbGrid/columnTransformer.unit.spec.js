@@ -6,8 +6,14 @@ const testHeaderLabel = 'Jack Skellington';
 const testCellIdentifierValue = 'Halloweentown';
 const testFormatter = (cell) => 'Nightmare Before Christmas';
 const TestHeaderComponent = React.createClass({render() {return <h1>Sally</h1>;}});
-const testHeaderProps = {type: 'Rag Doll', stuffing: 'Fall Leaves'};
-const onMove = {};
+const testHeaderProps = {
+    type: 'Rag Doll',
+    stuffing: 'Fall Leaves',
+    fieldDef: {
+        id: 1,
+        datatypeAttributes: {}
+    }
+};
 
 describe('ColumnTransformer', () => {
     describe('new', () => {
@@ -70,13 +76,17 @@ describe('ColumnTransformer', () => {
             },
             props: {
                 label: testHeaderLabel,
-                onMove: onMove
+                relatedField: {
+                    name: testHeaderLabel,
+                    id: undefined,
+                    datatypeAttributes: undefined
+                }
             }
         };
 
         it('converts the ColumnTransformer instance into a column object that can be consumed by QbGrid', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
-            expect(_.isEqual(columnTransformer.getGridHeader(onMove), expectedOutput)).toEqual(true);
+            expect(columnTransformer.getGridHeader()).toEqual(expectedOutput);
         });
 
         it('adds a cell formatter if it is set', () => {
@@ -89,7 +99,7 @@ describe('ColumnTransformer', () => {
                 }
             });
 
-            expect(_.isEqual(columnTransformer.getGridHeader(onMove), expectedOutputWithFormatter)).toEqual(true);
+            expect(columnTransformer.getGridHeader()).toEqual(expectedOutputWithFormatter);
         });
 
         it('adds a menu component if it is set', () => {
@@ -108,10 +118,18 @@ describe('ColumnTransformer', () => {
                             </div>
                         </span>
                     )
+                },
+                props: {
+                    label: testHeaderLabel,
+                    relatedField: {
+                        name: testHeaderLabel,
+                        id: 1,
+                        datatypeAttributes: {}
+                    }
                 }
             });
 
-            expect(_.isEqual(columnTransformer.getGridHeader(onMove), expectedOutputWithHeaderMenu)).toEqual(true);
+            expect(columnTransformer.getGridHeader()).toEqual(expectedOutputWithHeaderMenu);
         });
     });
 });
