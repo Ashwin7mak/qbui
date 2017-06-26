@@ -36,7 +36,7 @@ describe('PageService functions', () => {
                     numOfRows: 12
                 }
             }
-        }
+        };
 
         var url = pageService.constructUrl(pageService.API.CREATE_PAGE, [appId]);
         pageService.createPage(appId, page);
