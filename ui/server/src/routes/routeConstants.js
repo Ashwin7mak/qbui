@@ -142,7 +142,8 @@
         PUBLIC_TICKET              : '/ticket*',
         PUBLIC_USERS               : '/users*',
         PUBLIC_WORKFLOW_AUTOMATION_API : '/workflow/apps/:appId/api*',
-        PUBLIC_WORKFLOW_AUTOMATION_INVOKE : '/workflow/apps/:appId/invokes*'
+        PUBLIC_WORKFLOW_AUTOMATION_INVOKE: '/workflow/apps/:appId/invokes*',
+        PUBLIC_PAGES: '/app/:appId/pages*'
     };
 
     // Define list of public 'short-hand' routes and its back-end server api context.
@@ -186,7 +187,12 @@
         {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: context.base.WE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: context.base.WE}
+        {
+            route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE,
+            regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i,
+            context: context.base.WE
+        },
+        {route: publicControllerEndpoints.PUBLIC_PAGES, regEx: /^\/apps\/.*\/pages(.*)?$/i, context: context.api.EE}
     ];
 
     // The regular expression is used to identify the client routes when determining which
