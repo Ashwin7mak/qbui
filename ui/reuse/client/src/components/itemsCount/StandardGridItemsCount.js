@@ -2,25 +2,30 @@ import React, {Component, PropTypes} from "react";
 import "./StandardGridItemsCount.scss";
 
 class StandardGridItemsCount extends Component {
+
+    /**
+     * determines if items component navigation should be visible
+     * @returns {boolean}
+     */
+    shouldShowItems = () => {
+        return this.props.totalItems !== 0;
+    };
+
+
     /**
      * Renders the item count
-     * if we have some dynamic filtering in effect include the number of filtered items out of the total
-     * otherwise just show the grid total items
-     *
+     * No Item = Hide
      * Single Item = 1 Item
-     * 0/Multiple Items = 0/1 Items
-     *
+     * 0/Multiple Items = 0/N Items
      * Filtered Item = M of N Items
-     * Not Filtered = M Items
      */
 
     render() {
-
-        const itemCountMessage = (this.props.totalFilteredItems === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
-
+        const itemCountMessage = (this.props.totalItems === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
         const standardGridItemsCount = (this.props.totalFilteredItems === this.props.totalItems) ? `${this.props.totalItems}` : `${this.props.totalFilteredItems} of ${this.props.totalItems}`;
 
         return (
+            this.shouldShowItems() &&
              <div className="itemsCountLoaderContainer">
                          <div className="itemCount">
                              {standardGridItemsCount} {itemCountMessage}

@@ -45,7 +45,8 @@ export const EmbeddedAddChildLink = React.createClass({
             detailKeyValue: encodeURIComponent(detailKeyValue),
             detailKeyDisplay: encodeURIComponent(detailKeyDisplay)},
             uniqueId);
-        const noParent = parentIsBeingEdited && (detailKeyValue === null || detailKeyValue.trim() === '');
+        const emptyDetailKeyValue = detailKeyValue === null || (typeof detailKeyValue === 'string' && detailKeyValue.trim() === '');
+        const noParent = parentIsBeingEdited && emptyDetailKeyValue;
         const noun = childTableNoun ? childTableNoun.toLowerCase() : Locale.getMessage("records.singular");
         const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={noun}/>;
         return (

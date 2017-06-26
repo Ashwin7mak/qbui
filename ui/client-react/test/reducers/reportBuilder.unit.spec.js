@@ -11,7 +11,8 @@ function initializeState() {
         isPendingEdit: false,
         isInBuilderMode: false,
         availableColumns: [],
-        addBeforeColumn: false
+        addBeforeColumn: false,
+        fieldBeingDragged: ''
     };
 }
 
@@ -26,6 +27,19 @@ describe('Test initial state of reportBuilder reducer', () => {
 });
 
 describe('reportBuilder reducer', () => {
+    it('DRAGGING_COLUMN_START sets fieldBeingDragged to the sourceLabel', () => {
+        let content = {
+            sourceLabel: 'Label'
+        };
+        const state = reducer(initialState, {type: types.DRAGGING_COLUMN_START, content: content});
+        expect(state.fieldBeingDragged).toEqual(content.sourceLabel);
+    });
+
+    it('DRAGGING_COLUMN_END sets fieldBeingDragged to the an empty string', () => {
+        const state = reducer(initialState, {type: types.DRAGGING_COLUMN_END});
+        expect(state.fieldBeingDragged).toEqual('');
+    });
+
     it('UPDATE_REPORT_REDIRECT_ROUTE sets redirectRoute to the route', () => {
         let content = {
             route: route
