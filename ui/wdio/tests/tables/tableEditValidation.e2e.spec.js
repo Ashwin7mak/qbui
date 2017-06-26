@@ -8,12 +8,13 @@
     let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
+    let modalDialog = requirePO('/common/modalDialog');
 
     describe('Tables - Edit table validation tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
-        var existingTableName = 'Table 2';
+        let existingTableName = 'Table 2';
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -115,6 +116,84 @@
                 //Click on back to apps page link
                 tableCreatePO.clickBackToAppsLink();
 
+            });
+        });
+
+
+        /**
+         * Data provider for table field validation testCases.
+         */
+        function recordTitleFieldPickerTestCases() {
+            let aTextField = {name:'Text',
+                type:'SCALAR',
+                datatypeAttributes:{
+                    type:'TEXT'
+                }};
+            return [
+                {
+                    message: 'with just built in fields; expect record Id to be the only field on list',
+                    table: {name: "Table for TitlePicker 1"},
+                    expectedDefaultSelection: "Default to Table for TitlePicker 1 + ID",
+                    uiTable: false
+                },
+                {
+                    message: 'with a couple of custom fields; expect record Id + other fields to show on list',
+                    table: {name: "Table for TitlePicker 2", fields: [aTextField, aTextField]},
+                    expectedDefaultSelection: "Default to Table for TitlePicker 2 + ID",
+                    uiTable: false
+                },
+                {
+                    message: 'with record title field; expect record title field selected',
+                    table: {name: "Table for TitlePicker 3"},
+                    expectedDefaultSelection: "Record title",
+                    uiTable: true
+                }
+            ];
+        }
+
+
+        recordTitleFieldPickerTestCases().forEach(function(testCase) {
+            it('Edit table ' + testCase.message, function() {
+
+                //create the table with the specific fields
+                let createTablePromise = testCase.uiTable ? e2eBase.tableService.createTableInUI(testApp.id, testCase.table) : e2eBase.tableService.createTableInCore(testApp.id, testCase.table);
+
+                //Load app into the Browser
+                e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+                //Select table
+                tableCreatePO.selectTable(testCase.table.name);
+                //parse tableId from current url
+                let currentURL = browser.getUrl();
+                let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
+                //go to the table settings page for the table
+                tableCreatePO.clickOnModifyTableSettingsLink();
+                let pickerfield = browser.element('.recordTitleFieldSelect');
+                //verify the selected value
+                expect(pickerfield.element('.Select-value-label').getText()).toEqual(testCase.expectedDefaultSelection);
+
+                //check the expected list fields on the record title field picker drop down
+                pickerfield.click();
+
+                let dropDownListLabels = modalDialog.allDropDownListOptions;
+
+                //get the fields in the table - all of non built in fields + record id should show up
+                e2eBase.tableService.getTableFields(testApp.id, tableId).then(function(fieldLabel) {
+                    let fieldLabels = [];
+                    for (let i = 0; i < fieldLabel.fields.length; i++) {
+                        fieldLabels.push(fieldLabel.fields[i].name);
+                    }
+                   // expect(fieldLabels).toContain(dropDownListLabels);
+                });
+                //select one and reset
+                modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+                tableCreatePO.clickOnEditTableResetBtn();
+                //make sure the selection goes back to default selection
+                expect(pickerfield.element('.Select-value-label').getText()).toEqual(testCase.expectedDefaultSelection);
+                //select one and apply to test it was saved
+                modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+                tableCreatePO.clickOnEditTableApplyBtn();
+                //Go back to the apps page
+                e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
             });
         });
     });

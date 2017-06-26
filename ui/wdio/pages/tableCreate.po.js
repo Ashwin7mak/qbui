@@ -426,7 +426,7 @@
             //Click on table properties and settings link
             this.modifyTableSettingsLink.waitForVisible();
             this.modifyTableSettingsLink.click();
-            return browser.element('.dialogFieldInput').waitForVisible();
+            return browser.element('.dialogCreationPanelInfo').waitForVisible();
         }},
 
         /**

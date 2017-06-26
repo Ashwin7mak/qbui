@@ -95,7 +95,7 @@ class modalDialogWindow {
         //get the list of all drop down options
         browser.waitForVisible('.Select-menu-outer');
         browser.elements('.Select-option').value.filter(function(optionText) {
-            listOptions.push(optionText.element('div div').getText());
+            listOptions.push(optionText.getText());
         });
         return listOptions;
     }
