@@ -222,6 +222,8 @@ describe('Analytics', () => {
             expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name -- test_name2']);
 
             expect(window._aaq.push).not.toHaveBeenCalledWith(['setCustomField', 'test_name3', testValue3, 'request']);
+
+            expect(window._aaq.push).toHaveBeenCalledTimes(3);
         });
     });
 
