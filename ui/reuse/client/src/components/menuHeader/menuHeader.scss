@@ -5,6 +5,10 @@
     background-color: $leftnav-app-background-color; // Default for the left nav
     @include correctFontWeightForLightTextOnDarkBackground;
 
+    // The height of the component is dynamically produced depending on props passed to the component.
+    // Adding overflow hidden prevents loaded content from escaping the height of the component before it has expanded to the correct height.
+    overflow: hidden;
+
     transition: background-color 0.3s;
 
     .menuHeaderButton {
