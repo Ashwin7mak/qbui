@@ -1,3 +1,5 @@
+import queryString from 'query-string';
+
 /**
  * Static class of window url param access functions
  *   extracted for mockability /testability
@@ -68,6 +70,45 @@ class WindowLocationUtils {
     static getOrigin() {
         return window.location.origin;
     }
+
+    /**
+     * Returns the search portion of the url.
+     *
+     * i.e. for url https://developer.mozilla.org/en-US/search?q=URL#search-results-close-container';
+     * search portion is "?q=URL"
+     * @returns {*}
+     */
+    static getSearch() {
+        return window.location.search;
+    }
+
+    /**
+     * Given a params object, builds query string with key value pairs. Order of the key/value pairs are not guaranteed.
+     * params = {
+     *   name: 'Jon',
+     *   value: 33
+     * }
+     *   returns "?name=Jon&value=33"
+     *
+     * @param {string} urlQueryString string to parse for existing parameters
+     * @param {object} params
+     * @returns {string}
+     */
+    static buildQueryString(urlQueryString, params = {}) {
+        let parsed = {};
+        if (urlQueryString) {
+            // keep existing query strings
+            parsed = queryString.parse(urlQueryString);
+        }
+        Object.keys(params).forEach(key => {
+            // add the key:value pairs
+            // overwrites the value in urlQueryString if the same key already exists
+            parsed[key] = params[key];
+        });
+        const newQueryString = queryString.stringify(parsed);
+        return newQueryString.length ? '?' + newQueryString : '';
+    }
+
     /**
      * Calls window.addEventListener. This is mostly for ease of testing.
      */
