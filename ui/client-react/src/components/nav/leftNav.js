@@ -17,7 +17,7 @@ class LeftNav extends Component {
     static propTypes = {
         expanded: PropTypes.bool,
         visible: PropTypes.bool,
-        appsListOpen: PropTypes.bool.isRequired,
+        isAppsListOpen: PropTypes.bool.isRequired,
         selectedAppId: PropTypes.string,
         selectedApp: PropTypes.object,
         selectedTableId: PropTypes.string,
@@ -39,11 +39,15 @@ class LeftNav extends Component {
      * create apps toggle section (if an app is selected)
      */
     createAppsToggleArea = () => {
-        const {selectedApp, isAppLoading, onToggleAppsList, appsListOpen, onAppsRoute, expanded} = this.props;
+        const {selectedApp, isAppLoading, onToggleAppsList, isAppsListOpen, onAppsRoute, expanded} = this.props;
 
         // If there isn't an app selected, we don't want to show any icon.
         // However, if there is an app that doesn't have an icon, we want to provide a default.
-        const appIcon = selectedApp ? _.get(selectedApp, 'icon', '1') : null;
+        const appIcon = selectedApp ? _.get(selectedApp, 'icon', 'favicon') : null;
+
+        // The default favicon is in the default fonts (also if 'favicon' is selected as app icon);
+        // however, all selected app icons are in the TABLE_STURDY font
+        const iconFont = (appIcon && appIcon !== 'favicon') ? AVAILABLE_ICON_FONTS.TABLE_STURDY : AVAILABLE_ICON_FONTS.DEFAULT;
 
         const hideHeader = isAppLoading || !selectedApp;
 
@@ -51,11 +55,11 @@ class LeftNav extends Component {
             <div className="appsToggleArea">
                 <MenuHeader
                     icon={appIcon}
-                    iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                    iconFont={iconFont}
                     title={_.get(selectedApp, 'name', '')} // navLabel
                     backgroundColor={_.get(selectedApp, 'color', null)}
                     onClickHeader={onToggleAppsList}
-                    isToggleDown={!appsListOpen}
+                    isToggleDown={!isAppsListOpen}
                     isSmall={onAppsRoute}
                     isToggleVisible={!hideHeader}
                     isVisible={!hideHeader}
@@ -92,7 +96,7 @@ class LeftNav extends Component {
 
     renderNavContent = () => {
         // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
-        if (this.props.appsListOpen || !this.props.selectedApp) {
+        if (this.props.isAppsListOpen || !this.props.selectedApp) {
             return <AppsList {...this.props} key="apps" onSelectApp={this.onSelectApp}/>;
         } else {
             return <TablesList key="tables"

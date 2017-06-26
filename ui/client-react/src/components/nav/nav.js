@@ -29,7 +29,7 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import {loadApp, loadApps} from '../../actions/appActions';
 
-import {getSelectedApp, getApps, getIsAppLoading, getAreAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
+import * as App from '../../reducers/app';
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
@@ -415,7 +415,7 @@ export const Nav = React.createClass({
             <LeftNav
                 visible={this.props.shell.leftNavVisible}
                 expanded={this.props.shell.leftNavExpanded}
-                appsListOpen={this.props.shell.appsListOpen}
+                isAppsListOpen={this.props.shell.appsListOpen}
                 apps={appsList}
                 areAppsLoading={areAppsLoading}
                 isAppLoading={isAppLoading}
@@ -530,26 +530,22 @@ export const Nav = React.createClass({
     },
 });
 
-const mapStateToProps = state => {
-    const selectedAppId = getSelectedAppId(state);
-
-    return {
-        selectedApp: getSelectedApp(state),
-        getApps: () => getApps(state),
-        selectedAppId,
-        isAppLoading: getIsAppLoading(state),
-        areAppsLoading: getAreAppsLoading(state),
-        appOwner: getAppOwner(state),
-        appRoles: getAppRoles(state.selectedApp),
-        selectedTableId: getSelectedTableId(state),
-        appUsers: getAppUsers(state),
-        appUnfilteredUsers: getAppUnfilteredUsers(state),
-        forms: state.forms,
-        shell: state.shell,
-        record: state.record,
-        report: state.report
-    };
-};
+const mapStateToProps = state => ({
+    selectedApp: App.getSelectedApp(state),
+    getApps: () => App.getApps(state),
+    selectedAppId: App.getSelectedAppId(state),
+    isAppLoading: App.getIsAppLoading(state),
+    areAppsLoading: App.getAreAppsLoading(state),
+    appOwner: App.getAppOwner(state),
+    appRoles: getAppRoles(state.selectedApp),
+    selectedTableId: App.getSelectedTableId(state),
+    appUsers: App.getAppUsers(state),
+    appUnfilteredUsers: App.getAppUnfilteredUsers(state),
+    forms: state.forms,
+    shell: state.shell,
+    record: state.record,
+    report: state.report
+});
 
 const mapDispatchToProps = (dispatch) => {
     return {
