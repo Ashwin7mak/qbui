@@ -38,7 +38,7 @@ export default {
     USERS               : 'users',
     RELATIONSHIPS       : 'relationships',
     RIGHTS              : 'accessRights',
-
+    PAGES: 'pages',
     FEATURE_SWITCHES    : 'featureSwitches',
     FEATURE_OVERRIDES   : 'overrides',
     FEATURE_STATES      : 'featureStates',
