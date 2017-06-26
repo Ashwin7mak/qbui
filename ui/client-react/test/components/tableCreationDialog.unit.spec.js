@@ -8,7 +8,7 @@ import {TableCreationDialog, __RewireAPI__ as TableCreationDialogRewireAPI} from
 let component;
 let instance;
 let domComponent;
-let tableInfo = {name: {}, description: {}, tableIcon: {}, tableNoun: {}};
+let tableInfo = {name: {value: {}}, description: {value: {}}, tableIcon: {value: {}}, tableNoun: {value: {}}};
 
 const mockPromiseAll = {
     all: () => ({then: callback => callback()})
@@ -131,11 +131,17 @@ describe('TableCreationDialog', () => {
                                                  onTableCreated={mockParentFunctions.onTableCreated}
                                                  updateFormRedirectRoute={mockParentFunctions.updateFormRedirectRoute}
                                                  hideTableCreationDialog={mockParentFunctions.hideTableCreationDialog} />);
+        const tableInfoResult = {
+            name: tableInfo.name.value,
+            description: tableInfo.description.value,
+            tableIcon: tableInfo.tableIcon.value,
+            tableNoun: tableInfo.tableNoun.value
+        };
 
         instance = component.instance();
         instance.onFinished();
 
-        expect(mockParentFunctions.createTable).toHaveBeenCalledWith(app, tableInfo);
+        expect(mockParentFunctions.createTable).toHaveBeenCalledWith(app.id, tableInfoResult);
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
     });
 
