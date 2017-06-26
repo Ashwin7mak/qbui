@@ -124,23 +124,48 @@ export class Analytics extends Component {
     };
 
     /**
-     * Checks for diffs in the current props 'evergageUpdateProps' for changes in
-     * the new props before update, adding any updated props to the _aaq object
-     * @param newEvergageUpdateProps - the new props (key, value) pairs of props for Evergage
-     * @return String - lists the updated Evergage properties, empty string if no updates
+     * Filters through the new props to find props that have changed when compared to the old props
+     * @param newEvergageUpdateProps - object containing (evergagePropName: value) (includes unchanged props)
+     * @returns {{evergagePropName: value, ...}} - the filtered object containing only updated/changed props
      */
-    getEvergageUpdates = (newEvergageUpdateProps) => {
-        let updates = '';
+    getUpdatedProps = (newEvergageUpdateProps) => {
+        let updatedProps = {};
 
         _.forOwn(newEvergageUpdateProps, (newValue, evergagePropName) => {
             let oldPropVal = _.get(this.props.evergageUpdateProps, evergagePropName);
 
             if (oldPropVal !== newValue) {
-                window._aaq.push(['setCustomField', evergagePropName, newValue, 'request']);
-                updates += ' -- ' + evergagePropName;
+                _.set(updatedProps, evergagePropName, newValue);
             }
         });
-        return updates;
+        return updatedProps;
+    };
+
+    /**
+     * Creates a string containing descriptions (names) for the given props
+     * @param propsToUpdate - {evergagePropName: value} - the list of updated props
+     * @returns {string} - describes updated props
+     */
+    getEvergageUpdateNames = (propsToUpdate) => {
+        let updateString = '';
+        _.forOwn(propsToUpdate, (propValue, evergagePropName) => {
+            updateString += ' -- ' + evergagePropName;
+        });
+        return updateString;
+    };
+
+    /**
+     * Pushes request messages into the window._aaq object for any prop changes to be sent to Evergage.
+     * Then, adds the 'trackAction' message to initiate an update call to Evergage
+     * (see evergage dev api for details).
+     * @param propsToUpdate - {evergagePropName: value, ...} - the object of props updated
+     * @param updateString - describes the updates that occurred (to be included in the trackAction event message
+     */
+    trackAction = (propsToUpdate, updateString) => {
+        _.forOwn(propsToUpdate, (newValue, evergagePropName) => {
+            window._aaq.push(['setCustomField', evergagePropName, newValue, 'request']);
+        });
+        window._aaq.push(['trackAction', 'updated: ' + updateString]);
     };
 
     /**
@@ -149,11 +174,12 @@ export class Analytics extends Component {
      * @param nextProps - the new props in the updated Analytics component
      */
     componentWillReceiveProps(nextProps) {
-        let updates = this.getEvergageUpdates(nextProps.evergageUpdateProps);
-        if (updates.length) {
-            window._aaq.push(['trackAction', 'updated: ' + updates]);
+        let updatedProps = this.getUpdatedProps(nextProps.evergageUpdateProps);
+        let updateString = this.getEvergageUpdateNames(updatedProps);
+        if (updateString.length) {
+            this.trackAction(updatedProps, updateString);
         }
-    }
+    };
 
     /**
      * Tracks the current user and places the Evergage script on the page.

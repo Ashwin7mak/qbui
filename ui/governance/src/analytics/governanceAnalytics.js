@@ -9,7 +9,7 @@ import _ from "lodash";
 export class GovernanceAnalytics extends Component {
 
     render() {
-        /*
+        /**
         Any of these prop_key_vals will be sent to Evergage whenever they change.
         The given key is the name that will be used as the property for the event in
         Evergage, and the value will be the value set to that property.
@@ -25,9 +25,16 @@ export class GovernanceAnalytics extends Component {
             deniedUsers: this.props.deniedUsers,
             deactivatedUsers: this.props.deactivatedUsers,
             totalRealmUsers: this.props.totalRealmUsers,
-            pageLoadTime: this.props.pageLoadTime,
-            usersGridLoadTime: this.props.usersGridLoadTime
+            pageLoadTime: this.props.pageLoadTime
         };
+
+        /**
+         * NOTE: special case - this makes sure that a negative value isn't sent to Evergage, since
+         * usersGridLoadTime gets populated before pageLoadTime is calculated
+         */
+        if (this.props.usersGridLoadTime >= 0) {
+            propKeyVals.usersGridLoadTime = this.props.usersGridLoadTime
+        }
 
         return (
             <Analytics dataset={Config.evergageDataset}
