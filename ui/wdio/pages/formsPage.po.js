@@ -622,7 +622,7 @@
             return field.element('div').getAttribute('class').split(' ').indexOf('checkbox') !== -1;
         }},
         /**
-         * Method to check if the checkbox is checked
+         * Method to check if the checkbox is checked on small break point
          */
         isChecked: {value: function(field) {
             return (field.element('./..//span[contains(@class,"symbol")]').getAttribute('class').split(' ').indexOf('checked')) > 0;
