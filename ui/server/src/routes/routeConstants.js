@@ -135,6 +135,7 @@
         PUBLIC_RELATIONSHIPS       : '/apps/:appId/relationships*',
         PUBLIC_ROLES               : '/apps/:appId/roles*',
         PUBLIC_WORKFLOW_FLOW_MGR   : '/apps/:appId/workflow/flows*',
+        PUBLIC_PAGES: '/apps/:appId/pages*',
         PUBLIC_APPS                : '/apps*',
         PUBLIC_HEALTH              : '/health',
         PUBLIC_OPERATIONS          : '/operations*',
@@ -142,8 +143,7 @@
         PUBLIC_TICKET              : '/ticket*',
         PUBLIC_USERS               : '/users*',
         PUBLIC_WORKFLOW_AUTOMATION_API : '/workflow/apps/:appId/api*',
-        PUBLIC_WORKFLOW_AUTOMATION_INVOKE: '/workflow/apps/:appId/invokes*',
-        PUBLIC_PAGES: '/apps/:appId/pages*'
+        PUBLIC_WORKFLOW_AUTOMATION_INVOKE: '/workflow/apps/:appId/invokes*'
     };
 
     // Define list of public 'short-hand' routes and its back-end server api context.
@@ -180,6 +180,7 @@
         {route: publicControllerEndpoints.PUBLIC_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_WORKFLOW_FLOW_MGR, regEx: /^\/apps\/.*\/workflow\/flows(.*)?$/i, context: context.api.WORKFLOW.FLOW_MANAGER},
+        {route: publicControllerEndpoints.PUBLIC_PAGES, regEx: /^\/apps\/.*\/pages(.*)?$/i, context: context.api.EE},
         {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps(.*)?$/i, context: context.api.CORE},                  // conflict with EE
         {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health$/i, context: context.api.CORE},                // conflict with EE, Workflow
         {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: context.api.CORE},        // conflict with EE
@@ -191,8 +192,7 @@
             route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE,
             regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i,
             context: context.base.WE
-        },
-        {route: publicControllerEndpoints.PUBLIC_PAGES, regEx: /^\/apps\/.*\/pages(.*)?$/i, context: context.api.EE}
+        }
     ];
 
     // The regular expression is used to identify the client routes when determining which
