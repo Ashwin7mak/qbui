@@ -143,7 +143,7 @@
         PUBLIC_USERS               : '/users*',
         PUBLIC_WORKFLOW_AUTOMATION_API : '/workflow/apps/:appId/api*',
         PUBLIC_WORKFLOW_AUTOMATION_INVOKE: '/workflow/apps/:appId/invokes*',
-        PUBLIC_PAGES: '/app/:appId/pages*'
+        PUBLIC_PAGES: '/apps/:appId/pages*'
     };
 
     // Define list of public 'short-hand' routes and its back-end server api context.
