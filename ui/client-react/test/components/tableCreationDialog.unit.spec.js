@@ -102,8 +102,11 @@ describe('TableCreationDialog', () => {
         if (modalInDom) {
             modalInDom.parentNode.removeChild(modalInDom);
         }
+
         TableCreationDialogRewireAPI.__ResetDependency__('Promise');
         TableCreationDialogRewireAPI.__ResetDependency__('NotificationMan');
+        mockParentFunctions.createTable.calls.reset();
+        mockParentFunctions.createTableFailed.calls.reset();
     });
 
     it('renders a TableCreationDialog', () => {

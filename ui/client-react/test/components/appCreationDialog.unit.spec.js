@@ -21,30 +21,26 @@ const AppHistoryMock = {
 };
 
 
-let createProps = () => ({
+let mockProps = {
     createApp:  () => ({then: callback => callback({data: {id: 'mockAppId'}})}),
     createAppFailed:  () => ({then: (callbackSuccess, callBackFailed) => callBackFailed()}),
     hideAppCreationDialog() {},
     toggleAppsList() {}
-});
-
-let props;
+};
 
 describe('AppCreationDialog', () => {
     beforeEach(() => {
         jasmineEnzyme();
-
-        props = createProps();
 
         AppCreationDialogRewireAPI.__Rewire__('AppCreationPanel', AppCreationPanel);
         AppCreationDialogRewireAPI.__Rewire__('Promise', mockPromiseAll);
         AppCreationDialogRewireAPI.__Rewire__('NotificationManager', mockNotificationManager);
         AppCreationDialogRewireAPI.__Rewire__('AppHistory', AppHistoryMock);
 
-        spyOn(props, 'hideAppCreationDialog');
-        spyOn(props, 'createApp').and.callThrough();
-        spyOn(props, 'createAppFailed').and.callThrough();
-        spyOn(props, 'toggleAppsList');
+        spyOn(mockProps, 'hideAppCreationDialog');
+        spyOn(mockProps, 'createApp').and.callThrough();
+        spyOn(mockProps, 'createAppFailed').and.callThrough();
+        spyOn(mockProps, 'toggleAppsList');
         spyOn(AppHistoryMock.history, 'push');
         spyOn(mockNotificationManager, 'error');
     });
@@ -53,6 +49,9 @@ describe('AppCreationDialog', () => {
         AppCreationDialogRewireAPI.__ResetDependency__('AppCreationPanel');
         AppCreationDialogRewireAPI.__ResetDependency__('Promise');
         AppCreationDialogRewireAPI.__ResetDependency__('NotificationManager');
+
+        mockProps.createAppFailed.calls.reset();
+        mockProps.toggleAppsList.calls.reset();
     });
 
     it('renders an AppCreationDialog', () => {
@@ -63,48 +62,48 @@ describe('AppCreationDialog', () => {
     });
 
     it('will invoke hideAppCreationDialog action when onCancel is called', () => {
-        component = shallow(<AppCreationDialog hideAppCreationDialog={props.hideAppCreationDialog} />);
+        component = shallow(<AppCreationDialog hideAppCreationDialog={mockProps.hideAppCreationDialog} />);
 
         instance = component.instance();
         instance.onCancel();
 
-        expect(props.hideAppCreationDialog).toHaveBeenCalled();
+        expect(mockProps.hideAppCreationDialog).toHaveBeenCalled();
     });
 
     it('will invoke createApp action when onFinished is called', () => {
-        component = shallow(<AppCreationDialog createApp={props.createApp}
-                                               toggleAppsList={props.toggleAppsList}
+        component = shallow(<AppCreationDialog createApp={mockProps.createApp}
+                                               toggleAppsList={mockProps.toggleAppsList}
                                                app={{}} />);
 
         instance = component.instance();
         instance.onFinished();
 
-        expect(props.createApp).toHaveBeenCalledWith({});
-        expect(props.toggleAppsList).toHaveBeenCalledWith(false);
+        expect(mockProps.createApp).toHaveBeenCalledWith({});
+        expect(mockProps.toggleAppsList).toHaveBeenCalledWith(false);
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
     });
 
     it('will invoke not createApp action if createApp fails', () => {
-        component = shallow(<AppCreationDialog createApp={props.createAppFailed}
-                                               toggleAppsList={props.toggleAppsList}
+        component = shallow(<AppCreationDialog createApp={mockProps.createAppFailed}
+                                               toggleAppsList={mockProps.toggleAppsList}
                                                app={{}} />);
 
         instance = component.instance();
         instance.onFinished();
 
-        expect(props.createApp).not.toHaveBeenCalled();
-        expect(props.toggleAppsList).not.toHaveBeenCalled();
+        expect(mockProps.createApp).not.toHaveBeenCalled();
+        expect(mockProps.toggleAppsList).not.toHaveBeenCalled();
         expect(AppHistoryMock.history.push).not.toHaveBeenCalled();
         expect(mockNotificationManager.error).toHaveBeenCalled();
     });
 
     it('will NOT invoke createApp action when onFinished is called if there are no new apps', () => {
-        component = shallow(<AppCreationDialog createApp={props.createApp}
+        component = shallow(<AppCreationDialog createApp={mockProps.createApp}
                                                app={null} />);
 
         instance = component.instance();
         instance.onFinished();
 
-        expect(props.createApp).not.toHaveBeenCalled();
+        expect(mockProps.createApp).not.toHaveBeenCalled();
     });
 });
