@@ -533,13 +533,8 @@
                 if (platformName !== 'iOS' && browserName !== 'firefox') {
                     expect(expectedRecordValues[8]).toBe(sTime.toString());
                 }
-                if (platformName === 'iOS') {
-                    //numeric duration field
-                    expect(expectedRecordValues[9]).toBe('4.76142857142857 weeks');
-                } else {
-                    //numeric duration field
-                    expect(expectedRecordValues[9]).toBe('4.76142857142857  weeks');
-                }
+                //numeric duration field
+                expect(expectedRecordValues[9]).toBe('4.76142857142857  weeks');
                 //checkbox field
                 expect(expectedRecordValues[10]).toBe('true');
                 //email field
@@ -645,7 +640,9 @@
             let fields = browser.elements('.cellWrapper');
             return fields.value.map(function(field) {
                 return FormsPage.isCheckbox(field) ? FormsPage.isChecked(field).toString() :
-                    field.getText();
+                    // field.getText(); - getText() returns the data of the duration field with single space in between the value and 'weeks',
+                    // but the value in DOM has two spaces. We are using getAttribute('textContent') for consistency with reportContent.po getRecordCellValue().
+                field.getAttribute('textContent');
 
             });
         }}
