@@ -33,7 +33,7 @@ export class GovernanceAnalytics extends Component {
          * usersGridLoadTime gets populated before pageLoadTime is calculated
          */
         if (this.props.usersGridLoadTime >= 0) {
-            propKeyVals.usersGridLoadTime = this.props.usersGridLoadTime
+            propKeyVals.usersGridLoadTime = this.props.usersGridLoadTime;
         }
 
         return (

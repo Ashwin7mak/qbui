@@ -179,7 +179,7 @@ export class Analytics extends Component {
         if (updateString.length) {
             this.trackAction(updatedProps, updateString);
         }
-    };
+    }
 
     /**
      * Tracks the current user and places the Evergage script on the page.
