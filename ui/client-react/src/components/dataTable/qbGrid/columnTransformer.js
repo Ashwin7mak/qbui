@@ -70,6 +70,7 @@ class ColumnTransformer {
                 label: this.headerLabel,
                 relatedField: {
                     name: this.headerLabel,
+                    id: this.headerMenuProps && this.headerMenuProps.fieldDef && this.headerMenuProps.fieldDef.id,
                     datatypeAttributes: this.headerMenuProps && this.headerMenuProps.fieldDef &&
                     this.headerMenuProps.fieldDef.datatypeAttributes
                 }

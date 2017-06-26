@@ -14,10 +14,19 @@ export const Record = React.createClass({
     displayName: 'Record',
 
     componentWillReceiveProps(nextProps) {
-        let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && this.props.pendEdits.recordEditOpen === false;
-        let shouldRecordEditOpen = _.has(nextProps, 'pendEdits.recordEditOpen') && !nextProps.pendEdits.recordEditOpen;
-        let noPendingChanges = _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges);
-        if ((wasRecordEditOpen !== shouldRecordEditOpen && noPendingChanges)) {
+        const wasRecordEditOpen = _.get(this.props, 'pendEdits.recordEditOpen');
+        const shouldRecordEditOpen = _.get(nextProps, 'pendEdits.recordEditOpen');
+        // why do we care about pendEdits here?
+        const noPendingChanges = _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges);
+
+        const {appId, tblId, recId} = this.props;
+        const {appId:nextAppId, tblId:nextTblId, recId:nextRecId} = nextProps;
+        const differentRecord = appId !== nextAppId || tblId !== nextTblId || recId !== nextRecId;
+
+        // if recordEditOpen was false and shouldRecordEditOpen is true, we are starting to edit a record
+        if ((shouldRecordEditOpen && !wasRecordEditOpen && noPendingChanges) ||
+            // if we're showing a different record, user must've clicked [Save and add next]
+            (shouldRecordEditOpen && differentRecord)) {
             this.handleEditRecordStart(false);
         }
     },
@@ -25,7 +34,7 @@ export const Record = React.createClass({
     componentDidMount() {
         //new record or existing records with pending changes on open
         if ((this.props.recId === UNSAVED_RECORD_ID && _.isEmpty(this.props.pendEdits.recordChanges)) ||
-            (_.has(this.props, 'pendEdits.recordEditOpen') && _.isEmpty(this.props.pendEdits.recordChanges) && this.props.pendEdits.recordEditOpen !== false)) {
+            (_.get(this.props, 'pendEdits.recordEditOpen') && _.isEmpty(this.props.pendEdits.recordChanges))) {
             this.handleEditRecordStart(true);
         }
     },
