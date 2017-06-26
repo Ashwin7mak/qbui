@@ -625,11 +625,7 @@
          * Method to check if the checkbox is checked
          */
         isChecked: {value: function(field) {
-            if (field.element('./..//span[contains(@class,"symbol")]').getAttribute('class').split(' ').indexOf('checked')){
-                return true;
-            } else {
-                return false;
-            }
+            return (field.element('./..//span[contains(@class,"symbol")]').getAttribute('class').split(' ').indexOf('checked')) > 0;
         }},
 
         /**
