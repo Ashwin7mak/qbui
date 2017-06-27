@@ -138,6 +138,16 @@ const UrlUtils = {
     },
 
     /**
+     * get table homepage route
+     * @param appId
+     * @param tblId
+     * @returns {string}
+     */
+    getTableHomepageLink(appId, tblId) {
+        return StringUtils.format(URL.TABLE_LINK, [appId, tblId])
+    },
+
+    /**
      * Get the link for Table Properties & Settings page
      */
     getTableSettingsLink(appId, tableId) {
