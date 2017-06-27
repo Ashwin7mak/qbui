@@ -50,6 +50,6 @@ describe('PageService functions', () => {
 
         const url = pageService.constructUrl(pageService.API.GET_PAGE, [appId, pageId]);
         pageService.getPage(appId, pageId);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, pageId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 });
