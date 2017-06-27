@@ -1,5 +1,6 @@
 import * as types from "./standardGridActionTypes";
 import _ from 'lodash';
+import constants from "../constants/StandardGridConstants";
 
 /**
  * Action to set the visible items for a given grid
@@ -126,5 +127,5 @@ export const doUpdate = (gridId, doUpdateAction) => {
  * @returns {function(*, *)} (debounced)
  */
 export const doUpdateDebounced = (gridId, doUpdateAction) => {
-    return _.debounce(doUpdate(gridId, doUpdateAction), 500);
+    return _.debounce(doUpdate(gridId, doUpdateAction), constants.GRID_SEARCH_DEBOUNCE);
 };
