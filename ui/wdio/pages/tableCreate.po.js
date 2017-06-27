@@ -130,11 +130,8 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            //wait until loading screen disappear in leftNav
-
-            loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-            //wait until loading screen disappear in report Content
-            loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+            //wait until loading screen disappear
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Wait until table label displayed
             browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
             return browser.elements('.tablesList .withSecondary .leftNavLabel');
@@ -164,6 +161,7 @@
             if (results !== []) {
                 //Click on filtered table name
                 results[0].click();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
                 //Wat until reports page is visible
                 return reportContentPO.reportContainerEl;
             }
@@ -237,8 +235,6 @@
             expect(modalDialog.modalDialogTitle).toContain('New Table');
             //Verify table header description
             expect(this.tableDescription.getAttribute('textContent')).toContain('Create a new table when you want to collect a new type of information.');
-            //Verify table title
-            expect(this.tableTitle.getAttribute('textContent')).toContain('Name your table');
             //Verify Icon choose is enabled
             expect(browser.isEnabled('.iconChooser.closed')).toBe(true);
             //Verify cancel button is enabled

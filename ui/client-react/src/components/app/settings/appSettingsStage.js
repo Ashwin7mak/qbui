@@ -22,7 +22,7 @@ class AppSettingsStage extends React.Component {
                 //a local hack while we have no user defined roles, this is so we have pluralized role names
                 let roleTitle = (appUsers[role.id].length > 1 ? role.name + "s" : role.name);
                 usersRoleCount.push(
-                    <div className="appRolesPod">
+                    <div className="appRolesPod" key={role.id}>
                         <div className="appRolesDivider">
                             <div className="appRolesPodCount">{`${appUsers[role.id].length}`}</div>
                             <div className="appRolesPodName">{roleTitle}</div>

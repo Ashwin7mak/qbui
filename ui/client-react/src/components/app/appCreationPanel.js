@@ -11,9 +11,7 @@ import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/comp
 import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import Locale from '../../locales/locales';
-import _ from 'lodash';
 
-import './appCreationPanel.scss';
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
 export class AppCreationPanel extends Component {

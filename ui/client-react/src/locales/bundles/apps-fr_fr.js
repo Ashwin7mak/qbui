@@ -40,6 +40,7 @@ export default {
             users: {
                 addUser: "Ajouter un nouvel utilisateur",
                 users: "Utilisateurs",
+                assignRole: "Attribuer un rôle",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
@@ -55,7 +56,17 @@ export default {
                 userAddError: "Erreur d'ajout d'utilisateur",
                 userRemovingError: "Erreur lors de l'enlever",
                 emailBody: "Le corps du courrier électronique va ici",
-                emailSubject: "Le sujet de l'email va ici"
+                emailSubject: "Le sujet de l'email va ici",
+                changeUserRole: "Changement {valeur} rôle",
+                changeUserRoles: "Changement {valeur} les rôles",
+                changeUserRoleButton: "Changement de rôle",
+                pluralChangeUserRoleButton: "Changer les rôles",
+                userRoleTitle: "Changer le rôle de {valeur} utilisateur",
+                pluralUserRoleTitle: "Changer le rôle de {valeur} utilisateurs",
+                userRoleDescription: "La modification du rôle peut affecter ce qu'un utilisateur peut afficher.",
+                userRoleText: "Changer le rôle vers",
+                successUserRole: "{valeur} Le rôle de l'utilisateur a été changé",
+                pluralSuccessUserRole: "{valeur} Les rôles des utilisateurs ont été modifiés",
             }
         },
         appMenu: {
@@ -726,12 +737,12 @@ export default {
             finishedButtonLabel: "Créer une application",
             appNameHeading: "Nom de l'application,",
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
-            descriptionHeading: "Description de l'application"
+            descriptionHeading: "Description de l'application",
+            appCreationFailed: "Impossible de créer une application"
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
             newTableDescription: "Créer une nouvelle table lorsque vous souhaitez collecter un nouveau type d'information.",
-            newTableTitle: "Nommez votre table",
 
             summaryDescription: "Chaque bit d'information que vous souhaitez collecter est un champ.",
             summaryTitle: "Faites glisser et déposez les champs que vous souhaitez ajouter à votre table sur le formulaire. Vous pouvez organiser les champs dans l'ordre que vous souhaitez que les gens les utilisent.",

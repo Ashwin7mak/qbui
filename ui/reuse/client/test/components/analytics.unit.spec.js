@@ -147,6 +147,86 @@ describe('Analytics', () => {
         expect(window._aaq.push).toHaveBeenCalledWith(['gReqUID', 1]);
     });
 
+    describe('custom properties that will be sent as updates to evergage', () => {
+        beforeEach(() => {
+            // Don't add the script to the page during these tests
+            spyOn(document, 'getElementById').and.returnValue(true);
+
+            window._aaq = {push() {}};
+        });
+
+        afterEach(() => {
+            window._aaq = [];
+        });
+
+        it('does not update the window._aaq when there are no props in evergageUpdateProps', () => {
+            spyOn(window._aaq, 'push');
+
+            component = shallow(<Analytics dataset={mockDataset} evergageUpdateProps={{}} />);
+            let instance = component.instance();
+            spyOn(instance, 'trackAction').and.callThrough();
+
+            expect(window._aaq.push).not.toHaveBeenCalled();
+        });
+
+        it('updates when there is a key value pair in the evergageUpdateProps prop', () => {
+            let testValue = 12;
+            spyOn(window._aaq, 'push');
+
+            component = shallow(<Analytics dataset={mockDataset} evergageUpdateProps={{}} />, {lifecycleExperimental: true});
+            let instance = component.instance();
+            spyOn(instance, 'trackAction').and.callThrough();
+
+            component.setProps({evergageUpdateProps: {'test_name': testValue}});
+            expect(instance.trackAction).toHaveBeenCalled();
+            expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', testValue, 'request']);
+            expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name']);
+        });
+
+        it('updates when there are multiple key value pairs in the evergageUpdateProps prop', () => {
+            let testValue = 12;
+            let testValue2 = 99;
+            spyOn(window._aaq, 'push');
+
+            component = shallow(<Analytics dataset={mockDataset} evergageUpdateProps={{}} />, {lifecycleExperimental: true});
+            let instance = component.instance();
+            spyOn(instance, 'trackAction').and.callThrough();
+
+            component.setProps({evergageUpdateProps: {'test_name': testValue, 'test_name2': testValue2}});
+            expect(instance.trackAction).toHaveBeenCalled();
+            expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', testValue, 'request']);
+            expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name2', testValue2, 'request']);
+            expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name -- test_name2']);
+        });
+
+        it('updates when the evergageUpdateProps prop has some changes occur', () => {
+            let testValue = 12;
+            let testValue2 = 99;
+            let testValue3 = 'no change';
+            let testValueChanged = 120;
+            let testValue2Changed = 990;
+            spyOn(window._aaq, 'push');
+
+            component = shallow(<Analytics dataset={mockDataset}
+                                           evergageUpdateProps={{
+                                               'test_name': testValue,
+                                               'test_name2': testValue2,
+                                               'test_name3': testValue3}} />, {lifecycleExperimental: true});
+            let instance = component.instance();
+            spyOn(instance, 'trackAction').and.callThrough();
+
+            component.setProps({evergageUpdateProps: {'test_name': testValueChanged, 'test_name2': testValue2Changed}});
+            expect(instance.trackAction).toHaveBeenCalled();
+            expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name', testValueChanged, 'request']);
+            expect(window._aaq.push).toHaveBeenCalledWith(['setCustomField', 'test_name2', testValue2Changed, 'request']);
+            expect(window._aaq.push).toHaveBeenCalledWith(['trackAction', 'updated:  -- test_name -- test_name2']);
+
+            expect(window._aaq.push).not.toHaveBeenCalledWith(['setCustomField', 'test_name3', testValue3, 'request']);
+
+            expect(window._aaq.push).toHaveBeenCalledTimes(3);
+        });
+    });
+
     describe('functions that update evergage', () => {
         beforeEach(() => {
             // Don't add the script to the page during these tests
@@ -195,7 +275,7 @@ describe('Analytics', () => {
                 description: 'the evergage app id',
                 props: {app: {id: 13}},
                 expectedArguments: ['setCustomField', 'appid', 13, 'request']
-            },
+            }
         ];
 
         testCases.forEach(testCase => {

@@ -40,6 +40,7 @@ export default {
             users: {
                 addUser: "Hinzufügen ein neu Benutzer",
                 users: "Benutzer",
+                assignRole: "Rolle zuweisen",
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
@@ -55,7 +56,17 @@ export default {
                 userAddError: "Fehler beim Hinzufügen von Benutzer",
                 userRemovingError: "Fehler beim Entfernen des Benutzers",
                 emailBody: "Email Körper geht hier",
-                emailSubject: "E-Mail-Thema geht hier"
+                emailSubject: "E-Mail-Thema geht hier",
+                changeUserRole: "Veränderung {Wert} Rolle",
+                changeUserRoles: "Veränderung {Wert} Rollen",
+                changeUserRoleButton: "Rolle ändern",
+                pluralChangeUserRoleButton: "Rollentausch",
+                userRoleTitle: "Ändern Sie die Rolle von {Wert} Benutzer",
+                pluralUserRoleTitle: "Ändern Sie die Rolle von {Wert} Benutzer",
+                userRoleDescription: "Das Ändern der Rolle kann beeinflussen, was ein Benutzer anzeigen kann.",
+                userRoleText: "Rolle ändern",
+                successUserRole: "{Wert} Die Rolle des Benutzers wurde geändert",
+                pluralSuccessUserRole: "{Wert} Benutzerrollen wurden geändert",
             }
         },
         appMenu: {
@@ -727,12 +738,12 @@ export default {
             finishedButtonLabel: "App erstellen",
             appNameHeading: "App Name",
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
-            descriptionHeading: "App Beschreibung"
+            descriptionHeading: "App Beschreibung",
+            appCreationFailed: "App konnte nicht erstellt werden"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
             newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
-            newTableTitle: "Nennen Sie Ihren Tisch",
 
             summaryDescription: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld.",
             summaryTitle: "Drag & Drop Felder, die Sie hinzufügen möchten, um Ihre Tabelle auf das Formular. Sie können die Felder in der Reihenfolge anordnen, in der die Leute sie benutzen möchten.",

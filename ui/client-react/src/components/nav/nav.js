@@ -29,7 +29,7 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import {loadApp, loadApps} from '../../actions/appActions';
 
-import {getApp, getApps, getAreAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
+import * as App from '../../reducers/app';
 import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
@@ -43,6 +43,8 @@ import {updateFormRedirectRoute} from '../../actions/formActions';
 
 import Analytics from '../../../../reuse/client/src/components/analytics/analytics';
 import Config from '../../config/app.config';
+
+import {APPS_ROUTE} from '../../constants/urlConstants';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -110,8 +112,7 @@ export const Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [];
-        let selectedApp = this.getSelectedApp();
-        let selectedTableId = this.props.selectedTableId;
+        let {selectedApp, selectedTableId} = this.props;
 
         let isAdmin = selectedApp ? AppUtils.hasAdminAccess(selectedApp.accessRights) : false;
 
@@ -178,11 +179,6 @@ export const Nav = React.createClass({
         this.props.hideTrowser();
     },
 
-    getSelectedApp() {
-        const selectedAppId = this.props.selectedAppId;
-        return this.props.getApp(selectedAppId);
-    },
-
     getEditingApp() {
         const appsList = this.props.getApps() || [];
         const selectedAppId = this.props.selectedAppId;
@@ -217,7 +213,7 @@ export const Nav = React.createClass({
      */
     getSelectedTable(tableId) {
         if (tableId) {
-            const app = this.getSelectedApp();
+            const app = this.props.selectedApp;
             if (app) {
                 return _.find(app.tables, (t) => t.id === tableId);
             }
@@ -227,7 +223,7 @@ export const Nav = React.createClass({
 
 
     aReportIsSelected() {
-        let selectedApp = this.getSelectedApp();
+        let selectedApp = this.props.selectedApp;
         let reportData = this.getReportsData();
         return (selectedApp && reportData && reportData.rptId && reportData.data && reportData.data.name);
     },
@@ -330,30 +326,10 @@ export const Nav = React.createClass({
         return getPendEdits(this.props.record);
     },
 
-/*
-    // Commenting out this function to render the top nav items in the center.
-    // These items weren't enabled yet and were simply placeholders. We will need
-    // to put some of them back so, leaving the code here for now.
-    getCenterGlobalActions() {
-        return (
-            <ButtonGroup className="navItem">
-                <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
-                    <Button tabIndex="2" className="disabled">
-                        <Icon icon="search" />
-                    </Button>
-                </Tooltip>
-
-                <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                    <Button tabIndex="3" className="disabled"><Icon icon="star-full" /></Button>
-                </Tooltip>
-            </ButtonGroup>
-        );
-    },
-*/
-
     render() {
         const appsList = this.props.getApps() || [];
-        const {areAppsLoading} = this.props;
+        const {selectedAppId, selectedTableId, selectedApp, isAppLoading, areAppsLoading} = this.props;
+
 
         if (appsList.length === 0 && areAppsLoading) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -378,10 +354,6 @@ export const Nav = React.createClass({
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
-
-        const selectedAppId = this.props.selectedAppId;
-        const selectedApp = this.getSelectedApp();
-        const selectedTableId = this.props.selectedTableId;
 
         let editingAppId = this.props.match.params.appId;
         let editingTblId = this.props.match.params.tblId;
@@ -443,17 +415,21 @@ export const Nav = React.createClass({
             <LeftNav
                 visible={this.props.shell.leftNavVisible}
                 expanded={this.props.shell.leftNavExpanded}
-                appsListOpen={this.props.shell.appsListOpen}
+                isAppsListOpen={this.props.shell.appsListOpen}
                 apps={appsList}
-                appsLoading={areAppsLoading}
+                areAppsLoading={areAppsLoading}
+                isAppLoading={isAppLoading}
                 selectedAppId={selectedAppId}
+                selectedApp={selectedApp}
                 selectedTableId={selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 onToggleAppsList={this.toggleAppsList}
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
                 onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
-                onNavClick={this.toggleNav}/>
+                onNavClick={this.toggleNav}
+                onAppsRoute={this.props.match.url === APPS_ROUTE}
+            />
 
             <div className="main" >
                 <TopNav // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
@@ -543,7 +519,7 @@ export const Nav = React.createClass({
      * @returns {*}
      */
     allowCreateNewTable() {
-        const app = this.getSelectedApp();
+        const app = this.props.selectedApp;
         return app && AppUtils.hasAdminAccess(app.accessRights);
     },
     /**
@@ -554,23 +530,22 @@ export const Nav = React.createClass({
     },
 });
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        getApp: (appId) => getApp(state, appId),
-        getApps: () => getApps(state),
-        appOwner: getAppOwner(state),
-        appRoles: getAppRoles(state.selectedApp),
-        selectedAppId: getSelectedAppId(state),
-        selectedTableId: getSelectedTableId(state),
-        appUsers: getAppUsers(state),
-        appUnfilteredUsers: getAppUnfilteredUsers(state),
-        areAppsLoading: getAreAppsLoading(state),
-        forms: state.forms,
-        shell: state.shell,
-        record: state.record,
-        report: state.report
-    };
-};
+const mapStateToProps = state => ({
+    selectedApp: App.getSelectedApp(state),
+    getApps: () => App.getApps(state),
+    selectedAppId: App.getSelectedAppId(state),
+    isAppLoading: App.getIsAppLoading(state),
+    areAppsLoading: App.getAreAppsLoading(state),
+    appOwner: App.getAppOwner(state),
+    appRoles: getAppRoles(state.selectedApp),
+    selectedTableId: App.getSelectedTableId(state),
+    appUsers: App.getAppUsers(state),
+    appUnfilteredUsers: App.getAppUnfilteredUsers(state),
+    forms: state.forms,
+    shell: state.shell,
+    record: state.record,
+    report: state.report
+});
 
 const mapDispatchToProps = (dispatch) => {
     return {
