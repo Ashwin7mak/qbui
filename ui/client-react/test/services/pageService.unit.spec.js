@@ -10,11 +10,12 @@ describe('PageService functions', () => {
     });
     beforeEach(() => {
         spyOn(BaseService.prototype, 'post');
+        spyOn(BaseService.prototype, 'get');
     });
 
     it('test createPage', () => {
-        var appId = '123';
-        var page = {
+        const appId = '123';
+        const page = {
             pageId: 15,
             appId: "123",
             description: "Sample Description",
@@ -38,8 +39,17 @@ describe('PageService functions', () => {
             }
         };
 
-        var url = pageService.constructUrl(pageService.API.CREATE_PAGE, [appId]);
+        const url = pageService.constructUrl(pageService.API.CREATE_PAGE, [appId]);
         pageService.createPage(appId, page);
         expect(BaseService.prototype.post).toHaveBeenCalledWith(url, page);
+    });
+
+    it('test getPage', () => {
+        const appId = '123';
+        const pageId = '12';
+
+        const url = pageService.constructUrl(pageService.API.GET_PAGE, [appId, pageId]);
+        pageService.getPage(appId, pageId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, pageId);
     });
 });

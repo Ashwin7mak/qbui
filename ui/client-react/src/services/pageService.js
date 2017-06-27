@@ -9,6 +9,7 @@ class PageService extends BaseService {
         //  Page Service API endpoints
         this.API = {
             CREATE_PAGE: `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.PAGES}`,
+            GET_PAGE: `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.PAGES}/{1}`
         };
     }
 
@@ -21,6 +22,18 @@ class PageService extends BaseService {
     createPage(appId, page) {
         let url = super.constructUrl(this.API.CREATE_PAGE, [appId]);
         return super.post(url, page);
+    }
+
+
+    /**
+     * Get a page
+     * @param appId
+     * @param pageId
+     * @returns {*}
+     */
+    getPage(appId, pageId) {
+        let url = super.constructUrl(this.API.GET_PAGE, [appId, pageId]);
+        return super.get(url);
     }
 }
 
