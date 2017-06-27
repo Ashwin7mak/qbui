@@ -15,7 +15,8 @@ const selectedApp = (
         successDialogOpen: false,
         addedAppUser: [],
         isLoading: false,
-        error: false
+        error: false,
+        changeUserRoleDialog: false,
     },
     action) => {
 
@@ -50,6 +51,13 @@ const selectedApp = (
             roles: action.content.roles,
             rolesLoading: false,
             error: false
+        };
+    }
+
+    case types.TOGGLE_CHANGE_USER_ROLE: {
+        return {
+            ...state,
+            changeUserRoleDialog: action.content.isOpen
         };
     }
 

@@ -10,7 +10,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     let loadingSpinner = requirePO('/common/loadingSpinner');
-    let topNavPO = requirePO('topNav');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     var sText = 'testTextValue';
     var sUrl = 'http://www.yahoo.com';
@@ -87,7 +87,10 @@
         clickFormSaveBtn : {value: function() {
             //Click on form Save button
             this.editFormSaveBtns.waitForVisible();
-            return this.clickBtnOnForm('Save');
+            this.clickBtnOnForm('Save');
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            //wait until save success container goes away
+            return notificationContainer.waitUntilNotificationContainerGoesAway();
         }},
 
         /**
@@ -360,14 +363,15 @@
          */
         selectFromList : {value: function(listOption) {
             browser.waitForVisible('.Select-menu-outer');
-            //Need this to stabilize
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            //wait untill you see 1 option since drop down loads onDemand now
+            browser.element('.Select-option').waitForVisible();
             //get all options from the list
             let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
                 return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
             if (option !== []) {
+                browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
                 //Click on filtered option
                 option[0].waitForVisible();
                 option[0].click();
@@ -427,7 +431,19 @@
                 } else if (fieldType === 'allNumericFields') {
                     this.setFormInputValue(this.getAllNumericInputFields(), sNumeric);
                 } else if (fieldType === 'allTimeFields') {
-                    this.setDropDownValue(this.getAllTimeInputFields(), sTime);
+                    var timeFields = this.getAllTimeInputFields();
+                    for (i = 0; i < timeFields.value.length; i++) {
+                        browser.execute("return arguments[0].scrollIntoView(true);", timeFields.value[i]);
+                        //Need this to stabilize after scrolling to the element
+                        browser.pause(e2eConsts.shortWaitTimeMs);
+                        timeFields.value[i].waitForVisible();
+                        timeFields.value[i].click();
+                        if (browserName === 'chrome') {
+                            browser.keys([sTime, 'Enter']);
+                        } else {
+                            this.selectFromList(sTime);
+                        }
+                    }
                 } else if (fieldType === 'allDateFields') {
                     //get all date field input validators
                     var dateFields = this.getAllDateInputFields();

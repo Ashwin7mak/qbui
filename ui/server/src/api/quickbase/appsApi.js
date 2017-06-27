@@ -178,6 +178,7 @@
                     Promise.all(appPromises).then(
                         (responses) => {
                             let app = JSON.parse(responses[0].body);
+
                             if (responses.length > 1) {
                                 let tablesWithoutProps = [];
                                 this._mergeTableProps(app, responses[1], tablesWithoutProps);
