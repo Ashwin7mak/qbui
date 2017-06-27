@@ -8,7 +8,7 @@ import {TableCreationDialog, __RewireAPI__ as TableCreationDialogRewireAPI} from
 let component;
 let instance;
 let domComponent;
-let mockUrlRoute = 'mockUrlRoute';
+let mockRoute = 'mockRoute';
 let tableInfo = {name: {value: {}}, description: {value: {}}, tableIcon: {value: {}}, tableNoun: {value: {}}};
 
 const mockNotificationManager = {
@@ -92,7 +92,7 @@ describe('TableCreationDialog', () => {
 
         spyOn(mockParentFunctions, 'createTable').and.callThrough();
         spyOn(mockParentFunctions, 'createTableFailed').and.callThrough();
-        spyOn(mockUrlUtils, 'getAppHomePageLink').and.returnValue(mockUrlRoute);
+        spyOn(mockUrlUtils, 'getAppHomePageLink').and.returnValue(mockRoute);
         spyOn(AppHistoryMock.history, 'push');
         spyOn(mockNotificationManager, 'error');
     });
@@ -147,7 +147,7 @@ describe('TableCreationDialog', () => {
         expect(mockParentFunctions.createTable).toHaveBeenCalledWith(app.id, tableInfoResult);
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(app.id);
-        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(mockUrlRoute);
+        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(mockRoute);
     });
 
     it('will display an error message if table creation fails', () => {
