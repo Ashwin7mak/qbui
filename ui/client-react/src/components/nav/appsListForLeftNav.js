@@ -34,10 +34,12 @@ export const AppsList = React.createClass({
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
             // Give all apps in the left nav list a default icon of 'favicon'
-            let appForNavItem = {icon: 'favicon', ...app};
+            // TODO:: Refactor where the icon is obtain from in MC-3596. Patching for the purpose of the current story.
+            let appForNavItem = {icon: 'favicon', tableIcon: 'favicon', ...app};
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
                          item={appForNavItem}
+                         tableIcon={true}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
                          open={true}  />;
