@@ -2,6 +2,7 @@
     'use strict';
     var e2ePageBase = requirePO('e2ePageBase');
     var reportContentPO = requirePO('reportContent');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     // Lodash utility library
     var _ = require('lodash');
@@ -83,7 +84,8 @@
             //wait until you see apply btn
             this.sortGroupDlgApplyBtn.waitForVisible();
             //click on apply btn
-            return this.sortGroupDlgApplyBtn.click();
+            this.sortGroupDlgApplyBtn.click();
+            return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }},
 
         /**
@@ -93,7 +95,8 @@
             //wait until you see apply btn
             this.sortGroupDlgResetBtn.waitForVisible();
             //click on apply btn
-            return this.sortGroupDlgResetBtn.click();
+            this.sortGroupDlgResetBtn.click();
+            return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }},
 
         /**
@@ -510,6 +513,7 @@
             if (items !== []) {
                 items[0].element('a').waitForVisible();
                 items[0].element('a').click();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
                 //wait until report rows in table are loaded
                 return reportContentPO.waitForReportContent();
             } else {
