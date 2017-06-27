@@ -189,6 +189,10 @@
      *   timestamp:  current time stamp
      *   lvl:        log level text string
      *
+     * NOTE: only apply values which are needed to be one of the first attributes in the
+     * outputted json output structure.  This is being done to assist Splunk with how it
+     * combs the logs.
+     *
      * @param fields
      * @param lvl
      * @returns {Merged object}
