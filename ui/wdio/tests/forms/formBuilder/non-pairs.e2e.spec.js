@@ -184,8 +184,10 @@
                 formBuilderPO.tab_Existing.click();
                 // store the name of the first field on the form
                 let firstField = formBuilderPO.getFieldLabels()[0];
-                // verify that the existing fields list is empty
-                formBuilderPO.firstFieldToken.waitForExist(null, true);
+                // make sure that the existing fields list is empty
+                while (formBuilderPO.firstFieldToken.isExisting()) {
+                    formBuilderPO.addFirstField();
+                }
                 // remove the first field
                 formBuilderPO.removeField(1);
                 // verify that the removed field now appears in the existing fields list
@@ -402,9 +404,9 @@
             it('verify search in fields panel only returns results from active panel', function() {
                 // click on the EXISTING (fields) tab
                 formBuilderPO.tab_Existing.click();
-                // restore any existing fields which might have been removed by previous tests
-                while (formBuilderPO.firstFieldToken.isVisible()) {
-                    formBuilderPO.firstFieldToken.click();
+                // make sure that the existing fields list is empty
+                while (formBuilderPO.firstFieldToken.isExisting()) {
+                    formBuilderPO.addFirstField();
                 }
                 // select the first field on the form
                 formBuilderPO.selectFieldByIndex(1);
@@ -420,8 +422,7 @@
                 //  results to only contain existing fields
                 expect(formBuilderPO.fieldTokenTitle.getText()).toBe(existingLabel);
                 // add the field we just removed
-                formBuilderPO.firstFieldToken.click();
-                formBuilderPO.firstFieldToken.waitForExist(null, true);
+                formBuilderPO.addFirstField();
                 // verify the NO MATCH text
                 expect(formBuilderPO.emptySearchResult.getText()).toBe('No fields match "' + newLabel + '"');
                 // click on the NEW tab
@@ -442,7 +443,7 @@
                 formBuilderPO.dragNewFieldOntoForm(
                     formBuilderPO.getFieldToken('Choice list'),
                     formBuilderPO.firstField);
-                // set focus to end of text in editor & add new option
+                // move cursor to end of text in editor & add new option
                 let testOption = "test option";
                 formBuilderPO.multiChoiceEditor.click();
                 formBuilderPO.multiChoiceEditor.keys([
@@ -451,7 +452,7 @@
                 // save, reopen, select first field
                 formBuilderPO.save().open().selectFieldByIndex(1);
                 let options = formBuilderPO.multiChoiceEditor.getText();
-                expect(options.endsWith(testOption)).toBe(true);
+                expect(options.endsWith(testOption)).toBe(true, 'Expected "' + options + '" to end with "' + testOption);
             });
 
             // todo: it('automatic numbering', function() {

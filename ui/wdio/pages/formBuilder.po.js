@@ -191,6 +191,11 @@ class formBuilderPage {
         return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
     }
 
+    addFirstField() {
+        this.firstFieldToken.click();
+        return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+    }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.waitForVisible();
