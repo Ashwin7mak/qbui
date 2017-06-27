@@ -494,16 +494,6 @@ const forms = (
     case types.UNLOAD_FORM : {
         return removeCopies(currentForm.formData.recordId);
     }
-    case types.SET_STAGE_EDIT_MODE : {
-        if (!currentForm) {
-            return state;
-        }
-
-        updatedForm.formData.editingStage = action.state;
-
-        newState[id] = updatedForm;
-        return newState;
-    }
 
     default:
         // return existing state by default in redux

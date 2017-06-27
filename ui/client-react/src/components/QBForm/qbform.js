@@ -14,12 +14,10 @@ import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
 import {getTable} from '../../reducers/app';
-import {removeFieldFromForm, setStageEditMode} from '../../actions/formActions';
+import {removeFieldFromForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import * as SchemaConsts from "../../constants/schema";
 import FormBuilderStage from './formBuilderStage';
-import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
-import closeOnEscape from '../hoc/catchEscapeKey';
 import QBIcon from '../../../../reuse/client/src/components/icon/icon';
 
 import * as FieldsReducer from '../../reducers/fields';
@@ -530,24 +528,12 @@ export const QBForm = React.createClass({
             </div>
         );
     },
-
-    onEditStage() {
-        this.props.setStageEditMode(this.props.formId, true);
-    },
-    closeEditStage() {
-        this.props.setStageEditMode(this.props.formId, false);
-    },
     /**
      * Create a form footer with built-in fields
      */
     createFormStage() {
-        let FormBuilderStageWrapped = thwartClicksWrapper(FormBuilderStage);
         return this.props.editingForm ?
-            <FormBuilderStage table={this.props.table}
-                                     handleClickOutside={this.closeEditStage}
-                                     outsideClickIgnoreClass="formStage"
-                                     onEditStage={this.onEditStage}
-                                    editingStage={this.props.formData.editingStage}/> : null;
+            <FormBuilderStage table={this.props.table} /> : null;
     },
 
 
@@ -707,5 +693,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export default connect(
-    mapStateToProps, {removeFieldFromForm, updateFormAnimationState, setStageEditMode}
+    mapStateToProps, {removeFieldFromForm, updateFormAnimationState}
 )(QBForm);

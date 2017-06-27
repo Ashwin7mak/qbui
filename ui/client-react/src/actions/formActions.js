@@ -118,14 +118,6 @@ export const saveFormComplete = (id) => {
     };
 };
 
-export const setStageEditMode = (id, state) => {
-    return {
-        id,
-        state,
-        type: types.SET_STAGE_EDIT_MODE
-    }
-};
-
 /**
  * load a form, optionally with record data
  * @param appId app

@@ -17,18 +17,25 @@ $table-icon-heading-spacer: $spacing-xxx-small;
         margin-left: $table-icon-font-size + $table-icon-heading-spacer + 16px;
         .titleField {
             display: inline-block;
-            padding: 5px 15px;
+            padding: 5px 11px 5px 11px;
             border: $stroke-width-thin solid $color-black-300;
             color: $color-black-700;
-            border-radius: 64px;
+            border-radius: 4px;
+
+            .selectedOption{
+                > * {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+            }
 
             &:hover {
                 border: $stroke-width-thin solid $color-purple-600;
                 color: $color-purple-600;
             }
         }
-    }
-    .recordTitleFieldDescription {
-        margin-bottom: 10px;
+        .recordTitleFieldDescription {
+            margin-bottom: 10px;
+        }
     }
 }

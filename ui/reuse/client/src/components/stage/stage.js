@@ -16,7 +16,7 @@ class Stage extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {open: false};
+        this.state = {open: props.open === true ? true : false};
 
         this.toggleStage = this.toggleStage.bind(this);
     }
@@ -60,7 +60,12 @@ Stage.propTypes = {
 
     /**
      * The title/headline of the stage. It appears toward the upper-left of the stage. It's easiest to use the StageHeaderComponent, but not required. */
-    stageHeadline: PropTypes.node
+    stageHeadline: PropTypes.node,
+
+    /**
+     * Tells the stage whether it should be open or close by default
+     */
+    open: PropTypes.bool
 };
 
 export default Stage;
