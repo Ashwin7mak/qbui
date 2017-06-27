@@ -7,6 +7,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
 import * as types from '../actions/types';
+import constants from '../../../common/src/constants';
 import * as query from '../constants/query';
 import {getTable} from '../reducers/app';
 
@@ -113,6 +114,7 @@ export const updateTable = (appId, tableId, table) => {
         }
 
         return new Promise((resolve, reject) => {
+            dispatch(savingTable());
             const tableService = new TableService();
 
             const promise = tableService.updateTable(appId, tableId, table);

@@ -15,9 +15,8 @@ $edit-field-padding: 5px;
         position: -webkit-sticky;
         top: 0;
         z-index: 999;
-        background: #fff;
-        border-bottom: 1px solid #ccc;
-        padding: 10px;
+        background: $panel-background-color;
+        border-bottom: 1px solid $panel-border-color;
     }
     .form {
         padding: 10px;

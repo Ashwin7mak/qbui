@@ -87,7 +87,7 @@ class FormBuilderStage extends React.Component {
         let tableName = this.props.table ? this.props.table.name : "";
         let headline = <h4 className="formHeader"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.table.tableIcon} />
                         <span className="heading">Form for {tableName}</span>
-                    </h4>
+                    </h4>;
 
         return <Stage stageHeadline={headline} className="formStage" open={this.state.open}>
             <div className="editableStage">
