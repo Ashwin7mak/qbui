@@ -27,7 +27,7 @@
         // Feedback button topNav
         feedbackBtn: {
             get: function() {
-                return browser.element('.topNav .right .iconTableSturdy-Advertising');
+                return browser.element('.topNav .userFeedBack .dropdownToggle .iconUISturdy-feedback');
             }
         },
         //Give feedback option in Feedback button

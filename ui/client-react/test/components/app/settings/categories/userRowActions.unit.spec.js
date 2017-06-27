@@ -2,7 +2,7 @@
 
 import UserRowActions from '../../../../../src/components/app/settings/categories/userRowActions';
 import React from  'react';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 
 const props = {
     rowId: '10000',
@@ -14,8 +14,10 @@ const props = {
 describe('UserRowActions', () => {
     let component;
     let spy;
+    let spyReceiveProps;
     beforeEach(() => {
         spy = spyOn(UserRowActions.propTypes, 'onClickToggleSelectedRow');
+        spyReceiveProps = spyOn(UserRowActions.prototype, "componentWillReceiveProps");
         component = mount(<UserRowActions {...props}/>);
     });
 
@@ -28,5 +30,9 @@ describe('UserRowActions', () => {
         component.find('.selectRowCheckbox').simulate('click');
         expect(component.state().checked).toEqual(true);
         expect(spy).toHaveBeenCalled();
+    });
+    it('should call componentWillReceiveProps when component receives props', ()=>{
+        component.setProps({isSelected: false});
+        expect(spyReceiveProps).toHaveBeenCalled();
     });
 });

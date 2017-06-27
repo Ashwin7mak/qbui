@@ -1,0 +1,15 @@
+@import "../../../assets/css/qbVariables";
+
+.helpTitle {
+    display: none
+}
+
+.reHelpButtonHover:hover {
+    color: $color-cray-100;
+}
+
+@include small-breakpoint {
+    .helpTitle {
+        display: inline
+    }
+}
