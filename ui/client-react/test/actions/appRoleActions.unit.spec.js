@@ -106,7 +106,7 @@ describe('App Role Actions success workflow tests', () => {
             event(appId, types.ASSIGN_USERS_TO_APP_ROLE, {appUsers: mockResponseAssignUsers.data})
         ];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.assignUsersToAppRole(appId, roleId, userIds)).then(
+        return store.dispatch(appRoleActions.assignUsersToAppRole(appId, roleId, userDetails)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 expect(mockRoleService.prototype.assignUsersToAppRole).toHaveBeenCalled();
@@ -119,13 +119,13 @@ describe('App Role Actions success workflow tests', () => {
             });
     });
 
-    it('verify assignUsersToAppRole action', (done) => {
+    it('verify assignUserToAppRole action', (done) => {
         const userId = '10';
         const expectedActions = [
             event(appId, types.ASSIGN_USERS_TO_APP_ROLE, {appUsers: [userId]})
         ];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.assignUserToAppRole(appId, roleId, userId)).then(
+        return store.dispatch(appRoleActions.assignUserToAppRole(appId, roleId, userDetails)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 expect(mockRoleService.prototype.assignUsersToAppRole).toHaveBeenCalled();

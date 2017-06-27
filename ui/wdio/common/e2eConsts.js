@@ -58,6 +58,31 @@
         ADMIN_ROLEID : 12,
         PARTICIPANT_ROLEID : 11,
         VIEWER_ROLEID : 10,
+        NONE_ROLEID : 9,
+
+        user1 :  {
+            id: null,
+            firstName: 'Steve',
+            lastName: 'rodgers',
+            screenName: 'Captain America',
+            email: 'captain_america@quickbase.com'
+        },
+        user2 :  {
+            id: null,
+            screenName: 'spiderman',
+            email: 'spiderman@quickbase.com'
+        },
+        user3 :  {
+            id: null,
+            firstName: 'Henry',
+            lastName: 'King Sr.',
+            screenName: 'Brainwave',
+            email: 'brainwave@quickbase.com'
+        },
+        user4 :  {
+            id: null,
+            email: 'super.man@quickbase.com'
+        },
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 

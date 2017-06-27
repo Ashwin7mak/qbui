@@ -15,10 +15,11 @@ describe('StandardGridNavigation', () => {
         currentPage: 1,
         firstItemIndexInCurrentPage: 1,
         lastItemIndexInCurrentPage: 10,
-        totalPages: 1,
+        totalPages: 10,
         totalFilteredItems: 10,
         itemsPerPage: 10
     };
+
 
 
     it('should render', () => {
@@ -42,12 +43,49 @@ describe('StandardGridNavigation', () => {
         expect(StandardGridPagination.props().onClickNext).toEqual(getNextPage);
     });
 
+
+    it('should hide component if there is a single page', () => {
+        let paginationInfo =
+            {
+                ...basePageInfo,
+                totalPages: 1
+            };
+
+        let StandardGridNavigationComponent = shallow(
+            <StandardGridNavigation getPreviousPage={() => {}}
+                                    getNextPage={() => {}}
+                                    id={"accountUsers"}
+                                    paginationInfo={paginationInfo}/>);
+
+        let StandardGridPagination = StandardGridNavigationComponent.find(Pagination);
+        expect(StandardGridPagination).not.toBePresent();
+    });
+
+    it('should hide component if there is less than single page', () => {
+        let paginationInfo =
+            {
+                ...basePageInfo,
+                totalPages: 0
+            };
+
+        let StandardGridNavigationComponent = shallow(
+            <StandardGridNavigation getPreviousPage={() => {}}
+                                    getNextPage={() => {}}
+                                    id={"accountUsers"}
+                                    paginationInfo={paginationInfo}/>);
+
+        let StandardGridPagination = StandardGridNavigationComponent.find(Pagination);
+        expect(StandardGridPagination).not.toBePresent();
+    });
+
+
+
     it('should set the start and end records appropriately', () => {
         let paginationInfo =
             {
                 ...basePageInfo,
                 firstItemIndexInCurrentPage: 10,
-                lastItemIndexInCurrentPage: 20
+                lastItemIndexInCurrentPage: 20,
             };
 
         let StandardGridNavigationComponent = shallow(
@@ -61,23 +99,6 @@ describe('StandardGridNavigation', () => {
     });
 
     describe('Previous Disabled', () => {
-
-        it('should set previous disabled when total records is 0', () => {
-            let paginationInfo =
-                {
-                    ...basePageInfo,
-                    totalFilteredItems: 0
-                };
-
-            let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousPage={() => {}}
-                                        getNextPage={() => {}}
-                                        id={"accountUsers"}
-                                        paginationInfo={paginationInfo}/>);
-
-            expect(StandardGridNavigationComponent.props().isPreviousDisabled).toEqual(true);
-        });
-
 
         it('should set previous disabled when current page is 1', () => {
             let paginationInfo =
@@ -115,23 +136,6 @@ describe('StandardGridNavigation', () => {
 
     describe('Next Disabled', () => {
 
-        it('should set next disabled when total records is 0', () => {
-            let paginationInfo =
-                {
-                    ...basePageInfo,
-                    totalFilteredItems: 0
-                };
-
-            let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousPage={() => {}}
-                                        getNextPage={() => {}}
-                                        id={"accountUsers"}
-                                        paginationInfo={paginationInfo}/>);
-
-            expect(StandardGridNavigationComponent.props().isNextDisabled).toEqual(true);
-        });
-
-
         it('should set next disabled when current page is 1', () => {
             let paginationInfo =
                 {
@@ -166,6 +170,8 @@ describe('StandardGridNavigation', () => {
             expect(StandardGridNavigationComponent.props().isNextDisabled).toEqual(false);
         });
     });
+
+
 });
 
 

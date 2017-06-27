@@ -292,11 +292,15 @@ export const getAreAppsLoading = state => state.app.areAppsLoading;
 export const getIsAppLoading = state => state.app.isAppLoading;
 
 export const getSelectedAppId = (state) => {
-    return state.app.selected ? state.app.selected.appId : null;
+    return _.get(state.app, 'selected.appId');
 };
 
 export const getSelectedApp = (state) => {
-    return state.app.app;
+    if (!state.app.apps) {
+        return null;
+    }
+
+    return state.app.apps.find(currentApp => currentApp.id === getSelectedAppId(state));
 };
 
 export const getSelectedTableId = (state) => {
