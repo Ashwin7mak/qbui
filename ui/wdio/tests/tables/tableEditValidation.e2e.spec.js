@@ -119,7 +119,6 @@
             });
         });
 
-
         /**
          * Data provider for table field validation testCases.
          */
@@ -151,7 +150,6 @@
             ];
         }
 
-
         recordTitleFieldPickerTestCases().forEach(function(testCase) {
             it('Edit table ' + testCase.message, function() {
 
@@ -173,12 +171,11 @@
 
                 //check the expected list fields on the record title field picker drop down
                 pickerfield.click();
-                //get list of drop down options
-                let dropDownListLabel = modalDialog.allDropDownListOptions;
-                let dropDownListLabels = [];
-                for (let j = 0; j < dropDownListLabel.length; j++) {
-                    if (!(dropDownListLabel[j] === ('Default to ' + testCase.table.name + ' + ID'))) {
-                        dropDownListLabels.push(dropDownListLabel[j]);
+                //get list of fields from drop down options
+                let dropDownListLabels = modalDialog.allDropDownListOptions;
+                for (let j = 0; j < dropDownListLabels.length; j++) {
+                    if ((dropDownListLabels[j] === ('Default to ' + testCase.table.name + ' + ID'))) {
+                        delete dropDownListLabels[j];
                     }
                 }
 
