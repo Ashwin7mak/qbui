@@ -3,16 +3,16 @@
 .emptyState {
     text-align: center;
     border: $stroke-width-thin dashed $emptystate-border-color;
-    height: 170px;
+    height: 160px;
     margin-left: 9px;
     margin-right: 6px;
     padding-top: 16px;
 
     .createNewIcon {
         .addNewIcon {
-            font-size: 56px;
+            font-size: 50px;
             color: $add-user-button;
-            padding-top: 20px;
+            padding-top: 13px;
 
             &:hover {
                 color: $default-hover-color;
@@ -27,7 +27,7 @@
             height: 30px;
             font-size: $size-iconfont-small;
             color: $add-user-button;
-            padding-top: 13px;
+            padding-top: 15px;
             margin-left: 11px;
 
             &:hover {

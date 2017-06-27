@@ -60,4 +60,3 @@ describe('CreateNewItemButton', () => {
         expect(component.find('.iconMessage').text()).toEqual('mockLocaleMessage');
     });
 });
-
