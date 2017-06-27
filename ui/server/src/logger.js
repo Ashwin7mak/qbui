@@ -149,15 +149,14 @@
                 });
 
                 //  For each supported Bunyan logging level, add custom log attributes to the fields list before
-                //  logging the message.  The fields list is getting updated, rather than supplementing the
-                //  run-time arguments, because there is a need to have the 'timestamp' as the first attribute in
-                //  the outputted json structure.  This is being done to assist Splunk with how it combs the
-                //  logs -- it's looking for the 'timestamp' attribute in the 1st 128 characters..
+                //  logging the message.  The fields list is getting updated because there is a need to have the
+                //  'timestamp' as the first attribute in the outputted json structure --> Splunk is looking for
+                //  the 'timestamp' attribute in the 1st 128 characters.
                 //
-                //  NOTE: the fields object is a structure defined on the Logger, which is a Singleton.  Having
-                //  separate requests update that object could trigger concern about a race-condition.  But given
-                //  node is single threaded, we will not get exposed to the possibility of multiple requests
-                //  simultaneously updating the same shared reference (in this case the fields object).
+                //  NOTE: the fields object is a structure defined on the Logger, which is a Singleton.  With
+                //  separate requests updating that object, there could be concern about a race-condition.  But
+                //  given node is single threaded, the possibility of concurrent requests updating the same
+                //  reference (in this case the fields object) simultaneously is not possible.
                 appLogger.debug = function() {
                     logger.fields = applyRunTimeAttributes(logger.fields, 'DEBUG');
                     logger.debug.apply(logger, arguments);
@@ -202,7 +201,6 @@
      * @returns {Merged object}
      */
     function applyRunTimeAttributes(fields = {}, lvl) {
-
         const customAttributes = {
             timestamp: new Date().toISOString(),
             lvl: lvl
