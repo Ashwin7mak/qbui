@@ -9,7 +9,7 @@ let component;
 let instance;
 let domComponent;
 let mockRoute = 'mockRoute';
-let mockTableId ='mockTableId';
+let mockTableId = 'mockTableId';
 let tableInfo = {name: {value: {}}, description: {value: {}}, tableIcon: {value: {}}, tableNoun: {value: {}}};
 
 const mockNotificationManager = {
