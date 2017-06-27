@@ -65,6 +65,7 @@
             e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
+            //click on the automation row to open Automation View
             automationSettings.automationsTable.automations[0].click();
 
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();

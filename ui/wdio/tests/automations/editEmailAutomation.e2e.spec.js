@@ -107,7 +107,7 @@
 
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
-            automationSettings.automationsTable.automations[0].edit();
+            automationSettings.automationsTable.automations[0].clickEditButton();
 
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
