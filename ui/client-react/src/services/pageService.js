@@ -8,8 +8,8 @@ class PageService extends BaseService {
 
         //  Page Service API endpoints
         this.API = {
-            CREATE_PAGE: `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.PAGES}`,
-            GET_PAGE: `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.PAGES}/{1}`
+            CREATE_PAGE     : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.PAGES}`,
+            GET_PAGE        : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.PAGES}/{1}`
         };
     }
 
