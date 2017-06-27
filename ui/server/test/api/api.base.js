@@ -135,7 +135,7 @@
 
         // Return the current time since Epoch
         function getEpochTimeNow() {
-            return Math.round(d.getTime() / 1000);
+            return Math.round(new Date().getTime() / 1000);
         }
 
         var apiBase = {
