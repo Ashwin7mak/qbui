@@ -449,7 +449,7 @@
                         browser.pause(e2eConsts.shortWaitTimeMs);
                         timeFields.value[i].waitForVisible();
                         timeFields.value[i].click();
-                        if (browserName === 'chrome') {
+                        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
                             browser.keys([sTime, 'Enter']);
                         } else {
                             this.selectFromList(sTime);
