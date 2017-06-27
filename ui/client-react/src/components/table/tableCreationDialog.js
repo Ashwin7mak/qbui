@@ -11,8 +11,6 @@ import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
-//The Promise import is needed for unit testing purposes, it makes it easier to rewire
-import Promise from 'bluebird';
 
 import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
 

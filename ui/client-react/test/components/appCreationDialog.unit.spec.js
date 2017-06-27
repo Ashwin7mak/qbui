@@ -29,7 +29,6 @@ describe('AppCreationDialog', () => {
         jasmineEnzyme();
 
         AppCreationDialogRewireAPI.__Rewire__('AppCreationPanel', AppCreationPanel);
-        AppCreationDialogRewireAPI.__Rewire__('Promise', mockPromiseAll);
         AppCreationDialogRewireAPI.__Rewire__('NotificationManager', mockNotificationManager);
         AppCreationDialogRewireAPI.__Rewire__('AppHistory', AppHistoryMock);
 
