@@ -148,14 +148,16 @@
                     type: 'NODE'
                 });
 
-                //  for each supported Bunyan logging level, add custom log attributes to the fields list before
-                //  logging the message.
+                //  For each supported Bunyan logging level, add custom log attributes to the fields list before
+                //  logging the message.  The fields list is getting updated, rather than supplementing the
+                //  run-time arguments, because there is a need to have the 'timestamp' as the first attribute in
+                //  the outputted json structure.  This is being done to assist Splunk with how it combs the
+                //  logs -- it's looking for the 'timestamp' attribute in the 1st 128 characters..
                 //
-                //  NOTE: we are overriding at run-time, attributes defined in the logger fields object.
-                //  Given the logger is a Singleton, and the fields object is a structure defined on that instance,
-                //  there could be concern about a race-condition where multiple threads update the same shared
-                //  reference simultaneously.  But given node is single threaded, we should not get exposed to
-                //  this possibility.
+                //  NOTE: the fields object is a structure defined on the Logger, which is a Singleton.  Having
+                //  separate requests update that object could trigger concern about a race-condition.  But given
+                //  node is single threaded, we will not get exposed to the possibility of multiple requests
+                //  simultaneously updating the same shared reference (in this case the fields object).
                 appLogger.debug = function() {
                     logger.fields = applyRunTimeAttributes(logger.fields, 'DEBUG');
                     logger.debug.apply(logger, arguments);
@@ -194,10 +196,6 @@
      * Apply custom run-time arguments to the log:
      *   timestamp:  current time stamp
      *   lvl:        log level text string
-     *
-     * NOTE: only apply values which are needed to be one of the first attributes in the
-     * outputted json output structure.  This is being done to assist Splunk with how it
-     * combs the logs.
      *
      * @param fields
      * @param lvl
