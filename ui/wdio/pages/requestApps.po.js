@@ -19,10 +19,7 @@
          */
         getAllAppLeftNavLinksList: {get: function() {
             //wait until loading screen disappear in leftNav
-
-            loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-            //wait until loading screen disappear in report Content
-            loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             browser.element('.appsList .leftNavLabel').waitForVisible();
             return browser.elements('.appsList .leftNavLabel');
         }},
@@ -41,10 +38,7 @@
                 //Click on filtered table name
                 results[0].click();
                 //wait until loading screen disappear in leftNav
-
-                loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-                //wait until loading screen disappear in report Content
-                return loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+                return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             }
         }},
 

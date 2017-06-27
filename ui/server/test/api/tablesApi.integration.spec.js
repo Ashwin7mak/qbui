@@ -213,16 +213,14 @@
                             done(new Error("Unexpected error, table expected to be deleted on EE"));
                         },
                         (eeError) => {
-                            /* JIRA issue https://quickbase.atlassian.net/browse/MC-3110: Core is returning 403 instead of 404. Once this issue is fixed this test should be updated to expect the correct statusCode*/
-                            assert.equal(eeError.statusCode, 403, "Table should have been deleted on EE");
+                            assert.equal(eeError.statusCode, 404, "Table should have been deleted on EE");
                             var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
                             recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
                                 () => {
                                     done(new Error("Unexpected error, table expected to be deleted on Core and EE"));
                                 },
                                 (coreError) => {
-                                    /* JIRA issue https://quickbase.atlassian.net/browse/MC-3110: Core is returning 403 instead of 404. Once this issue is fixed this test should be updated to expect the correct statusCode*/
-                                    assert.equal(coreError.statusCode, 403, "Table should have been deleted on core");
+                                    assert.equal(coreError.statusCode, 404, "Table should have been deleted on core");
                                     done();
                                 }
                             ).catch((error) => {
