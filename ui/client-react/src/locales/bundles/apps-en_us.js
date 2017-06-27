@@ -747,12 +747,12 @@ export default {
             finishedButtonLabel: "Create app",
             appNameHeading: "App name",
             appNamePlaceHolder: "For example, \"Order Tracker\"",
-            descriptionHeading: "App description"
+            descriptionHeading: "App description",
+            appCreationFailed: "Unable to create app"
         },
         tableCreation: {
             newTablePageTitle: "New Table",
             newTableDescription: "Create a new table when you want to collect a new type of information.",
-            newTableTitle: "Name your table",
 
             summaryDescription: "Each bit of information you want to collect is a field, like Customer Name.",
             summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
