@@ -1,12 +1,21 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
 
+const defaultAppIcon = 'Customer';
+
+const setDefaultAppsProps = {
+    name: '',
+    description: '',
+    icon: defaultAppIcon
+};
+
 const appBuilder = (
     //  default states
     state = {
         isSavingApp: false,
         isDialogOpen: false,
-        isAppIconChooserOpen: false
+        isAppIconChooserOpen: false,
+        icon: defaultAppIcon
     },
     action) => {
     // reducer - no mutations!
@@ -21,10 +30,9 @@ const appBuilder = (
     case types.CREATE_APP_SUCCESS:
         return {
             ...state,
+            ...setDefaultAppsProps,
             isSavingApp: false,
-            isDialogOpen: false,
-            name: '',
-            description: ''
+            isDialogOpen: false
         };
 
     case types.CREATE_APP_FAILED:
@@ -43,9 +51,8 @@ const appBuilder = (
     case types.HIDE_APP_CREATION_DIALOG:
         return {
             ...state,
-            isDialogOpen: false,
-            name: '',
-            description: ''
+            ...setDefaultAppsProps,
+            isDialogOpen: false
         };
 
     case types.SET_APP_PROPERTY:
@@ -81,7 +88,7 @@ export const getAppProperty = (state, property) => _.get(state.appBuilder, prope
 export const getNewAppInfo = (state) => {
     //TODO: Description will need to be added to the return object, but there is currently no endpoint for it
     let description =  getAppProperty(state, 'description');
-    let icon = getAppProperty(state, 'name');
+    let icon = getAppProperty(state, 'icon');
     let name = getAppProperty(state, 'name');
 
     if (name.length > 0) {

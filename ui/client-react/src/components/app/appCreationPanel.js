@@ -44,9 +44,8 @@ export class AppCreationPanel extends Component {
         if (name === '') {
             return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.typeForSuggestions"/></div>;
         }
-        // console.log('this.props.appName: ', this.props.appName);
-        let suggestedIcons = tableIconNames.filter((icon) => IconUtils.filterMatches(tableIconsByTag, name, icon)).slice(0, 8);
 
+        let suggestedIcons = tableIconNames.filter((icon) => IconUtils.filterMatches(tableIconsByTag, name, icon)).slice(0, 8);
 
         if (suggestedIcons.length === 0) {
             return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.noSuggestedIcons"/></div>;

@@ -24,6 +24,7 @@ export class AppCreationDialog extends React.Component {
      */
     onFinished = () => {
         if (this.props.app) {
+            console.log('this.props.app: ', this.props.app);
             this.props.createApp(this.props.app).then((response) => {
                 let appId = _.get(response, 'data.id', null);
                 //reroutes to app home page link
