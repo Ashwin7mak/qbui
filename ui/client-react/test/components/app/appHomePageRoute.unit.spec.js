@@ -142,10 +142,13 @@ describe('AppHomePageRoute', () => {
 
     it('loads props from the store', () => {
         const appName = 'test';
+        const app = {name: appName, id: 1};
         const currentState = {
             tableProperties: {},
             app: {
-                app: {name: appName, id: 1},
+                app: app,
+                apps: [app],
+                selected: {appId: app.id},
                 isLoading: false
             }
         };
