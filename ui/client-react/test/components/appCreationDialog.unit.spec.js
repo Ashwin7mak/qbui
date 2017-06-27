@@ -7,6 +7,8 @@ import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialo
 
 let component;
 let instance;
+let mockRoute = 'mockRoute';
+let appId = 'mockAppId';
 
 const mockNotificationManager = {
     error() {}
@@ -16,9 +18,12 @@ const AppHistoryMock = {
     history: {push(_location) {}},
 };
 
+const mockUrlUtils = {
+    getAppHomePageLink() {}
+};
 
 let mockProps = {
-    createApp:  () => ({then: callback => callback({data: {id: 'mockAppId'}})}),
+    createApp:  () => ({then: callback => callback({data: {id: appId}})}),
     createAppFailed:  () => ({then: (callbackSuccess, callBackFailed) => callBackFailed()}),
     hideAppCreationDialog() {},
     toggleAppsList() {}
@@ -31,12 +36,14 @@ describe('AppCreationDialog', () => {
         AppCreationDialogRewireAPI.__Rewire__('AppCreationPanel', AppCreationPanel);
         AppCreationDialogRewireAPI.__Rewire__('NotificationManager', mockNotificationManager);
         AppCreationDialogRewireAPI.__Rewire__('AppHistory', AppHistoryMock);
+        AppCreationDialogRewireAPI.__Rewire__('UrlUtils', mockUrlUtils);
 
         spyOn(mockProps, 'hideAppCreationDialog');
         spyOn(mockProps, 'createApp').and.callThrough();
         spyOn(mockProps, 'createAppFailed').and.callThrough();
         spyOn(mockProps, 'toggleAppsList');
         spyOn(AppHistoryMock.history, 'push');
+        spyOn(mockUrlUtils, 'getAppHomePageLink').and.returnValue(mockRoute);
         spyOn(mockNotificationManager, 'error');
     });
 
@@ -45,6 +52,7 @@ describe('AppCreationDialog', () => {
         AppCreationDialogRewireAPI.__ResetDependency__('Promise');
         AppCreationDialogRewireAPI.__ResetDependency__('NotificationManager');
         AppCreationDialogRewireAPI.__ResetDependency__('AppHistory');
+        AppCreationDialogRewireAPI.__ResetDependency__('mockUrlUtils');
 
         mockProps.createAppFailed.calls.reset();
         mockProps.toggleAppsList.calls.reset();
@@ -66,7 +74,7 @@ describe('AppCreationDialog', () => {
         expect(mockProps.hideAppCreationDialog).toHaveBeenCalled();
     });
 
-    it('will call an action to create an app when onFinished is called', () => {
+    it('will create an app and reroute to app home page when onFinished is called', () => {
         component = shallow(<AppCreationDialog createApp={mockProps.createApp}
                                                toggleAppsList={mockProps.toggleAppsList}
                                                app={{}} />);
@@ -76,7 +84,8 @@ describe('AppCreationDialog', () => {
 
         expect(mockProps.createApp).toHaveBeenCalledWith({});
         expect(mockProps.toggleAppsList).toHaveBeenCalledWith(false);
-        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
+        expect(mockUrlUtils.getAppHomePageLink).toHaveBeenCalledWith(appId);
+        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(mockRoute);
     });
 
     it('will invoke NotificationManager if createApp action fails', () => {

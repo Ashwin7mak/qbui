@@ -8,6 +8,7 @@ import {TableCreationDialog, __RewireAPI__ as TableCreationDialogRewireAPI} from
 let component;
 let instance;
 let domComponent;
+let mockUrlRoute = 'mockUrlRoute';
 let tableInfo = {name: {value: {}}, description: {value: {}}, tableIcon: {value: {}}, tableNoun: {value: {}}};
 
 const mockNotificationManager = {
@@ -16,6 +17,10 @@ const mockNotificationManager = {
 
 const AppHistoryMock = {
     history: {push(_location) {}},
+};
+
+const mockUrlUtils = {
+    getAppHomePageLink() {}
 };
 
 const mockParentFunctions = {
@@ -83,9 +88,11 @@ describe('TableCreationDialog', () => {
         jasmineEnzyme();
         TableCreationDialogRewireAPI.__Rewire__('NotificationManager', mockNotificationManager);
         TableCreationDialogRewireAPI.__Rewire__('AppHistory', AppHistoryMock);
+        TableCreationDialogRewireAPI.__Rewire__('UrlUtils', mockUrlUtils);
 
         spyOn(mockParentFunctions, 'createTable').and.callThrough();
         spyOn(mockParentFunctions, 'createTableFailed').and.callThrough();
+        spyOn(mockUrlUtils, 'getAppHomePageLink').and.returnValue(mockUrlRoute);
         spyOn(AppHistoryMock.history, 'push');
         spyOn(mockNotificationManager, 'error');
     });
@@ -99,6 +106,7 @@ describe('TableCreationDialog', () => {
 
         TableCreationDialogRewireAPI.__ResetDependency__('NotificationManager');
         TableCreationDialogRewireAPI.__ResetDependency__('AppHistory');
+        TableCreationDialogRewireAPI.__ResetDependency__('UrlUtils');
     });
 
     it('renders a TableCreationDialog', () => {
@@ -138,6 +146,8 @@ describe('TableCreationDialog', () => {
 
         expect(mockParentFunctions.createTable).toHaveBeenCalledWith(app.id, tableInfoResult);
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
+        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(app.id);
+        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(mockUrlRoute);
     });
 
     it('will display an error message if table creation fails', () => {
