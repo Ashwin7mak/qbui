@@ -8,10 +8,6 @@ import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialo
 let component;
 let instance;
 
-const mockPromiseAll = {
-    all: () => ({then: callback => callback()})
-};
-
 const mockNotificationManager = {
     error() {}
 };
