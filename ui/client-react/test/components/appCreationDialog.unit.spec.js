@@ -49,6 +49,7 @@ describe('AppCreationDialog', () => {
         AppCreationDialogRewireAPI.__ResetDependency__('AppCreationPanel');
         AppCreationDialogRewireAPI.__ResetDependency__('Promise');
         AppCreationDialogRewireAPI.__ResetDependency__('NotificationManager');
+        AppCreationDialogRewireAPI.__ResetDependency__('AppHistory');
 
         mockProps.createAppFailed.calls.reset();
         mockProps.toggleAppsList.calls.reset();
