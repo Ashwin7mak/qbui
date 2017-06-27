@@ -10,10 +10,6 @@ let instance;
 let domComponent;
 let tableInfo = {name: {value: {}}, description: {value: {}}, tableIcon: {value: {}}, tableNoun: {value: {}}};
 
-const mockPromiseAll = {
-    all: () => ({then: callback => callback()})
-};
-
 const mockNotificationManager = {
     error() {}
 };
@@ -85,8 +81,6 @@ function buildMockParentComponent(options) {
 describe('TableCreationDialog', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        TableCreationDialogRewireAPI.__Rewire__('Promise', mockPromiseAll);
-        TableCreationDialogRewireAPI.__Rewire__('NotificationManager', mockNotificationManager);
         TableCreationDialogRewireAPI.__Rewire__('NotificationManager', mockNotificationManager);
         TableCreationDialogRewireAPI.__Rewire__('AppHistory', AppHistoryMock);
 
@@ -103,10 +97,8 @@ describe('TableCreationDialog', () => {
             modalInDom.parentNode.removeChild(modalInDom);
         }
 
-        TableCreationDialogRewireAPI.__ResetDependency__('Promise');
-        TableCreationDialogRewireAPI.__ResetDependency__('NotificationMan');
-        mockParentFunctions.createTable.calls.reset();
-        mockParentFunctions.createTableFailed.calls.reset();
+        TableCreationDialogRewireAPI.__ResetDependency__('NotificationManager');
+        TableCreationDialogRewireAPI.__ResetDependency__('AppHistory');
     });
 
     it('renders a TableCreationDialog', () => {
