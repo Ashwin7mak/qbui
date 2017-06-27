@@ -1,9 +1,23 @@
 @import '../../assets/css/qbVariables';
 
+$table-icon-font-size: $font-size-h3;
+$table-icon-heading-spacer: $spacing-xxx-small;
+
 .formStage {
+    .formHeader {
+        .qbIcon {
+            font-size: $table-icon-font-size;
+            margin-right: $table-icon-heading-spacer;
+        }
+        > * {
+            vertical-align: middle;
+        }
+    }
     .editableStage {
+        margin-left: $table-icon-font-size + $table-icon-heading-spacer + 16px;
         .titleField {
-            padding: 5px 25px;
+            display: inline-block;
+            padding: 5px 15px;
             border: $stroke-width-thin solid $color-black-300;
             color: $color-black-700;
             border-radius: 64px;

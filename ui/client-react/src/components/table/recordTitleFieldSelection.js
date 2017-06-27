@@ -30,6 +30,9 @@ class RecordTitleFieldSelection extends React.Component {
     getOption(option) {
         return <div className="pickerOption"><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType({datatypeAttributes: {type: option.type}}))} /> <span className="pickerOptionLabel">{option.label}</span></div>;
     }
+    getValue(option) {
+        return <div className="selectedOption"><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType({datatypeAttributes: {type: option.type}}))} /> <span className="selectedOptionLabel">{option.label}</span></div>;
+    }
     /**
      * get react-select component
      * @returns {XML}
@@ -57,11 +60,11 @@ class RecordTitleFieldSelection extends React.Component {
             };
         });
 
-        //const selectedValue = _.get(this.props, "table.recordTitleFieldId", '') || ''; // map null to empty string for select
         return <Select className="recordTitleFieldSelect"
                        value={this.props.selectedValue}
                        options={choices}
-                       //optionRenderer={this.getOption}
+                       optionRenderer={this.getOption}
+                       valueRenderer={this.getValue}
                        onChange={this.selectField}
                        autosize={false}
                        clearable={false} />;

@@ -58,9 +58,9 @@ export const setFieldsPropertiesPendingEditToFalse = () => {
  * This indication helps decide when a user selects another field as record title field instead then the required prop should be unset.
  * @returns {{type}}
  */
-export const setRequiredForRecordTitleSelection = (appId, tblId, fieldId, state) => {
+export const setRequiredPropForRecordTitleField = (appId, tblId, fieldId, required) => {
     return {
-        appId, tblId, fieldId, state,
+        appId, tblId, fieldId, required,
         type: types.SET_IS_REQD_FOR_RECORD_TITLE
     };
 };

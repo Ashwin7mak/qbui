@@ -543,7 +543,7 @@ export const QBForm = React.createClass({
     createFormStage() {
         let FormBuilderStageWrapped = thwartClicksWrapper(FormBuilderStage);
         return this.props.editingForm ?
-            <FormBuilderStageWrapped table={this.props.table}
+            <FormBuilderStage table={this.props.table}
                                      handleClickOutside={this.closeEditStage}
                                      outsideClickIgnoreClass="formStage"
                                      onEditStage={this.onEditStage}

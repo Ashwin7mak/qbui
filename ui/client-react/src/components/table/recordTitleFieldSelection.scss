@@ -6,12 +6,18 @@
         .Select-option:last-of-type {
             border-top: 1px solid $color-black-400;
         }
-        .pickerOption {
-            line-height: 14px;
+        .selectedOption, .pickerOption {
             > * {
                 display: inline-block;
                 vertical-align: middle;
             }
+        }
+        .selectedOption {
+            padding: 0 8px;
+        }
+        .pickerOption {
+            line-height: 14px;
+
             .pickerOptionLabel {
                 margin-left: 20px;
             }

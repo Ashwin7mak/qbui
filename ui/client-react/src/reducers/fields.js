@@ -161,7 +161,7 @@ const fieldsStore = (state = [], action) => {
         fieldList = _.cloneDeep(fieldList);
 
         let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.fieldId);
-        fieldList.fields[fieldIndex] = {...fieldList.fields[fieldIndex], isRequiredForRecordTitleField: action.state};
+        fieldList.fields[fieldIndex] = {...fieldList.fields[fieldIndex], isRequiredForRecordTitleField: action.required, required: action.required};
         newState.push(fieldList);
 
         return newState;

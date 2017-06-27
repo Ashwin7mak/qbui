@@ -26,8 +26,10 @@ class Stage extends Component {
     }
 
     render() {
+        let classes = "layout-stage";
+        classes += this.props.className ? " " + this.props.className : "";
         return (
-            <div className="layout-stage">
+            <div className={classes}>
                 <div className="stageHeader">
                     <div className="stageLeft">
                         {this.props.stageHeadline}
