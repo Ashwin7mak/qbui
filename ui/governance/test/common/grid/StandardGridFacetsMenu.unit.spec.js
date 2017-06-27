@@ -47,7 +47,7 @@ describe('StandardGridFacetsMenu functions', () => {
 
 
     it('renders GenericFacetMenu component', () => {
-        component = mount(<StandardGridFacetsMenu />);
+        component = shallow(<StandardGridFacetsMenu />);
 
         expect(component.find(GenericFacetMenu)).toBePresent();
     });
@@ -55,7 +55,7 @@ describe('StandardGridFacetsMenu functions', () => {
     it('test render FacetsMenu with facets', () => {
         spyOn(mockParentActions, 'showFacetMenu');
 
-        component = mount(<StandardGridFacetsMenu show={false}
+        component = shallow(<StandardGridFacetsMenu show={false}
                                                   facetFields={fakeFacetsData_valid}
                                                   showFacetMenu={mockParentActions.showFacetMenu} />);
 
@@ -167,7 +167,6 @@ describe('StandardGridFacetsMenu functions', () => {
             expect(subItem.length).toBe(3); //expanded has children
 
         });
-
 
         it('test render FacetsMenu click facet section collapse ', () => {
             let expanded = [];
