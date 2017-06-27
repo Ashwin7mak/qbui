@@ -42,6 +42,7 @@ export default {
             settings: "Settings",
             users: {
                 addUser: "Add a new user",
+                assignRole: "Assign Role",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
                 manager: "Application Manager",
@@ -58,7 +59,17 @@ export default {
                 userAddError: "Error adding user",
                 userRemovingError: "Error removing user",
                 emailBody: "Email body goes here",
-                emailSubject: "Email subject goes here"
+                emailSubject: "Email subject goes here",
+                changeUserRole: "Change {value} role",
+                changeUserRoles: "Change {value} roles",
+                changeUserRoleButton: "Change role",
+                pluralChangeUserRoleButton: "Change roles",
+                userRoleTitle: "Change the role of {value} user",
+                pluralUserRoleTitle: "Change the role of {value} users",
+                userRoleDescription: "Changing the role may affect what a user can view.",
+                userRoleText: "Change role to",
+                successUserRole: "{value} user’s role has been changed",
+                pluralSuccessUserRole: "{value} users’ roles have been changed",
             }
         },
         appMenu: {

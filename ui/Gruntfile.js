@@ -496,7 +496,7 @@ module.exports = function(grunt) {
                     },
                     mask          : '**/*.unit.spec.js',
                     root          : '.',
-                    excludes      : ['server/src/api/quickbase/mock/mockFeatureSwitchesApi.js', 'qb_lib/**/*'],
+                    excludes      : ['qb_lib/**/*'],
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
@@ -599,14 +599,12 @@ module.exports = function(grunt) {
                     './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js',
                     './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js',
                     './wdio/tests/reports/reportBuilder.e2e.spec.js',
+                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
 
                     //IN CI they are failing
                     './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                     './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
-                    './wdio/tests/relationships/createRelationshipWithUniqueRequiredField.e2e.spec.js',
-                    './wdio/tests/relationships/createSingleRelationship.e2e.spec.js',
-                    './wdio/tests/relationships/createMultiRelationship.e2e.spec.js',
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -635,7 +633,6 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
                         './wdio/tests/reports/reportTable.e2e.spec.js'
                     ],
                     tables: [
