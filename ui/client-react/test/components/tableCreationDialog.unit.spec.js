@@ -118,7 +118,7 @@ describe('TableCreationDialog', () => {
         Simulate.click(cancelButton);
     });
 
-    it('will invoke createTable action when onFinished is called', () => {
+    it('will create a table when onFinished is invoked', () => {
         component = shallow(<TableCreationDialog createTable={mockParentFunctions.createTable}
                                                  tableCreation={{iconChooserOpen: {}}}
                                                  tableInfo={tableInfo}
@@ -140,7 +140,7 @@ describe('TableCreationDialog', () => {
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
     });
 
-    it('will invoke NotificationManger if createTable fails', () => {
+    it('will display an error message if table creation fails', () => {
         component = shallow(<TableCreationDialog createTable={mockParentFunctions.createTableFailed}
                                                  tableCreation={{iconChooserOpen: {}}}
                                                  tableInfo={tableInfo}
