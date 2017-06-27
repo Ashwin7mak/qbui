@@ -5,20 +5,24 @@ import './emptyStateForLeftNav.scss';
 
 const EmptyStateForLeftNav = ({handleOnClick, emptyMessage, icon, iconMessage, className}) => (
     <div className = {`${className} emptyState`}>
-        <p>{Locale.getMessage(emptyMessage)}</p>
+        {emptyMessage && <p>{Locale.getMessage(emptyMessage)}</p>}
         <div className="createNewIcon" onClick={handleOnClick} role="button" tabIndex="0">
-                <Icon className={`${className} addNewIcon`} icon={icon}/>
-            <li className="iconMessage">{Locale.getMessage(iconMessage)}</li>
-            </div>
+            <Icon className={`${className} addNewIcon`} icon={icon}/>
+            {iconMessage && <li className="iconMessage">{Locale.getMessage(iconMessage)}</li>}
         </div>
+    </div>
 );
 
 EmptyStateForLeftNav.propTypes = {
     handleOnClick: PropTypes.func.isRequired,
-    emptyMessage: PropTypes.string.isRequired,
-    className: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired,
-    iconMessage: PropTypes.string.isRequired
+    emptyMessage: PropTypes.string,
+    className: PropTypes.string,
+    icon: PropTypes.string,
+    iconMessage: PropTypes.string
+};
+
+EmptyStateForLeftNav.defaultProps = {
+    icon: 'add-new-filled'
 };
 
 export default EmptyStateForLeftNav;
