@@ -27,6 +27,8 @@ export const CREATE_APP = 'CREATE_APP';
 export const CREATE_APP_SUCCESS = 'CREATE_APP_SUCCESS';
 export const CREATE_APP_FAILED = 'CREATE_APP_FAILED';
 export const SET_APP_PROPERTY = 'SET_APP_PROPERTY';
+export const OPEN_ICON_CHOOSER_FOR_APP = 'OPEN_ICON_CHOOSER_FOR_APP';
+export const CLOSE_ICON_CHOOSER_FOR_APP = 'CLOSE_ICON_CHOOSER_FOR_APP';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';

@@ -5,7 +5,8 @@ const appBuilder = (
     //  default states
     state = {
         isSavingApp: false,
-        isDialogOpen: false
+        isDialogOpen: false,
+        isAppIconChooserOpen: false
     },
     action) => {
     // reducer - no mutations!
@@ -52,6 +53,18 @@ const appBuilder = (
             ...state,
             [action.property]: action.value
         };
+
+    case types.OPEN_ICON_CHOOSER_FOR_APP:
+        return {
+            ...state,
+            isAppIconChooserOpen: true
+        };
+
+    case types.CLOSE_ICON_CHOOSER_FOR_APP:
+        return {
+            ...state,
+            isAppIconChooserOpen: false
+        };
     default:
         return state;
     }
@@ -61,16 +74,20 @@ export default appBuilder;
 
 export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialogOpen', false);
 
+export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
+
 export const getAppProperty = (state, property) => _.get(state.appBuilder, property, '');
 
 export const getNewAppInfo = (state) => {
     //TODO: Description will need to be added to the return object, but there is currently no endpoint for it
     let description =  getAppProperty(state, 'description');
+    let icon = getAppProperty(state, 'name');
     let name = getAppProperty(state, 'name');
 
     if (name.length > 0) {
         return {
-            name
+            name,
+            icon
         };
     }
     return null;
