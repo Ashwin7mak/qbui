@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow,mount} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import EmptyStateForLeftNav, {__RewireAPI__ as EmptyStateForLeftNavRewireAPI} from '../../src/components/sideNavs/emptyStateForLeftNav';
 
