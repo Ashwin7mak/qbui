@@ -9,6 +9,7 @@ let component;
 let instance;
 let domComponent;
 let mockRoute = 'mockRoute';
+let mockTableId ='mockTableId';
 let tableInfo = {name: {value: {}}, description: {value: {}}, tableIcon: {value: {}}, tableNoun: {value: {}}};
 
 const mockNotificationManager = {
@@ -20,14 +21,14 @@ const AppHistoryMock = {
 };
 
 const mockUrlUtils = {
-    getAppHomePageLink() {}
+    getAfterTableCreatedLink() {}
 };
 
 const mockParentFunctions = {
     hideDialog() {},
     setEditingProperty() {},
     setTableProperty() {},
-    createTable: () => {return {then: (fn) => fn({data:'tableId'})};},
+    createTable: () => {return {then: (fn) => fn({data: mockTableId})};},
     createTableFailed: () => {return {then: (fn, fnFailed) => fnFailed()};},
     tableCreated() {},
     hideTableCreationDialog() {},
@@ -92,7 +93,7 @@ describe('TableCreationDialog', () => {
 
         spyOn(mockParentFunctions, 'createTable').and.callThrough();
         spyOn(mockParentFunctions, 'createTableFailed').and.callThrough();
-        spyOn(mockUrlUtils, 'getAppHomePageLink').and.returnValue(mockRoute);
+        spyOn(mockUrlUtils, 'getAfterTableCreatedLink').and.returnValue(mockRoute);
         spyOn(AppHistoryMock.history, 'push');
         spyOn(mockNotificationManager, 'error');
     });
@@ -145,8 +146,7 @@ describe('TableCreationDialog', () => {
         instance.onFinished();
 
         expect(mockParentFunctions.createTable).toHaveBeenCalledWith(app.id, tableInfoResult);
-        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(jasmine.any(String));
-        expect(AppHistoryMock.history.push).toHaveBeenCalledWith(app.id);
+        expect(mockUrlUtils.getAfterTableCreatedLink).toHaveBeenCalledWith(app.id, mockTableId);
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(mockRoute);
     });
 
