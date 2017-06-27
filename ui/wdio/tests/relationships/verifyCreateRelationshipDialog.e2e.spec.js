@@ -26,6 +26,9 @@ describe('Relationships - Verify create relationship dialog Tests :', function()
     let realmName;
     let realmId;
     let testApp;
+    //
+    //***** These tests don't run in safari and firefox browser as 'scrollIntoView' and moveToObject is not supported by safari and firefox.
+    //
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
         /**
          * Setup method. Creates test app then authenticates into the new stack

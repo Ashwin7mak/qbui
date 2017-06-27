@@ -21,6 +21,8 @@ const descFieldTitleText = 'Description';
 
 describe('Relationships - Create multiple relationship Tests :', function() {
     // This app has 2 parent tables and 1 child table. A relationship already exists via API.
+    //***** These tests don't run in safari browser as 'scrollIntoView' is not supported by safari.
+    //
     let realmName;
     let realmId;
     let testApp;

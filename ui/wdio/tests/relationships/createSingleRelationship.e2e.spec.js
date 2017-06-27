@@ -20,6 +20,9 @@ describe('Relationships - Create single relationship Tests :', function() {
     let realmName;
     let realmId;
     let testApp;
+    //
+    //***** These tests don't run in safari browser as 'scrollIntoView' is not supported by safari.
+    //
     if (browserName !== 'safari') {
 
         /**

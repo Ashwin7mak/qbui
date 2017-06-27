@@ -24,6 +24,9 @@ describe('Relationships - Create relationship with unique and required field Tes
     let realmName;
     let realmId;
     let testApp;
+    //
+    //***** These tests don't run in safari browser as 'scrollIntoView' is not supported by safari.
+    //
     if (browserName !== 'safari') {
         /**
          * Setup method. Creates test app then authenticates into the new stack
