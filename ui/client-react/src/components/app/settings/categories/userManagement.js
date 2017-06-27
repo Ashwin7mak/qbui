@@ -71,9 +71,9 @@ class UserManagement extends React.Component {
         return columns;
     }
 
-    userIsSelected(selectedRows, userId) {
+    userIsSelected(selectedRows, userId, roleId) {
         const rows = _.find(selectedRows, (user)=>{
-            return user.id === userId;
+            return user.id === userId && user.roleId === roleId;
         });
         return Boolean(rows);
     }
@@ -88,10 +88,15 @@ class UserManagement extends React.Component {
                     user.roleName = role.name;
                     user.name = (user.firstName ? `${user.firstName} ` : "") + (user.lastName ? user.lastName : "");
                     user.roleId = role.id;
-                    user.isSelected = self.userIsSelected(selectedRows, user.userId);
+                    user.isSelected = self.userIsSelected(selectedRows, user.userId, role.id);
                     appUsersFiltered.push(user);
                 });
             }
+        });
+        appUsersFiltered.sort(function(a, b) {
+            if (a.firstName < b.firstName) {return -1;}
+            if (a.firstName > b.firstName) {return 1;}
+            return 0;
         });
         return appUsersFiltered;
     }

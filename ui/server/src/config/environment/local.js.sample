@@ -110,10 +110,16 @@
         // Tracing service name
         tracingServiceName: ''
 
+
         /**
-         * mock data for feature switches for local testing
+         * Override master.featureSwitches by overriding specific features in
+         * local.override.featureSwitches.json.
+         * Note: Feature Switches are overridden based on their names, ensure overrides
+         * have same name including spacing.
          */
-        //featureSwitchesMockData: './server/mockData/featureSwitches.json'
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/local.override.featureSwitches.json'
+        // masterOverrideTurnFeaturesOn:true
+
 
         /**
          * AWS api gateway to lambda functions for feature switches

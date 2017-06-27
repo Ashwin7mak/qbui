@@ -432,17 +432,24 @@ describe('Test app reducer - get app table tests', () => {
 
 describe('App selectors', () => {
     describe('getSelectedApp', () => {
+        const app = {id: 'abc', name: 'my test app'};
+
         it('returns the currently loaded app in state', () => {
-            const app = 'my test app';
-            const stateWithApp = {app: {app}};
+            const stateWithApp = {app: {apps: [app], selected: {appId: app.id}}};
 
             expect(AppReducer.getSelectedApp(stateWithApp)).toEqual(app);
         });
 
-        it('returns undefined if an app is not loaded', () => {
-            const stateWithoutApp = {app: {}};
+        it('returns undefined if no apps are loaded', () => {
+            const stateWithoutApp = {app: {apps: [], selected: {appId: app.id}}};
 
             expect(AppReducer.getSelectedApp(stateWithoutApp)).toEqual(undefined);
+        });
+
+        it('returns undefined if the currently selected app is not loaded', () => {
+            const stateWithApp = {app: {apps: [app], selected: {appId: 'a-non-loaded-app'}}};
+
+            expect(AppReducer.getSelectedApp(stateWithApp)).toEqual(undefined);
         });
     });
 });

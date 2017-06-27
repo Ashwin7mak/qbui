@@ -1,11 +1,9 @@
 import React, {PropTypes, Component} from 'react';
-import Button from 'react-bootstrap/lib/Button';
 import Loader from 'react-loader';
 import FlipMove from 'react-flip-move';
 import SideMenuBase from 'REUSE/components/sideMenuBase/sideMenuBase';
-import Icon from 'REUSE/components/icon/icon';
-import Tooltip from 'REUSE/components/tooltip/tooltip';
 import SimpleNavItem from 'REUSE/components/simpleNavItem/simpleNavItem';
+import NavHeader from 'REUSE/components/navHeader/navHeader';
 
 // CLIENT REACT IMPORTS
 import {LEFT_NAV_BAR} from 'APP/constants/spinnerConfigurations';
@@ -22,15 +20,6 @@ import './standardLeftNav.scss';
  * the leftNav is often passed as a prop to the TopNav in the onNavClick prop.
  */
 class StandardLeftNav extends Component {
-    constructor(props) {
-        super(props);
-
-        this.renderContextHeaderTitle = this.renderContextHeaderTitle.bind(this);
-        this.renderContextHeader = this.renderContextHeader.bind(this);
-        this.renderNavContent = this.renderNavContent.bind(this);
-        this.screenSizeChanged = this.screenSizeChanged.bind(this);
-    }
-
     componentDidMount() {
         window.addEventListener('resize', this.screenSizeChanged, false);
         this.screenSizeChanged(); // Call the function once to initialize
@@ -40,66 +29,11 @@ class StandardLeftNav extends Component {
         window.removeEventListener('resize', this.screenSizeChanged, false);
     }
 
-    screenSizeChanged() {
+    screenSizeChanged = () => {
         this.forceUpdate();
-    }
+    };
 
-    getMaxCharactersBeforeTooltip() {
-        if (Breakpoints.isSmallBreakpoint()) {
-            return 27;
-        }
-
-        return 17;
-    }
-
-    renderContextHeaderTitle() {
-        const {contextHeaderTitle} = this.props;
-
-        let contextHeaderTitleElement = <span className="contextHeaderTitle">{contextHeaderTitle}</span>;
-
-        if (contextHeaderTitle && contextHeaderTitle.length > this.getMaxCharactersBeforeTooltip()) {
-            return (
-                <Tooltip plainMessage={contextHeaderTitle} location="bottom">{contextHeaderTitleElement}</Tooltip>
-            );
-        }
-
-        return contextHeaderTitleElement;
-    }
-
-    renderContextHeader() {
-        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, contextHeaderIconFont, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
-
-        let classes = ['contextHeader'];
-
-        if (!showContextHeader) {
-            classes.push('contextHeaderHidden');
-        }
-
-        if (isCollapsed) {
-            classes.push('contextHeaderCollapsed');
-        }
-
-        if (isContextHeaderSmall && !isCollapsed) {
-            classes.push('contextHeaderSmall');
-        }
-
-        return (
-            <div className={classes.join(' ')}>
-                <Button
-                    className="contextHeaderButton"
-                    onClick={this.props.onClickContextHeader}
-                >
-                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} iconFont={contextHeaderIconFont} className="contextHeaderIcon" />}
-
-                    {this.renderContextHeaderTitle()}
-
-                    {showContextHeaderToggle && <Icon icon="caret-up" className={`contextHeaderToggle ${isContextToggleDown ? 'contextToggleDown' : ''}`} />}
-                </Button>
-            </div>
-        );
-    }
-
-    renderPrimaryActions() {
+    renderPrimaryActions = () => {
         const {navItems, isCollapsed} = this.props;
         return (
             <ul className={`standardLeftNavPrimaryActions ${isCollapsed ? 'standardLeftNavPrimaryActionsCollapsed' : ''}`}>
@@ -108,14 +42,25 @@ class StandardLeftNav extends Component {
                 ))}
             </ul>
         );
-    }
+    };
 
-    renderNavContent() {
+    renderNavContent = () => {
         const {className, isCollapsed, showLoadingIndicator, globalActions, brandingImage, brandingImageAltText, navItems} = this.props;
 
         return (
             <div className={`standardLeftNav ${className} ${isCollapsed ? 'isCollapsedStandardLeftNav' : ''}`}>
-                {this.renderContextHeader()}
+                <NavHeader
+                    title={this.props.contextHeaderTitle}
+                    isVisible={this.props.showContextHeader}
+                    isSmall={this.props.isContextHeaderSmall}
+                    icon={this.props.contextHeaderIcon}
+                    iconFont={this.props.contextHeaderIconFont}
+                    isToggleVisible={this.props.showContextHeaderToggle}
+                    isToggleDown={this.props.isContextToggleDown}
+                    isCollapsed={this.props.isCollapsed}
+                    backgroundColor={this.props.contextHeaderMenuBackgroundColor}
+                    onClickHeader={this.props.onClickContextHeader}
+                />
 
                 {this.renderPrimaryActions()}
 
@@ -130,11 +75,11 @@ class StandardLeftNav extends Component {
                 {Breakpoints.isSmallBreakpoint() && globalActions}
 
                 <div className="standardLeftNavBranding">
-                    <img className="leftNavLogo" alt={brandingImageAltText} src={LogoImg} />
+                    <img className="leftNavLogo" alt={brandingImageAltText} src={brandingImage} />
                 </div>
             </div>
         );
-    }
+    };
 
     render() {
         return (
@@ -187,8 +132,7 @@ StandardLeftNav.propTypes = {
     contextHeaderIcon: PropTypes.string,
 
     /**
-     * The font set to use for the contextHeaderIcon
-     */
+     * The font set to use for the contextHeaderIcon */
     contextHeaderIconFont: PropTypes.string,
 
     /**
@@ -202,6 +146,10 @@ StandardLeftNav.propTypes = {
     /**
      * Controls the direction of the toggle icon in the header. True for down. False for up. */
     isContextToggleDown: PropTypes.bool,
+
+    /**
+     * The background color (a hex value string) for the context header menu at the top of the nav. */
+    contextHeaderMenuBackgroundColor: PropTypes.string,
 
     /**
      * Callback that occurs when the context header is clicked */
@@ -256,7 +204,6 @@ StandardLeftNav.defaultProps = {
     showLoadingIndicator: false,
     showContextHeader: false,
     contextHeaderIcon: null,
-    contextHeaderIconFont: null,
     contextHeaderTitle: null,
     showContextHeaderToggle: false,
     isContextToggleDown: true,

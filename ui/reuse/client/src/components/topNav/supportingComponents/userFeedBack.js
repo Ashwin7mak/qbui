@@ -5,12 +5,11 @@ import Icon from '../../icon/icon';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import UrlUtils from '../../../../../../client-react/src/utils/urlUtils';
 import Tooltip from '../../tooltip/tooltip';
-
 import './userFeedBack.scss';
 
 // Uses defaults messages an icons specific to a feedback dropdown in the DefaultTopNav
 const dropDownMessage = 'header.menu.feedbackMenuTitle';
-const dropDownIcon = 'Advertising';
+const dropDownIcon = 'feedback';
 
 /**
  * This component was not designed to be reused outside of the ReDefaultTopNavGlobalActions component.
@@ -29,8 +28,8 @@ class userFeedBack extends Component {
             <DropDown id="nav-right-dropdown" className="userFeedBack globalActionLink" dropup={this.props.shouldOpenMenusUp}>
                 <Tooltip bsRole="toggle" tipId="feedback" i18nMessageKey="header.menu.feedbackTooltip" key="feedback" location="bottom">
                     <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
-                        <Icon icon={dropDownIcon} iconFont="iconTableSturdy"/>
-                        <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
+                        <Icon icon={dropDownIcon}/>
+                        <span className="navLabel feedBackTitle"><I18nMessage message={dropDownMessage}/></span>
                     </a>
                 </Tooltip>
 
@@ -49,11 +48,11 @@ class userFeedBack extends Component {
 
 userFeedBack.propTypes = {
     startTabIndex: PropTypes.number,
-    shouldOpenMenusUp: PropTypes.bool
+    shouldOpenMenusUp: PropTypes.bool,
 };
 
 userFeedBack.defaultPropTypes = {
-    startTabIndex: 0,
+    startTabIndex: 0
 };
 
 export default userFeedBack;
