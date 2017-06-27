@@ -9,6 +9,7 @@ import KeyboardShortcuts from '../../../../../reuse/client/src/components/keyboa
 import {I18nMessage} from 'REUSE/utils/i18nMessage';
 import Locale from 'REUSE/locales/locale';
 import Tooltip from 'REUSE/components/tooltip/tooltip';
+import * as SpinnerConfigurations from "../../../../../client-react/src/constants/spinnerConfigurations";
 
 import './multiStepDialog.scss';
 import '../../../../../reuse/client/src/components/iconActions/iconActions.scss';
@@ -129,12 +130,12 @@ class MultiStepDialog extends React.Component {
         if (this.props.classes) {
             classes = [...classes, this.props.classes];
         }
-
+        let savingRole = this.props.savingRole || false;
         const panels = this.getWrappedPages();
         return (
             <div>
                 <Modal className={classes.join(' ')} show={this.props.show}>
-
+                    <Loader loadedClassName="transitionGroup" loaded={!savingRole} options={SpinnerConfigurations.CHANGE_ROLE}>
                         {this.renderIcons()}
 
                         <div className="bodyContainer">
@@ -153,7 +154,7 @@ class MultiStepDialog extends React.Component {
 
                         </div>
                         {this.renderButtons()}
-
+            </Loader>
                 </Modal>
             </div>);
     }

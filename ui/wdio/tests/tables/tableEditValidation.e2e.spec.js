@@ -108,7 +108,7 @@
                 });
 
                 //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
+                expect(browser.element('.standardLeftNav .navHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
 
                 //Click on reset button in edit table mode
                 tableCreatePO.clickOnEditTableResetBtn();

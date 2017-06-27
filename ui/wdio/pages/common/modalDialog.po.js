@@ -1,3 +1,4 @@
+let loadingSpinner = requirePO('/common/loadingSpinner');
 class modalDialogWindow {
     //The methods below works for both qbModal dialog and also multiStepModal dialog.
     // Since the underlying className for both modal dialogs are 'modal-dialog'
@@ -94,6 +95,8 @@ class modalDialogWindow {
         let listOptions = [];
         //get the list of all drop down options
         browser.waitForVisible('.Select-menu-outer');
+        //wait untill you see 1 option since drop down loads onDemand now
+        browser.element('.Select-option').waitForVisible();
         browser.elements('.Select-option').value.filter(function(optionText) {
             listOptions.push(optionText.getText());
         });
@@ -144,12 +147,15 @@ class modalDialogWindow {
         this.clickOnDropDownDownArrowToExpand(element);
         //wait until you see select outer menu
         browser.waitForVisible('.Select-menu-outer');
+        //wait untill you see 1 option since drop down loads onDemand now
+        browser.element('.Select-option').waitForVisible();
         //get all options from the list
         var option = browser.elements('.Select-option').value.filter(function(optionText) {
             return optionText.getAttribute('textContent').includes(listOption);
         });
 
         if (option !== []) {
+            browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
             //Click on filtered option
             option[0].waitForVisible();
             option[0].click();
@@ -177,7 +183,10 @@ class modalDialogWindow {
             expect(btns[0].isVisible()).toBe(true);
             btns[0].waitForVisible();
             //Click on filtered button
-            return btns[0].click();
+            btns[0].click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            //Need this to stabilize DOM
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         } else {
             throw new Error('button with name ' + btnName + " not found on the " + this.modalDialogTitle + " dialog box");
         }

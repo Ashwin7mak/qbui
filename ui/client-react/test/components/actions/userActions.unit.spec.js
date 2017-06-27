@@ -4,7 +4,7 @@ import React from  'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import Locale from '../../../../reuse/client/src/locales/locale';
-import {Simulate} from 'react-addons-test-utils';
+
 
 const mockActions = {
     removeUsersFromAppRole() {return Promise.resolve([1]);}
@@ -27,12 +27,17 @@ const unselectedProps = {
     onEditSelected: () => {}
 };
 
+const UserRoleChange = ()=><div></div>;
+
 describe('UserActions', () => {
     let component;
     let instance;
     beforeEach(() => {
         jasmineEnzyme();
-        component = mount(<UserActions {...props}/>);
+        UserActionsRewireAPI.__Rewire__('UserRoleChange', UserRoleChange);
+        component = mount(
+            <UserActions {...props}/>
+        );
         instance = component.instance();
         spyOn(mockActions, 'removeUsersFromAppRole');
     });
@@ -57,7 +62,6 @@ describe('UserActions', () => {
     it('Action bar items should be disabled', () => {
         expect(component.find('.mail').childAt(0).hasClass('disabled')).toEqual(true);
         expect(component.find('.download-cloud').childAt(0).hasClass('disabled')).toEqual(true);
-        expect(component.find('.settings').childAt(0).hasClass('disabled')).toEqual(true);
     });
 
     it('Confirm qbModal dialog appears when remove is clicked', () => {

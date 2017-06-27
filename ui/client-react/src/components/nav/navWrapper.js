@@ -1,16 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-
 import Nav from './nav';
 import * as ReportActions from '../../actions/reportActions';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as AppActions from '../../actions/appActions';
-import * as SearchActions from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
-
+import {getLoggedInUser} from '../../../../reuse/client/src/actions/userActions';
 import {getApp, getSelectedAppId, getSelectedTableId} from '../../reducers/app';
+import {getLoggedInUserLoaded} from '../../../../reuse/client/src/reducers/userReducer';
 
 const walkMeScript = document.createElement("script");
 walkMeScript.src = Configuration.walkmeJSSnippet;
@@ -50,6 +49,10 @@ export const NavWrapper = React.createClass({
 
         if (this.isTouchDevice()) {
             document.body.className = "touch";
+        }
+        //only load the logged in User if it doesnt exist in state yet!
+        if (!this.props.userLoaded) {
+            this.props.getLoggedInUser();
         }
 
         let paramVals = this.props.match.params;
@@ -134,6 +137,7 @@ const mapStateToProps = (state) => ({
     locales: state.shell.locale,
     selectedAppId: getSelectedAppId(state),
     selectedTableId: getSelectedTableId(state),
+    userLoaded: getLoggedInUserLoaded(state),
     getApp: (appId) => getApp(state, appId)
 });
 
@@ -145,7 +149,8 @@ const mapDispatchToProps = (dispatch) => {
         clearSelectedTable: () => dispatch(AppActions.clearSelectedAppTable()),
         selectTable: (appId, tableId) => dispatch(AppActions.selectAppTable(appId, tableId)),
         getFeatureSwitchStates: (appId) => dispatch(FeatureSwitchActions.getStates(appId)),
-        loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId))
+        loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
+        getLoggedInUser: () => dispatch(getLoggedInUser())
     };
 };
 
