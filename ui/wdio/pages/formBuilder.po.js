@@ -85,7 +85,7 @@ class formBuilderPage {
     }
 
     get modalDismiss() {
-        // DON'T SAVE button in the SAVE CHANGES? dialog
+        // The DON'T SAVE button in the SAVE CHANGES dialog
         return browser.element('.modal-dialog .middleButton');
     }
 
@@ -94,16 +94,21 @@ class formBuilderPage {
         return browser.element('.multiChoicePropertyContainer textarea');
     }
 
+    get requiredCheckbox() {
+        // The MUST BE FILLED IN checkbox
+        return browser.element('//div[@class="checkboxPropertyContainer"]//label[text()="Must be filled in"]/..');
+    }
+
     get requiredCheckboxChecked() {
         // The MUST BE FILLED IN checkbox in its CHECKED state
-        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
-        return browser.element('.checkboxPropertyContainer input:checked');
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.requiredCheckbox.element('input:checked');
     }
 
     get requiredCheckboxNotChecked() {
         // The MUST BE FILLED IN checkbox in its UNCHECKED state
-        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
-        return browser.element('.checkboxPropertyContainer input:not(:checked)');
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.requiredCheckbox.element('input:not(:checked)');
     }
 
     get saveBtn() {
@@ -142,9 +147,9 @@ class formBuilderPage {
         return browser.element(".tabbedSideNav div div div:nth-child(3) div");
     }
 
-    get tab_New() {
-        // The NEW FIELDS tab - needs a better locator
-        return browser.element(".tabbedSideNav div div div:nth-child(2) div");
+    get tab_Active() {
+        // The active FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav .rc-tabs-tab-active");
     }
 
     get tab_Bar() {
@@ -152,14 +157,31 @@ class formBuilderPage {
         return browser.element(".tabbedSideNav div div div:nth-child(1)");
     }
 
-    get tab_Active() {
-        // The active FIELDS tab - needs a better locator
-        return browser.element(".tabbedSideNav .rc-tabs-tab-active");
+    get tab_New() {
+        // The NEW FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav div div div:nth-child(2) div");
     }
 
     get title() {
         // The name of the form, as displayed at the top of the form builder
         return browser.element('.formContainer .qbPanelHeaderTitleText');
+    }
+
+    get uniqueCheckbox() {
+        // The MUST BE UNIQUE checkbox
+        return browser.element('//div[@class="checkboxPropertyContainer"]//label[text()="Must be unique"]/..');
+    }
+
+    get uniqueCheckboxChecked() {
+        // The MUST BE UNIQUE checkbox in its CHECKED state
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.uniqueCheckbox.element('input:checked');
+    }
+
+    get uniqueCheckboxNotChecked() {
+        // The MUST BE UNIQUE checkbox in its UNCHECKED state
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.uniqueCheckbox.element('input:not(:checked)');
     }
 
     // methods
@@ -186,7 +208,7 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
-        try { // modal SAVE CHANGES? dlg
+        try { // modal SAVE CHANGES dlg
             this.modalDismiss.click();
             if (this.modalDismiss.isExisting()) {
                 this.modalDismiss.click();
@@ -273,7 +295,12 @@ class formBuilderPage {
 
     getRequiredCheckboxState() {
         // gets checked status of the MUST BE FILLED IN checkbox
-        return this.requiredCheckboxChecked.isExisting();
+        return this.requiredCheckboxChecked.isVisible();
+    }
+
+    getUniqueCheckboxState() {
+        // gets checked status of the MUST BE FILLED IN checkbox
+        return this.uniqueCheckboxChecked.isVisible();
     }
 
     moveByName(source, target) {
@@ -361,14 +388,22 @@ class formBuilderPage {
         // MC-2858: Edge: FIELD PROPERTIES doesn't render until second click to select field
         browser.buttonDown();
         browser.buttonUp();
-        this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
+        this.fieldProperty_Name.waitForVisible(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
 
     setRequiredCheckboxState(state) {
         // Clicks on the MUST BE FILLED IN checkbox IF NECESSARY to make the checked state match the specified value
-        if ((!state && this.requiredCheckboxChecked.isExisting()) || (state && this.requiredCheckboxNotChecked.isExisting())) {
-            this.fieldProperty_Required.click();
+        if (state !== this.requiredCheckboxChecked.isExisting()) {
+            this.requiredCheckbox.click();
+        }
+        return this;
+    }
+
+    setUniqueCheckboxState(state) {
+        // Clicks on the MUST BE UNIQUE checkbox IF NECESSARY to make the checked state match the specified value
+        if (state !== this.uniqueCheckboxChecked.isExisting()) {
+            this.uniqueCheckbox.click();
         }
         return this;
     }

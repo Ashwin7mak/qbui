@@ -86,6 +86,25 @@
                 expect(newFields).toEqual(existingFields);
             });
 
+            it('check the REQUIRED checkbox, cancel & verify not checked', function() {
+                formBuilderPO.selectFieldByIndex(1);
+                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setRequiredCheckboxState(true);
+                // cancel, reopen, reselect
+                formBuilderPO.cancel().open().selectFieldByIndex(1);
+                // verify REQUIRED checkbox IS NOT checked
+                expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
+            });
+            it('check the REQUIRED checkbox, save & verify checked', function() {
+                formBuilderPO.selectFieldByIndex(1);
+                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setRequiredCheckboxState(true);
+                // save, reopen, reselect
+                formBuilderPO.save().open().selectFieldByIndex(1);
+                // verify REQUIRED checkbox IS checked
+                expect(formBuilderPO.getRequiredCheckboxState()).toBe(true);
+            });
+
             it('remove a field with mouse & verify presence after CANCEL', function() {
                 // store the list of fields before deletion
                 let firstField = formBuilderPO.getFieldLabels()[0];
