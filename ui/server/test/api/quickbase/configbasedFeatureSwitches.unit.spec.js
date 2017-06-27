@@ -206,24 +206,28 @@ describe("Validate configuration based featureSwitch Api", function() {
         });
     });
 
-    describe("Negative  - expect failure when override file is configured but file name is null", function() {
+    describe("Expect success when override file is configured but file name is null", function() {
 
         it('success return results ', function(done) {
             let configNew = {featureSwitchConfigOverride: '', masterOverrideTurnFeaturesOn:true};
             const configBasedFSApiNew = require('../../../src/api/quickbase/configBasedFeatureSwitches')(configNew);
-            loadConfigFileStub = sinon.stub(configBasedFSApiNew, "loadConfigFile");
+            let loadConfigFileStubNew = sinon.stub(configBasedFSApiNew, "loadConfigFile");
 
-            loadConfigFileStub.onCall(0).returns(Promise.resolve(masterData));
+            loadConfigFileStubNew.onCall(0).returns(Promise.resolve(masterData));
 
-            let promise = configBasedFSApi.getFeatureSwitchStates(req, '1234567');
-            let errorMessage = 'Could not read override feature switch configuration file due to: Error:  invalid JSON';
+            let switchesResponseData = [
+                {"name":"Feature C", "status":true},
+                {"name":"Feature D", "status":true},
+                {"name":"Feature A", "status":true}
+            ];
+            let promise = configBasedFSApiNew.getFeatureSwitchStates(req, '1234567');
             promise.then(
                 function(response) {
-                    done(new Error("Unexpected success promise return when testing getFeatureSwitchStates - negative invalid override JSON "));
+                    assert.deepEqual(response, switchesResponseData);
+                    done();
                 },
                 function(error) {
-                    assert.deepEqual(error, errorMessage);
-                    done();
+                    done(new Error("Unexpected error promise return when testing getFeatureSwitchStates"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('getFeatureSwitchStates: exception processing  - negative invalid override JSON ' + JSON.stringify(errorMsg)));
@@ -234,14 +238,14 @@ describe("Validate configuration based featureSwitch Api", function() {
     describe("validate getFeatureSwitchStates function - master override", function() {
 
         it('success return results ', function(done) {
-            let configNew = {featureSwitchConfigOverride: 'someFile.json', masterOverrideTurnFeaturesOn:true};
-            const configBasedFSApiNew = require('../../../src/api/quickbase/configBasedFeatureSwitches')(configNew);
-            loadConfigFileStub = sinon.stub(configBasedFSApiNew, "loadConfigFile");
+            let someOverrideConfig = {featureSwitchConfigOverride: 'someFileNew.json', masterOverrideTurnFeaturesOn:true};
+            const someOverrideFSApiNew = require('../../../src/api/quickbase/configBasedFeatureSwitches')(someOverrideConfig);
+            let loadConfigFileStubNewOverride = sinon.stub(someOverrideFSApiNew, "loadConfigFile");
 
-            loadConfigFileStub.onCall(0).returns(Promise.resolve(masterData));
-            loadConfigFileStub.withArgs('someFile.json').onCall(0).returns(Promise.resolve(overRideData));
+            loadConfigFileStubNewOverride.onCall(0).returns(Promise.resolve(masterData));
+            loadConfigFileStubNewOverride.withArgs('someFileNew.json').onCall(0).returns(Promise.resolve(overRideData));
 
-            let promise = configBasedFSApiNew.getFeatureSwitchStates(req, '1234567');
+            let promise = someOverrideFSApiNew.getFeatureSwitchStates(req, '1234567');
             let switchesResponseData = [
                 {"name":"Feature C", "status":true},
                 {"name":"Feature D", "status":true},
