@@ -173,8 +173,14 @@
 
                 //check the expected list fields on the record title field picker drop down
                 pickerfield.click();
-
-                let dropDownListLabels = modalDialog.allDropDownListOptions;
+                //get list of drop down options
+                let dropDownListLabel = modalDialog.allDropDownListOptions;
+                let dropDownListLabels = [];
+                for (let j = 0; j < dropDownListLabel.length; j++) {
+                    if (!(dropDownListLabel[j] === ('Default to ' + testCase.table.name + ' + ID'))) {
+                        dropDownListLabels.push(dropDownListLabel[j]);
+                    }
+                }
 
                 //get the fields in the table - all of non built in fields + record id should show up
                 e2eBase.tableService.getTableFields(testApp.id, tableId).then(function(fieldLabel) {
@@ -182,9 +188,9 @@
                     for (let i = 0; i < fieldLabel.fields.length; i++) {
                         fieldLabels.push(fieldLabel.fields[i].name);
                     }
-                   // expect(fieldLabels).toContain(dropDownListLabels);
+                    expect(fieldLabels).toContain(arrayContaining(dropDownListLabels));
                 });
-                //select one and reset
+                 //select one and reset
                 modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
                 tableCreatePO.clickOnEditTableResetBtn();
                 //make sure the selection goes back to default selection
@@ -192,8 +198,7 @@
                 //select one and apply to test it was saved
                 modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
                 tableCreatePO.clickOnEditTableApplyBtn();
-                //Go back to the apps page
-                e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+                expect(pickerfield.element('.Select-value-label').getText()).toEqual(dropDownListLabels[0]);
             });
         });
     });
