@@ -42,6 +42,7 @@ export default {
             settings: "Settings",
             users: {
                 addUser: "Add a new user",
+                assignRole: "Assign Role",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
                 manager: "Application Manager",
@@ -58,7 +59,17 @@ export default {
                 userAddError: "Error adding user",
                 userRemovingError: "Error removing user",
                 emailBody: "Email body goes here",
-                emailSubject: "Email subject goes here"
+                emailSubject: "Email subject goes here",
+                changeUserRole: "Change {value} role",
+                changeUserRoles: "Change {value} roles",
+                changeUserRoleButton: "Change role",
+                pluralChangeUserRoleButton: "Change roles",
+                userRoleTitle: "Change the role of {value} user",
+                pluralUserRoleTitle: "Change the role of {value} users",
+                userRoleDescription: "Changing the role may affect what a user can view.",
+                userRoleText: "Change role to",
+                successUserRole: "{value} user’s role has been changed",
+                pluralSuccessUserRole: "{value} users’ roles have been changed",
             }
         },
         appMenu: {
@@ -516,15 +527,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "The app is not available in Mercury right now. ",
-                inQuickBaseClassic: " in QuickBase Classic. ",
-                clickHere: "Open the app "
-            },
-            noApps: {
-                noApps: "There are no apps in Mercury. ",
-                addApps: " to add apps."
-            },
+            appNotFound: "That app does not exist. Select a different app.",
             errorLoadingReport: {
                 message: "That report is not available",
                 helpText: "For now, you can try selecting a different report.",
@@ -534,10 +537,6 @@ export default {
                 stopGraphic: "Stop playing",
                 showAdditionalInfo: "View details",
                 hideAdditionalInfo: "Hide details"
-            },
-            noTables: {
-                noTables: "There are no tables in the app. ",
-                createTablesInQuickBaseClassic: "Create tables in "
             },
             supportLink: {
                 text: "Contact our Care team"
@@ -839,7 +838,7 @@ export default {
             copied: "Link copied",
             messageSubject:"Link to the {appName} app",
             messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}",
-            addUser: "add",
+            addUser: "Add",
             selectAUser:"Select a user",
             selectUsers: "Select users",
             assignRole: "Assign role",

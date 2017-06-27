@@ -58,6 +58,31 @@
         ADMIN_ROLEID : 12,
         PARTICIPANT_ROLEID : 11,
         VIEWER_ROLEID : 10,
+        NONE_ROLEID : 9,
+
+        user1 :  {
+            id: null,
+            firstName: 'Steve',
+            lastName: 'rodgers',
+            screenName: 'Captain America',
+            email: 'captain_america@quickbase.com'
+        },
+        user2 :  {
+            id: null,
+            screenName: 'spiderman',
+            email: 'spiderman@quickbase.com'
+        },
+        user3 :  {
+            id: null,
+            firstName: 'Henry',
+            lastName: 'King Sr.',
+            screenName: 'Brainwave',
+            email: 'brainwave@quickbase.com'
+        },
+        user4 :  {
+            id: null,
+            email: 'super.man@quickbase.com'
+        },
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 
@@ -340,23 +365,27 @@
             tableToFieldToFieldTypeMap[table1Name] = {};
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[1]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.TEXT
+                dataType: consts.TEXT,
+                unique: true,
+                required: true
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[2]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.NUMERIC
+                dataType: consts.NUMERIC,
+                required: true
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[3]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.CURRENCY
+                dataType: consts.CURRENCY,
+                unique: true,
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[4]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.PERCENT
+                dataType: consts.PERCENT,
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[5]] = {
                 fieldType: consts.SCALAR,
-                dataType: consts.RATING
+                dataType: consts.RATING,
             };
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[6]] = {
                 fieldType: consts.SCALAR,

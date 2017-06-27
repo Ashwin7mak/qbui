@@ -1,4 +1,5 @@
 import React from 'react';
+import queryString from 'query-string';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -135,6 +136,10 @@ export const RecordTrowser = React.createClass({
             //let updateRecord = false;
             const formType = CONTEXT.FORM.EDIT;
 
+            // use viewContextId if available
+            const parsedQueries = queryString.parse(location.search);
+            const viewContextId = parsedQueries.viewContextId;
+
             //  open the 'modal working' spinner/window for the record's form
             this.props.saveForm(formType);
 
@@ -143,7 +148,7 @@ export const RecordTrowser = React.createClass({
                 this.handleRecordAdd(pendEdits.recordChanges, formType, false, openNewRecord);
             } else {
                 //updateRecord = true;
-                this.handleRecordChange(formType, false, openNewRecord);
+                this.handleRecordChange(formType, false, openNewRecord, viewContextId);
             }
             //promise.then((obj) => {
             //    //  update the grid with the change..this is expected to get refactored once the record store is moved to redux..
@@ -230,7 +235,7 @@ export const RecordTrowser = React.createClass({
      * @param recId
      * @returns {Array}
      */
-    handleRecordChange(formType, next = false, openNewRecord = false) {
+    handleRecordChange(formType, next = false, openNewRecord = false, viewContextId) {
 
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
@@ -255,7 +260,11 @@ export const RecordTrowser = React.createClass({
                 //  need to call as the form.saving attribute is used to determine when to
                 //  open/close the 'modal working' spinner/window..
                 this.props.saveFormComplete(formType);
-                this.props.syncForm(CONTEXT.FORM.VIEW, obj.recId);
+                // this contextId is the "context" of the target we want to reload and update
+                // use viewContextId if we want to refresh a drawer, use CONTEXT.FORM.VIEW to
+                // reload a form rendered by recordRoute not in a drawer
+                const contextId = viewContextId || CONTEXT.FORM.VIEW;
+                this.props.syncForm(contextId, obj.recId);
 
 
                 if (next) {

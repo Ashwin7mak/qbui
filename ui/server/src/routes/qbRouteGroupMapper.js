@@ -21,7 +21,7 @@
     //  debug
     routeList[routeGroups.DEBUG] = [
         {route: routes.APP_USERS, methods: [constants.GET]},
-        {route: routes.APPS, methods: [constants.GET]},
+        {route: routes.APPS, methods: [constants.GET, constants.POST]},
         {route: routes.APP_ROLES, methods: [constants.GET]}
     ];
 

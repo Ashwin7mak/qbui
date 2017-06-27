@@ -254,3 +254,15 @@ Resources:
       Source:
         Type: CODEPIPELINE
       TimeoutInMinutes: !Ref CodeBuildTimeOutMins
+  # Normally CodeBuild creates this automatically but we need to create it here so we can subscribe it to lambda
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/codebuild/${AWS::StackName}-CodeBuild
+      RetentionInDays: 90
+  LogSubscription:
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:CWLogsForwarder
+      FilterPattern: ""
+      LogGroupName: !Ref LogGroup

@@ -3,12 +3,11 @@ import {connect} from "react-redux";
 import Loader from "react-loader";
 import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
-import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from "../../../utils/i18nMessage";
 import {loadAutomations, testAutomation} from "../../../actions/automationActions";
 import {getAutomationList} from "../../../reducers/automation";
 import UrlUtils from '../../../utils/urlUtils';
-import {Link} from 'react-router-dom';
+import * as UrlConsts from "../../../constants/urlConstants";
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
 import QbGrid from '../../dataTable/qbGrid/qbGrid';
@@ -64,7 +63,14 @@ export class AutomationListRoute extends Component {
     }
 
     editAutomation = (automationId) => {
-        let link = UrlUtils.getAutomationViewLink(this.getAppId(), automationId);
+        let appId = this.getAppId();
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/${automationId}`;
+        this.props.history.push(link);
+    }
+
+    openRowToView = (row) => {
+        let automation = _.find(this.props.automations, {id: row});
+        let link = UrlUtils.getAutomationViewLink(this.getAppId(), automation.id);
         if (this.props.history) {
             this.props.history.push(link);
         }
@@ -100,6 +106,9 @@ export class AutomationListRoute extends Component {
                             onClickEditIcon={this.editAutomation}
                             onClickDeleteIcon={null}
                             onClickTestRowIcon={this.handleTestAutomationClicked}
+                            commonCellProps={{
+                                onCellClick: this.openRowToView
+                            }}
                             editingRowErrors={[]}
                             onCancelEditingRow={this.cancelEditingRow}
                             onClickSaveRow={this.clickSaveRow}

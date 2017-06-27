@@ -26,6 +26,7 @@ export const HIDE_APP_CREATION_DIALOG = 'HIDE_APP_CREATION_DIALOG';
 export const CREATE_APP = 'CREATE_APP';
 export const CREATE_APP_SUCCESS = 'CREATE_APP_SUCCESS';
 export const CREATE_APP_FAILED = 'CREATE_APP_FAILED';
+export const SET_APP_PROPERTY = 'SET_APP_PROPERTY';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
@@ -125,6 +126,10 @@ export const CHANGE_REPORT_NAME = 'CHANGE_REPORT_NAME';
 export const ENTER_BUILDER_MODE = 'ENTER_BUILDER_MODE';
 export const EXIT_BUILDER_MODE = 'EXIT_BUILDER_MODE';
 
+//  ******** qbGrid actions ********
+export const DRAGGING_COLUMN_START = 'DRAGGING_COLUMN_START';
+export const DRAGGING_COLUMN_END = 'DRAGGING_COLUMN_END';
+
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
@@ -133,12 +138,13 @@ export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
 //  ******** search actions ********
 export const SEARCH_INPUT = 'SEARCH_INPUT';
 
-//  ******** user actions **********
+//  ******** App User actions **********
 export const SEARCH_USERS_SUCCESS = 'SEARCH_USERS_SUCCESS';
 export const SEARCH_USERS_FAIL = 'SEARCH_USERS_FAIL';
 export const SET_USER_ROLE_TO_ADD = 'SET_USER_ROLE_TO_ADD';
 export const TOGGLE_ADD_USER_DIALOG = 'TOGGLE_ADD_USER_DIALOG';
 export const SELECT_USER_ROWS = 'SELECT_USER_ROWS';
+export const TOGGLE_CHANGE_USER_ROLE = 'TOGGLE_CHANGE_USER_ROLE';
 
 // **** feature switches ****
 export const SET_FEATURE_SWITCH_STATES = 'SET_FEATURE_SWITCH_STATES';

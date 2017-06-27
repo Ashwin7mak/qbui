@@ -147,8 +147,28 @@
                     type: 'NODE'
                 });
 
-                showBody = getConfig('showBody', false);
+                //  for each supported Bunyan logging level, add custom log attributes
+                //  to the argument list before logging the message.
+                appLogger.debug = function() {
+                    logger.debug.apply(logger, addCustomArgs(arguments, 'DEBUG'));
+                };
+                appLogger.error = function() {
+                    logger.error.apply(logger, addCustomArgs(arguments, 'ERROR'));
+                };
+                appLogger.fatal = function() {
+                    logger.fatal.apply(logger, addCustomArgs(arguments, 'FATAL'));
+                };
+                appLogger.info = function() {
+                    logger.info.apply(logger, addCustomArgs(arguments, 'INFO'));
+                };
+                appLogger.trace = function() {
+                    logger.trace.apply(logger, addCustomArgs(arguments, 'TRACE'));
+                };
+                appLogger.warn = function() {
+                    logger.warn.apply(logger, addCustomArgs(arguments, 'WARN'));
+                };
 
+                showBody = getConfig('showBody', false);
             }
 
             return appLogger;
@@ -156,6 +176,51 @@
         }
 
     };
+
+    /**
+     * Apply custom arguments to the log entry.  Adding the following attributes to all messages:
+     *
+     * timestamp:  current time stamp
+     * lvl:        log level text string
+     *
+     * @param args
+     * @param lvl
+     * @returns {Array}
+     */
+    function addCustomArgs(args, lvl) {
+
+        const customArgs = {
+            timestamp: new Date().toISOString(),
+            lvl: lvl
+        };
+
+        let argList = [];
+        if (args.length > 0) {
+            // Bunyan expects all serializers to be the first argument when logging a message..otherwise
+            // the serializers will not get called.  This is important to note as we have request and
+            // response object serializers defined, which if not called, will result in the log output
+            // getting cluttered with large req/res objects that include newline characters, making the
+            // log difficult to read.
+            //
+            // Check if the first argument is an object.  If yes, then it most likely is a serializer, so
+            // merge in the custom attributes to the existing object instead of pushing a new entry into
+            // the argument list.
+            if (typeof (args[0]) === 'object') {
+                args[0] = Object.assign(args[0], customArgs);
+            } else {
+                argList.push(customArgs);
+            }
+
+            for (const arg of args) {
+                argList.push(arg);
+            }
+        } else {
+            //  calling bunyan logger without any arguments..just add the custom attributes
+            argList.push(customArgs);
+        }
+
+        return argList;
+    }
 
     /**
      * Return the bunyan configuration setting for the given key. If the key

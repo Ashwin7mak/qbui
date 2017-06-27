@@ -53,6 +53,14 @@ export const RecordRoute = React.createClass({
         return {hasDrawer: false};
     },
 
+    /***
+     * returns true if recordRoute is rendered in a drawer
+     * @return {boolean|*}
+     */
+    isRecordInDrawer() {
+        return this.props.hasDrawer || (this.props.isDrawerContext && this.props.location.pathname.includes('sr_app'));
+    },
+
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
         //selected table does not change when in a drawer
         if (!this.props.isDrawerContext) {
@@ -61,7 +69,7 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.location.pathname.includes('sr_app'))) {
+        if (this.isRecordInDrawer()) {
             this.props.loadForm(appId, this.props.match.params.tblId, rptId, 'view', this.props.match.params.recordId, this.props.uniqueId);
             const recordsArray = _.get(embeddedReport, 'data.records', []);
             this.navigateToRecord(this.props.match.params.recordId, embeddedReport, recordsArray);
@@ -346,11 +354,28 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        // convert to  a number from a string
-        const recordId = +this.props.match.params.recordId;
-        this.navigateToRecord(recordId);
+        if (this.props.isDrawerContext) {
+            const {appId, tblId, recordId} = this.props.match.params;
 
-        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+            // TODO: we should pass the actual rptId as rptId and separately pass in embeddedReport
+            const viewContextId = this.props.uniqueId;
+            const rptId = _.get(this.props, `embeddedReports[${this.props.match.params.rptId}].rptId`, 0);
+
+            const queries = {
+                editRec: recordId,
+                detailAppId: appId,
+                detailTableId: tblId,
+                detailReportId: rptId,
+                viewContextId
+            };
+            WindowHistoryUtils.pushWithQueries(queries);
+        } else {
+            // convert to  a number from a string
+            const recordId = +this.props.match.params.recordId;
+            this.navigateToRecord(recordId);
+
+            WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+        }
     },
 
     isAutomationEnabled() {
@@ -396,10 +421,9 @@ export const RecordRoute = React.createClass({
         if (this.isAutomationEnabled()) {
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
-
-        // Currently page actions are disabled for child records shown in drawers.
-        if (this.props.isDrawerContext) {
-            actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
+        //add record action is not to be shown in a drawer
+        if (this.isRecordInDrawer()) {
+            actions.splice(0, 1);
         }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
@@ -490,14 +514,12 @@ export const RecordRoute = React.createClass({
      */
     //shold be removed as a param and instead be stored in react router state
     handleDrillIntoChild(tblId, recId, embeddedReportsUniqueId) {
-        let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportsUniqueId);
-
         //todo : handle query params in the url
         const existingPath = this.props.location.pathname;
         const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
 
         // generate the next drilldown url segment representing the record we want to show in a drawer
-        const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
+        const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, embeddedReportsUniqueId, recId);
         const link = existingPath + recordDrawerSegment;
         if (this.props.history) {
             this.props.history.push(link);

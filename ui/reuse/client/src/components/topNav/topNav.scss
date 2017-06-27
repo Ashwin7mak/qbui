@@ -3,7 +3,6 @@
 .topNav {
     min-width: 200px;
     flex: 0 0 auto;
-    flex-basis: $top-nav-height;
     display: flex;
     order: 1;
     flex-direction: column;
@@ -12,7 +11,6 @@
 
     .top {
         display: flex;
-        flex-basis: $top-nav-height;
         font-size: 14px;
         min-width: 300px;
     }
@@ -118,10 +116,6 @@
 
     .globalActions {
         display: inline-block;
-
-        .builder {
-            padding-right: 10px;
-        }
 
         .link {
             > a, > div > a {
