@@ -3,7 +3,7 @@ import Loader from 'react-loader';
 import FlipMove from 'react-flip-move';
 import SideMenuBase from 'REUSE/components/sideMenuBase/sideMenuBase';
 import SimpleNavItem from 'REUSE/components/simpleNavItem/simpleNavItem';
-import MenuHeader from 'REUSE/components/menuHeader/menuHeader';
+import NavHeader from 'REUSE/components/navHeader/navHeader';
 
 // CLIENT REACT IMPORTS
 import {LEFT_NAV_BAR} from 'APP/constants/spinnerConfigurations';
@@ -49,7 +49,7 @@ class StandardLeftNav extends Component {
 
         return (
             <div className={`standardLeftNav ${className} ${isCollapsed ? 'isCollapsedStandardLeftNav' : ''}`}>
-                <MenuHeader
+                <NavHeader
                     title={this.props.contextHeaderTitle}
                     isVisible={this.props.showContextHeader}
                     isSmall={this.props.isContextHeaderSmall}

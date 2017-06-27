@@ -1,6 +1,6 @@
 @import "../../assets/css/qbVariables";
 
-.navMenuHeader {
+.navHeader {
     flex: 0 0 auto; // Don't shrink this on a short window.
     background-color: $leftnav-app-background-color; // Default for the left nav
     @include correctFontWeightForLightTextOnDarkBackground;
@@ -11,7 +11,7 @@
 
     transition: background-color 0.3s;
 
-    .menuHeaderButton {
+    .navHeaderButton {
         opacity: 1;
         overflow: hidden;
         background-color: transparent;
@@ -41,18 +41,18 @@
 
     }
 
-    &.menuHeaderCollapsed {
-        .menuHeaderButton {
+    &.navHeaderCollapsed {
+        .navHeaderButton {
             padding: 5px 10px;
         }
 
-        .menuHeaderTitle {
+        .navHeaderTitle {
             opacity: 0;
 
             transition: opacity 0.3s;
         }
 
-        .menuHeaderIcon {
+        .navHeaderIcon {
             font-size: 20px;
             width: 100%;
 
@@ -60,19 +60,19 @@
         }
     }
 
-    &.menuHeaderHidden {
-        .menuHeaderButton {
+    &.navHeaderHidden {
+        .navHeaderButton {
             opacity: 0;
             transition: opacity 0.4s 0s; // Need a 0 here to override the 0.2s delay above
         }
     }
 
-    &.menuHeaderSmall {
+    &.navHeaderSmall {
         display: flex;
 
         transition: background-color 0.3s;
 
-        .menuHeaderButton {
+        .navHeaderButton {
             display: flex;
             flex-direction: row;
             padding: 0 10px;
@@ -81,26 +81,27 @@
             justify-content: center;
         }
 
-        .menuHeaderIcon {
+        .navHeaderIcon {
             font-size: 24px;
             width: 24px;
             flex-grow: 0;
             flex-shrink: 0;
+            margin-right: 5px;
             // Safari seems to ignore the parent's align-items: center and justify-content: center
             align-self: center;
         }
 
-        .menuHeaderToggle {
+        .navHeaderToggle {
             bottom: 12px;
         }
     }
 
-    .menuHeaderIcon {
+    .navHeaderIcon {
         font-size: 40px;
         width: 40px;
     }
 
-    .menuHeaderTitle {
+    .navHeaderTitle {
         opacity: 1;
         display: block;
         overflow: hidden;
@@ -109,7 +110,7 @@
         transition: opacity 0.3s 0.2s;
     }
 
-    .menuHeaderToggle {
+    .navHeaderToggle {
         position: absolute;
         right: 10px;
         bottom: 16px;

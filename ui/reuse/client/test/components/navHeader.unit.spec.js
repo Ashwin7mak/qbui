@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import MenuHeader, {__RewireAPI__ as MenuHeaderRewireAPI} from '../../src/components/menuHeader/menuHeader';
+import NavHeader, {__RewireAPI__ as NavHeaderRewireAPI} from '../../src/components/navHeader/navHeader';
 import Icon, {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
 import Tooltip from 'REUSE/components/tooltip/tooltip';
 
@@ -18,33 +18,33 @@ const MotionMock = ({defaultStyle, style, children}) => {
 };
 const SpringMock = value => value;
 
-describe('MenuHeader', () => {
+describe('NavHeader', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
-        MenuHeaderRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
-        MenuHeaderRewireAPI.__Rewire__('Motion', MotionMock);
-        MenuHeaderRewireAPI.__Rewire__('spring', SpringMock);
+        NavHeaderRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
+        NavHeaderRewireAPI.__Rewire__('Motion', MotionMock);
+        NavHeaderRewireAPI.__Rewire__('spring', SpringMock);
     });
 
     afterEach(() => {
-        MenuHeaderRewireAPI.__ResetDependency__('Breakpoints');
-        MenuHeaderRewireAPI.__ResetDependency__(MotionMock);
-        MenuHeaderRewireAPI.__ResetDependency__('spring');
+        NavHeaderRewireAPI.__ResetDependency__('Breakpoints');
+        NavHeaderRewireAPI.__ResetDependency__(MotionMock);
+        NavHeaderRewireAPI.__ResetDependency__('spring');
     });
 
     it('displays a short bar with no content by default', () => {
-        component = shallow(<MenuHeader />);
+        component = shallow(<NavHeader />);
         component = component.find(MotionMock).dive(); // Render the motion component so we can access the rendered subcomponents
 
         expect(component.find('.menuHeaderTitle')).toHaveText('');
         expect(component.find('.menuHeaderIcon')).not.toBePresent();
         expect(component.find('.menuHeaderToggle')).not.toBePresent();
-        expect(component.find('.navMenuHeader')).toHaveProp('style', {height: 40});
+        expect(component.find('.navNavHeader')).toHaveProp('style', {height: 40});
     });
 
     it('shows a title', () => {
-        component = shallow(<MenuHeader title={testTitle} />);
+        component = shallow(<NavHeader title={testTitle} />);
         component = component.find(MotionMock).dive();
 
         expect(component.find('.menuHeaderTitle')).toHaveText(testTitle);
@@ -54,7 +54,7 @@ describe('MenuHeader', () => {
 
     it('shows the content of a long title in a tooltip', () => {
         const reallyLongTitle = "Everybody's working for the weekend Everybody's goin' off the deep end Everybody needs a second chance, oh";
-        component = shallow(<MenuHeader title={reallyLongTitle} />);
+        component = shallow(<NavHeader title={reallyLongTitle} />);
         component = component.find(MotionMock).dive();
 
         // The truncation in the visible title happens in CSS
@@ -68,7 +68,7 @@ describe('MenuHeader', () => {
         spyOn(BreakpointsMock, 'isSmallBreakpoint').and.returnValue(true);
 
         const reallyLongTitle = "Everybody's working for the weekend Everybody's goin' off the deep end Everybody needs a second chance, oh";
-        component = shallow(<MenuHeader title={reallyLongTitle} />);
+        component = shallow(<NavHeader title={reallyLongTitle} />);
         component = component.find(MotionMock).dive();
 
         // The truncation in the visible title happens in CSS
@@ -78,7 +78,7 @@ describe('MenuHeader', () => {
     });
 
     it('shows an icon', () => {
-        component = shallow(<MenuHeader title={testTitle} icon={testIcon} />);
+        component = shallow(<NavHeader title={testTitle} icon={testIcon} />);
         component = component.find(MotionMock).dive();
 
         expect(component.find('.menuHeaderIcon').find(Icon)).toHaveProp('icon', testIcon);
@@ -86,14 +86,14 @@ describe('MenuHeader', () => {
 
     it('shows icon from a different icon font', () => {
         const alternateFont = AVAILABLE_ICON_FONTS.TABLE_STURDY;
-        component = shallow(<MenuHeader title={testTitle} icon={testIcon} iconFont={alternateFont} />);
+        component = shallow(<NavHeader title={testTitle} icon={testIcon} iconFont={alternateFont} />);
         component = component.find(MotionMock).dive();
 
         expect(component.find('.menuHeaderIcon').find(Icon)).toHaveProp('iconFont', alternateFont);
     });
 
     it('hides the content of the menu header', () => {
-        component = shallow(<MenuHeader title={testTitle} icon={testIcon} isVisible={false} />);
+        component = shallow(<NavHeader title={testTitle} icon={testIcon} isVisible={false} />);
         component = component.find(MotionMock).dive();
 
         expect(component.find('.menuHeaderHidden')).toBePresent();
@@ -101,7 +101,7 @@ describe('MenuHeader', () => {
 
     describe('optionally displays a toggle (in down position by default)', () => {
         it('shows a toggle icon', () => {
-            component = shallow(<MenuHeader title={testTitle} isToggleVisible={true} />);
+            component = shallow(<NavHeader title={testTitle} isToggleVisible={true} />);
             component = component.find(MotionMock).dive();
 
             expect(component.find('.menuHeaderToggle')).toBePresent();
@@ -109,7 +109,7 @@ describe('MenuHeader', () => {
         });
 
         it('displays the toggle in the up position', () => {
-            component = shallow(<MenuHeader title={testTitle} isToggleVisible={true} isToggleDown={false} />);
+            component = shallow(<NavHeader title={testTitle} isToggleVisible={true} isToggleDown={false} />);
             component = component.find(MotionMock).dive();
 
             expect(component.find('.menuHeaderToggle')).toBePresent();
@@ -117,7 +117,7 @@ describe('MenuHeader', () => {
         });
 
         it('does not display the toggle when the menu header is collapsed', () => {
-            component = shallow(<MenuHeader title={testTitle} isToggleVisible={true} isCollapsed={true} />);
+            component = shallow(<NavHeader title={testTitle} isToggleVisible={true} isCollapsed={true} />);
             component = component.find(MotionMock).dive();
 
             expect(component.find('.menuHeaderToggle')).not.toBePresent();
@@ -126,7 +126,7 @@ describe('MenuHeader', () => {
 
     it('calls an action when clicked', () => {
         const onClickHeader = jasmine.createSpy('onClickHeader');
-        component = shallow(<MenuHeader title={testTitle} onClickHeader={onClickHeader} />);
+        component = shallow(<NavHeader title={testTitle} onClickHeader={onClickHeader} />);
         component = component.find(MotionMock).dive();
 
         component.find('.menuHeaderButton').simulate('click');
@@ -135,19 +135,19 @@ describe('MenuHeader', () => {
     });
 
     it('displays in a collapsed state', () => {
-        component = shallow(<MenuHeader title={testTitle} isCollapsed={true} />);
+        component = shallow(<NavHeader title={testTitle} isCollapsed={true} />);
         component = component.find(MotionMock).dive();
 
 
         // Title is hidden via CSS
-        expect(component.find('.navMenuHeader')).toHaveProp('style', {height: 40});
+        expect(component.find('.navNavHeader')).toHaveProp('style', {height: 40});
     });
 
     it('displays as a large header', () => {
-        component = shallow(<MenuHeader title={testTitle} isSmall={false} />);
+        component = shallow(<NavHeader title={testTitle} isSmall={false} />);
         component = component.find(MotionMock).dive();
 
-        console.log(component.find('.navMenuHeader').props().style);
+        console.log(component.find('.navNavHeader').props().style);
         expect(component.find('.menuHeader')).toHaveProp('style', {height: 90});
         expect(component.find('.menuHeaderSmall')).not.toBePresent();
         expect(component.find('.menuHeaderCollapsed')).not.toBePresent();

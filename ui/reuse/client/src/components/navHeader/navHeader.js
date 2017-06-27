@@ -5,7 +5,7 @@ import Tooltip from 'REUSE/components/tooltip/tooltip';
 import Button from 'react-bootstrap/lib/Button';
 import {Motion, spring} from 'react-motion';
 
-import './menuHeader.scss';
+import './navHeader.scss';
 
 // STYLE Variables
 const LARGE_HEIGHT = 90;
@@ -18,7 +18,7 @@ const LETTERS_BEFORE_ELLIPSES_SMALL_BREAKPOINT = 27;
  * A header that typically appears at the top of LeftNavs (see StandardLeftNav for an example)
  * It can display text along with an icon.
  */
-export class MenuHeader extends Component {
+export class NavHeader extends Component {
     static propTypes = {
         /**
          * The title that appears in the header.
@@ -83,10 +83,10 @@ export class MenuHeader extends Component {
         return LETTERS_BEFORE_ELLIPSES;
     }
 
-    renderMenuHeaderTitle = () => {
+    renderNavHeaderTitle = () => {
         const {title} = this.props;
 
-        let titleElement = <span className="menuHeaderTitle">{title}</span>;
+        let titleElement = <span className="navHeaderTitle">{title}</span>;
 
         if (title && title.length > this.getMaxCharactersBeforeTooltip()) {
             return (
@@ -123,18 +123,18 @@ export class MenuHeader extends Component {
     render() {
         const {isVisible, isSmall, icon, iconFont, isToggleVisible, isToggleDown, isCollapsed} = this.props;
 
-        let classes = ['navMenuHeader'];
+        let classes = ['navHeader'];
 
         if (!isVisible) {
-            classes.push('menuHeaderHidden');
+            classes.push('navHeaderHidden');
         }
 
         if (isCollapsed) {
-            classes.push('menuHeaderCollapsed');
+            classes.push('navHeaderCollapsed');
         }
 
         if (isSmall && !isCollapsed) {
-            classes.push('menuHeaderSmall');
+            classes.push('navHeaderSmall');
         }
 
         if (icon) {
@@ -146,15 +146,15 @@ export class MenuHeader extends Component {
                 {animatedStyle => (
                 <div className={classes.join(' ')} style={{...animatedStyle, ...this.getNonNumericStyles()}}>
                     <Button
-                        className="menuHeaderButton"
+                        className="navHeaderButton"
                         onClick={this.props.onClickHeader}
                     >
-                        {icon && <Icon icon={icon} iconFont={iconFont} className="menuHeaderIcon" />}
+                        {icon && <Icon icon={icon} iconFont={iconFont} className="navHeaderIcon" />}
 
-                        {this.renderMenuHeaderTitle()}
+                        {this.renderNavHeaderTitle()}
 
                         {(isToggleVisible && !isCollapsed) &&
-                        <Icon icon="caret-up" className={`menuHeaderToggle ${isToggleDown ? 'menuToggleDown' : ''}`} />}
+                        <Icon icon="caret-up" className={`navHeaderToggle ${isToggleDown ? 'menuToggleDown' : ''}`} />}
                     </Button>
                 </div>)}
             </Motion>
@@ -162,4 +162,4 @@ export class MenuHeader extends Component {
     }
 }
 
-export default MenuHeader;
+export default NavHeader;

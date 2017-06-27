@@ -9,7 +9,7 @@ import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import LogoImg from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
 import {APPS_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-import MenuHeader from 'REUSE/components/menuHeader/menuHeader';
+import NavHeader from 'REUSE/components/navHeader/navHeader';
 import {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
 import _ from 'lodash';
 
@@ -53,7 +53,7 @@ class LeftNav extends Component {
 
         return (
             <div className="appsToggleArea">
-                <MenuHeader
+                <NavHeader
                     icon={appIcon}
                     iconFont={iconFont}
                     title={_.get(selectedApp, 'name', '')} // navLabel
