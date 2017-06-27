@@ -66,7 +66,7 @@ describe('AppCreationDialog', () => {
         expect(mockProps.hideAppCreationDialog).toHaveBeenCalled();
     });
 
-    it('will invoke createApp action when onFinished is called', () => {
+    it('will call an action to create an app when onFinished is called', () => {
         component = shallow(<AppCreationDialog createApp={mockProps.createApp}
                                                toggleAppsList={mockProps.toggleAppsList}
                                                app={{}} />);
@@ -93,7 +93,7 @@ describe('AppCreationDialog', () => {
         expect(mockNotificationManager.error).toHaveBeenCalled();
     });
 
-    it('will NOT invoke createApp action when onFinished is called if there are no new apps', () => {
+    it('will NOT invoke createApp action when onFinished is called if there are no new app', () => {
         component = shallow(<AppCreationDialog createApp={mockProps.createApp}
                                                app={null} />);
 
