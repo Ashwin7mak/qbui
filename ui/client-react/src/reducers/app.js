@@ -8,7 +8,8 @@ const app = (
     state = {
         app: null,
         apps: [],
-        loading: false,
+        areAppsLoading: true, // Defaulting to true prevents flashing of unloaded state
+        isAppLoading: true, // Separate loading state so that the appHomePage doesn't show a partially loaded state when apps returns on first page load.
         error: false
     },
     action) => {
@@ -101,7 +102,7 @@ const app = (
     case types.CLEAR_SELECTED_APP:
         return {
             ...state,
-            loading: false,
+            isAppLoading: false,
             error: false,
             app: null,
             selected: clearSelected()
@@ -109,7 +110,7 @@ const app = (
     case types.CLEAR_SELECTED_APP_TABLE:
         return {
             ...state,
-            loading: false,
+            isAppLoading: false,
             error: false,
             selected: clearTableSelected()
         };
@@ -140,7 +141,7 @@ const app = (
         let appId = action.content.appId;
         return {
             ...state,
-            loading: true,
+            isAppLoading: true,
             error: false,
             app: null,
             selected: setSelectedApp(appId)
@@ -149,9 +150,8 @@ const app = (
         let appModel = new AppModel(action.content);
         return {
             ...state,
-            loading: false,
+            isAppLoading: false,
             error: false,
-            //  app is an appModel object
             app: appModel.getApp(),
             //  update app in apps list
             apps: setAppInApps(appModel.getApp()),
@@ -160,14 +160,15 @@ const app = (
     case types.LOAD_APP_ERROR:
         return {
             ...state,
-            loading: false,
+            isAppLoading: false,
             error: true,
             app: null,
             selected: setSelected()
         };
     case types.LOAD_APPS:
         return {
-            loading: true,
+            ...state,
+            areAppsLoading: true,
             error: false,
             app: null,
             apps: [],
@@ -176,15 +177,28 @@ const app = (
     case types.LOAD_APPS_SUCCESS:
         let appsModel = new AppsModel(action.content);
         return {
-            loading: false,
+            ...state,
+            areAppsLoading: false,
             error: false,
             app: null,
             apps: appsModel.getApps(),
             selected: clearSelected()
         };
+    case types.CREATE_APP_SUCCESS:
+        //  new app was created in builder..add it to apps list and select
+        if (action.app) {
+            let newAppModel = new AppModel({app: action.app});
+            return {
+                ...state,
+                app: newAppModel.getApp(),
+                apps: setAppInApps(newAppModel.getApp())
+            };
+        }
+        return state;
     case types.LOAD_APPS_ERROR:
         return {
-            loading: false,
+            ...state,
+            areAppsLoading: false,
             error: true,
             app: null,
             apps: [],
@@ -193,20 +207,20 @@ const app = (
     case types.LOAD_APP_OWNER:
         return {
             ...state,
-            loading: true,
+            isAppLoading: true,
             error: false
         };
     case types.LOAD_APP_OWNER_SUCCESS:
         return {
             ...state,
-            loading: false,
+            isAppLoading: false,
             error: false,
             selected: setAppOwner(action.content)
         };
     case types.LOAD_APP_OWNER_ERROR:
         return {
             ...state,
-            loading: false,
+            isAppLoading: false,
             error: true
         };
     case types.ASSIGN_USERS_TO_APP_ROLE:
@@ -258,30 +272,46 @@ const app = (
 export default app;
 
 export const getApps = (state) => {
-    return state.apps;
+    return state.app.apps;
 };
 
 export const getApp = (state, appId) => {
-    return _.find(state.apps, (a) => a.id === appId) || null;
+    return _.find(state.app.apps, (a) => a.id === appId) || null;
 };
 
-export const getIsAppsLoading = (state) => {
-    return state.loading;
+export const getTable = (state, appId, tableId) => {
+    let appInState = getApp(state, appId);
+    if (!appInState) {
+        return null;
+    }
+    return _.find(appInState.tables, {id: tableId}) || null;
 };
+
+export const getAreAppsLoading = state => state.app.areAppsLoading;
+
+export const getIsAppLoading = state => state.app.isAppLoading;
 
 export const getSelectedAppId = (state) => {
-    return state.selected ? state.selected.appId : null;
+    return _.get(state.app, 'selected.appId');
+};
+
+export const getSelectedApp = (state) => {
+    if (!state.app.apps) {
+        return null;
+    }
+
+    return state.app.apps.find(currentApp => currentApp.id === getSelectedAppId(state));
 };
 
 export const getSelectedTableId = (state) => {
-    return state.selected ? state.selected.tblId : null;
+    return state.app.selected ? state.app.selected.tblId : null;
 };
 
 export const getAppUsers = (state) => {
     let appUsers = [];
-    if (state.app) {
+    if (state.app.app) {
         let appModel = new AppModel();
-        appModel.setApp(state.app);
+        appModel.setApp(state.app.app);
         appUsers = appModel.getUsers();
     }
     return appUsers;
@@ -289,16 +319,16 @@ export const getAppUsers = (state) => {
 
 export const getAppUnfilteredUsers = (state) => {
     let appUnfilteredUsers = [];
-    if (state.app) {
+    if (state.app.app) {
         let appModel = new AppModel();
-        appModel.setApp(state.app);
+        appModel.setApp(state.app.app);
         appUnfilteredUsers = appModel.getUnfilteredUsers();
     }
     return appUnfilteredUsers;
 };
 
 export const getAppOwner = (state) => {
-    return state.selected ? state.selected.appOwner : null;
+    return state.app.selected ? state.app.selected.appOwner : null;
 };
 
 

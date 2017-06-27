@@ -1,3 +1,4 @@
+/* eslint-disable keyword-spacing */
 // Redux action creators for forms
 
 import FormService from '../services/formService';
@@ -10,7 +11,7 @@ import NotificationManager from '../../../reuse/client/src/scripts/notificationM
 import * as types from '../actions/types';
 import NavigationUtils from '../utils/navigationUtils';
 import FieldUtils from '../utils/fieldUtils';
-import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import {NEW_FORM_RECORD_ID, NEW_FIELD_PREFIX} from '../constants/schema';
 import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer, addRelationshipFieldProps} from './actionHelpers/transformFormData';
 import {saveAllNewFields, updateAllFieldsWithEdits, deleteField} from './fieldsActions';
@@ -204,7 +205,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
  * Private function for addFieldToForm, not exported
  * */
 const buildField = (field, id) => {
-    id = id || _.uniqueId('newField_');
+    id = id || _.uniqueId(NEW_FIELD_PREFIX);
     //FormFieldElement is needed for both existing fields and new fields for experience engine
     return _.merge({}, {
         id: id,
@@ -279,8 +280,8 @@ export const deselectField = (formId, location) => {
  * @param location
  * @returns {{id, type, content}|*}
  */
-export const removeFieldFromForm = (formId, field, location) => {
-    return {id: formId, type: types.REMOVE_FIELD, field, location};
+export const removeFieldFromForm = (formId, appId, tblId, field, location) => {
+    return {id: formId, type: types.REMOVE_FIELD, appId, tblId, field, location};
 };
 
 /**
@@ -368,11 +369,90 @@ export const createForm = (appId, tblId, formType, form) => {
     return saveTheForm(appId, tblId, formType, form, true);
 };
 
+
+/**
+ * when relationship is deleted, update parent form with a section for default report of the child table
+ * @param relationship
+ */
+export const removeRelationshipFromForm = (relationship) => {
+    return new Promise((resolve, reject) => {
+        if (relationship) {
+
+            let formService = new FormService();
+            formService.getForm(relationship.masterAppId, relationship.masterTableId).then(
+                (formResponse) => {
+                    let formMeta = formResponse.data.formMeta;
+                    if (formMeta.tabs && formMeta.tabs[0] && formMeta.tabs[0].sections) {
+                        let sections = formMeta.tabs[0].sections;
+                        let sectionToBeDeleted = null;
+                        Object.keys(sections).forEach((sectionKey) => {
+                            if(_.includes(_.map(_.map(_.get(sections[sectionKey], 'elements'), 'ChildReportElement'), 'relationshipId'), relationship.id)) {
+                                sectionToBeDeleted = sectionKey;
+                            }
+                        });
+                        if (sectionToBeDeleted) {
+                            sections[sectionToBeDeleted] = undefined;
+                            formService.updateForm(relationship.masterAppId, relationship.masterTableId, formMeta).then(
+                                () => resolve()
+                            ).catch(error => {
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'Error updating form to delete section showing child report');
+                                reject();
+                            });
+                        } else {
+                            resolve();
+                        }
+                    } else {
+                        resolve();
+                    }
+                }
+            ).catch(error => {
+                logger.parseAndLogError(LogLevel.ERROR, error, 'error trying to update forms');
+                reject();
+            });
+        } else {
+            resolve();
+        }
+    });
+};
+
+
+/**
+ * Delete detail field from child table, find the relationship info associated with the detail field and
+ * update the parent form to remove the section that displays child report
+ * @param appId
+ * @param childTableId
+ * @param field
+ * @param formMeta
+ * @returns {function(*, *)}
+ */
+export const deleteDetailFieldUpdateParentForm = (appId, childTableId, fieldId, formMeta) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            dispatch(deleteField(appId, childTableId, fieldId));
+
+            if (Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
+                let relatedRelationship = _.find(formMeta.relationships, (rel) => rel.detailTableId === childTableId && rel.detailFieldId === fieldId);
+                if  (relatedRelationship) {
+                    removeRelationshipFromForm(relatedRelationship).then(
+                        () => resolve()
+                    ).catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'error deleting section from parent form');
+                        reject();
+                    });
+                }
+            } else {
+                resolve();
+            }
+        });
+    };
+};
+
+
 export const deleteMarkedFields = (appId, tblId, formMeta) => {
-    return (dispatch, getState) => {
+    return dispatch => {
         let fields = formMeta.fieldsToDelete;
 
-        const fieldPromises = formMeta.fieldsToDelete ? fields.map(field => dispatch(deleteField(appId, tblId, field))) : [];
+        const fieldPromises = formMeta.fieldsToDelete ? fields.map(field =>  dispatch(deleteDetailFieldUpdateParentForm(appId, tblId, field, formMeta))) : [];
         if (fieldPromises.length === 0) {
             logger.info('No fields deleted with deleteMarkedFields for : `{appId}`, tbl: `{tblId}`');
             return Promise.resolve();
@@ -380,7 +460,7 @@ export const deleteMarkedFields = (appId, tblId, formMeta) => {
 
         return Promise.all(fieldPromises).then(() => {
             logger.debug('All promises processed in deleteMarkedFields against app: `{appId}`, tbl: `{tblId}`');
-        }).catch(error => {
+        }).catch((error) => {
             logger.error(error);
         });
     };
@@ -464,3 +544,6 @@ export const unloadForm = (id) => {
         type: types.UNLOAD_FORM
     };
 };
+
+
+

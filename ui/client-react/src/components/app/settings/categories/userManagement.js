@@ -10,6 +10,7 @@ import EmailFieldValueRenderer from '../../../fields/emailFieldValueRenderer';
 import '../../../dataTable/qbGrid/qbGrid.scss';
 import './userManagement.scss';
 import UserRowActions from  './userRowActions';
+import Locale from '../../../../locales/locales';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 /**
@@ -32,6 +33,7 @@ class UserManagement extends React.Component {
         this.getActionCellProps = this.getActionCellProps.bind(this);
         this.getCheckboxHeader = this.getCheckboxHeader.bind(this);
         this.onClickToggleSelectedRow = this.onClickToggleSelectedRow.bind(this);
+        this.userIsSelected = this.userIsSelected.bind(this);
     }
 
     createUserColumns(cellFormatter) {
@@ -40,28 +42,28 @@ class UserManagement extends React.Component {
             {
                 property: 'name',
                 header: {
-                    label: 'Name'
+                    label: Locale.getMessage('addUserToApp.name')
                 },
                 cell: {formatters: [cellFormatter]}
             },
             {
                 property: 'roleName',
                 header: {
-                    label: 'Role'
+                    label: Locale.getMessage('addUserToApp.role')
                 },
                 cell: {formatters: [cellFormatter]}
             },
             {
                 property: 'email',
                 header: {
-                    label: 'Email'
+                    label: Locale.getMessage('addUserToApp.email')
                 },
                 cell: {formatters: [cellFormatterEmail]}
             },
             {
                 property: 'screenName',
                 header: {
-                    label: 'User name'
+                    label: Locale.getMessage('addUserToApp.userName')
                 },
                 cell: {formatters: [cellFormatter]}
             }
@@ -69,20 +71,32 @@ class UserManagement extends React.Component {
         return columns;
     }
 
+    userIsSelected(selectedRows, userId, roleId) {
+        const rows = _.find(selectedRows, (user)=>{
+            return user.id === userId && user.roleId === roleId;
+        });
+        return Boolean(rows);
+    }
     createUserRows() {
         let appUsersFiltered = [];
         let appUsers = this.props.appUsers;
         let selectedRows = this.props.selectedRows;
+        let self = this;
         this.props.appRoles.forEach(function(role) {
             if (appUsers[role.id]) {
                 appUsers[role.id].forEach(function(user) {
                     user.roleName = role.name;
                     user.name = (user.firstName ? `${user.firstName} ` : "") + (user.lastName ? user.lastName : "");
                     user.roleId = role.id;
-                    user.isSelected = selectedRows.indexOf(user.userId) > -1 ;
+                    user.isSelected = self.userIsSelected(selectedRows, user.userId, role.id);
                     appUsersFiltered.push(user);
                 });
             }
+        });
+        appUsersFiltered.sort(function(a, b) {
+            if (a.firstName < b.firstName) {return -1;}
+            if (a.firstName > b.firstName) {return 1;}
+            return 0;
         });
         return appUsersFiltered;
     }

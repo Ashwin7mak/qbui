@@ -203,6 +203,30 @@ Resources:
                 - Name: build-artifacts
                 - Name: build-source
               RoleArn: !Sub arn:aws:iam::${ProdCrossAccountID}:role/CodePipelineCrossAccountRole-${AWS::Region}
+            - Name: PROD2
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              Configuration:
+                TemplatePath: build-source::deploy/ecs.yml
+                ActionMode: REPLACE_ON_FAILURE
+                Capabilities: CAPABILITY_IAM
+                StackName: !Sub PROD2-prod-${ServiceName}
+                RoleArn: !Sub arn:aws:iam::${ProdCrossAccountID}:role/CodePipelineCrossAccountRole-${AWS::Region}
+                # TODO: Add CF template config files to specify all but dynamic values (e.g. all but ContainerImage)
+                ParameterOverrides: !Sub |
+                 {
+                    "ContainerImage" : { "Fn::GetParam" : [ "build-artifacts", "build.json", "image" ] },
+                    "SwimlaneID": "PROD2",
+                    "Environment": "prod",
+                    "LegacyBase": ".quickbase.com"
+                 }
+              InputArtifacts:
+                - Name: build-artifacts
+                - Name: build-source
+              RoleArn: !Sub arn:aws:iam::${ProdCrossAccountID}:role/CodePipelineCrossAccountRole-${AWS::Region}
 
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
@@ -230,3 +254,15 @@ Resources:
       Source:
         Type: CODEPIPELINE
       TimeoutInMinutes: !Ref CodeBuildTimeOutMins
+  # Normally CodeBuild creates this automatically but we need to create it here so we can subscribe it to lambda
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/codebuild/${AWS::StackName}-CodeBuild
+      RetentionInDays: 90
+  LogSubscription:
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:CWLogsForwarder
+      FilterPattern: ""
+      LogGroupName: !Ref LogGroup

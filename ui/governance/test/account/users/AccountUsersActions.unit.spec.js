@@ -1,5 +1,6 @@
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
+import * as PerformanceTimingActions from "../../../src/analytics/performanceTimingActions";
 import {__RewireAPI__ as AccountUsersActionsRewireAPI} from "../../../src/account/users/AccountUsersActions";
 import * as types from "../../../src/app/actionTypes";
 import * as gridTypes from "../../../src/common/grid/standardGridActionTypes";
@@ -10,8 +11,15 @@ import FacetSelections from "../../../../reuse/client/src/components/facets/face
 import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 import {FACET_FIELDID} from "./grid/AccountUsersGridFacet.unit.spec";
 
-xdescribe('Account Users Actions Tests', () => {
-
+describe('Account Users Actions Tests', () => {
+    class mockLogger {
+        constructor() {}
+        logException() {}
+        debug() {}
+        warn() {}
+        error() {}
+        parseAndLogError() {}
+    }
 
     // Dummy Data
     const ACCOUNT_USERS_DATA = (withId) => [
@@ -69,6 +77,7 @@ xdescribe('Account Users Actions Tests', () => {
 
     describe('Fetch Actions', () => {
         let mockAccountId = 1, mockGridID = 1, mockItemsPerPage = 10;
+        let oldPerformance;
         const mockWindowUtils = {
             update: url => url,
         };
@@ -91,26 +100,38 @@ xdescribe('Account Users Actions Tests', () => {
             spyOn(mockWindowUtils, 'update');
             AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', mockAccountUsersService);
             AccountUsersActionsRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
+            AccountUsersActionsRewireAPI.__Rewire__('Logger', mockLogger);
             GovernanceBundleLoader.changeLocale('en-us');
+
+            oldPerformance = window.performance;
+            window.performance = {
+                now: function() {
+                    return 10;
+                }
+            };
         });
 
         afterEach(() => {
             AccountUsersActionsRewireAPI.__ResetDependency__('AccountUsersService', mockAccountUsersService);
             AccountUsersActionsRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
+            AccountUsersActionsRewireAPI.__ResetDependency__('Logger');
             GovernanceBundleLoader.changeLocale('en-us');
+
+            window.performance = oldPerformance;
         });
 
         it('gets dummy users', (done) => {
             const expectedActions = [
                 {type: types.GET_USERS_FETCHING},
+                {type: types.GET_GRID_START_TIME, payload: jasmine.any(Number)},
                 {type: types.GET_USERS_SUCCESS, users: ACCOUNT_USERS_DATA(true)},
                 {type: gridTypes.SET_TOTAL_ITEMS, gridId: mockGridID, totalItems: ACCOUNT_USERS_DATA().length}
             ];
+
             // expect the dummy data when the fetchAccountUsers is called
             const store = mockStore({});
             return store.dispatch(AccountUsersActions.fetchAccountUsers(mockAccountId, mockGridID, mockItemsPerPage))
                 .then(() => {
-                    console.log('hi');
                     expect(store.getActions(mockAccountId, mockGridID, mockItemsPerPage)).toEqual(expectedActions);
                 }
                 , error => expect(false).toBe(true))
@@ -185,7 +206,7 @@ xdescribe('Account Users Actions Tests', () => {
                 searchTerm: ""                      // search term
             };
 
-            store.dispatch(AccountUsersActions.doUpdate(GRID_ID, gridState));
+            store.dispatch(AccountUsersActions.doUpdateUsers(GRID_ID, gridState));
 
             const expectedAction = [
                 {
@@ -273,7 +294,7 @@ xdescribe('Account Users Actions Tests', () => {
                 searchTerm: searchTerm        // search for Zadministrator
             };
 
-            store.dispatch(AccountUsersActions.doUpdate(GRID_ID, gridState));
+            store.dispatch(AccountUsersActions.doUpdateUsers(GRID_ID, gridState));
 
             const expectedActions = [
                 {
@@ -327,7 +348,7 @@ xdescribe('Account Users Actions Tests', () => {
                 searchTerm: ""                      // no search
             };
 
-            store.dispatch(AccountUsersActions.doUpdate(GRID_ID, gridState));
+            store.dispatch(AccountUsersActions.doUpdateUsers(GRID_ID, gridState));
 
             const expectedActions = [
                 {

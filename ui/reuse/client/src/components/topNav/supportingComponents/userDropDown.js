@@ -3,11 +3,11 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import DropDown from 'react-bootstrap/lib/Dropdown';
 import Icon from 'REUSE/components/icon/icon';
 import {I18nMessage} from 'REUSE/utils/i18nMessage';
-
+import {connect} from 'react-redux';
+import {getLoggedInUserDropDownText} from '../../../reducers/userReducer';
 import './userDropDown.scss';
 
 // Uses defaults messages an icons specific to a user dropdown in the DefaultTopNav
-const dropDownMessage = 'globalActions.user';
 const dropDownIcon = 'user';
 const signOutMessage = 'header.menu.sign_out';
 
@@ -18,14 +18,8 @@ const signOutMessage = 'header.menu.sign_out';
  * @param props
  * @constructor
  */
-class UserDropDown extends Component {
-    constructor(props) {
-        super(props);
-
-        this.renderLocalesList = this.renderLocalesList.bind(this);
-    }
-
-    renderLocalesList() {
+export class UserDropDown extends Component {
+    renderLocalesList = () => {
         const {supportedLocales, changeLocale} = this.props;
 
         if (!changeLocale || !supportedLocales || supportedLocales.length === 0) {
@@ -50,16 +44,16 @@ class UserDropDown extends Component {
             }),
             <MenuItem divider key="localeBottomMenuDivider"/>
         ];
-    }
+    };
 
     render() {
         const {startTabIndex, app, signOutUser} = this.props;
 
         return (
-            <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink" dropup={this.props.shouldOpenMenusUp}>
+            <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink" dropup={this.props.shouldOpenMenusUp} pullRight={true}>
                 <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
-                    <Icon icon={dropDownIcon}/>
-                    <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
+                    <Icon className="userDropDownIcon" icon={dropDownIcon}/>
+                    <span className="navLabel">{this.props.loggedInUserDisplay}</span>
                 </a>
 
                 <DropDown.Menu>
@@ -90,7 +84,14 @@ UserDropDown.propTypes = {
 
 UserDropDown.defaultPropTypes = {
     supportedLocales: [],
-    startTabIndex: 0,
+    startTabIndex: 0
 };
 
-export default UserDropDown;
+const mapStateToProps = (state) => ({
+    loggedInUserDisplay: getLoggedInUserDropDownText(state)
+});
+
+export default connect(
+    mapStateToProps,
+    null
+)(UserDropDown);

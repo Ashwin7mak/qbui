@@ -26,8 +26,8 @@
             cert: '/dev/shm/secrets/nodejs.crt'
         },
         ip: 'localhost',
-        javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
-        eeHost: 'https://api.experienceengine.trunk.newstack.quickbaserocks.com',
+        javaHost: 'https://localhost.int1-ecs.newstack.quickbaserocks.com',
+        eeHost: 'https://api.int1-ecs.newstack.quickbaserocks.com',
         eeHostEnable: true,
         isMockServer: false,
         legacyBase: '.currentstack-int.quickbaserocks.com',

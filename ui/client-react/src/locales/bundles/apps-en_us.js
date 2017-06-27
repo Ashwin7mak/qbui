@@ -42,6 +42,7 @@ export default {
             settings: "Settings",
             users: {
                 addUser: "Add a new user",
+                assignRole: "Assign Role",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
                 manager: "Application Manager",
@@ -52,13 +53,23 @@ export default {
                 removeButton: "Remove",
                 cancel: "Cancel",
                 plural: "users",
-                usersRemovedFromAppRole: "{numOfUsers} users removed from the app role",
-                userRemovedFromAppRole: "User removed from the app role",
+                usersRemovedFromAppRole: "{numOfUsers} users have been removed from the app",
+                userRemovedFromAppRole: "User has been removed from the app",
                 userAdded: "User added",
                 userAddError: "Error adding user",
                 userRemovingError: "Error removing user",
                 emailBody: "Email body goes here",
-                emailSubject: "Email subject goes here"
+                emailSubject: "Email subject goes here",
+                changeUserRole: "Change {value} role",
+                changeUserRoles: "Change {value} roles",
+                changeUserRoleButton: "Change role",
+                pluralChangeUserRoleButton: "Change roles",
+                userRoleTitle: "Change the role of {value} user",
+                pluralUserRoleTitle: "Change the role of {value} users",
+                userRoleDescription: "Changing the role may affect what a user can view.",
+                userRoleText: "Change role to",
+                successUserRole: "{value} user’s role has been changed",
+                pluralSuccessUserRole: "{value} users’ roles have been changed",
             }
         },
         appMenu: {
@@ -93,6 +104,10 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
+            testAutomation: "Test Automation",
+            copyAutomation: "Copy Automation",
+            editAutomation: "Edit Automation",
+            deleteAutomation: "Delete Automation",
             dontDelete: "Don't delete",
             deleteThisRecord: "Delete this record?",
             deleteTheseSwitches: "Delete these feature switches?",
@@ -204,7 +219,7 @@ export default {
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
                 feedbackTooltip: "Share ideas and issues",
-                helpTooltip: "Help",
+                helpTooltip: "Help"
             }
         },
         fields: {
@@ -241,9 +256,13 @@ export default {
                 success: "Record Approved.",
                 error: "An error occured when approving this record."
             },
-            testautomation: {
+            testAutomation: {
                 success: "Automation Test Successful.",
                 error: "An error occured when testing this automation."
+            },
+            saveAutomation: {
+                success: "Automation Saved Successful.",
+                error: "An error occured when saving this automation."
             },
             automationList: {
                 nameHeader: "Name",
@@ -261,7 +280,18 @@ export default {
                 actions: {
                     email: "Send an email"
                 }
-            }
+            },
+            automationEdit: {
+                stageHeading: "Modify Automation: {automationName}",
+                nameHeader: "Name",
+                emailSectionHeader: "Send an Email",
+                toHeader: "Notify Whom",
+                subjectHeader: "Subject",
+                bodyHeader: "Message"
+            },
+            automationBuilder: {
+                modify: 'Modify Automation'
+            },
         },
         relationship: {
             childTable: "Child Table",
@@ -497,15 +527,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "The app is not available in Mercury right now. ",
-                inQuickBaseClassic: " in QuickBase Classic. ",
-                clickHere: "Open the app "
-            },
-            noApps: {
-                noApps: "There are no apps in Mercury. ",
-                addApps: " to add apps."
-            },
+            appNotFound: "That app does not exist. Select a different app.",
             errorLoadingReport: {
                 message: "That report is not available",
                 helpText: "For now, you can try selecting a different report.",
@@ -515,10 +537,6 @@ export default {
                 stopGraphic: "Stop playing",
                 showAdditionalInfo: "View details",
                 hideAdditionalInfo: "Hide details"
-            },
-            noTables: {
-                noTables: "There are no tables in the app. ",
-                createTablesInQuickBaseClassic: "Create tables in "
             },
             supportLink: {
                 text: "Contact our Care team"
@@ -616,7 +634,7 @@ export default {
             name: "Name",
             required: "Must be filled in",
             multiChoice: "Choices",
-            unique: "Must have unique values",
+            unique: "Must be unique",
             linkToRecord: "Link to a record in the table",
             connectedTo: "Connected on {fieldName} field"
         },
@@ -632,6 +650,8 @@ export default {
                 modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
+                removeTitleField: "This field cannot be removed until a different record title field is set",
+                removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
                 tooltips: {
@@ -665,6 +685,7 @@ export default {
                 }
             },
             existingFieldsToolTip: "Add {fieldName} to the form",
+            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} are on the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",
@@ -720,6 +741,14 @@ export default {
             featureNameExists: "Feature names must be unique",
             featureNameEmpty: "Feature names must not be blank"
         },
+        appCreation: {
+            newApp: "New app",
+            newAppPageTitle: "New App",
+            finishedButtonLabel: "Create app",
+            appNameHeading: "App name",
+            appNamePlaceHolder: "For example, \"Order Tracker\"",
+            descriptionHeading: "App description"
+        },
         tableCreation: {
             newTablePageTitle: "New Table",
             newTableDescription: "Create a new table when you want to collect a new type of information.",
@@ -759,7 +788,12 @@ export default {
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
             tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "The title field identifying each record",
+            recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
+            recordTitleFieldDefault: "Default to {recordName} + ID",
+            recordName: "Record Name"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
@@ -794,7 +828,7 @@ export default {
             title: "Add users to",
             description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
             searching: "Searching...",
-            userSuccessTitle: "Your app has new user!",
+            userSuccessTitle: "Your app has a new user!",
             userSuccessText: "Let them know they have access to your app by sharing the link with them.",
             copy: "Copy",
             email: "Email",
@@ -803,7 +837,15 @@ export default {
             userSuccessDialogOK: "No thanks",
             copied: "Link copied",
             messageSubject:"Link to the {appName} app",
-            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}"
+            messageBody: "I have added you to the {appName} app. Here’s a link so you can access it. \n {link}",
+            addUser: "Add",
+            selectAUser:"Select a user",
+            selectUsers: "Select users",
+            assignRole: "Assign role",
+            searchPromptText: "Type to search",
+            name: "Name",
+            role: "Role",
+            userName: "User name"
         }
     }
 };

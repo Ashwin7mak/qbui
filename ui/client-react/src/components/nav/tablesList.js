@@ -9,6 +9,7 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
+import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
 let TablesList = React.createClass({
 
@@ -142,16 +143,11 @@ let TablesList = React.createClass({
      * @returns {XML}
      */
     getNewTableItem() {
-
-        return (
-            <li className="newTableItem link" key="newTable">
-                <a className="newTable leftNavLink" onClick={this.props.onCreateNewTable}>
-                    <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message="tableCreation.newTablePageTitle"/></span>
-                    <div className="hoverComponent">
-                        <I18nMessage message="tableCreation.newTablePageTitle"/>
-                    </div>
-                </a>
-            </li>);
+        return <CreateNewItemButton handleOnClick={this.props.onCreateNewTable}
+                                    message="tableCreation.newTablePageTitle"
+                                    className="newTable"
+                                    key="newTableButton"
+        />;
     },
 
     render() {
@@ -163,19 +159,18 @@ let TablesList = React.createClass({
                     <NavItem item={{msg: 'nav.tablesHeading'}}
                              isHeading={true}
                              onClick={this.onClickTables} open={true} />
-                    <li className={this.state.searching ? "search open" : "search"}>
+                    <li key="tableSearchBox" className={this.state.searching ? "search open" : "search"}>
                         <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"
                                    value={this.state.searchText}
                                    onChange={this.onChangeSearch}
                                    onClearSearch={this.onClearSearch}
-                                   placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />                    </li>
+                                   placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />
+                    </li>
                 </ul>
 
                 <ul className="tablesList">
                     {this.tablesList()}
                 </ul>
-
-
             </div>
         );
     }

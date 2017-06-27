@@ -8,6 +8,8 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import {getFields} from '../reducers/fields';
 import {transformFieldBeforeSave} from './actionHelpers/transformFormData';
+import FormService from '../services/formService';
+import {createFormSectionForChildTable} from '../utils/formUtils';
 
 let logger = new Logger();
 
@@ -58,11 +60,13 @@ export const setFieldsPropertiesPendingEditToFalse = () => {
  * @param tableId
  * @returns {{appId: *, tblId: *, field: *, type}}
  */
-export const updateField = (field, appId, tableId) => {
+export const updateField = (field, appId, tableId, propertyName, newValue) => {
     return {
+        field: field,
+        propertyName: propertyName,
+        newValue: newValue,
         appId: appId,
         tblId: tableId,
-        field: field,
         type: types.UPDATE_FIELD
     };
 };
@@ -93,60 +97,6 @@ function createRelationship(appId, fieldId, detailTableId, parentTableId, parent
     return appService.createRelationship(appId, relationship);
 }
 
-export const saveNewField = (appId, tblId, field, formId = null) => {
-    return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && field) {
-                let fieldsService = new FieldsService();
-
-                const oldFieldId = field.id;
-                const fieldCopy = transformFieldBeforeSave(field);
-                delete fieldCopy.id;
-                delete fieldCopy.isPendingEdit;
-
-                fieldsService.createField(appId, tblId, fieldCopy).then(
-                    (response) => {
-
-                        const fieldId = response.data.id;
-
-                        dispatch(updateFieldId(oldFieldId, fieldId, formId, appId, tblId));
-
-                        if (field.parentTableId) {
-                            createRelationship(appId, fieldId, tblId, field.parentTableId, field.parentFieldId).then(
-                                () => resolve()
-                            ).catch(error => {
-                                // unable to create a relationship, delete the field since it is not useful
-                                logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createRelationship:');
-                                fieldsService.deleteField(appId, tblId, fieldId);
-                                reject();
-                            });
-                        } else {
-                            resolve();
-                        }
-                    },
-                    (errorResponse) => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        let error = errorResponse.response;
-                        logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createField:');
-                        dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
-                        reject();
-                    }
-                ).catch(error => {
-                    logger.error(error);
-                    return Promise.reject(error);
-                });
-            } else {
-                logger.error('fieldsService.getFields: Missing required input parameters.');
-                let error = {
-                    statusText:'Missing required input parameters to load fields',
-                    status:500
-                };
-                dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
-                reject();
-            }
-        });
-    };
-};
 
 export const updateFieldProperties = (appId, tblId, field) => {
 
@@ -183,6 +133,123 @@ export const updateFieldProperties = (appId, tblId, field) => {
         });
     };
 };
+/**
+ * For a newly minted relationship, update parent form with a section for default report of the child table
+ * @param relationshipId
+ * @param childTableName
+ * @param parentTableId
+ */
+export const  updateParentFormForRelationship = (appId, relationshipId, childTableName, parentTableId) => {
+    return new Promise((resolve, reject) => {
+        if (relationshipId) {
+            let formService = new FormService();
+            formService.getForm(appId, parentTableId).then(
+                (formResponse) => {
+                    let formMeta = formResponse.data.formMeta;
+                    if (formMeta.tabs && formMeta.tabs[0] && formMeta.tabs[0].sections) {
+                        let sections = formMeta.tabs[0].sections;
+                        let childReportExists = null;
+                        Object.keys(sections).forEach((sectionKey) => {
+                            if (_.has(sections[sectionKey], 'headerElement.FormHeaderElement.displayText')) {
+                                if (_.includes(_.map(sections[sectionKey], 'headerElement.FormHeaderElement.displayText'), childTableName)) {
+                                    childReportExists = true;
+                                }
+                            }
+                        });
+                        if (childReportExists) {
+                            return null;
+                        } else {
+                            let length = Object.keys(sections).length;
+                            sections[length] = createFormSectionForChildTable(
+                                sections[0],
+                                childTableName,
+                                relationshipId);
+                            return formMeta;
+                        }
+                    } else {
+                        resolve();
+                    }
+                }
+            ).then((updatedForm) => {
+                if (updatedForm) {
+                    formService.updateForm(appId, parentTableId, updatedForm).then(
+                        () => resolve()
+                    );
+                } else {
+                    resolve();
+                }
+            }).catch((error) => {
+                logger.parseAndLogError(LogLevel.ERROR, error, 'get/UpdateForm');
+                reject();
+            });
+        } else {
+            logger.parseAndLogError(LogLevel.ERROR, error, 'need a valid relationshipID for updating parent form with child table default report');
+            reject();
+        }
+    });
+};
+
+export const saveNewField = (appId, tblId, field, formId = null) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && field) {
+                let fieldsService = new FieldsService();
+
+                const oldFieldId = field.id;
+                const fieldCopy = transformFieldBeforeSave(field);
+                delete fieldCopy.id;
+                delete fieldCopy.isPendingEdit;
+
+                fieldsService.createField(appId, tblId, fieldCopy).then(
+                    (response) => {
+
+                        const fieldId = response.data.id;
+
+                        dispatch(updateFieldId(oldFieldId, fieldId, formId, appId, tblId));
+
+                        if (field.parentTableId) {
+                            createRelationship(appId, fieldId, tblId, field.parentTableId, field.parentFieldId).then(
+                                (relationshipResponse) => {
+                                    return relationshipResponse.data.id;
+                                }
+                            ).then((relationshipId) => {
+                                updateParentFormForRelationship(appId, relationshipId, field.childTableName, field.parentTableId).then(
+                                    () => resolve()
+                                );
+                            }).catch((error) => {
+                                // unable to create a relationship, delete the field since it is not useful
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createRelationship or update form failed');
+                                fieldsService.deleteField(appId, tblId, fieldId);
+                                reject();
+                            });
+                        } else {
+                            resolve();
+                        }
+                    },
+                    (errorResponse) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        let error = errorResponse.response;
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createField:');
+                        dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
+                        reject();
+                    }
+                ).catch((error) => {
+                    logger.error(error);
+                    return Promise.reject(error);
+                });
+            } else {
+                logger.error('fieldsService.getFields: Missing required input parameters.');
+                let error = {
+                    statusText:'Missing required input parameters to load fields',
+                    status:500
+                };
+                dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
+                reject();
+            }
+        });
+    };
+};
+
 
 export const updateAllFieldsWithEdits = (appId, tableId) => {
     return (dispatch, getState) => {
@@ -196,7 +263,7 @@ export const updateAllFieldsWithEdits = (appId, tableId) => {
 
         return Promise.all(fieldPromises).then(() => {
             logger.debug('All promises processed in updateAllFieldsWithEdit against app: `{appId}`, tbl: `{tableId}`');
-        }).catch(error => {
+        }).catch((error) => {
             logger.error(error);
         });
     };
@@ -221,7 +288,7 @@ export const saveAllNewFields = (appId, tableId, formId = null) => {
 
         return Promise.all(fieldPromises).then(() => {
             logger.debug('All promises processed in saveAllNewFields against app: `{appId}`, tbl: `{tableId}`');
-        }).catch(error => {
+        }).catch((error) => {
             logger.error(error);
         });
     };
@@ -262,3 +329,6 @@ export const loadFields = (appId, tblId) => {
         });
     };
 };
+
+
+

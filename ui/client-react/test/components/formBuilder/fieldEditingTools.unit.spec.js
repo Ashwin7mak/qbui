@@ -27,37 +27,60 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'removeFieldFromForm');
 
         component = shallow(<FieldEditingTools
+            app={{id: 'app1'}} tblId={'tbl1'}
             numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
             relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
-            isFieldDeletable={true}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
 
         expect(deleteButton).toBePresent();
+        expect(deleteButton).not.toBeDisabled();
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, relatedField, location);
+        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, 'app1', 'tbl1', relatedField, location);
         mockParentProps.removeFieldFromForm.calls.reset();
     });
 
-    it('has no delete button if the prop isFieldDeletable is not present', () => {
+    it('has disabled delete button if the field is a recordtitle field', () => {
         component = shallow(<FieldEditingTools
+            app={{id: 'app1'}} tblId={'tbl1'}
+            numberOfFieldsOnForm={2}
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
-            removeFieldFromForm={mockParentProps.removeFieldFromForm}
             relatedField={relatedField}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            fieldId={relatedField.id}
+            table={{recordTitleFieldId: relatedField.id}}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
 
-        expect(deleteButton.length).toBe(0);
+        expect(deleteButton).toBePresent();
+        expect(deleteButton).toBeDisabled();
+    });
+
+    it('has delete button if the field is a detail key field field', () => {
+        component = shallow(<FieldEditingTools
+            app={{id: 'app1', relationships: [{detailAppId: 'app1', detailTableId: 'tbl1', detailFieldId: relatedField.id}]}} tblId={'tbl1'}
+            numberOfFieldsOnForm={2}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            selectedFields={[]}
+            location={location}
+            relatedField={relatedField}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            fieldId={relatedField.id}
+        />);
+
+        let deleteButton = component.find('.deleteFieldIcon button');
+
+        expect(deleteButton).toBePresent();
     });
 
     it('does not have a a delete button if there is only one field on the form', () => {

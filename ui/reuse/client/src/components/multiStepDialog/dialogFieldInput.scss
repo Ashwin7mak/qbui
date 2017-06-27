@@ -1,0 +1,50 @@
+@import '../../assets/css/_qbVariables';
+
+.dialogField {
+    width: 50%;
+    margin-bottom: 30px;
+
+    &:first-of-type {
+        padding-right: 20px;
+    }
+    .dialogFieldTitle {
+        margin-bottom: 4px;
+        color: $field-label-normal-color;
+        font-weight: bold;
+    }
+
+    input, textarea {
+        padding: 5px;
+        resize: none;
+        width: 100%;
+        border: 1px solid $input-text-normal-border-color;
+        border-radius: $radius-base;
+    }
+
+    input {
+        height: 34px;
+
+        &:focus {
+            @include text-input-focus;
+        }
+    }
+
+    &.validationFailed {
+        .dialogFieldTitle {
+            color: $error-color;
+        }
+        input, input:focus {
+            border: solid 1px $input-text-error-border-color;
+            border-color: $input-text-error-border-color !important;
+            border-left-width: 5px;
+            box-shadow: none;
+        }
+    }
+}
+
+@include small-breakpoint {
+    .dialogField {
+        min-width: 50%;
+        width: inherit;
+    }
+}

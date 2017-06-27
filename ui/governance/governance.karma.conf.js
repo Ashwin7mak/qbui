@@ -122,7 +122,9 @@ module.exports = function(config) {
                 // Settings used to support React unit tests that use Enzyme
                 'react/addons': true,
                 'react/lib/ExecutionEnvironment': true,
-                'react/lib/ReactContext': true
+                'react/lib/ReactContext': true,
+                'react-dom/test-utils': true,
+                'react-test-renderer/shallow': true
             },
             resolve: {
                 root: path.resolve(__dirname, '../'),
@@ -247,9 +249,9 @@ module.exports = function(config) {
             ],
             check : {
                 global: {
-                    statements: 86,
+                    statements: 87,
                     branches: 60,
-                    functions: 88,
+                    functions: 90,
                     lines: 90
                 }
             }

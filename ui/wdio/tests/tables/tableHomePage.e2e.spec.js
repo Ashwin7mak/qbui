@@ -8,7 +8,7 @@
     //Load the page Objects
     let e2ePageBase = requirePO('e2ePageBase');
     let RequestAppsPage = requirePO('requestApps');
-    let ReportContentPO = requirePO('reportContent');
+    let reportContentPO = requirePO('reportContent');
     let newStackAuthPO = requirePO('newStackAuth');
     let tableCreatePO = requirePO('tableCreate');
 
@@ -106,10 +106,8 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            browser.call(function() {
-                // Auth into the new stack as an admin
-                return newStackAuthPO.realmLogin(realmName, realmId);
-            });
+            // Auth into the new stack as an admin
+            return newStackAuthPO.realmLogin(realmName, realmId);
         });
 
         /**
@@ -163,24 +161,18 @@
                     return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId));
                 });
 
-                browser.call(function() {
-                    //get the user authentication
-                    return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-                });
+                // Auth into the new stack as an admin
+                newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
 
-                browser.call(function() {
-                    // Load the requestAppsPage (shows a list of all the apps in a realm)
-                    return e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
-                });
+                //go to app via url
+                e2ePageBase.loadAppsInBrowser(realmName);
 
-                //select the App
+                //select App
                 RequestAppsPage.selectApp(app.name);
 
-                //select the table
-                tableCreatePO.selectTable(app.tables[0].name);
-
-                // wait for the THP report content to be loaded
-                ReportContentPO.waitForReportContent();
+                //Select table Table 1
+                tableCreatePO.selectTable('table 1');
+                reportContentPO.waitForReportContent();
 
                 //Assert report title to be expected
                 browser.element('.tableHomepageStageHeadline').waitForVisible();
@@ -188,6 +180,8 @@
 
                 //Expand the stage
                 browser.element('button.toggleStage').click();
+                //Need this for sliding
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 browser.element('.stage-showHide-content').waitForVisible();
 
                 //Assert description of the stage
@@ -218,18 +212,13 @@
                 return e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, e2eConsts.ADMIN_ROLEID, [userId]);
             });
 
-            browser.call(function() {
-                //get the user authentication
-                return e2ePageBase.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-            });
+            // Auth into the new stack as an admin
+            newStackAuthPO.nonAdminRealmLogin(realmName, realmId, userId);
 
             //test that admin have access to admin report
             //Load the admin report
-            browser.call(function() {
-                return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
-            });
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
+            e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId);
+            reportContentPO.waitForReportContent();
 
             //Assert report title to be expected
             browser.element('.stageHeadline').waitForVisible();
@@ -237,11 +226,8 @@
 
             //test that admin have access to participant report
             //Load the participant report
-            browser.call(function() {
-                return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
-            });
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
+            e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId);
+            reportContentPO.waitForReportContent();
 
             //Assert report title to be expected
             browser.element('.stageHeadline').waitForVisible();
@@ -249,11 +235,8 @@
 
             //test that admin have access to viewer report
             //Load the viewer report
-            browser.call(function() {
-                return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
-            });
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
+            e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId);
+            reportContentPO.waitForReportContent();
 
             //Assert report title to be expected
             browser.element('.stageHeadline').waitForVisible();

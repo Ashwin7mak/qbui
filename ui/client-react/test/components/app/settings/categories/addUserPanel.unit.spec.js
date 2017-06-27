@@ -3,7 +3,6 @@ import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import AddUserPanel from '../../../../../src/components/app/settings/categories/addUserPanel';
 import TestUtils from 'react-addons-test-utils';
-import {shallow} from 'enzyme';
 
 let component;
 const realmUsers = [
@@ -118,21 +117,6 @@ describe('AddUserPanel', () => {
                                 setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
         />);
         expect(component.find('.assignRole')).toBePresent();
-    });
-
-    it('changes the role on change of the Role Select component', () => {
-        spyOn(mockParentFunctions, 'updateRole');
-        component = shallow(<AddUserPanel appRoles={appRoles}
-                                        realmUsers={realmUsers}
-                                        searchUsers={mockParentFunctions.searchUsers}
-                                        isValid={true}
-                                        existingUsers={appUsers}
-                                        setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
-        />);
-        const selectWrapper = component.find('.assignRole Select');
-        expect(component.state().selectedRole).toEqual(11);
-        selectWrapper.simulate('change');
-        expect(component.state().selectedRole).toEqual(undefined);
     });
 
     it('test getRoles method', () => {

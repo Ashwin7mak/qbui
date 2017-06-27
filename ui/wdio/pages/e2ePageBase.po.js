@@ -6,6 +6,7 @@
     'use strict';
     var reportContentPO = requirePO('reportContent');
     let loadingSpinner = requirePO('/common/loadingSpinner');
+    let topNavPO = requirePO('topNav');
 
     function PageBase() {
         // Define common locators that all pages share here
@@ -56,11 +57,6 @@
         //TODO Need to implement, use waitUntil method
     };
 
-    PageBase.prototype.getUserAuthentication = function(realmName, realmId, userId) {
-        //get the user authentication
-        return this.navigateTo(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-    };
-
     /**
      * Helper method that will load an apps page for you in your browser by directly hitting a generated URL
      * @param realmName
@@ -68,12 +64,10 @@
      */
     PageBase.prototype.loadAppsInBrowser = function(realmName) {
         this.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName));
-        //wait until loading screen disappear in leftNav
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        //wait until loading screen disappear in report Content
-        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.myappsBody');
+        //wait until loading screen disappear
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        //wait until apps links in leftNav is visible
+        return browser.element('.appsList .leftNavLabel').waitForVisible();
     };
 
     /**
@@ -84,12 +78,35 @@
      */
     PageBase.prototype.loadAppByIdInBrowser = function(realmName, appId) {
         this.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, appId));
-        //wait until loading screen disappear in leftNav
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        //wait until loading screen disappear in report Content
-        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.appHomePageBody');
+        //wait until loading screen disappear
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        //If tablesList is not visible then again navigate to appId page
+        if (!browser.element('.tablesList .leftNavLabel').isExisting()) {
+            this.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, appId));
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        }
+        //wait until you see newTable in left Nav
+        return browser.element('.appHomePageBody .noRowsIcon').waitForVisible();
+    };
+
+    /**
+     * Helper method that will load an particular table by ID in an app for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @param tableId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadTableByIdInBrowser = function(realmName, appId, tableId) {
+        this.navigateTo(e2eBase.getRequestTableEndpoint(realmName, appId, tableId));
+        //wait until loading screen disappear
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        //If tablesList is not visible then again navigate to table page
+        if (!browser.element('.tablesList .leftNavLabel').isExisting()) {
+            this.navigateTo(e2eBase.getRequestTableEndpoint(realmName, appId, tableId));
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        }
+        //wait until records count loaded
+        return browser.element('.reportToolbar .loadedContent .recordsCount').waitForVisible();
     };
 
     /**
@@ -102,10 +119,13 @@
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
         this.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-        //wait until loading screen disappear in leftNav
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        //wait until loading screen disappear in report Content
-        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+        //wait until loading screen disappear
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        //If tablesList is not visible then again navigate to report page
+        if (!browser.element('.tablesList .leftNavLabel').isExisting()) {
+            this.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        }
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
     };
@@ -118,16 +138,20 @@
      */
     PageBase.prototype.loadUsersInAnAppInBrowser = function(realmName, appId) {
         this.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, appId));
-        //wait until loading screen disappear in leftNav
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        //wait until loading screen disappear in report Content
-        loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
-        //wait until apps home page is visible
-        return browser.waitForVisible('.iconActionButton.addRecord');
+        //wait until loading screen disappear
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        //If user report is not visible then again navigate to user page
+        if (!browser.element('.userManagementContainer').isExisting()) {
+            this.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, appId));
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        }
+        //wait until report rows in table are loaded
+        return reportContentPO.waitForReportContent();
     };
 
     PageBase.prototype.navigateTo = function(url) {
         return browser.url(url);
     };
+
     module.exports = new PageBase();
 }());

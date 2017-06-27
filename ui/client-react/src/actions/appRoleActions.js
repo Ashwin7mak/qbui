@@ -55,11 +55,14 @@ export const loadAppRoles = (appId) => {
     };
 };
 
-export const assignUsersToAppRole = (appId, roleId, userIds) => {
+export const assignUsersToAppRole = (appId, roleId, userDetails) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
         return new Promise((resolve, reject) => {
+            let userIds = userDetails.map((userDetail)=>{
+                return userDetail.id;
+            });
             let logger = new Logger();
             let roleService = new RoleService();
             roleService.assignUsersToAppRole(appId, roleId, userIds).then(
@@ -87,26 +90,39 @@ export const assignUsersToAppRole = (appId, roleId, userIds) => {
     };
 };
 
-export const assignUserToAppRole = (appId, roleId, userId) => {
-    return assignUsersToAppRole(appId, roleId, [userId]);
+export const assignUserToAppRole = (appId, roleId, userDetails) => {
+    return assignUsersToAppRole(appId, roleId, userDetails);
 };
 
-export const removeUsersFromAppRole = (appId, roleId, userIds) => {
+export const removeUsersFromAppRole = (appId, userDetails) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             let logger = new Logger();
             let roleService = new RoleService();
-            roleService.removeUsersFromAppRole(appId, roleId, userIds).then(
-                () => {
+            let usersByRole = {};
+            // get userDetails from [{id: '1', roleId: '2'}] into {<roleId>:[<userIds>]}
+            // so we make calls per role rather that per userId which is way lesser
+            userDetails.map((userDetail)=>{
+                if (usersByRole[userDetail.roleId]) {
+                    usersByRole[userDetail.roleId].push(userDetail.id);
+                } else {
+                    usersByRole[userDetail.roleId] = [userDetail.id];
+                }
+            });
+            _.forEach(usersByRole, (userIds, usersRoleId)=> {
+                roleService.removeUsersFromAppRole(appId, usersRoleId, userIds).then(() => {
                     logger.debug('RoleService removeUsersFromAppRole success');
-                    dispatch(event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {roleId: roleId, userIds:userIds}));
-                    resolve(userIds);
-                },
-                (error) => {
+                    dispatch(event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {
+                        roleId: usersRoleId,
+                        userIds: userIds
+                    }));
+                    resolve(userDetails);
+                }, (error) => {
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.removeUsersFromAppRole:');
                     reject();
                 }
-            );
+				);
+            });
         });
     };
 };

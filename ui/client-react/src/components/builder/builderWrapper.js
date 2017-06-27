@@ -63,9 +63,14 @@ export const BuilderWrapper = React.createClass({
             title = `${Locale.getMessage('builder.formBuilder.modify')}`;
         } else if (this.props.location.pathname.includes('report')) {
             title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
+        } else if (this.props.location.pathname.includes('automation')) {
+            title = `${Locale.getMessage('automation.automationBuilder.modify')}`;
         }
 
         const app = this.getSelectedApp();
+        const appId = _.get(this.props, "match.params.appId");
+        const tableId = _.get(this.props, "match.params.tblId");
+
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
@@ -81,7 +86,7 @@ export const BuilderWrapper = React.createClass({
                         <Switch>
                             {
                                 this.props.routes.map((route, i) => {
-                                    return RouteWithSubRoutes(route, i, {app});
+                                    return RouteWithSubRoutes(route, i, {app, appId, tableId});
                                 })
                             }
                         </Switch>
@@ -94,16 +99,15 @@ export const BuilderWrapper = React.createClass({
 });
 
 const mapStateToProps = (state) => ({
-    getApp: (appId) => getApp(state.app, appId),
-    getApps: () => getApps(state.app),
-    selectedAppId: getSelectedAppId(state.app)
+    getApp: (appId) => getApp(state, appId),
+    getApps: () => getApps(state),
+    selectedAppId: getSelectedAppId(state)
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        loadApp: (appId) => dispatch(loadApp(appId)),
-        loadApps: () => dispatch(loadApps())
-    };
-};
+const mapDispatchToProps = ({
+    loadApp,
+    loadApps,
+    ...commonNavActions('builder')
+});
 
-export default withRouter(connect(mapStateToProps, commonNavActions('builder'))(BuilderWrapper));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BuilderWrapper));

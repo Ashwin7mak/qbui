@@ -144,6 +144,9 @@ projRecs.init(projGen);
     //tablesToCreate = fieldTypesOnly;
     //tablesToCreate = plainParentChildOnly;
 
+    //or use concat to have a combination of tables in the app
+    //tablesToCreate = companiesTables.concat(countryStateCityOnly);
+
     log.debug('dataGenCustomize seed: ' + seed);
 
     // Generate an app and log the app and tables it created when done
@@ -277,6 +280,11 @@ projRecs.init(projGen);
             wordType: 'randomLetters',
             wordLength: 6
         });
+        const defaultTextChoice = textChoices[2].coercedValue.value;
+        const defaultValue = {
+            coercedValue: Object.assign({},  textChoices[2].coercedValue),
+            displayValue: defaultTextChoice
+        };
         // Temporarily add a placeholder blank (not chosen) selection to top of list
         textChoices.unshift(emptyChoice);
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.TEXT, "Text MultiChoice",
@@ -286,7 +294,8 @@ projRecs.init(projGen);
                     choices: textChoices,
                     allowNew: false,
                     sortAsGiven: false
-                }
+                },
+                defaultValue : defaultValue
             });
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number With Ext");
@@ -1051,11 +1060,11 @@ projRecs.init(projGen);
                     e2eBase.recordBase.apiBase.executeRequest(formsEndpoint, consts.GET).then(function(formsResult) {
                         var form = JSON.parse(formsResult.body);
                         if (savedRelationships) {
-                            savedRelationships.forEach((relationship, index) => {
+                            savedRelationships.forEach((relationship) => {
                                 if (relationship.masterTableId === tableId) {
                                     const sections = form.tabs[0].sections;
                                     const length = Object.keys(sections).length;
-                                    const childReportElement = {"ChildReportElement" : {relationshipId: index}};
+                                    const childReportElement = {"ChildReportElement" : {relationshipId: relationship.id}};
                                     sections[length] = Object.assign(_.cloneDeep(sections[0]), {
                                         elements: {0: childReportElement},
                                         fields: [],

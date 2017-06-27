@@ -21,8 +21,9 @@ function event(appId, type, content) {
 }
 
 const appId = '1';
-const roleId = 'VIEWER';
 const userIds = ['1', '2'];
+const userDetails = [{id: '1', roleId: 1}, {id: '2', roleId: 1}];
+const roleId = '1';
 
 class mockLogger {
     constructor() {}
@@ -105,7 +106,7 @@ describe('App Role Actions success workflow tests', () => {
             event(appId, types.ASSIGN_USERS_TO_APP_ROLE, {appUsers: mockResponseAssignUsers.data})
         ];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.assignUsersToAppRole(appId, roleId, userIds)).then(
+        return store.dispatch(appRoleActions.assignUsersToAppRole(appId, roleId, userDetails)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 expect(mockRoleService.prototype.assignUsersToAppRole).toHaveBeenCalled();
@@ -118,13 +119,13 @@ describe('App Role Actions success workflow tests', () => {
             });
     });
 
-    it('verify assignUsersToAppRole action', (done) => {
+    it('verify assignUserToAppRole action', (done) => {
         const userId = '10';
         const expectedActions = [
             event(appId, types.ASSIGN_USERS_TO_APP_ROLE, {appUsers: [userId]})
         ];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.assignUserToAppRole(appId, roleId, userId)).then(
+        return store.dispatch(appRoleActions.assignUserToAppRole(appId, roleId, userDetails)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 expect(mockRoleService.prototype.assignUsersToAppRole).toHaveBeenCalled();
@@ -142,7 +143,7 @@ describe('App Role Actions success workflow tests', () => {
             event(appId, types.REMOVE_USERS_FROM_APP_ROLE, {roleId:roleId, userIds:userIds})
         ];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, roleId, userIds)).then(
+        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, userDetails)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 expect(mockRoleService.prototype.removeUsersFromAppRole).toHaveBeenCalled();
@@ -252,7 +253,7 @@ describe('App Role Actions failure workflow', () => {
     it('verify removeUsersFromAppRole reject response', (done) => {
         const expectedActions = [];
         const store = roleStore({});
-        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, roleId, userIds)).then(
+        return store.dispatch(appRoleActions.removeUsersFromAppRole(appId, userIds)).then(
             () => {
                 expect(false).toBe(true);
                 done();

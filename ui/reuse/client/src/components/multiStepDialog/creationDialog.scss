@@ -1,0 +1,68 @@
+@import '../../assets/css/_qbVariables';
+
+//This is the style used for the creation dialog. The current creation dialog that uses these styles are
+//app creation and table creation
+
+.dialogCreationPanel {
+
+    .title {
+        color: $color-black-700;
+        font-size: $font-size-large;
+        padding-top: 25px;
+        padding-bottom: $spacing-x-small;
+    }
+    .description {
+        color: $color-black-500;
+        font-size: 16px;
+    }
+    .sections .iconSelection  .iconChooser.open {
+        height: 256px; // override the table settings style since it has a different height
+    }
+}
+
+@include not-small-breakpoint {
+
+    .multiStepModal.creationDialog .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 355px;
+        }
+        width: 840px;
+    }
+
+    .multiStepModal.creationDialog.allowOverflow .loadedContent {
+        overflow: visible;
+    }
+}
+
+@include medium-breakpoint {
+
+    .multiStepModal.creationDialog .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 350px;
+        }
+        width: 600px;
+    }
+}
+
+/* some initial small styles in case we support small */
+@include small-breakpoint {
+
+    .multiStepModal.creationDialog .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 550px;
+        }
+        width: 420px;
+        .iconChooser.open {
+            width: 100%;
+        }
+        .dialogField {
+            width: 100%;
+        }
+        .dialogField:first-of-type {
+            padding-right: 0;
+        }
+    }
+}

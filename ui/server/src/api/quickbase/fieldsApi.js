@@ -4,7 +4,8 @@
 (function() {
     'use strict';
 
-    let defaultRequest = require('request');
+    let env = require('../../config/environment');
+    let defaultRequest = require('../../requestClient').getClient(env);
     let Promise = require('bluebird');
     let log = require('../../logger').getLogger();
     let _ = require('lodash');
@@ -155,6 +156,43 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('fieldsApi.createField(): unexpected error creating field on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
+            patchField: function(req, tableId, fieldId) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, tableId, fieldId);
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(response);
+                        },
+                        (error) => {
+                            log.error({req: req}, "fieldsApi.patchField(): Error patching field on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('fieldsApi.patchField(): unexpected error patching field on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+            getField: function(req, tableId, fieldId) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, tableId, fieldId);
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(JSON.parse(response.body));
+                        },
+                        (error) => {
+                            log.error({req: req}, "fieldsApi.getField(): Error getting field from core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('fieldsApi.getField(): unexpected error getting field from core', ex, true);
                         reject(ex);
                     });
                 });

@@ -4,7 +4,8 @@
 (function() {
     'use strict';
 
-    let defaultRequest = require('request');
+    let env = require('../../config/environment');
+    let defaultRequest = require('../../requestClient').getClient(env);
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
     let log = require('../../logger').getLogger();
@@ -360,6 +361,44 @@
             },
 
             /**
+             * Helper function to get the field from core and then update it
+             * This is needed because the patch at this time requires to send in
+             * id, type and datatypeAttributes.type along with the changes even if none of these have changed.
+             * Since we dont have the types available we need to query the field.
+             * @param req
+             * @param fieldId
+             * @private
+             */
+            _updateField: function(req, tableId, fieldId) {
+                return new Promise((resolve, reject) =>{
+                    let getFieldReq = _.clone(req);
+                    getFieldReq.method = 'get';
+                    fieldsApi.getField(getFieldReq, tableId, fieldId).then(
+                        (field) =>{
+                            if (field.required) {
+                                resolve();
+                            } else {
+                                let patchFieldPayload = _.pick(field, ['id', 'type', 'datatypeAttributes.type']);
+                                patchFieldPayload.required = true;
+                                let patchFieldReq = _.clone(req);
+                                patchFieldReq.rawBody = JSON.stringify(patchFieldPayload);
+                                patchFieldReq.headers[constants.CONTENT_LENGTH] = patchFieldReq.rawBody.length;
+                                fieldsApi.patchField(patchFieldReq, null, fieldId).then(
+                                    () => {
+                                        resolve();
+                                    }
+                                ).catch(ex => {
+                                    reject(ex);
+                                });
+                            }
+                        }
+                    ).catch((ex) =>{
+                        reject(ex);
+                    });
+                });
+            },
+
+            /**
              * The update Table call will send the whole object for TableProperties + name of the table if it has been updated.
              * This api is responsible for making 2 calls -
              *  1. to Core to update table name (if its on the payload)
@@ -386,6 +425,11 @@
                 tableProperReq.rawBody = JSON.stringify(_.omit(reqPayload, ['name']));
                 tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
                 promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
+
+                //record title field property was updated. Need to make this field required.
+                if (reqPayload.recordTitleFieldId) {
+                    promises.push(this._updateField(req, req.params.tableId, reqPayload.recordTitleFieldId));
+                }
 
                 return Promise.all(promises);
             },

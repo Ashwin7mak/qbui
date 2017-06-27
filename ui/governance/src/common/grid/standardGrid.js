@@ -8,22 +8,12 @@ import QbCell from "../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
+import {pageLoadTime} from "../../analytics/performanceTimingActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import "./standardGrid.scss";
-
-// Sub-component pieces we will be using to override React Tabular's default components
-const tableSubComponents = {
-    header: {
-        cell: QbHeaderCell
-    },
-    body: {
-        row: QbRow,
-        cell: QbCell
-    }
-};
 
 // Helper function to return additional props to add to a row element
 const onRowFn = (row) => {
@@ -69,6 +59,12 @@ export class StandardGrid extends Component {
         this.tableRef = body && body.getRef().parentNode;
     };
 
+    componentDidUpdate = () => {
+        if (this.props.items) {
+            this.props.pageLoadTime();
+        }
+    };
+
     /**
      * Render the grid when items exist
      */
@@ -79,13 +75,22 @@ export class StandardGrid extends Component {
                     className="qbGrid"
                     columns={this.getColumns()}
                     onScroll={this.handleScroll}
-                    components={tableSubComponents}
+                    components={{
+                        header: {
+                            cell: this.props.headerRenderer
+                        },
+                        body: {
+                            row: QbRow,
+                            cell: this.props.cellRenderer
+                        }
+                    }}
                 >
                     <Table.Header className="qbHeader"/>
 
+                    {/*If there is no data at all, render an empty grid, else render this.props.items*/}
                     <Table.Body
                         className="qbTbody"
-                        rows={this.props.items}
+                        rows={_.isNull(this.props.items) ? [] : this.props.items}
                         rowKey={this.getUniqueRowKey.bind(this)}
                         onRow={onRowFn}
                         ref={this.bodyRef}
@@ -132,7 +137,8 @@ export class StandardGrid extends Component {
                                      itemTypeSingular={this.props.itemTypeSingular}
                                      itemsPerPage={this.props.itemsPerPage}
                 />
-                {!_.isEmpty(this.props.items) ? this.renderItemsExist() : this.renderNoItemsExist()}
+                {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
+                {!_.isNull(this.props.items) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
             </div>
         );
     }
@@ -202,18 +208,27 @@ StandardGrid.propTypes = {
     /**
      *  The text to display if there are no items found
      */
-    noItemsFound: PropTypes.string
+    noItemsFound: PropTypes.string,
+
+    /**
+     *  Function that returns the page load time (as a number)
+     */
+    pageLoadTime: PropTypes.func,
+
+    /**
+     * Header cell to be passed in to make QbGrid more reusable.
+     * Use QbHeaderCell for a default non-draggable header.
+     * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use). */
+    headerRenderer: PropTypes.func,
+
+    /**
+     * Cell renderer.
+     */
+    cellRenderer: PropTypes.func
 };
 
-
 StandardGrid.defaultProps = {
-    shouldFacet: true,
-    facetFields:[],
-    shouldSearch: true
-};
-
-StandardGrid.defaultProps = {
-    items: [],
+    items: null,
     /**
      * Provide the Header Menu Transformations.
      * You can append more menu like the "Sort" to the column
@@ -223,7 +238,12 @@ StandardGrid.defaultProps = {
         {
             menuItemsClasses: [SortMenuItems]
         }
-    ]
+    ],
+    shouldFacet: true,
+    facetFields:[],
+    shouldSearch: true,
+    headerRenderer: QbHeaderCell,
+    cellRenderer: QbCell
 };
 
 const mapStateToProps = (state, props) => {
@@ -238,6 +258,9 @@ const mapDispatchToProps = (dispatch, props) => ({
     setSort(sortFid, asc, remove) {
         dispatch(StandardGridActions.setSort(props.id, sortFid, asc, remove));
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
+    },
+    pageLoadTime: () => {
+        dispatch(pageLoadTime(_.round((window.performance.now() / 1000), 2)));
     }
 });
 

@@ -4,7 +4,6 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import {CONTEXT} from '../../../src/actions/context';
 import {ReportFieldSelectMenu, __RewireAPI__ as RewireAPI} from '../../../src/components/reportBuilder/reportFieldSelectMenu';
-import SideMenuBase from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
 import FieldFormats from '../../../src/utils/fieldFormats';
 import Locale from '../../../../reuse/client/src/locales/locale';
 
@@ -103,11 +102,18 @@ const MockReportUtils = {
     getDifferenceOfColumns(allColumns, currentColumns) {return hiddenColumns;}
 };
 
+class MockDroppableSideMenuBase extends React.Component {
+    render() {
+        return <div />;
+    }
+}
+
 describe('ReportFieldSelectMenu', () => {
     beforeEach(() => {
         jasmineEnzyme();
         RewireAPI.__Rewire__('Locale', MockLocale);
         RewireAPI.__Rewire__('ReportUtils', MockReportUtils);
+        RewireAPI.__Rewire__('DroppableSideMenuBase', MockDroppableSideMenuBase);
         spyOn(testProps, 'refreshFieldSelectMenu').and.callThrough();
         spyOn(testProps, 'addColumnFromExistingField').and.callThrough();
     });
@@ -115,6 +121,7 @@ describe('ReportFieldSelectMenu', () => {
     afterEach(() => {
         RewireAPI.__ResetDependency__('Locale');
         RewireAPI.__ResetDependency__('ReportUtils');
+        RewireAPI.__ResetDependency__('DroppableSideMenuBase');
         testProps.refreshFieldSelectMenu.calls.reset();
         testProps.addColumnFromExistingField.calls.reset();
     });
@@ -122,15 +129,14 @@ describe('ReportFieldSelectMenu', () => {
     it('renders a SideMenuBase with options for ReportFieldSelectMenu styling', () => {
         component = shallow(<ReportFieldSelectMenu {...testProps} appId={appId} tblId={tblId} reportData={reportData}/>);
 
-        let sideMenu = component.find(SideMenuBase);
+        let sideMenu = component.find({baseClass: 'reportFieldSelectMenu'});
         expect(sideMenu).toBePresent();
-        expect(sideMenu).toHaveProp('baseClass', 'reportFieldSelectMenu');
     });
 
     it('calls refresh in constructor', () => {
         component = mount(<ReportFieldSelectMenu {...testProps} appId={appId} tblId={tblId} reportData={reportData}/>);
 
-        expect(testProps.refreshFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, appId, tblId);
+        expect(testProps.refreshFieldSelectMenu).toHaveBeenCalledWith(appId, tblId);
     });
 
     it('has the correct columns in the list based on the reportData prop', () => {

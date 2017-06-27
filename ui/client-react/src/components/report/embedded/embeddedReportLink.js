@@ -32,13 +32,15 @@ export const EmbeddedReportLink = React.createClass({
 
 
     render() {
-        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
+        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue, detailKeyDisplay} = this.props;
 
         let link;
         if (Breakpoints.isSmallBreakpoint()) {
-            link = this.props.match.url + UrlUtils.getReportDrawerSegment(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+            link = this.props.match.url + UrlUtils.getReportDrawerSegment(appId, childTableId, childReportId, detailKeyFid,
+                    detailKeyValue, detailKeyDisplay);
         } else {
-            link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+            link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid,
+                detailKeyValue, detailKeyDisplay);
         }
 
         let tableName;

@@ -10,7 +10,8 @@
     let log = require('../logger').getLogger();
     let perfLogger = require('../perfLogger');
     let routesConstants = require('./routeConstants');
-    let request = require('request');
+    let env = require('../config/environment');
+    let request = require('../requestClient').getClient(env);
     let routeGroupMapper = require('./qbRouteGroupMapper');
     let simpleStringify = require('./../../../common/src/simpleStringify.js');
     let queryFormatter = require('../api/quickbase/formatter/queryFormatter');
@@ -43,9 +44,9 @@
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
 
-        // initialize the feature switches API, use mock API if config.featureSwitchesMockData is defined
+        // initialize the feature switches API, use master.featureSwitches.json override these with config.featureSwitchConfigOverride if defined
         // (unit tests can override this through the 2nd parameter)
-        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
+        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, true);
         rolesApi = require('../api/quickbase/rolesApi')(config);
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
@@ -87,9 +88,13 @@
                 requestFunctions[routes.APP_USERS] = getAppUsers;
                 requestFunctions[routes.APP_ROLES] = getAppRoles;
                 requestFunctions[routes.APP_COMPONENTS] = getAppComponents;
-
-                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
                 requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
+
+                /***
+                 *  CRUD on feature switches unused until this epic is worked on :
+                 *  https://quickbase.atlassian.net/browse/MC-1189
+                 */
+                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
 
                 requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
                 requestFunctions[routes.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
@@ -156,6 +161,7 @@
                 requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
                 requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
+                requestFunctions[routes.APPS] = createApp;
                 requestFunctions[routes.RECORDS] = createSingleRecord;
                 requestFunctions[routes.RECORDS_BULK] = forwardApiRequest;
                 requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
@@ -782,6 +788,36 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Get App Users');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Create an app.  The request adds to both core and ee.
+     *
+     * @param req
+     * @param res
+     */
+    function createApp(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.createApp(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Create App');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Create App');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {

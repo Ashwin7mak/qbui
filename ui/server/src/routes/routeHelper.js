@@ -453,8 +453,16 @@
          * @param fieldId
          * @returns {*}
          */
-        getFieldsRoute: function(url, fieldId) {
-            let root = getUrlRoot(url, TABLES);
+        getFieldsRoute: function(url, tableId, fieldId) {
+            let root = "";
+            if (tableId) {
+                root = getUrlRoot(url, APPS);
+                if (root) {
+                    root += '/' + TABLES + '/' + tableId;
+                }
+            } else {
+                root = getUrlRoot(url, TABLES);
+            }
             if (root) {
                 return root + '/' + FIELDS + (fieldId ? '/' + fieldId : '');
             }
@@ -909,6 +917,14 @@
          */
         getMyAppsLegacyStackRoute: function() {
             return `${getLegacyStackMainHandlerRoot()}?a=myqb`;
+        },
+
+        /**
+         * Navigate to the legacy stack 'Logout' page
+         * @returns {string}
+         */
+        getSignoutLegacyStackRoute: function() {
+            return `${getLegacyStackMainHandlerRoot()}?a=Signout`;
         }
 
 

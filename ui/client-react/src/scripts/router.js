@@ -22,6 +22,7 @@ import AppPropertiesRoute from "../components/app/settings/categories/appPropert
 import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
 import AutomationListRoute from "../components/automation/settings/automationListRoute";
 import AutomationViewRoute from "../components/automation/settings/automationViewRoute";
+import AutomationBuilderContainer from "../components/automation/builder/automationBuilderContainer";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
@@ -78,20 +79,24 @@ store.dispatch(FeatureSwitchActions.getStates());
  *          props - object with any properties to be included when rendering the component (optional)
  **/
 const routes = [
-    {
-        path: ADMIN_ROUTE,
-        component: NavWrapper,
-        routes: [
-            {
-                path: `${ADMIN_ROUTE}/featureSwitches/:id`,
-                component: FeatureSwitchOverridesRoute
-            },
-            {
-                path: `${ADMIN_ROUTE}/featureSwitches`,
-                component: FeatureSwitchesRoute
-            }
-        ]
-    },
+    /***
+     *  Shall be enabled when this epic is worked on :
+     *  https://quickbase.atlassian.net/browse/MC-1189
+     */
+    // {
+    //     path: ADMIN_ROUTE,
+    //     component: NavWrapper,
+    //     routes: [
+    //         {
+    //             path: `${ADMIN_ROUTE}/featureSwitches/:id`,
+    //             component: FeatureSwitchOverridesRoute
+    //         },
+    //         {
+    //             path: `${ADMIN_ROUTE}/featureSwitches`,
+    //             component: FeatureSwitchesRoute
+    //         }
+    //     ]
+    // },
     {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
         component: NavWrapper,
@@ -140,7 +145,7 @@ const routes = [
         ]
     },
     {
-        path: `${BUILDER_ROUTE}/app/:appId`,
+        path: `${BUILDER_ROUTE}/app/:appId/(table)?/:tblId?/`,
         component: BuilderWrapper,
         routes: [
             {
@@ -150,6 +155,10 @@ const routes = [
             {
                 path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/report/:rptId`,
                 component: ReportBuilderContainer
+            },
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId`,
+                component: AutomationBuilderContainer
             }
         ]
     },
