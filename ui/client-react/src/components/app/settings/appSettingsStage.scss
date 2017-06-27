@@ -59,5 +59,19 @@
                 font-size: 14px;
             }
         }
+    &.selectable {
+        &:hover {
+            background-color: $leftnav-table-selected-color;
+            color: $color-black-100;
+            cursor: pointer;
+        }
+        &.active {
+            border-left: none;
+            border-bottom: 3px solid #74489d;
+            top: auto;
+            left: auto;
+            bottom: 0;
+        }
+    }
     }
 }

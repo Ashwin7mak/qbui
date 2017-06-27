@@ -9,22 +9,25 @@ class AppSettingsStage extends React.Component {
 
     constructor(...args) {
         super(...args);
-        this.getRoleTotals = this.getRoleTotals.bind(this);
-        this.getAppOwnerSection = this.getAppOwnerSection.bind(this);
-        this.getAppOwnerName = this.getAppOwnerName.bind(this);
     }
 
-    getRoleTotals() {
+    getRoleTotals = ()=> {
         let usersRoleCount = [];
         let appUsers = this.props.appUsers || [];
+        let self = this;
         this.props.appRoles.forEach(function(role) {
             if (appUsers[role.id]) {
                 //a local hack while we have no user defined roles, this is so we have pluralized role names
-                let roleTitle = (appUsers[role.id].length > 1 ? role.name + "s" : role.name);
+                let noOfUsers = appUsers[role.id].length;
+                let roleTitle = (noOfUsers > 1 ? role.name + "s" : role.name);
+                let classes = noOfUsers > 0 ? "appRolesPod selectable" : "appRolesPod";
+                if (self.props.selectedRole === role.id) {classes += ' active';}
                 usersRoleCount.push(
-                    <div className="appRolesPod" key={role.id}>
+                    <div className={classes}
+                         key={role.id}
+                         onClick={()=>{self.props.filterUserByRole(role.id, noOfUsers);}}>
                         <div className="appRolesDivider">
-                            <div className="appRolesPodCount">{`${appUsers[role.id].length}`}</div>
+                            <div className="appRolesPodCount">{`${noOfUsers}`}</div>
                             <div className="appRolesPodName">{roleTitle}</div>
                         </div>
                     </div>
@@ -34,7 +37,7 @@ class AppSettingsStage extends React.Component {
         return usersRoleCount;
     }
 
-    getAppOwnerName() {
+    getAppOwnerName= ()=> {
         if (this.props.appOwner) {
             let appOwner = `${this.props.appOwner.firstName} ${this.props.appOwner.lastName}`;
             if (this.props.appOwner.email) {
@@ -47,7 +50,7 @@ class AppSettingsStage extends React.Component {
         return '';
     }
 
-    getAppOwnerSection() {
+    getAppOwnerSection = ()=> {
         let appOwnerTitle = `, ${Locale.getMessage('app.users.manager')}`;
         let appUsersManagementContent = Locale.getMessage('app.users.content');
         return (

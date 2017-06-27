@@ -23,7 +23,9 @@ import UserSuccessDialog from './userSuccessDialog.js';
 export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
-            updateRowCount: true
+            updateRowCount: true,
+            appRoles: this.props.appRoles,
+            selectedRole: '',
         };
     },
 
@@ -35,6 +37,12 @@ export const AppUsersRoute = React.createClass({
 
     componentWillUnmount() {
         this.deselectAllRows();
+    },
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            appRoles: nextProps.appRoles
+        });
     },
 
     getPageActions() {
@@ -146,7 +154,16 @@ export const AppUsersRoute = React.createClass({
         const selectedUserRows = this.props.selectedUserRows.length;
         return selectedUserRows > 0 && (selectedUserRows === this.props.appUsers.length);
     },
-
+    filterUserByRole(role, noOfUsers) {
+        if (noOfUsers < 1) {return;}
+        let appRoles = _.filter(this.props.appRoles, function(appRole) {
+            return appRole.id === role;
+        });
+        this.setState({
+            appRoles,
+            selectedRole: role,
+        });
+    },
     render() {
         if (this.props.appRoles && this.props.selectedApp && this.props.appOwner) {
             const unfilteredAppUsers = this.props.unfilteredAppUsers;
@@ -158,7 +175,10 @@ export const AppUsersRoute = React.createClass({
 
                         <AppSettingsStage appUsers={unfilteredAppUsers}
                                           appRoles={this.props.appRoles}
-                                          appOwner={this.props.appOwner}/>
+                                          appOwner={this.props.appOwner}
+                                          filterUserByRole={this.filterUserByRole}
+                                          selectedRole={this.state.selectedRole}
+                        />
                     </Stage>
                 <AddUserDialog realmUsers={this.props.realmUsers}
                                searchUsers={this.props.searchUsers}
@@ -181,7 +201,7 @@ export const AppUsersRoute = React.createClass({
                     <div className="userManagementContainer">
                         <UserManagement appId={appId}
                                         appUsers={unfilteredAppUsers}
-                                        appRoles={this.props.appRoles}
+                                        appRoles={this.state.appRoles}
                                         onClickToggleSelectedRow={this.toggleSelectedRow}
                                         onClickToggleSelectAllRows={this.toggleSelectAllRows}
                                         selectedRows={this.props.selectedUserRows}
