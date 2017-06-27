@@ -148,8 +148,14 @@
                     type: 'NODE'
                 });
 
-                //  for each supported Bunyan logging level, add custom log attributes
-                //  to the argument list before logging the message.
+                //  for each supported Bunyan logging level, add custom log attributes to the fields list before
+                //  logging the message.
+                //
+                //  NOTE: we are overriding at run-time, attributes defined in the logger fields object.
+                //  Given the logger is a Singleton, and the fields object is a structure defined on that instance,
+                //  there could be concern about a race-condition where multiple threads update the same shared
+                //  reference simultaneously.  But given node is single threaded, we should not get exposed to
+                //  this possibility.
                 appLogger.debug = function() {
                     logger.fields = applyRunTimeAttributes(logger.fields, 'DEBUG');
                     logger.debug.apply(logger, arguments);
