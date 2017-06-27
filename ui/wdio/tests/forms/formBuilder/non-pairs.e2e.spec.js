@@ -380,6 +380,7 @@
                 formBuilderPO.selectedField.waitForVisible();
                 // reload page AFTER change
                 browser.url(browser.getUrl());
+                browser.pause(1000); // give alert a second to appear (slow on Edge)
                 // implicit verification: this line will fail if an alert is NOT present
                 browser.alertDismiss();
             });
@@ -451,6 +452,7 @@
                 ]);
                 // save, reopen, select first field
                 formBuilderPO.save().open().selectFieldByIndex(1);
+                formBuilderPO.multiChoiceEditor.waitForExist();
                 let options = formBuilderPO.multiChoiceEditor.getText();
                 expect(options.endsWith(testOption)).toBe(true, 'Expected "' + options + '" to end with "' + testOption);
             });
