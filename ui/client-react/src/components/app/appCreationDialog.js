@@ -45,6 +45,11 @@ export class AppCreationDialog extends React.Component {
 
         const classes = ['appCreationDialog creationDialog'];
 
+        // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
+        if (this.props.isAppIconChooserOpen) {
+            classes.push('allowOverflow');
+        }
+
         return (
             <MultiStepDialog show={this.props.appDialogOpen}
                                  classes={classes.join(' ')}
@@ -62,13 +67,15 @@ export class AppCreationDialog extends React.Component {
 
 AppCreationDialog.propTypes = {
     hideAppCreationDialog: PropTypes.func.isRequired,
-    appDialogOpen: PropTypes.bool.isRequired
+    appDialogOpen: PropTypes.bool.isRequired,
+    isAppIconChooserOpen: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
     return {
         appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state),
-        app: AppBuilderSelectors.getNewAppInfo(state)
+        app: AppBuilderSelectors.getNewAppInfo(state),
+        isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)
     };
 };
 
