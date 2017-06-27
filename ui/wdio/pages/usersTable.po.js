@@ -38,11 +38,11 @@
         // Export users button
         userExportCSV: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-download-cloud');}},
 
-        // Change user role settings
-        userChangeRole : {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-settings');}},
-
         // Remove user button on user report
         userRemoveIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-errorincircle-fill');}},
+
+        // Change user role button on user report
+        userChangeRoleIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-change-user-role');}},
 
         // User action icon elements
         userActionsListUlEl: {get: function() {return browser.element('.reportActionsBlock .actionIcons');}},
@@ -57,7 +57,7 @@
         userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
 
         /**
-         * Function to click on user Remove Icon
+         * Function to click on user remove Icon
          */
         clickUserRemoveIcon: {
             value: function() {
@@ -65,6 +65,18 @@
                 this.userRemoveIcon.waitForVisible();
                 //click on the user remove icon
                 return this.userRemoveIcon.click();
+            }
+        },
+
+        /**
+         * Function to click on change user role icon
+         */
+        clickChangeUserRoleIcon: {
+            value: function() {
+                //wait for user remove icon
+                this.userChangeRoleIcon.waitForVisible();
+                //click on the user remove icon
+                return this.userChangeRoleIcon.click();
             }
         },
 
@@ -87,6 +99,13 @@
             var colHeaders = [];
             for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
             return colHeaders;
+        }},
+
+        /**
+         * Helper function to select role
+         */
+        selectRole: {value: function(role) {
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, role);
         }},
 
         /**

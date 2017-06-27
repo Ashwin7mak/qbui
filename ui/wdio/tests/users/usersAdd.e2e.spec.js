@@ -124,7 +124,7 @@
                 var appName = testApp.name;
                 expect(modalDialog.modalDialogTitle).toContain(appName);
                 // Verify Add new user button disabled
-                expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
+                expect(modalDialog.modalDialogDisabledBtn.isEnabled()).toBe(false);
                 // Click Cancel
                 modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
             });
