@@ -75,12 +75,11 @@ export const AppsList = React.createClass({
         this.props.showAppCreationDialog();
     },
 
-    renderResult() {
+    renderEmptyStateOrNewButton() {
         return _.isEmpty(this.props.apps) ?
             <EmptyStateForLeftNav handleOnClick={this.createNewApp}
                                   emptyMessage="emptyAppState.message"
                                   className="appsListForLeftNav"
-                                  icon="add-new-filled"
                                   iconMessage="emptyAppState.createNewApp"
             /> :
             this.getNewAppItem();
@@ -104,7 +103,7 @@ export const AppsList = React.createClass({
                 </li>
 
                 {this.appList()}
-                {this.renderResult()}
+                {this.renderEmptyStateOrNewButton()}
 
             </ul>
         );
