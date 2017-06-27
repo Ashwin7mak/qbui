@@ -105,5 +105,16 @@
          */
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
+
+
+        /**
+         * Override master.featureSwitches by overriding specific features in
+         * ci.override.featureSwitches.json.
+         * Note: Feature Switches are overridden based on their names, ensure overrides
+         * have same name including spacing.
+         */
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/ci.override.featureSwitches.json'
+        // masterOverrideTurnFeaturesOn:true
+
     };
 }());

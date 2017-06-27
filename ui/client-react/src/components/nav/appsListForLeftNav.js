@@ -7,8 +7,6 @@ import {connect} from "react-redux";
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
-import AppUtils from '../../utils/appUtils';
-
 export const AppsList = React.createClass({
 
     propTypes: {
@@ -35,10 +33,13 @@ export const AppsList = React.createClass({
     },
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
-            app.icon = 'favicon';
+            // Give all apps in the left nav list a default icon of 'favicon'
+            // TODO:: Refactor where the icon is obtain from in MC-3596. Patching for the purpose of the current story.
+            let appForNavItem = {icon: 'favicon', tableIcon: 'favicon', ...app};
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
-                         item={app}
+                         item={appForNavItem}
+                         tableIcon={true}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
                          open={true}  />;
@@ -61,6 +62,7 @@ export const AppsList = React.createClass({
         return <CreateNewItemButton handleOnClick={this.createNewApp}
                                     message="appCreation.newApp"
                                     className="newApp"
+                                    key="newAppButton"
                 />;
     },
 

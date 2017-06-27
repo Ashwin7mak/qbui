@@ -76,14 +76,22 @@ $edit-icon-font-size: 18px;
         z-index: $zindex-qbGrid-th;
 
         &.placeholderCell {
-            background-color: $color-purple-100;
-            border-left: 1px dashed $color-purple-600;
-            border-right: 1px dashed $color-purple-600;
+            background-color: rgba($dragPreview-background-color, 0.08);
+            border-left: $stroke-width-thin dashed $dragtoken-border-color;
+            border-right: $stroke-width-thin dashed $dragtoken-border-color;
             border-bottom: none;
-            border-top: 1px dashed $color-purple-600;
+            border-top: $stroke-width-thin dashed $dragtoken-border-color;
 
             &:last-of-type {
-                border-right: 1px dashed $color-purple-600;
+                border-right: $stroke-width-thin dashed $dragtoken-border-color;
+            }
+
+            .gridHeaderLabel {
+                visibility: hidden;
+            }
+
+            .headerMenu {
+                visibility: hidden;
             }
         }
 
@@ -104,6 +112,10 @@ $edit-icon-font-size: 18px;
             border-right: 1px solid $grid-column-header-border-color;
             width: 100%;
         }
+    }
+    // adjust sizing when no checkbox is present
+    &.isMultiSelectDisabled .qbHeaderCell {
+        min-width: 30px;
     }
 
     // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
@@ -217,15 +229,25 @@ $edit-icon-font-size: 18px;
         max-width: 80px;
         position: relative;
         vertical-align: top;
-        background-color: $color-purple-100;
-        border-left: 1px dashed $color-purple-600;
-        border-right: 1px dashed $color-purple-600;
+        background-color: rgba($dragPreview-background-color, 0.08);
+        border-left: $stroke-width-thin dashed $dragtoken-border-color;
+        border-right: $stroke-width-thin dashed $dragtoken-border-color;
         border-bottom: none;
         border-top: none;
 
         &:last-of-type {
-            border-right: 1px dashed $color-purple-600;
+            border-right: $stroke-width-thin dashed $dragtoken-border-color;
         }
+
+        .cellWrapper {
+            visibility: hidden;
+        }
+    }
+
+    // Adjust alignment of icons when checkbox is not present
+    &.isMultiSelectDisabled .qbRow .stickyCell {
+        padding-left: 10px;
+        padding-right: 0;
     }
 
     //== header row above groups of rows
@@ -578,7 +600,7 @@ $edit-icon-font-size: 18px;
         border-bottom: 1px solid $grid-line-color;
     }
     .qbRow:last-of-type .placeholderCell {
-        border-bottom: 1px dashed $color-black-600;
+        border-bottom: $stroke-width-thin dashed $dragtoken-border-color;
     }
 
     // row hover highlighting - only done while not inline editing

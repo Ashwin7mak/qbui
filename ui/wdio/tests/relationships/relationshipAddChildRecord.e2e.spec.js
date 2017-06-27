@@ -20,6 +20,9 @@ let childRecordsTextValues = [];
 
 describe('Relationships - Add child Record to embedded Table tests: ', () => {
     const defaultParentRecordValue = 1;
+    //
+    //***** These tests don't run in safari and firefox browser as 'scrollIntoView' is not supported.
+    //
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
         /**
          * Setup method. Creates test app then authenticates into the new stack

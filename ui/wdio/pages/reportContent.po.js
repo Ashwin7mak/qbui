@@ -117,6 +117,7 @@
          */
         waitForReportContent: {value: function() {
             // wait until you see .qbTbody
+            browser.element('.qbTbody').waitForExist();
             browser.element('.qbTbody').waitForVisible();
             return browser.element('.qbRow').waitForVisible();
         }},
@@ -353,6 +354,12 @@
         openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            //If tablesList is not visible then again navigate to report page
+            if (!browser.element('.tablesList .leftNavLabel').isExisting()) {
+                browser.url(requestRecordPageEndPoint);
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            }
             return formsPO.waitForViewFormsTableLoad();
         }},
 

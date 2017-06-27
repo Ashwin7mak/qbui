@@ -65,6 +65,9 @@ export const QB_GRID = Object.assign({}, LARGE_ABSOLUTE_CENTERED_SPINNER, {zInde
 // Used in the left navbar when apps or tables are loading
 export const LEFT_NAV_BAR =  LARGE_RELATIVE_LIGHT_SPINNER;
 
+// used in the change user role modal
+export const CHANGE_ROLE = LARGE_ABSOLUTE_CENTERED_SPINNER;
+
 // Used in the trowser content loading
 export const TROWSER_CONTENT =  LARGE_RELATIVE_SPINNER;
 
@@ -88,5 +91,8 @@ export const CARD_VIEW_NAVIGATION =  SMALL_PALE_SPINNER;
 
 // Use on automation list screen
 export const AUTOMATION_LIST_LOADING = LARGE_ABSOLUTE_CENTERED_SPINNER;
+
+// Use on the main app home page
+export const APP_HOMEPAGE_LOADING = LARGE_ABSOLUTE_CENTERED_SPINNER;
 
 

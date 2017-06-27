@@ -11,6 +11,7 @@ import * as Formatters from "./grid/AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import * as SCHEMACONSTS from "../../../../client-react/src/constants/schema";
 import {FACET_FIELDS} from "../users/grid/AccountUsersGridFacet";
+import {gridStartTime} from "../../analytics/performanceTimingActions";
 
 /**
  * Action when there is successful user from the backend
@@ -224,9 +225,13 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
         let logger = new Logger();
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
+
         const promise = accountUsersService.getAccountUsers(accountId);
 
         dispatch(fetchingAccountUsers());
+
+        // TODO: Refactor the promise to a Higher order promise to start the timer
+        dispatch(gridStartTime(_.round((window.performance.now() / 1000), 2)));
 
         return promise.then(response => {
             _.each(response.data, item => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import UserFieldValueEditor from '../../../fields/userFieldValueEditor';
-import Select from 'react-select';
+import RoleDropdown from '../../../../../../reuse/client/src/components/app/roleDropdown';
 import './addUserDialog.scss';
 import constants from '../../../../../../common/src/constants';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 
-class addUserPanel extends React.Component {
+export class addUserPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -72,7 +72,7 @@ class addUserPanel extends React.Component {
         return (
             <div className = "panelContainer">
                 <div className="selectUser panel-items">
-                    <dt>Select users</dt>
+                    <dt>{Locale.getMessage('addUserToApp.selectUsers')}</dt>
                     <dd>
                         <UserFieldValueEditor
                             appUsers={appUsers}
@@ -82,22 +82,22 @@ class addUserPanel extends React.Component {
                             searchUsers={this.props.searchUsers}
                             isValid={this.props.isValid}
                             existingUsers={this.props.existingUsers}
+                            searchPromptText={Locale.getMessage('addUserToApp.searchPromptText')}
                             ref={(fieldValueEditor) => {this.fieldValueEditor = fieldValueEditor;}}
                         />
                     </dd>
                 </div>
-                <div className="assignRole panel-items">
-                    <dt>Assign role</dt>
-                    <Select
-                        autofocus
-                        options={this.getRoles()}
-                        searchable={false}
-                        simpleValue
-                        clearable={false}
-                        value={this.state.selectedRole}
-                        onChange={this.updateRole}
-                    />
-                </div>
+                <RoleDropdown
+                    autofocus
+                    titleClass="role-dropdown-title"
+                    options={this.getRoles()}
+                    searchable={false}
+                    simpleValue
+                    clearable={false}
+                    value={this.state.selectedRole}
+                    onChange={this.updateRole}
+                    title={"app.users.assignRole"}
+                />
 
             </div>
         );

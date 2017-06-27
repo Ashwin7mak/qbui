@@ -44,9 +44,9 @@
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
 
-        // initialize the feature switches API, use mock API if config.featureSwitchesMockData is defined
+        // initialize the feature switches API, use master.featureSwitches.json override these with config.featureSwitchConfigOverride if defined
         // (unit tests can override this through the 2nd parameter)
-        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
+        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, true);
         rolesApi = require('../api/quickbase/rolesApi')(config);
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
@@ -88,9 +88,13 @@
                 requestFunctions[routes.APP_USERS] = getAppUsers;
                 requestFunctions[routes.APP_ROLES] = getAppRoles;
                 requestFunctions[routes.APP_COMPONENTS] = getAppComponents;
-
-                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
                 requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
+
+                /***
+                 *  CRUD on feature switches unused until this epic is worked on :
+                 *  https://quickbase.atlassian.net/browse/MC-1189
+                 */
+                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
 
                 requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
                 requestFunctions[routes.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;

@@ -59,11 +59,15 @@ let NavItem = React.createClass({
         if (this.props.selected) {
             classes += " selected";
         }
+
+        // TODO:: Refactor getting the icon font in MC-3596
+        const iconFont = (item.tableIcon === 'favicon' ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY);
+
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
                 {this.props.tableIcon ?
-                    <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={item.tableIcon}/> :
-                    <QBicon icon={item.icon}/>
+                    <Icon iconFont={iconFont} icon={item.tableIcon}/> :
+                    <QBicon icon={item.icon} />
                     }
                 <span className={"leftNavLabel"}>{label}</span>
             </Link>

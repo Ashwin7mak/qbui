@@ -132,7 +132,7 @@ describe('LeftNav', () => {
                 <LeftNav open={false}
                          appsListOpen={false}
                          apps={appsTestData}
-                         selectedAppId={validAppId}
+                         selectedApp={validAppId}
                          items={navItemsTestData}/>
             </MemoryRouter>);
 
