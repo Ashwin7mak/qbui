@@ -61,7 +61,7 @@ class RecordTitleFieldSelection extends React.Component {
         });
 
         return <Select className="recordTitleFieldSelect"
-                       value={this.props.selectedValue}
+                       value={this.props.selectedValue || ""}
                        options={choices}
                        optionRenderer={this.getOption}
                        valueRenderer={this.getValue}
@@ -81,7 +81,8 @@ class RecordTitleFieldSelection extends React.Component {
 
 RecordTitleFieldSelection.propTypes = {
     onChange: PropTypes.func.isRequired,
-    tableInfo: PropTypes.object.isRequired,
+    table: PropTypes.object.isRequired,
+    selectedValue: PropTypes.string
 
 };
 
