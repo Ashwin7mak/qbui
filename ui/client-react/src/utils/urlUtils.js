@@ -144,7 +144,7 @@ const UrlUtils = {
      * @returns {string}
      */
     getTableHomepageLink(appId, tblId) {
-        return StringUtils.format(URL.TABLE_LINK, [appId, tblId])
+        return StringUtils.format(URL.TABLE_LINK, [appId, tblId]);
     },
 
     /**
