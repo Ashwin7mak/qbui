@@ -75,6 +75,7 @@ $default-text-onlight-color:    $color-black-700;
 $text-color: $default-text-onlight-color;   // This is overriding a bootstrap variable. We need to keep it until we go through bootstrap in another pass.
 
 $default-hover-color:           $color-cyan-400;
+$bootstrap-hover-color:         $color-cray-100;
 $page-background-color:         $color-black-200;
 
 // general

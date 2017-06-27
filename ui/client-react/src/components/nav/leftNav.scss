@@ -510,7 +510,7 @@ div.leftNavTooltip {
         flex-direction: row;
 
         > li {
-            flex: 1 0 auto;
+            flex: 1 1 0;
             border-right: 1px solid $leftnav-background-stroke-color;
             &:last-of-type {
                 border-right: none;
