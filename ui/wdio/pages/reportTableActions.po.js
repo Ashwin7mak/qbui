@@ -83,13 +83,13 @@
          */
         selectRecordRowCheckbox : {value: function(recordRowIndex) {
             //get all checkboxes in the report table first column
-            var getAllCheckBoxs = this.reportSelectRowCheckbox.value.filter(function(checkbox) {
+            var getAllCheckBoxes = this.reportSelectRowCheckbox.value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
             });
 
-            if (getAllCheckBoxs !== []) {
-                getAllCheckBoxs[0].waitForVisible();
-                return getAllCheckBoxs[0].click();
+            if (getAllCheckBoxes !== []) {
+                getAllCheckBoxes[0].waitForVisible();
+                return getAllCheckBoxes[0].click();
             } else {
                 throw new Error('Checkbox not found at row ' + recordRowIndex);
             }

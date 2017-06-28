@@ -61,8 +61,8 @@
 
             //TODO: MC-3410 - Need a better way to verify user was removed
             // Check that the user was removed
-            ReportTableActionsPO.selectAllRecordsCheckbox();
-            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+            // ReportTableActionsPO.selectAllRecordsCheckbox();
+            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
@@ -83,6 +83,23 @@
             // Check for the user not removed
             // ReportTableActionsPO.selectAllRecordsCheckbox();
             // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+        });
+
+        /**
+         * Selects multiple users, clicks remove and checks the user count.
+         */
+        it('Should select remove a multiple users and check for the success message', function() {
+
+            // Select mulitple users and click on remove icon
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
+            ReportTableActionsPO.selectRecordRowCheckbox(2);
+
+            UsersTablePage.clickUserRemoveIcon();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            // Click on remove button from the dialogue box
+            expect(modalDialog.modalDialogTitle).toContain("Remove 2 users?");
+            modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
         });
     });
 }());

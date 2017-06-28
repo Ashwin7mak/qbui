@@ -6,7 +6,6 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
-    let leftNavPO = requirePO('leftNav');
     let reportContentPO = requirePO('reportContent');
     let tableCreatePO = requirePO('tableCreate');
 
@@ -51,12 +50,10 @@
             //Verify topNav
             TopNavPO.verifyTopNav(testApp, true, false, false, false);
         });
-
         /**
          * Test Method - checking for usability of topNav on Table homepage
          */
         it('Visibility of topNav on Table with tableHomepage set', function() {
-
             //Select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             // wait for the report content to be visible
@@ -70,7 +67,6 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
-
             //Go to reports page directly
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
@@ -82,6 +78,7 @@
          * Test Method - checking for visibility of topNav on User homepage
          */
         it('Visibility of topNav on User homepage', function() {
+            //Go to users page directly
             e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
 
             //Verify topNav

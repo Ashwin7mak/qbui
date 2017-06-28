@@ -78,5 +78,27 @@
             // Click on cancel button from the dialogue box
             modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
         });
+
+        /**
+         * Selects multiple users, clicks change user role, and selects role
+         */
+        it('Should select multiple users, change role to "Viewer"', function() {
+
+            // Select the checkbox and click on change role icon
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
+            ReportTableActionsPO.selectRecordRowCheckbox(2);
+            UsersTablePage.clickChangeUserRoleIcon();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            // Select user role from the drop down
+            expect(modalDialog.modalDialogTitle).toContain('Change the role of');
+            UsersTablePage.selectRole("Viewer");
+            // Wait for modal to disappear
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            // Click on change role button from the dialogue box
+            modalDialog.clickOnModalDialogBtn(modalDialog.CHANGE_ROLE_BTN);
+
+        });
     });
 }());
