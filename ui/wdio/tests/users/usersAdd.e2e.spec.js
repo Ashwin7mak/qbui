@@ -121,8 +121,7 @@
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-                var appName = testApp.name;
-                expect(modalDialog.modalDialogTitle).toContain(appName);
+                expect(modalDialog.modalDialogTitle).toContain(testApp.name);
                 // Verify Add new user button disabled
                 expect(modalDialog.modalDialogDisabledBtn.isEnabled()).toBe(false);
                 // Click Cancel
