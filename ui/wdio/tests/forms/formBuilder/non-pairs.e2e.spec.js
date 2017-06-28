@@ -95,7 +95,7 @@
             });
 
             // one-offs
-/*
+
             it('drag a new field onto the form & verify that it is inserted into that position on the form', function() {
                 let newField = formBuilderPO.fieldTokenTitle.getText();
                 let fields = formBuilderPO.getFieldLabels();
@@ -446,7 +446,7 @@
                 // verify that the previous EXISTING search term is still present
                 expect(formBuilderPO.searchInput.getAttribute("value")).toBe(newLabel);
             });
-*/
+
             it('save new multichoice option & verify persistence', function() {
                 formBuilderPO.dragNewFieldOntoForm(
                     formBuilderPO.getFieldToken('Choice list'),
