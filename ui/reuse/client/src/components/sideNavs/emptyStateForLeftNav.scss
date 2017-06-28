@@ -1,0 +1,42 @@
+@import "../../assets/css/qbVariables";
+
+.emptyState {
+    text-align: center;
+    border: $stroke-width-thin dashed $emptystate-border-color;
+    height: 160px;
+    margin-left: 9px;
+    margin-right: 6px;
+    padding-top: 16px;
+
+    .createNewIcon {
+        .addNewIcon {
+            font-size: 50px;
+            color: $add-user-button;
+            padding-top: 12px;
+
+            &:hover {
+                color: $default-hover-color;
+            }
+
+            &:active {
+                color: $edit-icon-normal-color;
+            }
+        }
+
+        .iconMessage {
+            height: 30px;
+            font-size: $size-iconfont-small;
+            color: $add-user-button;
+            padding-top: 11px;
+            margin-left: 11px;
+
+            &:hover {
+                color: $default-hover-color;
+            }
+
+            &:active {
+                color: $edit-icon-normal-color;
+            }
+        }
+    }
+}
