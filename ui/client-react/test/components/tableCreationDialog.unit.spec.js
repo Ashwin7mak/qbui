@@ -9,6 +9,7 @@ let component;
 let instance;
 let domComponent;
 let mockRoute = 'mockRoute';
+let mockTHPlink = 'mockTHP';
 let mockTableId = 'mockTableId';
 let tableInfo = {name: {value: {}}, description: {value: {}}, tableIcon: {value: {}}, tableNoun: {value: {}}};
 
@@ -21,7 +22,8 @@ const AppHistoryMock = {
 };
 
 const mockUrlUtils = {
-    getAfterTableCreatedLink() {}
+    getAfterTableCreatedLink() {},
+    getTableHomepageLink() { return mockTHPlink; }
 };
 
 const mockParentFunctions = {
@@ -33,7 +35,8 @@ const mockParentFunctions = {
     tableCreated() {},
     hideTableCreationDialog() {},
     updateFormRedirectRoute() {},
-    onTableCreated() {}
+    onTableCreated() {},
+    updateFormRedirectRoute() {}
 };
 
 let app = {
@@ -74,6 +77,7 @@ function buildMockParent() {
                                      hideTableCreationDialog={mockParentFunctions.hideDialog}
                                      createTable={mockParentFunctions.createTable}
                                      onTableCreated={mockParentFunctions.tableCreated}
+                                     updateFormRedirectRoute={mockParentFunctions.updateFormRedirectRoute}
                 />
             );
         }
@@ -93,7 +97,9 @@ describe('TableCreationDialog', () => {
 
         spyOn(mockParentFunctions, 'createTable').and.callThrough();
         spyOn(mockParentFunctions, 'createTableFailed').and.callThrough();
+        spyOn(mockParentFunctions, 'updateFormRedirectRoute').and.callThrough();
         spyOn(mockUrlUtils, 'getAfterTableCreatedLink').and.returnValue(mockRoute);
+        spyOn(mockUrlUtils, 'getTableHomepageLink').and.returnValue(mockTHPlink);
         spyOn(AppHistoryMock.history, 'push');
         spyOn(mockNotificationManager, 'error');
     });
@@ -146,6 +152,8 @@ describe('TableCreationDialog', () => {
         instance.onFinished();
 
         expect(mockParentFunctions.createTable).toHaveBeenCalledWith(app.id, tableInfoResult);
+        expect(mockParentFunctions.updateFormRedirectRoute).toHaveBeenCalledWith(mockTHPlink);
+
         expect(mockUrlUtils.getAfterTableCreatedLink).toHaveBeenCalledWith(app.id, mockTableId);
         expect(AppHistoryMock.history.push).toHaveBeenCalledWith(mockRoute);
     });
