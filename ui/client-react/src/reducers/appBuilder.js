@@ -3,10 +3,11 @@ import _ from 'lodash';
 
 const defaultAppIcon = 'Customer';
 
-const setDefaultAppsProps = {
+const setDefaultSettings = {
     name: '',
     description: '',
-    icon: defaultAppIcon
+    icon: defaultAppIcon,
+    isAppIconChooserOpen: false
 };
 
 const appBuilder = (
@@ -30,7 +31,7 @@ const appBuilder = (
     case types.CREATE_APP_SUCCESS:
         return {
             ...state,
-            ...setDefaultAppsProps,
+            ...setDefaultSettings,
             isSavingApp: false,
             isDialogOpen: false
         };
@@ -51,7 +52,7 @@ const appBuilder = (
     case types.HIDE_APP_CREATION_DIALOG:
         return {
             ...state,
-            ...setDefaultAppsProps,
+            ...setDefaultSettings,
             isDialogOpen: false
         };
 
