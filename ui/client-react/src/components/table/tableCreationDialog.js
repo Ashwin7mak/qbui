@@ -12,6 +12,8 @@ import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 
+import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
+
 export class TableCreationDialog extends Component {
     /**
      * cancel
@@ -51,7 +53,7 @@ export class TableCreationDialog extends Component {
                 NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
             });
 
-    };
+    }
 
     /**
      * check for any validation errors in tableInfo
@@ -62,7 +64,7 @@ export class TableCreationDialog extends Component {
         // form can be saved if the state if the fields is valid, regardless of what previous validation error is being shown
 
         return this.props.tableCreation.edited && !_.findKey(this.props.tableInfo, (field) => field.pendingValidationError);
-    };
+    }
 
     /**
      * get table names for app
@@ -73,7 +75,7 @@ export class TableCreationDialog extends Component {
             appTablesNames = this.props.app.tables.map((table) => table.name);
         }
         return appTablesNames;
-    };
+    }
 
     /**
      * render the multi-step modal dialog for creating a table
