@@ -976,10 +976,9 @@ describe('Report reducer functions', () => {
                 content : {addBefore: true, requestedColumn: requestedColumnId7InColumns},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns.length).toEqual(2);
                     expect(testState[0].data.columns[0].id).toEqual(7);
-                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.columns[1].id).toEqual(6);
                     expect(testState[0].data.columns[0].isHidden).toEqual(false);
                     expect(testState[0].data.fids.length).toEqual(2);
                     expect(testState[0].data.fids[0]).toEqual(7);
@@ -992,11 +991,10 @@ describe('Report reducer functions', () => {
                 content : {addBefore: true, requestedColumn: requestedColumnIdNotInColumns},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns.length).toEqual(4);
+                    expect(testState[0].data.columns.length).toEqual(3);
                     expect(testState[0].data.columns[0].id).toEqual(8);
-                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[2].id).toEqual(6);
-                    expect(testState[0].data.columns[3].id).toEqual(7);
+                    expect(testState[0].data.columns[1].id).toEqual(6);
+                    expect(testState[0].data.columns[2].id).toEqual(7);
                     expect(testState[0].data.fids.length).toEqual(3);
                     expect(testState[0].data.fids[0]).toEqual(8);
                     expect(testState[0].data.fids[1]).toEqual(6);
@@ -1009,10 +1007,9 @@ describe('Report reducer functions', () => {
                 content : {addBefore: false, requestedColumn: requestedColumnId6InColumns},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns.length).toEqual(2);
                     expect(testState[0].data.columns[0].id).toEqual(7);
-                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.columns[1].id).toEqual(6);
                     expect(testState[0].data.fids.length).toEqual(2);
                     expect(testState[0].data.fids[0]).toEqual(7);
                     expect(testState[0].data.fids[1]).toEqual(6);
@@ -1024,11 +1021,10 @@ describe('Report reducer functions', () => {
                 content : {addBefore: false, requestedColumn: requestedColumnIdNotInColumns},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns.length).toEqual(4);
+                    expect(testState[0].data.columns.length).toEqual(3);
                     expect(testState[0].data.columns[0].id).toEqual(6);
                     expect(testState[0].data.columns[1].id).toEqual(7);
-                    expect(testState[0].data.columns[2].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[3].id).toEqual(8);
+                    expect(testState[0].data.columns[2].id).toEqual(8);
                     expect(testState[0].data.fids.length).toEqual(3);
                     expect(testState[0].data.fids[0]).toEqual(6);
                     expect(testState[0].data.fids[1]).toEqual(7);

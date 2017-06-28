@@ -40,7 +40,7 @@ describe('StandardLeftNav', () => {
         const testTitle = 'Test Context Header';
         component = mount(<StandardLeftNav contextHeaderTitle={testTitle} />);
 
-        expect(component.find('.contextHeaderTitle')).toHaveText(testTitle);
+        expect(component.find('.navHeaderTitle')).toHaveText(testTitle);
     });
 
     it('has an area for branding', () => {

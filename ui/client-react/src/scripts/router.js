@@ -79,20 +79,24 @@ store.dispatch(FeatureSwitchActions.getStates());
  *          props - object with any properties to be included when rendering the component (optional)
  **/
 const routes = [
-    {
-        path: ADMIN_ROUTE,
-        component: NavWrapper,
-        routes: [
-            {
-                path: `${ADMIN_ROUTE}/featureSwitches/:id`,
-                component: FeatureSwitchOverridesRoute
-            },
-            {
-                path: `${ADMIN_ROUTE}/featureSwitches`,
-                component: FeatureSwitchesRoute
-            }
-        ]
-    },
+    /***
+     *  Shall be enabled when this epic is worked on :
+     *  https://quickbase.atlassian.net/browse/MC-1189
+     */
+    // {
+    //     path: ADMIN_ROUTE,
+    //     component: NavWrapper,
+    //     routes: [
+    //         {
+    //             path: `${ADMIN_ROUTE}/featureSwitches/:id`,
+    //             component: FeatureSwitchOverridesRoute
+    //         },
+    //         {
+    //             path: `${ADMIN_ROUTE}/featureSwitches`,
+    //             component: FeatureSwitchesRoute
+    //         }
+    //     ]
+    // },
     {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
         component: NavWrapper,
@@ -141,7 +145,7 @@ const routes = [
         ]
     },
     {
-        path: `${BUILDER_ROUTE}/app/:appId/table/:tblId`,
+        path: `${BUILDER_ROUTE}/app/:appId/(table)?/:tblId?/`,
         component: BuilderWrapper,
         routes: [
             {

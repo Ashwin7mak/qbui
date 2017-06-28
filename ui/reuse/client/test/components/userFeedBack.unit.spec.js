@@ -7,7 +7,7 @@ let component;
 const mockI18nMessage = ({message}) => <div className="i18nMessage">{message}</div>;
 const props = {startTabIndex: 4, shouldOpenMenusUp: false};
 
-describe('UserDropDown', () => {
+describe('UserFeedBack', () => {
     beforeEach(() => {
         jasmineEnzyme();
         UserFeedBackRewireAPI.__Rewire__('I18nMessage', mockI18nMessage);
@@ -21,7 +21,7 @@ describe('UserDropDown', () => {
     it('Should have all the necessary mock up', () => {
         expect(component.find('.userFeedBack')).toBePresent();
         expect(component.find('.dropdownToggle')).toBePresent();
-        expect(component.find('.iconTableSturdy-Advertising')).toBePresent();
+        expect(component.find('.iconUISturdy-feedback')).toBePresent();
         expect(component.find('.navLabel')).toBePresent();
         expect(component.find('.dropdown-menu')).toBePresent();
         expect(component.find('.dropdown-menu').children().length).toEqual(2);

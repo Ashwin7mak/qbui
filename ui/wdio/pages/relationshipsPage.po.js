@@ -14,6 +14,7 @@
     let modalDialog = requirePO('/common/modalDialog');
     let notificationContainer = requirePO('/common/notificationContainer');
     let topNavPO = requirePO('topNav');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -230,7 +231,11 @@
                 //TODO: Handle multiple links to parent(s)
                 // Try to find something clickable on the form
                 browser.waitForVisible(linkToParentLocatorString);
-                return browser.element(linkToParentLocatorString).click();
+                browser.element(linkToParentLocatorString).click();
+                this.slideyRightyEl.waitForVisible();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+                //Need this for stabilize DOM
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             }
         }},
 
@@ -260,7 +265,9 @@
             this.iconActionsCloseDrawerButtonEl.waitForVisible();
             this.viewFormTableEl.waitForExist();
             this.iconActionsCloseDrawerButtonEl.click();
-            return browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
+            browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.mediumWaitTimeMs, true);
+            //need this for dom to stabilize
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
@@ -276,7 +283,7 @@
         /**
          * Method to create relationship using add another record button via form builder
          */
-        createRelationshipToParentTable: {value: function(parentTable, selectField) {
+        createRelationshipToParentTable: {value: function(parentTable, parentField, parentRecord, expectedParentRecordValues, expectedChildRecordValues) {
 
             //Select settings -> modify this form
             topNavPO.clickOnModifyFormLink();
@@ -284,20 +291,21 @@
             //Click on add a new record button
             formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
 
-            //Select table from table list of add a record dialog
+            //Select parent table from 'create relationship' dialog
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
 
-            //Select Field form field dropdown
-            if (selectField !== '') {
+            //Select a Field to create relationship to parent table from 'create relationship' dialog
+            if (parentField !== '') {
                 //Click on advanced settings of add a record dialog
                 modalDialog.clickModalDialogAdvancedSettingsToggle();
 
-                //Select field to link to parent table (This will be either titleField or recordId)
-                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+                //Select field to link to parent table (This will be either titleField or recordId or uniqueRequired field)
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, parentField);
             }
 
             //Click Add To form button
             modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+            modalDialog.waitUntilModalDialogSlideAway();
 
             //Verify the get another record got added to the form builder
             expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable);
@@ -306,77 +314,48 @@
             formBuilderPO.save();
             //wait until save success container goes away
             notificationContainer.waitUntilNotificationContainerGoesAway();
-            //verify You land in view form
-            formsPO.waitForViewFormsTableLoad();
-            return topNavPO.settingsBtn.waitForVisible();
-        }},
 
-        /**
-         * Method to select a record via parent picker
-         */
-        selectFromParentPicker: {
-            value: function(parentRecord) {
-                let fields = browser.elements('.formElementContainer .field').value.filter(function(fieldLabel) {
-                    return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
-                });
+            //Select record from parent Picker
+            //click on the edit pencil on the child record
+            formsPO.clickRecordEditPencilInViewForm();
 
-                if (fields !== []) {
-                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').waitForVisible();
-                    fields[0].element('.cellWrapper .multiChoiceContainer .Select-arrow-zone').click();
-                    return formsPO.selectFromList(parentRecord);
-                }
-
-            }},
-
-        /**
-         * Method to click on Relationship link in view record mode
-         */
-        clickOnRelationshipFieldValueLink: {value: function(element) {
-            element.element('span.textField.viewElement.textLink').waitForExist();
-            //Click on the relationship
-            element.element('span.textField.viewElement.textLink').moveToObject();
-            // Needed for stabilize DOm after moveToObject
-            browser.pause(slideyRightyPause);
-            element.element('span.textField.viewElement.textLink').waitForVisible();
-            return element.element('span.textField.viewElement.textLink').click();
-        }},
-
-        /**
-         * Method to verify relationship link in view record mode
-         */
-        verifyParentRecordRelationship: {value: function(expectedParentRecordFieldValues, expectedChildTableRecordValues) {
-            let getRecordValuesByClickingOnRelLink;
-            let getEmbeddedReportChildRecordValues;
-
-            //verify You land in view form since you edited a record from View form after saving
-            browser.element('.viewForm .field').waitForVisible();
-            let fields = browser.elements('.viewForm .field').value.filter(function(fieldLabel) {
-                return fieldLabel.element('.fieldLabel').getAttribute('textContent').includes(e2eConsts.GET_ANOTHER_RECORD);
+            //Select parent picker value
+            const fieldTypes = ['allPhoneFields', 'allParentRecordFields'];
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType, parentRecord);
             });
 
-            if (fields !== []) {
-                //Click on the relationship
-                this.clickOnRelationshipFieldValueLink(fields[0]);
-                //Wait until the view form drawer loads
-                browser.element('.drawer .formTable.section-0').waitForVisible();
+            //Click Save on the form
+            formsPO.clickFormSaveBtn();
+            //Need this as link takes time to show up
+            browser.pause(e2eConsts.mediumWaitTimeMs);
 
-                //Verify the parent record values
-                getRecordValuesByClickingOnRelLink = formsPO.getRecordValuesInViewForm('.drawer .formTable.section-0');
-                expect(getRecordValuesByClickingOnRelLink.sort()).toEqual(expectedParentRecordFieldValues.sort());
+            //verify you see parent link on the view form
+            this.parentRecordLinkEl.waitForVisible();
 
-                //Verify the embeddedReport ie child record values
-                //get first cell value
-                getEmbeddedReportChildRecordValues = reportContentPO.getRecordValues(0, 0);
-                //Just verify the first value to make sure selected record shows up
-                expect(getEmbeddedReportChildRecordValues).toEqual(expectedChildTableRecordValues);
+            //Verify the parent record and embedded child record
+            return this.verifyParentAndEmbeddedChildRecord(expectedParentRecordValues, expectedChildRecordValues);
+        }},
+
+        verifyParentAndEmbeddedChildRecord : {
+            value: function(expectedParentRecordValues, expectedChildRecordValues) {
+                // Click on link to parentRecord link
+                this.clickOnFormFieldLinkToParent();
+
+                // Check you are on the right parent container
+                let actualParentRecordValues = this.getValuesFromFormSection(this.getFormSectionEl(true));
+                expect(actualParentRecordValues.sort()).toEqual(expectedParentRecordValues.sort());
+
+                //Verify the embedded child record values
+                // Confirm the values on the child form is the right record
+                reportContentPO.waitForReportContent();
+                let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
+                expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
 
                 //close the View record drawer
-                browser.element('.closeDrawer').click();
-                //wait until drawer screen disappear
-                return browser.waitForVisible('.closeDrawer', e2eConsts.longWaitTimeMs, true);
-            }
+                this.closeSlideyRighty();
 
-        }},
+            }},
 
         /**
          * Verift the Get another record relationship dialog selectTables list and select the parentTable
@@ -402,8 +381,8 @@
                     //Click on advanced settings of add a record dialog
                     modalDialog.clickModalDialogAdvancedSettingsToggle();
 
-                    //Select field to link to parent table (This will be either titleField or recordId)
-                    modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+                    //Select field to link to parent table (This will be either titleField or recordId or unique&required fields)
+                    return modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
                 }
                 if (verifyDefaultField !== '') {
                     //Click on advanced settings of add a record dialog
@@ -411,7 +390,7 @@
 
                     //Verify the default field selected
                     modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').waitForVisible();
-                    expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(verifyDefaultField);
+                    return expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(verifyDefaultField);
                 }
             }}
 

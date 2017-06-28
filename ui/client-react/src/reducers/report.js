@@ -395,6 +395,7 @@ const report = (state = [], action) => {
                 }
                 return column;
             });
+            _.remove(currentReport.data.columns, column => {return column.isPlaceholder;});
             _.remove(currentReport.data.fids, fid => {return fid === requestedColumn.id;});
             currentReport.data.fids.splice(fidInsertionIndex, 0, requestedColumn.id);
             reorderColumns(currentReport.data.columns);

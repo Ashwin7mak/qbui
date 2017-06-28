@@ -83,5 +83,21 @@
          */
         wistiaScriptPart1: 'https://fast.wistia.com/embed/medias/zl4za7cf5e.jsonp',
         wistiaScriptPart2: 'https://fast.wistia.com/assets/external/E-v1.js',
+
+
+
+        /**
+         * Override master.featureSwitches by overriding specific features in
+         * prod.override.featureSwitches.json.
+         * Note: Feature Switches are overridden based on their names, ensure overrides
+         * have same name including spacing.
+         */
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/prod.override.featureSwitches.json'
+
+        /**
+         * Note: [Caution] Updating masterOverrideTurnFeaturesOn to be set to true will enable all feature switches to be turned on irrespective of overrides
+         */
+        // masterOverrideTurnFeaturesOn:false
+
     };
 }());

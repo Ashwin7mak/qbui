@@ -36,7 +36,7 @@
         //edit table apply btn
         editTableApplyBtn : {get: function() {return browser.element('button.primaryButton');}},
         //edit table resest btn
-        editTableResetBtn : {get: function() {return browser.element('a.secondaryButton');}},
+        editTableResetBtn : {get: function() {return browser.element('button.secondaryButton');}},
 
         // settings Icon under globalActions
         settingsBtn : {get: function() {return browser.element('.iconUISturdy-settings');}},
@@ -130,11 +130,8 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            //wait until loading screen disappear in leftNav
-
-            loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-            //wait until loading screen disappear in report Content
-            loadingSpinner.waitUntilReportLoadingSpinnerGoesAway();
+            //wait until loading screen disappear
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //Wait until table label displayed
             browser.element('.tablesList .withSecondary .leftNavLabel').waitForVisible();
             return browser.elements('.tablesList .withSecondary .leftNavLabel');
@@ -164,6 +161,7 @@
             if (results !== []) {
                 //Click on filtered table name
                 results[0].click();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
                 //Wat until reports page is visible
                 return reportContentPO.reportContainerEl;
             }
