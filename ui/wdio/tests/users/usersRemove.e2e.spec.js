@@ -48,7 +48,6 @@
          * Selects a single user, clicks remove and checks the user count.
          */
         it('Should select remove a single user and check for the success message', function() {
-
             // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.clickUserRemoveIcon();
@@ -69,7 +68,6 @@
          * Selects a single user, clicks remove, cancels, and checks the user count.
          */
         it('Should select remove a single user and cancel ', function() {
-
             // Select the checkbox and click on remove icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.clickUserRemoveIcon();
@@ -89,11 +87,8 @@
          * Selects multiple users, clicks remove and checks the user count.
          */
         it('Should select remove a multiple users and check for the success message', function() {
-
             // Select mulitple users and click on remove icon
-            ReportTableActionsPO.selectRecordRowCheckbox(1);
-            ReportTableActionsPO.selectRecordRowCheckbox(2);
-
+            ReportTableActionsPO.selectMultipleRecordRowCheckboxes([1, 2]);
             UsersTablePage.clickUserRemoveIcon();
             browser.pause(e2eConsts.shortWaitTimeMs);
 

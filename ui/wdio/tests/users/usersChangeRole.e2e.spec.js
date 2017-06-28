@@ -48,7 +48,6 @@
          * Selects a single user, clicks change user role, and selects role
          */
         it('Should select a single user, change role to "Viewer"', function() {
-
             // Select the checkbox and click on change role icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.clickChangeUserRoleIcon();
@@ -69,7 +68,6 @@
          * Selects a single user, clicks change user role, and cancels
          */
         it('Should select a single user, change role and cancel', function() {
-
             // Select the checkbox and click on change role icon
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.clickChangeUserRoleIcon();
@@ -83,10 +81,8 @@
          * Selects multiple users, clicks change user role, and selects role
          */
         it('Should select multiple users, change role to "Viewer"', function() {
-
             // Select the checkbox and click on change role icon
-            ReportTableActionsPO.selectRecordRowCheckbox(1);
-            ReportTableActionsPO.selectRecordRowCheckbox(2);
+            ReportTableActionsPO.selectMultipleRecordRowCheckboxes([1, 2]);
             UsersTablePage.clickChangeUserRoleIcon();
             browser.pause(e2eConsts.shortWaitTimeMs);
 

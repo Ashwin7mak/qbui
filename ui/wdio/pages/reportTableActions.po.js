@@ -94,6 +94,15 @@
                 throw new Error('Checkbox not found at row ' + recordRowIndex);
             }
         }},
+
+        /**
+         * Select multiple checkboxes
+         */
+        selectMultipleRecordRowCheckboxes : {value : function(recordRowIndexes) {
+            for (var i = 0; i < recordRowIndexes.length; i++) {
+                this.selectRecordRowCheckbox(recordRowIndexes[i]);
+            }
+        }},
     });
 
     module.exports = ReportTableActionsPage;

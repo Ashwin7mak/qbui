@@ -111,6 +111,7 @@
              * Attempts to add a invalid user and cancels
              */
             it('Add new user by invalid user to application and cancel', function() {
+                // Add User with Role to app
                 UsersTablePage.addUserWithRoleToApp(Crap, "None", true);
             });
 
