@@ -57,7 +57,7 @@ export class AppCreationPanel extends Component {
                                  icons={tableIconNames}
                                  name={this.props.appName}
                                  setIconChoice={(icon) => this.props.setAppProperty('icon', icon)}
-                                 listOfIconByNames={tableIconNames}
+                                 listOfIconsByNames={tableIconNames}
                                  listOfIconsByTagNames={tableIconsByTag}
                                  I18nMessage={"tableCreation.typeForSuggestions"}/>
                 </div>

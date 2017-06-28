@@ -31,7 +31,6 @@ class IconChooser extends Component {
      * expand/collapse icon grid
      */
     toggleAllIcons = () =>{
-        console.log('this.props.isOpen: ', this.props.isOpen);
         if (this.props.isOpen) {
             this.props.onClose();
         } else {
@@ -89,7 +88,8 @@ class IconChooser extends Component {
         return nextProps.isOpen !== this.props.isOpen ||
             nextProps.selectedIcon !== this.props.selectedIcon ||
             nextProps.isOpen !== this.props.isOpen ||
-            nextState.filterText !== this.state.filterText;
+            nextState.filterText !== this.state.filterText ||
+            nextState.name !== this.props.name;
     }
 
     /**
@@ -105,14 +105,13 @@ class IconChooser extends Component {
      * display suggested icons in a list
      * @returns {XML}
      */
-    getSuggestedIcons= () => {
+    getSuggestedIcons = () => {
         const name = _.get(this.props, 'name', '').toLowerCase().trim();
 
         if (name === '') {
             return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.I18nMessage}/></div>;
         }
-
-        let suggestedIcons = this.props.listOfIconByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, name, icon)).slice(0, 8);
+        let suggestedIcons = this.props.listOfIconsByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, name, icon)).slice(0, 8);
 
         if (suggestedIcons.length === 0) {
             return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.noSuggestedIcons"/></div>;
@@ -177,7 +176,7 @@ IconChooser.propTypes = {
     /**
      * searches for icons by name
      */
-    listOfIconByNames: PropTypes.func,
+    listOfIconsByNames: PropTypes.func,
     /**
      * current icon name
      */

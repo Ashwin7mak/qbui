@@ -148,14 +148,14 @@ class TableCreationPanel extends Component {
                                       validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
 
                     <IconChooser selectedIcon={this.props.tableInfo && this.props.tableInfo.tableIcon ? this.props.tableInfo.tableIcon.value : null}
+                                 name={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.value : ""}
                                  isOpen={this.props.iconChooserOpen}
                                  onOpen={this.props.openIconChooser}
                                  onClose={this.props.closeIconChooser}
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  icons={tableIconNames}
-                                 name={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.value : ""}
                                  setIconChoice={(icon) => this.props.setTableProperty('tableIcon', icon)}
-                                 listOfIconByNames={tableIconNames}
+                                 listOfIconsByNames={tableIconNames}
                                  listOfIconsByTagNames={tableIconsByTag}
                                  I18nMessage={"tableCreation.typeForSuggestions"} />
 
