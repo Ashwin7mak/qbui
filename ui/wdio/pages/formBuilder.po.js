@@ -2,9 +2,10 @@
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
-let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
+
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
 
@@ -76,7 +77,7 @@ class formBuilderPage {
 
     get firstFieldToken() {
         // The FIRST field in the list of NEW or EXISTING fields (left panel)
-        return browser.element('.rc-tabs-tabpane-active .listOfElementsItem');
+        return browser.element(tab_Field);
     }
 
     get formBuilderContainer() {

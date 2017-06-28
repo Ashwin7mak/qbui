@@ -95,7 +95,7 @@
             });
 
             // one-offs
-
+/*
             it('drag a new field onto the form & verify that it is inserted into that position on the form', function() {
                 let newField = formBuilderPO.fieldTokenTitle.getText();
                 let fields = formBuilderPO.getFieldLabels();
@@ -375,9 +375,12 @@
             });
 
             it('reload page with changes, verify presence of browser alert', function() {
+                // add a new field
                 formBuilderPO.firstFieldToken.click();
                 // wait for selected field visibility (nothing was selected previously)
                 formBuilderPO.selectedField.waitForVisible();
+                // wait a bit because Edge won't generate an alert otherwise...
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 // reload page AFTER change
                 browser.url(browser.getUrl());
                 browser.pause(e2eConsts.shortWaitTimeMs); // give alert time to appear (slow on Edge)
@@ -422,6 +425,8 @@
                 expect(formBuilderPO.search(newLabel).length).toBe(1);
                 //  results to only contain existing fields
                 expect(formBuilderPO.fieldTokenTitle.getText()).toBe(existingLabel);
+                // trying to avoid failure of subsequent click Chrome/SauceLabs (click selects field but doesn't add it)
+                this.searchInput.keys(["Tab"]);
                 // add the field we just removed
                 formBuilderPO.addFirstField();
                 // wait for the NO MATCH text to appear
@@ -441,7 +446,7 @@
                 // verify that the previous EXISTING search term is still present
                 expect(formBuilderPO.searchInput.getAttribute("value")).toBe(newLabel);
             });
-
+*/
             it('save new multichoice option & verify persistence', function() {
                 formBuilderPO.dragNewFieldOntoForm(
                     formBuilderPO.getFieldToken('Choice list'),
@@ -449,14 +454,16 @@
                 // move cursor to end of text in editor & add new option
                 let testOption = "test option";
                 formBuilderPO.multiChoiceEditor.click();
-                formBuilderPO.multiChoiceEditor.keys([
-                    "Command", "ArrowDown", "Command", "Enter", testOption
-                ]);
+                formBuilderPO.multiChoiceEditor.keys(["Command", "ArrowDown", "Command"]);
+                // wait for coursor to go to end of textarea?  It was typing in the middle (not the last line) when all these keys were together...
+                browser.pause(1000);
+                formBuilderPO.multiChoiceEditor.keys(["Enter", testOption]);
                 // save, reopen, select first field
                 formBuilderPO.save().open().selectFieldByIndex(1);
                 let options = formBuilderPO.multiChoiceEditor.getText();
                 expect(options.endsWith(testOption)).toBe(true, 'Expected "' + options + '" to end with "' + testOption);
             });
+
             // todo: it('automatic numbering', function() {
             // MC-3611: QE: add test(s) for automatic numbering of duplicate field names
             // });
