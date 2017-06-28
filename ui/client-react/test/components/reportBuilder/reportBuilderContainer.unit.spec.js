@@ -171,7 +171,7 @@ describe('ReportBuilderContainer', () => {
     });
 
     it('loads report data via API call when report edit is done by hitting URL', () => {
-        spyOn(testPropsAfterReload,'loadReport');
+        spyOn(testPropsAfterReload, 'loadReport');
         component = shallow(<ReportBuilderContainer {...testPropsAfterReload} />);
         expect(testPropsAfterReload.loadReport).toHaveBeenCalled();
     });
