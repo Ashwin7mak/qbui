@@ -132,6 +132,7 @@
                 let stream = getStream();
 
                 let logger = bunyan.createLogger({
+                    timestamp  : '',        // placeholder..ensures timestamp is 1st element outputted in json object
                     name       : name,
                     streams    : [stream],
                     level      : level,
@@ -147,25 +148,38 @@
                     type: 'NODE'
                 });
 
-                //  for each supported Bunyan logging level, add custom log attributes
-                //  to the argument list before logging the message.
+                //  For each supported Bunyan logging level, add custom log attributes to the fields list before
+                //  logging the message.  The fields list is getting updated because there is a need to have the
+                //  'timestamp' as the first attribute in the outputted json structure --> Splunk is looking for
+                //  the 'timestamp' attribute in the 1st 128 characters.
+                //
+                //  NOTE: the fields object is a structure defined on the Logger, which is a Singleton.  With
+                //  separate requests updating that object, there could be concern about a race-condition.  But
+                //  given node is single threaded, the possibility of concurrent requests updating the same
+                //  reference (in this case the fields object) simultaneously is not possible.
                 appLogger.debug = function() {
-                    logger.debug.apply(logger, addCustomArgs(arguments, 'DEBUG'));
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'DEBUG');
+                    logger.debug.apply(logger, arguments);
                 };
                 appLogger.error = function() {
-                    logger.error.apply(logger, addCustomArgs(arguments, 'ERROR'));
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'ERROR');
+                    logger.error.apply(logger, arguments);
                 };
                 appLogger.fatal = function() {
-                    logger.fatal.apply(logger, addCustomArgs(arguments, 'FATAL'));
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'FATAL');
+                    logger.fatal.apply(logger, arguments);
                 };
                 appLogger.info = function() {
-                    logger.info.apply(logger, addCustomArgs(arguments, 'INFO'));
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'INFO');
+                    logger.info.apply(logger, arguments);
                 };
                 appLogger.trace = function() {
-                    logger.trace.apply(logger, addCustomArgs(arguments, 'TRACE'));
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'TRACE');
+                    logger.trace.apply(logger, arguments);
                 };
                 appLogger.warn = function() {
-                    logger.warn.apply(logger, addCustomArgs(arguments, 'WARN'));
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'WARN');
+                    logger.warn.apply(logger, arguments);
                 };
 
                 showBody = getConfig('showBody', false);
@@ -178,48 +192,21 @@
     };
 
     /**
-     * Apply custom arguments to the log entry.  Adding the following attributes to all messages:
+     * Apply custom run-time arguments to the log:
+     *   timestamp:  current time stamp
+     *   lvl:        log level text string
      *
-     * timestamp:  current time stamp
-     * lvl:        log level text string
-     *
-     * @param args
+     * @param fields
      * @param lvl
-     * @returns {Array}
+     * @returns {Merged object}
      */
-    function addCustomArgs(args, lvl) {
-
-        const customArgs = {
+    function applyRunTimeAttributes(fields = {}, lvl) {
+        const customAttributes = {
             timestamp: new Date().toISOString(),
             lvl: lvl
         };
 
-        let argList = [];
-        if (args.length > 0) {
-            // Bunyan expects all serializers to be the first argument when logging a message..otherwise
-            // the serializers will not get called.  This is important to note as we have request and
-            // response object serializers defined, which if not called, will result in the log output
-            // getting cluttered with large req/res objects that include newline characters, making the
-            // log difficult to read.
-            //
-            // Check if the first argument is an object.  If yes, then it most likely is a serializer, so
-            // merge in the custom attributes to the existing object instead of pushing a new entry into
-            // the argument list.
-            if (typeof (args[0]) === 'object') {
-                args[0] = Object.assign(args[0], customArgs);
-            } else {
-                argList.push(customArgs);
-            }
-
-            for (const arg of args) {
-                argList.push(arg);
-            }
-        } else {
-            //  calling bunyan logger without any arguments..just add the custom attributes
-            argList.push(customArgs);
-        }
-
-        return argList;
+        return Object.assign(fields, customAttributes);
     }
 
     /**
