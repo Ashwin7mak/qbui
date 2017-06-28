@@ -26,34 +26,46 @@ class legacyQuickbase {
         return browser.element('.mid a[id="manageAllUsersLink"]');
     }
 
-    // Wait for legacy Quick Base page to fully load
+    /**
+     * Wait for legacy Quick Base page to fully load
+     */
     waitForPageToFullyLoad(){
         this.buttonQBUniversitybDone.waitForVisible();
     }
 
-    //* Dismiss the Quick Base University popup
+    /**
+     * Dismiss the Quick Base University popup
+     */
     dismissQBUniversityPopup(){
         this.buttonQBUniversitybDone.click();
     }
 
-    //* Get page title
+    /**
+     * Get page title
+     */
     getPageTitle() {
         var title = browser.getTitle();
         console.log("==> Quickbase home page title is: " + title);
         return title
     }
 
-    //* Click the Manage billing account link in the AccountAdmin frame
+    /**
+     * Click the Manage billing account link in the AccountAdmin frame
+     */
     clickManageBillingAccountLinkInAcctAdmin() {
         this.linkManageMyBillingAccount.click();
     }
 
-    //* Click the Manage all users link in the AccountAdmin frame
+    /**
+     * Click the Manage all users link in the AccountAdmin frame
+     */
     clickManageAllUsersLinkInAcctAdmin() {
         this.linkManageAllUsersInAcctAdmin.click();
     }
 
-    //* Click the Manage all users link in the Manage Billing Account Summary tab
+    /**
+     * Click the Manage all users link in the Manage Billing Account Summary tab
+     */
     clickManageAllUsersLinkInMBASummaryTab() {
         this.inkManageAllUsersInMBASummary.click();
     }
