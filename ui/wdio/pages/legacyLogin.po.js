@@ -1,7 +1,6 @@
 'use strict';
 
 class legacyLogin {
-
     get fieldUsername() {
         // EmailAddress or User name text field
         browser.element('.UserInput.WithPadding[name="loginid"]').waitForVisible();
