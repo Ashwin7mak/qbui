@@ -753,7 +753,6 @@ export default {
             recordNameHeading: "Ein Rekord in der Tabelle heißt",
             descriptionHeading: "Beschreibung",
             iconHeading: "Symbol",
-            suggestedIconsHeading: "Vorgeschlagene Ikonen",
             searchPlaceholder: "Tabellensymbole suchen ......",
 
             tableNamePlaceholder: "Zum Beispiel, Kunden",
@@ -788,6 +787,7 @@ export default {
             recordName: "Datensatzname"
         },
         iconChooser: {
+            suggestedIconsHeading: "Vorgeschlagene Ikonen"
         },
         settings: {
             header: "Einstellungen",

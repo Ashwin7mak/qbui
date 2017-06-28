@@ -109,12 +109,12 @@ class IconChooser extends Component {
         const name = _.get(this.props, 'name', '').toLowerCase().trim();
 
         if (name === '') {
-            return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.I18nMessage}/></div>;
+            return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.typeForSuggestionsText}/></div>;
         }
         let suggestedIcons = this.props.listOfIconsByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, name, icon)).slice(0, 8);
 
         if (suggestedIcons.length === 0) {
-            return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.noSuggestedIcons"/></div>;
+            return <div className="noSuggestedIcons iconList"><I18nMessage message=this.props.noSuggestedIconsText/></div>;
         }
 
         return (
@@ -157,7 +157,7 @@ class IconChooser extends Component {
                     </div>
                 </div>
                 <div className="dialogFieldTitle suggestedIcons">
-                    <div className="tableFieldTitle"><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
+                    <div className="tableFieldTitle"><I18nMessage message="iconChooser.suggestedIconsHeading"/></div>
                     {this.getSuggestedIcons()}
                 </div>
             </div>);
@@ -170,13 +170,21 @@ IconChooser.propTypes = {
      */
     classes: PropTypes.string,
     /**
+     * sets text for type for suggestion
+     */
+    typeForSuggestionsText: PropTypes.string,
+    /**
+     * sets text for no suggestions
+     */
+    noSuggestedIconsText: PropTypes.string,
+    /**
      * sets the icon
      */
     setIconChoice: PropTypes.func,
     /**
      * searches for icons by name
      */
-    listOfIconsByNames: PropTypes.func,
+    listOfIconsByNames: PropTypes.array,
     /**
      * current icon name
      */
@@ -201,10 +209,6 @@ IconChooser.propTypes = {
      * icon names to include
      */
     icons: PropTypes.arrayOf(PropTypes.string).isRequired,
-    /**
-     * icon selected callback
-     */
-    onSelect: PropTypes.func.isRequired,
     /**
      * icon categorization metadata (if tag includes search text, show icons from icons array)
      */

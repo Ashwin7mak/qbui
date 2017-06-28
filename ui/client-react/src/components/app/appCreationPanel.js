@@ -54,13 +54,14 @@ export class AppCreationPanel extends Component {
                                  onOpen={this.props.openIconChooserForApp}
                                  onClose={this.props.closeIconChooserForApp}
                                  placeHolder="tableCreation.searchPlaceholder"
+                                 typeForSuggestionsText="tableCreation.typeForSuggestions"
+                                 noSuggestedIconsText="tableCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  icons={tableIconNames}
                                  name={this.props.appName}
                                  setIconChoice={(icon) => this.props.setAppProperty('icon', icon)}
                                  listOfIconsByNames={tableIconNames}
-                                 listOfIconsByTagNames={tableIconsByTag}
-                                 I18nMessage={"tableCreation.typeForSuggestions"}/>
+                                 listOfIconsByTagNames={tableIconsByTag} />
                 </div>
             </div>);
     }

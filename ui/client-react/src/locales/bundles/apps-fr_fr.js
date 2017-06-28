@@ -752,7 +752,6 @@ export default {
             recordNameHeading: "Un enregistrement dans le tableau est appelé",
             descriptionHeading: "La description",
             iconHeading: "Icône",
-            suggestedIconsHeading: "Icônes suggérées",
             searchPlaceholder: "Rechercher des icônes...",
 
             tableNamePlaceholder: "Par exemple, les clients",
@@ -787,6 +786,7 @@ export default {
             recordName: "Nom de l'enregistrement"
         },
         iconChooser: {
+            suggestedIconsHeading: "Icônes suggérées"
         },
         settings: {
             header: "Paramètres",

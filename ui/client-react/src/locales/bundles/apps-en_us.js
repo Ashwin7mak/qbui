@@ -762,7 +762,6 @@ export default {
             recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",
-            suggestedIconsHeading: "Suggested Icons",
             searchPlaceholder: "Search table icons...",
 
             tableNamePlaceholder: "For example, Customers",
@@ -797,6 +796,7 @@ export default {
             recordName: "Record Name"
         },
         iconChooser: {
+            suggestedIconsHeading: "Suggested Icons"
         },
         settings: {
             header: "Settings",

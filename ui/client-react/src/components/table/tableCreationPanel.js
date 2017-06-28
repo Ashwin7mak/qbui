@@ -152,13 +152,14 @@ class TableCreationPanel extends Component {
                                  isOpen={this.props.iconChooserOpen}
                                  onOpen={this.props.openIconChooser}
                                  onClose={this.props.closeIconChooser}
-                                 placeHolder="tableCreation.searchPlaceholder"
-                                 font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
-                                 icons={tableIconNames}
                                  setIconChoice={(icon) => this.props.setTableProperty('tableIcon', icon)}
+                                 placeHolder="tableCreation.searchPlaceholder"
+                                 typeForSuggestionsText="tableCreation.typeForSuggestions"
+                                 noSuggestedIconsText="tableCreation.noSuggestedIcons"
+                                 icons={tableIconNames}
+                                 font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  listOfIconsByNames={tableIconNames}
-                                 listOfIconsByTagNames={tableIconsByTag}
-                                 I18nMessage={"tableCreation.typeForSuggestions"} />
+                                 listOfIconsByTagNames={tableIconsByTag} />
 
                     <DialogFieldInput title={Locale.getMessage("tableCreation.descriptionHeading")}
                                       className="tableCreationPanel"
