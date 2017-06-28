@@ -688,7 +688,7 @@ export default {
                 }
             },
             existingFieldsToolTip: "Add {fieldName} to the form",
-            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} are on the form",
+            existingEmptyState: "All {numberOfFields} fields that belong to the {tableName} table are on the form",
             fieldGroups: {
                 text: "Text",
                 numeric: "Number",
@@ -750,12 +750,16 @@ export default {
             finishedButtonLabel: "Create app",
             appNameHeading: "App name",
             appNamePlaceHolder: "For example, \"Order Tracker\"",
-            descriptionHeading: "App description"
+            descriptionHeading: "App description",
+            appCreationFailed: "Unable to create app"
+        },
+        emptyAppState: {
+            message: "You don't have any apps yet.",
+            createNewApp: "Create an app"
         },
         tableCreation: {
             newTablePageTitle: "New Table",
             newTableDescription: "Create a new table when you want to collect a new type of information.",
-            newTableTitle: "Name your table",
 
             summaryDescription: "Each bit of information you want to collect is a field, like Customer Name.",
             summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
