@@ -87,9 +87,8 @@ class IconChooser extends Component {
 
         return nextProps.isOpen !== this.props.isOpen ||
             nextProps.selectedIcon !== this.props.selectedIcon ||
-            nextProps.isOpen !== this.props.isOpen ||
             nextState.filterText !== this.state.filterText ||
-            nextState.name !== this.props.name;
+            nextProps.name !== this.props.name;
     }
 
     /**
@@ -157,7 +156,7 @@ class IconChooser extends Component {
                     </div>
                 </div>
                 <div className="dialogFieldTitle suggestedIcons">
-                    <div className="tableFieldTitle"><I18nMessage message="iconChooser.suggestedIconsHeading"/></div>
+                    <div className="fieldTitle"><I18nMessage message="iconChooser.suggestedIconsHeading"/></div>
                     {this.getSuggestedIcons()}
                 </div>
             </div>);

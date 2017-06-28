@@ -1,5 +1,5 @@
 import React from 'react';
-import {mount, shallow} from 'enzyme';
+import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import IconChooser, {__RewireAPI__ as IconChooserCutsRewireAPI} from 'REUSE/components/iconChooser/iconChooser';
 
@@ -52,7 +52,7 @@ describe('IconChooser', () => {
         spyOn(mockParentFunctions, 'onOpen');
 
         let selectedIcon = icons[1];
-        component = shallow(<IconChooser selectedIcon={selectedIcon}
+        component = mount(<IconChooser selectedIcon={selectedIcon}
                                         isOpen={false}
                                         onOpen={mockParentFunctions.onOpen}
                                         onClose={mockParentFunctions.onClose}
@@ -72,13 +72,14 @@ describe('IconChooser', () => {
         spyOn(mockParentFunctions, 'onClose');
 
         let selectedIcon = icons[0];
-        component = shallow(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={true}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={icons}
-                                        setIconChoice={mockParentFunctions.setIconChoice} />);
+        component = mount(<IconChooser selectedIcon={selectedIcon}
+                                         isOpen={true}
+                                         onOpen={mockParentFunctions.onOpen}
+                                         onClose={mockParentFunctions.onClose}
+                                         font={fontName}
+                                         icons={icons}
+                                         listOfIconsByNames={icons}
+                                         setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.open")).toBePresent();
 
@@ -115,15 +116,16 @@ describe('IconChooser', () => {
         ];
 
         let selectedIcon = icons[0];
-        component = shallow(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={true}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={iconsForFiltering}
-                                        iconsByTag={iconsByTag}
-                                        classes="myClass"
-                                        setIconChoice={mockParentFunctions.setIconChoice} />);
+        component = mount(<IconChooser selectedIcon={selectedIcon}
+                                         isOpen={true}
+                                         onOpen={mockParentFunctions.onOpen}
+                                         onClose={mockParentFunctions.onClose}
+                                         font={fontName}
+                                         listOfIconsByNames={iconsForFiltering}
+                                         icons={iconsForFiltering}
+                                         listOfIconsByTagNames={iconsByTag}
+                                         classes="myClass"
+                                         setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.open")).toBePresent();
 

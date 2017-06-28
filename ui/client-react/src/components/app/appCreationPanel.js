@@ -57,10 +57,12 @@ export class AppCreationPanel extends Component {
                                  typeForSuggestionsText="appCreation.typeForSuggestions"
                                  noSuggestedIconsText="appCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
-                                 icons={tableIconNames}
                                  name={this.props.appName}
                                  setIconChoice={(icon) => this.props.setAppProperty('icon', icon)}
+
+                                 icons={tableIconNames}
                                  listOfIconsByNames={tableIconNames}
+
                                  listOfIconsByTagNames={tableIconsByTag} />
                 </div>
             </div>);
