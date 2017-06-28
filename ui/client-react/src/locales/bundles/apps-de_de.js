@@ -676,7 +676,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
-            existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
+            existingEmptyState: "Alle {numberOfFields} Felder, die zur {tableName} Tabelle gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",
@@ -740,6 +740,10 @@ export default {
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
             descriptionHeading: "App Beschreibung",
             appCreationFailed: "App konnte nicht erstellt werden"
+        },
+        emptyAppState: {
+            message: "Du hast noch keine Apps.",
+            createNewApp: "Erstellen Sie eine App"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
