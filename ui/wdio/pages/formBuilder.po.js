@@ -238,6 +238,7 @@ class formBuilderPage {
         // move to target & jiggle
         target.moveToObject();
         target.moveToObject(5, 5);
+        browser.pause(1000); // initial insertion point is below target, then fields shift down
         // release button
         browser.buttonUp();
         // wait for the new field to replace the target

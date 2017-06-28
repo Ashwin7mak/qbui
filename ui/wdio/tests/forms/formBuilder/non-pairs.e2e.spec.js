@@ -96,6 +96,18 @@
 
             // one-offs
 
+            it('drag a new field onto the form & verify that it is inserted into that position on the form', function() {
+                let newField = formBuilderPO.fieldTokenTitle.getText();
+                let fields = formBuilderPO.getFieldLabels();
+                let expectedFields = [newField, ...fields];
+                // verify (hope) that the first field label (where new field will be inserted) doesn't already match new field label
+                expect(fields[0]).not.toEqual(newField);
+                // drag first new field token onto first field on form
+                let newFields = formBuilderPO.dragNewFieldOntoForm(formBuilderPO.firstFieldToken, formBuilderPO.firstField);
+                // verify that the new field is inserted at the position it was dragged to
+                expect(newFields).toEqual(expectedFields);
+            });
+
             it('add a new field from the collapsed NEW FIELDS panel', function() {
                 // verify that there are initially no collapsed field tokens
                 formBuilderPO.fieldTokenCollapsed.waitForExist(null, true);
@@ -315,18 +327,6 @@
                 expect(formBuilderPO.tab_Active.getText()).toBe("Existing");
             });
 
-            it('drag a new field onto the form & verify that it is inserted into that position on the form', function() {
-                let newField = formBuilderPO.fieldTokenTitle.getText();
-                let fields = formBuilderPO.getFieldLabels();
-                let expectedFields = [newField, ...fields];
-                // verify (hope) that the first field label (where new field will be inserted) doesn't already match new field label
-                expect(fields[0]).not.toEqual(newField);
-                // drag first new field token onto first field on form
-                let newFields = formBuilderPO.dragNewFieldOntoForm(formBuilderPO.firstFieldToken, formBuilderPO.firstField);
-                // verify that the new field is inserted at the position it was dragged to
-                expect(newFields).toEqual(expectedFields);
-            });
-
             it('cancel & save via confirmation dialog, verify view form & save', function() {
                 // add the first new field item to the form
                 formBuilderPO.firstFieldToken.click();
@@ -370,7 +370,7 @@
             it('cancel w/o changes, verify view form & lack of confirmation/browser alert', function() {
                 // click on CANCEL in the modified form
                 formBuilderPO.cancelBtn.click();
-                // re-open the vorm builder (which would be impossible if a modal dlg or alert were displayed
+                // re-open the form builder (which would be impossible if a modal dlg or alert were displayed
                 formBuilderPO.open();
             });
 
@@ -380,7 +380,7 @@
                 formBuilderPO.selectedField.waitForVisible();
                 // reload page AFTER change
                 browser.url(browser.getUrl());
-                browser.pause(1000); // give alert a second to appear (slow on Edge)
+                browser.pause(e2eConsts.shortWaitTimeMs); // give alert time to appear (slow on Edge)
                 // implicit verification: this line will fail if an alert is NOT present
                 browser.alertDismiss();
             });
@@ -424,6 +424,8 @@
                 expect(formBuilderPO.fieldTokenTitle.getText()).toBe(existingLabel);
                 // add the field we just removed
                 formBuilderPO.addFirstField();
+                // wait for the NO MATCH text to appear
+                formBuilderPO.emptySearchResult.waitForExist();
                 // verify the NO MATCH text
                 expect(formBuilderPO.emptySearchResult.getText()).toBe('No fields match "' + newLabel + '"');
                 // click on the NEW tab
@@ -452,11 +454,9 @@
                 ]);
                 // save, reopen, select first field
                 formBuilderPO.save().open().selectFieldByIndex(1);
-                formBuilderPO.multiChoiceEditor.waitForExist();
                 let options = formBuilderPO.multiChoiceEditor.getText();
                 expect(options.endsWith(testOption)).toBe(true, 'Expected "' + options + '" to end with "' + testOption);
             });
-
             // todo: it('automatic numbering', function() {
             // MC-3611: QE: add test(s) for automatic numbering of duplicate field names
             // });
