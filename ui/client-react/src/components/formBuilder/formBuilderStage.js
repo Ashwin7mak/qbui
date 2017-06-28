@@ -19,7 +19,7 @@ import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
 
 import './formBuilderStage.scss';
 
-class FormBuilderStage extends React.Component {
+export class FormBuilderStage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -32,14 +32,22 @@ class FormBuilderStage extends React.Component {
         this.setState({open: !this.state.open});
     }
 
+    /**
+     * On selection of a field as title field
+     * 1. make the picker uneditable
+     * 2. reset the required prop on the previously selected record title field (only if that value was set for the purpose of record title field selection during this form session)
+     * 3. set the required prop on the newly selected record title field
+     * 4. update the recordTitleFieldId on the table
+     * @param fieldId
+     */
     onChangeTitleField(fieldId) {
         this.setState({editingStage: false});
-        //reset the previously selected field's required prop only if a particular prop was set on it
+
         let previousTitleField = _.find(this.props.fields, field => field.id === this.props.table.recordTitleFieldId);
         if (previousTitleField && previousTitleField.isRequiredForRecordTitleField === true) {
             this.props.setRequiredPropForRecordTitleField(this.props.table.appId, this.props.table.id, previousTitleField.id, false);
         }
-        //update the recordTitleFieldId on the table and update field's property as required.
+
         let newTableInfo = _.clone(this.props.table);
         newTableInfo.recordTitleFieldId = fieldId;
         this.props.updateAppTableProperties(this.props.table.appId, this.props.table.id, newTableInfo);
@@ -86,7 +94,7 @@ class FormBuilderStage extends React.Component {
 
         let tableName = this.props.table ? this.props.table.name : "";
         let headline = <h4 className="formHeader"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.table.tableIcon} />
-                        <span className="heading">Form for {tableName}</span>
+                        <I18nMessage message ="builder.formBuilder.stage.title" tableName={this.props.table.name}/>
                     </h4>;
 
         return <Stage stageHeadline={headline} className="formStage" open={this.state.open}>

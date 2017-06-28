@@ -125,7 +125,7 @@ describe('Form Actions load form error functions', () => {
         });
     });
 
-    it('test promise reject handling updateForm', (done) => {
+    xit('test promise reject handling updateForm', (done) => {
         const store = mockStore({});
         return store.dispatch(updateForm(1, 2, VIEW, {})).then(
             () => {
@@ -141,7 +141,7 @@ describe('Form Actions load form error functions', () => {
             }
         );
     });
-    it('test promise reject handling createForm', (done) => {
+    xit('test promise reject handling createForm', (done) => {
         const store = mockStore({});
         return store.dispatch(createForm(1, 2, VIEW, {})).then(
             () => {
