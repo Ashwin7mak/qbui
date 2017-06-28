@@ -4,13 +4,13 @@
 class automationsSettings {
 
     get pageTitle() {
-        return browser.element('.automationSettings .automationListSettingsStage');
+        let elementControlWrapper = require('../common/controls/elementControlWrapper.po');
+        return new elementControlWrapper('.automationSettings .automationListSettingsStage');
     }
 
     get automationsTable() {
-        let Table = require('../../controls/tableControlWrapper.js');
-        let tableControl = new Table('//*[@class="automationSettings--table table table-hover"]');
-        return tableControl;
+        let AutomationsGrid = require('./automationsTableControlWrapper.po');
+        return new AutomationsGrid();
     }
 }
 
