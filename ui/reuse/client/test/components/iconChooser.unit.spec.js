@@ -1,23 +1,35 @@
 import React from 'react';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import IconChooser from 'REUSE/components/iconChooser/iconChooser';
+import IconChooser, {__RewireAPI__ as IconChooserCutsRewireAPI} from 'REUSE/components/iconChooser/iconChooser';
 
 let component;
 
 const mockParentFunctions = {
     onOpen() {},
     onClose() {},
-    onSelect() {}
+    setIconChoice() {}
 };
 
 let icons = ['a', 'b', 'c', 'd', 'e'];
 
 let fontName = 'someFont';
 
+const mockLocale = {
+    locale: {getMessage() {}}
+};
+
 describe('IconChooser', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        IconChooserCutsRewireAPI.__Rewire__('I18nMessage', ({message}) => <div className="mockMessage">{message}</div>);
+        IconChooserCutsRewireAPI.__Rewire__('Locale', mockLocale.locale);
+    });
+
+    afterEach(() => {
+        jasmineEnzyme();
+        IconChooserCutsRewireAPI.__ResetDependency__('I18nMessage');
+        IconChooserCutsRewireAPI.__ResetDependency__('Locale');
     });
 
     it('renders closed icon chooser', () => {
@@ -25,12 +37,12 @@ describe('IconChooser', () => {
         let selectedIcon = icons[0];
 
         component = mount(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={false}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={icons}
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                         isOpen={false}
+                                         onOpen={mockParentFunctions.onOpen}
+                                         onClose={mockParentFunctions.onClose}
+                                         font={fontName}
+                                         icons={icons}
+                                         setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.closed")).toBePresent();
         expect(component.find(`.iconChooser.closed .showAllToggle .qbIcon.${fontName}-${selectedIcon}`)).toBePresent();
@@ -40,13 +52,13 @@ describe('IconChooser', () => {
         spyOn(mockParentFunctions, 'onOpen');
 
         let selectedIcon = icons[1];
-        component = mount(<IconChooser selectedIcon={selectedIcon}
+        component = shallow(<IconChooser selectedIcon={selectedIcon}
                                         isOpen={false}
                                         onOpen={mockParentFunctions.onOpen}
                                         onClose={mockParentFunctions.onClose}
                                         font={fontName}
                                         icons={icons}
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                       setIconChoice={mockParentFunctions.setIconChoice} />);
 
         let toggle = component.find(".iconChooser.closed .showAllToggle").at(0);
         toggle.simulate('click');
@@ -56,17 +68,17 @@ describe('IconChooser', () => {
     });
 
     it('renders an expanded chooser, selects an icon', () => {
-        spyOn(mockParentFunctions, 'onSelect');
+        spyOn(mockParentFunctions, 'setIconChoice');
         spyOn(mockParentFunctions, 'onClose');
 
         let selectedIcon = icons[0];
-        component = mount(<IconChooser selectedIcon={selectedIcon}
+        component = shallow(<IconChooser selectedIcon={selectedIcon}
                                         isOpen={true}
                                         onOpen={mockParentFunctions.onOpen}
                                         onClose={mockParentFunctions.onClose}
                                         font={fontName}
                                         icons={icons}
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                        setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.open")).toBePresent();
 
@@ -77,10 +89,10 @@ describe('IconChooser', () => {
         let selectIconIndex = 2;
         renderedIcons.at(selectIconIndex).simulate('click');
 
-        expect(mockParentFunctions.onSelect).toHaveBeenCalledWith(icons[selectIconIndex]);
+        expect(mockParentFunctions.setIconChoice).toHaveBeenCalledWith(icons[selectIconIndex]);
         expect(mockParentFunctions.onClose).toHaveBeenCalled();
 
-        mockParentFunctions.onSelect.calls.reset();
+        mockParentFunctions.setIconChoice.calls.reset();
         mockParentFunctions.onClose.calls.reset();
     });
 
@@ -103,7 +115,7 @@ describe('IconChooser', () => {
         ];
 
         let selectedIcon = icons[0];
-        component = mount(<IconChooser selectedIcon={selectedIcon}
+        component = shallow(<IconChooser selectedIcon={selectedIcon}
                                         isOpen={true}
                                         onOpen={mockParentFunctions.onOpen}
                                         onClose={mockParentFunctions.onClose}
@@ -111,7 +123,7 @@ describe('IconChooser', () => {
                                         icons={iconsForFiltering}
                                         iconsByTag={iconsByTag}
                                         classes="myClass"
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                        setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.open")).toBePresent();
 
