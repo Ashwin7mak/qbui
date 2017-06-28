@@ -23,7 +23,7 @@ const AppHistoryMock = {
 
 const mockUrlUtils = {
     getAfterTableCreatedLink() {},
-    getTableHomepageLink() { return mockTHPlink; }
+    getTableHomepageLink() {return mockTHPlink;}
 };
 
 const mockParentFunctions = {
@@ -35,8 +35,7 @@ const mockParentFunctions = {
     tableCreated() {},
     hideTableCreationDialog() {},
     updateFormRedirectRoute() {},
-    onTableCreated() {},
-    updateFormRedirectRoute() {}
+    onTableCreated() {}
 };
 
 let app = {
