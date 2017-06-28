@@ -675,7 +675,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
-            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à {tableName} sont sur le formulaire",
+            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à la table {tableName} sont sur le formulaire",
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
@@ -737,12 +737,16 @@ export default {
             finishedButtonLabel: "Créer une application",
             appNameHeading: "Nom de l'application,",
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
-            descriptionHeading: "Description de l'application"
+            descriptionHeading: "Description de l'application",
+            appCreationFailed: "Impossible de créer une application"
+        },
+        emptyAppState: {
+            message: "Vous n'avez pas encore d'applications.",
+            createNewApp: "Créer une application"
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
             newTableDescription: "Créer une nouvelle table lorsque vous souhaitez collecter un nouveau type d'information.",
-            newTableTitle: "Nommez votre table",
 
             summaryDescription: "Chaque bit d'information que vous souhaitez collecter est un champ.",
             summaryTitle: "Faites glisser et déposez les champs que vous souhaitez ajouter à votre table sur le formulaire. Vous pouvez organiser les champs dans l'ordre que vous souhaitez que les gens les utilisent.",
