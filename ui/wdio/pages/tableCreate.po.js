@@ -489,7 +489,6 @@
             expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
 
             //check the expected list fields on the record title field picker drop down
-            //pickerfield.click();
             modalDialog.clickOnDropDownDownArrowToExpand(pickerfield);
             //get list of fields from drop down options
             let dropDownListLabels = modalDialog.allDropDownListOptions;

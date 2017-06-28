@@ -88,7 +88,7 @@
         }
 
         tableFieldValidationTestCases().forEach(function(testCase) {
-            xit('Edit table ' + testCase.message, function() {
+            it('Edit table ' + testCase.message, function() {
 
                 //Select table Table 2
                 tableCreatePO.selectTable('Table 2');
