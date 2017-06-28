@@ -119,7 +119,7 @@
         function generateSalt() {
             var prime_length = 128;
             var diffHell = crypto.createDiffieHellman(prime_length);
-            return diffHell.generateKeys('base64');;
+            return diffHell.generateKeys('base64');
         }
 
         // hashes + encodes secret and salt for use with private apis (these should only be used in testing)
