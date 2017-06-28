@@ -382,7 +382,8 @@
                 // wait a bit because Edge won't generate an alert otherwise...
                 browser.pause(e2eConsts.shortWaitTimeMs);
                 // reload page AFTER change
-                browser.url(browser.getUrl());
+                // browser.url(browser.getUrl());
+                browser.reload();
                 browser.pause(e2eConsts.shortWaitTimeMs); // give alert time to appear (slow on Edge)
                 // implicit verification: this line will fail if an alert is NOT present
                 browser.alertDismiss();
@@ -426,7 +427,7 @@
                 //  results to only contain existing fields
                 expect(formBuilderPO.fieldTokenTitle.getText()).toBe(existingLabel);
                 // trying to avoid failure of subsequent click Chrome/SauceLabs (click selects field but doesn't add it)
-                this.searchInput.keys(["Tab"]);
+                formBuilderPO.searchInput.keys("Tab");
                 // add the field we just removed
                 formBuilderPO.addFirstField();
                 // wait for the NO MATCH text to appear
@@ -454,14 +455,11 @@
                 // move cursor to end of text in editor & add new option
                 let testOption = "test option";
                 formBuilderPO.multiChoiceEditor.click();
-                formBuilderPO.multiChoiceEditor.keys(["Command", "ArrowDown", "Command"]);
-                // wait for coursor to go to end of textarea?  It was typing in the middle (not the last line) when all these keys were together...
-                browser.pause(1000);
-                formBuilderPO.multiChoiceEditor.keys(["Enter", testOption]);
+                formBuilderPO.multiChoiceEditor.keys(["Command", "ArrowUp", "Command", testOption, "Enter"]);
                 // save, reopen, select first field
                 formBuilderPO.save().open().selectFieldByIndex(1);
                 let options = formBuilderPO.multiChoiceEditor.getText();
-                expect(options.endsWith(testOption)).toBe(true, 'Expected "' + options + '" to end with "' + testOption);
+                expect(options.startssWith(testOption)).toBe(true, options + 'didn\'t start with ' + testOption);
             });
 
             // todo: it('automatic numbering', function() {
