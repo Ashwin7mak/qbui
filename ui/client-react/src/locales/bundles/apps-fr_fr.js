@@ -753,6 +753,7 @@ export default {
             descriptionHeading: "La description",
             iconHeading: "Icône",
             suggestedIconsHeading: "Icônes suggérées",
+            searchPlaceholder: "Rechercher des icônes...",
 
             tableNamePlaceholder: "Par exemple, les clients",
             recordNamePlaceholder: "Par exemple, client",
@@ -786,7 +787,6 @@ export default {
             recordName: "Nom de l'enregistrement"
         },
         iconChooser: {
-            searchPlaceholder: "Rechercher des icônes..."
         },
         settings: {
             header: "Paramètres",

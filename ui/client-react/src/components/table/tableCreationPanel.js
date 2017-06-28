@@ -152,6 +152,7 @@ class TableCreationPanel extends Component {
                                  isOpen={this.props.iconChooserOpen}
                                  onOpen={this.props.openIconChooser}
                                  onClose={this.props.closeIconChooser}
+                                 placeHolder="tableCreation.searchPlaceholder"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  icons={tableIconNames}
                                  setIconChoice={(icon) => this.props.setTableProperty('tableIcon', icon)}

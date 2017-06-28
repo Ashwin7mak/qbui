@@ -149,7 +149,7 @@ class IconChooser extends Component {
                 <div className={classes.join(' ')}>
                     <div className="topRow">
                         {this.renderIconToggle()}
-                        <div className="iconSearch searchInputBox"><input type="text" value={this.state.filterText} placeholder={Locale.getMessage("iconChooser.searchPlaceholder")} onChange={this.filterChanged} cols="20"/><Icon icon="search" className="searchIcon"/></div>
+                        <div className="iconSearch searchInputBox"><input type="text" value={this.state.filterText} placeholder={Locale.getMessage(this.props.placeHolder)} onChange={this.filterChanged} cols="20"/><Icon icon="search" className="searchIcon"/></div>
                     </div>
 
                     <div className="allIcons">

@@ -754,6 +754,7 @@ export default {
             descriptionHeading: "Beschreibung",
             iconHeading: "Symbol",
             suggestedIconsHeading: "Vorgeschlagene Ikonen",
+            searchPlaceholder: "Tabellensymbole suchen ......",
 
             tableNamePlaceholder: "Zum Beispiel, Kunden",
             recordNamePlaceholder: "Zum Beispiel, Kunde",
@@ -787,7 +788,6 @@ export default {
             recordName: "Datensatzname"
         },
         iconChooser: {
-            searchPlaceholder: "Tabellensymbole suchen ......"
         },
         settings: {
             header: "Einstellungen",
