@@ -64,7 +64,7 @@ class IconChooser extends Component {
      * get icons matching the current filter text
      */
     getFilteredIcons = () => {
-        return this.props.icons.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, this.state.filterText.toLowerCase().trim(), icon));
+        return this.props.listOfIconsByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, this.state.filterText.toLowerCase().trim(), icon));
     };
 
     /**
@@ -183,7 +183,7 @@ IconChooser.propTypes = {
     /**
      * searches for icons by name
      */
-    listOfIconsByNames: PropTypes.array,
+    listOfIconsByNames: PropTypes.array.isRequired,
     /**
      * current icon name
      */
@@ -204,10 +204,6 @@ IconChooser.propTypes = {
      * icon font to use
      */
     font: PropTypes.string.isRequired,
-    /**
-     * icon names to include
-     */
-    icons: PropTypes.arrayOf(PropTypes.string).isRequired,
     /**
      * icon categorization metadata (if tag includes search text, show icons from icons array)
      */

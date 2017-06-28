@@ -157,10 +157,7 @@ class TableCreationPanel extends Component {
                                  typeForSuggestionsText="tableCreation.typeForSuggestions"
                                  noSuggestedIconsText="tableCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
-
-                                 icons={tableIconNames}
                                  listOfIconsByNames={tableIconNames}
-
                                  listOfIconsByTagNames={tableIconsByTag} />
 
                     <DialogFieldInput title={Locale.getMessage("tableCreation.descriptionHeading")}

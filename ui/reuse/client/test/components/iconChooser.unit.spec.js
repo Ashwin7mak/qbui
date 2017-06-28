@@ -37,12 +37,12 @@ describe('IconChooser', () => {
         let selectedIcon = icons[0];
 
         component = mount(<IconChooser selectedIcon={selectedIcon}
-                                         isOpen={false}
-                                         onOpen={mockParentFunctions.onOpen}
-                                         onClose={mockParentFunctions.onClose}
-                                         font={fontName}
-                                         icons={icons}
-                                         setIconChoice={mockParentFunctions.setIconChoice} />);
+                                       isOpen={false}
+                                       onOpen={mockParentFunctions.onOpen}
+                                       onClose={mockParentFunctions.onClose}
+                                       font={fontName}
+                                       listOfIconsByNames={icons}
+                                       setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.closed")).toBePresent();
         expect(component.find(`.iconChooser.closed .showAllToggle .qbIcon.${fontName}-${selectedIcon}`)).toBePresent();
@@ -53,11 +53,11 @@ describe('IconChooser', () => {
 
         let selectedIcon = icons[1];
         component = mount(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={false}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={icons}
+                                       isOpen={false}
+                                       onOpen={mockParentFunctions.onOpen}
+                                       onClose={mockParentFunctions.onClose}
+                                       font={fontName}
+                                       listOfIconsByNames={icons}
                                        setIconChoice={mockParentFunctions.setIconChoice} />);
 
         let toggle = component.find(".iconChooser.closed .showAllToggle").at(0);
@@ -77,7 +77,6 @@ describe('IconChooser', () => {
                                          onOpen={mockParentFunctions.onOpen}
                                          onClose={mockParentFunctions.onClose}
                                          font={fontName}
-                                         icons={icons}
                                          listOfIconsByNames={icons}
                                          setIconChoice={mockParentFunctions.setIconChoice} />);
 
@@ -122,7 +121,6 @@ describe('IconChooser', () => {
                                          onClose={mockParentFunctions.onClose}
                                          font={fontName}
                                          listOfIconsByNames={iconsForFiltering}
-                                         icons={iconsForFiltering}
                                          listOfIconsByTagNames={iconsByTag}
                                          classes="myClass"
                                          setIconChoice={mockParentFunctions.setIconChoice} />);

@@ -59,10 +59,7 @@ export class AppCreationPanel extends Component {
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  name={this.props.appName}
                                  setIconChoice={(icon) => this.props.setAppProperty('icon', icon)}
-
-                                 icons={tableIconNames}
                                  listOfIconsByNames={tableIconNames}
-
                                  listOfIconsByTagNames={tableIconsByTag} />
                 </div>
             </div>);
