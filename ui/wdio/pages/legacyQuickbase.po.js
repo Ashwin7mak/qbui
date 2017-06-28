@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * This file uses the Page Object pattern to define legacy QB page for test
+ */
+
 class legacyQuickbase {
 
     get buttonQBUniversitybDone() {
@@ -29,45 +33,44 @@ class legacyQuickbase {
     /**
      * Wait for legacy Quick Base page to fully load
      */
-    waitForPageToFullyLoad(){
+    waitForPageToFullyLoad() {
         this.buttonQBUniversitybDone.waitForVisible();
+        return this;
     }
 
     /**
      * Dismiss the Quick Base University popup
      */
     dismissQBUniversityPopup(){
-        this.buttonQBUniversitybDone.click();
+        return this.buttonQBUniversitybDone.click();
     }
 
     /**
      * Get page title
      */
     getPageTitle() {
-        var title = browser.getTitle();
-        console.log("==> Quickbase home page title is: " + title);
-        return title
+        return browser.getTitle();
     }
 
     /**
      * Click the Manage billing account link in the AccountAdmin frame
      */
     clickManageBillingAccountLinkInAcctAdmin() {
-        this.linkManageMyBillingAccount.click();
+        return this.linkManageMyBillingAccount.click();
     }
 
     /**
      * Click the Manage all users link in the AccountAdmin frame
      */
     clickManageAllUsersLinkInAcctAdmin() {
-        this.linkManageAllUsersInAcctAdmin.click();
+        return this.linkManageAllUsersInAcctAdmin.click();
     }
 
     /**
      * Click the Manage all users link in the Manage Billing Account Summary tab
      */
     clickManageAllUsersLinkInMBASummaryTab() {
-        this.inkManageAllUsersInMBASummary.click();
+        return this.inkManageAllUsersInMBASummary.click();
     }
 
 }
