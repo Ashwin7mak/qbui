@@ -63,7 +63,7 @@
         var DEFAULT_HEADERS = {};
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var PRIVATE_API_HEADERS = {};
-        var apiSalt = generateSalt(16);
+        var apiSalt = generateSalt();
         var epochTimeNow = getEpochTimeNow();
         PRIVATE_API_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode(epochTimeNow, apiSalt, 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7');
@@ -116,8 +116,10 @@
         }
 
         // generates a salt for use with private apis (these should only be used in testing)
-        function generateSalt(length) {
-            return crypto.randomBytes(length).toString('base64');
+        function generateSalt() {
+            var prime_length = 128;
+            var diffHell = crypto.createDiffieHellman(prime_length);
+            return diffHell.generateKeys('base64');;
         }
 
         // hashes + encodes secret and salt for use with private apis (these should only be used in testing)
