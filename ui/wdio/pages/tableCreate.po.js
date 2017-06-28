@@ -475,6 +475,49 @@
          */
         setDeletePromtTextFieldValue: {value: function(fieldValue) {
             return modalDialog.deletePromptTextField.setValue([fieldValue]);
+        }},
+
+        verifyEditTableTitleFieldDropDown : {value: function(app, table, defaultSelection) {
+            //Select table
+            this.selectTable(table.name);
+            //parse tableId from current url
+            let currentURL = browser.getUrl();
+            let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
+
+            //go to the table settings page for the table
+            this.clickOnModifyTableSettingsLink();
+            let pickerfield = browser.element('.recordTitleFieldSelect');
+            //verify the selected value
+            expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
+
+            //check the expected list fields on the record title field picker drop down
+            //pickerfield.click();
+            modalDialog.clickOnDropDownDownArrowToExpand(pickerfield);
+            //get list of fields from drop down options
+            let dropDownListLabels = modalDialog.allDropDownListOptions;
+            for (let j = 0; j < dropDownListLabels.length; j++) {
+                if ((dropDownListLabels[j] === ('Default to ' + table.name + ' + ID'))) {
+                    delete dropDownListLabels[j];
+                }
+            }
+
+            //get the fields in the table - all of non built in fields + record id should show up
+            e2eBase.tableService.getTableFields(app.id, tableId).then(function(fieldLabel) {
+                let fieldLabels = [];
+                for (let i = 0; i < fieldLabel.fields.length; i++) {
+                    fieldLabels.push(fieldLabel.fields[i].name);
+                }
+                expect(fieldLabels).toContain(arrayContaining(dropDownListLabels));
+            });
+            //select one and reset
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+            this.clickOnEditTableResetBtn();
+            //make sure the selection goes back to default selection
+            expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
+            //select one and apply to test it was saved
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+            this.clickOnEditTableApplyBtn();
+            return expect(pickerfield.element('.Select-value-label').getText()).toEqual(dropDownListLabels[0]);
         }}
 
     });

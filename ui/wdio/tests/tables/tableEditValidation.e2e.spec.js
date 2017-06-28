@@ -88,7 +88,7 @@
         }
 
         tableFieldValidationTestCases().forEach(function(testCase) {
-            it('Edit table ' + testCase.message, function() {
+            xit('Edit table ' + testCase.message, function() {
 
                 //Select table Table 2
                 tableCreatePO.selectTable('Table 2');
@@ -158,44 +158,8 @@
 
                 //Load app into the Browser
                 e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-                //Select table
-                tableCreatePO.selectTable(testCase.table.name);
-                //parse tableId from current url
-                let currentURL = browser.getUrl();
-                let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
-                //go to the table settings page for the table
-                tableCreatePO.clickOnModifyTableSettingsLink();
-                let pickerfield = browser.element('.recordTitleFieldSelect');
-                //verify the selected value
-                expect(pickerfield.element('.Select-value-label').getText()).toEqual(testCase.expectedDefaultSelection);
 
-                //check the expected list fields on the record title field picker drop down
-                pickerfield.click();
-                //get list of fields from drop down options
-                let dropDownListLabels = modalDialog.allDropDownListOptions;
-                for (let j = 0; j < dropDownListLabels.length; j++) {
-                    if ((dropDownListLabels[j] === ('Default to ' + testCase.table.name + ' + ID'))) {
-                        delete dropDownListLabels[j];
-                    }
-                }
-
-                //get the fields in the table - all of non built in fields + record id should show up
-                e2eBase.tableService.getTableFields(testApp.id, tableId).then(function(fieldLabel) {
-                    let fieldLabels = [];
-                    for (let i = 0; i < fieldLabel.fields.length; i++) {
-                        fieldLabels.push(fieldLabel.fields[i].name);
-                    }
-                    expect(fieldLabels).toContain(arrayContaining(dropDownListLabels));
-                });
-                 //select one and reset
-                modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
-                tableCreatePO.clickOnEditTableResetBtn();
-                //make sure the selection goes back to default selection
-                expect(pickerfield.element('.Select-value-label').getText()).toEqual(testCase.expectedDefaultSelection);
-                //select one and apply to test it was saved
-                modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
-                tableCreatePO.clickOnEditTableApplyBtn();
-                expect(pickerfield.element('.Select-value-label').getText()).toEqual(dropDownListLabels[0]);
+                tableCreatePO.verifyEditTableTitleFieldDropDown(testApp, testCase.table, testCase.expectedDefaultSelection);
             });
         });
     });
