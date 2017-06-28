@@ -1,4 +1,3 @@
-'use strict';
 class notificationContainerWindow {
 
     /**
@@ -11,5 +10,9 @@ class notificationContainerWindow {
         return browser.pause(e2eConsts.mediumWaitTimeMs);
     }
 
+    waitForSuccessNotification() {
+        browser.waitForExist('.notification-success', e2eConsts.longWaitTimeMs);
+    }
 }
+
 module.exports = new notificationContainerWindow();
