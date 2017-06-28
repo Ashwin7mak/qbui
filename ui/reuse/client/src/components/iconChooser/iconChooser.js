@@ -31,7 +31,7 @@ class IconChooser extends Component {
      * expand/collapse icon grid
      */
     toggleAllIcons = () =>{
-
+        console.log('this.props.isOpen: ', this.props.isOpen);
         if (this.props.isOpen) {
             this.props.onClose();
         } else {
@@ -48,10 +48,10 @@ class IconChooser extends Component {
     renderIconToggle = () => {
         return (
             <button tabIndex="0" className="showAllToggle" onClick={this.toggleAllIcons} type="button">
-                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon} tooltipTitle={IconUtils.getIconToolTipTitle(this.props.iconsByTag, this.props.selectedIcon)}/>
+                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon} tooltipTitle={IconUtils.getIconToolTipTitle(this.props.listOfIconsByTagNames, this.props.selectedIcon)}/>
                 <Icon icon="caret-down" className="toggleIcon"/>
             </button>);
-    }
+    };
 
     /**
      * search input changed
@@ -59,14 +59,14 @@ class IconChooser extends Component {
      */
     filterChanged = (e) => {
         this.setState({filterText: e.target.value});
-    }
+    };
 
     /**
      * get icons matching the current filter text
      */
     getFilteredIcons = () => {
-        return this.props.icons.filter((icon) => IconUtils.filterMatches(this.props.iconsByTag, this.state.filterText.toLowerCase().trim(), icon));
-    }
+        return this.props.icons.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, this.state.filterText.toLowerCase().trim(), icon));
+    };
 
     /**
      * icon selected callback
@@ -75,8 +75,8 @@ class IconChooser extends Component {
     selectIcon = (icon) => {
         this.toggleAllIcons(); // collapse the icon chooser
 
-        this.props.onSelect(icon);
-    }
+        this.props.setIconChoice(icon);
+    };
 
     /**
      * rendering all the icons is actually fairly slow so do it only when necessary
@@ -109,7 +109,7 @@ class IconChooser extends Component {
         const name = _.get(this.props, 'name', '').toLowerCase().trim();
 
         if (name === '') {
-            return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.typeForSuggestions"/></div>;
+            return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.I18nMessage}/></div>;
         }
 
         let suggestedIcons = this.props.listOfIconByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, name, icon)).slice(0, 8);
@@ -132,7 +132,7 @@ class IconChooser extends Component {
      * @param icon
      */
     selectIcon = (icon) => {
-        this.props.setIconChoice('icon', icon);
+        this.props.setIconChoice(icon);
     };
 
     /**
@@ -154,7 +154,7 @@ class IconChooser extends Component {
                     </div>
 
                     <div className="allIcons">
-                        {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)} type="button"><Icon iconFont={this.props.font} icon={icon} tooltipTitle={IconUtils.getIconToolTipTitle(this.props.iconsByTag, icon)}/></button>)}
+                        {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)} type="button"><Icon iconFont={this.props.font} icon={icon} tooltipTitle={IconUtils.getIconToolTipTitle(this.props.listOfIconsByTagNames, icon)}/></button>)}
                     </div>
                 </div>
                 <div className="dialogFieldTitle suggestedIcons">
@@ -174,10 +174,6 @@ IconChooser.propTypes = {
      * sets the icon
      */
     setIconChoice: PropTypes.func,
-    /**
-     * searches for groups of icons by tag names
-     */
-    listOfIconsByTagNames: PropTypes.func,
     /**
      * searches for icons by name
      */
@@ -213,14 +209,14 @@ IconChooser.propTypes = {
     /**
      * icon categorization metadata (if tag includes search text, show icons from icons array)
      */
-    iconsByTag: PropTypes.arrayOf(PropTypes.shape({
+    listOfIconsByTagNames: PropTypes.arrayOf(PropTypes.shape({
         tag: React.PropTypes.string,
         icons: PropTypes.arrayOf(PropTypes.string)
     }))
 };
 
 IconChooser.defaultProps = {
-    iconsByTag: []
+    listOfIconsByTagNames: []
 };
 
 export default IconChooser;

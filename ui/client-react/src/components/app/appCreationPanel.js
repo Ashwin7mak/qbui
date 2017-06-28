@@ -7,9 +7,10 @@ import * as AppBuilderActions from '../../actions/appBuilderActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
-import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
+
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
 export class AppCreationPanel extends Component {
@@ -54,12 +55,11 @@ export class AppCreationPanel extends Component {
                                  onClose={this.props.closeIconChooserForApp}
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  icons={tableIconNames}
-                                 iconsByTag={tableIconsByTag}
-                                 onSelect={this.selectIcon}
                                  name={this.props.appName}
-                                 setIconChoice={this.props.setAppProperty}
+                                 setIconChoice={(icon) => this.props.setAppProperty('icon', icon)}
                                  listOfIconByNames={tableIconNames}
-                                 listOfIconsByTagNames={tableIconsByTag}/>
+                                 listOfIconsByTagNames={tableIconsByTag}
+                                 I18nMessage={"tableCreation.typeForSuggestions"}/>
                 </div>
             </div>);
     }
