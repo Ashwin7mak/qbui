@@ -154,11 +154,12 @@ export const AppUsersRoute = React.createClass({
         const selectedUserRows = this.props.selectedUserRows.length;
         return selectedUserRows > 0 && (selectedUserRows === this.props.appUsers.length);
     },
-    filterUserByRole(role, noOfUsers) {
+    filterUserByRole(role, noOfUsers, isActive) {
         if (noOfUsers < 1) {return;}
-        let appRoles = _.filter(this.props.appRoles, function(appRole) {
-            return appRole.id === role;
-        });
+        let appRoles = isActive ? (role = '', this.props.appRoles) :
+			_.filter(this.props.appRoles, function(appRole) {
+    return appRole.id === role;
+});
         this.setState({
             appRoles,
             selectedRole: role,

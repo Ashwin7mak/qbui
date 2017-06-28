@@ -21,11 +21,12 @@ class AppSettingsStage extends React.Component {
                 let noOfUsers = appUsers[role.id].length;
                 let roleTitle = (noOfUsers > 1 ? role.name + "s" : role.name);
                 let classes = noOfUsers > 0 ? "appRolesPod selectable" : "appRolesPod";
-                if (self.props.selectedRole === role.id) {classes += ' active';}
+                let selected = false;
+                if (self.props.selectedRole === role.id) {classes += ' active'; selected = true;}
                 usersRoleCount.push(
                     <div className={classes}
                          key={role.id}
-                         onClick={()=>{self.props.filterUserByRole(role.id, noOfUsers);}}>
+                         onClick={()=>{self.props.filterUserByRole(role.id, noOfUsers, selected);}}>
                         <div className="appRolesDivider">
                             <div className="appRolesPodCount">{`${noOfUsers}`}</div>
                             <div className="appRolesPodName">{roleTitle}</div>

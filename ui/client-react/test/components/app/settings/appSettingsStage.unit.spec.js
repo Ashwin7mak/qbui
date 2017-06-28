@@ -65,10 +65,10 @@ describe('AppSettingsStage functions', () => {
     const appOwner = {firstName: "Nic", lastName: "Cage", email: "stanleygoodspeed@fbi.gov"};
     const appOwnerNoEmail = {firstName: "Nic", lastName: "Cage"};
     const appOwnerName = `${appOwner.firstName} ${appOwner.lastName}`;
-    const selectedRole = 11
+    const selectedRole = 11;
     const mockFunction = {
         filterUserByRole: ()=>{}
-    }
+    };
 
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<AppSettingsStage appUsers={appUsers}
@@ -93,17 +93,17 @@ describe('AppSettingsStage functions', () => {
         let appOwnerNameResponse = component.getAppOwnerName();
         expect(appOwnerNameResponse).toEqual(appOwnerName);
     });
-    it ('calls filterUserByRole on click of a role', ()=>{
-        spyOn(mockFunction, 'filterUserByRole')
+    it('calls filterUserByRole on click of a role', ()=>{
+        spyOn(mockFunction, 'filterUserByRole');
         let component = shallow(<AppSettingsStage appUsers={appUsers}
                                                   appRoles={appRoles}
                                                   appOwner={appOwnerNoEmail}
                                                   filterUserByRole={mockFunction.filterUserByRole}
                                                   selectedRole={selectedRole}
-        />)
+        />);
         let viewer = component.find('.selectable').first();
         viewer.simulate('click');
         expect(mockFunction.filterUserByRole).toHaveBeenCalled();
 
-    })
+    });
 });
