@@ -3,6 +3,32 @@ module.exports = class AutomationsService {
         this.automationApi = automationApi;
     }
 
+    * flowNameGenerator() {
+        for (; ;) {
+            yield 'flow_name_' + Math.random().toString(36).substring(7);
+        }
+    }
+
+    /**
+     * Gets the url to Application Settings - Automation page
+     * @param realmName
+     * @param appId
+     */
+    getAppAutomationsSettingsUrl(realmName, appId) {
+        let appAutomationsSettingsUrl = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/settings/app/' + appId + '/automation');
+        return appAutomationsSettingsUrl;
+    }
+
+    getAutomationViewUrl(realmName, appId, automationId) {
+        let automationViewUrl = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/settings/app/' + appId + '/automation/' + automationId + '/view');
+        return automationViewUrl;
+    }
+
+    getAutomationEditViewUrl(realmName, appId, automationId) {
+        let automationEditViewUrl = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/builder/app/' + appId + '/automation/' + automationId);
+        return automationEditViewUrl;
+    }
+
     /**
      * Gets the automations for application
      * @param appId application id
