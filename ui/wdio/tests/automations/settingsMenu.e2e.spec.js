@@ -5,7 +5,6 @@
     let appSettingsList = requirePO('/app/appSettings');
     let automationSettings = requirePO('/automations/automationsSettings');
     let newStackAuthPO = requirePO('newStackAuth');
-    let leftNavPO = requirePO('leftNav');
     let appBuilder = require('../../../test_generators/app.builder.js');
 
     describe('Automations - application settings ', function() {
@@ -44,17 +43,16 @@
         it('should contains menu item that leads to automations settings', function() {
 
             //validate the 'Settings' button is visible
-            expect(appToolbar.appSettingsBtn.isVisible()).toBe(true);
+            expect(appToolbar.appSettingsBtn.isVisible).toBe(true);
 
             //click 'Settings' button and validate that the 'Automation' item is available on the setting list
             appToolbar.appSettingsBtn.click();
-            expect(appSettingsList.automationSettingsBtn.isVisible()).toBe(true);
 
             //click 'Automations' button on settings list
             appSettingsList.automationSettingsBtn.click();
 
             //verify that 'Automations button leads to table of automations
-            expect(automationSettings.pageTitle.getAttribute('textContent')).toBe('Automations');
+            expect(automationSettings.pageTitle.text).toBe('Automations');
             expect(automationSettings.automationsTable.isVisible).toBe(true);
         });
     });

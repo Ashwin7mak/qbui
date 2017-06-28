@@ -81,7 +81,7 @@
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
         //TODO MC-1911 needs to be fixed for the below test to pass
-        xit('Edit a record via table actions edit pencil above the table grid', function() {
+        it('Edit a record via table actions edit pencil above the table grid', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 

@@ -37,14 +37,6 @@ describe('AppsListForLeftNav', () => {
         NavItemRewireAPI.__ResetDependency__('Link');
     });
 
-    it('renders a new app button', () => {
-        component = shallow(<AppsList />);
-
-        expect(component.find(SearchBox).length).toEqual(1);
-        expect(component.find(NavItem).length).toEqual(1);
-        expect(component.find(CreateNewItemButton).length).toEqual(1);
-    });
-
     it('renders a list of apps', () => {
         component = shallow(<AppsList apps={apps}/>);
 
@@ -72,5 +64,34 @@ describe('AppsListForLeftNav', () => {
         instance.createNewApp();
 
         expect(mockFuncs.showAppCreationDialog).toHaveBeenCalled();
+    });
+
+    it('renders a new app button', () => {
+        component = shallow(<AppsList apps={apps}/>);
+
+        expect(component.find(SearchBox).length).toEqual(1);
+        expect(component.find(NavItem).length).toEqual(4);
+        expect(component.find(CreateNewItemButton)).toBePresent();
+        expect(component.find('.emptyState')).not.toBePresent();
+        expect(component.find('.createNewIcon')).not.toBePresent();
+        expect(component.find('.iconMessage')).not.toBePresent();
+    });
+
+    it('renders empty message when there are no apps', () => {
+        component = mount(<AppsList apps={[]}/>);
+
+        expect(component.find(CreateNewItemButton)).not.toBePresent();
+        expect(component.find('.emptyState')).toBePresent();
+        expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
+    });
+
+    it('renders empty message when apps are undefined', () => {
+        component = mount(<AppsList/>);
+
+        expect(component.find(CreateNewItemButton)).not.toBePresent();
+        expect(component.find('.emptyState')).toBePresent();
+        expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
     });
 });
