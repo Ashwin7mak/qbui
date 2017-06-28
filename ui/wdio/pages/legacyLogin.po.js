@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * This file uses the Page Object pattern to define legacy Login page for test
+ */
 class legacyLogin {
     get fieldUsername() {
         // EmailAddress or User name text field
@@ -23,7 +26,6 @@ class legacyLogin {
      * @param password
      */
     singInUser(username, password) {
-        // Login user
         this.enterUsername(username);
         this.enterPassword(password);
         this.clickSignInButton();
@@ -58,7 +60,7 @@ class legacyLogin {
      */
     clickSignInButton() {
         try {
-            this.buttonSignIn.click();
+            return this.buttonSignIn.click();
         } catch (err) {
             browser.logger.error('Error in clickSignInButton function:' + err);
         }
@@ -66,4 +68,3 @@ class legacyLogin {
 
 }
 module.exports = new legacyLogin();
-// export default legacyLogin();
