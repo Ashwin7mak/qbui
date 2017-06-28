@@ -748,7 +748,11 @@ export default {
             appNameHeading: "App name",
             appNamePlaceHolder: "For example, \"Order Tracker\"",
             descriptionHeading: "App description",
-            appCreationFailed: "Unable to create app"
+            appCreationFailed: "Unable to create app",
+
+            searchPlaceholder: "Search app icons...",
+            typeForSuggestions: "Please type an app name to get suggestions",
+            noSuggestedIcons: "There are no suggested icons for this app name"
         },
         emptyAppState: {
             message: "You don't have any apps yet.",

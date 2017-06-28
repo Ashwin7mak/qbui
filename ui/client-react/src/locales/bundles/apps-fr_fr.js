@@ -738,7 +738,11 @@ export default {
             appNameHeading: "Nom de l'application,",
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
             descriptionHeading: "Description de l'application",
-            appCreationFailed: "Impossible de créer une application"
+            appCreationFailed: "Impossible de créer une application",
+
+            searchPlaceholder: "Rechercher les icônes de l'application...",
+            typeForSuggestions: "Tapez un nom d'application pour obtenir des suggestionss",
+            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour le nom de cette application"
         },
         emptyAppState: {
             message: "Vous n'avez pas encore d'applications.",

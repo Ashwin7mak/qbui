@@ -114,7 +114,7 @@ class IconChooser extends Component {
         let suggestedIcons = this.props.listOfIconsByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, name, icon)).slice(0, 8);
 
         if (suggestedIcons.length === 0) {
-            return <div className="noSuggestedIcons iconList"><I18nMessage message=this.props.noSuggestedIconsText/></div>;
+            return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.noSuggestedIconsText}/></div>;
         }
 
         return (

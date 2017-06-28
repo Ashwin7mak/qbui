@@ -53,9 +53,9 @@ export class AppCreationPanel extends Component {
                                  isOpen={this.props.isAppIconChooserOpen}
                                  onOpen={this.props.openIconChooserForApp}
                                  onClose={this.props.closeIconChooserForApp}
-                                 placeHolder="tableCreation.searchPlaceholder"
-                                 typeForSuggestionsText="tableCreation.typeForSuggestions"
-                                 noSuggestedIconsText="tableCreation.noSuggestedIcons"
+                                 placeHolder="appCreation.searchPlaceholder"
+                                 typeForSuggestionsText="appCreation.typeForSuggestions"
+                                 noSuggestedIconsText="appCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  icons={tableIconNames}
                                  name={this.props.appName}
