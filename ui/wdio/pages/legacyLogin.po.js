@@ -25,9 +25,9 @@ class legacyLogin {
      * @param username
      * @param password
      */
-    singInUser(username, password) {
-        this.enterUsername(username);
-        this.enterPassword(password);
+    signInUser(username, password) {
+        this.setUsername(username);
+        this.setPassword(password);
         this.clickSignInButton();
     }
 
@@ -35,9 +35,10 @@ class legacyLogin {
      * Enter username/email address
      * @param username
      */
-    enterUsername(username) {
+    setUsername(username) {
         try {
             this.fieldUsername.setValue(username);
+            return this;
         } catch (err) {
             browser.logger.error('Error in enterUsername function:' + err);
         }
@@ -47,9 +48,10 @@ class legacyLogin {
      * Enter enter password
      * @param password
      */
-    enterPassword(password) {
+    setPassword(password) {
         try {
             this.fieldPassword.setValue(password);
+            return this;
         } catch (err) {
             browser.logger.error('Error in enterPassword function:' + err);
         }
