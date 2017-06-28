@@ -610,6 +610,7 @@ module.exports = function(grunt) {
                         './wdio/tests/forms/formEdit.e2e.spec.js',
                         './wdio/tests/forms/formEditValidation.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/non-pairs-part-2.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
                     ],
