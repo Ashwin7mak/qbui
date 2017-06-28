@@ -27,13 +27,13 @@ export class StandardGridToolBar extends Component {
     };
 
     render() {
-        let hasFacets = this.props.shouldFacet;
-        let hasNavigation = (this.props.totalFilteredItems || this.props.totalItems) > this.props.itemsPerPage;
+        let {shouldFacet, shouldSearch} = this.props;
+
         return (
             <div>
-                <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
+                <div className={"standardGridToolBar " + (shouldFacet ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
-                        {this.props.shouldSearch &&
+                        {shouldSearch &&
                         <GenericFilterSearchBox searchBoxKey={`${this.props.id}_searchBox`}
                                                 placeholder={`Search ${this.props.itemTypePlural}`}
                                                 onChange={this.props.onSearchChange}
@@ -41,7 +41,7 @@ export class StandardGridToolBar extends Component {
                                                 searchTerm={this.props.searchTerm}
                         />
                         }
-                        {hasFacets &&
+                        {shouldFacet &&
                             <div className="standardGridFacet">
                                 <StandardGridFacetsMenu
                                     className="facetMenu"
@@ -58,23 +58,19 @@ export class StandardGridToolBar extends Component {
                     <div className="standardRightToolBar">
                         <div className="standardGridItemsCount">
                             <div className="itemsCount">
-                                {this.props.totalItems !== 0 &&
-                                    <StandardGridItemsCount totalItems={this.props.totalItems}
+                                <StandardGridItemsCount totalItems={this.props.totalItems}
                                                             totalFilteredItems={this.props.totalFilteredItems}
                                                             itemTypePlural={this.props.itemTypePlural}
                                                             itemTypeSingular={this.props.itemTypeSingular}
                                     />
-                                }
                             </div>
                         </div>
                         <div className="standardGridNavigation" >
-                            {hasNavigation &&
-                                <StandardGridNavigation className="standardGridNavigation"
-                                                        getPreviousPage={this.props.getPreviousPage}
-                                                        getNextPage={this.props.getNextPage}
-                                                        id={this.props.id}
-                                />
-                            }
+                            <StandardGridNavigation className="standardGridNavigation"
+                                                    getPreviousPage={this.props.getPreviousPage}
+                                                    getNextPage={this.props.getNextPage}
+                                                    id={this.props.id}
+                            />
                         </div>
                     </div>
                 </div>
@@ -165,7 +161,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         onSearchChange: (searchEvent) => {
             dispatch(StandardGridActions.setSearch(ownProps.id, searchEvent.target.value));
-            dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
+            dispatch(StandardGridActions.doUpdateDebounced(ownProps.id, ownProps.doUpdate));
         },
 
         clearSearchTerm: () => {

@@ -21,18 +21,21 @@ const signOutHref = '/qbase/signout';
  * Alternatively, pass in additional top bar elements by wrapping them with this component as children: <ReDefaultTopNavGlobalActions> <div>CustomMenuItem</div> </ReDefaultTopNavGlobalActions>
  * Check out the propTypes for other values you can change if you need.
  * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
-class DefaultTopNavGlobalActions extends Component {
+export class DefaultTopNavGlobalActions extends Component {
+
     /**
      * A link to sign the user out
      * (MenuItem href is currently incompatible with react-fastclick) */
-    signOutUser() {
+    signOutUser = () => {
         WindowLocationUtils.update(signOutHref);
     }
 
+    //if small break point need to add margin-top to feedback, help
     render() {
         return (
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
+                    {this.props.children}
                     {this.props.hasFeedback &&
                     <li className="link globalAction withDropdown">
                         <UserFeedBack
@@ -41,7 +44,6 @@ class DefaultTopNavGlobalActions extends Component {
                         />
                     </li>
                     }
-                    {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
                             tabIndex={this.props.startTabIndex}
@@ -52,7 +54,8 @@ class DefaultTopNavGlobalActions extends Component {
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     ))}
-                    <li className="link globalAction withDropdown">
+                    <li className="link globalAction"><HelpButton link={this.props.helpButtonLink}/></li>
+                    <li className="link globalAction withUserDropdown">
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
                             changeLocale={this.props.changeLocale}
@@ -62,10 +65,6 @@ class DefaultTopNavGlobalActions extends Component {
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                             position = {"center"}
                         />
-                    </li>
-
-                    <li className="link globalAction">
-                        <HelpButton link={this.props.helpButtonLink}/>
                     </li>
                 </ul>
             </div>

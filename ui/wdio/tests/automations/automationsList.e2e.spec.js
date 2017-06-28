@@ -6,7 +6,7 @@
     let automationSettings = requirePO('/automations/automationsSettings');
     let appBuilder = require('../../../test_generators/app.builder.js');
     let newStackAuthPO = requirePO('newStackAuth');
-    let leftNavPO = requirePO('leftNav');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     let assert = require('assert');
 
@@ -15,14 +15,9 @@
         let realmId;
         let app;
 
-        function* flowNameGenerator() {
-            for (;;) {
-                yield 'flow_name_' + Math.random().toString(36).substring(7);
-            }
-        }
-
-        let emailFlowNames = [flowNameGenerator().next().value, flowNameGenerator().next().value, flowNameGenerator().next().value];
-        let notEmailFlowNames = [flowNameGenerator().next().value, flowNameGenerator().next().value, flowNameGenerator().next().value];
+        let flowNameGenerator = e2eBase.automationsService.flowNameGenerator();
+        let emailFlowNames = [flowNameGenerator.next().value, flowNameGenerator.next().value, flowNameGenerator.next().value];
+        let notEmailFlowNames = [flowNameGenerator.next().value, flowNameGenerator.next().value, flowNameGenerator.next().value];
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -65,27 +60,28 @@
             });
         });
 
-        /**
-         * Before each it block reload the list all report (can be used as a way to reset state between tests)
-         */
         beforeEach(function() {
             return e2ePageBase.loadAppByIdInBrowser(realmName, app.id);
         });
 
-        it('should contain a list of only EMAIL automations for application', function() {
+        it(' should contain a list of only EMAIL automations for application', function() {
+            //navigate to Application Automations Settings page directly with URL
+            e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
 
-            //click 'Settings' button and validate that the 'Automation' item is available on the setting list
-            appToolbar.appSettingsBtn.click();
-            appSettingsList.automationSettingsBtn.click();
-
-            //validate header text
-            expect(automationSettings.automationsTable.header.cells[0]).toBe('Name');
+            //validate table headers
+            let actualHeadersText = automationSettings.automationsTable.headersText;
+            let expectedHeadersText = ["name", "description"];
+            let doesHaveHeaders = expectedHeadersText.every(function(element) {
+                return actualHeadersText.includes(element);
+            });
+            assert.ok(doesHaveHeaders, 'Grid headers does not have required text. Expected list: ' +
+                expectedHeadersText.toString() + ' List from UI: ' + automationSettings.automationsTable.headersText.toString());
 
             //get the list of automations from table
             let counter = 0;
             let actualFlows = [];
-            for (let row of automationSettings.automationsTable.rows) {
-                actualFlows[counter] = row.cells[0];
+            for (let automation of automationSettings.automationsTable.automations) {
+                actualFlows[counter] = automation.name;
                 counter++;
             }
 
@@ -96,6 +92,17 @@
             });
 
             assert.ok(isFlowsListEqual, 'Lists of automation expected to be equal. Expected list: ' + emailFlowNames.toString() + ' List from UI: ' + actualFlows.toString());
+        });
+
+        it(' menu leads to automations list', function() {
+            //click 'Settings' button and validate that the 'Automation' item is available on the setting list
+            appToolbar.appSettingsBtn.click();
+            appSettingsList.automationSettingsBtn.click();
+
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
+            //verify automations table is visible
+            expect(automationSettings.pageTitle.text).toBe('Automations');
         });
     });
 }());

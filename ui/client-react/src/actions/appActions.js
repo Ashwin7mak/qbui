@@ -98,3 +98,7 @@ export const toggleAddToAppSuccessDialog = (isOpen, email) => {
 export const updateAppTableProperties = (appId, tblId, tableInfo) => {
     return event(types.UPDATE_APP_TABLE_PROPS, {appId, tblId, tableInfo});
 };
+
+export const toggleChangeUserRoleDialog = (isOpen) => {
+    return event(types.TOGGLE_CHANGE_USER_ROLE, {isOpen});
+};

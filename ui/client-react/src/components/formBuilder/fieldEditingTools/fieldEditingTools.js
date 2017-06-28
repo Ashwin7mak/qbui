@@ -236,7 +236,7 @@ const mapStateToProps = (state, ownProps) => {
         isDragging = currentForm.isDragging;
     }
     let appId = ownProps.app ? ownProps.app.id : null;
-    let table = getTable(state.app, appId, ownProps.tblId);
+    let table = getTable(state, appId, ownProps.tblId);
     return {
         selectedFields,
         previouslySelectedField,

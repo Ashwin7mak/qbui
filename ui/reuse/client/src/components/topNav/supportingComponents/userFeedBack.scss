@@ -20,4 +20,58 @@
             }
         }
     }
+    .feedBackTitle {
+        display: none
+    }
+
+    @include small-breakpoint {
+        .feedBackTitle {
+            display: inline
+        }
+
+        .dropdown-menu {
+
+            margin-bottom: 0;
+            border-radius: 2px;
+
+            &:before {
+                all: unset;
+            }
+            &:after {
+                top: 0;
+            }
+
+            &:before {
+                position: absolute;
+                bottom: -6px;
+                left: 9px;
+                display: inline-block;
+                border-right: 7px solid transparent;
+                border-top: 7px solid #ffffff;
+                border-left: 7px solid transparent;
+                content: '';
+            }
+
+            li[role="presentation"]{
+                padding: 2px 0;
+            }
+
+            li.divider{
+                margin: 3px 0;
+            }
+        }
+
+        .dropdown-menu[aria-labelledby="nav-right-dropdown"]{
+            &:before {
+                right: auto;
+                left: 9px;
+            }
+
+            &:after {
+                right: auto;
+                left: 9px;
+            }
+        }
+
+    }
 }

@@ -12,53 +12,38 @@ import * as types from '../actions/types';
 let logger = new Logger();
 
 /**
- * Construct reports store payload
- *
- * @param context - context
- * @param type - event type
- * @param content - optional content related to event type
- * @returns {{id: *, type: *, content: *}}
- */
-function event(context, type, content) {
-    let id = context;
-    return {
-        id: id,
-        type: type,
-        content: content || null
-    };
-}
-
-/**
  * Update the route of the report builder.
- * @param context
  * @param route
  */
-export const updateReportRedirectRoute = (context, route) => {
-    return event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route});
+export const updateReportRedirectRoute = route => {
+    return {
+        type: types.UPDATE_REPORT_REDIRECT_ROUTE,
+        content: {route}
+    };
 };
 
 /**
  * Sets isPendingEdit to false.
- * @param context
  */
-export const setReportBuilderPendingEditToFalse = (context) => {
-    return event(context, types.SET_IS_PENDING_EDIT_TO_FALSE);
+export const setReportBuilderPendingEditToFalse = () => {
+    return {
+        type: types.SET_IS_PENDING_EDIT_TO_FALSE
+    };
 };
 
 /**
  * Refresh the fields for the field select menu.
- * @param context
  * @param appId
  * @param tblId
  */
-export const refreshFieldSelectMenu = (context, appId, tblId) => {
+export const refreshFieldSelectMenu = (appId, tblId) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             let fieldsService = new FieldsService();
             fieldsService.getFields(appId, tblId)
                 .then(response => {
                     logger.debug('FieldsService getFields success');
-                    dispatch(event(context, types.REFRESH_FIELD_SELECT_MENU, {response}));
+                    dispatch({type: types.REFRESH_FIELD_SELECT_MENU, content: {response}});
                     resolve();
                 }).catch(error => {
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
@@ -76,7 +61,11 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
  * @param addBeforeColumn
  */
 export const insertPlaceholderColumn = (context, clickedColumnId, addBeforeColumn) => {
-    return event(context, types.INSERT_PLACEHOLDER_COLUMN, {clickedColumnId, addBeforeColumn});
+    return {
+        id: context,
+        type: types.INSERT_PLACEHOLDER_COLUMN,
+        content: {clickedColumnId, addBeforeColumn}
+    };
 };
 
 /**
@@ -86,7 +75,11 @@ export const insertPlaceholderColumn = (context, clickedColumnId, addBeforeColum
  * @param addBefore
  */
 export const addColumnFromExistingField = (context, requestedColumn, addBefore) => {
-    return event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, {requestedColumn, addBefore});
+    return {
+        id: context,
+        type: types.ADD_COLUMN_FROM_EXISTING_FIELD,
+        content: {requestedColumn, addBefore}
+    };
 };
 
 /**
@@ -95,32 +88,43 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
  * @param clickedId
  */
 export const hideColumn = (context, clickedId) => {
-    return event(context, types.HIDE_COLUMN, {clickedId});
+    return {
+        id: context,
+        type: types.HIDE_COLUMN,
+        content: {clickedId}
+    };
 };
 
 /**
  * Enter report builder mode
- * @param context
  */
-export const enterBuilderMode = (context) => {
-    return event(context, types.ENTER_BUILDER_MODE, {});
+export const enterBuilderMode = () => {
+    return {
+        type: types.ENTER_BUILDER_MODE
+    };
 };
 
 /**
  * Exit report builder mode
- * @param context
  */
-export const exitBuilderMode = (context) => {
-    return event(context, types.EXIT_BUILDER_MODE, {});
+export const exitBuilderMode = () => {
+    return {
+        type: types.EXIT_BUILDER_MODE
+    };
 };
 
 /**
  * Move a column based on the source and target ids given.
  * @param context
- * @param sourceIndex and targetIndex
+ * @param sourceLabel
+ * @param targetLabel
  */
-export const moveColumn = (context, params) => {
-    return event(context, types.MOVE_COLUMN, params);
+export const moveColumn = (context, sourceLabel, targetLabel) => {
+    return {
+        id: context,
+        type: types.MOVE_COLUMN,
+        content: {sourceLabel, targetLabel}
+    };
 };
 
 /**
@@ -129,7 +133,11 @@ export const moveColumn = (context, params) => {
  * @param newName - the new report name
  */
 export const changeReportName = (context, newName) => {
-    return event(context, types.CHANGE_REPORT_NAME, {newName});
+    return {
+        id: context,
+        type: types.CHANGE_REPORT_NAME,
+        content: {newName}
+    };
 };
 
 /**
@@ -148,7 +156,7 @@ export const saveReport = (appId, tblId, rptId, reportDef, redirectRoute) => {
                 reportService.updateReport(appId, tblId, rptId, reportDef)
                     .then((response) => {
                         logger.debug('ReportService updateReport success');
-                        dispatch(event(null, types.SET_IS_PENDING_EDIT_TO_FALSE));
+                        dispatch({type: types.SET_IS_PENDING_EDIT_TO_FALSE});
                         NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
                         NotificationManager.success(Locale.getMessage('report.notification.save.success'), Locale.getMessage('success'));
                         resolve();
