@@ -150,6 +150,39 @@ class reportBuilderPage {
         return this;
     }
 
+    addColumnAfterFlow() {
+        this.clickHeaderMenu();
+        this.clickAddColumnAfterMenuOption();
+        this.clickFieldToken();
+        return this;
+    }
+
+    addColumnBeforeFlow() {
+        this.clickHeaderMenu();
+        this.clickAddColumnBeforeMenuOption();
+        this.clickFieldToken();
+        return this;
+    }
+
+    hideColumnFlow() {
+        // open the first headerMenu
+        this.clickHeaderMenu();
+        // click hide option on menu
+        this.clickHideMenuOption();
+        return this;
+    }
+
+    saveAndGetReportContainer() {
+        this.clickSave();
+        this.getReportContainer();
+        return this;
+    }
+
+    dragAndDropFlow(source, target) {
+        // drag 1st column onto 2nd
+        this.getReportLocator(source);
+        this.getReportLocator(target);
+    }
     /**
      * Checks to see if you are in report builder.
      */
