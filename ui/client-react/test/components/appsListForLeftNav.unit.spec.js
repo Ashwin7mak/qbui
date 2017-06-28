@@ -37,14 +37,6 @@ describe('AppsListForLeftNav', () => {
         NavItemRewireAPI.__ResetDependency__('Link');
     });
 
-    it('renders a new app button', () => {
-        component = shallow(<AppsList />);
-
-        expect(component.find(SearchBox).length).toEqual(1);
-        expect(component.find(NavItem).length).toEqual(1);
-        expect(component.find(CreateNewItemButton).length).toEqual(1);
-    });
-
     it('renders a list of apps', () => {
         component = shallow(<AppsList apps={apps}/>);
 
@@ -63,55 +55,43 @@ describe('AppsListForLeftNav', () => {
         expect(component.state().searching).toEqual(false);
     });
 
-    it('will createNewApp if a user has access rights', () => {
+    it('will createNewApp', () => {
         spyOn(mockFuncs, 'showAppCreationDialog');
         component = mount(<AppsList apps={apps}
                                     showAppCreationDialog={mockFuncs.showAppCreationDialog}/>);
 
         instance = component.instance();
-        spyOn(instance, 'allowCreateNewApp').and.returnValue(true);
-
         instance.createNewApp();
 
         expect(mockFuncs.showAppCreationDialog).toHaveBeenCalled();
     });
 
-    it('will NOT createNewApp if a user does not have access rights', () => {
-        spyOn(mockFuncs, 'showAppCreationDialog');
-        component = mount(<AppsList apps={apps}
-                                    showAppCreationDialog={mockFuncs.showAppCreationDialog}/>);
+    it('renders a new app button', () => {
+        component = shallow(<AppsList apps={apps}/>);
 
-        instance = component.instance();
-        spyOn(instance, 'allowCreateNewApp').and.returnValue(false);
-
-        instance.createNewApp();
-
-        expect(mockFuncs.showAppCreationDialog).not.toHaveBeenCalled();
+        expect(component.find(SearchBox).length).toEqual(1);
+        expect(component.find(NavItem).length).toEqual(4);
+        expect(component.find(CreateNewItemButton)).toBePresent();
+        expect(component.find('.emptyState')).not.toBePresent();
+        expect(component.find('.createNewIcon')).not.toBePresent();
+        expect(component.find('.iconMessage')).not.toBePresent();
     });
 
-    it('a user is allowed to create an app', () => {
-        let mockApp = {
-            accessRights: {appRights: ['EDIT_SCHEMA']}
-        };
-        spyOn(mockFuncs, 'getApp').and.returnValue(mockApp);
-        component = mount(<AppsList apps={apps}getApp={mockFuncs.getApp} />);
+    it('renders empty message when there are no apps', () => {
+        component = mount(<AppsList apps={[]}/>);
 
-        instance = component.instance();
-        let result = instance.allowCreateNewApp();
-
-        expect(result).toEqual(true);
+        expect(component.find(CreateNewItemButton)).not.toBePresent();
+        expect(component.find('.emptyState')).toBePresent();
+        expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
     });
 
-    it('a user is NOT allowed to create an app', () => {
-        let mockApp = {
-            accessRights: {appRights: []}
-        };
-        spyOn(mockFuncs, 'getApp').and.returnValue(mockApp);
-        component = mount(<AppsList apps={apps}getApp={mockFuncs.getApp} />);
+    it('renders empty message when apps are undefined', () => {
+        component = mount(<AppsList/>);
 
-        instance = component.instance();
-        let result = instance.allowCreateNewApp();
-
-        expect(result).toEqual(false);
+        expect(component.find(CreateNewItemButton)).not.toBePresent();
+        expect(component.find('.emptyState')).toBePresent();
+        expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
     });
 });

@@ -1,21 +1,24 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-
-import UserDropDown, {__RewireAPI__ as UserDropDownRewireAPI} from 'REUSE/components/topNav/supportingComponents/userDropDown';
+import {UserDropDown, __RewireAPI__ as UserDropDownRewireAPI} from 'REUSE/components/topNav/supportingComponents/userDropDown';
 
 const mockI18nMessage = ({message}) => <div className="i18nMessage">{message}</div>;
+const mockActions = {
+    getLoggedInUserDropDownText() {return true;}
+};
 
 let component;
 
 describe('UserDropDown', () => {
     beforeEach(() => {
         jasmineEnzyme();
-
+        spyOn(mockActions, 'getLoggedInUserDropDownText');
         UserDropDownRewireAPI.__Rewire__('I18nMessage', mockI18nMessage);
     });
 
     afterEach(() => {
+        mockActions.getLoggedInUserDropDownText.calls.reset();
         UserDropDownRewireAPI.__ResetDependency__('I18nMessage');
     });
 

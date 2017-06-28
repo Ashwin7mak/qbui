@@ -8,7 +8,6 @@
     let NewStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
     let UsersTablePage = requirePO('usersTable');
-    let ReportContentPO = requirePO('reportContent');
     let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Users - Application user management table tests: ', function() {

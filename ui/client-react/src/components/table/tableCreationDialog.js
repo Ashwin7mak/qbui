@@ -12,7 +12,7 @@ import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 
-import './tableCreationDialog.scss';
+import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
 
 export class TableCreationDialog extends React.Component {
 
@@ -55,7 +55,7 @@ export class TableCreationDialog extends React.Component {
 
                 // navigate to form builder (no page reload)
 
-                this.props.updateFormRedirectRoute(null);
+                this.props.updateFormRedirectRoute(UrlUtils.getTableHomepageLink(this.props.app.id, tblId));
                 AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
@@ -93,7 +93,7 @@ export class TableCreationDialog extends React.Component {
      */
     render() {
 
-        const classes = ['tableCreationDialog'];
+        const classes = ['tableCreationDialog creationDialog'];
 
         // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
         if (this.props.tableCreation.iconChooserOpen) {
@@ -108,9 +108,8 @@ export class TableCreationDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage("tableCreation.finishedButtonLabel")}
                                  canProceed={this.isValid()}
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle")]}>
-                <div className="tableCreationPanel">
+                <div className="dialogCreationPanel">
                     <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
-                    <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
                     <TableCreationPanel tableInfo={this.props.tableInfo}
                                     iconChooserOpen={this.props.tableCreation.iconChooserOpen}
                                     openIconChooser={this.props.openIconChooser}

@@ -55,11 +55,14 @@ export const loadAppRoles = (appId) => {
     };
 };
 
-export const assignUsersToAppRole = (appId, roleId, userIds) => {
+export const assignUsersToAppRole = (appId, roleId, userDetails) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
         return new Promise((resolve, reject) => {
+            let userIds = userDetails.map((userDetail)=>{
+                return userDetail.id;
+            });
             let logger = new Logger();
             let roleService = new RoleService();
             roleService.assignUsersToAppRole(appId, roleId, userIds).then(
@@ -87,8 +90,8 @@ export const assignUsersToAppRole = (appId, roleId, userIds) => {
     };
 };
 
-export const assignUserToAppRole = (appId, roleId, userId) => {
-    return assignUsersToAppRole(appId, roleId, [userId]);
+export const assignUserToAppRole = (appId, roleId, userDetails) => {
+    return assignUsersToAppRole(appId, roleId, userDetails);
 };
 
 export const removeUsersFromAppRole = (appId, userDetails) => {

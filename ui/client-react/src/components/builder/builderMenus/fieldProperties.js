@@ -207,15 +207,16 @@ export class FieldProperties extends Component {
             this.createNameProperty(this.props.selectedField.name, key++)
         ];
 
-        if (isRecordTitleField) {
-            fieldPropContainers.push(this.createRequiredProperty(true, key++, true));
-            fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
-        } else if (fieldType !== serverTypeConsts.CHECKBOX) {
+        if (fieldType !== serverTypeConsts.CHECKBOX) {
             fieldPropContainers.push(this.createUniqueProperty(this.props.selectedField.unique, key++));
-            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
+        }
+
+        if (isRecordTitleField) {
+            fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++, true));
         } else {
             fieldPropContainers.push(this.createRequiredProperty(this.props.selectedField.required, key++));
         }
+
 
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
 

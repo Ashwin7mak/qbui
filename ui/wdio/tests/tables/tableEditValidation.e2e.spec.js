@@ -5,7 +5,7 @@
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
     let tableCreatePO = requirePO('tableCreate');
-    let modalDialog = requirePO('/common/modalDialog');
+    let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
 
@@ -39,13 +39,11 @@
         });
 
         /**
-         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         * Before All it block load the app.
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
-            //Select table Table 2
-            return e2ePageBase.loadTableByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id);
+            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
         });
 
 
@@ -91,6 +89,10 @@
         tableFieldValidationTestCases().forEach(function(testCase) {
             it('Edit table ' + testCase.message, function() {
 
+                //Select table Table 2
+                tableCreatePO.selectTable('Table 2');
+                reportContentPO.waitForReportContent();
+
                 //Select the table properties of settings of table 1 from global actions gear
                 tableCreatePO.clickOnModifyTableSettingsLink();
 
@@ -104,13 +106,8 @@
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                 });
 
-                //Verify Apply button is disabled
-                expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBe(false);
-                //Verify Reset button is enabled
-                expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBe(true);
-
                 //Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
+                expect(browser.element('.standardLeftNav .navHeaderTitle').getAttribute('textContent')).toContain(existingTableName);
 
                 //Click on reset button in edit table mode
                 tableCreatePO.clickOnEditTableResetBtn();

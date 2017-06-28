@@ -40,6 +40,7 @@ export default {
             users: {
                 addUser: "Hinzufügen ein neu Benutzer",
                 users: "Benutzer",
+                assignRole: "Rolle zuweisen",
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
@@ -55,7 +56,17 @@ export default {
                 userAddError: "Fehler beim Hinzufügen von Benutzer",
                 userRemovingError: "Fehler beim Entfernen des Benutzers",
                 emailBody: "Email Körper geht hier",
-                emailSubject: "E-Mail-Thema geht hier"
+                emailSubject: "E-Mail-Thema geht hier",
+                changeUserRole: "Veränderung {Wert} Rolle",
+                changeUserRoles: "Veränderung {Wert} Rollen",
+                changeUserRoleButton: "Rolle ändern",
+                pluralChangeUserRoleButton: "Rollentausch",
+                userRoleTitle: "Ändern Sie die Rolle von {Wert} Benutzer",
+                pluralUserRoleTitle: "Ändern Sie die Rolle von {Wert} Benutzer",
+                userRoleDescription: "Das Ändern der Rolle kann beeinflussen, was ein Benutzer anzeigen kann.",
+                userRoleText: "Rolle ändern",
+                successUserRole: "{Wert} Die Rolle des Benutzers wurde geändert",
+                pluralSuccessUserRole: "{Wert} Benutzerrollen wurden geändert",
             }
         },
         appMenu: {
@@ -90,6 +101,10 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
+            testAutomation: "Testautomatisierung",
+            copyAutomation: "Kopiere Automation",
+            editAutomation: "Automatisierung bearbeiten",
+            deleteAutomation: "Automatisierung löschen",
             dontDelete: "Nicht löschen",
             deleteThisRecord: "Löschen Sie diesen Datensatz?",
             deleteTheseSwitches: "Löschen sie diesen Schaltet?",
@@ -198,7 +213,8 @@ export default {
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Ein Problem melden",
-                feedbackTooltip: "Teilen Sie Ideen und Fragen"
+                feedbackTooltip: "Teilen Sie Ideen und Fragen",
+                helpTooltip: "Hilfe"
             }
 
         },
@@ -505,15 +521,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "Die App ist im Moment nicht verfügbar in Mercury. ",
-                inQuickBaseClassic: " in Quickbase Classic. ",
-                clickHere: "Öffnen Sie die App"
-            },
-            noApps: {
-                noApps: "Es gibt keine Apps in Mercury. ",
-                addApps: " hinzuzufügen Apps."
-            },
+            appNotFound: "Diese App existiert nicht. Wählen Sie eine andere App aus.",
             errorLoadingReport: {
                 message: "Dieser Bericht ist nicht verfügbar",
                 helpText: "Denn jetzt können Sie versuchen, einen anderen Bericht auswählen.",
@@ -523,10 +531,6 @@ export default {
                 stopGraphic: "Hör auf zu spielen",
                 showAdditionalInfo: "Details anzeigen",
                 hideAdditionalInfo: "Details ausblenden"
-            },
-            noTables: {
-                noTables: "Es gibt keine Tabellen. ",
-                createTablesInQuickBaseClassic: "Erstellen von Tabellen in "
             },
             supportLink: {
                 text: "Wenden Sie sich an unser Care-Team"
@@ -672,7 +676,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
-            existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
+            existingEmptyState: "Alle {numberOfFields} Felder, die zur {tableName} Tabelle gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",
@@ -729,12 +733,21 @@ export default {
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         },
         appCreation: {
-            newApp: 'Neue app'
+            newApp: 'Neue app',
+            newAppPageTitle: 'Neue App',
+            finishedButtonLabel: "App erstellen",
+            appNameHeading: "App Name",
+            appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
+            descriptionHeading: "App Beschreibung",
+            appCreationFailed: "App konnte nicht erstellt werden"
+        },
+        emptyAppState: {
+            message: "Du hast noch keine Apps.",
+            createNewApp: "Erstellen Sie eine App"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
             newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
-            newTableTitle: "Nennen Sie Ihren Tisch",
 
             summaryDescription: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld.",
             summaryTitle: "Drag & Drop Felder, die Sie hinzufügen möchten, um Ihre Tabelle auf das Formular. Sie können die Felder in der Reihenfolge anordnen, in der die Leute sie benutzen möchten.",
@@ -770,7 +783,12 @@ export default {
             tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
             tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen.",
 
-            tableReadyDialogOK: "OK"
+            tableReadyDialogOK: "OK",
+
+            recordTitleFieldHeading: "Das Titelfeld identifiziert jeden Datensatz",
+            recordTitleFieldDescription: "Wählen Sie das Feld aus, das als Überschrift angezeigt wird, wenn Sie einen Datensatz anzeigen oder bearbeiten. Dieses Feld muss ausgefüllt werden.",
+            recordTitleFieldDefault: "Standard auf Noun + ID",
+            recordName: "Datensatzname"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
@@ -814,7 +832,15 @@ export default {
             userSuccessDialogOK: "Nein Danke",
             copied: "Link kopiert",
             messageSubject:"Link zum {App Name} App",
-            messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}"
+            messageBody: "Ich habe dich dazu gebracht {App Name} App. Hier ist ein Link, damit du darauf zugreifen kannst. \N {Verknüpfung}",
+            addUser: "Hinzufügen",
+            selectAUser:"Wählen Sie einen Benutzer aus",
+            selectUsers: "Benutzer auswählen",
+            assignRole: "Rolle zuweisen",
+            searchPromptText: "Tippe um zu suchen",
+            name: "Name",
+            role: "Rolle",
+            userName: "Benutzername"
         }
     }
 };

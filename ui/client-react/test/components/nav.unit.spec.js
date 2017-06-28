@@ -3,6 +3,8 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import * as ShellActions from '../../src/actions/shellActions';
 import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
+import {AppCreationDialog} from '../../src/components/app/appCreationDialog';
+import {TableCreationDialog} from '../../src/components/table/tableCreationDialog';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_TABLE_IDS_KEY} from '../../src/constants/localStorage';
@@ -81,6 +83,7 @@ describe('Nav Unit tests', () => {
         appOwner: null,
         appRoles: null,
         selectedAppId: null,
+        selectedApp: null,
         selectedTableId: null,
         appUsers: {},
         appUnfilteredUsers: {},
@@ -133,6 +136,7 @@ describe('Nav Unit tests', () => {
         spyOn(props, 'enterBuilderMode').and.callThrough();
         spyOn(props, 'loadApps').and.callThrough();
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
+        NavRewireAPI.__Rewire__('AppCreationDialog', AppCreationDialog);
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
@@ -151,6 +155,7 @@ describe('Nav Unit tests', () => {
         props.enterBuilderMode.calls.reset();
         props.loadApps.calls.reset();
         NavRewireAPI.__ResetDependency__('LeftNav');
+        NavRewireAPI.__ResetDependency__('AppCreationDialog');
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
         NavRewireAPI.__ResetDependency__('TopNav');
@@ -165,16 +170,29 @@ describe('Nav Unit tests', () => {
     });
 
     it('test renders large by default', () => {
-        let component = mount(<Nav {...props}/>);
+        let cloneProps = _.cloneDeep(props);
+        cloneProps.selectedAppId = 'mockSelectedAppId';
+        let component = mount(<Nav {...cloneProps}/>);
         let leftNav = component.find('.leftMenu');
         expect(leftNav.length).toBe(1);
         let topNav = component.find('.topNav');
         expect(topNav.length).toBe(1);
+        let appCreationDialog = component.find(AppCreationDialog);
+        expect(appCreationDialog.length).toBe(1);
+        let tableCreationDialog = component.find(TableCreationDialogMock);
+        expect(tableCreationDialog.length).toBe(1);
+    });
+
+    it('will not render TableCreation if mockSelectedAppId is null', () => {
+        let component = mount(<Nav {...props}/>);
+
+        let tableCreationDialog = component.find(TableCreationDialogMock);
+        expect(tableCreationDialog.length).toBe(0);
     });
 
     it('renders the loading screen while no apps are loaded', () => {
         let cloneProps = _.clone(props);
-        cloneProps.isAppsLoading = true;
+        cloneProps.areAppsLoading = true;
 
         let component = TestUtils.renderIntoDocument(<Nav {...cloneProps}/>);
         let domComponent = ReactDOM.findDOMNode(component);
@@ -315,7 +333,7 @@ describe('Nav Unit tests', () => {
         let component = TestUtils.renderIntoDocument(<Nav {...props}location={testLocation} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
         component.navigateToReportBuilder();
 
-        expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);
+        expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });
 
     describe('app and table creation ', () => {

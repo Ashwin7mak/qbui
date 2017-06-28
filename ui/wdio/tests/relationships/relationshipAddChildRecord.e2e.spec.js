@@ -20,6 +20,9 @@ let childRecordsTextValues = [];
 
 describe('Relationships - Add child Record to embedded Table tests: ', () => {
     const defaultParentRecordValue = 1;
+    //
+    //***** These tests don't run in safari and firefox browser as 'scrollIntoView' is not supported.
+    //
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -64,10 +67,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
          */
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
-            reportContentPO.waitForLeftNavLoaded();
-            //wait until view form is visible
-            return formsPagePO.viewFormContainerEl.waitForVisible();
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
         });
 
         /**
@@ -122,7 +122,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
         /**
          *  default parent selected in drop down when trowser opens while adding a child record, this value can be changed
          */
-        xit('Verify default parent selected in drop down when trowser opens while adding a child record', () => {
+        it('Verify default parent selected in drop down when trowser opens while adding a child record', () => {
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
             const origRecordCount = formsPagePO.getRecordsCountInATable();

@@ -146,17 +146,19 @@ describe('Validate RouteHelper unit tests', function() {
     describe('validate getFieldsRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},
-            {name: 'test null url', url: null, id:null, expectation: null},
-            {name: 'test invalid url', url: '/non/parsing/url', id: '1', expectation: '/non/parsing/url'},
-            {name: 'test invalid url - no table id', url: '/apps/123/tables', id: '1', expectation: '/apps/123/tables'},
-            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', id: '1', expectation: '/apps/123/tables/'},
-            {name: 'test valid url', url: '/apps/123/tables/456', id: null, expectation: '/apps/123/tables/456/fields'},
-            {name: 'test valid url - id=1', url: '/apps/123/tables/456', id: '1', expectation: '/apps/123/tables/456/fields/1'}
+            {name: 'test null url', url: null, tableId: null, fieldId:null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', tableId: null, fieldId: '1', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', tableId: null, fieldId: '1', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', tableId: null, fieldId: '1', expectation: '/apps/123/tables/'},
+            {name: 'test valid url', url: '/apps/123/tables/456', tableId: null, fieldId: null, expectation: '/apps/123/tables/456/fields'},
+            {name: 'test valid url with tableId', url: '/apps/123/tables/456', tableId: 123, fieldId: null, expectation: '/apps/123/tables/123/fields'},
+            {name: 'test valid url no tableId, fieldId=1', url: '/apps/123/tables/456', tableId: null, fieldId: '1', expectation: '/apps/123/tables/456/fields/1'},
+            {name: 'test valid url with tableId & fieldId', url: '/apps/123/tables/456', tableId: 123, fieldId: 1, expectation: '/apps/123/tables/123/fields/1'},
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getFieldsRoute(testCase.url, testCase.id), testCase.expectation);
+                assert.equal(routeHelper.getFieldsRoute(testCase.url, testCase.tableId, testCase.fieldId), testCase.expectation);
                 done();
             });
         });

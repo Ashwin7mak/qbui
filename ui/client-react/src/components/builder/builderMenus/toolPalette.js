@@ -31,8 +31,6 @@ class ToolPalette extends Component {
 
         return (
             <NewFieldsMenu isCollapsed={this.props.isCollapsed}
-                           beginDrag={this.props.beginDrag}
-                           endDrag={this.props.endDrag}
                            isOpen={this.props.isOpen}
                            toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
                            toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
@@ -41,17 +39,24 @@ class ToolPalette extends Component {
                            includeNewRelationship={validParentTables.length > 0}/>);
     };
 
-    renderExistingFieldsMenu = () => (
-        <ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
-                            isOpen={this.props.isOpen}
-                            toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
-                            toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
-                            toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
-                            toolPaletteFocus={this.props.toolPaletteFocus}
-                            app={this.props.app}
-                            appId={_.get(this.props, 'app.id', null)}
-                            tblId={_.get(this.props, 'formMeta.tableId', null)}/>
-    );
+    renderExistingFieldsMenu = () => {
+        // Only can render the existing fields if an app is provided and form is loaded.
+        if (!this.props.appId || !this.props.tableId) {
+            return null;
+        }
+
+        return (
+            <ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
+                                isOpen={this.props.isOpen}
+                                toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                                toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                                toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                                toolPaletteFocus={this.props.toolPaletteFocus}
+                                app={this.props.app}
+                                appId={this.props.appId}
+                                tblId={this.props.tableId} />
+        );
+    };
 
     renderToolPalette = () => (
         <div className="toolPaletteContainer">
@@ -94,6 +99,11 @@ ToolPalette.propTypes = {
     /**
      * Display the menu is an open state (only affects small breakpoint) */
     isOpen: PropTypes.bool,
+
+    /**
+     * AppId and tableId are used to get the correct existing fields from the table for the loaded form. */
+    appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    tableId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     /**
      * newly added relationship field IDs

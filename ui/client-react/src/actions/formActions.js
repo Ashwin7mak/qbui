@@ -372,11 +372,9 @@ export const createForm = (appId, tblId, formType, form) => {
 
 /**
  * when relationship is deleted, update parent form with a section for default report of the child table
- * @param relationshipId
- * @param childTableName
- * @param parentTableId
+ * @param relationship
  */
-export const  removeRelationshipFromForm = (relationship) => {
+export const removeRelationshipFromForm = (relationship) => {
     return new Promise((resolve, reject) => {
         if (relationship) {
 
@@ -403,7 +401,7 @@ export const  removeRelationshipFromForm = (relationship) => {
                         } else {
                             resolve();
                         }
-                    }else{
+                    } else {
                         resolve();
                     }
                 }
@@ -411,7 +409,7 @@ export const  removeRelationshipFromForm = (relationship) => {
                 logger.parseAndLogError(LogLevel.ERROR, error, 'error trying to update forms');
                 reject();
             });
-        }else{
+        } else {
             resolve();
         }
     });
@@ -427,13 +425,13 @@ export const  removeRelationshipFromForm = (relationship) => {
  * @param formMeta
  * @returns {function(*, *)}
  */
-export const  deleteDetailFieldUpdateParentForm = (appId, childTableId, fieldId, formMeta) => {
-    return (dispatch, getState) => {
+export const deleteDetailFieldUpdateParentForm = (appId, childTableId, fieldId, formMeta) => {
+    return (dispatch) => {
         return new Promise((resolve, reject) => {
             dispatch(deleteField(appId, childTableId, fieldId));
 
             if (Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
-                let relatedRelationship = _.find(formMeta.relationships, (rel) => rel.detailTableId === childTableId  && rel.detailFieldId === fieldId);
+                let relatedRelationship = _.find(formMeta.relationships, (rel) => rel.detailTableId === childTableId && rel.detailFieldId === fieldId);
                 if  (relatedRelationship) {
                     removeRelationshipFromForm(relatedRelationship).then(
                         () => resolve()
@@ -442,7 +440,7 @@ export const  deleteDetailFieldUpdateParentForm = (appId, childTableId, fieldId,
                         reject();
                     });
                 }
-            }else {
+            } else {
                 resolve();
             }
         });
@@ -451,7 +449,7 @@ export const  deleteDetailFieldUpdateParentForm = (appId, childTableId, fieldId,
 
 
 export const deleteMarkedFields = (appId, tblId, formMeta) => {
-    return (dispatch, getState) => {
+    return dispatch => {
         let fields = formMeta.fieldsToDelete;
 
         const fieldPromises = formMeta.fieldsToDelete ? fields.map(field =>  dispatch(deleteDetailFieldUpdateParentForm(appId, tblId, field, formMeta))) : [];

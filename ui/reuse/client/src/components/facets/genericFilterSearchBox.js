@@ -1,13 +1,6 @@
 import React, {PropTypes, Component} from 'react';
-import Locale from '../../locales/locale';
 import './facet.scss';
 import IconInputBox from '../iconInputBox/iconInputBox';
-
-// IMPORTS FROM CLIENT REACT
-import Logger from "../../../../../client-react/src/utils/logger";
-// IMPORTS FROM CLIENT REACT
-
-let logger = new Logger();
 
 /*
  FilterSearchBox component takes user input for filtering a report.

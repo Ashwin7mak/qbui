@@ -1,10 +1,10 @@
+'use strict';
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
-
-let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
 
@@ -23,6 +23,11 @@ class formBuilderPage {
         return browser.element('.clearSearch .searchIcon');
     }
 
+    get emptySearchResult() {
+        // the text in the fields panel when the search term returns no results
+        return browser.element('.emptySearchResult');
+    }
+
     get deleteFieldIcon() {
         // REMOVE (field from form) icon (when a field is selected or highlighted)
         return browser.element('.deleteFieldIcon');
@@ -35,8 +40,6 @@ class formBuilderPage {
 
     get fieldProperty_Required() {
         // REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
-        // to get its state, use getRequiredCheckboxState
-        // to set its state, use setRequiredCheckboxState
         return browser.element('.checkboxPropertyContainer .checkbox');
     }
 
@@ -57,27 +60,27 @@ class formBuilderPage {
 
     get fieldTokenTitle() {
         // the label of the first NEW FIELD token
-        return browser.element('.fieldTokenTitle');
+        return browser.element('.rc-tabs-tabpane-active .fieldTokenTitle');
     }
 
     get firstField() {
-        // the first field (wait for it after open)
+        // the first field on the form
         return browser.element('.field');
+    }
+
+    get firstNewFieldGroup() {
+        // The FIRST group in the list of NEW FIELDs (left panel)
+        return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
+    }
+
+    get firstFieldToken() {
+        // The FIRST field in the list of NEW FIELDs (left panel)
+        return browser.element('.rc-tabs-tabpane-active .listOfElementsItem');
     }
 
     get formBuilderContainer() {
         // the whole form builder page (all 3 panels)
         return browser.element('.formBuilderContainer');
-    }
-
-    get listOfElementsItemGroup() {
-        // The FIRST group in the list of NEW FIELDs (left panel)
-        return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
-    }
-
-    get listOfElementsItem() {
-        // The FIRST field in the list of NEW FIELDs (left panel)
-        return browser.element('.listOfElementsItem');
     }
 
     get modalDismiss() {
@@ -108,8 +111,8 @@ class formBuilderPage {
     }
 
     get searchInput() {
-        // SEARCH textbox in the NEW FIELDS panel
-        return browser.element('.searchInput');
+        // SEARCH textbox in the FIELDS panel
+        return browser.element('.rc-tabs-tabpane-active .searchInput');
     }
 
     get selectedField() {
@@ -129,11 +132,7 @@ class formBuilderPage {
 
     get tab_Existing() {
         // The EXISTING tab in leftNav
-        // return this.tabbedSideNav.element('div:contains("Existing")'); // invalid selector...?
-        // return this.tabbedSideNav.element('//div[contains(text(), "Existing"]'); // not found...?
-        // return this.tabbedSideNav.element('//div[contains(getAttribute("innerHTML"), "Existing")]'); // invalid xpath...?
         // ask Brandon to add a descriptive class name or id!
-        // return this.tabbedSideNav.element('div:nth-child(3) div'); // clicks on the bar, i.e. nth-child(1)...?
         return browser.element(".tabbedSideNav div div div:nth-child(3) div");
     }
 
@@ -152,10 +151,6 @@ class formBuilderPage {
         return browser.element(".tabbedSideNav .rc-tabs-tab-active");
     }
 
-    get tab_firstField() {
-        return browser.element(tab_Field);
-    }
-
     get title() {
         // The name of the form, as displayed at the top of the form builder
         return browser.element('.formContainer .qbPanelHeaderTitleText');
@@ -165,14 +160,18 @@ class formBuilderPage {
 
     addNewField(label) {
         browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
+        return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
     }
 
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
+        this.cancelBtn.waitForVisible();
         this.cancelBtn.click();
         while (!formsPO.viewFormContainerEl.isExisting()) {
             this.dirtyForm_Dismiss();
         }
+        //Need this to wait for leftNav and record to load back again
+        browser.pause(e2eConsts.mediumWaitTimeMs);
         return this;
     }
 
@@ -214,6 +213,7 @@ class formBuilderPage {
             // return this.getSelectedFieldLabel() === source.getText();
             return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getFieldLabels();
     }
 
@@ -224,7 +224,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        this.firstField.waitForExist();
+        this.firstField.waitForVisible();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
@@ -242,7 +242,7 @@ class formBuilderPage {
 
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
-        this.tab_firstField.waitForVisible();
+        this.firstFieldToken.waitForVisible();
         let labelEls = browser.elements(tab_Field);
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
@@ -254,7 +254,7 @@ class formBuilderPage {
         // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
         // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
         // this lets the message include the contents of the unexpectedly present list.
-        return this.tab_firstField.isExisting() ? this.getNewFieldLabels() : [];
+        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getSelectedFieldLabel() {
@@ -280,6 +280,9 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
+        //Need to stabilize the menu
+        browser.pause(e2eConsts.shortWaitTimeMs);
+        topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
         // this.firstField.waitForExist();
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
@@ -321,6 +324,7 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
         loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
@@ -334,7 +338,7 @@ class formBuilderPage {
             this.clearSearch.click();
         }
         // wait for groups to appear or disappear depending on whether we searched or cleared
-        this.listOfElementsItemGroup.waitForVisible(null, (text !== null));
+        this.firstNewFieldGroup.waitForVisible(null, (text !== null));
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getNewFieldLabels();
     }
@@ -393,40 +397,6 @@ class formBuilderPage {
     stripAsterisk(label) {
         // strips the leading '* ' from a field label if necessary
         return label.replace('* ', ''); // not limited to leading chars but simple
-    }
-
-    /**
-     * Verify the Get another record relationship dialog titles, descriptions and functionality
-     * @param expectedTablesList to verify the select table drop down list
-     * @param parentTable table to select
-     * @param childTable table to verify that I am inside this table while creating relationship
-     * @param expectedFieldsList to verify the fields from advanced settings select dropdown
-     */
-    verifyGetAnotherRecordRelationshipDialog(expectedTablesList, parentTable, childTable, expectedFieldsList) {
-        expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-        //Verify title
-        expect(modalDialog.modalDialogTitle).toContain('Get another record');
-        //Verify select tables drop down has all the tables except the one you're in
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
-        let tableDropDownList = modalDialog.allDropDownListOptions;
-        expect(tableDropDownList).toEqual(expectedTablesList);
-        //click again on the arrow to collapse the outer menu
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
-        //Select the table
-        modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
-        //Click on advanced settings
-        modalDialog.clickModalDialogAdvancedSettingsToggle();
-        //Click on advanced setting field drop down
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
-        //Verify select drop down has just record id
-        let selectFieldDropDownList = modalDialog.allDropDownListOptions;
-        expect(selectFieldDropDownList).toEqual(expectedFieldsList);
-        //Finally close the dialog
-        modalDialog.modalDialogCloseBtn.click();
-        //Verify the dialog got closed
-        browser.waitForVisible('.modal-dialog .iconUISturdy-close', e2eConsts.longWaitTimeMs, true);
-        //Close the form builder
-        this.cancel();
     }
 
     KB_cancel() {

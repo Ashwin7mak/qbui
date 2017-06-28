@@ -10,7 +10,8 @@ const tableHomePageRptId = '0';
 
 const mockActions = {
     exitBuilderMode() {},
-    loadDynamicReport() {}
+    loadDynamicReport() {},
+    moveColumn() {}
 };
 
 const previousLocation = '/somewhere/over/the/rainbow';
@@ -96,6 +97,7 @@ describe('ReportBuilderContainer', () => {
         ReportBuilderRewireAPI.__Rewire__('ReportNameEditor', mockReportNameEditor);
         ReportBuilderRewireAPI.__Rewire__('ReportToolsAndContent', mockReportToolsAndContent);
         ReportBuilderRewireAPI.__Rewire__('ReportSaveOrCancelFooter', mockReportSaveOrCancelFooter);
+        ReportBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
 
         spyOn(mockActions, 'exitBuilderMode');
         spyOn(mockActions, 'loadDynamicReport');
@@ -106,6 +108,7 @@ describe('ReportBuilderContainer', () => {
         ReportBuilderRewireAPI.__ResetDependency__('ReportNameEditor');
         ReportBuilderRewireAPI.__ResetDependency__('ReportToolsAndContent');
         ReportBuilderRewireAPI.__ResetDependency__('ReportSaveOrCancelFooter');
+        ReportBuilderRewireAPI.__ResetDependency__('FormBuilderCustomDragLayer');
 
         mockActions.exitBuilderMode.calls.reset();
         mockActions.loadDynamicReport.calls.reset();

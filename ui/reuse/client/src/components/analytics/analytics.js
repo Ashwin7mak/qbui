@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {getLoggedInUserId, getLoggedInUserAdminStatus} from 'REUSE/reducers/userReducer';
+import {getLoggedInUserId, getLoggedInUserAdminStatus, getLoggedInUserEmail} from 'REUSE/reducers/userReducer';
 import {getLoggedInUser} from 'REUSE/actions/userActions';
 
 // IMPORT FROM CLIENT REACT
@@ -26,7 +26,7 @@ export class Analytics extends Component {
         super(props);
 
         // Evergage requires a global variable called _aaq
-        this._aaq = window._aaq || (window._aaq = []);
+        window._aaq = window._aaq || [];
 
         // logger is set here so that unit test rewire will work
         this.logger = new Logger();
@@ -39,6 +39,10 @@ export class Analytics extends Component {
             this.updateEverageAppId,
         ];
     }
+
+    static defaultProps = {
+        evergageUpdateProps: {}
+    };
 
     /**
      * Setup script copied from the Evergage documentation.
@@ -73,7 +77,12 @@ export class Analytics extends Component {
      */
     updateEvergageUser = () => {
         if (this.props.userId) {
-            this._aaq.push(['setUser', this.props.userId]);
+            window._aaq.push(['setUser', this.props.userId]);
+            window._aaq.push(['gReqUID', this.props.userId]);
+        }
+
+        if (this.props.userEmail) {
+            window._aaq.push(['gReqUserEmail', this.props.userEmail]);
         }
     };
 
@@ -82,7 +91,7 @@ export class Analytics extends Component {
      */
     updateEvergageAdminStatus = () => {
         if (_.has(this.props, 'isAdmin')) {
-            this._aaq.push(['setCustomField', 'has_app_admin', this.props.isAdmin, 'request']);
+            window._aaq.push(['setCustomField', 'has_app_admin', this.props.isAdmin, 'request']);
         }
     };
 
@@ -92,7 +101,7 @@ export class Analytics extends Component {
     updateAppManagerStatus = () => {
         if (this.props.userId && _.has(this.props, 'app.ownerId')) {
             const isAppManager = (this.props.userId === this.props.app.ownerId);
-            this._aaq.push(['setCustomField', 'is_app_mgr', isAppManager, 'request']);
+            window._aaq.push(['setCustomField', 'is_app_mgr', isAppManager, 'request']);
         }
     };
 
@@ -101,7 +110,7 @@ export class Analytics extends Component {
      */
     updateEvergageAccountId = () => {
         if (_.has(this.props, 'app.accountId')) {
-            this._aaq.push(['setCompany', this.props.app.accountId]);
+            window._aaq.push(['setCompany', this.props.app.accountId]);
         }
     };
 
@@ -110,9 +119,67 @@ export class Analytics extends Component {
      */
     updateEverageAppId = () => {
         if (_.has(this.props, 'app.id')) {
-            this._aaq.push(['setCustomField', 'appid', this.props.app.id, 'request']);
+            window._aaq.push(['setCustomField', 'appid', this.props.app.id, 'request']);
         }
     };
+
+    /**
+     * Filters through the new props to find props that have changed when compared to the old props
+     * @param newEvergageUpdateProps - object containing (evergagePropName: value) (includes unchanged props)
+     * @returns {{evergagePropName: value, ...}} - the filtered object containing only updated/changed props
+     */
+    getUpdatedProps = (newEvergageUpdateProps) => {
+        let updatedProps = {};
+
+        _.forOwn(newEvergageUpdateProps, (newValue, evergagePropName) => {
+            let oldPropVal = _.get(this.props.evergageUpdateProps, evergagePropName);
+
+            if (oldPropVal !== newValue) {
+                _.set(updatedProps, evergagePropName, newValue);
+            }
+        });
+        return updatedProps;
+    };
+
+    /**
+     * Creates a string containing descriptions (names) for the given props
+     * @param propsToUpdate - {evergagePropName: value} - the list of updated props
+     * @returns {string} - describes updated props
+     */
+    getEvergageUpdateNames = (propsToUpdate) => {
+        let updateString = '';
+        _.forOwn(propsToUpdate, (propValue, evergagePropName) => {
+            updateString += ' -- ' + evergagePropName;
+        });
+        return updateString;
+    };
+
+    /**
+     * Pushes request messages into the window._aaq object for any prop changes to be sent to Evergage.
+     * Then, adds the 'trackAction' message to initiate an update call to Evergage
+     * (see evergage dev api for details).
+     * @param propsToUpdate - {evergagePropName: value, ...} - the object of props updated
+     * @param updateString - describes the updates that occurred (to be included in the trackAction event message
+     */
+    trackAction = (propsToUpdate, updateString) => {
+        _.forOwn(propsToUpdate, (newValue, evergagePropName) => {
+            window._aaq.push(['setCustomField', evergagePropName, newValue, 'request']);
+        });
+        window._aaq.push(['trackAction', 'updated: ' + updateString]);
+    };
+
+    /**
+     * If updates received on the evergageProps, create a 'trackAction' to reflect the
+     * updated properties and to trigger an event in Evergage
+     * @param nextProps - the new props in the updated Analytics component
+     */
+    componentWillReceiveProps(nextProps) {
+        let updatedProps = this.getUpdatedProps(nextProps.evergageUpdateProps);
+        let updateString = this.getEvergageUpdateNames(updatedProps);
+        if (updateString.length) {
+            this.trackAction(updatedProps, updateString);
+        }
+    }
 
     /**
      * Tracks the current user and places the Evergage script on the page.
@@ -122,7 +189,6 @@ export class Analytics extends Component {
             if (!this.props.dataset) {
                 return this.logger.debug('Dataset was not provided to analytics component. Analytics have not been loaded.');
             }
-
 
             if (this.props.getLoggedInUser) {
                 this.props.getLoggedInUser();
@@ -173,6 +239,12 @@ Analytics.propTypes = {
     userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
+    *  The email of the currently logged in user to be used with Evergage.
+    *  Typically this is passed as a prop from Redux (user reducer)
+    */
+    userEmail: PropTypes.string,
+
+    /**
      * Boolean indicating whether the current user is an admin.
      * Typically this is passed as a prop from Redux (user reducer)
      */
@@ -191,9 +263,21 @@ Analytics.propTypes = {
         id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         ownerId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         accountId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-    })
+    }),
+
+    /**
+     *  The additional props that needs to be passed to Evergage.
+     *  An object containing key value pairs (evergageUpdateName, value)
+     */
+    evergageUpdateProps: PropTypes.object
 };
 
-const mapStateToProps = state => ({userId: getLoggedInUserId(state), isAdmin: getLoggedInUserAdminStatus(state)});
+const mapStateToProps = state => {
+    return {
+        userId: getLoggedInUserId(state),
+        userEmail: getLoggedInUserEmail(state),
+        isAdmin: getLoggedInUserAdminStatus(state)
+    };
+};
 
 export default connect(mapStateToProps, {getLoggedInUser})(Analytics);

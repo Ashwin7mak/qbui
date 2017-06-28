@@ -3,19 +3,16 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
-import {getApp, getSelectedAppId} from '../../reducers/app';
-
-import AppUtils from '../../utils/appUtils';
+import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
+import _ from 'lodash';
 
 export const AppsList = React.createClass({
 
     propTypes: {
-        apps: React.PropTypes.array.isRequired,
-        onSelectApp: React.PropTypes.func.isRequired,
-        onCreateNewApp: React.PropTypes.func
+        apps: React.PropTypes.array.isRequired
     },
     getInitialState() {
         return {
@@ -38,10 +35,13 @@ export const AppsList = React.createClass({
     },
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
-            app.icon = 'favicon';
+            // Give all apps in the left nav list a default icon of 'favicon'
+            // TODO:: Refactor where the icon is obtain from in MC-3596. Patching for the purpose of the current story.
+            let appForNavItem = {icon: 'favicon', tableIcon: 'favicon', ...app};
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
-                         item={app}
+                         item={appForNavItem}
+                         tableIcon={true}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
                          open={true}  />;
@@ -61,28 +61,28 @@ export const AppsList = React.createClass({
      * @returns {XML}
      */
     getNewAppItem() {
-        return <CreateNewItemButton handleOnClick={this.props.onCreateNewApp}
+        return <CreateNewItemButton handleOnClick={this.createNewApp}
                                     message="appCreation.newApp"
                                     className="newApp"
+                                    key="newAppButton"
                 />;
-    },
-
-    /**
-     * is user able to create a new app from the left nav
-     * @returns {*}
-     */
-    allowCreateNewApp() {
-        const app = this.props.getApp(this.props.selectedAppId);
-        return app && AppUtils.hasAdminAccess(app.accessRights);
     },
 
     /**
      * open the create app wizard
      */
     createNewApp() {
-        if (this.allowCreateNewApp()) {
-            this.props.showAppCreationDialog();
-        }
+        this.props.showAppCreationDialog();
+    },
+
+    renderEmptyStateOrNewButton() {
+        return _.isEmpty(this.props.apps) ?
+            <EmptyStateForLeftNav handleOnClick={this.createNewApp}
+                                  emptyMessage="emptyAppState.message"
+                                  className="appsListForLeftNav"
+                                  iconMessage="emptyAppState.createNewApp"
+            /> :
+            this.getNewAppItem();
     },
 
     render() {
@@ -103,16 +103,15 @@ export const AppsList = React.createClass({
                 </li>
 
                 {this.appList()}
-                {this.getNewAppItem()}
+                {this.renderEmptyStateOrNewButton()}
+
             </ul>
         );
     }
 });
 
 const mapDispatchToProps = {
-    showAppCreationDialog,
-    getApp,
-    getSelectedAppId
+    showAppCreationDialog
 };
 
 export default connect(

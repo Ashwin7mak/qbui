@@ -132,6 +132,7 @@
                 let stream = getStream();
 
                 let logger = bunyan.createLogger({
+                    timestamp  : '',        // placeholder..ensures timestamp is 1st element outputted in json object
                     name       : name,
                     streams    : [stream],
                     level      : level,
@@ -147,8 +148,41 @@
                     type: 'NODE'
                 });
 
-                showBody = getConfig('showBody', false);
+                //  For each supported Bunyan logging level, add custom log attributes to the fields list before
+                //  logging the message.  The fields list is getting updated because there is a need to have the
+                //  'timestamp' as the first attribute in the outputted json structure --> Splunk is looking for
+                //  the 'timestamp' attribute in the 1st 128 characters.
+                //
+                //  NOTE: the fields object is a structure defined on the Logger, which is a Singleton.  With
+                //  separate requests updating that object, there could be concern about a race-condition.  But
+                //  given node is single threaded, the possibility of concurrent requests updating the same
+                //  reference (in this case the fields object) simultaneously is not possible.
+                appLogger.debug = function() {
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'DEBUG');
+                    logger.debug.apply(logger, arguments);
+                };
+                appLogger.error = function() {
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'ERROR');
+                    logger.error.apply(logger, arguments);
+                };
+                appLogger.fatal = function() {
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'FATAL');
+                    logger.fatal.apply(logger, arguments);
+                };
+                appLogger.info = function() {
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'INFO');
+                    logger.info.apply(logger, arguments);
+                };
+                appLogger.trace = function() {
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'TRACE');
+                    logger.trace.apply(logger, arguments);
+                };
+                appLogger.warn = function() {
+                    logger.fields = applyRunTimeAttributes(logger.fields, 'WARN');
+                    logger.warn.apply(logger, arguments);
+                };
 
+                showBody = getConfig('showBody', false);
             }
 
             return appLogger;
@@ -156,6 +190,24 @@
         }
 
     };
+
+    /**
+     * Apply custom run-time arguments to the log:
+     *   timestamp:  current time stamp
+     *   lvl:        log level text string
+     *
+     * @param fields
+     * @param lvl
+     * @returns {Merged object}
+     */
+    function applyRunTimeAttributes(fields = {}, lvl) {
+        const customAttributes = {
+            timestamp: new Date().toISOString(),
+            lvl: lvl
+        };
+
+        return Object.assign(fields, customAttributes);
+    }
 
     /**
      * Return the bunyan configuration setting for the given key. If the key

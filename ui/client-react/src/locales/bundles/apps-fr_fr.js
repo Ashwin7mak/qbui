@@ -40,6 +40,7 @@ export default {
             users: {
                 addUser: "Ajouter un nouvel utilisateur",
                 users: "Utilisateurs",
+                assignRole: "Attribuer un rôle",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
@@ -55,7 +56,17 @@ export default {
                 userAddError: "Erreur d'ajout d'utilisateur",
                 userRemovingError: "Erreur lors de l'enlever",
                 emailBody: "Le corps du courrier électronique va ici",
-                emailSubject: "Le sujet de l'email va ici"
+                emailSubject: "Le sujet de l'email va ici",
+                changeUserRole: "Changement {valeur} rôle",
+                changeUserRoles: "Changement {valeur} les rôles",
+                changeUserRoleButton: "Changement de rôle",
+                pluralChangeUserRoleButton: "Changer les rôles",
+                userRoleTitle: "Changer le rôle de {valeur} utilisateur",
+                pluralUserRoleTitle: "Changer le rôle de {valeur} utilisateurs",
+                userRoleDescription: "La modification du rôle peut affecter ce qu'un utilisateur peut afficher.",
+                userRoleText: "Changer le rôle vers",
+                successUserRole: "{valeur} Le rôle de l'utilisateur a été changé",
+                pluralSuccessUserRole: "{valeur} Les rôles des utilisateurs ont été modifiés",
             }
         },
         appMenu: {
@@ -90,6 +101,10 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            testAutomation: "Automatisation des tests",
+            copyAutomation: "Copier l'automatisation",
+            editAutomation: "Modifier l'automatisation",
+            deleteAutomation: "Supprimer l'automatisation",
             dontDelete: "Ne pas supprimer",
             deleteThisRecord: "Supprimer cet enregistrement?",
             deleteTheseSwitches: "Supprimer ces commutateurs?",
@@ -505,15 +520,7 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
         errors: {
-            appNotFound: {
-                notFound: "L'application est pas disponible dans Mercury en ce moment. ",
-                inQuickBaseClassic: " dans QuickBase Classic. ",
-                clickHere: "Ouvrez l'application"
-            },
-            noApps: {
-                noApps: "Il n'y a pas d'applications dans Mercury. ",
-                addApps: " d'ajouter des applications."
-            },
+            appNotFound: "Cette application n'existe pas. Sélectionnez une autre application.",
             errorLoadingReport: {
                 message: "Ce rapport n'est pas disponible",
                 helpText: "Pour l'instant, vous pouvez essayer Sélection d'un rapport différent.",
@@ -523,10 +530,6 @@ export default {
                 stopGraphic: "Arrête de jouer",
                 showAdditionalInfo: "Voir les détails",
                 hideAdditionalInfo: "Cacher les détails"
-            },
-            noTables: {
-                noTables: "Il n'y a pas tables. ",
-                createTablesInQuickBaseClassic: "Créer des tables dans ",
             },
             supportLink: {
                 text: "Contactez notre équipe de soins"
@@ -672,7 +675,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Ajoutez {fieldName} au formulaire',
-            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à {tableName} sont sur le formulaire",
+            existingEmptyState: "Tous les champs {numberOfFields} qui appartiennent à la table {tableName} sont sur le formulaire",
             fieldGroups: {
                 text: "Texte",
                 numeric: "Nombre",
@@ -729,12 +732,21 @@ export default {
             featureNameEmpty: "Les noms des entités doivent être blanc"
         },
         appCreation: {
-            newApp: 'Nouvelle application'
+            newApp: 'Nouvelle application',
+            newAppPageTitle: 'Nouvelle Application',
+            finishedButtonLabel: "Créer une application",
+            appNameHeading: "Nom de l'application,",
+            appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
+            descriptionHeading: "Description de l'application",
+            appCreationFailed: "Impossible de créer une application"
+        },
+        emptyAppState: {
+            message: "Vous n'avez pas encore d'applications.",
+            createNewApp: "Créer une application"
         },
         tableCreation: {
             newTablePageTitle: "Nouvelle table",
             newTableDescription: "Créer une nouvelle table lorsque vous souhaitez collecter un nouveau type d'information.",
-            newTableTitle: "Nommez votre table",
 
             summaryDescription: "Chaque bit d'information que vous souhaitez collecter est un champ.",
             summaryTitle: "Faites glisser et déposez les champs que vous souhaitez ajouter à votre table sur le formulaire. Vous pouvez organiser les champs dans l'ordre que vous souhaitez que les gens les utilisent.",
@@ -770,7 +782,12 @@ export default {
             tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
             tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs.",
 
-            tableReadyDialogOK: "D'accord"
+            tableReadyDialogOK: "D'accord",
+
+            recordTitleFieldHeading: "Le champ du titre identifiant chaque enregistrement",
+            recordTitleFieldDescription: "Choisissez le champ qui s'affiche comme titre lorsque vous visualisez ou modifiez un enregistrement. Ce champ doit être rempli.",
+            recordTitleFieldDefault: "Par défaut à Noun + ID",
+            recordName: "Nom de l'enregistrement"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
@@ -813,7 +830,15 @@ export default {
             userSuccessDialogOK: "Non merci",
             copied: "Lien copié",
             messageSubject:"Lien vers le {nom de l'application} Application",
-            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}"
+            messageBody: "Je vous ai ajouté à {nom de l'application} Application. Voici un lien pour pouvoir y accéder. \N {lien}",
+            addUser: "Ajouter",
+            selectAUser:"Sélectionnez un utilisateur",
+            selectUsers: "Sélectionnez les utilisateurs",
+            assignRole: "Attribuer un rôle",
+            searchPromptText: "Tapez pour rechercher",
+            name: "Prénom",
+            role: "Rôle",
+            userName: "Nom d'utilisateur"
         }
     }
 };
