@@ -55,7 +55,7 @@ export class TableCreationDialog extends React.Component {
 
                 // navigate to form builder (no page reload)
 
-                this.props.updateFormRedirectRoute(null);
+                this.props.updateFormRedirectRoute(UrlUtils.getTableHomepageLink(this.props.app.id, tblId));
                 AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
@@ -110,7 +110,6 @@ export class TableCreationDialog extends React.Component {
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle")]}>
                 <div className="dialogCreationPanel">
                     <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
-                    <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
                     <TableCreationPanel tableInfo={this.props.tableInfo}
                                     iconChooserOpen={this.props.tableCreation.iconChooserOpen}
                                     openIconChooser={this.props.openIconChooser}
