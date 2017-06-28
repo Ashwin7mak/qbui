@@ -65,19 +65,19 @@ describe('Locales', () => {
         expect(testMsg).toBe('test');
     });
 
-    // it('test singular getPluralizedMessage', () => {
-    //     GovernanceBundleLoader.changeLocale('en-us');
-    //     Locale.getI18nBundle();
-    //     const testMsg = Locale.getPluralizedMessage("test.testPluralize",  {item: 'item'});
-    //     expect(testMsg).toBe('1 Customer record deleted');
-    // });
-    //
-    // it('test plural getPluralizedMessage', () => {
-    //     GovernanceBundleLoader.changeLocale('en-us');
-    //     Locale.getI18nBundle();
-    //     const testMsg = Locale.getPluralizedMessage("test.testPluralize",  {items: 'items', nameForItem: 'Customer'});
-    //     expect(testMsg).toBe('2 Customers deleted');
-    // });
+    it('test singular getPluralizedMessage', () => {
+        GovernanceBundleLoader.changeLocale('en-us');
+        Locale.getI18nBundle();
+        const testMsg = Locale.getPluralizedMessage("test.testPluralize",  {value: 1, nameForRecord: 'Customer'});
+        expect(testMsg).toBe('1 Customer record deleted');
+    });
+
+    it('test plural getPluralizedMessage', () => {
+        GovernanceBundleLoader.changeLocale('en-us');
+        Locale.getI18nBundle();
+        const testMsg = Locale.getPluralizedMessage("test.testPluralize",  {value: 2, nameForRecord: 'Customer'});
+        expect(testMsg).toBe('2 Customer records deleted');
+    });
 
     it('test empty params getPluralizedMessage', () => {
         GovernanceBundleLoader.changeLocale('en-us');
