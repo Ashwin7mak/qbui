@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
+import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
+import _ from 'lodash';
 
 export const AppsList = React.createClass({
 
@@ -73,6 +75,16 @@ export const AppsList = React.createClass({
         this.props.showAppCreationDialog();
     },
 
+    renderEmptyStateOrNewButton() {
+        return _.isEmpty(this.props.apps) ?
+            <EmptyStateForLeftNav handleOnClick={this.createNewApp}
+                                  emptyMessage="emptyAppState.message"
+                                  className="appsListForLeftNav"
+                                  iconMessage="emptyAppState.createNewApp"
+            /> :
+            this.getNewAppItem();
+    },
+
     render() {
         return (
             <ul className={"appsList"} >
@@ -91,7 +103,8 @@ export const AppsList = React.createClass({
                 </li>
 
                 {this.appList()}
-                {this.getNewAppItem()}
+                {this.renderEmptyStateOrNewButton()}
+
             </ul>
         );
     }
