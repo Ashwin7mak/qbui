@@ -8,7 +8,6 @@ class qbGrid {
 
     get searchBox() {
         // Search textbox
-        browser.element('.searchInput').waitForVisible();
         return browser.element('.searchInput');
     }
 
@@ -33,10 +32,11 @@ class qbGrid {
      */
     setSearchString(str) {
         try {
+            this.searchBox.waitForVisible();
             this.searchBox.setValue(str);
             return this;
         } catch (err) {
-            browser.logger.error('Error in enterSearchingString function:' + err);
+            browser.logger.error('Error in setSearchString function:' + err);
         }
     }
 
