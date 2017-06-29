@@ -15,7 +15,9 @@ let mockState = {
 describe('Test appBuilder reducer - initial state', () => {
     const initialState = {
         isSavingApp: false,
-        isDialogOpen: false
+        isDialogOpen: false,
+        isAppIconChooserOpen: false,
+        icon: 'Customer'
     };
     it('return default state', () => {
         const state = reducer(undefined, {});
@@ -123,7 +125,7 @@ describe('App Creation Selector', () => {
         it('will return a new app object if there is an app object', () => {
             let result = AppBuilderSelectors.getNewAppInfo(mockState);
 
-            expect(result).toEqual({name: 'Mock App Name'});
+            expect(result).toEqual({name: 'Mock App Name', icon: ''});
         });
 
         it('will return null if there is no new app object', () => {
