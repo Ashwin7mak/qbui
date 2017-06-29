@@ -164,7 +164,7 @@ IconChooser.propTypes = {
      */
     classes: PropTypes.string,
     /**
-     * sets text for type for suggestion
+     * sets text for typeForSuggestionsText
      */
     typeForSuggestionsText: PropTypes.string,
     /**
@@ -176,7 +176,7 @@ IconChooser.propTypes = {
      */
     setIconChoice: PropTypes.func,
     /**
-     * searches for icons by name
+     * an array of icons a user can choose from
      */
     listOfIconsByNames: PropTypes.array.isRequired,
     /**
