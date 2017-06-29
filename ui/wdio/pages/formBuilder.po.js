@@ -334,6 +334,7 @@ class formBuilderPage {
         topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        formBuilderPO.tab_Active.waitForExist();
         expect(this.tab_Active.getText()).toBe("New");
         return this;
     }

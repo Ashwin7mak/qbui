@@ -87,7 +87,7 @@
             // click on a cell to view a record so that we can edit the form so that we can add new fields
             reportContentPO.clickOnRecordInReportTable(0);
             // add a new field for us to customize (avoiding dragNewFieldToForm for x-browser compatibility)
-            formBuilderPO.open().selectFieldByIndex(1);
+            formBuilderPO.open().firstField.element('.field').click();
             formBuilderPO.addNewField("Text");
             // revise the UNIQUE property (i.e. click the unchecked checkbox to check it)
             formBuilderPO.setUniqueCheckboxState(true);
