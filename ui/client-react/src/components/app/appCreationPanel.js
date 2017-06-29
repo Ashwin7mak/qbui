@@ -7,8 +7,9 @@ import * as AppBuilderActions from '../../actions/appBuilderActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
-
 import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+
+//TODO: XD needs to provide us with a list of appIconNames and appIconsByTag, currently none exists
 import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
 
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
