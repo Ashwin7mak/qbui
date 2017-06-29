@@ -4,11 +4,12 @@ import AppCreationPanel from './appCreationPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import * as AppBuilderActions from '../../actions/appBuilderActions';
+import * as ShellActions from '../../actions/shellActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
-import _ from 'lodash';
-
-import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
+import UrlUtils from '../../utils/urlUtils';
+import AppHistory from '../../globals/appHistory';
+import {NotificationManager} from 'react-notifications';
 
 export class AppCreationDialog extends React.Component {
     /**
@@ -23,7 +24,16 @@ export class AppCreationDialog extends React.Component {
      */
     onFinished = () => {
         if (this.props.app) {
-            this.props.createApp(this.props.app);
+            this.props.createApp(this.props.app).then((response) => {
+                let appId = _.get(response, 'data.id', null);
+                //reroutes to app home page link
+                AppHistory.history.push(UrlUtils.getAppHomePageLink(appId));
+                //this forces the table list to show, after the user is navigated to the app home page link
+                this.props.toggleAppsList(false);
+            }, (error) => {
+                // leave the dialog open but issue a growl indicating an error
+                NotificationManager.error(Locale.getMessage('appCreation.appCreationFailed'), Locale.getMessage('failed'));
+            });
         }
     };
 
@@ -64,7 +74,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     hideAppCreationDialog: AppBuilderActions.hideAppCreationDialog,
-    createApp: AppBuilderActions.createApp
+    createApp: AppBuilderActions.createApp,
+    toggleAppsList: ShellActions.toggleAppsList
 };
 
 export default connect(

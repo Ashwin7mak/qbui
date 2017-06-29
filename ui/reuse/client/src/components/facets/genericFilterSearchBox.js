@@ -1,5 +1,4 @@
 import React, {PropTypes, Component} from 'react';
-import Locale from '../../locales/locale';
 import './facet.scss';
 import IconInputBox from '../iconInputBox/iconInputBox';
 

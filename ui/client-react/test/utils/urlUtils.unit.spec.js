@@ -1,7 +1,7 @@
 import React from 'react';
 import UrlUtils, {__RewireAPI__ as UrlUtilsRewireAPI} from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE} from '../../src/constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, TABLE_LINK} from '../../src/constants/urlConstants';
 import StringUtils from '../../src/utils/stringUtils';
 
 describe('UrlUtils', () => {
@@ -149,6 +149,16 @@ describe('UrlUtils', () => {
             let url = StringUtils.format(USERS_ROUTE, [appId]);
 
             expect(UrlUtils.getAppUsersLink(appId)).toEqual(url);
+        });
+    });
+
+    describe('getTableHomepageLink', () => {
+        it('returns a link to the table home page', () => {
+            let appId = '1';
+            let tblId = '2';
+            let url = StringUtils.format(TABLE_LINK, [appId, tblId]);
+
+            expect(UrlUtils.getTableHomepageLink(appId, tblId)).toEqual(url);
         });
     });
 });
