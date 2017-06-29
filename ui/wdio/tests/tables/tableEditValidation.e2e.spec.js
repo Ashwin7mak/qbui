@@ -8,7 +8,7 @@
     let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
-    let modalDialog = requirePO('/common/modalDialog');
+    let topNavPO = requirePO('topNav');
 
     describe('Tables - Edit table validation tests: ', function() {
         let realmName;
@@ -93,7 +93,6 @@
 
                 //Select table Table 2
                 tableCreatePO.selectTable('Table 2');
-                reportContentPO.waitForReportContent();
 
                 //Select the table properties of settings of table 1 from global actions gear
                 topNavPO.clickOnTableSettingsLink();

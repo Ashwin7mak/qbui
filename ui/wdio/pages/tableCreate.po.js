@@ -255,6 +255,7 @@
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
             //Need this to trigger a change in the field especially when testing the empty field values in firefox
+            filteredElement.element(filteredElementInputClassName).click();
             filteredElement.element(filteredElementInputClassName).setValue('aaa');
             return filteredElement.element(filteredElementInputClassName).setValue(fieldValue);
         }},
@@ -384,7 +385,8 @@
                 //moveToObject not working in firefox and edge but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
                 if (browserName === 'chrome') {
                     //Hover over to an element and verify the field error
-                    results[0].moveToObject('.dialogFieldInput');
+                    //results[0].moveToObject('.dialogFieldInput');
+                    results[0].element('.dialogFieldInput').click();
                     browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
                     expect(results[0].element('.invalidInput').getAttribute('textContent')).toContain(errorMsg);
                     return results[0].click();
