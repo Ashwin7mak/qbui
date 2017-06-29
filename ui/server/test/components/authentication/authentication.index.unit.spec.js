@@ -5,7 +5,6 @@ var authentication = require('../../../src/components/authentication/index')(con
 var consts = require('../../../../common/src/constants');
 var assert = require('assert');
 var log = require('../../../src/logger').getLogger();
-var ob32utils = require('../../../src/utility/ob32Utils');
 var routeHelper = require('../../../src/routes/routeHelper');
 
 var mockReq = {};
@@ -54,7 +53,6 @@ describe('Validate https response authentication functions', function() {
         mockReq.cookies = {
             ISFEDERATED : true
         };
-
         authentication.signout(mockReq, mockRes);
         assert(spyRedirect.calledOnce, 'should redirect');
         assert(spyRedirect.getCall(0).args[0].includes(routeHelper.getSignoutLegacyStackRoute()), true,
@@ -65,7 +63,6 @@ describe('Validate https response authentication functions', function() {
         assert.equal(mockRes.cookies.ISFEDERATED.value, "",
             'the team_TICKET cookie value should be set as the TICKET cookie in the response');
     });
-
     it('validate http response 200 json request for signout', function() {
         mockReq.headers = {
             accept: consts.APPLICATION_JSON,
@@ -132,124 +129,115 @@ describe('Validate https response authentication functions', function() {
         assert(spyRender.calledOnce);
     });
 
-    it('validate http response 302 and TICKET cookie redirect for federation', function() {
-        let ob32EncodedTime = 'bmnicwvzd';
-        let time = ob32utils.decoder(ob32EncodedTime);
-        var mockFederationReq = {
+    describe('federation endpoint', function() {
+        // Copy this mock request and edit the copy with what you need for your test
+        const validMockFederationRequest = {
             query: {
-                "url" : "team.ns.quickbase.com/qbase/governance/12/users"
+                "url" : "team.mercury.quickbase.com/qbase/governance/12/users"
             },
             headers : {
-                host: "team.ns.quickbase.com"
+                host: "team.mercury.quickbase.com"
             },
             cookies : {
-                "team_TICKET": `8_${ob32EncodedTime}_aaaaaa_aaa_a_aaaaaaa`
-            }
-        };
-        authentication.federation(mockFederationReq, mockRes);
-        assert(spyRedirect.calledOnce, 'redirect should be called once');
-        assert(mockFederationReq.query.url, spyRedirect.getCall(0).args[0],
-            'redirect should be set based on url specified in query parameters of the request');
-        assert.equal(mockRes.cookies.TICKET.value, mockFederationReq.cookies.team_TICKET,
-            'the team_TICKET cookie value should be set as the TICKET cookie in the response');
-        assert.equal(mockRes.cookies.TICKET.options.expires, 0,
-            'the expiration on the new stack cookie should be zero (session cookie)');
-        assert.equal(mockRes.cookies.TICKET.options.domain, mockFederationReq.headers.host,
-            'the domain of the new stack cookie should use the hostname defined in the request');
-        assert.equal(mockRes.cookies.team_TICKET.value, "",
-            'the realm specific cookie should be empty after federation');
-        assert.equal(mockRes.cookies.team_TICKET.options.expires.getTime(), 0,
-            'the realm specific cookie should be set to expire after federation');
-        assert.equal(mockRes.cookies.team_TICKET.options.domain, config.legacyBase.substring(1),
-            'the realm specific cookie should have the domain specified in config.legacyBase');
-    });
-
-    it('validate http response 302 and TICKET cookie redirect with a non-production hostname for federation', function() {
-        let con = {legacyBase: '.trunk.quickbaserocks.com'};
-        var auth = require('../../../src/components/authentication/index')(con);
-        let ob32EncodedTime = 'bmnicwvzd';
-        let time = ob32utils.decoder(ob32EncodedTime);
-        var mockFederationReq = {
-            query: {
-                "url" : "team.ns.trunk.quickbaserocks.com/qbase/governance/12/users"
-            },
-            headers : {
-                host: "team.ns.trunk.quickbaserocks.com"
-            },
-            cookies : {
-                "team_TICKET": `8_${ob32EncodedTime}_aaaaaa_aaa_a_aaaaaaa`
-            }
-        };
-        auth.federation(mockFederationReq, mockRes);
-        assert(spyRedirect.calledOnce, 'redirect should be called once');
-        assert(mockFederationReq.query.url, spyRedirect.getCall(0).args[0],
-            'redirect should be set based on url specified in query parameters of the request');
-        assert.equal(mockRes.cookies.TICKET.value, mockFederationReq.cookies.team_TICKET,
-            'the team_TICKET cookie value should be set as the TICKET cookie in the response');
-        assert.equal(mockRes.cookies.TICKET.options.expires, 0,
-            'the expiration on the new stack cookie should be zero (session cookie)');
-        assert.equal(mockRes.cookies.TICKET.options.domain, mockFederationReq.headers.host,
-            'the domain of the new stack cookie should use the hostname defined in the request');
-        assert.equal(mockRes.cookies.team_TICKET.value, "",
-            'the realm specific cookie should be empty after federation');
-        assert.equal(mockRes.cookies.team_TICKET.options.expires.getTime(), 0,
-            'the realm specific cookie should be set to expire after federation');
-        assert.equal(mockRes.cookies.team_TICKET.options.domain, con.legacyBase.substring(1),
-            'the realm specific cookie should have the domain specified in config.legacyBase');
-    });
-
-    it('validate http response 302 redirect to /db/main?a=myqb when no redirect url is provided for federation', function() {
-        var mockFederationReq = {
-            query : { },
-            headers : {
-                host: "team.quickbase.com"
-            },
-            cookies : {
-                "team_TICKET": `8_bmnicwvzd_aaaaaa_aaa_a_aaaaaa`
-            }
-        };
-        authentication.federation(mockFederationReq, mockRes);
-        assert(`${mockFederationReq.headers.host}/db/main?a=myqb`, spyRedirect.getCall(0).args[0],
-            'redirect should go to legacy stack my apps page');
-    });
-
-    it('validate http response 401 when the realm prefix in the cookie and realmhost mismatch for federation', function() {
-        var mockFederationReq = {
-            query: {
-                "url" : "team.ns.quickbase.com/qbase/governance/12/users"
-            },
-            headers : {
-                host: "team.quickbase.com"
-            },
-            cookies : {
-                "someotherrealm_TICKET": "someticketvalue"
+                "team_TICKET": `8_bmnicwvzd_aaaaaa_aaa_a_aaaaaaa`
             }
         };
 
-        authentication.federation(mockFederationReq, mockRes);
-        assert.equal(mockRes.httpStatus, 401,
-            'should error when we are missing the realm-specific cookie');
-        assert(spyRedirect.callCount === 0, ' should not redirect');
-        assert(spyRender.calledOnce, 'should render the error page');
-    });
+        it('validate http response 302 and TICKET cookie redirect for federation', function() {
+            authentication.federation(validMockFederationRequest, mockRes);
+            assert(spyRedirect.calledOnce, 'redirect should be called once');
+            assert(validMockFederationRequest.query.url, spyRedirect.getCall(0).args[0],
+                'redirect should be set based on url specified in query parameters of the request');
+            assert.equal(mockRes.cookies.TICKET.value, validMockFederationRequest.cookies.team_TICKET,
+                'the team_TICKET cookie value should be set as the TICKET cookie in the response');
+            assert.equal(mockRes.cookies.TICKET.options.expires, 0,
+                'the expiration on the new stack cookie should be zero (session cookie)');
+            assert.equal(mockRes.cookies.TICKET.options.domain, validMockFederationRequest.headers.host,
+                'the domain of the new stack cookie should use the hostname defined in the request');
+            assert.equal(mockRes.cookies.team_TICKET.value, "",
+                'the realm specific cookie should be empty after federation');
+            assert.equal(mockRes.cookies.team_TICKET.options.expires.getTime(), 0,
+                'the realm specific cookie should be set to expire after federation');
+            assert.equal(mockRes.cookies.team_TICKET.options.domain, config.legacyBase.substring(1),
+                'the realm specific cookie should have the domain specified in config.legacyBase');
+        });
 
-    it('validate http response 401 when realm ticket is null for federation', function() {
-        var mockFederationReq = {
-            query: {
-                "url" : "team.ns.quickbase.com/qbase/governance/12/users"
-            },
-            headers : {
-                host: "team.quickbase.com"
-            },
-            cookies : {
-                "team_TICKET": null
-            }
-        };
+        it('validate http response 302 and TICKET cookie redirect with a non-production hostname for federation', function() {
+            let con = {legacyBase: '.trunk.quickbaserocks.com'};
+            const auth = require('../../../src/components/authentication/index')(con);
+            const mockFederationReq = Object.assign({}, validMockFederationRequest,
+                {
+                    query: {
+                        "url" : "team.mercury.trunk.quickbaserocks.com/qbase/governance/12/users"
+                    },
+                    headers : {
+                        host: "team.mercury.trunk.quickbaserocks.com"
+                    }
+                });
 
-        authentication.federation(mockFederationReq, mockRes);
-        assert.equal(mockRes.httpStatus, 401,
-            'should error when we are missing the realm-specific cookie');
-        assert(spyRedirect.callCount === 0, ' should not redirect');
-        assert(spyRender.calledOnce, 'should render the error page');
+            auth.federation(mockFederationReq, mockRes);
+            assert(spyRedirect.calledOnce, 'redirect should be called once');
+            assert(mockFederationReq.query.url, spyRedirect.getCall(0).args[0],
+                'redirect should be set based on url specified in query parameters of the request');
+            assert.equal(mockRes.cookies.TICKET.value, mockFederationReq.cookies.team_TICKET,
+                'the team_TICKET cookie value should be set as the TICKET cookie in the response');
+            assert.equal(mockRes.cookies.TICKET.options.expires, 0,
+                'the expiration on the new stack cookie should be zero (session cookie)');
+            assert.equal(mockRes.cookies.TICKET.options.domain, mockFederationReq.headers.host,
+                'the domain of the new stack cookie should use the hostname defined in the request');
+            assert.equal(mockRes.cookies.team_TICKET.value, "",
+                'the realm specific cookie should be empty after federation');
+            assert.equal(mockRes.cookies.team_TICKET.options.expires.getTime(), 0,
+                'the realm specific cookie should be set to expire after federation');
+            assert.equal(mockRes.cookies.team_TICKET.options.domain, con.legacyBase.substring(1),
+                'the realm specific cookie should have the domain specified in config.legacyBase');
+        });
+
+        it('validate http response 302 redirect to /db/main?a=myqb when no redirect url is provided for federation', function() {
+            const mockFederationReq = Object.assign({}, validMockFederationRequest, {query: {}});
+            authentication.federation(mockFederationReq, mockRes);
+            assert(`team.quickbase.com/db/main?a=myqb`, spyRedirect.getCall(0).args[0],
+                'redirect should go to legacy stack my apps page');
+        });
+
+        it('validate http response 401 when the realm prefix in the cookie and realmhost mismatch for federation', function() {
+            const mockFederationReq = Object.assign({}, validMockFederationRequest, {cookies: {"someotherrealm_TICKET": "someticketvalue"}});
+
+            authentication.federation(mockFederationReq, mockRes);
+            assert.equal(mockRes.httpStatus, 401,
+                'should error when we are missing the realm-specific cookie');
+            assert(spyRedirect.callCount === 0, ' should not redirect');
+            assert(spyRender.calledOnce, 'should render the error page');
+        });
+
+        it('validate http response 401 when realm ticket is null for federation', function() {
+            const mockFederationReq = Object.assign({}, validMockFederationRequest, {cookies : {"team_TICKET": null}});
+
+            authentication.federation(mockFederationReq, mockRes);
+            assert.equal(mockRes.httpStatus, 401,
+                'should error when we are missing the realm-specific cookie');
+            assert(spyRedirect.callCount === 0, ' should not redirect');
+            assert(spyRender.calledOnce, 'should render the error page');
+        });
+
+        it('validate http 302 redirect to legacy stack if redirect url does not go to a quickbase domain', function() {
+            let con = {legacyBase: '.quickbase.com'};
+            const auth = require('../../../src/components/authentication/index')(con);
+            const mockFederationReq = Object.assign({}, validMockFederationRequest, {query: {"url": "google.com"}});
+
+            auth.federation(mockFederationReq, mockRes);
+            assert(con.legacyBase, spyRedirect.getCall(0).args[0],
+                'redirect should be back to legacy stack');
+        });
+
+        it('validate http 302 redirect to legacy stack if redirect url is not a valid url', function() {
+            let con = {legacyBase: '.quickbase.com'};
+            const auth = require('../../../src/components/authentication/index')(con);
+            const mockFederationReq = Object.assign({}, validMockFederationRequest, {query: {"url": "TOTALLY_NOT_A_URL"}});
+
+            auth.federation(mockFederationReq, mockRes);
+            assert(con.legacyBase, spyRedirect.getCall(0).args[0],
+                'redirect should be back to legacy stack');
+        });
     });
 });
