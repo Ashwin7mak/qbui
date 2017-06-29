@@ -18,7 +18,6 @@ import {removeFieldFromForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import * as SchemaConsts from "../../constants/schema";
 import FormBuilderStage from '../formBuilder/formBuilderStage';
-import QBIcon from '../../../../reuse/client/src/components/icon/icon';
 
 import * as FieldsReducer from '../../reducers/fields';
 

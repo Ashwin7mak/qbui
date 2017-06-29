@@ -44,9 +44,11 @@ export class FormBuilderStage extends React.Component {
         newTableInfo.recordTitleFieldId = fieldId;
         this.props.updateAppTableProperties(this.props.table.appId, this.props.table.id, newTableInfo);
 
-        let newTitleField = _.find(this.props.fields, {id: fieldId});
-        if (newTitleField && !newTitleField.required) {
-            this.props.setRequiredPropForRecordTitleField(this.props.table.appId, this.props.table.id, newTitleField.id, true, true);
+        if (fieldId) {
+            let newTitleField = _.find(this.props.fields, {id: fieldId});
+            if (newTitleField && !newTitleField.required) {
+                this.props.setRequiredPropForRecordTitleField(this.props.table.appId, this.props.table.id, newTitleField.id, true, true);
+            }
         }
     }
 
@@ -69,7 +71,8 @@ export class FormBuilderStage extends React.Component {
                                                       outsideClickIgnoreClass="recordTitleFieldSelect"
                                                       onChange={this.onChangeTitleField}
                                                       table={this.props.table}
-                                                      selectedValue={recordTitleField ? recordTitleField.id : null}/>
+                                                      selectedValue={recordTitleField ? recordTitleField.id : null}
+                                                      openOnFocus={true} autofocus={true}/>
                 </div>
             );
 
@@ -79,8 +82,12 @@ export class FormBuilderStage extends React.Component {
 
 
             titlePicker = (
-                <div onClick={this.onEditStage}>
-                    <div className="titleField">{recordTitleFieldLabel}</div>
+                <div>
+                    <div className="titleField" onClick={this.onEditStage}>
+                        <span>{recordTitleFieldLabel}</span>
+                        <Icon className="editIcon" icon="edit"/>
+                        <span className="Select-arrow-zone"><span className="Select-arrow"></span></span>
+                    </div>
                 </div>
             );
         }
@@ -92,7 +99,7 @@ export class FormBuilderStage extends React.Component {
             );
 
         return (
-            <Stage stageHeadline={headline} className="formStage" open={true}>
+            <Stage stageHeadline={headline} className="formStage" isOpenOnMount={true}>
                 <div className="editableStage">
                     <div className="recordTitleFieldDescription">
                         <I18nMessage message ="tableCreation.recordTitleFieldHeading"/>

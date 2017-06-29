@@ -392,16 +392,18 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+            FormActionsRewireAPI.__Rewire__('updateTable', mockTableActions.updateTable);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+            FormActionsRewireAPI.__ResetDependency__('updateTable');
         });
 
 
-        xit('transforms the data from array structure to object before save', (done) => {
+        it('transforms the data from array structure to object before save', (done) => {
             const store = mockStore({});
 
             return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
@@ -415,7 +417,7 @@ describe('Form Actions', () => {
                 });
         });
 
-        xit('transforms the returned response data after the save', (done) => {
+        it('transforms the returned response data after the save', (done) => {
             const store = mockStore({});
 
             store.dispatch(createForm("appId", "tblId", "view", formData)).then(

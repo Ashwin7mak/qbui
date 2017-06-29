@@ -4,6 +4,7 @@ $table-icon-font-size: $font-size-h3;
 $table-icon-heading-spacer: $spacing-xxx-small;
 
 .formStage {
+    cursor: pointer;
     .formHeader {
         .qbIcon {
             font-size: $table-icon-font-size;
@@ -16,22 +17,45 @@ $table-icon-heading-spacer: $spacing-xxx-small;
     .editableStage {
         margin-left: $table-icon-font-size + $table-icon-heading-spacer + 16px;
         .titleField {
-            display: inline-block;
-            padding: 5px 11px 5px 11px;
-            border: $stroke-width-thin solid $color-black-300;
-            color: $color-black-700;
-            border-radius: 4px;
+            width: 250px;
+            display: table;
+            padding: 5px 0px 5px 11px;
+            border: $stroke-width-thin solid $panel-background-color;
 
+            > * {
+                display: inline-block;
+            }
             .selectedOption {
                 > * {
                     display: inline-block;
                     vertical-align: middle;
                 }
+                .qbIcon {
+                    margin-right: 2px;
+                }
+            }
+            .editIcon {
+                color: $iconfont-on-light-normal-color;
+                font-size: 15px;
+                margin-left: 15px;
+            }
+            .Select-arrow-zone {
+                display: none;
+            }
+
+            .Select-arrow-zone {
+                float: right;
             }
 
             &:hover {
-                border: $stroke-width-thin solid $color-purple-600;
-                color: $color-purple-600;
+                border: $stroke-width-thin solid $panel-border-color;
+                border-radius: $border-radius-base;
+                .editIcon {
+                    display: none;
+                }
+                .Select-arrow-zone {
+                    display: inline-block;
+                }
             }
         }
         .recordTitleFieldDescription {

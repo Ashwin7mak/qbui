@@ -10,6 +10,14 @@ class WindowLocationUtilsMock {
     static pushWithoutQuery() { }
 }
 
+const mockTableActions = {
+    updateTable(_appId, _tableId, table) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'TableUpdated'})));
+        };
+    }
+};
+
 describe('Form Actions load form error functions', () => {
 
     beforeEach(() => {
@@ -49,10 +57,12 @@ describe('Form Actions load form error functions', () => {
         spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
         spyOn(mockFormService.prototype, 'createForm').and.callThrough();
         FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
+        FormActionsRewireAPI.__Rewire__('updateTable', mockTableActions.updateTable);
     });
 
     afterEach(() => {
         FormActionsRewireAPI.__ResetDependency__('FormService');
+        FormActionsRewireAPI.__ResetDependency__('updateTable');
     });
 
     it('test missing params to loadForm', (done) => {
@@ -125,7 +135,7 @@ describe('Form Actions load form error functions', () => {
         });
     });
 
-    xit('test promise reject handling updateForm', (done) => {
+    it('test promise reject handling updateForm', (done) => {
         const store = mockStore({});
         return store.dispatch(updateForm(1, 2, VIEW, {})).then(
             () => {
@@ -141,7 +151,7 @@ describe('Form Actions load form error functions', () => {
             }
         );
     });
-    xit('test promise reject handling createForm', (done) => {
+    it('test promise reject handling createForm', (done) => {
         const store = mockStore({});
         return store.dispatch(createForm(1, 2, VIEW, {})).then(
             () => {

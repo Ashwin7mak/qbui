@@ -23,7 +23,12 @@ class RecordTitleFieldSelection extends React.Component {
     };
 
     getOption(option, className) {
-        return <div className={className + "Option"}><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType({datatypeAttributes: {type: option.type}}))} /> <span className="optionLabel">{option.label}</span></div>;
+        return (
+            <div className={className + "Option"}>
+                {option.type && <Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType({datatypeAttributes: {type: option.type}}))} />}
+                <span className="optionLabel">{option.label}</span>
+            </div>
+        );
     }
     /**
      * get react-select component
@@ -38,13 +43,13 @@ class RecordTitleFieldSelection extends React.Component {
         }
 
         const defaultName = Locale.getMessage("tableCreation.recordTitleFieldDefault", {recordName: tableNoun});
-        const defaultChoice = {id:'', name:defaultName}; // default choice at bottom of select
+        const defaultChoice = {value:'', label:defaultName}; // default choice at bottom of select
 
         let tableFields = _.get(this.props, "table.fields", []);
 
         // ignore built-in fields except for record ID
         tableFields = _.reject(tableFields, field => field.type !== "SCALAR" || (field.builtIn && field.id !== DEFAULT_RECORD_KEY_ID));
-        const choices = [...tableFields, defaultChoice].map(field => {
+        const choices = [...tableFields].map(field => {
             return {
                 value: field.id,
                 label: field.name,
@@ -52,6 +57,7 @@ class RecordTitleFieldSelection extends React.Component {
             };
         });
 
+        choices.push(defaultChoice);
         return <Select className="recordTitleFieldSelect"
                        value={this.props.selectedValue || ""}
                        options={choices}
@@ -59,7 +65,9 @@ class RecordTitleFieldSelection extends React.Component {
                        valueRenderer={(option) => this.getOption(option, "selected")}
                        onChange={this.selectField}
                        autosize={false}
-                       clearable={false} />;
+                       clearable={false}
+                       openOnFocus={this.props.openOnFocus}
+                       autofocus={this.props.autofocus}/>;
     }
 
     render() {
@@ -70,6 +78,11 @@ class RecordTitleFieldSelection extends React.Component {
     }
 
 }
+RecordTitleFieldSelection.defaultProps = {
+    openOnFocus: false,
+    autofocus: false
+};
+
 
 RecordTitleFieldSelection.propTypes = {
     onChange: PropTypes.func.isRequired,
