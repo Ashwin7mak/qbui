@@ -166,7 +166,7 @@ describe('IconChooser', () => {
     });
 
     describe('getSuggestedIcons', () => {
-        it('will return an empty string if name is an empty string', () => {
+        it('will typeForSuggestionsText if name is an empty string', () => {
             component = mount(<IconChooser name=""
                                              listOfIconsByNames={[]}
                                              listOfIconsByTagNames={[]}
