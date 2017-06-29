@@ -95,7 +95,7 @@ class IconChooser extends Component {
      */
     getSuggestedIcons = () => {
         const name = _.get(this.props, 'name', '').toLowerCase().trim();
-        debugger;
+
         if (name === '') {
             return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.typeForSuggestionsText}/></div>;
         }
