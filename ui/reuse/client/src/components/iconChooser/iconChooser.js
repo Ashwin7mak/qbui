@@ -85,7 +85,7 @@ class IconChooser extends Component {
      * @param name
      * @returns {XML}
      */
-    getAppIcon = (name) => {
+    getIcon = (name) => {
         return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name} tooltipTitle={IconUtils.getIconToolTipTitle(this.props.listOfIconsByTagNames, name)}/>;
     };
 
@@ -95,7 +95,7 @@ class IconChooser extends Component {
      */
     getSuggestedIcons = () => {
         const name = _.get(this.props, 'name', '').toLowerCase().trim();
-
+        debugger;
         if (name === '') {
             return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.typeForSuggestionsText}/></div>;
         }
@@ -109,7 +109,7 @@ class IconChooser extends Component {
             <div className="iconList">
                 {suggestedIcons.map((iconName, i) => (
                     <button key={i} onClick={() => this.selectIcon(iconName)} type="button">
-                        {this.getAppIcon(iconName)}
+                        {this.getIcon(iconName)}
                     </button>))}
             </div>);
     };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import IconChooser, {__RewireAPI__ as IconChooserCutsRewireAPI} from 'REUSE/components/iconChooser/iconChooser';
 
@@ -8,10 +8,12 @@ let component;
 const mockParentFunctions = {
     onOpen() {},
     onClose() {},
-    setIconChoice() {}
+    setIconChoice() {},
+    getIcon() {}
 };
 
 let icons = ['a', 'b', 'c', 'd', 'e'];
+let instance;
 
 let fontName = 'someFont';
 
@@ -160,6 +162,40 @@ describe('IconChooser', () => {
 
         vehicleIcons.forEach((vehicle) => {
             expect(component.find(`.allIcons .qbIcon.${fontName}-${vehicle}`)).toBePresent();
+        });
+    });
+
+    fdescribe('getSuggestedIcons', () => {
+        it('will return an empty string if name is an empty string', () => {
+            component = mount(<IconChooser name=""
+                                             listOfIconsByNames={[]}
+                                             listOfIconsByTagNames={[]}
+                                             typeForSuggestionsText="mockTypeForSuggestionsText"
+                                             noSuggestedIconsText="mockNoSuggestedIconsText"/>);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            instance.getSuggestedIcons();
+
+            expect(component.find('.noSuggestedIcons .iconList')).toBePresent();
+            expect(component.find('.noSuggestedIcons .iconList')).toIncludeText("mockTypeForSuggestionsText");
+            expect(instance.getIcon).not.toHaveBeenCalled();
+        });
+
+        it('will return the prop mockNoSuggestedIconsText if prop name does not match listOfIconsByNames', () => {
+            component = mount(<IconChooser name="mockName"
+                                           listOfIconsByNames={[]}
+                                           listOfIconsByTagNames={[]}
+                                           typeForSuggestionsText="mockTypeForSuggestionsText"
+                                           noSuggestedIconsText="mockNoSuggestedIconsText"/>);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            instance.getSuggestedIcons();
+
+            expect(component.find('.noSuggestedIcons .iconList')).toBePresent();
+            expect(component.find('.noSuggestedIcons .iconList')).toIncludeText("mockNoSuggestedIconsText");
+            expect(instance.getIcon).not.toHaveBeenCalled();
         });
     });
 });
