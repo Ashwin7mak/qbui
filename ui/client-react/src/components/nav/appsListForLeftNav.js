@@ -7,6 +7,8 @@ import {connect} from 'react-redux';
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
+
+import {tableIconNames} from '../../../../reuse/client/src/components/icon/tableIcons';
 import _ from 'lodash';
 
 export const AppsList = React.createClass({
@@ -40,7 +42,8 @@ export const AppsList = React.createClass({
         return this.props.apps && this.props.apps.map((app) => {
             // Give all apps in the left nav list a default icon of 'favicon'
             // TODO:: Refactor where the icon is obtain from in MC-3596. Patching for the purpose of the current story.
-            let appForNavItem = {icon: 'favicon', tableIcon: 'favicon', ...app};
+            let randomIcon = tableIconNames[Math.floor(Math.random() * tableIconNames.length - 1)];
+            let appForNavItem = {icon: randomIcon, tableIcon: randomIcon, ...app};
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
                          item={appForNavItem}
