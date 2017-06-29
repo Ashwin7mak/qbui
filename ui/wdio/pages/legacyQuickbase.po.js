@@ -8,25 +8,21 @@ class legacyQuickbase {
 
     get buttonQBUniversitybDone() {
         //* Done button on Quick Base University popup
-        browser.element('.walkme-action-done.walkme-click-and-hover').waitForVisible();
         return browser.element('.walkme-action-done.walkme-click-and-hover');
     }
 
     get linkManageMyBillingAccount() {
         //* Manage my billing account link in Account Admin frame
-        browser.element('#manageMyBillingAccount').waitForVisible();
         return browser.element('#manageMyBillingAccount');
     }
 
     get linkManageAllUsersInAcctAdmin() {
         //* Manage all users link in Account Admin frame
-        browser.element('.SideBarLink[id="manageUsersSidebar"] a[id="manageUsers"]').waitForVisible();
         return browser.element('.SideBarLink[id="manageUsersSidebar"] a[id="manageUsers"]');
     }
 
     get linkManageAllUsersInMBASummary() {
         //* Manage all users link in Manage Billing Account Summary tab, id should be added for this link
-        browser.element('.mid a[id="manageAllUsersLink"]').waitForVisible();
         return browser.element('.mid a[id="manageAllUsersLink"]');
     }
 
@@ -42,6 +38,7 @@ class legacyQuickbase {
      * Dismiss the Quick Base University popup
      */
     dismissQBUniversityPopup(){
+        this.buttonQBUniversitybDone.waitForVisible();
         return this.buttonQBUniversitybDone.click();
     }
 
@@ -56,6 +53,7 @@ class legacyQuickbase {
      * Click the Manage billing account link in the AccountAdmin frame
      */
     clickManageBillingAccountLinkInAcctAdmin() {
+        this.linkManageMyBillingAccount.waitForVisible();
         return this.linkManageMyBillingAccount.click();
     }
 
@@ -63,6 +61,7 @@ class legacyQuickbase {
      * Click the Manage all users link in the AccountAdmin frame
      */
     clickManageAllUsersLinkInAcctAdmin() {
+        this.linkManageAllUsersInAcctAdmin.waitForVisible();
         return this.linkManageAllUsersInAcctAdmin.click();
     }
 
@@ -70,6 +69,7 @@ class legacyQuickbase {
      * Click the Manage all users link in the Manage Billing Account Summary tab
      */
     clickManageAllUsersLinkInMBASummaryTab() {
+        this.linkManageAllUsersInMBASummary.waitForVisible();
         return this.inkManageAllUsersInMBASummary.click();
     }
 
