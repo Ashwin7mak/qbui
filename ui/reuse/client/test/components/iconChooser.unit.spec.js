@@ -183,7 +183,7 @@ describe('IconChooser', () => {
             expect(instance.getIcon).not.toHaveBeenCalled();
         });
 
-        it('will render mockNoSuggestedIconsText if prop name does not match listOfIconsByNames', () => {
+        it('will render mockNoSuggestedIconsText if a user search does not match an icon in the listOfIconsByNames', () => {
             component = mount(<IconChooser name="mockName"
                                            listOfIconsByNames={[]}
                                            listOfIconsByTagNames={[]}
@@ -200,7 +200,7 @@ describe('IconChooser', () => {
             expect(instance.getIcon).not.toHaveBeenCalled();
         });
 
-        it('will invoke getIcon if a user searchers for an icon in the listOfIconsByNames', () => {
+        it('will invoke getIcon if a user search matches an icon in the listOfIconsByNames', () => {
             let dragonIcon = 'dragon';
             component = mount(<IconChooser name={dragonIcon}
                                            listOfIconsByNames={[dragonIcon]}
