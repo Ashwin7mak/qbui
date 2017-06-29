@@ -67,7 +67,8 @@ class formBuilderPage {
 
     get firstField() {
         // the first field on the form
-        return browser.element('.field');
+        // return browser.element('.field');
+        return browser.element('.formElementContainer');
     }
 
     get firstNewFieldGroup() {
@@ -93,6 +94,11 @@ class formBuilderPage {
     get multiChoiceEditor() {
         // The multiline choice editor in the FIELD PROPERTIES panel
         return browser.element('.multiChoicePropertyContainer textarea');
+    }
+
+    get qbPanelHeader() {
+        // a wrapper for the FORM TITLE
+        return browser.element('.qbPanelHeader');
     }
 
     get requiredCheckbox() {
@@ -168,6 +174,11 @@ class formBuilderPage {
         return browser.element('.formContainer .qbPanelHeaderTitleText');
     }
 
+    get tooltip() {
+        // The tooltip which appears when you hover over a NEW or EXISTING field in the left panel
+        return browser.element('.tooltip');
+    }
+
     get uniqueCheckbox() {
         // The MUST BE UNIQUE checkbox
         return browser.element('//div[@class="checkboxPropertyContainer"]//label[text()="Must be unique"]/..');
@@ -234,20 +245,16 @@ class formBuilderPage {
         // Clicks on the specified new field token and drags it to the specified target field
         let sourceLabel = source.getText();
         source.moveToObject();
+        // wait a bit for the tile to be ready to be dragged
+        this.tooltip.waitForVisible();
         browser.buttonDown();
-        browser.pause(e2eConsts.shortWaitTimeMs);
         // move to target & jiggle
         target.moveToObject();
         target.moveToObject(5, 5);
-        browser.pause(1000); // initial insertion point is below target, then fields shift down
+        target.element('.dropHovering').waitForExist();
         // release button
         browser.buttonUp();
-        // wait for the new field to replace the target
-        let targetLabel = browser.element('.formElementContainer .selectedFormElement').element('./..').getText();
-        browser.waitUntil(function() {
-            return targetLabel.startsWith(sourceLabel); // ignore any 'helper' text (e.g. "Select..." for Choice list)
-        }, e2eConsts.mediumWaitTimeMs, 'Expected target label (' + targetLabel + ') to match source label (' + sourceLabel + ') after drag');
-        browser.pause(e2eConsts.shortWaitTimeMs);
+        target.element('.notDropHovering').waitForExist();
         return this.getFieldLabels();
     }
 
