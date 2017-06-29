@@ -45,11 +45,11 @@
             // Load the List All report on Table 1
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
+
         /**
          * Test to add a record via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-
         it('Add a record via form', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
@@ -86,15 +86,9 @@
         it('add a field which is both REQUIRED and UNIQUE & verify appropriate errors while adding new record', function() {
             // click on a cell to view a record so that we can edit the form so that we can add new fields
             reportContentPO.clickOnRecordInReportTable(0);
-            // add a new field for us to customize
-            // this line causes failure in FF & Safari due to MouseMoveTo...
-            // rather than exclude it from those browsers, replace it with
-            // something that doesn't do that, like select first field then
-            // click to add 2nd field, then test 2nd field on add form
-//            formBuilderPO.open().dragNewFieldOntoForm(formBuilderPO.firstFieldToken, formBuilderPO.firstField);
+            // add a new field for us to customize (avoiding dragNewFieldToForm for x-browser compatibility)
             formBuilderPO.open().selectFieldByIndex(1);
             formBuilderPO.addNewField("Text");
-            // dragNewFieldOntoForm(formBuilderPO.firstFieldToken, formBuilderPO.firstField);
             // revise the UNIQUE property (i.e. click the unchecked checkbox to check it)
             formBuilderPO.setUniqueCheckboxState(true);
             // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
