@@ -101,7 +101,7 @@ describe('AppsListForLeftNav', () => {
         component.setState({searchText: 'mockSearchText'});
 
         instance = component.instance();
-        instance.onClearSearch()
+        instance.onClearSearch();
 
         expect(component).toHaveState('searchText', '');
     });
@@ -111,7 +111,7 @@ describe('AppsListForLeftNav', () => {
             target: {
                 value: 'newMockSearchText'
             }
-        }
+        };
         component = mount(<AppsList/>);
 
         component.setState({searching: false});
