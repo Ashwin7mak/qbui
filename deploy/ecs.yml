@@ -97,6 +97,9 @@ Resources:
                 - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
             - Name: legacyBase
               Value: !Ref LegacyBase
+          ExtraHosts:
+            - Hostname: "hostxray"
+              IpAddress: "169.254.170.3"
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
