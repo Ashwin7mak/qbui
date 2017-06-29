@@ -507,7 +507,7 @@
                 expect(fieldLabels).toContain(arrayContaining(dropDownListLabels));
             });
             //select one and reset
-            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield.element('.Select-value-label'), dropDownListLabels[0]);
             this.clickOnEditTableResetBtn();
             //make sure the selection goes back to default selection
             expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
