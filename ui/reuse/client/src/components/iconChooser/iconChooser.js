@@ -30,7 +30,7 @@ class IconChooser extends Component {
     /**
      * expand/collapse icon grid
      */
-    toggleAllIcons = () =>{
+    toggleAllIcons = () => {
         if (this.props.isOpen) {
             this.props.onClose();
         } else {
@@ -73,7 +73,7 @@ class IconChooser extends Component {
      */
     selectIcon = (icon) => {
         this.toggleAllIcons(); // collapse the icon chooser
-
+        debugger;
         this.props.setIconChoice(icon);
     };
 
@@ -84,7 +84,6 @@ class IconChooser extends Component {
      * @returns {boolean}
      */
     shouldComponentUpdate(nextProps, nextState) {
-
         return nextProps.isOpen !== this.props.isOpen ||
             nextProps.selectedIcon !== this.props.selectedIcon ||
             nextState.filterText !== this.state.filterText ||
@@ -144,7 +143,7 @@ class IconChooser extends Component {
         }
 
         return (
-            <div className="dialogField iconSelection">
+            <div className={`${this.props.className} dialogField iconSelection`}>
                 <div className={classes.join(' ')}>
                     <div className="topRow">
                         {this.renderIconToggle()}

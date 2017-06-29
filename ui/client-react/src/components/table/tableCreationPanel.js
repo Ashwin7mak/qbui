@@ -148,6 +148,7 @@ class TableCreationPanel extends Component {
                                       validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
 
                     <IconChooser selectedIcon={this.props.tableInfo && this.props.tableInfo.tableIcon ? this.props.tableInfo.tableIcon.value : null}
+                                 className="tableCreationIconChooser"
                                  name={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.value : ""}
                                  isOpen={this.props.iconChooserOpen}
                                  onOpen={this.props.openIconChooser}
