@@ -77,7 +77,7 @@ class IconChooser extends Component {
 
         return nextProps.isOpen !== this.props.isOpen ||
             nextProps.selectedIcon !== this.props.selectedIcon ||
-            nextProps.isOpen !== this.props.isOpen ||
+            nextProps.name !== this.props.name ||
             nextState.filterText !== this.state.filterText;
     }
 
@@ -100,6 +100,7 @@ class IconChooser extends Component {
         if (name === '') {
             return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.typeForSuggestionsText}/></div>;
         }
+
         let suggestedIcons = this.props.listOfIconsByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, name, icon)).slice(0, 8);
 
         if (suggestedIcons.length === 0) {
