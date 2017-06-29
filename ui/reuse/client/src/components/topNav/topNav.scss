@@ -134,6 +134,14 @@
             padding: 0;
             vertical-align: middle;
             line-height: 40px;
+
+            .globalAction {
+                height: 40px;
+
+                .globalActionLink {
+                    vertical-align: top;
+                }
+            }
         }
 
         .globalAction {

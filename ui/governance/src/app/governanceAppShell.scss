@@ -41,19 +41,14 @@ $topnav-hover-background-color: #40caf8;
                 }
             }
 
-            a.dropdownToggle:hover {
+            a:hover {
                 color: $topnav-hover-background-color;
-            }
-        }
 
-        .globalActionsList {
-            .globalAction {
-                height: 40px;
-
-                .globalActionLink {
-                    vertical-align: top;
+                span.reHelpButtonHover.qbIcon {
+                    color: inherit;
                 }
             }
+
         }
     }
 }
