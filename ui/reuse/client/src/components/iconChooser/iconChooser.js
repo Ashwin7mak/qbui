@@ -110,7 +110,7 @@ class IconChooser extends Component {
         return (
             <div className="iconList">
                 {suggestedIcons.map((iconName, i) => (
-                    <button key={i} onClick={() => this.selectIcon(iconName)} type="button">
+                    <button key={i} onClick={() => this.selectIconDoNotToggle(iconName)} type="button">
                         {this.getIcon(iconName)}
                     </button>))}
             </div>);
@@ -122,6 +122,15 @@ class IconChooser extends Component {
      */
     selectIcon = (icon) => {
         this.toggleAllIcons(); // collapse the icon chooser
+        this.props.setIconChoice(icon);
+    };
+
+    /**
+     * selectIconDoNotToggle selected callback
+     * allows a user to select an icon from the list of suggested icon without toggling the icon menu open
+     * @param icon
+     */
+    selectIconDoNotToggle = (icon) => {
         this.props.setIconChoice(icon);
     };
 
