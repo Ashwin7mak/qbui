@@ -20,19 +20,23 @@ class legacyLogin {
     }
 
     /**
+     * Invoke the login page
+     * @param url
+     */
+    invoke(url) {
+        browser.url(url);
+        this.buttonSignIn.waitForVisible();
+        return this;
+    }
+    /**
      * Login user
      * @param username
      * @param password
      */
     signInUser(username, password) {
-        try {
-            this.buttonSignIn.waitForVisible();
-            this.username.setValue(username);
-            this.password.setValue(password);
-            return this.buttonSignIn.click();
-        } catch (err) {
-            browser.logger.error('Error in signInUser function:' + err);
-        }
+        this.username.setValue(username);
+        this.password.setValue(password);
+        return this.buttonSignIn.click();
     }
 
 }
