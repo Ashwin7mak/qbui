@@ -5,7 +5,7 @@ class notificationContainerWindow {
      */
     waitUntilNotificationContainerGoesAway() {
         //wait until notification container slides away
-        browser.waitForExist('.notification-container-empty', e2eConsts.mediumWaitTimeMs);
+        browser.waitForExist('.notification-message', e2eConsts.longWaitTimeMs);
         //Need this to wait for container to slide away
         return browser.pause(e2eConsts.mediumWaitTimeMs);
     }

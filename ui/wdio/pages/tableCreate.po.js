@@ -11,6 +11,8 @@
     let reportContentPO = requirePO('reportContent');
     let modalDialog = requirePO('/common/modalDialog');
     const tableNameFieldTitle = "Table name";
+    let topNavPO = requirePO('topNav');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     let tablesPage = Object.create(e2ePageBase, {
         //new table button
@@ -415,17 +417,6 @@
         }},
 
         /**
-         * Method to click on table settings and properties link under tables gear icon in global actions
-         */
-        clickOnModifyTableSettingsLink : {value: function() {
-            this.verifyTableSettingsDropDown();
-            //Click on table properties and settings link
-            this.modifyTableSettingsLink.waitForVisible();
-            this.modifyTableSettingsLink.click();
-            return browser.element('.dialogCreationPanelInfo').waitForVisible();
-        }},
-
-        /**
          * Method to click on 'back to apps ' link
          */
         clickBackToAppsLink : {value: function() {
@@ -443,6 +434,7 @@
             this.editTableApplyBtn.waitForVisible();
             this.editTableApplyBtn.click();
             //Need this for notification container to slide away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
             return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
@@ -454,6 +446,7 @@
             this.editTableResetBtn.waitForVisible();
             this.editTableResetBtn.click();
             //Need this for notification container to slide away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
@@ -483,7 +476,7 @@
             let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
 
             //go to the table settings page for the table
-            this.clickOnModifyTableSettingsLink();
+            topNavPO.clickOnTableSettingsLink();
             let pickerfield = browser.element('.recordTitleFieldSelect');
             //verify the selected value
             expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
@@ -504,7 +497,7 @@
                 for (let i = 0; i < fieldLabel.fields.length; i++) {
                     fieldLabels.push(fieldLabel.fields[i].name);
                 }
-                expect(fieldLabels).toContain(arrayContaining(dropDownListLabels));
+                expect(fieldLabels).toContain(expect.arrayContaining(dropDownListLabels));
             });
             //select one and reset
             modalDialog.selectItemFromModalDialogDropDownList(pickerfield.element('.Select-value-label'), dropDownListLabels[0]);
