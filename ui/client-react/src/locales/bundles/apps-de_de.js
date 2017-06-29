@@ -740,7 +740,6 @@ export default {
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
             descriptionHeading: "App Beschreibung",
             appCreationFailed: "App konnte nicht erstellt werden",
-
             searchPlaceholder: "Such-Symbole suchen...",
             typeForSuggestions: "Bitte geben Sie einen App-Namen ein, um Vorschläge zu erhalten",
             noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen App-Namen"
