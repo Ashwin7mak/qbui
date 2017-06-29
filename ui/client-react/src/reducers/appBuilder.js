@@ -7,7 +7,8 @@ const setDefaultSettings = {
     name: '',
     description: '',
     icon: defaultAppIcon,
-    isAppIconChooserOpen: false
+    isAppIconChooserOpen: false,
+    isDialogOpen: false
 };
 
 const appBuilder = (
