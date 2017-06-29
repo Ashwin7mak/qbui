@@ -165,7 +165,7 @@ describe('IconChooser', () => {
         });
     });
 
-    fdescribe('getSuggestedIcons', () => {
+    describe('getSuggestedIcons', () => {
         it('will return an empty string if name is an empty string', () => {
             component = mount(<IconChooser name=""
                                              listOfIconsByNames={[]}
@@ -179,10 +179,11 @@ describe('IconChooser', () => {
 
             expect(component.find('.noSuggestedIcons .iconList')).toBePresent();
             expect(component.find('.noSuggestedIcons .iconList')).toIncludeText("mockTypeForSuggestionsText");
+            expect(component.find('.noSuggestedIcons .iconList')).not.toIncludeText("mockNoSuggestedIconsText");
             expect(instance.getIcon).not.toHaveBeenCalled();
         });
 
-        it('will return the prop mockNoSuggestedIconsText if prop name does not match listOfIconsByNames', () => {
+        it('will render mockNoSuggestedIconsText if prop name does not match listOfIconsByNames', () => {
             component = mount(<IconChooser name="mockName"
                                            listOfIconsByNames={[]}
                                            listOfIconsByTagNames={[]}
@@ -195,7 +196,46 @@ describe('IconChooser', () => {
 
             expect(component.find('.noSuggestedIcons .iconList')).toBePresent();
             expect(component.find('.noSuggestedIcons .iconList')).toIncludeText("mockNoSuggestedIconsText");
+            expect(component.find('.noSuggestedIcons .iconList')).not.toIncludeText("mockTypeForSuggestionsText");
             expect(instance.getIcon).not.toHaveBeenCalled();
+        });
+
+        it('will invoke getIcon if a user searchers for an icon in the listOfIconsByNames', () => {
+            let dragonIcon = 'dragon';
+            component = mount(<IconChooser name={dragonIcon}
+                                           listOfIconsByNames={[dragonIcon]}
+                                           listOfIconsByTagNames={[]}
+                                           typeForSuggestionsText="mockTypeForSuggestionsText"
+                                           noSuggestedIconsText="mockNoSuggestedIconsText"/>);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            instance.getSuggestedIcons();
+
+            expect(component.find('.noSuggestedIcons .iconList')).not.toBePresent();
+            expect(component.find('.iconList')).toBePresent();
+            expect(instance.getIcon).toHaveBeenCalledWith(dragonIcon);
+        });
+
+        it('will invoke selectIcon when the icon is clicked on', () => {
+            let dragonIcon = 'dragon';
+            component = mount(<IconChooser name={dragonIcon}
+                                           listOfIconsByNames={[dragonIcon]}
+                                           listOfIconsByTagNames={[]}
+                                           typeForSuggestionsText="mockTypeForSuggestionsText"
+                                           noSuggestedIconsText="mockNoSuggestedIconsText"/>);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            spyOn(instance, 'selectIcon');
+            instance.getSuggestedIcons();
+
+            let iconList = component.find('.iconList button');
+            iconList.simulate('click');
+
+            expect(component.find('.noSuggestedIcons .iconList')).not.toBePresent();
+            expect(instance.selectIcon).toHaveBeenCalledWith(dragonIcon);
+            expect(instance.getIcon).toHaveBeenCalledWith(dragonIcon);
         });
     });
 });
