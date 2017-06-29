@@ -396,7 +396,7 @@ class formBuilderPage {
 
     setRequiredCheckboxState(state) {
         // Clicks on the MUST BE FILLED IN checkbox IF NECESSARY to make the checked state match the specified value
-        if (state !== this.requiredCheckboxChecked.isExisting()) {
+        if (state !== this.getRequiredCheckboxState()) {
             this.requiredCheckbox.click();
         }
         return this;
@@ -404,7 +404,7 @@ class formBuilderPage {
 
     setUniqueCheckboxState(state) {
         // Clicks on the MUST BE UNIQUE checkbox IF NECESSARY to make the checked state match the specified value
-        if (state !== this.uniqueCheckboxChecked.isExisting()) {
+        if (state !== this.getUniqueCheckboxState()) {
             this.uniqueCheckbox.click();
         }
         return this;

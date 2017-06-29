@@ -6,6 +6,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
+    var formBuilderPO = requirePO('formBuilder');
     var ReportInLineEditPO = requirePO('reportInLineEdit');
 
     describe('Forms - Add a record via form tests: ', function() {
@@ -44,11 +45,11 @@
             // Load the List All report on Table 1
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
-
         /**
          * Test to add a record via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
+/*
         it('Add a record via form', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
@@ -80,6 +81,52 @@
 
             // Step 7 - Verify the records count got increased by 1
             expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount + 1);
+        });
+*/
+        it('add a field which is both REQUIRED and UNIQUE & verify appropriate errors while adding new record', function() {
+            // click on a cell to view a record so that we can edit the form so that we can add new fields
+            reportContentPO.clickOnRecordInReportTable(1);
+            // add a new field for us to customize
+            formBuilderPO.open().dragNewFieldOntoForm(formBuilderPO.firstFieldToken, formBuilderPO.firstField);
+            // revise the UNIQUE property (i.e. click the unchecked checkbox to check it)
+            formBuilderPO.setUniqueCheckboxState(true);
+            // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
+            formBuilderPO.setRequiredCheckboxState(true);
+            // save the form & new field
+            formBuilderPO.save();
+            // click on ADD RECORD Button
+            reportContentPO.clickAddRecordBtnOnStage();
+            // click SAVE button
+            formsPO.clickFormSaveBtn();
+            // expect REQUIRED error
+            expect(formsPO.formErrorMessageHeader.getText()).toBe('Please fix this field');
+            expect(formsPO.formErrorMessageContent.getText()).toBe(formBuilderPO.stripAsterisk(formsPO.firstFieldLabel.getText()));
+            // dismiss the error
+            formsPO.formErrorMessageContainerCloseBtn.click();
+            // specify a value
+            let testValue = 'test';
+            formsPO.firstTextField.setValue(testValue);
+            // click SAVE button
+            formsPO.clickFormSaveBtn();
+            // click on ADD RECORD Button
+            reportContentPO.clickAddRecordBtnOnStage();
+            // specify the same value as the previous new record
+            formsPO.firstTextField.setValue(testValue);
+            // click SAVE button
+            formsPO.clickFormSaveBtn();
+            // expect UNIQUE error
+            expect(formsPO.formErrorMessageHeader.getText()).toBe('Please fix this field');
+            expect(formsPO.formErrorMessageContent.getText()).toBe(formBuilderPO.stripAsterisk(formsPO.firstFieldLabel.getText()));
+            // dismiss the error
+            formsPO.formErrorMessageContainerCloseBtn.click();
+            formsPO.formErrorMessageContainerEl.waitForExist(null, true);
+            // make the value unique by appending the same value
+            formsPO.firstTextField.click();
+            formsPO.firstTextField.keys(["Command", "ArrowRight", "Command", testValue]);
+            // click SAVE button
+            formsPO.clickFormSaveBtn(); // needs to go to end of string to append, or something else...?
+            // wait until edit form disappears (implicitly assert no error appears)
+            formsPO.editFormContainerEl.waitForExist(null, true);
         });
     });
 }());

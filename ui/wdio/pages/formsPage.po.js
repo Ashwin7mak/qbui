@@ -34,7 +34,9 @@
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconUISturdy-edit');}},
-
+        // first text field on the form
+        firstTextField : {get: function() {return this.editFormContainerEl.element('.textField');}},
+        firstFieldLabel : {get: function() {return this.editFormContainerEl.element('.fieldLabel');}},
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
         //cancel form button
@@ -88,9 +90,9 @@
             //Click on form Save button
             this.editFormSaveBtns.waitForVisible();
             this.clickBtnOnForm('Save');
-            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until save success container goes away
-            return notificationContainer.waitUntilNotificationContainerGoesAway();
+            // return notificationContainer.waitUntilNotificationContainerGoesAway();
         }},
 
         /**
