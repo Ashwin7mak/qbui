@@ -99,7 +99,6 @@
                 // verify REQUIRED checkbox IS checked
                 expect(formBuilderPO.getRequiredCheckboxState()).toBe(true);
             });
- /*
 
             it('rename a field, verify no revision after CANCEL', function() {
                 let originalFields = formBuilderPO.getFieldLabels();
@@ -219,7 +218,6 @@
                 // verify persistence
                 expect(newFields).toEqual(movedFields);
             });
-            */
         }
     });
 }());

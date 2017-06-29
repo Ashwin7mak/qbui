@@ -2,9 +2,10 @@
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
-let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
+
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
 
@@ -76,7 +77,7 @@ class formBuilderPage {
 
     get firstFieldToken() {
         // The FIRST field in the list of NEW or EXISTING fields (left panel)
-        return browser.element('.rc-tabs-tabpane-active .listOfElementsItem');
+        return browser.element(tab_Field);
     }
 
     get formBuilderContainer() {
@@ -191,6 +192,11 @@ class formBuilderPage {
         return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
     }
 
+    addFirstField() {
+        this.firstFieldToken.click();
+        return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+    }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.waitForVisible();
@@ -233,6 +239,7 @@ class formBuilderPage {
         // move to target & jiggle
         target.moveToObject();
         target.moveToObject(5, 5);
+        browser.pause(1000); // initial insertion point is below target, then fields shift down
         // release button
         browser.buttonUp();
         // wait for the new field to replace the target
@@ -317,13 +324,9 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
-        //Need to stabilize the menu
-        browser.pause(e2eConsts.shortWaitTimeMs);
         topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
-        // this.firstField.waitForExist();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         expect(this.tab_Active.getText()).toBe("New");
         return this;
     }
