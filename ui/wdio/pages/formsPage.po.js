@@ -353,6 +353,10 @@
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
+        getFieldByIndex: {value: function(index) {
+            return browser.element('.formElementContainer:nth-child(' + index + ')');
+        }},
+
         /**
          * Method to set input value for a field on the form.
          */
@@ -368,6 +372,10 @@
                     fieldTypes.value[i].setValue([fieldValue]);
                 }
             }
+        }},
+
+        setFieldValueByIndex: {value: function(index, value) {
+            this.getFieldByIndex(index).element('.input').setValue(value);
         }},
 
         /**

@@ -441,7 +441,7 @@ class formBuilderPage {
 
     stripAsterisk(label) {
         // strips the leading '* ' from a field label if necessary
-        return label.replace('* ', ''); // not limited to leading chars but simple
+        return label.replace('* ', '');
     }
 
     KB_cancel() {
