@@ -217,7 +217,7 @@ describe('IconChooser', () => {
             expect(instance.getIcon).toHaveBeenCalledWith(dragonIcon);
         });
 
-        it('will invoke selectIcon when the icon is clicked on', () => {
+        it('will invoke selectIconDoNotToggle when the icon is clicked on', () => {
             let dragonIcon = 'dragon';
             component = mount(<IconChooser name={dragonIcon}
                                            listOfIconsByNames={[dragonIcon]}
@@ -227,14 +227,14 @@ describe('IconChooser', () => {
 
             instance = component.instance();
             spyOn(instance, 'getIcon');
-            spyOn(instance, 'selectIcon');
+            spyOn(instance, 'selectIconDoNotToggle');
             instance.getSuggestedIcons();
 
             let iconList = component.find('.iconList button');
             iconList.simulate('click');
 
             expect(component.find('.noSuggestedIcons .iconList')).not.toBePresent();
-            expect(instance.selectIcon).toHaveBeenCalledWith(dragonIcon);
+            expect(instance.selectIconDoNotToggle).toHaveBeenCalledWith(dragonIcon);
             expect(instance.getIcon).toHaveBeenCalledWith(dragonIcon);
         });
     });
