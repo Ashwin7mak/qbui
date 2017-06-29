@@ -1,12 +1,10 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {mount} from 'enzyme';
-import TestUtils, {Simulate} from 'react-addons-test-utils';
+import {Simulate} from 'react-addons-test-utils';
 import {FormBuilderStage} from '../../../src/components/formBuilder/formBuilderStage';
 
-import _ from 'lodash';
-
-describe('FormBuilderStage functions', () => {
+describe('FormBuilderStage ', () => {
     let component;
 
     const props = {
@@ -25,10 +23,6 @@ describe('FormBuilderStage functions', () => {
 
     beforeEach(() => {
         jasmineEnzyme();
-
-    });
-
-    afterEach(() => {
 
     });
 

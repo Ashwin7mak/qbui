@@ -532,8 +532,7 @@ export const QBForm = React.createClass({
      * Create a form footer with built-in fields
      */
     createFormStage() {
-        return this.props.editingForm ?
-            <FormBuilderStage table={this.props.table} /> : null;
+        return this.props.editingForm && <FormBuilderStage table={this.props.table} />;
     },
 
 
@@ -651,12 +650,16 @@ export const QBForm = React.createClass({
         }
 
         let formStage = this.createFormStage();
-        let classes = "form";
-        classes += this.props.edit ? " editForm" : " viewForm";
+        let classes = ["form"];
+        if (this.props.edit) {
+            classes.push(" editForm");
+        } else {
+            classes.push(" viewForm");
+        }
         return (
             <div className="formContainer">
                 {formStage}
-                <form className={classes}>
+                <form className={classes.join(" ")}>
                     {formContent}
                 </form>
                 <div>{formFooter}</div>

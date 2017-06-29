@@ -34,7 +34,7 @@ describe('RecordTitleFieldSelection functions', () => {
     it('renders RecordTitleFieldSelection component with default title field if no selectedValue is passed in', () => {
         component = mount(<RecordTitleFieldSelection {...props}/>);
 
-        let selectLabel = component.find(".selectedOptionLabel");
+        let selectLabel = component.find(".optionLabel");
         expect(component.find(RecordTitleFieldSelection)).toBePresent();
         expect(selectLabel).toBePresent();
         expect(selectLabel.text()).toEqual("Default to tableNoun + ID");
@@ -42,11 +42,10 @@ describe('RecordTitleFieldSelection functions', () => {
     });
 
     it('renders RecordTitleFieldSelection component with default title field for null selectedValue', () => {
-        let newProps = _.cloneDeep(props);
-        newProps.selectedValue = "";
+        let newProps = {...props, selectedValue: ''};
         component = mount(<RecordTitleFieldSelection {...newProps}/>);
 
-        let selectLabel = component.find(".selectedOptionLabel");
+        let selectLabel = component.find(".optionLabel");
         expect(component.find(RecordTitleFieldSelection)).toBePresent();
         expect(selectLabel).toBePresent();
         expect(selectLabel.text()).toEqual("Default to tableNoun + ID");
@@ -55,14 +54,13 @@ describe('RecordTitleFieldSelection functions', () => {
 
     it('renders RecordTitleFieldSelection with a provided title field and selection works', () => {
 
-        let newProps = _.cloneDeep(props);
-        newProps.selectedValue = 3;
+        let newProps = {...props, selectedValue: 3};
 
         spyOn(newProps, 'onChange');
 
         component = mount(<RecordTitleFieldSelection {...newProps}/>);
 
-        let selectLabel = component.find(".selectedOptionLabel");
+        let selectLabel = component.find(".optionLabel");
         expect(selectLabel).toBePresent();
         expect(selectLabel.text()).toEqual("Record ID#");
 

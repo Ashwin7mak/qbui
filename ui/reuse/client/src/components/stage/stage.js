@@ -16,7 +16,7 @@ class Stage extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {open: props.open === true ? true : false};
+        this.state = {open: props.isOpenOnMount};
 
         this.toggleStage = this.toggleStage.bind(this);
     }
@@ -53,6 +53,10 @@ class Stage extends Component {
     }
 }
 
+Stage.defaultProps = {
+    isOpenOnMount: false
+};
+
 Stage.propTypes = {
     /**
      * Page actions that appear on the right side of the page. It's easiest to pass in a IconActions component, but not required. */
@@ -65,7 +69,7 @@ Stage.propTypes = {
     /**
      * Tells the stage whether it should be open or close by default
      */
-    open: PropTypes.bool
+    isOpenOnMount: PropTypes.bool
 };
 
 export default Stage;

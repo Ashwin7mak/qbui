@@ -1,12 +1,9 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import Collapse from 'react-bootstrap/lib/Collapse';
-import Well from 'react-bootstrap/lib/Well';
 import {connect} from 'react-redux';
 import RecordTitleFieldSelection from '../table/recordTitleFieldSelection';
-import {updateField, setRequiredPropForRecordTitleField} from '../../actions/fieldsActions';
-import {setStageEditMode} from '../../actions/formActions';
-import {getFields} from '../../reducers/fields';
+import {setRequiredPropForRecordTitleField} from '../../actions/fieldsActions';
+import {getFields, getField} from '../../reducers/fields';
 import {updateAppTableProperties} from '../../actions/appActions';
 import {I18nMessage} from "../../utils/i18nMessage";
 import {Button} from 'react-bootstrap';
@@ -24,14 +21,9 @@ export class FormBuilderStage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: true,
             editingStage: false
         };
     }
-    toggleStage() {
-        this.setState({open: !this.state.open});
-    }
-
     /**
      * On selection of a field as title field
      * 1. make the picker uneditable
@@ -40,10 +32,10 @@ export class FormBuilderStage extends React.Component {
      * 4. update the recordTitleFieldId on the table
      * @param fieldId
      */
-    onChangeTitleField(fieldId) {
+    onChangeTitleField = (fieldId) => {
         this.setState({editingStage: false});
 
-        let previousTitleField = _.find(this.props.fields, field => field.id === this.props.table.recordTitleFieldId);
+        let previousTitleField = this.props.recordTitleField;
         if (previousTitleField && previousTitleField.isRequiredForRecordTitleField === true) {
             this.props.setRequiredPropForRecordTitleField(this.props.table.appId, this.props.table.id, previousTitleField.id, false);
         }
@@ -52,78 +44,84 @@ export class FormBuilderStage extends React.Component {
         newTableInfo.recordTitleFieldId = fieldId;
         this.props.updateAppTableProperties(this.props.table.appId, this.props.table.id, newTableInfo);
 
-        let newTitleField = _.find(this.props.fields, field => field.id === fieldId);
+        let newTitleField = _.find(this.props.fields, {id: fieldId});
         if (newTitleField && !newTitleField.required) {
             this.props.setRequiredPropForRecordTitleField(this.props.table.appId, this.props.table.id, newTitleField.id, true, true);
         }
     }
 
-    onEditStage() {
+    onEditStage = () => {
         this.setState({editingStage: true});
     }
-    closeEditStage() {
+    closeEditStage = () => {
         this.setState({editingStage: false});
     }
 
     render() {
         let titlePicker = null;
 
-        let recordTitleFieldId = _.get(this.props, "table.recordTitleFieldId", '') || '';
+        let recordTitleField = this.props.recordTitleField;
         if (this.state.editingStage) {
             let RecordTitleFieldSelectionWrapped = thwartClicksWrapper(RecordTitleFieldSelection);
-            titlePicker = <div>
-                <RecordTitleFieldSelectionWrapped handleClickOutside={this.closeEditStage.bind(this)}
-                                                  outsideClickIgnoreClass="recordTitleFieldSelect"
-                                                  onChange={this.onChangeTitleField.bind(this)}
-                                                  table={this.props.table}
-                                                  selectedValue={recordTitleFieldId}
-                                                  recordTitleFieldDescription="tableCreation.recordTitleFieldDescription"/>
-            </div>;
+            titlePicker = (
+                <div>
+                    <RecordTitleFieldSelectionWrapped handleClickOutside={this.closeEditStage}
+                                                      outsideClickIgnoreClass="recordTitleFieldSelect"
+                                                      onChange={this.onChangeTitleField}
+                                                      table={this.props.table}
+                                                      selectedValue={recordTitleField ? recordTitleField.id : null}/>
+                </div>
+            );
 
         } else {
             let recordTitleFieldLabel = Locale.getMessage("tableCreation.recordTitleFieldDefault", {recordName: this.props.table.tableNoun});
-            if (recordTitleFieldId) {
-                let recordTitleField = _.find(this.props.fields, field => field.id === recordTitleFieldId);
-                recordTitleFieldLabel = <div className="selectedOption"><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType(recordTitleField))} /> <span className="selectedOptionLabel">{recordTitleField.name}</span></div>;
-            }
+            recordTitleFieldLabel = recordTitleField ? <div className="selectedOption"><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType(recordTitleField))} /> <span className="selectedOptionLabel">{recordTitleField.name}</span></div> : recordTitleFieldLabel;
 
-            titlePicker = <div onClick={this.onEditStage.bind(this)}>
-                <div className="titleField">{recordTitleFieldLabel}</div>
-            </div>;
+
+            titlePicker = (
+                <div onClick={this.onEditStage}>
+                    <div className="titleField">{recordTitleFieldLabel}</div>
+                </div>
+            );
         }
 
-        let tableName = this.props.table ? this.props.table.name : "";
-        let headline = <h4 className="formHeader"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.table.tableIcon} />
-                        <I18nMessage message ="builder.formBuilder.stage.title" tableName={this.props.table.name}/>
-                    </h4>;
+        let headline = (
+                <h4 className="formHeader"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.table.tableIcon} />
+                    <I18nMessage message ="builder.formBuilder.stage.title" tableName={this.props.table.name}/>
+                </h4>
+            );
 
-        return <Stage stageHeadline={headline} className="formStage" open={this.state.open}>
-            <div className="editableStage">
-                <div className="recordTitleFieldDescription">
-                    <I18nMessage message ="tableCreation.recordTitleFieldHeading"/>
+        return (
+            <Stage stageHeadline={headline} className="formStage" open={true}>
+                <div className="editableStage">
+                    <div className="recordTitleFieldDescription">
+                        <I18nMessage message ="tableCreation.recordTitleFieldHeading"/>
+                    </div>
+                    {titlePicker}
                 </div>
-                {titlePicker}
-            </div>
-        </Stage>;
+            </Stage>
+        );
     }
 
 }
 
 FormBuilderStage.propTypes = {
-    table: PropTypes.object.isRequired
+    table: PropTypes.object.isRequired,
+    fields: PropTypes.object,
+    recordTitleField: PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => {
+    let recordTitleFieldId = _.get(ownProps, "table.recordTitleFieldId", '');
     return {
-        fields: getFields(state, ownProps.table.appId, ownProps.table.id)
+        fields: getFields(state, ownProps.table.appId, ownProps.table.id),
+        recordTitleField: recordTitleFieldId ? getField(state, recordTitleFieldId, ownProps.table.appId, ownProps.table.id) : null
     };
 };
 
 const mapDispatchToProps = {
-    updateField,
     updateAppTableProperties,
-    setRequiredPropForRecordTitleField,
-    setStageEditMode
+    setRequiredPropForRecordTitleField
 };
 
 export default connect(

@@ -41,4 +41,17 @@ describe('Stage', () => {
 
         expect(component.find('.toggleStage')).not.toBePresent();
     });
+
+    it('opens on mount if the isOpenOnMount prop is true', () => {
+        const testContent = <p className="testContent">Test Content</p>;
+        component = mount(<Stage isOpenOnMount={true}>{testContent}</Stage>);
+
+        expect(component.find('.collapsedContent .testContent')).toBePresent();
+        expect(component.find('.toggleStage')).toBePresent();
+    });
+    it('closed on mount if the isOpenOnMount prop is false', () => {
+        component = shallow(<Stage/>);
+
+        expect(component.find('.toggleStage')).not.toBePresent();
+    });
 });

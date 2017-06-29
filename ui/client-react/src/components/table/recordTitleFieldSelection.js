@@ -14,11 +14,6 @@ import './recordTitleFieldSelection.scss';
  * table properties section for choosing a record title field
  */
 class RecordTitleFieldSelection extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     /**
      * callback with new field
      * @param field
@@ -27,11 +22,8 @@ class RecordTitleFieldSelection extends React.Component {
         this.props.onChange(field.value || null); // update with field ID (map to null if empty string value was selected)
     };
 
-    getOption(option) {
-        return <div className="pickerOption"><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType({datatypeAttributes: {type: option.type}}))} /> <span className="pickerOptionLabel">{option.label}</span></div>;
-    }
-    getValue(option) {
-        return <div className="selectedOption"><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType({datatypeAttributes: {type: option.type}}))} /> <span className="selectedOptionLabel">{option.label}</span></div>;
+    getOption(option, className) {
+        return <div className={className + "Option"}><Icon icon={FieldUtils.getFieldSpecificIcon(FieldFormats.getFormatType({datatypeAttributes: {type: option.type}}))} /> <span className="optionLabel">{option.label}</span></div>;
     }
     /**
      * get react-select component
@@ -63,8 +55,8 @@ class RecordTitleFieldSelection extends React.Component {
         return <Select className="recordTitleFieldSelect"
                        value={this.props.selectedValue || ""}
                        options={choices}
-                       optionRenderer={this.getOption}
-                       valueRenderer={this.getValue}
+                       optionRenderer={(option) => this.getOption(option, "picker")}
+                       valueRenderer={(option) => this.getOption(option, "selected")}
                        onChange={this.selectField}
                        autosize={false}
                        clearable={false} />;
