@@ -42,12 +42,12 @@
          * @returns {boolean}
          */
         function isValidRedirect(redirectUrl) {
-            const legacyBaseUrl = requestHelper.getLegacyHost();
+            const legacyBaseUrl = requestHelper.getLegacyHostTopTwoDomain();
             if (legacyBaseUrl === "") {
                 return false;
             }
             // Legacy Base URL will be used in a regex so make sure dots are handled as literals
-            const urlRegex = new RegExp(`.*${legacyBaseUrl.replace(/./, '\\.')}`);
+            const urlRegex = new RegExp(`.*${legacyBaseUrl.replace(/\./g, '\\.')}`);
 
             // We will verify that the redirect url is on the same
             // domain of legacy stack url specified in the config
