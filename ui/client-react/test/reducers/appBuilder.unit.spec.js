@@ -63,6 +63,22 @@ describe('App Creation Dialog', () => {
 
         expect(state.name).toBe('mockAppName');
     });
+
+    describe('OPEN_ICON_CHOOSER_FOR_APP', () => {
+        it('will set isAppIconChooserOpen to true', () => {
+            const state = reducer(storeState, {type: types.OPEN_ICON_CHOOSER_FOR_APP});
+
+            expect(state.isAppIconChooserOpen).toBe(true);
+        });
+    });
+
+    describe('CLOSE_ICON_CHOOSER_FOR_APP', () => {
+        it('will set isAppIconChooserOpen to true', () => {
+            const state = reducer(storeState, {type: types.CLOSE_ICON_CHOOSER_FOR_APP});
+
+            expect(state.isAppIconChooserOpen).toBe(false);
+        });
+    });
 });
 
 
