@@ -33,7 +33,6 @@ const appBuilder = (
             ...state,
             ...setDefaultSettings,
             isSavingApp: false,
-            isDialogOpen: false
         };
 
     case types.CREATE_APP_FAILED:
@@ -52,8 +51,7 @@ const appBuilder = (
     case types.HIDE_APP_CREATION_DIALOG:
         return {
             ...state,
-            ...setDefaultSettings,
-            isDialogOpen: false
+            ...setDefaultSettings
         };
 
     case types.SET_APP_PROPERTY:
