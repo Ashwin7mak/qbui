@@ -74,10 +74,11 @@ class IconChooser extends Component {
      * @returns {boolean}
      */
     shouldComponentUpdate(nextProps, nextState) {
+
         return nextProps.isOpen !== this.props.isOpen ||
             nextProps.selectedIcon !== this.props.selectedIcon ||
-            nextState.filterText !== this.state.filterText ||
-            nextProps.name !== this.props.name;
+            nextProps.isOpen !== this.props.isOpen ||
+            nextState.filterText !== this.state.filterText;
     }
 
     /**
