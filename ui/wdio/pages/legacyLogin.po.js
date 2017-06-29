@@ -6,7 +6,6 @@
 class legacyLogin {
     get username() {
         // EmailAddress or User name text field
-        browser.element('.UserInput.WithPadding[name="loginid"]').waitForVisible();
         return browser.element('.UserInput.WithPadding[name="loginid"]');
     }
 
@@ -27,6 +26,7 @@ class legacyLogin {
      */
     signInUser(username, password) {
         try {
+            this.buttonSignIn.waitForVisible();
             this.username.setValue(username);
             this.password.setValue(password);
             return this.buttonSignIn.click();
