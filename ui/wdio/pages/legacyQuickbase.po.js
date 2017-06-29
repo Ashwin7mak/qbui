@@ -6,7 +6,7 @@
 
 class legacyQuickbase {
 
-    get buttonQBUniversitybDone() {
+    get buttonQBUniversityDone() {
         //* Done button on Quick Base University popup
         return browser.element('.walkme-action-done.walkme-click-and-hover');
     }
@@ -30,16 +30,16 @@ class legacyQuickbase {
      * Wait for legacy Quick Base page to fully load
      */
     waitForPageToFullyLoad() {
-        this.buttonQBUniversitybDone.waitForVisible();
+        this.buttonQBUniversityDone.waitForVisible();
         return this;
     }
 
     /**
      * Dismiss the Quick Base University popup
      */
-    dismissQBUniversityPopup(){
-        this.buttonQBUniversitybDone.waitForVisible();
-        return this.buttonQBUniversitybDone.click();
+    dismissQBUniversityPopup() {
+        this.buttonQBUniversityDone.waitForVisible();
+        return this.buttonQBUniversityDone.click();
     }
 
     /**
@@ -53,7 +53,6 @@ class legacyQuickbase {
      * Click the Manage billing account link in the AccountAdmin frame
      */
     clickManageBillingAccountLinkInAcctAdmin() {
-        this.linkManageMyBillingAccount.waitForVisible();
         return this.linkManageMyBillingAccount.click();
     }
 
@@ -61,7 +60,6 @@ class legacyQuickbase {
      * Click the Manage all users link in the AccountAdmin frame
      */
     clickManageAllUsersLinkInAcctAdmin() {
-        this.linkManageAllUsersInAcctAdmin.waitForVisible();
         return this.linkManageAllUsersInAcctAdmin.click();
     }
 
@@ -69,8 +67,7 @@ class legacyQuickbase {
      * Click the Manage all users link in the Manage Billing Account Summary tab
      */
     clickManageAllUsersLinkInMBASummaryTab() {
-        this.linkManageAllUsersInMBASummary.waitForVisible();
-        return this.inkManageAllUsersInMBASummary.click();
+        return this.linkManageAllUsersInMBASummary.click();
     }
 
 }
