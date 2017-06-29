@@ -114,11 +114,11 @@ describe('App Actions event functions', () => {
         expect(AppBuilderActions.setAppProperty('mockProperty', 'mockValue')).toEqual({type: types.SET_APP_PROPERTY, property: 'mockProperty', value: 'mockValue'});
     });
 
-    it('create setAppProperty event', () => {
+    it('create openIconChooserForApp event', () => {
         expect(AppBuilderActions.openIconChooserForApp()).toEqual({type: types.OPEN_ICON_CHOOSER_FOR_APP});
     });
 
-    it('create setAppProperty event', () => {
+    it('create closeIconChooserForApp event', () => {
         expect(AppBuilderActions.closeIconChooserForApp()).toEqual({type: types.CLOSE_ICON_CHOOSER_FOR_APP});
     });
 });
