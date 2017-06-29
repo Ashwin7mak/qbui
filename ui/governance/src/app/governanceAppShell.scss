@@ -45,5 +45,15 @@ $topnav-hover-background-color: #40caf8;
                 color: $topnav-hover-background-color;
             }
         }
+
+        .globalActionsList {
+            .globalAction {
+                height: 40px;
+
+                .globalActionLink {
+                    vertical-align: top;
+                }
+            }
+        }
     }
 }
