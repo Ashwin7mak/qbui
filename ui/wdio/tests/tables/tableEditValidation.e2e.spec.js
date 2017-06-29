@@ -155,7 +155,11 @@
             it('Edit table ' + testCase.message, function() {
 
                 //create the table with the specific fields
-                testCase.uiTable ? e2eBase.tableService.createTableInUI(testApp.id, testCase.table) : e2eBase.tableService.createTableInCore(testApp.id, testCase.table);
+                if (testCase.uiTable) {
+                    e2eBase.tableService.createTableInUI(testApp.id, testCase.table);
+                }                else {
+                    e2eBase.tableService.createTableInCore(testApp.id, testCase.table);
+                }
 
                 //Load app into the Browser
                 e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
