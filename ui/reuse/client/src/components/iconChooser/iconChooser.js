@@ -68,16 +68,6 @@ class IconChooser extends Component {
     };
 
     /**
-     * icon selected callback
-     * @param icon
-     */
-    selectIcon = (icon) => {
-        this.toggleAllIcons(); // collapse the icon chooser
-        debugger;
-        this.props.setIconChoice(icon);
-    };
-
-    /**
      * rendering all the icons is actually fairly slow so do it only when necessary
      * @param nextProps
      * @param nextState
@@ -125,10 +115,11 @@ class IconChooser extends Component {
     };
 
     /**
-     * icon selected
+     * icon selected callback
      * @param icon
      */
     selectIcon = (icon) => {
+        this.toggleAllIcons(); // collapse the icon chooser
         this.props.setIconChoice(icon);
     };
 
