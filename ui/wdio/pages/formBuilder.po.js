@@ -2,9 +2,10 @@
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
-let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
+
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
 
@@ -25,6 +26,7 @@ class formBuilderPage {
 
     get emptySearchResult() {
         // the text in the fields panel when the search term returns no results
+        // e.g. 'No fields matched "<searchterm>"
         return browser.element('.emptySearchResult');
     }
 
@@ -59,7 +61,7 @@ class formBuilderPage {
     }
 
     get fieldTokenTitle() {
-        // the label of the first NEW FIELD token
+        // the label of the first NEW or EXISTING field token (left panel)
         return browser.element('.rc-tabs-tabpane-active .fieldTokenTitle');
     }
 
@@ -74,8 +76,8 @@ class formBuilderPage {
     }
 
     get firstFieldToken() {
-        // The FIRST field in the list of NEW FIELDs (left panel)
-        return browser.element('.rc-tabs-tabpane-active .listOfElementsItem');
+        // The FIRST field in the list of NEW or EXISTING fields (left panel)
+        return browser.element(tab_Field);
     }
 
     get formBuilderContainer() {
@@ -84,20 +86,30 @@ class formBuilderPage {
     }
 
     get modalDismiss() {
-        // DON'T SAVE button in the SAVE CHANGES? dlg
+        // The DON'T SAVE button in the SAVE CHANGES dialog
         return browser.element('.modal-dialog .middleButton');
+    }
+
+    get multiChoiceEditor() {
+        // The multiline choice editor in the FIELD PROPERTIES panel
+        return browser.element('.multiChoicePropertyContainer textarea');
+    }
+
+    get requiredCheckbox() {
+        // The MUST BE FILLED IN checkbox
+        return browser.element('//div[@class="checkboxPropertyContainer"]//label[text()="Must be filled in"]/..');
     }
 
     get requiredCheckboxChecked() {
         // The MUST BE FILLED IN checkbox in its CHECKED state
-        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
-        return browser.element('.checkboxPropertyContainer input:checked');
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.requiredCheckbox.element('input:checked');
     }
 
     get requiredCheckboxNotChecked() {
         // The MUST BE FILLED IN checkbox in its UNCHECKED state
-        // After significant trial & error on EDGE, separate checked/unchecked elements was the only working solution :-(
-        return browser.element('.checkboxPropertyContainer input:not(:checked)');
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.requiredCheckbox.element('input:not(:checked)');
     }
 
     get saveBtn() {
@@ -136,9 +148,9 @@ class formBuilderPage {
         return browser.element(".tabbedSideNav div div div:nth-child(3) div");
     }
 
-    get tab_New() {
-        // The NEW FIELDS tab - needs a better locator
-        return browser.element(".tabbedSideNav div div div:nth-child(2) div");
+    get tab_Active() {
+        // The active FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav .rc-tabs-tab-active");
     }
 
     get tab_Bar() {
@@ -146,9 +158,9 @@ class formBuilderPage {
         return browser.element(".tabbedSideNav div div div:nth-child(1)");
     }
 
-    get tab_Active() {
-        // The active FIELDS tab - needs a better locator
-        return browser.element(".tabbedSideNav .rc-tabs-tab-active");
+    get tab_New() {
+        // The NEW FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav div div div:nth-child(2) div");
     }
 
     get title() {
@@ -156,10 +168,32 @@ class formBuilderPage {
         return browser.element('.formContainer .qbPanelHeaderTitleText');
     }
 
+    get uniqueCheckbox() {
+        // The MUST BE UNIQUE checkbox
+        return browser.element('//div[@class="checkboxPropertyContainer"]//label[text()="Must be unique"]/..');
+    }
+
+    get uniqueCheckboxChecked() {
+        // The MUST BE UNIQUE checkbox in its CHECKED state
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.uniqueCheckbox.element('input:checked');
+    }
+
+    get uniqueCheckboxNotChecked() {
+        // The MUST BE UNIQUE checkbox in its UNCHECKED state
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.uniqueCheckbox.element('input:not(:checked)');
+    }
+
     // methods
 
     addNewField(label) {
         browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
+        return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+    }
+
+    addFirstField() {
+        this.firstFieldToken.click();
         return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
     }
 
@@ -181,7 +215,7 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
-        try { // modal SAVE CHANGES? dlg
+        try { // modal SAVE CHANGES dlg
             this.modalDismiss.click();
             if (this.modalDismiss.isExisting()) {
                 this.modalDismiss.click();
@@ -205,16 +239,24 @@ class formBuilderPage {
         // move to target & jiggle
         target.moveToObject();
         target.moveToObject(5, 5);
+        browser.pause(1000); // initial insertion point is below target, then fields shift down
         // release button
         browser.buttonUp();
         // wait for the new field to replace the target
+        let targetLabel = browser.element('.formElementContainer .selectedFormElement').element('./..').getText();
         browser.waitUntil(function() {
-            // can't use THIS here?
-            // return this.getSelectedFieldLabel() === source.getText();
-            return browser.element('.formElementContainer .selectedFormElement').element('./..').getText() === source.getText();
-        }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
+            return targetLabel.startsWith(sourceLabel); // ignore any 'helper' text (e.g. "Select..." for Choice list)
+        }, e2eConsts.mediumWaitTimeMs, 'Expected target label (' + targetLabel + ') to match source label (' + sourceLabel + ') after drag');
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getFieldLabels();
+    }
+
+    getExistingFieldLabels() {
+        // Gets the list of field labels from the EXISTING FIELD panel
+        // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
+        // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
+        // this lets the message include the contents of the unexpectedly present list.
+        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getFieldLocator(index) {
@@ -240,6 +282,11 @@ class formBuilderPage {
         }
     }
 
+    getFieldToken(label) {
+        // Returns the field token (left panel) with the specified label
+        return browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]');
+    }
+
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
         this.firstFieldToken.waitForVisible();
@@ -249,14 +296,6 @@ class formBuilderPage {
         });
     }
 
-    getExistingFieldLabels() {
-        // Gets the list of field labels from the EXISTING FIELD panel
-        // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
-        // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
-        // this lets the message include the contents of the unexpectedly present list.
-        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
-    }
-
     getSelectedFieldLabel() {
         // Finds the parent of '.selectedFormElement' & returns its text
         return this.selectedField.element('./..').getText();
@@ -264,7 +303,12 @@ class formBuilderPage {
 
     getRequiredCheckboxState() {
         // gets checked status of the MUST BE FILLED IN checkbox
-        return this.requiredCheckboxChecked.isExisting();
+        return this.requiredCheckboxChecked.isVisible();
+    }
+
+    getUniqueCheckboxState() {
+        // gets checked status of the MUST BE FILLED IN checkbox
+        return this.uniqueCheckboxChecked.isVisible();
     }
 
     moveByName(source, target) {
@@ -280,13 +324,9 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
-        //Need to stabilize the menu
-        browser.pause(e2eConsts.shortWaitTimeMs);
         topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
-        // this.firstField.waitForExist();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         expect(this.tab_Active.getText()).toBe("New");
         return this;
     }
@@ -353,14 +393,22 @@ class formBuilderPage {
         // MC-2858: Edge: FIELD PROPERTIES doesn't render until second click to select field
         browser.buttonDown();
         browser.buttonUp();
-        this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
+        this.fieldProperty_Name.waitForVisible(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
 
     setRequiredCheckboxState(state) {
         // Clicks on the MUST BE FILLED IN checkbox IF NECESSARY to make the checked state match the specified value
-        if ((!state && this.requiredCheckboxChecked.isExisting()) || (state && this.requiredCheckboxNotChecked.isExisting())) {
-            this.fieldProperty_Required.click();
+        if (state !== this.requiredCheckboxChecked.isExisting()) {
+            this.requiredCheckbox.click();
+        }
+        return this;
+    }
+
+    setUniqueCheckboxState(state) {
+        // Clicks on the MUST BE UNIQUE checkbox IF NECESSARY to make the checked state match the specified value
+        if (state !== this.uniqueCheckboxChecked.isExisting()) {
+            this.uniqueCheckbox.click();
         }
         return this;
     }
