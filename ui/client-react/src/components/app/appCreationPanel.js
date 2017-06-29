@@ -50,7 +50,7 @@ export class AppCreationPanel extends Component {
                                       rows="3" />
 
                     <IconChooser selectedIcon={this.props.appIcon}
-                                 className="appCreationIconChooser"
+                                 functionalName="appCreationIconChooser"
                                  isOpen={this.props.isAppIconChooserOpen}
                                  onOpen={this.props.openIconChooserForApp}
                                  onClose={this.props.closeIconChooserForApp}
