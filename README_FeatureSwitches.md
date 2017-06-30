@@ -36,7 +36,7 @@ enabling dynamic addition and update of feature switches that could affect multi
        "defaultOn": {
          "type": "boolean"
        },
-       "RealmsOveride": {
+       "realmsOveride": {
          "type": "array",
          "items": {
            "type": "object",
@@ -70,7 +70,7 @@ enabling dynamic addition and update of feature switches that could affect multi
      "name": "Feature A",
      "defaultOn": false,
      "description": "description",
-     "RealmsOveride":[
+     "realmsOveride":[
        {
          "realmId": "1234567",
          "overrideStateOn": true
