@@ -67,7 +67,7 @@ export class AppHomePageRoute extends Component {
         pageService.getPage(this.props.match.params.appId, defaultPageId).then(response => {
             const page = response.data;
 
-            // uncomment following to see the response to pages endpoint
+            // uncomment following to see the response from pages endpoint
             // console.log(response);
             // console.log(JSON.stringify(response.data), null, 2);
 
