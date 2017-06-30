@@ -84,15 +84,13 @@ export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIco
 export const getAppProperty = (state, property) => _.get(state.appBuilder, property, '');
 
 export const getNewAppInfo = (state) => {
-    //TODO: Description will need to be added to the return object, but there is currently no endpoint for it
-    let description =  getAppProperty(state, 'description');
-    let icon = getAppProperty(state, 'icon');
     let name = getAppProperty(state, 'name');
 
     if (name.length > 0) {
         return {
             name,
-            icon
+            icon: getAppProperty(state, 'icon'),
+            description: getAppProperty(state, 'description')
         };
     }
     return null;
