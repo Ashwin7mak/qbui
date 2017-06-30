@@ -85,7 +85,7 @@
         });
 */
         it('add a field which is both REQUIRED and UNIQUE & verify appropriate errors while adding new record', function() {
-            if (browserName !== 'safari' || browserName !== 'firefox') {
+            if (browserName !== 'safari' && browserName !== 'firefox') {
                 // todo: figure out why the first line fails in safari (click has no effect/doesn't invoke view form)
                 // FF & safari are excluded anyway due to setValue
 
