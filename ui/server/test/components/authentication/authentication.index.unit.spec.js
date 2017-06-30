@@ -167,6 +167,7 @@ describe('Validate https response authentication functions', function() {
         it('validate http response 302 and TICKET cookie redirect with a non-production hostname for federation', function() {
             const con = Object.assign({}, config, {legacyBase: '.currentstack-int.quickbaserocks.com'});
             const auth = require('../../../src/components/authentication/index')(con);
+            const requestHelper = require('../../../src/api/quickbase/requestHelper')(con);
             const mockFederationReq = Object.assign({}, validMockFederationRequest,
                 {
                     query: {
@@ -191,8 +192,8 @@ describe('Validate https response authentication functions', function() {
                 'the realm specific cookie should be empty after federation');
             assert.equal(mockRes.cookies.team_TICKET.options.expires.getTime(), 0,
                 'the realm specific cookie should be set to expire after federation');
-            assert.equal(mockRes.cookies.team_TICKET.options.domain, con.legacyBase.substring(1),
-                'the realm specific cookie should have the domain specified in config.legacyBase');
+            assert.equal(mockRes.cookies.team_TICKET.options.domain, requestHelper.getLegacyHostTopTwoDomain().substring(1),
+                'the realm specific cookie should have the correct domain');
         });
 
         it('validate http response 302 redirect to /db/main?a=myqb when no redirect url is provided for federation', function() {
