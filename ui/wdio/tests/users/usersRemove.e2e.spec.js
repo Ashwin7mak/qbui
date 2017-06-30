@@ -48,18 +48,15 @@
          * Selects a single user, clicks remove and checks the user count.
          */
         it('Should select remove a single user and check for the success message', function() {
-            // Select the checkbox and click on remove icon
-            ReportTableActionsPO.selectRecordRowCheckbox(1);
-            UsersTablePage.clickUserRemoveIcon();
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
-            // Click on remove button from the dialogue box
-            expect(modalDialog.modalDialogTitle).toContain("Remove this user?");
-            modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
+            // Remove user from app
+            UsersTablePage.removeUserFromApp(1, false);
+            // Reload the user page
+            e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
 
             //TODO: MC-3410 - Need a better way to verify user was removed
             // Check that the user was removed
             // ReportTableActionsPO.selectAllRecordsCheckbox();
+            // browser.pause(e2eConsts.shortWaitTimeMs);
             // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
@@ -67,17 +64,16 @@
          * Selects a single user, clicks remove, cancels, and checks the user count.
          */
         it('Should select remove a single user and cancel ', function() {
-            // Select the checkbox and click on remove icon
-            ReportTableActionsPO.selectRecordRowCheckbox(1);
-            UsersTablePage.clickUserRemoveIcon();
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            // Remove user from app and cancel
+            UsersTablePage.removeUserFromApp(1, true);
+            // Reload the user page
+            e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
 
-            // Click on cancel button from the dialogue box
-            modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
 
             //TODO: MC-3410 - Need a better way to verify user was removed
             // Check for the user not removed
             // ReportTableActionsPO.selectAllRecordsCheckbox();
+            // browser.pause(e2eConsts.shortWaitTimeMs);
             // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 

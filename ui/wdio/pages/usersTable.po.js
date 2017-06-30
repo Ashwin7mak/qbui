@@ -7,6 +7,7 @@
     // Import the base page object
     let e2ePageBase = requirePO('./e2ePageBase');
     let modalDialog = requirePO('/common/modalDialog');
+    let ReportTableActionsPO = requirePO('reportTableActions');
     let UsersTablePage = Object.create(e2ePageBase, {
 
 
@@ -107,6 +108,24 @@
         selectRole: {value: function(role) {
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, role);
         }},
+
+        removeUserFromApp: {value: function(index, cancel) {
+            // Select the checkbox
+            ReportTableActionsPO.selectRecordRowCheckbox(index);
+            // Click remove icon in actions
+            UsersTablePage.clickUserRemoveIcon();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(modalDialog.modalDialogTitle).toContain("Remove this user?");
+            if (true === cancel) {
+                // Click Cancel
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            } else {
+                // Click remove button
+                modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
+            }
+        }},
+
+        // changeUserRole:
 
         /**
          * Helper function to add user and role to app
