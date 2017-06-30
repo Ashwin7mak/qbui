@@ -749,9 +749,7 @@ export default {
             appNamePlaceHolder: "For example, \"Order Tracker\"",
             descriptionHeading: "App description",
             appCreationFailed: "Unable to create app",
-            searchPlaceholder: "Search app icons...",
-            typeForSuggestions: "Please type an app name to get suggestions",
-            noSuggestedIcons: "There are no suggested icons for this app name"
+            searchPlaceholder: "Search app icons..."
         },
         emptyAppState: {
             message: "You don't have any apps yet.",
@@ -788,9 +786,6 @@ export default {
             homePageStillBuilding: "Still building?  ",
             homePageCreateAnother: "Create another table",
 
-            noSuggestedIcons: "There are no suggested icons for this table name",
-            typeForSuggestions: "Please type a table name to get suggestions",
-
             tableReadyTitle: "Your table's ready!",
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
             tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
@@ -803,7 +798,9 @@ export default {
             recordName: "Record Name"
         },
         iconChooser: {
-            suggestedIconsHeading: "Suggested Icons"
+            suggestedIconsHeading: "Suggested icons",
+            noSuggestedIcons: "There are no suggested icons for ",
+            typeForSuggestions: "Type a name to view suggested icons"
         },
         settings: {
             header: "Settings",

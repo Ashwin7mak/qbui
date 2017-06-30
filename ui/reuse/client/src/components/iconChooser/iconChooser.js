@@ -3,6 +3,8 @@ import {PropTypes, Component} from 'react';
 import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
 import IconUtils from 'REUSE/components/icon/iconUtils';
 import {I18nMessage} from "../../utils/i18nMessage";
+import {tableIconNames, tableIconsByTag} from 'REUSE/components/icon/tableIcons';
+
 
 // IMPORTS FROM CLIENT REACT
 import Locale from 'APP/locales/locales';
@@ -98,13 +100,13 @@ class IconChooser extends Component {
         const name = _.get(this.props, 'name', '').toLowerCase().trim();
 
         if (name === '') {
-            return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.typeForSuggestionsText}/></div>;
+            return <div className="noSuggestedIcons iconList">{Locale.getMessage("iconChooser.typeForSuggestions")}</div>;
         }
 
         let suggestedIcons = this.props.listOfIconsByNames.filter((icon) => IconUtils.filterMatches(this.props.listOfIconsByTagNames, name, icon)).slice(0, 8);
 
         if (suggestedIcons.length === 0) {
-            return <div className="noSuggestedIcons iconList"><I18nMessage message={this.props.noSuggestedIconsText}/></div>;
+            return <div className="noSuggestedIcons iconList">{`${Locale.getMessage("iconChooser.noSuggestedIcons")} ${this.props.name}`}</div>;
         }
 
         return (
@@ -174,14 +176,6 @@ IconChooser.propTypes = {
      */
     classes: PropTypes.string,
     /**
-     * sets text for typeForSuggestionsText
-     */
-    typeForSuggestionsText: PropTypes.string,
-    /**
-     * sets text for no suggestions
-     */
-    noSuggestedIconsText: PropTypes.string,
-    /**
      * sets the icon
      */
     setIconChoice: PropTypes.func,
@@ -219,7 +213,8 @@ IconChooser.propTypes = {
 };
 
 IconChooser.defaultProps = {
-    listOfIconsByTagNames: []
+    listOfIconsByTagNames: tableIconsByTag,
+    listOfIconsByNames: tableIconNames
 };
 
 export default IconChooser;

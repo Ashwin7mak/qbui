@@ -163,8 +163,6 @@ class TableCreationPanel extends Component {
                                  onClose={this.props.closeIconChooser}
                                  setIconChoice={this.setTableIcon}
                                  placeHolder="tableCreation.searchPlaceholder"
-                                 typeForSuggestionsText="tableCreation.typeForSuggestions"
-                                 noSuggestedIconsText="tableCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  listOfIconsByNames={tableIconNames}
                                  listOfIconsByTagNames={tableIconsByTag} />
