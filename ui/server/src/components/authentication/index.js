@@ -47,16 +47,14 @@
                 return false;
             }
             // Legacy Base URL will be used in a regex so make sure dots are handled as literals
+            // For example, the matching regex would be like /.*\.quickbase\.com/ when legacyBaseUrl is '.quickbase.com'
             const urlRegex = new RegExp(`.*${legacyBaseUrl.replace(/\./g, '\\.')}`);
 
             // We will verify that the redirect url is on the same
             // domain of legacy stack url specified in the config
             // (e.g., legacyBase is quickbase-dev.com, only redirect on that domain is OK)
             const redirect = URL.parse(redirectUrl);
-            if (redirect && redirect.hostname && urlRegex.test(redirect.hostname)) {
-                return true;
-            }
-            return false;
+            return redirect && redirect.hostname && urlRegex.test(redirect.hostname);
         }
 
         return {
