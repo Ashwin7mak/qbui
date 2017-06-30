@@ -96,6 +96,46 @@
 
             // one-offs
 
+            it('drags a field outside of viewport & verifies autoscroll', function() {
+                let firstField = formBuilderPO.firstField;
+                let lastField = browser.element(formBuilderPO.getFieldLocator(
+                    formBuilderPO.getFieldLabels().length));
+
+                // shrink the window to cause last element to not be visible AND
+                // make everything faster (less distance to drag/content to scroll)
+                let browserSize = browser.windowHandleSize();
+                formBuilderPO.setViewportSize({
+                    width: browserSize.value.width,
+                    height: formBuilderPO.firstField.getElementSize().height * 4
+                }, true);
+                expect(lastField.isVisibleWithinViewport()).toBe(false);
+
+                // move cursor to container & press MB1
+                formBuilderPO.qbPanelHeader.moveToObject();
+                browser.buttonDown();
+
+                // initiate autoscroll DOWN
+                while (formBuilderPO.qbPanelHeader.isVisibleWithinViewport()) {
+                    browser.moveTo(null, 0, 2);
+                }
+
+                // wait for autoscroll DOWN to finish
+                while (!lastField.isVisibleWithinViewport()) {
+                    browser.pause(1000);
+                }
+
+                // initiate autoscroll UP
+                while (lastField.isVisibleWithinViewport()) {
+                    browser.moveTo(null, 0, -2);
+                }
+
+                // wait for autoscroll UP to finish
+                while (!formBuilderPO.qbPanelHeader.isVisibleWithinViewport()) {
+                    browser.pause(1000);
+                }
+                browser.buttonUp();
+            });
+
             it('drag a new field onto the form & verify that it is inserted into that position on the form', function() {
                 let newField = formBuilderPO.fieldTokenTitle.getText();
                 let fields = formBuilderPO.getFieldLabels();
@@ -145,50 +185,6 @@
                 formBuilderPO.tab_Existing.click();
                 // verify that the removed field still appears in the existing fields list
                 expect(formBuilderPO.getNewFieldLabels()).toContain(firstField);
-            });
-
-            it('drags a field outside of viewport & verifies autoscroll', function() {
-                let firstField = formBuilderPO.firstField;
-                let lastField = browser.element(formBuilderPO.getFieldLocator(
-                    formBuilderPO.getFieldLabels().length));
-
-                // shrink the window to cause last element to not be visible AND
-                // make everything faster (less distance to drag/content to scroll)
-                let browserSize = browser.windowHandleSize();
-                formBuilderPO.setViewportSize({
-                    width: browserSize.value.width,
-                    height: formBuilderPO.firstField.getElementSize().height * 4
-                }, true);
-                expect(lastField.isVisibleWithinViewport()).toBe(false);
-
-                // move cursor to container & press MB1
-                formBuilderPO.formBuilderContainer.moveToObject();
-                browser.buttonDown();
-
-                // initiate autoscroll DOWN
-                while (firstField.isVisible()) {
-                    browser.moveTo(null, 0, 2);
-                }
-
-                // wait for autoscroll DOWN to finish
-                while (!lastField.isVisibleWithinViewport()) {
-                    browser.pause(1000);
-                }
-
-                // not sure why, but this is needed to make scrolling work in subsequent loops.
-                browser.buttonUp();
-                browser.buttonDown();
-
-                // initiate autoscroll UP
-                while (lastField.isVisibleWithinViewport()) {
-                    browser.moveTo(null, 0, -2);
-                }
-
-                // wait for autoscroll UP to finish
-                while (!firstField.isVisibleWithinViewport()) {
-                    browser.pause(1000);
-                }
-                browser.buttonUp();
             });
 
             it('remove existing field & re-add it, verify field presence (or not) of field in existing field list at each step', function() {
