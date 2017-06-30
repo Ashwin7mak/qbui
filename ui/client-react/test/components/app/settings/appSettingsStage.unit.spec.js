@@ -3,12 +3,12 @@
  */
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import AppSettingsStage  from '../../../../src/components/app/settings/appSettingsStage';
+import {AppSettingsStage, }  from '../../../../src/components/app/settings/appSettingsStage';
 import {shallow} from 'enzyme';
 
 describe('AppSettingsStage functions', () => {
     'use strict';
-
+    let component;
     const appUsers = {
         10: [
             {
@@ -71,14 +71,14 @@ describe('AppSettingsStage functions', () => {
     };
 
     it('test render of component', () => {
-        let component = TestUtils.renderIntoDocument(<AppSettingsStage appUsers={appUsers}
+        component = shallow(<AppSettingsStage appUsers={appUsers}
                                                                      appRoles={appRoles}
                                                                      appOwner={appOwner}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(component.length).toEqual(1);
     });
 
     it('test getAppOwnerName method with appOwner email', () => {
-        let component = TestUtils.renderIntoDocument(<AppSettingsStage appUsers={appUsers}
+        component = shallow(<AppSettingsStage appUsers={appUsers}
                                                                      appRoles={appRoles}
                                                                      appOwner={appOwner}/>);
         let appOwnerNameResponse = component.getAppOwnerName();
@@ -87,7 +87,7 @@ describe('AppSettingsStage functions', () => {
     });
 
     it('test getAppOwnerName method with NO appOwner email', () => {
-        let component = TestUtils.renderIntoDocument(<AppSettingsStage appUsers={appUsers}
+        component = TestUtils.renderIntoDocument(<AppSettingsStage appUsers={appUsers}
                                                                      appRoles={appRoles}
                                                                      appOwner={appOwnerNoEmail}/>);
         let appOwnerNameResponse = component.getAppOwnerName();
@@ -95,14 +95,14 @@ describe('AppSettingsStage functions', () => {
     });
     it('calls filterUserByRole on click of a role', ()=>{
         spyOn(mockFunction, 'filterUserByRole');
-        let component = shallow(<AppSettingsStage appUsers={appUsers}
+        component = shallow(<AppSettingsStage appUsers={appUsers}
                                                   appRoles={appRoles}
                                                   appOwner={appOwnerNoEmail}
                                                   filterUserByRole={mockFunction.filterUserByRole}
                                                   selectedRole={selectedRole}
         />);
-        let viewer = component.find('.selectable').first();
-        viewer.simulate('click');
+        const roleSelector = component.find('.selectable').first();
+        roleSelector.simulate('click');
         expect(mockFunction.filterUserByRole).toHaveBeenCalled();
 
     });

@@ -14,7 +14,7 @@ import UserActions from '../../../actions/userActions';
 import {loadAppAndOwner, searchUsers, setUserRoleToAdd, openAddUserDialog, selectUserRows, clearSelectedUserRows} from '../../../../actions/userActions';
 import {toggleAddToAppSuccessDialog} from '../../../../actions/appActions';
 import {loadAppRoles} from '../../../../actions/appRoleActions';
-import {getAppRoles} from '../../../../reducers/selectedApp';
+import {getAppRoles, getFilteredAppRoles} from '../../../../reducers/selectedApp';
 import {getSelectedAppId, getApp, getAppOwner, getAppUsers, getAppUnfilteredUsers} from '../../../../reducers/app';
 import {getSearchedUsers, getDialogStatus, getRoleIdToAdd, getSelectedUsers} from '../../../../reducers/users';
 import './appUsersRoute.scss';
@@ -154,17 +154,6 @@ export const AppUsersRoute = React.createClass({
         const selectedUserRows = this.props.selectedUserRows.length;
         return selectedUserRows > 0 && (selectedUserRows === this.props.appUsers.length);
     },
-    filterUserByRole(role, noOfUsers, isActive) {
-        if (noOfUsers < 1) {return;}
-        let appRoles = isActive ? (role = '', this.props.appRoles) :
-			_.filter(this.props.appRoles, function(appRole) {
-    return appRole.id === role;
-});
-        this.setState({
-            appRoles,
-            selectedRole: role,
-        });
-    },
     render() {
         if (this.props.appRoles && this.props.selectedApp && this.props.appOwner) {
             const unfilteredAppUsers = this.props.unfilteredAppUsers;
@@ -177,8 +166,6 @@ export const AppUsersRoute = React.createClass({
                         <AppSettingsStage appUsers={unfilteredAppUsers}
                                           appRoles={this.props.appRoles}
                                           appOwner={this.props.appOwner}
-                                          filterUserByRole={this.filterUserByRole}
-                                          selectedRole={this.state.selectedRole}
                         />
                     </Stage>
                 <AddUserDialog realmUsers={this.props.realmUsers}
@@ -202,7 +189,7 @@ export const AppUsersRoute = React.createClass({
                     <div className="userManagementContainer">
                         <UserManagement appId={appId}
                                         appUsers={unfilteredAppUsers}
-                                        appRoles={this.state.appRoles}
+                                        appRoles={this.props.filteredAppRoles}
                                         onClickToggleSelectedRow={this.toggleSelectedRow}
                                         onClickToggleSelectAllRows={this.toggleSelectAllRows}
                                         selectedRows={this.props.selectedUserRows}
@@ -233,7 +220,8 @@ const mapStateToProps = (state, ownProps) => {
         roleIdToAdd: getRoleIdToAdd(state.users),
         selectedUserRows: getSelectedUsers(state.users),
         successDialogOpen: state.selectedApp.successDialogOpen,
-        addedAppUser: state.selectedApp.addedAppUser
+        addedAppUser: state.selectedApp.addedAppUser,
+        filteredAppRoles: getFilteredAppRoles(state)
     };
 };
 

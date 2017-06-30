@@ -60,10 +60,14 @@
             }
         }
         &.selectable {
+            border-bottom: 3px solid $color-black-100;
             &:hover {
                 background-color: $leftnav-table-selected-color;
                 color: $color-black-100;
                 cursor: pointer;
+            }
+            &:hover > .appRolesDivider {
+                border-left: 3px solid $leftnav-table-selected-color;
             }
             &.active {
                 border-left: none;
