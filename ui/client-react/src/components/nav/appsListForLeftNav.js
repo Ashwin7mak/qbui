@@ -5,6 +5,7 @@ import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
 import {connect} from 'react-redux';
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
+import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
 
@@ -42,11 +43,10 @@ export const AppsList = React.createClass({
         return this.props.apps && this.props.apps.map((app) => {
             // Give all apps in the left nav list a default icon of 'favicon'
             // TODO:: Refactor where the icon is obtain from in MC-3596. Patching for the purpose of the current story.
-            let randomIcon = tableIconNames[Math.floor(Math.random() * tableIconNames.length - 1)];
-            let appForNavItem = {icon: randomIcon, tableIcon: randomIcon, ...app};
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
-                         item={appForNavItem}
+                         item={app}
+                         icon={this.props.appIcon}
                          tableIcon={true}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
@@ -116,11 +116,19 @@ export const AppsList = React.createClass({
     }
 });
 
+const mapStateToProps = (state) => {
+    let {icon} = AppBuilderSelectors.getAppProperties(state);
+
+    return {
+        appIcon: icon
+    };
+};
+
 const mapDispatchToProps = {
     showAppCreationDialog
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(AppsList);

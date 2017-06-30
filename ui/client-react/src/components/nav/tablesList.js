@@ -97,6 +97,7 @@ let TablesList = React.createClass({
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
+                         icon={table.tableIcon}
                          key={table.id}
                          tableIcon={true}
                          showSecondary={this.props.expanded}
