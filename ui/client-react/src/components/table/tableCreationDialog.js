@@ -55,7 +55,7 @@ export class TableCreationDialog extends React.Component {
 
                 // navigate to form builder (no page reload)
 
-                this.props.updateFormRedirectRoute(null);
+                this.props.updateFormRedirectRoute(UrlUtils.getTableHomepageLink(this.props.app.id, tblId));
                 AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
