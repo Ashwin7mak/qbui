@@ -758,8 +758,8 @@ export default {
             iconHeading: "Icône",
             suggestedIconsHeading: "Icônes suggérées",
 
-            tableNamePlaceholder: "Par exemple, les clients",
-            recordNamePlaceholder: "Par exemple, client",
+            tableNamePlaceholder: "Par exemple, les clients. Utilisez jusqu'à {numberOfChars} lettres",
+            recordNamePlaceholder: "Par exemple, client. Utilisez jusqu'à {numberOfChars} lettres",
             descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la navigation à gauche",
 
             finishedButtonLabel: "Créer une table",

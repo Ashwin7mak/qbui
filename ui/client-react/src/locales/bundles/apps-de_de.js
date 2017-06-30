@@ -759,8 +759,8 @@ export default {
             iconHeading: "Symbol",
             suggestedIconsHeading: "Vorgeschlagene Ikonen",
 
-            tableNamePlaceholder: "Zum Beispiel, Kunden",
-            recordNamePlaceholder: "Zum Beispiel, Kunde",
+            tableNamePlaceholder: "Zum Beispiel, Kunden. Verwenden Sie bis zu {numberOfChars} Buchstaben",
+            recordNamePlaceholder: "Zum Beispiel, Kunde. Verwenden Sie bis zu {numberOfChars} Buchstaben",
             descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linke navigation",
 
             finishedButtonLabel: "Tabelle",

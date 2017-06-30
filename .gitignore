@@ -33,3 +33,14 @@ ui/ui
 # Docker #
 ######################
 docker-compose.override.yml
+ui/.npmrc
+
+ui/.npmrc
+
+ui/.npmrc
+
+ui/karma.conf.js
+
+ui/tests.custom.webpack.js.sample
+
+ui/wdio/dataGen/dataGenCustomize.js
