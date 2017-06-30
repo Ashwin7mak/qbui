@@ -19,6 +19,7 @@ import * as UrlConsts from "../../constants/urlConstants";
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
 import * as constants from '../../../../common/src/constants';
+import FeatureCheck from './featureCheck';
 
 import './featureSwitches.scss';
 
@@ -343,7 +344,10 @@ export class FeatureSwitchesRoute extends React.Component {
      */
     componentDidMount() {
         this.checkAccess(this.props);
-        this.props.getSwitches();
+        let featureSwitchUI = _.find(this.props.states, (feature) => feature.name.toLowerCase() === ("featureSwitchUI").toLowerCase());
+        if (featureSwitchUI && featureSwitchUI.status) {
+            this.props.getSwitches();
+        }
     }
 
     render() {
@@ -352,51 +356,55 @@ export class FeatureSwitchesRoute extends React.Component {
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
         const loaded = this.props.error === null;
         return (
-            <Loader loaded={loaded} loadedClassName="featureSwitchesLoader">
-                <div className="featureSwitches">
-                    <div className="top">
+            <FeatureCheck featureName="featureSwitchUITest">
+                <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
+                <FeatureCheck featureName="featureSwitchUI">
+                    <Loader loaded={loaded} loadedClassName="featureSwitchesLoader">
+                    <div className="featureSwitches">
+                        <div className="top">
 
-                        <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
+                            <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
 
-                        <div className="globalButtons">
-                            <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                            <div className="globalButtons">
+                                <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                            </div>
+
                         </div>
 
-                    </div>
+                        <div className="main">
+                            <Table.Provider className="featureSwitchTable switches"
+                                            columns={this.state.columns}
+                                            components={{
+                                                body: {
+                                                    wrapper: BodyWrapper,
+                                                    row: RowWrapper
+                                                }
+                                            }}>
 
-                    <div className="main">
-                        <Table.Provider className="featureSwitchTable switches"
-                                        columns={this.state.columns}
-                                        components={{
-                                            body: {
-                                                wrapper: BodyWrapper,
-                                                row: RowWrapper
-                                            }
-                                        }}>
+                                <Table.Header />
 
-                            <Table.Header />
-
-                            <Table.Body rows={this.props.switches} rowKey="id" />
-                        </Table.Provider>
-                    </div>
-
-                    <div className="bottom">
-
-                        <div className="selectionButtons">
-
-                            <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                            <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                            <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
-                            <span>{selectedSizeLabel}</span>
+                                <Table.Body rows={this.props.switches} rowKey="id" />
+                            </Table.Provider>
                         </div>
 
-                        {this.getConfirmDialog()}
+                        <div className="bottom">
 
-                        <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
+                            <div className="selectionButtons">
+
+                                <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                                <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                                <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                                <span>{selectedSizeLabel}</span>
+                            </div>
+
+                            {this.getConfirmDialog()}
+
+                            <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
+                        </div>
                     </div>
-                </div>
-            </Loader>
-
+                </Loader>
+                </FeatureCheck>
+            </FeatureCheck>
         );
     }
 }
@@ -421,8 +429,8 @@ const mapStateToProps = (state) => {
     return {
 
         switches: sortedSwitches,
-        error: state.featureSwitches.errorResponse
-
+        error: state.featureSwitches.errorResponse,
+        states: state.featureSwitches.states
     };
 };
 
