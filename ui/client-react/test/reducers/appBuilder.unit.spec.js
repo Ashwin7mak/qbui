@@ -108,50 +108,27 @@ describe('App Creation Selector', () => {
         });
     });
 
-    describe('getAppProperty', () => {
+    describe('getAppProperties', () => {
         it('will return app name if there is an app name', () => {
-            let result = AppBuilderSelectors.getAppProperty(mockState, 'name');
+            let {name, icon, description} = AppBuilderSelectors.getAppProperties(mockState);
 
-            expect(result).toEqual(mockState.appBuilder.name);
+            expect(name).toEqual(mockState.appBuilder.name);
+            expect(icon).toEqual(mockState.appBuilder.icon);
+            expect(description).toEqual(mockState.appBuilder.description);
         });
 
-        it('will return an empty string if there is no app name', () => {
+        it('will return app name if there is an app name', () => {
             let cloneMockState = _.cloneDeep(mockState);
-            cloneMockState.appBuilder.name = '';
 
-            let result = AppBuilderSelectors.getAppProperty(cloneMockState, 'name');
+            delete cloneMockState.appBuilder.name;
+            delete cloneMockState.appBuilder.icon;
+            delete cloneMockState.appBuilder.description;
 
-            expect(result).toEqual('');
-        });
+            let {name, icon, description} = AppBuilderSelectors.getAppProperties(cloneMockState);
 
-        it('will return app description if there is an app description', () => {
-            let result = AppBuilderSelectors.getAppProperty(mockState, 'description');
-
-            expect(result).toEqual(mockState.appBuilder.description);
-        });
-
-        it('will return an empty string if there is no app description', () => {
-            let cloneMockState = _.cloneDeep(mockState);
-            cloneMockState.appBuilder.description = '';
-
-            let result = AppBuilderSelectors.getAppProperty(cloneMockState, 'description');
-
-            expect(result).toEqual('');
-        });
-
-        it('will return app icon if there is an icon description', () => {
-            let result = AppBuilderSelectors.getAppProperty(mockState, 'description');
-
-            expect(result).toEqual(mockState.appBuilder.description);
-        });
-
-        it('will return an empty string if there is no app icon', () => {
-            let cloneMockState = _.cloneDeep(mockState);
-            cloneMockState.appBuilder.icon = '';
-
-            let result = AppBuilderSelectors.getAppProperty(cloneMockState, 'icon');
-
-            expect(result).toEqual('');
+            expect(name).toEqual(undefined);
+            expect(icon).toEqual(undefined);
+            expect(description).toEqual(undefined);
         });
     });
 

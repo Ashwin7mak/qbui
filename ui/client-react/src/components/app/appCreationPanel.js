@@ -76,10 +76,12 @@ export class AppCreationPanel extends Component {
 
 
 const mapStateToProps = (state) => {
+    let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
+
     return {
-        appName: AppBuilderSelectors.getAppProperty(state, 'name'),
-        appDescription: AppBuilderSelectors.getAppProperty(state, 'description'),
-        appIcon: AppBuilderSelectors.getAppProperty(state, 'icon'),
+        appName: name,
+        appDescription: description,
+        appIcon: icon,
         isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)
     };
 };

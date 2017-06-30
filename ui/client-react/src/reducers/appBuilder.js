@@ -2,7 +2,7 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 
 const defaultAppIcon = 'Customer';
-
+const APP_PROPS = ['name', 'icon', 'description'];
 const setDefaultSettings = {
     name: '',
     description: '',
@@ -81,16 +81,16 @@ export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialog
 
 export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
 
-export const getAppProperty = (state, property) => _.get(state.appBuilder, property, '');
+export const getAppProperties = (state) => _.pick(state.appBuilder, APP_PROPS);
 
 export const getNewAppInfo = (state) => {
-    let name = getAppProperty(state, 'name');
+    let {name, icon, description} = getAppProperties(state);
 
-    if (name.length > 0) {
+    if (name) {
         return {
             name,
-            icon: getAppProperty(state, 'icon'),
-            description: getAppProperty(state, 'description')
+            icon,
+            description
         };
     }
     return null;
