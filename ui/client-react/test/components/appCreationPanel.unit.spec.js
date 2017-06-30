@@ -5,6 +5,7 @@ import {AppCreationPanel} from '../../src/components/app/appCreationPanel';
 import DialogFieldInput from '../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 
 let component;
+let instance;
 
 let mockFuncs = {
     setAppProperty() {}
@@ -36,5 +37,14 @@ describe('AppCreationPanel', () => {
         component.find('textarea').simulate('change', {target: {value: 'Mock App Description'}});
 
         expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('description', 'Mock App Description');
+    });
+
+    it('will invoke setAppProperty when setAppIcon is invoked', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}/>);
+
+        instance = component.instance();
+        instance.setAppIcon('dragon icon');
+
+        expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('icon', 'dragon icon');
     });
 });

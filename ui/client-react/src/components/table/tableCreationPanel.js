@@ -112,6 +112,14 @@ class TableCreationPanel extends Component {
     };
 
     /**
+     * set table icon
+     * @param  icon
+     */
+    setTableIcon = (icon) => {
+        this.props.setTableProperty('tableIcon', icon);
+    };
+
+    /**
      * render the table settings UI
      * @returns {XML}
      */
@@ -153,7 +161,7 @@ class TableCreationPanel extends Component {
                                  isOpen={this.props.iconChooserOpen}
                                  onOpen={this.props.openIconChooser}
                                  onClose={this.props.closeIconChooser}
-                                 setIconChoice={(icon) => this.props.setTableProperty('tableIcon', icon)}
+                                 setIconChoice={this.setTableIcon}
                                  placeHolder="tableCreation.searchPlaceholder"
                                  typeForSuggestionsText="tableCreation.typeForSuggestions"
                                  noSuggestedIconsText="tableCreation.noSuggestedIcons"

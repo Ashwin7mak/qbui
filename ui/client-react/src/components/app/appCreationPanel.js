@@ -26,6 +26,14 @@ export class AppCreationPanel extends Component {
     };
 
     /**
+     * set app icon
+     * @param  icon
+     */
+    setAppIcon = (icon) => {
+        this.props.setAppProperty('icon', icon);
+    };
+
+    /**
      * render the app settings UI
      * @returns {XML}
      */
@@ -60,7 +68,7 @@ export class AppCreationPanel extends Component {
                                  noSuggestedIconsText="appCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  name={this.props.appName}
-                                 setIconChoice={(icon) => this.props.setAppProperty('icon', icon)}
+                                 setIconChoice={this.setAppIcon}
                                  listOfIconsByNames={tableIconNames}
                                  listOfIconsByTagNames={tableIconsByTag} />
                 </div>
