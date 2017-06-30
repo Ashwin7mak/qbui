@@ -35,6 +35,15 @@ class PageService extends BaseService {
         let url = super.constructUrl(this.API.GET_PAGE, [appId, pageId]);
         return super.get(url);
     }
+
+    /**
+     * This is a super temporary function, we will be removing this SOON (really, I swear).
+     * @param appId
+     */
+    getMockPage(appId, pageId) {
+        let url = super.constructUrl(`${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/page/{1}`, [appId, pageId]);
+        return super.get(url);
+    }
 }
 
 export default PageService;

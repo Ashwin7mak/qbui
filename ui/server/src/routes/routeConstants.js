@@ -82,6 +82,8 @@
         REPORT_RECORDS_COUNT        : context.client.QBUI + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : context.client.QBUI + '/apps/:appId/tables/:tableId/homePage',
 
+        PAGE_MOCK                   : context.client.QBUI + '/apps/:appId/page/:pageId',
+
         TABLE_COMPONENTS            : context.client.QBUI + '/apps/:appId/tables/tableComponents',
         TABLE                       : context.client.QBUI + '/apps/:appId/tables/:tableId',
         TABLES                      : context.client.QBUI + '/apps/:appId/tables',
