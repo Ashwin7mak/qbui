@@ -47,11 +47,9 @@ export class AutomationBuilderContainer extends Component {
     }
 
     componentDidMount() {
-        if (this.getAutomationId() == "create"){
-                console.log(this.props);
-                this.props.createAutomation();
-        }
-        else if (this.getAppId() && this.getAutomationId()) {
+        if (this.getAutomationId() === "create") {
+            this.props.createAutomation();
+        } else if (this.getAppId() && this.getAutomationId()) {
             this.props.loadAutomation(this.getAppId(), this.getAutomationId());
         }
     }
@@ -108,9 +106,6 @@ export class AutomationBuilderContainer extends Component {
     }
 
     onSave = () => {
-        console.log("hi");
-        console.log(this);
-        console.log(this.props.newAutomation);
         this.props.saveAutomation(this.getAppId(), this.getAutomationId(), this.props.automation);
 
         let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}/${this.getAutomationId()}/${UrlConsts.AUTOMATION.VIEW}`;

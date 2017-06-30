@@ -130,12 +130,12 @@ const automation = (
             defaultValue:null,
             name:"toAddress",
             type:"TEXT",
-            };
+        };
         let body = {
             defaultValue:null,
             name:"body",
             type:"TEXT",
-            };
+        };
         let newStateAutomation = {
             name:'',
             type:"EMAIL",
@@ -149,7 +149,7 @@ const automation = (
             ...state,
             automation : newStateAutomation,
             newAutomation : true
-        }
+        };
     }
 
     case types.CHANGE_AUTOMATION_NAME: {
@@ -194,4 +194,4 @@ export const getAutomation = (state) => {
 
 export const getNewAutomation = (state) => {
     return state.automation.newAutomation;
-}
+};

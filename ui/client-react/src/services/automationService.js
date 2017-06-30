@@ -44,11 +44,8 @@ class AutomationService extends BaseService {
 
     }
 
-    createAutomation(appId,automation){
-        console.log(appId);
-        console.log(automation);
-        let url = super.constructUrl(this.API.GET_AUTOMATIONS, [appId,automation]);
-        console.log(url);
+    createAutomation(appId, automation) {
+        let url = super.constructUrl(this.API.GET_AUTOMATIONS, [appId, automation]);
         return super.post(url, automation);
     }
 }

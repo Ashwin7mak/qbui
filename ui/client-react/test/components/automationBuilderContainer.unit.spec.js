@@ -31,6 +31,11 @@ const propsWithAuto = {
     automation: sampleAuto1
 };
 
+const propsWithCreate = {
+    ...props,
+    automationId: "create"
+};
+
 describe('AutomationBuilderContainer', () => {
     let component;
 
@@ -148,5 +153,27 @@ describe('AutomationBuilderContainer', () => {
             expect(propsWithAuto.saveAutomation).not.toHaveBeenCalled();
             expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
         });
+    });
+
+    describe('AutomationBuilderContainer save button with new automation', () => {
+        beforeEach(() => {
+            jasmineEnzyme();
+            spyOn(propsWithCreate, 'generateAutomation').and.callThrough();
+            spyOn(NavigationUtils, 'goBackToPreviousLocation');
+
+            component = mount(<AutomationBuilderContainer {...propsWithCreate}/>);
+        });
+
+        afterEach(() => {
+        });
+
+        it('test save button click', () => {
+            let saveButton = component.find('.mainTrowserFooterButton');
+            saveButton.simulate('click');
+
+            expect(propsWithAuto.generateAutomation).toHaveBeenCalled();
+            expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
+        });
+
     });
 });

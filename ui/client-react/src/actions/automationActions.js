@@ -208,12 +208,12 @@ export const testAutomation = (automationName, appId) => {
 
 export const createAutomation = () => {
     return (dispatch) => dispatch(event(null, types.CREATE_AUTOMATION, {}));
-}
+};
 
 export const changeAutomationName = (newName) => {
     return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_NAME, {newName}));
 
-}
+};
 export const changeAutomationEmailTo = (newTo) => {
     return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_TO, {newTo}));
 };

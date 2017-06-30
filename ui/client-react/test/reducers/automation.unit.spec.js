@@ -29,6 +29,20 @@ describe('Automation reducer functions', () => {
             let resultState = reducer(undefined, {type: types.LOAD_AUTOMATIONS, id: 10, content: 'TEST'});
             expect(resultState).toEqual({appId: 'TEST', list: null, error: undefined});
         });
+
+        it('returns correct after adding new automation', () => {
+            let expectedState = {
+                appId: 'TEST', automation: {
+                    id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL", inputs: [
+                        {name: "toAddress", type: "TEXT", defaultValue: null},
+                        {name: "subject", type: "TEXT", defaultValue: null},
+                        {name: "body", type: "TEXT", defaultValue: null}
+                    ]
+                }
+            };
+            let resultState = reducer({appId: 'TEST'});
+            expect(resultState).toEqual(expectedState);
+        });
     });
 
     describe('Automation reducer transitions', () => {
