@@ -36,7 +36,7 @@ enabling dynamic addition and update of feature switches that could affect multi
        "defaultOn": {
          "type": "boolean"
        },
-       "RealmsOveride": {
+       "realmsOveride": {
          "type": "array",
          "items": {
            "type": "object",
@@ -70,7 +70,7 @@ enabling dynamic addition and update of feature switches that could affect multi
      "name": "Feature A",
      "defaultOn": false,
      "description": "description",
-     "RealmsOveride":[
+     "realmsOveride":[
        {
          "realmId": "1234567",
          "overrideStateOn": true
@@ -107,5 +107,27 @@ enabling dynamic addition and update of feature switches that could affect multi
   
   
 #### Enable/Disable rendering of the UI feature by checking for a feature switch defined above
- Will be updated in the next PR
- 
+  In order to Enable/Disable rendering of a UI component: 
+  * Add feature switch into the configuration files as mentioned above
+  * Use FeatureCheck component to wrap the component that needs to be selectively hidden as follows : 
+   <pre><code>
+   &lt;FeatureCheck featureName={"Feature A"}>
+          &lt;IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>
+   &lt;/FeatureCheck&gt;
+    </code></pre>
+   In the example above <IconActions> is selectively shown/disabled  based on the configuration for "Feature A".
+   
+   Note: By default a feature that is not specified in the configuration file is turned off
+     
+   
+ ### Trouble shooting :
+* The path for master configuration file[master.featureSwitches.json] is not configurable at this time. 
+* If the master.featureSwitches.json in "ui/server/src/config/environment/featureSwitch/" is deleted, or contains an invalid JSON - 
+A log line along the lines of : "Could not read master feature switch configuration file *" 
+  would be seen in the logs 
+  
+  
+  
+* As mentioned earlier, override files can be added - ui/server/src/config/environment/featureSwitch/{env}.override.featureSwitches.json
+* This file is then referenced in {env.js} file 
+* If the path to the file specified in env.js is incorrect or if the file is not a valid JSON file  -  A log line along the lines of : "Could not read override feature switch configuration file *" would be seen in the logs 
