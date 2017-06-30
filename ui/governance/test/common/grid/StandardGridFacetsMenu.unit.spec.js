@@ -1,13 +1,13 @@
-import React from 'react';
-import {shallow, mount} from 'enzyme';
-import jasmineEnzyme from 'jasmine-enzyme';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
-import {__RewireAPI__ as GenericFacetsItemRewireAPI}  from '../../../../reuse/client/src/components/facets/genericFacetItem';
-import {__RewireAPI__ as GenericFacetsListRewireAPI}  from '../../../../reuse/client/src/components/facets/genericFacetsList';
-import {StandardGridFacetsMenu} from '../../../src/common/grid/toolbar/StandardGridFacetsMenu';
-import GenericFacetMenu from '../../../../reuse/client/src/components/facets/genericFacetMenu';
-import _ from 'lodash';
+import React from "react";
+import {shallow, mount} from "enzyme";
+import jasmineEnzyme from "jasmine-enzyme";
+import ReactDOM from "react-dom";
+import TestUtils from "react-addons-test-utils";
+import {__RewireAPI__ as GenericFacetsItemRewireAPI}  from "../../../../reuse/client/src/components/facets/genericFacetItem";
+import {__RewireAPI__ as GenericFacetsListRewireAPI}  from "../../../../reuse/client/src/components/facets/genericFacetsList";
+import {StandardGridFacetsMenu} from "../../../src/common/grid/toolbar/StandardGridFacetsMenu";
+import GenericFacetMenu from "../../../../reuse/client/src/components/facets/genericFacetMenu";
+import _ from "lodash";
 
 const I18nMessageMock = () => <div>test</div>;
 
@@ -16,7 +16,7 @@ const mockParentActions = {
     hideFacetMenu() {},
     setFacetsExpanded() {},
     setFacetsMoreRevealed() {},
-    toggleFacetMenu() {},
+    toggleFacetMenu() {}
 };
 
 describe('StandardGridFacetsMenu functions', () => {
@@ -24,13 +24,13 @@ describe('StandardGridFacetsMenu functions', () => {
 
     const fakeFacetsData_valid = {
         facets : [
-            {id:1, name:'test', type:"TEXT", values:[{value:"a"}, {value:"b"}, {value:"c"}]}
+            {id : 1, name : 'test', type : "TEXT", values : [{value : "a"}, {value : "b"}, {value : "c"}]}
         ]
     };
 
     const fakeFacetsLongData_valid = {
-        facets : [{id:1, name:'test', type:"TEXT",
-            values:[{value:"a"}, {value:"b"}, {value:"c"}, {value:"d"}, {value:"e"}, {value:"f"}]}
+        facets : [{id : 1, name : 'test', type : "TEXT",
+            values : [{value : "a"}, {value : "b"}, {value : "c"}, {value : "d"}, {value : "e"}, {value : "f"}]}
         ]
     };
 
@@ -52,10 +52,21 @@ describe('StandardGridFacetsMenu functions', () => {
         expect(component.find(GenericFacetMenu)).toBePresent();
     });
 
-    it('test render FacetsMenu with facets', () => {
+    it('render FacetsMenu with facets', () => {
         spyOn(mockParentActions, 'showFacetMenu');
 
-        component = shallow(<StandardGridFacetsMenu show={false}
+        component = mount(<StandardGridFacetsMenu show={true}
+                                                  facetFields={fakeFacetsData_valid}
+                                                  showFacetMenu={mockParentActions.showFacetMenu} />);
+
+        expect(component.find('.popoverShown')).toBePresent();
+
+    });
+
+    it('render FacetsMenu with no facets', () => {
+        spyOn(mockParentActions, 'showFacetMenu');
+
+        component = mount(<StandardGridFacetsMenu show={false}
                                                   facetFields={fakeFacetsData_valid}
                                                   showFacetMenu={mockParentActions.showFacetMenu} />);
 
@@ -63,9 +74,9 @@ describe('StandardGridFacetsMenu functions', () => {
 
     });
 
-    it('test render FacetsMenu shows selection tokens', () => {
+    it('render FacetsMenu shows selection tokens', () => {
         let selected = {
-            1: ['a', 'c']
+            1 : ['a', 'c']
         };
         let callbacks = {
             onFacetSelect(e, facet, value) {}
@@ -108,16 +119,16 @@ describe('StandardGridFacetsMenu functions', () => {
             document.body.removeChild(mountPoint);
         });
 
-        it('test render FacetsMenu click facet section expand ', () => {
+        it('render FacetsMenu click facet section expand ', () => {
             class MockParent extends React.Component {
                 constructor(props) {
                     super(props);
                     this.state = {
-                        expanded: []
+                        expanded : []
                     };
                 }
 
-                mockSetFacetsExpanded = (newExpanded) => this.setState({expanded: newExpanded.expanded});
+                mockSetFacetsExpanded = (newExpanded) => this.setState({expanded : newExpanded.expanded});
                 render() {
                     return (
                         <StandardGridFacetsMenu show={true}
@@ -151,7 +162,7 @@ describe('StandardGridFacetsMenu functions', () => {
             // expand the facet panel
             let RenderedFacetsMenu = TestUtils.findRenderedComponentWithType(component, StandardGridFacetsMenu);
 
-            RenderedFacetsMenu.handleToggleCollapse({id:1}, null);
+            RenderedFacetsMenu.handleToggleCollapse({id : 1}, null);
 
             //ensure its in the expanded list
             expect(_.includes(RenderedFacetsMenu.props.expandedFacetFields, 1)).toBeTruthy();
@@ -168,7 +179,7 @@ describe('StandardGridFacetsMenu functions', () => {
 
         });
 
-        it('test render FacetsMenu click facet section collapse ', () => {
+        it('render FacetsMenu click facet section collapse ', () => {
             let expanded = [];
             component = ReactDOM.render(<StandardGridFacetsMenu show={true}
                                                                 expandedFacetFields={expanded}
@@ -194,9 +205,9 @@ describe('StandardGridFacetsMenu functions', () => {
             expect(facetPanels.length).toBe(1);
 
             // expand the facet panel
-            component.handleToggleCollapse({id:1}, null);
+            component.handleToggleCollapse({id : 1}, null);
             // then collapse the facet panel
-            component.handleToggleCollapse({id:1}, null);
+            component.handleToggleCollapse({id : 1}, null);
 
             //ensure its not  the expanded list
             expect(_.includes(component.props.expandedFacetFields, 1)).toBeFalsy();
@@ -231,12 +242,12 @@ describe('StandardGridFacetsMenu functions', () => {
                 constructor(props) {
                     super(props);
                     this.state = {
-                        expanded: [],
-                        moreRevealedFacetFields: []
+                        expanded : [],
+                        moreRevealedFacetFields : []
                     };
                 }
 
-                setFacetsMoreRevealed = (newExpanded) => this.setState({moreRevealedFacetFields: newExpanded.moreRevealed});
+                setFacetsMoreRevealed = (newExpanded) => this.setState({moreRevealedFacetFields : newExpanded.moreRevealed});
                 render() {
                     return (
                         <StandardGridFacetsMenu show={true}
@@ -304,7 +315,7 @@ describe('StandardGridFacetsMenu functions', () => {
     describe('handleToggleCollapse', () => {
         it('scrolls the clicked element into view', () => {
             const mockClickEvent = {
-                currentTarget: {
+                currentTarget : {
                     scrollIntoView() {}
                 }
             };
@@ -320,7 +331,7 @@ describe('StandardGridFacetsMenu functions', () => {
 
     describe('setFacetCollapsed', () => {
         it('collapses a facet if it is expanded', () => {
-            const testFacet = {id: 16, name: 'test'};
+            const testFacet = {id : 16, name : 'test'};
             spyOn(mockParentActions, 'setFacetsExpanded');
             component = shallow(<StandardGridFacetsMenu expandedFacetFields={[testFacet.id]}
                                                         setFacetsExpanded={mockParentActions.setFacetsExpanded}
@@ -328,7 +339,7 @@ describe('StandardGridFacetsMenu functions', () => {
 
             component.instance().setFacetCollapsed(testFacet, true);
 
-            expect(mockParentActions.setFacetsExpanded).toHaveBeenCalledWith({expanded: []});
+            expect(mockParentActions.setFacetsExpanded).toHaveBeenCalledWith({expanded : []});
         });
     });
 });

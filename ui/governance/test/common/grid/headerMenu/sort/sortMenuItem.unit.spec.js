@@ -130,12 +130,6 @@ describe('SortMenuItem', () => {
         expect(inst.isSortedAsc()).toBeFalsy();
     });
 
-    it("checks if the isSortedAsc returns true when no sortFids prop is not 0 (positive) and matches fieldDef.id", () => {
-        component = shallow(<SortMenuItem sortFids={[3]} fieldDef={{id: 3}} />);
-        inst = component.instance();
-        expect(inst.isSortedAsc()).toBeTruthy();
-    });
-
     it("checks if the isSortedAsc returns true when no sortFids prop is not 0 (positive) and contains fieldDef.id", () => {
         component = shallow(<SortMenuItem sortFids={[9, 21, 3, 99]} fieldDef={{id: 3}} />);
         inst = component.instance();
@@ -160,11 +154,6 @@ describe('SortMenuItem', () => {
         expect(inst.isColumnSorted()).toBeFalsy();
     });
 
-    it("checks if the isColumnSorted returns true when the the sortedFids match the fieldDef.id", () => {
-        component = shallow(<SortMenuItem sortFids={[2]} fieldDef={{id: 2}}/>);
-        inst = component.instance();
-        expect(inst.isColumnSorted()).toBeTruthy();
-    });
 
     it("checks if the isColumnSorted returns true when the the sortedFids contain the fieldDef.id", () => {
         component = shallow(<SortMenuItem sortFids={[9, 3, 2, 20]} fieldDef={{id: 2}}/>);
