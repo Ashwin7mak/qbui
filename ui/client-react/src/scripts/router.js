@@ -159,6 +159,10 @@ const routes = [
             {
                 path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId`,
                 component: AutomationBuilderContainer
+            },
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/create`,
+                component: AutomationBuilderContainer
             }
         ]
     },

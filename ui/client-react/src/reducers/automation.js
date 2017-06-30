@@ -118,6 +118,45 @@ const automation = (
             error: undefined
         };
     }
+
+    case types.CREATE_AUTOMATION: {
+        //let newState = _.cloneDeep(state);
+        let subject = {
+            defaultValue: null,
+            name: "subject",
+            type: "TEXT",
+        };
+        let toAddress = {
+            defaultValue:null,
+            name:"toAddress",
+            type:"TEXT",
+            };
+        let body = {
+            defaultValue:null,
+            name:"body",
+            type:"TEXT",
+            };
+        let newStateAutomation = {
+            name:'',
+            type:"EMAIL",
+            inputs: [
+                subject,
+                toAddress,
+                body
+            ]
+        };
+        return {
+            ...state,
+            automation : newStateAutomation,
+            newAutomation : true
+        }
+    }
+
+    case types.CHANGE_AUTOMATION_NAME: {
+        let newState = _.cloneDeep(state);
+        newState.automation.name = action.content.newName;
+        return newState;
+    }
     case types.CHANGE_AUTOMATION_EMAIL_TO: {
         let newState = _.cloneDeep(state);
         emailAutomationSetTo(newState.automation, action.content.newTo);
@@ -152,3 +191,7 @@ export const testAutomation = (state) => {
 export const getAutomation = (state) => {
     return state.automation.automation;
 };
+
+export const getNewAutomation = (state) => {
+    return state.automation.newAutomation;
+}

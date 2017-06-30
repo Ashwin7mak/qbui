@@ -137,6 +137,45 @@ export const saveAutomation = (appId, automationId, automation) => {
     };
 };
 
+/**
+ * Create an automation.
+ *
+ * @param appId - app id
+ * @param automation - the automation to save
+ */
+export const generateAutomation = (appId, automation) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId) {
+                logger.debug(`AutomationsAction.generateAutomation: generating automation for appId: ${appId}`);
+
+                dispatch(event(null, types.GENERATE_AUTOMATION, {appId: appId, automation: automation}));
+
+                let automationService = new AutomationService();
+                automationService.createAutomation(appId, automation)
+                    .then((response) => {
+                        logger.debug('AutomationService saveAutomation success');
+                        NotificationManager.success(Locale.getMessage('automation.saveAutomation.success'), Locale.getMessage('success'));
+                        dispatch(event(null, types.SAVE_AUTOMATION_SUCCESS, response.data));
+                        resolve();
+                    })
+                    .catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'automationService.saveAutomation:');
+                        NotificationManager.error(Locale.getMessage('automation.saveAutomation.error'), Locale.getMessage('failed'));
+                        dispatch(event(null, types.SAVE_AUTOMATION_FAILED, error));
+                        reject();
+                    });
+            } else {
+                logger.error(`automationService.saveAutomation: Missing required input parameters.  appId: ${appId}, automationId: ${automationId}`);
+                NotificationManager.error(Locale.getMessage('automation.saveAutomation.error'), Locale.getMessage('failed'));
+                dispatch(event(null, types.SAVE_AUTOMATION_FAILED, 500));
+                reject();
+            }
+        });
+    };
+};
+
+
 export const testAutomation = (automationName, appId) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -167,6 +206,14 @@ export const testAutomation = (automationName, appId) => {
     };
 };
 
+export const createAutomation = () => {
+    return (dispatch) => dispatch(event(null, types.CREATE_AUTOMATION, {}));
+}
+
+export const changeAutomationName = (newName) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_NAME, {newName}));
+
+}
 export const changeAutomationEmailTo = (newTo) => {
     return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_TO, {newTo}));
 };
