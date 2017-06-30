@@ -36,6 +36,9 @@ Parameters:
     Type: String
   Environment:
     Type: String
+  XrayDaemonAddress:
+    Type: String
+    Default: 169.254.170.3:2000
 
 Mappings:
   # 3381 = pre-prod
@@ -97,9 +100,8 @@ Resources:
                 - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
             - Name: legacyBase
               Value: !Ref LegacyBase
-          ExtraHosts:
-            - Hostname: "hostxray"
-              IpAddress: "169.254.170.3"
+            - Name: AWS_XRAY_DAEMON_ADDRESS
+              Value: !Ref XrayDaemonAddress
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
