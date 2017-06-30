@@ -112,6 +112,14 @@ class TableCreationPanel extends Component {
     };
 
     /**
+     * set table icon
+     * @param  icon
+     */
+    setTableIcon = (icon) => {
+        this.props.setTableProperty('tableIcon', icon);
+    };
+
+    /**
      * render the table settings UI
      * @returns {XML}
      */
@@ -148,15 +156,13 @@ class TableCreationPanel extends Component {
                                       validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
 
                     <IconChooser selectedIcon={this.props.tableInfo && this.props.tableInfo.tableIcon ? this.props.tableInfo.tableIcon.value : null}
-                                 functionalName="tableCreationIconChooser"
+                                 className="tableCreationIconChooser"
                                  name={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.value : ""}
                                  isOpen={this.props.iconChooserOpen}
                                  onOpen={this.props.openIconChooser}
                                  onClose={this.props.closeIconChooser}
-                                 setIconChoice={(icon) => this.props.setTableProperty('tableIcon', icon)}
+                                 setIconChoice={this.setTableIcon}
                                  placeHolder="tableCreation.searchPlaceholder"
-                                 typeForSuggestionsText="tableCreation.typeForSuggestions"
-                                 noSuggestedIconsText="tableCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  listOfIconsByNames={tableIconNames}
                                  listOfIconsByTagNames={tableIconsByTag} />

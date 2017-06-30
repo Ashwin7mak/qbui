@@ -99,6 +99,7 @@ describe('AppsListForLeftNav', () => {
         component = mount(<AppsList/>);
 
         component.setState({searchText: 'mockSearchText'});
+        expect(component).toHaveState('searchText', 'mockSearchText');
 
         instance = component.instance();
         instance.onClearSearch();

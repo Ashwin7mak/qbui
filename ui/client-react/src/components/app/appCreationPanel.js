@@ -26,6 +26,14 @@ export class AppCreationPanel extends Component {
     };
 
     /**
+     * set app icon
+     * @param  icon
+     */
+    setAppIcon = (icon) => {
+        this.props.setAppProperty('icon', icon);
+    };
+
+    /**
      * render the app settings UI
      * @returns {XML}
      */
@@ -51,16 +59,14 @@ export class AppCreationPanel extends Component {
                                       rows="3" />
 
                     <IconChooser selectedIcon={this.props.appIcon}
-                                 functionalName="appCreationIconChooser"
+                                 className="appCreationIconChooser"
                                  isOpen={this.props.isAppIconChooserOpen}
                                  onOpen={this.props.openIconChooserForApp}
                                  onClose={this.props.closeIconChooserForApp}
                                  placeHolder="appCreation.searchPlaceholder"
-                                 typeForSuggestionsText="appCreation.typeForSuggestions"
-                                 noSuggestedIconsText="appCreation.noSuggestedIcons"
                                  font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                                  name={this.props.appName}
-                                 setIconChoice={(icon) => this.props.setAppProperty('icon', icon)}
+                                 setIconChoice={this.setAppIcon}
                                  listOfIconsByNames={tableIconNames}
                                  listOfIconsByTagNames={tableIconsByTag} />
                 </div>
@@ -70,10 +76,12 @@ export class AppCreationPanel extends Component {
 
 
 const mapStateToProps = (state) => {
+    let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
+
     return {
-        appName: AppBuilderSelectors.getAppProperty(state, 'name'),
-        appDescription: AppBuilderSelectors.getAppProperty(state, 'description'),
-        appIcon: AppBuilderSelectors.getAppProperty(state, 'icon'),
+        appName: name,
+        appDescription: description,
+        appIcon: icon,
         isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)
     };
 };

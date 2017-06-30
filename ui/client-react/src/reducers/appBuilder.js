@@ -2,22 +2,20 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 
 const defaultAppIcon = 'Customer';
-
+const APP_PROPS = ['name', 'icon', 'description'];
 const setDefaultSettings = {
     name: '',
     description: '',
     icon: defaultAppIcon,
     isAppIconChooserOpen: false,
-    isDialogOpen: false
+    isDialogOpen: false,
+    isSavingApp: false
 };
 
 const appBuilder = (
     //  default states
     state = {
-        isSavingApp: false,
-        isDialogOpen: false,
-        isAppIconChooserOpen: false,
-        icon: defaultAppIcon
+        ...setDefaultSettings
     },
     action) => {
     // reducer - no mutations!
@@ -83,18 +81,16 @@ export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialog
 
 export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
 
-export const getAppProperty = (state, property) => _.get(state.appBuilder, property, '');
+export const getAppProperties = (state) => _.pick(state.appBuilder, APP_PROPS);
 
 export const getNewAppInfo = (state) => {
-    //TODO: Description will need to be added to the return object, but there is currently no endpoint for it
-    let description =  getAppProperty(state, 'description');
-    let icon = getAppProperty(state, 'icon');
-    let name = getAppProperty(state, 'name');
+    let {name, icon, description} = getAppProperties(state);
 
-    if (name.length > 0) {
+    if (name) {
         return {
             name,
-            icon
+            icon,
+            description
         };
     }
     return null;
