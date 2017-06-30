@@ -38,10 +38,14 @@
          * Based on the URL the user wants to redirect and the legacyBaseUrl specified in
          * the config, to we will return true if the root domains are the same
          * (e.g., quickbase-dev.com, quickbase.com, etc..) otherwise false
-         * @param redirectUrl
-         * @returns {boolean}
+         * @param redirectUrl The redirect url specified in the query params
+         * @returns {boolean} true if the redirect is to a valid domain else false
          */
         function isValidRedirect(redirectUrl) {
+            if (!redirectUrl) {
+                return false;
+            }
+
             const legacyBaseUrl = requestHelper.getLegacyHostTopTwoDomain();
             if (legacyBaseUrl === "") {
                 return false;
@@ -162,7 +166,7 @@
                 // to the legacy stack's 'My Apps' page. If the redirect url is not to a quickbase domain, we will also
                 // redirect to the 'My Apps' page.
                 let redirectUrl = req.query.url;
-                if (!redirectUrl || redirectUrl.length === 0 || !isValidRedirect(redirectUrl))  {
+                if (!isValidRedirect(redirectUrl))  {
                     redirectUrl = requestHelper.getLegacyRealmBase(req) + routeHelper.getMyAppsLegacyStackRoute();
                 }
                 res.redirect(redirectUrl);
