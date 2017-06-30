@@ -40,7 +40,7 @@ describe('Automation reducer functions', () => {
                     ]
                 }
             };
-            let resultState = reducer({appId: 'TEST'});
+            let resultState = reducer({appId: 'TEST'}, {type: types.CREATE_AUTOMATION, id:10, content: []});
             expect(resultState).toEqual(expectedState);
         });
     });

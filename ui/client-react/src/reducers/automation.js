@@ -120,29 +120,45 @@ const automation = (
     }
 
     case types.CREATE_AUTOMATION: {
-        //let newState = _.cloneDeep(state);
-        let subject = {
-            defaultValue: null,
-            name: "subject",
-            type: "TEXT",
-        };
-        let toAddress = {
-            defaultValue:null,
-            name:"toAddress",
-            type:"TEXT",
-        };
-        let body = {
-            defaultValue:null,
-            name:"body",
-            type:"TEXT",
-        };
         let newStateAutomation = {
             name:'',
             type:"EMAIL",
             inputs: [
-                subject,
-                toAddress,
-                body
+                {
+                    defaultValue: null,
+                    name: "subject",
+                    type: "TEXT",
+                },
+                {
+                    defaultValue:null,
+                    name:"toAddress",
+                    type:"TEXT",
+                },
+                {
+                    defaultValue:null,
+                    name:"body",
+                    type:"TEXT",
+                }
+            ],
+
+            steps: [
+                {
+                    type: "ACTION",
+                    actions: [
+                        {
+                            type: "CALL",
+                            functionName: "SEND_EMAIL",
+                            parameterBindings: [
+                                {parentName: "toAddress", "childName": "toAddress"},
+                                {parentName: "fromAddress", "childName": "fromAddress"},
+                                {parentName: "ccAddress", "childName": "ccAddress"},
+                                {parentName: "subject", "childName": "subject"},
+                                {parentName: "body", "childName": "body"}
+                            ],
+                            returnBinding: {"parentName": "response"}
+                        }
+                    ]
+                }
             ]
         };
         return {

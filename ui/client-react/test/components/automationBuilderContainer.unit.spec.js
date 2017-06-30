@@ -20,6 +20,7 @@ const props = {
     app: sampleApp,
     loadAutomation: (context, appId) => {},
     saveAutomation: (appId, automationId, automation) => {},
+    generateAutomation: (appId, automation) => {},
     changeAutomationEmailTo: (value) => {},
     changeAutomationEmailSubject: (value) => {},
     changeAutomationEmailBody: (value) => {},
@@ -97,9 +98,9 @@ describe('AutomationBuilderContainer', () => {
         });
 
         it('test screen is filled in', () => {
-            expect(component.find(EmailFieldValueEditor)).toHaveValue("test@test.com");
-            expect(component.find(FieldValueEditor)).toHaveValue("Test subject");
-            expect(component.find(MultiLineTextFieldValueEditor)).toHaveValue("Test body");
+            expect(component.find(".test-id-to-field")).toHaveValue("test@test.com");
+            expect(component.find(".test-id-subject-field")).toHaveValue("Test subject");
+            expect(component.find(".test-id-body-field")).toHaveValue("Test body");
         });
     });
 
