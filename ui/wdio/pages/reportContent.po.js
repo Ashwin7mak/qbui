@@ -345,6 +345,8 @@
             }
             //Click on the third cell of recordRowIndex row
             return recordCellEl.click();
+            formsPO.viewFormContainerEl.waitForVisible();
+            return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }},
 
         /**
