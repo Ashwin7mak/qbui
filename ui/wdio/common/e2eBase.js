@@ -75,10 +75,10 @@
                     return promise.reject(error);
                 });
             },
-            // Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
-            getRequestAppsPageEndpoint: function(realmName) {
-                var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/apps/');
-                return requestAppsPageEndPoint;
+            // Helper method to get the proper URL for loading FS page
+            getRequestFSPageEndpoint: function(realmName) {
+                let requestFSPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/admin/featureSwitches');
+                return requestFSPageEndPoint;
             },
             // Helper method to get the proper URL for loading the app in an realm
             getRequestAppPageEndpoint: function(realmName, appId) {
