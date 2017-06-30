@@ -2,6 +2,7 @@
  * Created by rbeyer on 6/12/17.
  */
 import * as types from '../actions/types';
+import _ from 'lodash';
 
 // Return only the appRoles from selectedApp object, else returns null
 export const getAppRoles = (state) => {

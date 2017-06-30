@@ -65,7 +65,7 @@ export class AppSettingsStage extends React.Component {
     }
 
     filterUserByRole = (roleId, numberOfUsers, isActive)=> {
-        if (numberOfUsers < 1) {return;}
+        if (numberOfUsers === 0) {return;}
         roleId = isActive ? null : roleId;
         this.props.changeStageSelectedRoleId(roleId);
 
@@ -95,11 +95,7 @@ AppSettingsStage.propTypes = {
     appOwner: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) =>({stageSelectedRoleId: state.selectedApp.stageSelectedRoleId});
-const mapDispatchToProps = (dispatch) =>{
-    return {
-        changeStageSelectedRoleId: (roleId)=> dispatch(changeStageSelectedRoleId(roleId))
-    };
-};
+const mapStateToProps = (state) => ({stageSelectedRoleId: state.selectedApp.stageSelectedRoleId});
+const mapDispatchToProps = {changeStageSelectedRoleId};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppSettingsStage);

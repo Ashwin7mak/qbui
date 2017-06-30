@@ -24,8 +24,6 @@ export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
             updateRowCount: true,
-            appRoles: this.props.appRoles,
-            selectedRole: '',
         };
     },
 
@@ -37,12 +35,6 @@ export const AppUsersRoute = React.createClass({
 
     componentWillUnmount() {
         this.deselectAllRows();
-    },
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            appRoles: nextProps.appRoles
-        });
     },
 
     getPageActions() {
@@ -154,6 +146,7 @@ export const AppUsersRoute = React.createClass({
         const selectedUserRows = this.props.selectedUserRows.length;
         return selectedUserRows > 0 && (selectedUserRows === this.props.appUsers.length);
     },
+
     render() {
         if (this.props.appRoles && this.props.selectedApp && this.props.appOwner) {
             const unfilteredAppUsers = this.props.unfilteredAppUsers;
