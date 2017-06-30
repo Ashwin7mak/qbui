@@ -348,6 +348,9 @@
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
+        /**
+         * Returns the formElementContainer specified by INDEX
+         */
         getFieldByIndex: {value: function(index) {
             return browser.element('.formElementContainer:nth-child(' + index + ')');
         }},
@@ -369,6 +372,11 @@
             }
         }},
 
+        /**
+         * Identifies field specified by INDEX and set its value
+         * assumes that the specified field is a TEXT FIELD
+         * and thus will accept any string as input
+         */
         setFieldValueByIndex: {value: function(index, value) {
             this.getFieldByIndex(index).element('.input').setValue(value);
         }},

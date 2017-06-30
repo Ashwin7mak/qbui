@@ -66,8 +66,7 @@ class formBuilderPage {
     }
 
     get firstField() {
-        // the first field on the form
-        // return browser.element('.field');
+        // the first FormElementContainer on the form
         return browser.element('.formElementContainer');
     }
 
@@ -334,7 +333,7 @@ class formBuilderPage {
         topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-        this.tab_Active.waitForExist();
+        this.tab_Active.waitForVisible();
         expect(this.tab_Active.getText()).toBe("New");
         return this;
     }

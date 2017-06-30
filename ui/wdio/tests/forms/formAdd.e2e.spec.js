@@ -14,6 +14,7 @@
         var realmId;
         var testApp;
         var successMessage = 'Record added';
+        const errorRequiredUnique = 'Please fix this field';
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -100,7 +101,7 @@
             // click SAVE button
             formsPO.clickFormSaveBtn();
             // expect REQUIRED error
-            expect(formsPO.formErrorMessageHeader.getText()).toBe('Please fix this field');
+            expect(formsPO.formErrorMessageHeader.getText()).toBe(errorReuiredUnique);
             let field = formsPO.getFieldByIndex(2);
             expect(formsPO.formErrorMessageContent.getText()).toBe(formBuilderPO.stripAsterisk(field.getText()));
             // dismiss the error
@@ -117,7 +118,7 @@
             // click SAVE button
             formsPO.clickFormSaveBtn();
             // expect UNIQUE error
-            expect(formsPO.formErrorMessageHeader.getText()).toBe('Please fix this field');
+            expect(formsPO.formErrorMessageHeader.getText()).toBe(errorRequiredUnique);
             field = formsPO.getFieldByIndex(2);
             expect(formsPO.formErrorMessageContent.getText()).toBe(formBuilderPO.stripAsterisk(field.getText()));
             // dismiss the error
