@@ -44,8 +44,8 @@ describe('Validate https response authentication functions', function() {
         spyRedirect.restore();
     });
 
-    it('validate federated users are redirected to   legacy', function() {
-
+    it('validate federated users are redirected to legacy', function() {
+        const requestHelper = require('../../../src/api/quickbase/requestHelper')(config);
         mockReq.headers = {
             host: 'localhost'
         };
@@ -62,6 +62,8 @@ describe('Validate https response authentication functions', function() {
         assert(stubLog.calledOnce);
         assert.equal(mockRes.cookies.ISFEDERATED.value, "",
             'the team_TICKET cookie value should be set as the TICKET cookie in the response');
+        assert.equal(mockRes.cookies.ISFEDERATED.options.domain, requestHelper.getLegacyHostTopTwoDomain().substring(1),
+            'the realm specific cookie should have the correct domain');
     });
     it('validate http response 200 json request for signout', function() {
         mockReq.headers = {
