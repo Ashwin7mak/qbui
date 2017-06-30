@@ -42,9 +42,6 @@ Parameters:
   TracingEnabled:
     Type: String
     Default: true
-  TracingServiceName:
-    Type: String
-    Default: UI
 Mappings:
   # 3381 = pre-prod
   # 1063 = prod
@@ -110,7 +107,7 @@ Resources:
             - Name: tracingEnabled
               Value: !Ref TracingEnabled
             - Name: tracingServiceName
-              Value: !Ref TracingServiceName
+              Value: !Ref ServiceName
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
