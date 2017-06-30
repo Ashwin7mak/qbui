@@ -8,16 +8,14 @@ const setDefaultSettings = {
     description: '',
     icon: defaultAppIcon,
     isAppIconChooserOpen: false,
-    isDialogOpen: false
+    isDialogOpen: false,
+    isSavingApp: false
 };
 
 const appBuilder = (
     //  default states
     state = {
-        isSavingApp: false,
-        isDialogOpen: false,
-        isAppIconChooserOpen: false,
-        icon: defaultAppIcon
+        ...setDefaultSettings
     },
     action) => {
     // reducer - no mutations!
