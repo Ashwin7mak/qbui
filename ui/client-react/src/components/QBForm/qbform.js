@@ -651,9 +651,9 @@ export const QBForm = React.createClass({
         let formStage = this.createFormStage();
         let classes = ["form"];
         if (this.props.edit) {
-            classes.push(" editForm");
+            classes.push("editForm");
         } else {
-            classes.push(" viewForm");
+            classes.push("viewForm");
         }
         return (
             <div className="formContainer">
