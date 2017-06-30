@@ -46,14 +46,12 @@ describe('Stage', () => {
         const testContent = <p className="testContent">Test Content</p>;
         component = mount(<Stage isOpenOnMount={true}>{testContent}</Stage>);
 
-        expect(component.find('.collapsedContent .testContent')).toBePresent();
-        expect(component.find('.toggleStage')).toBePresent();
+        expect(component.find('.toggleStage .iconUISturdy-caret-up')).toBePresent();
     });
     it('closed on mount if the isOpenOnMount prop is false', () => {
         const testContent = <p className="testContent">Test Content</p>;
         component = mount(<Stage isOpenOnMount={false}>{testContent}</Stage>);
 
-        expect(component.find('.collapsedContent .testContent')).not.toBePresent();
-        expect(component.find('.toggleStage')).not.toBePresent();
+        expect(component.find('.toggleStage .iconUISturdy-caret-down')).toBePresent();
     });
 });
