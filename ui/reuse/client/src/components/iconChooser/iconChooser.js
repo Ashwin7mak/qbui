@@ -145,7 +145,7 @@ class IconChooser extends Component {
         }
 
         return (
-            <div className={`${this.props.functionalName} dialogField iconSelection`}>
+            <div className={`${this.props.className} dialogField iconSelection`}>
                 <div className={classes.join(' ')}>
                     <div className="topRow">
                         {this.renderIconToggle()}
@@ -166,9 +166,9 @@ class IconChooser extends Component {
 
 IconChooser.propTypes = {
     /**
-     * a functionalName makes it easier for a QE to locate dom elements on the page
+     * a className makes it easier for a QE to locate dom elements on the page
      */
-    functionalName: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
     /**
      * additional classes
      */
