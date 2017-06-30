@@ -39,7 +39,12 @@ Parameters:
   XrayDaemonAddress:
     Type: String
     Default: 169.254.170.3:2000
-
+  TracingEnabled:
+    Type: String
+    Default: true
+  TracingServiceName:
+    Type: String
+    Default: UI
 Mappings:
   # 3381 = pre-prod
   # 1063 = prod
@@ -102,6 +107,10 @@ Resources:
               Value: !Ref LegacyBase
             - Name: AWS_XRAY_DAEMON_ADDRESS
               Value: !Ref XrayDaemonAddress
+            - Name: tracingEnabled
+              Value: !Ref TracingEnabled
+            - Name: tracingServiceName
+              Value: !Ref TracingServiceName
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
