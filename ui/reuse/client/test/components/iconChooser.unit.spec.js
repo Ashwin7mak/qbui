@@ -29,7 +29,6 @@ describe('IconChooser', () => {
     });
 
     afterEach(() => {
-        jasmineEnzyme();
         IconChooserCutsRewireAPI.__ResetDependency__('I18nMessage');
         IconChooserCutsRewireAPI.__ResetDependency__('Locale');
     });
