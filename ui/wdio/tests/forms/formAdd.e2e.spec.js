@@ -85,8 +85,9 @@
         });
 */
         it('add a field which is both REQUIRED and UNIQUE & verify appropriate errors while adding new record', function() {
-            if (browserName !== 'safari') {
+            if (browserName !== 'safari' || browserName !== 'firefox') {
                 // todo: figure out why the first line fails in safari (click has no effect/doesn't invoke view form)
+                // FF & safari are excluded anyway due to setValue
 
                 // click on a cell to view a record so that we can edit the form so that we can add new fields
                 reportContentPO.clickOnRecordInReportTable(0);
