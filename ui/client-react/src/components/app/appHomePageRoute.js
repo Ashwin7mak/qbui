@@ -12,6 +12,7 @@ import {getSelectedApp, getIsAppLoading} from '../../reducers/app';
 import {showTopNav} from '../../actions/shellActions';
 import Loader from 'react-loader';
 import {APP_HOMEPAGE_LOADING} from '../../constants/spinnerConfigurations';
+import PageService from '../../services/pageService';
 import get from 'lodash/get';
 
 import './appHomePage.scss';
@@ -42,12 +43,36 @@ export class AppHomePageRoute extends Component {
         showTopNav: PropTypes.func
     };
 
+    constructor(props) {
+        super(props);
+
+        // We want to push this to the redux store, set local state for now
+        this.state = {
+            page: {}
+        };
+    }
+
     componentDidMount() {
         this.props.showTopNav();
         if (this.props.notifyTableDeleted) {
             NotificationManager.success(Locale.getMessage('tableEdit.tableDeleted', {tableName: this.props.tableJustDeleted}), Locale.getMessage('success'));
             this.props.resetTableDeleteNotification();
         }
+
+        // Load default page for app
+        const pageService = new PageService();
+        // this is a call to get a mock page object from the node layer
+        const defaultPageId = 0; // TODO: use real default page ID
+        // this will result in a 404 response until EE returns pages to node layer
+        pageService.getPage(this.props.match.params.appId, defaultPageId).then(response => {
+            const page = response.data;
+
+            // uncomment following to see the response to pages endpoint
+            // console.log(response);
+            // console.log(JSON.stringify(response.data), null, 2);
+
+            this.setState({page});
+        });
     }
 
     /**
@@ -59,7 +84,7 @@ export class AppHomePageRoute extends Component {
     };
 
     getStageHeadline = () => {
-        const userHeadLine = `${Locale.getMessage('app.homepage.welcomeTitle')} ${this.getSelectedAppName()}`;
+        const userHeadLine = this.state.page.name || `${Locale.getMessage('app.homepage.welcomeTitle')} ${this.getSelectedAppName()}`;
         return (
             <div className="appHomePageStage">
                 <div className="appStageHeadline">
