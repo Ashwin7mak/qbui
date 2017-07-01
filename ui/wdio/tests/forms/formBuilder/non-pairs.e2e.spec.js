@@ -96,6 +96,18 @@
 
             // one-offs
 
+            it('drag a new field onto the form & verify that it is inserted into that position on the form', function() {
+                let newField = formBuilderPO.fieldTokenTitle.getText();
+                let fields = formBuilderPO.getFieldLabels();
+                let expectedFields = [newField, ...fields];
+                // verify (hope) that the first field label (where new field will be inserted) doesn't already match new field label
+                expect(fields[0]).not.toEqual(newField);
+                // drag first new field token onto first field on form
+                let newFields = formBuilderPO.dragNewFieldOntoForm(formBuilderPO.firstFieldToken, formBuilderPO.firstField);
+                // verify that the new field is inserted at the position it was dragged to
+                expect(newFields).toEqual(expectedFields);
+            });
+/*
             it('drags a field outside of viewport & verifies autoscroll', function() {
                 let firstField = formBuilderPO.firstField;
                 let lastField = browser.element(formBuilderPO.getFieldLocator(
@@ -134,18 +146,6 @@
                     browser.pause(1000);
                 }
                 browser.buttonUp();
-            });
-
-            it('drag a new field onto the form & verify that it is inserted into that position on the form', function() {
-                let newField = formBuilderPO.fieldTokenTitle.getText();
-                let fields = formBuilderPO.getFieldLabels();
-                let expectedFields = [newField, ...fields];
-                // verify (hope) that the first field label (where new field will be inserted) doesn't already match new field label
-                expect(fields[0]).not.toEqual(newField);
-                // drag first new field token onto first field on form
-                let newFields = formBuilderPO.dragNewFieldOntoForm(formBuilderPO.firstFieldToken, formBuilderPO.firstField);
-                // verify that the new field is inserted at the position it was dragged to
-                expect(newFields).toEqual(expectedFields);
             });
 
             it('add a new field from the collapsed NEW FIELDS panel', function() {
@@ -276,7 +276,7 @@
                 browser.moveToObject(target);
                 // verify drag token label (which won't ever feature a 'required' asterisk)
                 formBuilderPO.fieldTokenDragging.waitForExist();
-                expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(label.replace('* ', ''));
+                expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(stripAsterisk(label));
                 // drag back to source & drop
                 browser.pause(e2eConsts.shortWaitTimeMs);
                 browser.moveToObject(source);
@@ -296,7 +296,7 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
             });
-
+*/
         }
     });
 }());
