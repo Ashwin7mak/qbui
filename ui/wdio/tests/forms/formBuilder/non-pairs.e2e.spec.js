@@ -276,7 +276,7 @@
                 browser.moveToObject(target);
                 // verify drag token label (which won't ever feature a 'required' asterisk)
                 formBuilderPO.fieldTokenDragging.waitForExist();
-                expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(stripAsterisk(label));
+                expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(formBuilderPO.stripAsterisk(label));
                 // drag back to source & drop
                 browser.pause(e2eConsts.shortWaitTimeMs);
                 browser.moveToObject(source);
