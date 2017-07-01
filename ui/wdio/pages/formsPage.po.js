@@ -34,7 +34,6 @@
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconUISturdy-edit');}},
-
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
         //cancel form button
@@ -99,9 +98,7 @@
             //Click on form Save button
             this.editFormSaveBtns.waitForVisible();
             this.clickBtnOnForm('Save');
-            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-            //wait until save success container goes away
-            return notificationContainer.waitUntilNotificationContainerGoesAway();
+            return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }},
 
         /**
@@ -352,6 +349,13 @@
         }},
 
         /**
+         * Returns the formElementContainer specified by INDEX
+         */
+        getFieldByIndex: {value: function(index) {
+            return browser.element('.formElementContainer:nth-child(' + index + ')');
+        }},
+
+        /**
          * Method to set input value for a field on the form.
          */
         setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
@@ -366,6 +370,15 @@
                     fieldTypes.value[i].setValue([fieldValue]);
                 }
             }
+        }},
+
+        /**
+         * Identifies field specified by INDEX and set its value
+         * assumes that the specified field is a TEXT FIELD
+         * and thus will accept any string as input
+         */
+        setFieldValueByIndex: {value: function(index, value) {
+            this.getFieldByIndex(index).element('.input').setValue(value);
         }},
 
         /**
