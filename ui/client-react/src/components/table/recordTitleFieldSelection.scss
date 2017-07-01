@@ -25,10 +25,12 @@
             > * {
                 display: inline-block;
             }
-
-            .optionLabel {
-                margin-left: 20px;
-            }
+        }
+        /* Override the default styles of the react select component*/
+        .Select-menu-outer .Select-menu .Select-option .qbIcon {
+            position: inherit;
+            margin-right: 7px;
+            color: $color-black-700;
         }
     }
 }
