@@ -57,7 +57,7 @@ class formBuilderPage {
 
     get fieldDragging() {
         // the highlighted field when hovering over a drop target
-        return formElementContainer.element('.dragging');
+        return this.formElementContainer.element('.dragging');
     }
 
     get fieldTokenCollapsed() {
