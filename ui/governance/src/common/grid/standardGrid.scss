@@ -19,6 +19,25 @@
     width: 100%;
     position: relative;
     min-height: 0;
+
+    .qbHeader {
+        .qbHeaderCell:last-child {
+            .dropdown-menu {
+                right: 0;
+                left: initial;
+            }
+            
+            .dropdown-menu:before {
+                right: 9px;
+                left: initial;
+            }
+
+            .dropdown-menu:after {
+                right: 9px;
+                left: initial;
+            }
+        }
+    }
 }
 
 .noItemsExist {
