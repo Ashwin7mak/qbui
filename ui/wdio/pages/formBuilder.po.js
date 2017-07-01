@@ -261,11 +261,9 @@ class formBuilderPage {
         // some tricky waiting is required here due to odd animation behavior
         // where dropHovering first appears BELOW target, then swaps with new
         target.element('.dropHovering .notDragging').waitForExist();
-        // target.element('.notDropHovering').waitForExist();
-//        this.fieldDragging.waitForExist();
-
         // release button
         browser.buttonUp();
+        this.fieldDragging.waitForExist(null, true);
         return this.getFieldLabels();
     }
 
