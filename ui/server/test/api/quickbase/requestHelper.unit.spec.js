@@ -97,6 +97,23 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
+    describe('validate getLegacyHostTopTwoDomain', function() {
+        it('should return the correct top two domain for .quickbase.com', function(done) {
+            const testConfig = Object.assign({}, config, {legacyBase: '.quickbase.com'});
+            let reqHelper = require('./../../../src/api/quickbase/requestHelper')(testConfig);
+            let host = reqHelper.getLegacyHostTopTwoDomain();
+            should(host).be.exactly(testConfig.legacyBase);
+            done();
+        });
+
+        it('should return the correct top two domain for currentstack-int.quickbaserocks.com', function(done) {
+            let reqHelper = require('./../../../src/api/quickbase/requestHelper')(Object.assign({}, config, {legacyBase: 'currentstack-int.quickbaserocks.com'}));
+            let host = reqHelper.getLegacyHostTopTwoDomain();
+            should(host).be.exactly('.quickbaserocks.com');
+            done();
+        });
+    });
+
     describe('validate the request host', function() {
         let testCases = [
             {name:'empty domain - removePort=true/addProtocol=true', host: '', removePort: false, addProtocol: false, expectation: ''},
