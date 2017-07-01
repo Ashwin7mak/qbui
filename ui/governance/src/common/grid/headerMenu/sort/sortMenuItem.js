@@ -22,7 +22,7 @@ class SortMenuItem extends Component {
 
         switch (this.props.fieldDef.datatypeAttributes.type) {
         case FieldConsts.CHECKBOX:
-            message =  'uncheckedToChecked';
+            message =  'noToYes';
             break;
         case FieldConsts.TEXT:
         case FieldConsts.URL:
@@ -57,7 +57,7 @@ class SortMenuItem extends Component {
 
         switch (this.props.fieldDef.datatypeAttributes.type) {
         case FieldConsts.CHECKBOX:
-            message =  "checkedToUnchecked";
+            message =  "yesToNo";
             break;
         case FieldConsts.TEXT:
         case FieldConsts.URL:
