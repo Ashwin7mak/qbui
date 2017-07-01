@@ -3,7 +3,7 @@
     "name": "Feature A",
     "defaultOn": false,
     "description": "description",
-    "RealmsOveride":[
+    "realmsOveride":[
       {
         "realmId": "1234567",
         "overrideStateOn": true
