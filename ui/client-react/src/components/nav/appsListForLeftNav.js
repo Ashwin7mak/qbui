@@ -8,6 +8,7 @@ import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 
 import {tableIconNames} from '../../../../reuse/client/src/components/icon/tableIcons';
 import _ from 'lodash';
@@ -47,6 +48,7 @@ export const AppsList = React.createClass({
                 <NavItem key={app.id}
                          item={app}
                          icon={app.icon || 'favicon'}
+                         iconFont={AVAILABLE_ICON_FONTS.DEFAULT}
                          tableIcon={true}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
