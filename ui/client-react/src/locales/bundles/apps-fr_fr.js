@@ -645,6 +645,9 @@ export default {
                 removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
+                stage: {
+                    title: 'Formulaire pour {tableName}'
+                },
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Créer un champ de texte et l'ajouter au formulaire",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Créer un champ de numéro et l'ajouter au formulaire",
