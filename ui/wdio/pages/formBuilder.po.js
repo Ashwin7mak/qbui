@@ -255,14 +255,10 @@ class formBuilderPage {
         // wait a bit for the tile to be ready to be dragged
         this.tooltip.waitForVisible();
         browser.buttonDown();
-        // move to target & jiggle
-        // target.moveToObject('.field');
+        // drag to target, jiggle & wait
         target.element('.fieldLabel').moveToObject();
         target.element('.fieldLabel').moveToObject(5, 5);
-        // some tricky waiting is required here due to odd animation behavior
-        // where dropHovering first appears BELOW target, then swaps with new
         target.element('.selectedFormElement').waitForExist();
-        // browser.pause(e2eConsts.shortWaitTimeMs);
         // release button
         browser.buttonUp();
         this.fieldDragging.waitForExist(null, true);
