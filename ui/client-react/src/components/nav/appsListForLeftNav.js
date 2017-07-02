@@ -46,7 +46,7 @@ export const AppsList = React.createClass({
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
                          item={app}
-                         icon={this.props.appIcon}
+                         icon={app.icon || 'favicon'}
                          tableIcon={true}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}

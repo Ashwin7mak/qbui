@@ -103,8 +103,8 @@ let NavItem = React.createClass({
 });
 
 NavItem.defaultProps = {
-    icon: 'Acquisition_Clock',
-    iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY
+    icon: 'favicon',
+    iconFont: AVAILABLE_ICON_FONTS.DEFAULT
 };
 
 export default NavItem;

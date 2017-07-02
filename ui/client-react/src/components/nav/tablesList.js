@@ -9,6 +9,8 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
+
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
 let TablesList = React.createClass({
@@ -98,6 +100,7 @@ let TablesList = React.createClass({
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
                          icon={table.tableIcon}
+                         iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          key={table.id}
                          tableIcon={true}
                          showSecondary={this.props.expanded}
