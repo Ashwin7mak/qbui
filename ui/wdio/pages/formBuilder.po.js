@@ -256,8 +256,9 @@ class formBuilderPage {
         this.tooltip.waitForVisible();
         browser.buttonDown();
         // move to target & jiggle
-        target.moveToObject('.field');
-        target.moveToObject('.fieldLabel');
+        // target.moveToObject('.field');
+        target.element('.fieldLabel').moveToObject();
+        target.element('.fieldLabel').moveToObject(5, 5);
         // some tricky waiting is required here due to odd animation behavior
         // where dropHovering first appears BELOW target, then swaps with new
         target.element('.selectedFormElement').waitForExist();
