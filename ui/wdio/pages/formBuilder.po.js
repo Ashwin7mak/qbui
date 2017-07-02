@@ -256,15 +256,12 @@ class formBuilderPage {
         this.tooltip.waitForVisible();
         browser.buttonDown();
         // move to target & jiggle
-        // Edge needs more jiggle than others to correctly set insertion point
-        target.moveToObject(5, 5);
-        target.moveToObject();
-        target.moveToObject(5, 5);
-
+        target.moveToObject('.field');
+        target.moveToObject('.fieldLabel');
         // some tricky waiting is required here due to odd animation behavior
         // where dropHovering first appears BELOW target, then swaps with new
-        // target.element('.dropHovering .notDragging').waitForExist();
-        browser.pause(e2eConsts.shortWaitTimeMs);
+        target.element('.selectedFormElement').waitForExist();
+        // browser.pause(e2eConsts.shortWaitTimeMs);
         // release button
         browser.buttonUp();
         this.fieldDragging.waitForExist(null, true);
