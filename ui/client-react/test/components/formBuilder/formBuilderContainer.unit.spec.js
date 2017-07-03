@@ -12,7 +12,6 @@ import {ENTER_KEY, SPACE_KEY} from '../.././../../reuse/client/src/components/ke
 import ElementToken from '../../../../reuse/client/src/components/dragAndDrop/elementToken/elementToken';
 import Loader from 'react-loader';
 import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
-import {QBForm} from '../../../src/components/QBForm/qbform';
 
 const appId = "1";
 const tblId = "2";
@@ -43,6 +42,12 @@ const FormBuilderMock = React.createClass({
     }
 });
 
+const QBFormMock = React.createClass({
+    render: function() {
+        return <div>QB Form mock</div>;
+    }
+});
+
 let component;
 let instance;
 
@@ -57,7 +62,7 @@ var FieldPropertiesMock = React.createClass({
 describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        FormBuilderRewireAPI.__Rewire__('QbForm', QBForm);
+        FormBuilderRewireAPI.__Rewire__('QbForm', QBFormMock);
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', ElementToken);
         ExistingFieldsRewireAPI.__Rewire__('FieldTokenInMenu', ElementToken);
@@ -78,6 +83,7 @@ describe('FormBuilderContainer', () => {
     });
 
     afterEach(() => {
+        FormBuilderRewireAPI.__ResetDependency__('QBForm');
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
         ToolPaletteRewireAPI.__ResetDependency__('ExistingFieldsMenu');
         NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');

@@ -13,9 +13,12 @@ import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
+import {getTable} from '../../reducers/app';
 import {removeFieldFromForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import * as SchemaConsts from "../../constants/schema";
+import FormBuilderStage from '../formBuilder/formBuilderStage';
+
 import * as FieldsReducer from '../../reducers/fields';
 
 import {connect} from 'react-redux';
@@ -524,6 +527,13 @@ export const QBForm = React.createClass({
             </div>
         );
     },
+    /**
+     * Create a form footer with built-in fields
+     */
+    createFormStage() {
+        return this.props.editingForm && <FormBuilderStage table={this.props.table} />;
+    },
+
 
     /**
      * Create a form footer with built-in fields
@@ -638,9 +648,17 @@ export const QBForm = React.createClass({
             );
         }
 
+        let formStage = this.createFormStage();
+        let classes = ["form"];
+        if (this.props.edit) {
+            classes.push("editForm");
+        } else {
+            classes.push("viewForm");
+        }
         return (
             <div className="formContainer">
-                <form className={this.props.edit ? "editForm" : "viewForm"}>
+                {formStage}
+                <form className={classes.join(" ")}>
                     {formContent}
                 </form>
                 <div>{formFooter}</div>
@@ -668,10 +686,11 @@ function buildUserField(id, fieldValue, name) {
 
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || ownProps.uniqueId || CONTEXT.FORM.VIEW);
-
+    let appId = ownProps.app ? ownProps.app.id : null;
     return {
         fields: state.fields,
-        relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : []
+        relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : [],
+        table : getTable(state, appId, ownProps.tblId)
     };
 };
 
