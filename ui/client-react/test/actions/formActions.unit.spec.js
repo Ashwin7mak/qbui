@@ -33,6 +33,14 @@ const mockFieldsActions = {
     }
 };
 
+const mockTableActions = {
+    updateTable(_appId, _tableId, table) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'TableUpdated'})));
+        };
+    }
+};
+
 // we mock the Redux store when testing async action creators
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -228,6 +236,7 @@ describe('Form Actions', () => {
             {type: 'AllFieldsAdded'},
             {type: 'AllFieldsUpdated'},
             {type: 'AllFieldsDeleted'},
+            {type: 'TableUpdated'},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
         ];
         class mockFormService {
@@ -247,19 +256,23 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+            FormActionsRewireAPI.__Rewire__('TableActions', mockTableActions);
 
             spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
             spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
             spyOn(mockFieldsActions, 'deleteMarkedFields').and.callThrough();
+            spyOn(mockTableActions, 'updateTable').and.callThrough();
             FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
             FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
             FormActionsRewireAPI.__Rewire__('deleteMarkedFields', mockFieldsActions.deleteMarkedFields);
+            FormActionsRewireAPI.__Rewire__('updateTable', mockTableActions.updateTable);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
             FormActionsRewireAPI.__ResetDependency__('saveAllNewFields');
+            FormActionsRewireAPI.__ResetDependency__('updateTable');
         });
 
         it('saves a form update', (done) => {
@@ -379,12 +392,14 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+            FormActionsRewireAPI.__Rewire__('updateTable', mockTableActions.updateTable);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+            FormActionsRewireAPI.__ResetDependency__('updateTable');
         });
 
 
