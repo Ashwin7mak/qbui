@@ -55,6 +55,11 @@ class formBuilderPage {
         return browser.element('.fieldTokenDragging');
     }
 
+    get fieldDragging() {
+        // the highlighted field when hovering over a drop target
+        return this.formElementContainer.element('.dragging');
+    }
+
     get fieldTokenCollapsed() {
         // the token which appears when dragging a field to another position
         return browser.element('.fieldTokenCollapsed');
@@ -83,6 +88,11 @@ class formBuilderPage {
     get formBuilderContainer() {
         // the whole form builder page (all 3 panels)
         return browser.element('.formBuilderContainer');
+    }
+
+    get formElementContainer() {
+        // the whole form builder page (all 3 panels)
+        return this.formBuilderContainer.element('.formElementContainer');
     }
 
     get modalDismiss() {
@@ -211,11 +221,10 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.waitForVisible();
         this.cancelBtn.click();
-        while (!formsPO.viewFormContainerEl.isExisting()) {
+        while (this.formBuilderContainer.isExisting()) {
             this.dirtyForm_Dismiss();
         }
-        //Need this to wait for leftNav and record to load back again
-        browser.pause(e2eConsts.mediumWaitTimeMs);
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -233,8 +242,7 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         formsPO.viewFormContainerEl.waitForExist();
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
@@ -247,13 +255,13 @@ class formBuilderPage {
         // wait a bit for the tile to be ready to be dragged
         this.tooltip.waitForVisible();
         browser.buttonDown();
-        // move to target & jiggle
-        target.moveToObject();
-        target.moveToObject(5, 5);
-        target.element('.dropHovering').waitForExist();
+        // drag to target, jiggle & wait
+        target.element('.fieldLabel').moveToObject();
+        target.element('.fieldLabel').moveToObject(5, 5);
+        target.element('.selectedFormElement').waitForExist();
         // release button
         browser.buttonUp();
-        target.element('.notDropHovering').waitForExist();
+        this.fieldDragging.waitForExist(null, true);
         return this.getFieldLabels();
     }
 
