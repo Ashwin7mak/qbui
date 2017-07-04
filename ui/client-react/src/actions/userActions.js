@@ -157,3 +157,11 @@ export const clearSelectedUserRows = () => {
     return userEvent(types.SELECT_USER_ROWS, {selectedUsers: []});
 };
 
+/**
+ * Change Selected role Id in App Setting Stage
+ *
+ * @returns {{type, selectedUsers: *}}
+ */
+export const changeStageSelectedRoleId = (roleId) => {
+    return userEvent(types.STAGE_SELECTED_ROLE_ID, {roleId});
+};
