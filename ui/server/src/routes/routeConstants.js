@@ -135,7 +135,7 @@
         PUBLIC_RELATIONSHIPS       : '/apps/:appId/relationships*',
         PUBLIC_ROLES               : '/apps/:appId/roles*',
         PUBLIC_WORKFLOW_FLOW_MGR   : '/apps/:appId/workflow/flows*',
-        PUBLIC_PAGES: '/apps/:appId/pages*',
+        PUBLIC_PAGES               : '/apps/:appId/pages*',
         PUBLIC_APPS                : '/apps*',
         PUBLIC_HEALTH              : '/health',
         PUBLIC_OPERATIONS          : '/operations*',

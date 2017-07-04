@@ -153,7 +153,9 @@ export const TablePropertiesRoute = React.createClass({
                                         validate={this.props.tableProperties.isDirty}
                                         appTables={this.getExistingTableNames()}/>
 
-                    <RecordTitleFieldSelection tableInfo={this.props.tableProperties.tableInfo} onChange={this.updateRecordTitleField} />
+                    <h4><I18nMessage message ="tableCreation.recordTitleFieldHeading"/></h4>
+                    <div className="recordTitleFieldDescription"><I18nMessage message ="tableCreation.recordTitleFieldDescription"/></div>
+                    <RecordTitleFieldSelection table={this.props.table} selectedValue={_.get(this.props, "tableProperties.tableInfo.recordTitleFieldId.value", '') || ''} onChange={this.updateRecordTitleField} recordTitleFieldDescription="tableCreation.recordTitleFieldDescription"/>
 
                     <div className="tableInfoButtons">
                         <Button disabled={!this.props.isDirty} className="secondaryButton resetButton" onClick={this.resetTableProperties}>

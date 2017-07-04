@@ -24,9 +24,9 @@
 
                                 if (config.masterOverrideTurnFeaturesOn) {
                                     states[featureSwitch.name] = true;
-                                } else if (featureSwitch.RealmsOveride) {
+                                } else if (featureSwitch.realmsOveride) {
                                     // realm overrides take precedence over default
-                                    featureSwitch.RealmsOveride.forEach(function(override) {
+                                    featureSwitch.realmsOveride.forEach(function(override) {
                                         if (parseInt(override.realmId) === parseInt(realmId)) {
                                             states[featureSwitch.name] = override.overrideStateOn;
                                         }
@@ -45,9 +45,9 @@
 
                                             if (config.masterOverrideTurnFeaturesOn) {
                                                 states[switchOverride.name] = true;
-                                            } else if (switchOverride.RealmsOveride) {
+                                            } else if (switchOverride.realmsOveride) {
                                                 // realm overrides take precedence over default
-                                                switchOverride.RealmsOveride.forEach(function(realmOverride) {
+                                                switchOverride.realmsOveride.forEach(function(realmOverride) {
                                                     if (parseInt(realmOverride.realmId) === parseInt(realmId)) {
                                                         states[switchOverride.name] = realmOverride.overrideStateOn;
                                                     }

@@ -646,6 +646,9 @@ export default {
                 removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
+                stage: {
+                    title: 'Formular für {tableName}'
+                },
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Erstellen Sie ein Textfeld und fügen Sie es dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Erstellen Sie ein Zahlenfeld und fügen Sie es dem Formular hinzu",
@@ -676,7 +679,7 @@ export default {
                 }
             },
             existingFieldsToolTip: 'Füge {fieldName} dem Formular hinzu',
-            existingEmptyState: "Alle {numberOfFields} Felder, die zum {tableName} gehören, befinden sich auf dem Formular",
+            existingEmptyState: "Alle {numberOfFields} Felder, die zur {tableName} Tabelle gehören, befinden sich auf dem Formular",
             fieldGroups: {
                 text: "Text",
                 numeric: "Nummer",
@@ -738,12 +741,16 @@ export default {
             finishedButtonLabel: "App erstellen",
             appNameHeading: "App Name",
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
-            descriptionHeading: "App Beschreibung"
+            descriptionHeading: "App Beschreibung",
+            appCreationFailed: "App konnte nicht erstellt werden"
+        },
+        emptyAppState: {
+            message: "Du hast noch keine Apps.",
+            createNewApp: "Erstellen Sie eine App"
         },
         tableCreation: {
             newTablePageTitle: "Neue Tabelle",
             newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
-            newTableTitle: "Nennen Sie Ihren Tisch",
 
             summaryDescription: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld.",
             summaryTitle: "Drag & Drop Felder, die Sie hinzufügen möchten, um Ihre Tabelle auf das Formular. Sie können die Felder in der Reihenfolge anordnen, in der die Leute sie benutzen möchten.",

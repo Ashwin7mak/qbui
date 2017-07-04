@@ -591,29 +591,29 @@ module.exports = function(grunt) {
                     // Stabilize in CI before enabling
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
 
-                    // Removed due to configuration issue
-                    './wdio/tests/automations/automationsList.e2e.spec.js',
-                    './wdio/tests/automations/settingsMenu.e2e.spec.js',
-
                     // Failing in CI
                     './wdio/tests/relationships/relationshipNavToChild.e2e.spec.js',
                     './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js',
                     './wdio/tests/reports/reportBuilder.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
-
-                    //IN CI they are failing
-                    './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
-                    './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
-                    './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
                 ],
                 suites: {
                     // Please alphabetize these by folder level
-                    automations: [],
+                    automations: [
+                        './wdio/tests/automations/automationsList.e2e.spec.js',
+                        './wdio/tests/automations/settingsMenu.e2e.spec.js',
+                        './wdio/tests/automations/automationView.e2e.spec.js',
+                        './wdio/tests/automations/editEmailAutomation.e2e.spec.js'
+                    ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
                         './wdio/tests/forms/formAddValidation.e2e.spec.js',
                         './wdio/tests/forms/formEdit.e2e.spec.js',
-                        './wdio/tests/forms/formEditValidation.e2e.spec.js'
+                        './wdio/tests/forms/formEditValidation.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/non-pairs-part-2.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
                     ],
                     global: [
                         './wdio/tests/global/globalLeftNav.e2e.spec.js',
@@ -654,7 +654,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'forms,relationships,reports,tables,users,global'
+                suite: 'forms,relationships,reports,tables,users,global,automations'
             }
         },
 

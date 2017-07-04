@@ -57,15 +57,18 @@
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
         var TICKET_HEADER_KEY = 'ticket';
-        var PRIVATE_API_AUTH_HEADER = 'Authorization';
-        var PRIVATE_API_SALT_HEADER = 'Authorization-Salt';
+        var PRIVATE_API_AUTH_HEADER = 'X-CORE-SHA256HASH';
+        var PRIVATE_API_SALT_HEADER = 'X-CORE-SALT';
+        var PRIVATE_API_TIMESTAMP_HEADER = 'X-CORE-TIMESTAMP';
         var DEFAULT_HEADERS = {};
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var PRIVATE_API_HEADERS = {};
         var apiSalt = generateSalt();
+        var epochTimeNow = getEpochTimeNow();
         PRIVATE_API_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
-        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode('e4d1d39f-3352-474e-83bb-74dda6c4d8d7', apiSalt);
+        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode(epochTimeNow, apiSalt, 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7');
         PRIVATE_API_HEADERS[PRIVATE_API_SALT_HEADER] = apiSalt;
+        PRIVATE_API_HEADERS[PRIVATE_API_TIMESTAMP_HEADER] = epochTimeNow;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
         var TABLES_PROPERTIES = '/tableproperties/';
@@ -114,20 +117,24 @@
 
         // generates a salt for use with private apis (these should only be used in testing)
         function generateSalt() {
-            var prime_length = 32;
+            var prime_length = 128;
             var diffHell = crypto.createDiffieHellman(prime_length);
-            diffHell.generateKeys('base64');
-            return diffHell;
+            return diffHell.generateKeys('base64');
         }
 
         // hashes + encodes secret and salt for use with private apis (these should only be used in testing)
-        function hashAndEncode(secret, salt) {
-            var saltedSecret = secret + salt;
+        function hashAndEncode(timestamp, salt, secret) {
+            var saltedSecret = timestamp + salt + secret;
 
             var sha256 = crypto.createHash("sha256");
             sha256.update(saltedSecret);
             var result = sha256.digest("base64");
             return result;
+        }
+
+        // Return the current time since Epoch
+        function getEpochTimeNow() {
+            return Math.round(new Date().getTime() / 1000);
         }
 
         var apiBase = {
