@@ -252,7 +252,7 @@ describe('NavItem', () => {
             expect(component.find(Icon)).toBePresent();
         });
 
-        it('will not render an anchor tag and an icon if showSecondary and secondaryIcon are both true', () => {
+        it('will not render an anchor tag and an icon if showSecondary and secondaryIcon are both false', () => {
             component = shallow(<NavItem isHeading={false}
                                          showSecondary={false}
                                          secondaryIcon={false}
