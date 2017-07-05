@@ -66,7 +66,7 @@
         var apiSalt = generateSalt();
         var epochTimeNow = getEpochTimeNow();
         PRIVATE_API_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
-        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode(epochTimeNow, apiSalt, 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7');
+        PRIVATE_API_HEADERS[PRIVATE_API_AUTH_HEADER] = hashAndEncode(epochTimeNow, apiSalt, config.sharedSecret || 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7');
         PRIVATE_API_HEADERS[PRIVATE_API_SALT_HEADER] = apiSalt;
         PRIVATE_API_HEADERS[PRIVATE_API_TIMESTAMP_HEADER] = epochTimeNow;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
