@@ -62,6 +62,20 @@
             getLegacyHost : function() {
                 return config ? config.legacyBase : '';
             },
+            /**
+             * Get the two rightmost parts of the domain
+             * (e.g., currentstack-int.quickbaserocks.com => quickbaserocks.com)
+             */
+            getLegacyHostTopTwoDomain: function() {
+                const split = this.getLegacyHost().split('.');
+
+                // There should be at least two parts in the domain...
+                if (split.length < 2) {
+                    return '';
+                }
+                const size = split.length;
+                return `.${split[size - 2]}.${split[size - 1]}`;
+            },
             getAgentOptions: function(req) {
                 let agentOptions = {
                     rejectUnauthorized: false

@@ -108,6 +108,46 @@
                 expect(newFields).toEqual(expectedFields);
             });
 
+            it('drags a field outside of viewport & verifies autoscroll', function() {
+                let firstField = formBuilderPO.firstField;
+                let lastField = browser.element(formBuilderPO.getFieldLocator(
+                    formBuilderPO.getFieldLabels().length));
+
+                // shrink the window to cause last element to not be visible AND
+                // make everything faster (less distance to drag/content to scroll)
+                let browserSize = browser.windowHandleSize();
+                formBuilderPO.setViewportSize({
+                    width: browserSize.value.width,
+                    height: formBuilderPO.firstField.getElementSize().height * 4
+                }, true);
+                expect(lastField.isVisibleWithinViewport()).toBe(false);
+
+                // move cursor to container & press MB1
+                formBuilderPO.qbPanelHeader.moveToObject();
+                browser.buttonDown();
+
+                // initiate autoscroll DOWN
+                while (formBuilderPO.qbPanelHeader.isVisibleWithinViewport()) {
+                    browser.moveTo(null, 0, 2);
+                }
+
+                // wait for autoscroll DOWN to finish
+                while (!lastField.isVisibleWithinViewport()) {
+                    browser.pause(1000);
+                }
+
+                // initiate autoscroll UP
+                while (lastField.isVisibleWithinViewport()) {
+                    browser.moveTo(null, 0, -2);
+                }
+
+                // wait for autoscroll UP to finish
+                while (!formBuilderPO.qbPanelHeader.isVisibleWithinViewport()) {
+                    browser.pause(1000);
+                }
+                browser.buttonUp();
+            });
+
             it('add a new field from the collapsed NEW FIELDS panel', function() {
                 // verify that there are initially no collapsed field tokens
                 formBuilderPO.fieldTokenCollapsed.waitForExist(null, true);
@@ -145,50 +185,6 @@
                 formBuilderPO.tab_Existing.click();
                 // verify that the removed field still appears in the existing fields list
                 expect(formBuilderPO.getNewFieldLabels()).toContain(firstField);
-            });
-
-            it('drags a field outside of viewport & verifies autoscroll', function() {
-                let firstField = formBuilderPO.firstField;
-                let lastField = browser.element(formBuilderPO.getFieldLocator(
-                    formBuilderPO.getFieldLabels().length));
-
-                // shrink the window to cause last element to not be visible AND
-                // make everything faster (less distance to drag/content to scroll)
-                let browserSize = browser.windowHandleSize();
-                formBuilderPO.setViewportSize({
-                    width: browserSize.value.width,
-                    height: formBuilderPO.firstField.getElementSize().height * 4
-                }, true);
-                expect(lastField.isVisibleWithinViewport()).toBe(false);
-
-                // move cursor to container & press MB1
-                formBuilderPO.formBuilderContainer.moveToObject();
-                browser.buttonDown();
-
-                // initiate autoscroll DOWN
-                while (firstField.isVisible()) {
-                    browser.moveTo(null, 0, 2);
-                }
-
-                // wait for autoscroll DOWN to finish
-                while (!lastField.isVisibleWithinViewport()) {
-                    browser.pause(1000);
-                }
-
-                // not sure why, but this is needed to make scrolling work in subsequent loops.
-                browser.buttonUp();
-                browser.buttonDown();
-
-                // initiate autoscroll UP
-                while (lastField.isVisibleWithinViewport()) {
-                    browser.moveTo(null, 0, -2);
-                }
-
-                // wait for autoscroll UP to finish
-                while (!firstField.isVisibleWithinViewport()) {
-                    browser.pause(1000);
-                }
-                browser.buttonUp();
             });
 
             it('remove existing field & re-add it, verify field presence (or not) of field in existing field list at each step', function() {
@@ -230,6 +226,7 @@
                 // verify that the form container no longer exists
                 formBuilderPO.formBuilderContainer.waitForExist(null, true);
                 // get back to form builder so afterEach doesn't fail on Cancel
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
                 reportContentPO.clickOnRecordInReportTable(1);
                 formBuilderPO.open();
             });
@@ -280,7 +277,7 @@
                 browser.moveToObject(target);
                 // verify drag token label (which won't ever feature a 'required' asterisk)
                 formBuilderPO.fieldTokenDragging.waitForExist();
-                expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(label.replace('* ', ''));
+                expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(formBuilderPO.stripAsterisk(label));
                 // drag back to source & drop
                 browser.pause(e2eConsts.shortWaitTimeMs);
                 browser.moveToObject(source);
@@ -300,7 +297,6 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
             });
-
         }
     });
 }());

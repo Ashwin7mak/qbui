@@ -344,7 +344,9 @@
                 }, recordCellEl);
             }
             //Click on the third cell of recordRowIndex row
-            return recordCellEl.click();
+            recordCellEl.click();
+            formsPO.viewFormContainerEl.waitForVisible();
+            return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }},
 
         /**

@@ -75,3 +75,11 @@ export const showAppCreationDialog = () => ({
 export const hideAppCreationDialog = () => ({
     type: types.HIDE_APP_CREATION_DIALOG
 });
+
+export const openIconChooserForApp = () => ({
+    type: types.OPEN_ICON_CHOOSER_FOR_APP
+});
+
+export const closeIconChooserForApp = () => ({
+    type: types.CLOSE_ICON_CHOOSER_FOR_APP
+});
