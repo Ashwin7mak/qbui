@@ -21,9 +21,7 @@ let TablesList = React.createClass({
         showReports: React.PropTypes.func.isRequired,
         expanded: React.PropTypes.bool,
         onCreateNewTable: React.PropTypes.func,
-        selectedApp: React.PropTypes.shape({
-            tables: React.PropTypes.array
-        })
+        tables: React.PropTypes.array
     },
     getDefaultProps() {
         return {
