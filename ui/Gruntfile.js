@@ -605,6 +605,9 @@ module.exports = function(grunt) {
                         './wdio/tests/automations/automationView.e2e.spec.js',
                         './wdio/tests/automations/editEmailAutomation.e2e.spec.js'
                     ],
+                    featureSwitches: [
+                        './wdio/tests/featureSwitches/configurationBasedFeatureSwitches.e2e.spec.js'
+                    ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
                         './wdio/tests/forms/formAddValidation.e2e.spec.js',
