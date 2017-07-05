@@ -48,33 +48,16 @@
          * Selects a single user, clicks change user role, and selects role
          */
         it('Should select a single user, change role to "Viewer"', function() {
-            // Select the checkbox and click on change role icon
-            ReportTableActionsPO.selectRecordRowCheckbox(1);
-            UsersTablePage.clickChangeUserRoleIcon();
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
-            // Select user role from the drop down
-            expect(modalDialog.modalDialogTitle).toContain('Change the role of');
-            UsersTablePage.selectRole("Viewer");
-            // Wait for modal to disappear
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
-            // Click on change role button from the dialogue box
-            modalDialog.clickOnModalDialogBtn(modalDialog.CHANGE_ROLE_BTN);
-
+            // Change user role
+            UsersTablePage.changeUserRoleInApp(1, 'Viewer', false);
         });
 
         /**
          * Selects a single user, clicks change user role, and cancels
          */
         it('Should select a single user, change role and cancel', function() {
-            // Select the checkbox and click on change role icon
-            ReportTableActionsPO.selectRecordRowCheckbox(1);
-            UsersTablePage.clickChangeUserRoleIcon();
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
-            // Click on cancel button from the dialogue box
-            modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            // Change user role
+            UsersTablePage.changeUserRoleInApp(1, 'Viewer', true);
         });
 
         /**

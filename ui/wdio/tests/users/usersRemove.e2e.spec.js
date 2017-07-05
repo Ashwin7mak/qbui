@@ -55,9 +55,9 @@
 
             //TODO: MC-3410 - Need a better way to verify user was removed
             // Check that the user was removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // browser.pause(e2eConsts.shortWaitTimeMs);
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
@@ -69,12 +69,11 @@
             // Reload the user page
             e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
 
-
             //TODO: MC-3410 - Need a better way to verify user was removed
             // Check for the user not removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // browser.pause(e2eConsts.shortWaitTimeMs);
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**

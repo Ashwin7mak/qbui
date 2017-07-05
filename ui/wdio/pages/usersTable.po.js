@@ -125,7 +125,22 @@
             }
         }},
 
-        // changeUserRole:
+        changeUserRoleInApp: {value: function(index, role, cancel) {
+            // Select the checkbox
+            ReportTableActionsPO.selectRecordRowCheckbox(index);
+            // Click change role icon in actions
+            UsersTablePage.clickChangeUserRoleIcon();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(modalDialog.modalDialogTitle).toContain('Change the role of');
+            UsersTablePage.selectRole(role);
+            if (true === cancel) {
+                // Click Cancel
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            } else {
+                // Click change role button
+                modalDialog.clickOnModalDialogBtn(modalDialog.CHANGE_ROLE_BTN);
+            }
+        }},
 
         /**
          * Helper function to add user and role to app
