@@ -24,7 +24,6 @@ export class ExistingFieldsMenu extends Component {
                 childrenTabIndex={toolPaletteChildrenTabIndex}
                 toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
                 hasKeyBoardFocus={toolPaletteFocus}
-                headerElementRenderer={this.getHeaderElementRenderer}
                 childElementRenderer={DraggableFieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}

@@ -110,6 +110,12 @@ class ListOfElements extends Component {
         }
     };
 
+    /**
+     * Renders a header for a group of elements. Uses the custom renderer if provided.
+     * And adds a caret icon to indicate collapsed/expanded state if the header is specified as collapsible.
+     * @param element
+     * @returns {XML}
+     */
     renderHeaderElement = (element) => {
         let header;
         if (this.props.headerElementRenderer) {
@@ -130,6 +136,12 @@ class ListOfElements extends Component {
         );
     }
 
+    /**
+     * Render a list of child elements.
+     * @param element
+     * @param index
+     * @returns {XML}
+     */
     renderElementGroup = (element, index) => {
         if (this.props.animateChildren) {
             return <FlipMove typeName="ul" className="animatedListOfElementsItemList">
@@ -143,7 +155,7 @@ class ListOfElements extends Component {
     }
 
     /**
-     * Takes the SUPPORTED_NEW_FIELD_TYPES constant and maps them to a displayed list of grouped field types
+     * Render a set of element groups, each group may have a set of child elements and an optional header.
      * @returns {XML}
      */
     renderElementGroups = () => {
@@ -277,7 +289,7 @@ ListOfElements.propTypes = {
         collapsible: PropTypes.bool,
 
         /**
-         * Show the list of elements in an open state */
+         * Show the list of elements in an open state. Works in conjunction with the collapsible prop. */
         isOpen: PropTypes.bool,
 
         /**
