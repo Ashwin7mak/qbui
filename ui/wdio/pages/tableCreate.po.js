@@ -507,7 +507,7 @@
             //make sure the selection goes back to default selection
             expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
             //select one and apply to test it was saved
-            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield.element('.Select-value-label'), dropDownListLabels[0]);
             this.clickOnEditTableApplyBtn();
             return expect(pickerfield.element('.Select-value-label').getText()).toEqual(dropDownListLabels[0]);
         }}
