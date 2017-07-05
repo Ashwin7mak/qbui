@@ -102,7 +102,6 @@ let TablesList = React.createClass({
                          icon={table.tableIcon}
                          iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          key={table.id}
-                         tableIcon={true}
                          showSecondary={this.props.expanded}
                          secondaryIcon={"report-menu-3"}
                          secondaryOnSelect={this.props.showReports}
