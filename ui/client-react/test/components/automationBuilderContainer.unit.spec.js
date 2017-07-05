@@ -8,7 +8,7 @@ import MultiLineTextFieldValueEditor from "../../src/components/fields/multiLine
 import EmailFieldValueEditor from "../../src/components/fields/emailFieldValueEditor";
 
 const sampleApp = {id: 'app1', tables: []};
-const sampleAuto1 = {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL", inputs: [
+const sampleAuto1 = {id: 'auto1', name: 'Auto_1', active: true, type: "EMAIL", inputs: [
     {name: "toAddress", type: "TEXT", defaultValue: "test@test.com"},
     {name: "fromAddress", type: "TEXT",  defaultValue: "testing@quickbaserocks.com"},
     {name: "ccAddress", type: "TEXT",  defaultValue: null},
@@ -20,6 +20,7 @@ const props = {
     app: sampleApp,
     loadAutomation: (context, appId) => {},
     saveAutomation: (appId, automationId, automation) => {},
+    createAutomation:() => {},
     generateAutomation: (appId, automation) => {},
     changeAutomationEmailTo: (value) => {},
     changeAutomationEmailSubject: (value) => {},
@@ -34,7 +35,35 @@ const propsWithAuto = {
 
 const propsWithCreate = {
     ...props,
-    automationId: "create"
+    automation: {
+        name: '', type: "EMAIL", active:true, inputs: [
+            {name: "subject", type: "TEXT", defaultValue: null},
+            {name: "toAddress", type: "TEXT", defaultValue: null},
+            {name: "body", type: "TEXT", defaultValue: null},
+            {name: "fromAddress", type: "TEXT", defaultValue: 'notify@quickbaserocks.com'},
+            {name: "ccAddress", type: "TEXT", defaultValue: null}
+        ],
+        steps: [
+            {
+                type: "ACTION",
+                actions: [
+                    {
+                        type: "CALL",
+                        functionName: "SEND_EMAIL",
+                        parameterBindings: [
+                            {parentName: "toAddress", "childName": "toAddress"},
+                            {parentName: "fromAddress", "childName": "fromAddress"},
+                            {parentName: "ccAddress", "childName": "ccAddress"},
+                            {parentName: "subject", "childName": "subject"},
+                            {parentName: "body", "childName": "body"}
+                        ],
+                        returnBinding: {"parentName": "response"}
+                    }
+                ]
+            }
+        ]
+    },
+    newAutomation: true
 };
 
 describe('AutomationBuilderContainer', () => {
@@ -49,7 +78,7 @@ describe('AutomationBuilderContainer', () => {
             component = shallow(<AutomationBuilderContainer {...propsWithAuto}/>);
             expect(component.instance().getAppId()).toEqual("app1");
             expect(component.instance().getAutomationId()).toEqual("auto1");
-            expect(component.instance().getAutomationName()).toEqual("Auto 1");
+            expect(component.instance().getAutomationName()).toEqual("Auto_1");
         });
 
         it('test get app id from app id in matches', () => {
@@ -88,6 +117,24 @@ describe('AutomationBuilderContainer', () => {
         });
     });
 
+    describe('AutomationBuilderContainer when creating automation', () => {
+        beforeEach(() => {
+            jasmineEnzyme();
+            component = mount(<AutomationBuilderContainer {...propsWithCreate}/>);
+        });
+
+        afterEach(() => {
+        });
+
+        it('test screen is filled in', () => {
+            expect(component.find('.test-id-name-field').find('.textField')).toHaveValue('');
+            expect(component.find('.test-id-to-field')).toHaveValue('');
+            let subject = component.find('.test-id-subject-field');
+            expect(subject.find('.textField')).toHaveValue('');
+            expect(component.find(MultiLineTextFieldValueEditor)).toHaveValue(null);
+        });
+    });
+
     describe('AutomationBuilderContainer with automation', () => {
         beforeEach(() => {
             jasmineEnzyme();
@@ -98,9 +145,11 @@ describe('AutomationBuilderContainer', () => {
         });
 
         it('test screen is filled in', () => {
-            expect(component.find(".test-id-to-field")).toHaveValue("test@test.com");
-            expect(component.find(".test-id-subject-field")).toHaveValue("Test subject");
-            expect(component.find(".test-id-body-field")).toHaveValue("Test body");
+            expect(component.find('.test-id-name-field').find('.textField')).toHaveValue("Auto_1");
+            expect(component.find('.test-id-to-field')).toHaveValue("test@test.com");
+            let subject = component.find('.test-id-subject-field');
+            expect(subject.find('.textField')).toHaveValue("Test subject");
+            expect(component.find(MultiLineTextFieldValueEditor)).toHaveValue("Test body");
         });
     });
 
@@ -172,7 +221,7 @@ describe('AutomationBuilderContainer', () => {
             let saveButton = component.find('.mainTrowserFooterButton');
             saveButton.simulate('click');
 
-            expect(propsWithAuto.generateAutomation).toHaveBeenCalled();
+            expect(propsWithCreate.generateAutomation).toHaveBeenCalled();
             expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
         });
 

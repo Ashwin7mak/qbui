@@ -146,7 +146,7 @@ export class AutomationBuilderContainer extends Component {
                             <div className="formElementContainer">
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.nameHeader")} />
-                                    <FieldValueEditor classname="test-id-name-field" onChange={this.updateName} value={name} appUsers={[]}/>
+                                    <FieldValueEditor classes="test-id-name-field" onChange={this.updateName} value={name} appUsers={[]}/>
                                 </div>
                             </div>
                             <h3><I18nMessage message="automation.automationEdit.emailSectionHeader"/></h3>
@@ -159,7 +159,7 @@ export class AutomationBuilderContainer extends Component {
                                                 onChange={this.updateTo}
                                                 value={to}
                                                 invalid={this.isEmailInvalid(to)}
-                                                classname="test-id-to-field"/>
+                                                classes="test-id-to-field"/>
                                             <div className="clearIcon">
                                                 <div className="tipChildWrapper" aria-describedby="qbtooltip_321">
                                                     <span className="clearIconButton qbIcon iconUISturdy-clear-mini"></span>
@@ -171,12 +171,12 @@ export class AutomationBuilderContainer extends Component {
 
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.subjectHeader")} />
-                                    <FieldValueEditor classname="test-id-subject-field" onChange={this.updateSubject} value={subject} appUsers={[]} />
+                                    <FieldValueEditor classes="test-id-subject-field" onChange={this.updateSubject} value={subject} appUsers={[]} />
                                 </div>
 
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.bodyHeader")} />
-                                    <MultiLineTextFieldValueEditor classname="test-id-body-field" value={body} onChange={this.updateBody}/>
+                                    <MultiLineTextFieldValueEditor classes="test-id-body-field" value={body} onChange={this.updateBody}/>
                                 </div>
                             </div>
 

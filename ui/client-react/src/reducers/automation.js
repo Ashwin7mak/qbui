@@ -39,6 +39,7 @@ const automation = (
         return {
             ...state,
             appId: action.content,
+            newAutomation : false
         };
     }
     case types.LOAD_AUTOMATIONS_FAILED: {
@@ -123,24 +124,35 @@ const automation = (
         let newStateAutomation = {
             name:'',
             type:"EMAIL",
+            active: true,
             inputs: [
                 {
-                    defaultValue: null,
                     name: "subject",
                     type: "TEXT",
+                    defaultValue: null
                 },
                 {
-                    defaultValue:null,
                     name:"toAddress",
                     type:"TEXT",
+                    defaultValue: null
                 },
                 {
-                    defaultValue:null,
                     name:"body",
                     type:"TEXT",
+                    defaultValue: null,
+                },
+                {
+                    name:"fromAddress",
+                    type:"TEXT",
+                    defaultValue: "notify@quickbaserocks.com",
+                },
+                {
+                    name:"ccAddress",
+                    type:"TEXT",
+                    defaultValue: null,
                 }
-            ],
 
+            ],
             steps: [
                 {
                     type: "ACTION",
