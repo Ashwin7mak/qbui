@@ -1,6 +1,7 @@
 'use strict';
 let e2ePageBase = requirePO('e2ePageBase');
 let loadingSpinner = requirePO('/common/loadingSpinner');
+let leftNavPO = requirePO('leftNav');
 
 class appsPage {
 
@@ -92,6 +93,7 @@ class appsPage {
         this.createAppButton.click();
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         // get the length of the appsList after creating a new app and expect the length to increase by 1
+        leftNavPO.leftNavCaretUpEl.click();
         let newAppsCount = this.getLeftNavAppsList().value.length;
         expect(newAppsCount).toBe(appsCount + 1);
         return this;

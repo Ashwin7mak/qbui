@@ -1,6 +1,6 @@
 /**
  * E2E tests for the newApp
- * cperikal 5/16/2017
+ * cperikal 7/29/2017
  */
 (function() {
     'use strict';
