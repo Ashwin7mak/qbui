@@ -9,7 +9,6 @@ import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
 import {MAX_TABLE_NAME_LENGTH, MAX_TABLE_RECORD_NAME_LENGTH} from '../../constants/componentConstants';
 import _ from 'lodash';
 import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
-
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
 class TableCreationPanel extends Component {
