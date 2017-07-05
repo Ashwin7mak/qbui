@@ -645,6 +645,7 @@ export default {
                 removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
+                existingFieldsMenuThisTableTitle: 'Cette table',
                 stage: {
                     title: 'Formulaire pour {tableName}'
                 },

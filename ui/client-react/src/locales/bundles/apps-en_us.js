@@ -654,6 +654,7 @@ export default {
                 removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
+                existingFieldsMenuThisTableTitle: 'This table',
                 stage: {
                     title: 'Form for {tableName}'
                 },

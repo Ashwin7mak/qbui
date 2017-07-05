@@ -27,7 +27,7 @@ export class ExistingFieldsMenu extends Component {
                 childElementRenderer={DraggableFieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'This table', collapsible: true, isOpen: true}] : undefined}
+                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: Locale.getMessage('builder.formBuilder.existingFieldsMenuThisTableTitle'), collapsible: true, isOpen: true}] : undefined}
                 isFilterable={true}
                 hideTitle={false}
                 emptyMessage={this.buildEmptyState()}
