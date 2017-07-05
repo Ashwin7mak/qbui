@@ -119,7 +119,7 @@ class ListOfElements extends Component {
     renderHeaderElement = (element) => {
         let header;
         if (this.props.headerElementRenderer) {
-            header = <this.props.headerElementRenderer {...element} />;
+            header = <this.props.headerElementRenderer {...element} isCollapsed={this.props.isCollapsed}/>;
         } else {
             header = element.title;
         }
@@ -131,7 +131,7 @@ class ListOfElements extends Component {
         return (
             <div className={classes.join(" ")}>
                 {element.collapsible && <Icon icon="caret-up" className="headerCollapseIcon"></Icon>}
-                <div>{header}</div>
+                {!this.props.isCollapsed && <div>{header}</div>}
             </div>
         );
     }

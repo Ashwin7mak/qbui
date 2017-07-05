@@ -128,13 +128,11 @@ $toolpalette-header-font-size: 10px;
             }
         }
         .collapsibleHeader {
-            /* font-size: $font-size-base; */
             > * {
                 vertical-align: middle;
                 display: inline-block;
             }
             .headerCollapseIcon {
-                /* font-size: $font-size-large; */
                 margin-right: 5px;
             }
         }
