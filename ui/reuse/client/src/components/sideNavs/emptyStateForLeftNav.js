@@ -18,7 +18,7 @@ EmptyStateForLeftNav.propTypes = {
     emptyMessage: PropTypes.string,
     className: PropTypes.string,
     icon: PropTypes.string,
-    iconMessage: PropTypes.string,
+    iconMessage: PropTypes.string
 };
 
 EmptyStateForLeftNav.defaultProps = {
