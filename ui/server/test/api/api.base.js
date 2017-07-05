@@ -28,7 +28,12 @@
 
     module.exports = function(config) {
         //Module constants
+
+        // A recent PR in CORE changed the shared secret to "NO_DEFAULT" in Prod and Int. Temporary fix until
+        // we can change the keys in the Core integration environment.
+        // See PR at: https://github.com/QuickBase/QuickBase/pull/1123
         var SHARED_SECRET = 'NO_DEFAULT' || 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7';
+
         var QBUI_BASE_ENDPOINT = '/qbui';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
