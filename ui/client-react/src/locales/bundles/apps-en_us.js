@@ -654,6 +654,9 @@ export default {
                 removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
+                stage: {
+                    title: 'Form for {tableName}'
+                },
                 tooltips: {
                     // Tooltip for every single field type because of requirements for a/an and pronouns different for each language
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Create a text field and add it to the form",
@@ -748,7 +751,8 @@ export default {
             appNameHeading: "App name",
             appNamePlaceHolder: "For example, \"Order Tracker\"",
             descriptionHeading: "App description",
-            appCreationFailed: "Unable to create app"
+            appCreationFailed: "Unable to create app",
+            searchPlaceholder: "Search app icons..."
         },
         emptyAppState: {
             message: "You don't have any apps yet.",
@@ -766,7 +770,7 @@ export default {
             recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",
-            suggestedIconsHeading: "Suggested Icons",
+            searchPlaceholder: "Search table icons...",
 
             tableNamePlaceholder: "For example, Customers",
             recordNamePlaceholder: "For example, customer",
@@ -785,9 +789,6 @@ export default {
             homePageStillBuilding: "Still building?  ",
             homePageCreateAnother: "Create another table",
 
-            noSuggestedIcons: "There are no suggested icons for this table name",
-            typeForSuggestions: "Please type a table name to get suggestions",
-
             tableReadyTitle: "Your table's ready!",
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
             tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
@@ -800,7 +801,9 @@ export default {
             recordName: "Record Name"
         },
         iconChooser: {
-            searchPlaceholder: "Search table icons..."
+            suggestedIconsHeading: "Suggested icons",
+            noSuggestedIcons: "There are no suggested icons for ",
+            typeForSuggestions: "Type a name to view suggested icons"
         },
         settings: {
             header: "Settings",

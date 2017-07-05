@@ -1,5 +1,5 @@
 /**
- * E2E tests for the formAdd on small break point
+ * E2E tests for the topNav of the Reports page
  * cperikal 5/22/2017
  */
 (function() {
@@ -8,8 +8,8 @@
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
     let formsPO = requirePO('formsPage');
-    let loadingSpinner = requirePO('/common/loadingSpinner');
     let reportContentPO = requirePO('reportContent');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     describe('Forms - Add Record Tests: ', function() {
         let realmName;
@@ -43,7 +43,7 @@
             return e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0));
         });
 
-        it('Add a record via form', function() {
+        it('Edit a record via table actions edit pencil above the table grid', function() {
             let origRecordCount;
             let fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields', 'allTimeFields'];
             let fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
@@ -52,8 +52,12 @@
             reportContentPO.waitForReportContentSB();
             origRecordCount = formsPO.getRecordsCountInATable();
 
-            // Click on Add Record Button
-            formsPO.clickAddRecordOnSBP();
+            // Click on 1st record
+            formsPO.clickFormCardOnSBP();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
+            // Click on the edit pencil button
+            formsPO.clickEditRecordOnSBP();
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
             // Enter form values
@@ -66,43 +70,19 @@
 
             // Click Save on the form
             formsPO.clickFormSaveBtn();
-            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
-            // Click on 1st record
-            formsPO.clickFormCardOnSBP();
-            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-
-            // Verify record got added
+            // Verify record got Edited
             let recordValues = formsPO.getFieldValues();
+            // We have used 'junk' here to ignore the first element of the array which does not consists any values
             formsPO.verifyFieldValuesInReportTable(['junk', ...recordValues]);
 
             // Click on return button
             formsPO.returnButtonOnSBP.waitForVisible();
             formsPO.returnButtonOnSBP.click();
 
-            // Verify the count got increased by 1
+            // Verify the records count not increased
             reportContentPO.waitForReportContentSB();
-            let newRecordCount = formsPO.getRecordsCountInATable();
-            expect(newRecordCount).toBe(origRecordCount + 1);
-        });
-
-        it('Click on close button on form', function() {
-
-            // Get the original records count in a report
-            reportContentPO.waitForReportContentSB();
-            let origRecordCount = formsPO.getRecordsCountInATable();
-
-            // Click on Add Record Button
-            formsPO.clickAddRecordOnSBP();
-
-            // Click cancel on the form
-            formsPO.clickFormCloseBtn();
-
-            // Verify the new record count is same as original record count
-            reportContentPO.waitForReportContentSB();
-            let newRecordCount = formsPO.getRecordsCountInATable();
-            expect(newRecordCount).toBe(origRecordCount);
+            expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
         });
     });
 }());
-

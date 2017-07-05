@@ -27,6 +27,8 @@ export const CREATE_APP = 'CREATE_APP';
 export const CREATE_APP_SUCCESS = 'CREATE_APP_SUCCESS';
 export const CREATE_APP_FAILED = 'CREATE_APP_FAILED';
 export const SET_APP_PROPERTY = 'SET_APP_PROPERTY';
+export const OPEN_ICON_CHOOSER_FOR_APP = 'OPEN_ICON_CHOOSER_FOR_APP';
+export const CLOSE_ICON_CHOOSER_FOR_APP = 'CLOSE_ICON_CHOOSER_FOR_APP';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
@@ -56,6 +58,7 @@ export const END_DRAG = 'END_DRAG';
 export const IS_DRAGGING = 'IS_DRAGGING';
 export const SET_IS_PENDING_EDIT_TO_FALSE = 'SET_IS_PENDING_EDIT_TO_FALSE';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
+export const SET_IS_REQD_FOR_RECORD_TITLE = 'SET_IS_REQD_FOR_RECORD_TITLE';
 
 //  ********  Nav shell actions ********
 export const UPDATE_FORM_ANIMATION_STATE = 'UPDATE_FORM_ANIMATION_STATE';
@@ -144,6 +147,7 @@ export const SEARCH_USERS_FAIL = 'SEARCH_USERS_FAIL';
 export const SET_USER_ROLE_TO_ADD = 'SET_USER_ROLE_TO_ADD';
 export const TOGGLE_ADD_USER_DIALOG = 'TOGGLE_ADD_USER_DIALOG';
 export const SELECT_USER_ROWS = 'SELECT_USER_ROWS';
+export const STAGE_SELECTED_ROLE_ID = 'STAGE_SELECTED_ROLE_ID';
 export const TOGGLE_CHANGE_USER_ROLE = 'TOGGLE_CHANGE_USER_ROLE';
 
 // **** feature switches ****
