@@ -1,15 +1,38 @@
 import React from 'react';
-import {PropTypes} from 'react';
+import {PropTypes, Component} from 'react';
 import DialogFieldInput from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 import {DIALOG_FIELD_INPUT_COMPONENT_TYPE} from '../../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
 import {connect} from 'react-redux';
 import * as AppBuilderActions from '../../actions/appBuilderActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
+import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+
+//TODO: XD needs to provide us with a list of appIconNames and appIconsByTag, currently none exists
+import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
 
 import '../../../../reuse/client/src/components/multiStepDialog/dialogCreationPanel.scss';
 
-export class AppCreationPanel extends React.Component {
+export class AppCreationPanel extends Component {
+    static propTypes = {
+        setAppProperty: PropTypes.func,
+        openIconChooser: PropTypes.func,
+        closeIconChooser: PropTypes.func,
+        appName: PropTypes.string,
+        appDescription: PropTypes.string,
+        appIcon: PropTypes.string,
+        isAppIconChooserOpen: PropTypes.bool
+    };
+
+    /**
+     * set app icon
+     * @param  icon
+     */
+    setAppIcon = (icon) => {
+        this.props.setAppProperty('icon', icon);
+    };
+
     /**
      * render the app settings UI
      * @returns {XML}
@@ -34,6 +57,18 @@ export class AppCreationPanel extends React.Component {
                                       onChange={ this.props.setAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3" />
+
+                    <IconChooser selectedIcon={this.props.appIcon}
+                                 className="appCreationIconChooser"
+                                 isOpen={this.props.isAppIconChooserOpen}
+                                 onOpen={this.props.openIconChooserForApp}
+                                 onClose={this.props.closeIconChooserForApp}
+                                 placeHolder="appCreation.searchPlaceholder"
+                                 font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                                 name={this.props.appName}
+                                 setIconChoice={this.setAppIcon}
+                                 listOfIconsByNames={tableIconNames}
+                                 listOfIconsByTagNames={tableIconsByTag} />
                 </div>
             </div>);
     }
@@ -41,14 +76,20 @@ export class AppCreationPanel extends React.Component {
 
 
 const mapStateToProps = (state) => {
+    let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
+
     return {
-        appName: AppBuilderSelectors.getAppProperty(state, 'name'),
-        appDescription: AppBuilderSelectors.getAppProperty(state, 'description')
+        appName: name,
+        appDescription: description,
+        appIcon: icon,
+        isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)
     };
 };
 
 const mapDispatchToProps = {
-    setAppProperty: AppBuilderActions.setAppProperty
+    setAppProperty: AppBuilderActions.setAppProperty,
+    openIconChooserForApp: AppBuilderActions.openIconChooserForApp,
+    closeIconChooserForApp: AppBuilderActions.closeIconChooserForApp
 };
 
 export default connect(
