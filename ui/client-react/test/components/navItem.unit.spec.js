@@ -10,6 +10,7 @@ let component;
 let instance;
 let secondaryIcon = 'mockSecondaryIcon';
 let mockEvent = {};
+let mockHoverComponent = <div className="mockHoverComponent"></div>;
 let mockItem = {
     name: 'mockName'
 };
@@ -106,5 +107,62 @@ describe('NavItem', () => {
                                      item={mockItem} />);
 
         expect(component.find(OverlayTrigger)).not.toBePresent();
+    });
+
+    describe('getLinkItem', () => {
+        it('will render a link if isHeading is false', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showToolTip={false}
+                                         secondaryIcon={true}
+                                         item={mockItem} />);
+
+            expect(component.find(LinkMock)).toBePresent();
+        });
+
+        it('will render a className withSecondary if secondaryIcon is true', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showToolTip={false}
+                                         secondaryIcon={true}
+                                         item={mockItem} />);
+
+            expect(component.find('.withSecondary')).toBePresent();
+        });
+
+        it('will render a className selected if selected is true', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showToolTip={false}
+                                         selected={true}
+                                         item={mockItem} />);
+
+            expect(component.find('.selected')).toBePresent();
+        });
+
+        it('will render an anchor tag and an icon if showSecondary and secondaryIcon are both true', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showSecondary={true}
+                                         secondaryIcon={true}
+                                         showToolTip={false}
+                                         item={mockItem} />);
+
+            expect(component.find('a')).toBePresent();
+            expect(component.find(Icon)).toBePresent();
+        });
+
+        it('will render a hover component', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showToolTip={false}
+                                         hoverComponent={mockHoverComponent}
+                                         item={mockItem} />);
+
+            expect(component.find('.mockHoverComponent')).toBePresent();
+        });
+
+        it('will not render a hover component if it is undefined', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showToolTip={false}
+                                         item={mockItem} />);
+
+            expect(component.find('.mockHoverComponent')).not.toBePresent();
+        });
     });
 });
