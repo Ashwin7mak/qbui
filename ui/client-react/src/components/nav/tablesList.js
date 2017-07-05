@@ -144,14 +144,14 @@ let TablesList = React.createClass({
      */
     getNewTableItem() {
         return <CreateNewItemButton handleOnClick={this.props.onCreateNewTable}
-                                    message="tableCreation.newTablePageTitle"a
+                                    message="tableCreation.newTablePageTitle"
                                     className="newTable"
                                     key="newTableButton"
         />;
     },
 
     renderEmptyStateOrButton() {
-        if (_.isEmpty(this.props.tables)) {
+        if (_.isEmpty(this.props.tables) && this.props.expanded) {
             return <EmptyStateForLeftNav handleOnClick={this.props.onCreateNewTable}
                                          emptyMessage="emptyTableState.message"
                                          className="tableList"
