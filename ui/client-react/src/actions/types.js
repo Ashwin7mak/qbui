@@ -20,10 +20,15 @@ export const CLEAR_SELECTED_APP_TABLE = 'CLEAR_SELECTED_APP_TABLE';
 export const SELECT_APP_TABLE = 'SELECT_APP_TABLE';
 export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
-//  ******** App Role actions ********
-export const LOAD_APP_ROLES = 'LOAD_APP_ROLES';
-export const LOAD_APP_ROLES_SUCCESS = 'LOAD_APP_ROLES_SUCCESS';
-export const LOAD_APP_ROLES_FAILED = 'LOAD_APP_ROLES_FAILED';
+//  **** App Builder actions ****
+export const SHOW_APP_CREATION_DIALOG = 'SHOW_APP_CREATION_DIALOG';
+export const HIDE_APP_CREATION_DIALOG = 'HIDE_APP_CREATION_DIALOG';
+export const CREATE_APP = 'CREATE_APP';
+export const CREATE_APP_SUCCESS = 'CREATE_APP_SUCCESS';
+export const CREATE_APP_FAILED = 'CREATE_APP_FAILED';
+export const SET_APP_PROPERTY = 'SET_APP_PROPERTY';
+export const OPEN_ICON_CHOOSER_FOR_APP = 'OPEN_ICON_CHOOSER_FOR_APP';
+export const CLOSE_ICON_CHOOSER_FOR_APP = 'CLOSE_ICON_CHOOSER_FOR_APP';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
@@ -53,6 +58,7 @@ export const END_DRAG = 'END_DRAG';
 export const IS_DRAGGING = 'IS_DRAGGING';
 export const SET_IS_PENDING_EDIT_TO_FALSE = 'SET_IS_PENDING_EDIT_TO_FALSE';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
+export const SET_IS_REQD_FOR_RECORD_TITLE = 'SET_IS_REQD_FOR_RECORD_TITLE';
 
 //  ********  Nav shell actions ********
 export const UPDATE_FORM_ANIMATION_STATE = 'UPDATE_FORM_ANIMATION_STATE';
@@ -123,6 +129,10 @@ export const CHANGE_REPORT_NAME = 'CHANGE_REPORT_NAME';
 export const ENTER_BUILDER_MODE = 'ENTER_BUILDER_MODE';
 export const EXIT_BUILDER_MODE = 'EXIT_BUILDER_MODE';
 
+//  ******** qbGrid actions ********
+export const DRAGGING_COLUMN_START = 'DRAGGING_COLUMN_START';
+export const DRAGGING_COLUMN_END = 'DRAGGING_COLUMN_END';
+
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
@@ -131,9 +141,14 @@ export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
 //  ******** search actions ********
 export const SEARCH_INPUT = 'SEARCH_INPUT';
 
-//  ******** user actions **********
+//  ******** App User actions **********
 export const SEARCH_USERS_SUCCESS = 'SEARCH_USERS_SUCCESS';
 export const SEARCH_USERS_FAIL = 'SEARCH_USERS_FAIL';
+export const SET_USER_ROLE_TO_ADD = 'SET_USER_ROLE_TO_ADD';
+export const TOGGLE_ADD_USER_DIALOG = 'TOGGLE_ADD_USER_DIALOG';
+export const SELECT_USER_ROWS = 'SELECT_USER_ROWS';
+export const STAGE_SELECTED_ROLE_ID = 'STAGE_SELECTED_ROLE_ID';
+export const TOGGLE_CHANGE_USER_ROLE = 'TOGGLE_CHANGE_USER_ROLE';
 
 // **** feature switches ****
 export const SET_FEATURE_SWITCH_STATES = 'SET_FEATURE_SWITCH_STATES';
@@ -183,11 +198,11 @@ export const DELETING_TABLE_FAILED = 'DELETING_TABLE_FAILED';
 export const TABLE_DELETED = 'TABLE_DELETED';
 export const NOTIFY_TABLE_DELETED = 'NOTIFY_TABLE_DELETED';
 
-// ************ Used for the Add User Dialog *************
-export const SHOW_ADD_USER_TO_APP_DIALOG = 'SHOW_ADD_USER_TO_APP_DIALOG';
-export const SET_USER_ROLE_TO_ADD = 'SET_USER_ROLE_TO_ADD';
-export const TOGGLE_ADD_USER_DIALOG = 'TOGGLE_ADD_USER_DIALOG';
-export const SELECT_USER_ROWS = 'SELECT_USER_ROWS';
+//  ******** Selected App actions ********
+export const LOAD_APP_ROLES = 'LOAD_APP_ROLES';
+export const LOAD_APP_ROLES_SUCCESS = 'LOAD_APP_ROLES_SUCCESS';
+export const LOAD_APP_ROLES_FAILED = 'LOAD_APP_ROLES_FAILED';
+export const TOGGLE_ADD_TO_APP_SUCCESS_DIALOG = 'TOGGLE_ADD_TO_APP_SUCCESS_DIALOG';
 
 //  ******** automation actions ********
 export const LOAD_AUTOMATIONS = 'LOAD_AUTOMATIONS';
@@ -196,7 +211,6 @@ export const LOAD_AUTOMATIONS_FAILED = 'LOAD_AUTOMATIONS_FAILED';
 export const TEST_AUTOMATION = 'TEST_AUTOMATION';
 export const TEST_AUTOMATION_SUCCESS = 'TEST_AUTOMATION_SUCCESS';
 export const TEST_AUTOMATION_FAILED = 'TEST_AUTOMATION_FAILED';
-export const TOGGLE_ADD_TO_APP_SUCCESS_DIALOG = 'TOGGLE_ADD_TO_APP_SUCCESS_DIALOG';
 export const LOAD_AUTOMATION = 'LOAD_AUTOMATION';
 export const LOAD_AUTOMATION_SUCCESS = 'LOAD_AUTOMATION_SUCCESS';
 export const LOAD_AUTOMATION_FAILED = 'LOAD_AUTOMATION_FAILED';

@@ -1,11 +1,31 @@
 import React, {PropTypes, Component} from 'react';
 import Swipeable from 'react-swipeable';
+import {DropTarget} from 'react-dnd';
+import DraggableItemTypes from '../../../../../reuse/client/src/components/dragAndDrop/draggableItemTypes';
 
 import './sideMenuBase.scss';
 
 // CLIENT REACT IMPORTS
 import Breakpoints from 'APP/utils/breakpoints';
 // CLIENT REACT IMPORTS
+
+const menuTarget = {
+    drop(dropTargetProps, monitor) {
+        let dragItemProps = monitor.getItem();
+        if (dropTargetProps.onDrop) {
+            dropTargetProps.onDrop(dropTargetProps, dragItemProps);
+        }
+        return dropTargetProps;
+    }
+};
+
+function collect(connectDropSource, monitor) {
+    return {
+        connectDropTarget: connectDropSource.dropTarget(),
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop()
+    };
+}
 
 /**
  * SideMenuBase creates a panel that appears below the main content.
@@ -114,13 +134,34 @@ class SideMenuBase extends Component {
         }
     }
 
-    render() {
-        return (
-            <div className={this.getBaseClasses()}>
+    getSideMenu() {
+        let {connectDropTarget, isDroppable} = this.props;
+
+        if (isDroppable) {
+            return (
+                connectDropTarget(
+                    <div className={this.getSideMenuClasses()}>
+                        <Swipeable className={this.getSideMenuClasses()} onswipedLeft={this.closeOnSwipeLeft}>
+                            {this.props.sideMenuContent}
+                        </Swipeable>
+                    </div>
+                )
+            );
+        } else {
+            return (
                 <Swipeable className={this.getSideMenuClasses()} onswipedLeft={this.closeOnSwipeLeft}>
                     {this.props.sideMenuContent}
                 </Swipeable>
+            );
+        }
+    }
 
+    render() {
+        let SideMenu = this.getSideMenu();
+
+        return (
+            <div className={this.getBaseClasses()}>
+                {SideMenu}
                 <div className={this.getMainBodyClasses()}>
                     {this.props.children}
                 </div>
@@ -159,6 +200,17 @@ export const SideMenuBaseProps = {
      *   1. Careful with this one as it breaks the XD pattern for left navs.
      *   2. If a new prop is passed at runtime, it won't visibly update until the next page resize */
     willDock: PropTypes.bool,
+
+    /**
+     * Can tokens be dropped into the side menu?
+     * If true, make sure to have a DragDropContext wrapping the menu.
+     */
+    isDroppable: PropTypes.bool,
+
+    /**
+     * If the menu is droppable, this is a callback to a function that will get called when a token drops into the menu.
+     */
+    onDrop: PropTypes.func,
 };
 
 SideMenuBase.propTypes = {
@@ -170,11 +222,14 @@ SideMenuBase.propTypes = {
 };
 
 SideMenuBase.defaultProps = {
+    isDroppable: false,
     isOpen: false,
     isCollapsed: false,
     pullRight: false,
     willDock: true,
     baseClass: 'sideMenu'
 };
+
+export const DroppableSideMenuBase = (DropTarget(DraggableItemTypes.FIELD, menuTarget, collect)(SideMenuBase));
 
 export default SideMenuBase;

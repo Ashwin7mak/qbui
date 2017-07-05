@@ -10,6 +10,11 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
     let formsPagePO = requirePO('formsPage');
+    let formBuilderPO = requirePO('formBuilder');
+    let modalDialog = requirePO('/common/modalDialog');
+    let notificationContainer = requirePO('/common/notificationContainer');
+    let topNavPO = requirePO('topNav');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
     // slidey-righty animation const
     var slideyRightyPause = 2000;
 
@@ -32,6 +37,18 @@
         parentRecordLinkInDrawerEl: {
             get: function() {
                 return browser.element('.numericField.viewElement');
+            }
+        },
+        // returns the element displaying the add child button
+        addChildButton: {
+            get: function() {
+                return browser.element('.addChildBtn');
+            }
+        },
+        // returns the class for the element displaying the add child button but in a disabled state
+        addChildButtonDisabledClass: {
+            get: function() {
+                return '.addChildBtn.disabled';
             }
         },
         // Page Object functions
@@ -92,9 +109,9 @@
          */
         clickAddChildButton: {
             value: function() {
-                browser.waitForVisible('.addChildBtn');
-                browser.element('.addChildBtn').click();
-                browser.waitForVisible('.recordTrowser');
+                this.addChildButton.waitForVisible();
+                this.addChildButton.click();
+                return browser.waitForVisible('.recordTrowser');
             }
         },
 
@@ -123,7 +140,7 @@
                 // Click Save on the form
                 formsPagePO.clickFormSaveBtn();
                 // wait until report rows in table are loaded
-                reportContentPO.waitForReportContent();
+                return reportContentPO.waitForReportContent();
             }
         },
 
@@ -134,7 +151,7 @@
             formsPO.viewFormContainerEl.waitForVisible();
             browser.waitForVisible('.textField.viewElement.textLink');
             let linkEl = this.parentRecordLinkEl;
-            linkEl.click();
+            return linkEl.click();
         }},
         /**
          * While viewing a parent record on a form get the values of each record in the child table
@@ -209,12 +226,16 @@
                 //TODO: Handle multiple links to parent(s)
                 // Use the specific form section
                 formSectionEl.waitForVisible();
-                formSectionEl.element(linkToParentLocatorString).click();
+                return formSectionEl.element(linkToParentLocatorString).click();
             } else {
                 //TODO: Handle multiple links to parent(s)
                 // Try to find something clickable on the form
                 browser.waitForVisible(linkToParentLocatorString);
                 browser.element(linkToParentLocatorString).click();
+                this.slideyRightyEl.waitForVisible();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+                //Need this for stabilize DOM
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             }
         }},
 
@@ -244,7 +265,9 @@
             this.iconActionsCloseDrawerButtonEl.waitForVisible();
             this.viewFormTableEl.waitForExist();
             this.iconActionsCloseDrawerButtonEl.click();
-            browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
+            browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.mediumWaitTimeMs, true);
+            //need this for dom to stabilize
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
@@ -254,9 +277,123 @@
             this.tableHomePageLinkEl.waitForVisible();
             // Needed for animation of slidey-righty
             browser.pause(slideyRightyPause);
-            this.tableHomePageLinkEl.click();
-        }}
-    });
+            return this.tableHomePageLinkEl.click();
+        }},
 
+        /**
+         * Method to create relationship using add another record button via form builder
+         */
+        createRelationshipToParentTable: {value: function(parentTable, parentField, parentRecord, expectedParentRecordValues, expectedChildRecordValues) {
+
+            //Select settings -> modify this form
+            topNavPO.clickOnModifyFormLink();
+
+            //Click on add a new record button
+            formBuilderPO.addNewField(e2eConsts.GET_ANOTHER_RECORD);
+
+            //Select parent table from 'create relationship' dialog
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
+
+            //Select a Field to create relationship to parent table from 'create relationship' dialog
+            if (parentField !== '') {
+                //Click on advanced settings of add a record dialog
+                modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                //Select field to link to parent table (This will be either titleField or recordId or uniqueRequired field)
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, parentField);
+            }
+
+            //Click Add To form button
+            modalDialog.clickOnModalDialogBtn(modalDialog.ADD_TO_FORM_BTN);
+            modalDialog.waitUntilModalDialogSlideAway();
+
+            //Verify the get another record got added to the form builder
+            expect(formBuilderPO.getSelectedFieldLabel().split('\n')[0]).toBe(e2eConsts.GET_ANOTHER_RECORD + ' from ' + parentTable);
+
+            //Save the form builder
+            formBuilderPO.save();
+            //wait until save success container goes away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
+
+            //Select record from parent Picker
+            //click on the edit pencil on the child record
+            formsPO.clickRecordEditPencilInViewForm();
+
+            //Select parent picker value
+            const fieldTypes = ['allPhoneFields', 'allParentRecordFields'];
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType, parentRecord);
+            });
+
+            //Click Save on the form
+            formsPO.clickFormSaveBtn();
+            //Need this as link takes time to show up
+            browser.pause(e2eConsts.mediumWaitTimeMs);
+
+            //verify you see parent link on the view form
+            this.parentRecordLinkEl.waitForVisible();
+
+            //Verify the parent record and embedded child record
+            return this.verifyParentAndEmbeddedChildRecord(expectedParentRecordValues, expectedChildRecordValues);
+        }},
+
+        verifyParentAndEmbeddedChildRecord : {
+            value: function(expectedParentRecordValues, expectedChildRecordValues) {
+                // Click on link to parentRecord link
+                this.clickOnFormFieldLinkToParent();
+
+                // Check you are on the right parent container
+                let actualParentRecordValues = this.getValuesFromFormSection(this.getFormSectionEl(true));
+                expect(actualParentRecordValues.sort()).toEqual(expectedParentRecordValues.sort());
+
+                //Verify the embedded child record values
+                // Confirm the values on the child form is the right record
+                reportContentPO.waitForReportContent();
+                let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
+                expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
+
+                //close the View record drawer
+                this.closeSlideyRighty();
+
+            }},
+
+        /**
+         * Verift the Get another record relationship dialog selectTables list and select the parentTable
+         * @param expectedTablesList to verify the select table drop down list
+         * @param parentTable table to select
+         */
+        verifyTablesAndFieldsFromCreateRelationshipDialog: {
+            value: function(expectedTablesList, selectParentTable, selectField, verifyDefaultField) {
+                expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
+                //Verify title
+                expect(modalDialog.modalDialogTitle).toContain(e2eConsts.GET_ANOTHER_RECORD);
+                //Verify select tables drop down has all the tables except the one you're in
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+                let tableDropDownList = modalDialog.allDropDownListOptions;
+                expect(tableDropDownList).toEqual(expectedTablesList);
+                //click again on the arrow to collapse the outer menu
+                modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
+                //Select the table
+                modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, selectParentTable);
+
+                //Select Field form field dropdown
+                if (selectField !== '') {
+                    //Click on advanced settings of add a record dialog
+                    modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                    //Select field to link to parent table (This will be either titleField or recordId or unique&required fields)
+                    return modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogFieldSelectorDropDownArrow, selectField);
+                }
+                if (verifyDefaultField !== '') {
+                    //Click on advanced settings of add a record dialog
+                    modalDialog.clickModalDialogAdvancedSettingsToggle();
+
+                    //Verify the default field selected
+                    modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').waitForVisible();
+                    return expect(modalDialog.modalDialog.element('.advancedSettingsInfo .fieldSelector .Select-multi-value-wrapper').getAttribute('textContent')).toBe(verifyDefaultField);
+                }
+            }}
+
+    });
     module.exports = relationshipsPage;
 }());

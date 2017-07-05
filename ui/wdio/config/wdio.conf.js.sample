@@ -71,11 +71,10 @@ exports.config = {
             baseTestDir + '/global/globalTopNav.e2e.spec.js'
         ],
         relationships: [
-            baseTestDir + '/relationships/createRelationship.e2e.spec.js',
-            baseTestDir + '/relationships/createRelationshipNegativeTests.e2e.spec.js',
+            baseTestDir + '/relationships/createSingleRelationship.e2e.spec.js',
+            baseTestDir + '/relationships/createMultiRelationship.e2e.spec.js',
             baseTestDir + '/relationships/relationshipAddChildRecord.e2e.spec.js',
-            baseTestDir + '/relationships/relationshipNavToChild.e2e.spec.js',
-            baseTestDir + '/relationships/relationshipNavToParent.e2e.spec.js'
+            baseTestDir + '/relationships/verifyCreateRelationshipDialog.e2e.spec.js',
         ],
         reports: [
             baseTestDir + '/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
@@ -293,6 +292,9 @@ exports.config = {
         // Grab the browser name to use in spec files
         // See http://webdriver.io/guide/testrunner/browserobject.html for working with config file variables
         global.browserName = browser.desiredCapabilities.browserName;
+        // Grab the platform name to use in spec files
+        global.platformName = browser.desiredCapabilities.platformName;
+
 
         // This does not work if using Appium so need to check global var here
         if (!this.useAppium) {

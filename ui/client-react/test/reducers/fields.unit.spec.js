@@ -1,4 +1,4 @@
-import {tableFieldsObj, tableFieldsReportDataObj, getField, isFieldDeletable} from '../../src/reducers/fields';
+import {tableFieldsObj, tableFieldsReportDataObj, getField} from '../../src/reducers/fields';
 import reducer from '../../src/reducers/fields';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 import * as types from '../../src/actions/types';
@@ -199,35 +199,25 @@ describe('Test fields reducer', () => {
         expect(currentFieldList.fields).toEqual(expectedFieldsWithRemoval);
     });
 
-    describe('isFieldDeletable', () => {
-        const testState = {}; // App store is not in redux yet. Refactor once app can be obtained from state.
+    it('sets isRequiredPropForRecordTitleField and required property to passed in value', () => {
+        const newState = [{
+            appId: appId,
+            tblId: tblId,
+            fields: [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}]
+        }];
+        const actionPayload = {
+            type: types.SET_IS_REQD_FOR_RECORD_TITLE,
+            appId: appId,
+            tblId: tblId,
+            fieldId: 10,
+            required: true
+        };
+        const state = reducer(newState, actionPayload, {type: types.SET_IS_REQD_FOR_RECORD_TITLE});
+        const expectedFields = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10, isRequiredForRecordTitleField: true, required: true}];
+        const currentFieldList = tableFieldsObj(state, appId, tblId);
 
-        it('returns true if there is no app', () => {
-            expect(isFieldDeletable(testState, null, 1, 2)).toEqual(true);
-        });
-
-        it('returns true if there is no table on the app', () => {
-            const testApp = {tables: [{id: 3}]};
-
-            expect(isFieldDeletable(testState, testApp, 1, 2)).toEqual(true);
-        });
-
-        it('returns true if there is no record title on the table', () => {
-            const testApp = {tables: [{id: 1}]};
-
-            expect(isFieldDeletable(testState, testApp, 1, 2)).toEqual(true);
-        });
-
-        it('returns true if the current fieldId does not match the title field id for the table', () => {
-            const testApp = {tables: [{id: 1, recordTitleFieldId: 3}]};
-
-            expect(isFieldDeletable(testState, testApp, 1, 2)).toEqual(true);
-        });
-
-        it('returns false if the current fieldId matches the title field id for the table', () => {
-            const testApp = {tables: [{id: 1, recordTitleFieldId: 2}]};
-
-            expect(isFieldDeletable(testState, testApp, 1, 2));
-        });
+        expect(currentFieldList.appId).toEqual(appId);
+        expect(currentFieldList.tblId).toEqual(tblId);
+        expect(currentFieldList.fields).toEqual(expectedFields);
     });
 });

@@ -1,10 +1,11 @@
 import React from 'react';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import TableCreationPanel from '../../src/components/table/tableCreationPanel';
 import {Simulate} from 'react-addons-test-utils';
 
 let component;
+let instance;
 
 let tableInfo = {
     name: {value: 'Customers'},
@@ -28,6 +29,10 @@ const mockParentFunctions = {
 describe('TableCreationPanel', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        spyOn(mockParentFunctions, 'openIconChooser');
+        spyOn(mockParentFunctions, 'closeIconChooser');
+        spyOn(mockParentFunctions, 'setTableProperty');
+        spyOn(mockParentFunctions, 'setEditingProperty');
     });
 
     it('renders a TableCreationPanel', () => {
@@ -40,12 +45,10 @@ describe('TableCreationPanel', () => {
                                               validate={true}
                                               appTables={appTables} />);
 
-        expect(component.find('.tableInfo')).toBePresent();
+        expect(component.find('.tableInfo.dialogCreationPanelInfo')).toBePresent();
     });
 
     it('calls icon chooser callbacks when necessary', () => {
-        spyOn(mockParentFunctions, 'openIconChooser');
-        spyOn(mockParentFunctions, 'closeIconChooser');
         component = mount(<TableCreationPanel tableInfo={tableInfo}
                                               openIconChooser={mockParentFunctions.openIconChooser}
                                               closeIconChooser={mockParentFunctions.closeIconChooser}
@@ -55,7 +58,7 @@ describe('TableCreationPanel', () => {
                                               validate={true}
                                               appTables={appTables} />);
 
-        expect(component.find('.tableInfo')).toBePresent();
+        expect(component.find('.tableInfo.dialogCreationPanelInfo')).toBePresent();
 
         let iconChooser = component.find(".iconChooser .showAllToggle");
         expect(iconChooser).toBePresent();
@@ -66,9 +69,6 @@ describe('TableCreationPanel', () => {
     });
 
     it('calls editing callbacks', () => {
-        spyOn(mockParentFunctions, 'setTableProperty');
-        spyOn(mockParentFunctions, 'setEditingProperty');
-
         component = mount(<TableCreationPanel tableInfo={tableInfo}
                                               openIconChooser={mockParentFunctions.openIconChooser}
                                               closeIconChooser={mockParentFunctions.closeIconChooser}
@@ -78,9 +78,9 @@ describe('TableCreationPanel', () => {
                                               validate={true}
                                               appTables={appTables} />);
 
-        expect(component.find('.tableInfo')).toBePresent();
+        expect(component.find('.tableInfo.dialogCreationPanelInfo')).toBePresent();
 
-        let inputFields = component.find(".tableFieldInput input");
+        let inputFields = component.find(".dialogFieldInput input");
         expect(inputFields).toBePresent();
 
         let input = inputFields.get(0);
@@ -93,5 +93,14 @@ describe('TableCreationPanel', () => {
         Simulate.change(input);
         Simulate.keyDown(input, {key: "Tab", keyCode: 9, which: 9}); // tab out
         expect(mockParentFunctions.setTableProperty).toHaveBeenCalled();
+    });
+
+    it('will invoke setTableProperty when setTableIcon is invoked', () => {
+        component = shallow(<TableCreationPanel setTableProperty={mockParentFunctions.setTableProperty} />);
+
+        instance = component.instance();
+        instance.setTableIcon('dragon icon');
+
+        expect(mockParentFunctions.setTableProperty).toHaveBeenCalledWith('tableIcon', 'dragon icon');
     });
 });

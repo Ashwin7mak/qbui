@@ -1,4 +1,4 @@
-import {loadTableHomePage, __RewireAPI__ as TableActionsRewireAPI} from '../../src/actions/tableActions';
+import {loadTableHomePage, updateTable, __RewireAPI__ as TableActionsRewireAPI} from '../../src/actions/tableActions';
 import * as types from '../../src/actions/types';
 import {PAGE} from '../../../common/src/constants';
 import ReportModel from '../../src/models/reportModel';
@@ -82,6 +82,7 @@ describe('Table Actions functions', () => {
         }
     }
 
+
     beforeEach(() => {
         spyOn(mockTableService.prototype, 'getHomePage').and.callThrough();
         TableActionsRewireAPI.__Rewire__('TableService', mockTableService);
@@ -132,5 +133,66 @@ describe('Table Actions functions', () => {
             });
     });
 
+});
+
+describe('Update Table Action functions', () =>{
+    class mockTableService {
+        constructor() { }
+        updateTable(_appId, _tableId, tableInfo) {
+            return Promise.resolve({data: 'newTableId'});
+        }
+    }
+
+    class mockTableFailureService {
+        constructor() { }
+        updateTable(_appId, _tableId, tableInfo) {
+            return Promise.reject({response: {status: 500}});
+        }
+    }
+
+    it('updated table', (done) =>{
+
+        TableActionsRewireAPI.__Rewire__('TableService', mockTableService);
+
+        // the mock store makes the actions dispatched available via getActions()
+        // so we don't need to spy on the dispatcher etc.
+
+        const tableInfo = {name: 'Record', tableNoun: 'record', description: 'description'};
+        const expectedActions = [
+            {type: types.SAVING_TABLE},
+            {type: types.TABLE_SAVED, tableInfo}
+        ];
+        const store = mockStore({});
+
+        return store.dispatch(updateTable('appId', 'tableId', tableInfo)).then(
+            () =>{
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () =>{
+                expect(false).toBe(true);
+                done();
+            });
+    });
+
+    it('fails to update table', (done) =>{
+
+        TableActionsRewireAPI.__Rewire__('TableService', mockTableFailureService);
+
+        const store = mockStore({});
+
+        return store.dispatch(updateTable('appId', 'tableId', {
+            name: 'Record',
+            tableNoun: 'record',
+            description: 'description'
+        })).then(
+            () =>{
+                expect(false).toBe(true);
+                done();
+            },
+            () =>{
+                done();
+            });
+    });
 });
 

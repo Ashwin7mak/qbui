@@ -2,7 +2,9 @@
  * Created by rbeyer on 2/22/17.
  */
 import React from 'react';
+import {shallow} from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
+import jasmineEnzyme from 'jasmine-enzyme';
 import UserManagement  from '../../../../../src/components/app/settings/categories/userManagement';
 
 describe('UserManagement functions', () => {
@@ -101,41 +103,36 @@ describe('UserManagement functions', () => {
     const userColumns = ['name', 'roleName', 'email', 'screenName'];
     const selectedRows = [];
 
+    beforeEach(() => {
+        jasmineEnzyme();
+    });
+
     it('test render of component', () => {
-        let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}
-                                                                     appRoles={appRoles}
-                                                                     selectedRows={selectedRows}
-                                                                    appId={appId}/>);
+        let component = shallow(<UserManagement appUsers={appUsers} appRoles={appRoles} selectedRows={selectedRows} appId={appId}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test createUserColumns method', () => {
         let cellFormatter = (cellData) => {return <span>{cellData}</span>;};
-        let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}
-                                                                     appRoles={appRoles}
-                                                                     selectedRows={selectedRows}
-                                                                     appId={appId}/>);
-        let columns = component.createUserColumns(cellFormatter);
+        let component = shallow(<UserManagement appUsers={appUsers} appRoles={appRoles} selectedRows={selectedRows} appId={appId}/>);
+        let instance = component.instance();
+        let columns = instance.createUserColumns(cellFormatter);
         for (var i = 0; i < userColumns.length; i++) {
             expect(columns[i].property).toEqual(userColumns[i]);
         }
     });
 
     it('test createRows method with users and roles data', () => {
-        let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}
-                                                                     appRoles={appRoles}
-                                                                     selectedRows={selectedRows}
-                                                                     appId={appId}/>);
-        let users = component.createUserRows();
+        let component = shallow(<UserManagement appUsers={appUsers} appRoles={appRoles} selectedRows={selectedRows} appId={appId}/>);
+        let instance = component.instance();
+        let users = instance.createUserRows();
         expect(users).toEqual(usersResolved);
     });
 
     it('test getActionCellProps method', () => {
-        let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsersEmpty}
-                                                                     appRoles={appRoles}
-                                                                     selectedRows={selectedRows}
-                                                                     appId={appId}/>);
-        let cellProps = component.getActionCellProps();
+        let component = shallow(<UserManagement appUsers={appUsersEmpty} appRoles={appRoles} selectedRows={selectedRows} appId={appId}/>);
+        let instance = component.instance();
+        let cellProps = instance.getActionCellProps();
         expect(cellProps).toEqual({isStickyCell: true});
     });
 

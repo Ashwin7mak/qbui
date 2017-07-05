@@ -30,21 +30,6 @@ export const getFields = (state, appId, tblId) => {
     return fieldsList ? fieldsList.fields : [];
 };
 
-/**
- * Determines if a particular field can be deleted from a form
- * TODO:: Remove app argument and instead access current app from state once apps store is refactored to redux.
- * @param state
- * @param app
- * @param tblId
- * @param fieldId
- * @returns {null|*|number|boolean}
- */
-export const isFieldDeletable = (state, app, tblId, fieldId) => {
-    const currentTable = app ? _.find(app.tables, {id: tblId}) : null;
-
-    return !currentTable || !currentTable.recordTitleFieldId || currentTable.recordTitleFieldId !== fieldId;
-};
-
 const fieldsStore = (state = [], action) => {
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
@@ -143,32 +128,42 @@ const fieldsStore = (state = [], action) => {
     }
 
     case types.UPDATE_FIELD : {
-        //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
-        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        if (action.field) {
+            //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
+            let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
 
-        if (fieldList) {
-            fieldList = _.cloneDeep(fieldList);
+            if (fieldList) {
+                fieldList = _.cloneDeep(fieldList);
 
-            let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
-            let {field, propertyName, newValue} = action;
+                let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
+                let {field, propertyName, newValue} = action;
 
-            field[propertyName] = newValue;
-            //indexed and unique are linked and needs to be set to the same value
-            field.indexed = field.unique;
+                field[propertyName] = newValue;
+                //indexed and unique are linked and needs to be set to the same value
+                field.indexed = field.unique;
 
-            fieldList.fields[fieldIndex] = {...field, isPendingEdit: true};
-            fieldList.isPendingEdit = true;
+                fieldList.fields[fieldIndex] = {...field, isPendingEdit: true};
+                fieldList.isPendingEdit = true;
 
-            newState.push(fieldList);
-            return newState;
-
-        } else {
-            logger.warn(`the list of fields for the appId: ${action.appId}  and tblId: ${action.tblId} do not exist!`);
-            return state;
+                newState.push(fieldList);
+                return newState;
+            }
         }
+        logger.warn(`the list of fields for the appId: ${action.appId}  and tblId: ${action.tblId} do not exist!`);
+        return state;
     }
     case types.SET_IS_PENDING_EDIT_TO_FALSE: {
         newState[0].isPendingEdit = false;
+        return newState;
+    }
+    case types.SET_IS_REQD_FOR_RECORD_TITLE: {
+        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        fieldList = _.cloneDeep(fieldList);
+
+        let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.fieldId);
+        fieldList.fields[fieldIndex] = {...fieldList.fields[fieldIndex], isRequiredForRecordTitleField: action.required, required: action.required};
+        newState.push(fieldList);
+
         return newState;
     }
     case types.SAVING_FORM: {

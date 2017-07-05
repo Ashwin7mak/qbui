@@ -1,4 +1,4 @@
-@import '../../assets/css/qbVariables';
+@import "../../assets/css/qbVariables";
 
 /*
  * Mixin to create the separator line to the left of the report icon on each table in the nav.
@@ -110,7 +110,6 @@
 
             &:hover {
                 background: $leftnav-background-color;
-
             }
         }
     }
@@ -143,29 +142,12 @@ div.leftNavTooltip {
 }
 
 
-
 /* collapsed nav overrides */
 
 @include not-small-breakpoint {
     .leftNav.collapsed {
         width: 40px;
         transition: width 100ms ease;
-
-        .appsToggleArea {
-            .appsToggle .navLabel, .appsToggleIcon {
-                display: none;
-            }
-        }
-
-        .appsToggleArea button.appsToggle {
-            padding: 0 10px;
-            flex-direction: row;
-
-            .qbIcon {
-                font-size: 20px;
-                width: 20px;
-            }
-        }
 
         .branding {
             display: none;
@@ -237,66 +219,6 @@ div.leftNavTooltip {
 
     .qbIcon {
         font-size: 18px;
-    }
-
-    .appsToggleArea {
-        position: relative;
-        flex: 0 0 auto;
-        min-height: 40px;
-        background-color: $leftnav-app-background-color;
-        @include correctFontWeightForLightTextOnDarkBackground;
-
-        .toggleNavButton {
-            display: none;
-            position: absolute;
-            right: 10px;
-            top: 11px;
-            color: $left-nav-heading-color;
-
-            .qbIcon {
-                font-size: 16px;
-            }
-        }
-
-        button.appsToggle {
-            overflow: hidden;
-            padding: 10px 28px;
-            color: $leftnav-app-icon-color;
-            min-height: 40px;
-            border: 0;
-            border-radius: 0;
-            margin: 0;
-            width: 100%;
-            position: relative;
-            white-space: nowrap;
-            cursor: pointer;
-            background-color: transparent;
-            display: block;
-            align-items: center;
-            font-size: 20px;
-
-            .qbIcon {
-                font-size: 40px;
-                width: 40px;
-            }
-
-            .navLabel {
-                margin-top: 10px;
-                display: block;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .iconUISturdy-caret-up {
-                position: absolute;
-                right: 10px;
-                width: auto;
-                bottom: 16px;
-                font-size: 14px;
-                transition: transform 300ms ease-in;
-                transform: rotate(-180deg);
-            }
-        }
     }
 
     .globalActions {
@@ -372,39 +294,18 @@ div.leftNavTooltip {
                 width: 100%;
                 flex: 0 0 auto;
             }
+        }
 
-            .tablesList {
-                flex: 1 1 auto;
-                width: 100%;
-                overflow: auto;
-                padding: 0;
-                margin: 0;
-                border-top: 1px solid $leftnav-background-stroke-color;
-
-                .newTableItem {
-                    position: sticky;
-                    position: -webkit-sticky;
-                    bottom: 0;
-                    background-color: $leftnav-background-color;
-                    border-top: 1px solid $leftnav-background-stroke-color;
-                }
-                .newTable {
-                    cursor: pointer;
-                    line-height: 40px;
-
-                    &:hover {
-                        color: $left-nav-link-hover-color;
-                        background-color: $leftnav-table-selected-color;
-                    }
-                    .hoverComponent {
-                        span {
-                            padding-left: 15px;
-                        }
-                    }
-                }
-            }
+        .appsList, .tablesList {
+            flex: 1 1 auto;
+            width: 100%;
+            overflow: auto;
+            padding: 0;
+            margin: 0;
+            border-top: 1px solid $leftnav-background-stroke-color;
         }
     }
+
     /* This is so when you hover over the item, the entire contents shows like a tooltip... but we then cannot scroll when collapsed. Temporary fix */
     &.expanded {
         .transitionGroup {
@@ -468,7 +369,7 @@ div.leftNavTooltip {
         }
     }
 
-    ul.tablesList, ul.tablesHeading {
+    ul.tablesList, ul.tablesHeading, ul.appsList {
         li {
             a.right {
                 opacity: 0;
@@ -532,7 +433,7 @@ div.leftNavTooltip {
         flex-direction: row;
 
         > li {
-            flex: 1 0 auto;
+            flex: 1 1 0;
             border-right: 1px solid $leftnav-background-stroke-color;
             &:last-of-type {
                 border-right: none;
@@ -596,12 +497,6 @@ div.leftNavTooltip {
         transition: width 100ms ease;
         z-index: 9999;
 
-        .appsToggleArea {
-            .toggleNavButton {
-                display: block;
-            }
-        }
-
         .branding {
             .logo {
                 width: 28%;
@@ -624,13 +519,6 @@ div.leftNavTooltip {
         transform: translate3d(300px, 0, 0);
         -webkit-transform: translate3d(300px, 0, 0);
     }
-
-    /* hide tables footer (add new table) for small */
-
-    .link.newTableItem {
-        display: none;
-    }
-
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/
@@ -671,10 +559,6 @@ $travel-distance: 15;
 .leftNavList-enter-active.tablesList li, .leftNavList-enter-active.tablesHeading li {
     margin-top: 0;
     transition: all $transition-time ease-in;
-}
-
-.leftNav.appsListOpen .appsToggleArea .qbIcon.iconUISturdy-caret-up {
-    transform: rotate(0deg);
 }
 
 .leftNav .loader {

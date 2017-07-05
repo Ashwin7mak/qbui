@@ -3,9 +3,16 @@
 $table-properties-panel-width: 776px;
 
 .settingsAppShell {
+    .tablePropertiesLoaded {
+        height: calc(100% - 45px);
+        display: flex;
+        flex-direction: column;
+    }
     .pageActions {
         .deleteTable {
             color: $color-red-700;
+            margin-right: 0;
+
         }
     }
     .tableSettingsStage {
@@ -19,37 +26,36 @@ $table-properties-panel-width: 776px;
             vertical-align: middle;
         }
     }
-    .tableInfoPanel {
+    .dialogCreationPanelInfo {
         margin: 15px;
         max-width: $table-properties-panel-width;
 
-        .tableField {
+        .recordTitleFieldSection {
+            flex-grow: 1;
+        }
+        .dialogField {
             padding-right: 20px;
         }
 
-        .tableInfo .sections .iconSelection .iconChooser.open {
+        .dialogCreationPanel .sections .iconSelection .iconChooser.open {
             width: calc(200% - 20px);
         }
 
         .tableInfoButtons {
-            float: right;
 
-            &.open {
-                opacity: 1;
-                transition: all 300ms ease-in;
-            }
-            &.closed {
-                opacity: 0;
-                transition: all 300ms ease-in;
-            }
-
-            & > * {
-                vertical-align: middle;
-            }
-
+            display: flex;
+            justify-content: flex-end;
             .primaryButton {
                 margin-left: 5px;
             }
+            .resetButton {
+                border: none;
+                background-color: $secondary-background-color;
+                color: $button-lightbg-text-color;
+            }
+        }
+        .recordTitleFieldDescription {
+            margin-bottom: 15px;
         }
     }
 }

@@ -11,7 +11,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs', function() {
+    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs ( (chrome, edge))', function() {
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             beforeAll(function() {
                 /**
@@ -58,6 +58,48 @@
             });
 
             // pos/neg pairs
+
+            // MC-2164: REQUIRED checkbox needs a reliable way to automate click & query    formBuilderPO.selectFieldByIndex(1);
+            xit('check the UNIQUE checkbox, cancel & verify not checked', function() {
+                // revise the UNIQUE property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setUniqueCheckboxState(true);
+                // cancel, reopen, reselect
+                formBuilderPO.cancel().open().selectFieldByIndex(1);
+                // verify UNIQUE checkbox IS NOT checked
+                expect(formBuilderPO.getUniqueCheckboxState()).toBe(false);
+            });
+            // MC-2164: REQUIRED checkbox needs a reliable way to automate click & query    formBuilderPO.selectFieldByIndex(1);
+            xit('check the UNIQUE checkbox, save & verify checked', function() {
+                formBuilderPO.selectFieldByIndex(1);
+                // revise the UNIQUE property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setUniqueCheckboxState(true);
+                // save, reopen, reselect
+                formBuilderPO.save().open().selectFieldByIndex(1);
+                // verify UNIQUE checkbox IS checked
+                expect(formBuilderPO.getUniqueCheckboxState()).toBe(true);
+            });
+
+            // MC-2164: REQUIRED checkbox needs a reliable way to automate click & query    formBuilderPO.selectFieldByIndex(1);
+            xit('check the REQUIRED checkbox, cancel & verify not checked', function() {
+                formBuilderPO.selectFieldByIndex(1);
+                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setRequiredCheckboxState(formBuilderPO.requiredCheckbox, true);
+                // cancel, reopen, reselect
+                formBuilderPO.cancel().open().selectFieldByIndex(1);
+                // verify REQUIRED checkbox IS NOT checked
+                expect(formBuilderPO.getRequiredCheckboxState()).toBe(false);
+            });
+            // MC-2164: REQUIRED checkbox needs a reliable way to automate click & query    formBuilderPO.selectFieldByIndex(1);
+            xit('check the REQUIRED checkbox, save & verify checked', function() {
+                formBuilderPO.selectFieldByIndex(1);
+                // revise the REQUIRED property (i.e. click the unchecked checkbox to check it)
+                formBuilderPO.setRequiredCheckboxState(true);
+                // save, reopen, reselect
+                formBuilderPO.save().open().selectFieldByIndex(1);
+                // verify REQUIRED checkbox IS checked
+                expect(formBuilderPO.getRequiredCheckboxState()).toBe(true);
+            });
+
             it('rename a field, verify no revision after CANCEL', function() {
                 let originalFields = formBuilderPO.getFieldLabels();
                 formBuilderPO.selectFieldByIndex(1);
@@ -113,7 +155,7 @@
 
             it('add a new field to bottom of form & verify absence after CANCEL', function() {
                 let existingFields = formBuilderPO.getFieldLabels();
-                let newField = formBuilderPO.listOfElementsItem;
+                let newField = formBuilderPO.firstFieldToken;
                 // verify that (hopefully) the last existing field on the form
                 // doesn't have the same name as the first item in the NEW FIELDS list
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField.getText());
@@ -130,7 +172,7 @@
             });
             it('add a new field to bottom of form & verify presence after SAVE', function() {
                 let existingFields = formBuilderPO.getFieldLabels();
-                let newField = formBuilderPO.listOfElementsItem;
+                let newField = formBuilderPO.firstFieldToken;
                 // verify that (hopefully) the last existing field on the form
                 // doesn't have the same name as the first item in the NEW FIELDS list
                 expect(existingFields[existingFields.length - 1]).not.toBe(newField);

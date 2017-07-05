@@ -56,7 +56,12 @@ export const SettingsWrapper = React.createClass({
             if (!app) {
                 //TODO: performance improvement to support app argument to load when fetching all apps
                 this.props.loadApps();
-                this.props.loadApp(paramVals.appId);
+                this.props.loadApp(paramVals.appId).then(
+                    () => {
+                        if (paramVals.tblId) {
+                            this.props.selectTable(paramVals.appId, paramVals.tblId);
+                        }
+                    });
             }
 
             this.props.getFeatureSwitchStates(paramVals.appId);
@@ -156,9 +161,9 @@ SettingsWrapper.propTypes = {
 const mapStateToProps = (state) => ({
     isNavCollapsed: !state.shell.leftNavExpanded,
     isOpen: state.shell.leftNavVisible,
-    selectedAppId: getSelectedAppId(state.app),
-    selectedTableId: getSelectedTableId(state.app),
-    getApp: (appId) => getApp(state.app, appId)
+    selectedAppId: getSelectedAppId(state),
+    selectedTableId: getSelectedTableId(state),
+    getApp: (appId) => getApp(state, appId)
 });
 
 const mapDispatchToProps = (dispatch) => {

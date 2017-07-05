@@ -19,6 +19,10 @@ let testApp;
 let childRecordsTextValues = [];
 
 describe('Relationships - Add child Record to embedded Table tests: ', () => {
+    const defaultParentRecordValue = 1;
+    //
+    //***** These tests don't run in safari and firefox browser as 'scrollIntoView' is not supported.
+    //
     if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -63,10 +67,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
          */
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
-            reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
-            reportContentPO.waitForLeftNavLoaded();
-            //wait until view form is visible
-            return formsPagePO.viewFormContainerEl.waitForVisible();
+            return reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
         });
 
         /**
@@ -76,7 +77,7 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
             const origRecordCount = formsPagePO.getRecordsCountInATable();
-            relationshipsPO.addChildRecord(origRecordCount, 1);
+            relationshipsPO.addChildRecord(origRecordCount, defaultParentRecordValue);
 
             // Verify new record got added to the end of the embedded table and verify the expected field values
             const recordValues = reportContentPO.getRecordValues(origRecordCount);
@@ -92,12 +93,43 @@ describe('Relationships - Add child Record to embedded Table tests: ', () => {
          *  row count does not increase for the current embedded report
          */
         it('Adding Child to a different parent,does not add a row to the embedded report currently viewed', () => {
+            const parentRecordValue = 3;
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
             const origRecordCount = formsPagePO.getRecordsCountInATable();
-            relationshipsPO.addChildRecord(origRecordCount, 3);
+            relationshipsPO.addChildRecord(origRecordCount, parentRecordValue);
             // Verify the records count remained same
             expect(formsPagePO.getRecordsCountInATable()).toBe(origRecordCount);
+
+        });
+
+        /**
+         *  Add child button disabled when adding a parent
+         */
+        it('Add child button disabled when adding a parent', () => {
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
+            const origRecordCount = formsPagePO.getRecordsCountInATable();
+            relationshipsPO.clickAddChildButton();
+            // Verify - when the trowser is opened for adding a child, you cannot add a child to this currently being added parent
+            // so if it has a relationship with a child , the add child record button is expected to be disabled
+            //only checking for the css disabled
+            browser.waitForVisible(relationshipsPO.addChildButtonDisabledClass);
+
+        });
+
+
+        /**
+         *  default parent selected in drop down when trowser opens while adding a child record, this value can be changed
+         */
+        it('Verify default parent selected in drop down when trowser opens while adding a child record', () => {
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
+            const origRecordCount = formsPagePO.getRecordsCountInATable();
+            relationshipsPO.clickAddChildButton();
+            // Verify - when the trowser is opened for adding a child,and we have the default parent selected
+            browser.waitForVisible('.Select-value-label');
+            expect(browser.getText('.Select-value-label')).toBe('1');
 
         });
     }

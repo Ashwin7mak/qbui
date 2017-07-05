@@ -81,12 +81,12 @@ const getAppOwnerData = (dispatch, appId, userId) => {
  */
 export const loadAppAndOwner = appId => {
     return (dispatch, getState) => {
-        let app = getApp(getState().app, appId);
+        let app = getApp(getState(), appId);
         if (app) {
             return getAppOwnerData(dispatch, appId, app.ownerId);
         } else {
             return loadAppData(dispatch, appId).then(() => {
-                app = getApp(getState().app, appId);
+                app = getApp(getState(), appId);
                 getAppOwnerData(dispatch, appId, app.ownerId);
             });
         }
@@ -157,3 +157,11 @@ export const clearSelectedUserRows = () => {
     return userEvent(types.SELECT_USER_ROWS, {selectedUsers: []});
 };
 
+/**
+ * Change Selected role Id in App Setting Stage
+ *
+ * @returns {{type, selectedUsers: *}}
+ */
+export const changeStageSelectedRoleId = (roleId) => {
+    return userEvent(types.STAGE_SELECTED_ROLE_ID, {roleId});
+};

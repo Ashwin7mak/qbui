@@ -1,6 +1,5 @@
 import * as formActions from '../../src/actions/formActions';
-import {loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
-import * as UrlConsts from "../../src/constants/urlConstants";
+import {loadForm, createForm, updateForm, deleteMarkedFields, deleteDetailFieldUpdateParentForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import configureMockStore from 'redux-mock-store';
@@ -33,6 +32,18 @@ const mockFieldsActions = {
         };
     }
 };
+
+const mockTableActions = {
+    updateTable(_appId, _tableId, table) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'TableUpdated'})));
+        };
+    }
+};
+
+// we mock the Redux store when testing async action creators
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('Form Actions', () => {
 
@@ -91,12 +102,6 @@ describe('Form Actions', () => {
     });
 
     describe('load form data action', () => {
-
-        // we mock the Redux store when testing async action creators
-
-        const middlewares = [thunk];
-        const mockStore = configureMockStore(middlewares);
-
         let formResponseData = {
             formId: 1,
             tableId: "table1",
@@ -226,15 +231,12 @@ describe('Form Actions', () => {
             formMeta: {tabs: {}}
         };
 
-        // we mock the Redux store when testing async action creators
-        const middlewares = [thunk];
-        const mockStore = configureMockStore(middlewares);
-
         const expectedSaveActions = [
             {id:'view', type:types.SAVING_FORM, content: null},
             {type: 'AllFieldsAdded'},
             {type: 'AllFieldsUpdated'},
             {type: 'AllFieldsDeleted'},
+            {type: 'TableUpdated'},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
         ];
         class mockFormService {
@@ -254,19 +256,23 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+            FormActionsRewireAPI.__Rewire__('TableActions', mockTableActions);
 
             spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
             spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
             spyOn(mockFieldsActions, 'deleteMarkedFields').and.callThrough();
+            spyOn(mockTableActions, 'updateTable').and.callThrough();
             FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
             FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
             FormActionsRewireAPI.__Rewire__('deleteMarkedFields', mockFieldsActions.deleteMarkedFields);
+            FormActionsRewireAPI.__Rewire__('updateTable', mockTableActions.updateTable);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
             FormActionsRewireAPI.__ResetDependency__('saveAllNewFields');
+            FormActionsRewireAPI.__ResetDependency__('updateTable');
         });
 
         it('saves a form update', (done) => {
@@ -366,9 +372,6 @@ describe('Form Actions', () => {
     });
 
     describe('transforms data appropriately', () => {
-        const middlewares = [thunk];
-        const mockStore = configureMockStore(middlewares);
-
         const formData = {
             formId: 1,
             formMeta: {tabs: {}}
@@ -389,12 +392,14 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+            FormActionsRewireAPI.__Rewire__('updateTable', mockTableActions.updateTable);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+            FormActionsRewireAPI.__ResetDependency__('updateTable');
         });
 
 
@@ -589,6 +594,121 @@ describe('Form Actions', () => {
                 id: 'view',
                 type: types.SET_IS_PENDING_EDIT_TO_FALSE,
                 content: null});
+        });
+    });
+
+    describe('deleteDetailFieldUpdateParentForm', () => {
+        const testDeleteFieldAction = {type: 'deleteField'};
+        let removeRelationship;
+
+        const childTableId = 2;
+        const fieldId = 3;
+
+        const testFormMetaWithRelationship = {
+            relationships: [
+                {
+                    detailTableId: childTableId,
+                    detailFieldId: fieldId
+                }
+            ]
+        };
+
+        beforeEach(() => {
+            removeRelationship = jasmine.createSpy('removeRelationship');
+            FormActionsRewireAPI.__Rewire__('deleteField', () => dispatch => dispatch(testDeleteFieldAction));
+            FormActionsRewireAPI.__Rewire__('removeRelationshipFromForm', removeRelationship);
+        });
+
+        afterEach(() => {
+            FormActionsRewireAPI.__ResetDependency__('deleteField');
+            FormActionsRewireAPI.__ResetDependency__('removeRelationshipFromForm');
+        });
+
+        it('deletes a field from the form', (done) => {
+            const store = mockStore({});
+
+            store.dispatch(deleteDetailFieldUpdateParentForm(1, 2, 3, {})).then(() => {
+                // the delete action should be called once for the field
+                expect(store.getActions()).toEqual([testDeleteFieldAction]);
+                expect(removeRelationship).not.toHaveBeenCalled();
+                done();
+            }).catch(() => {
+                expect(false).toBe(true);
+                done();
+            });
+        });
+
+        it('removes any relationships form the form for the currently deleted field', (done) => {
+            const store = mockStore({});
+
+            removeRelationship.and.callFake(() => Promise.resolve());
+
+            store.dispatch(deleteDetailFieldUpdateParentForm(1, childTableId, fieldId, testFormMetaWithRelationship)).then(() => {
+                expect(store.getActions()).toEqual([testDeleteFieldAction]);
+                expect(removeRelationship).toHaveBeenCalled();
+                done();
+            }).catch(() => {
+                expect(false).toBe(true);
+                done();
+            });
+        });
+
+        it('handles an error response when trying to remove a relationships', () => {
+            const store = mockStore({});
+
+            removeRelationship.and.callFake(() => Promise.reject());
+
+            store.dispatch(deleteDetailFieldUpdateParentForm(1, childTableId, fieldId, testFormMetaWithRelationship)).then(() => {
+                expect(false).toBe(true);
+                done();
+            }).catch(() => {
+                expect(store.getActions()).toEqual([testDeleteFieldAction]);
+                expect(removeRelationship).toHaveBeenCalled();
+                done();
+            });
+        });
+    });
+
+    describe('deleteMarkedFields', () => {
+        const testDeleteDetailFieldAction = {type: 'deleteDetailField'};
+        beforeEach(() => {
+            FormActionsRewireAPI.__Rewire__('deleteDetailFieldUpdateParentForm', () => dispatch => dispatch(testDeleteDetailFieldAction));
+        });
+
+        afterEach(() => {
+            FormActionsRewireAPI.__ResetDependency__('deleteDetailFieldUpdateParentForm');
+        });
+
+        it('deletes any fields currently marked for deletion on the form', (done) => {
+            const formMeta = {fieldsToDelete: [1, 2]};
+            const store = mockStore({});
+
+            // expects deleteDetailFieldUpdateParentForm to be called for each field in the list
+            const expectedActions = [
+                testDeleteDetailFieldAction,
+                testDeleteDetailFieldAction
+            ];
+
+            store.dispatch(deleteMarkedFields(1, 2, formMeta)).then(() => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            }).catch(() => {
+                expect(false).toBe(true);
+                done();
+            });
+        });
+
+        it('resolves the promise without calling additional actions if there are no fields to delete', (done) => {
+            const formMeta = {fieldsToDelete: []};
+            const store = mockStore({});
+
+            store.dispatch(deleteMarkedFields(1, 2, formMeta)).then(() => {
+                expect(store.getActions()).toEqual([]);
+                done();
+            }).catch(() => {
+                expect(false).toBe(true);
+                done();
+            });
         });
     });
 });

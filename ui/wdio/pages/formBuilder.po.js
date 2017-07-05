@@ -2,10 +2,17 @@
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
 let formsPO = requirePO('formsPage');
-let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 let modalDialog = requirePO('/common/modalDialog');
+let loadingSpinner = requirePO('/common/loadingSpinner');
+
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
+
+    get activePanel() {
+        // The active FIELDS panel
+        return browser.element(".tabbedSideNav .rc-tabs-tabpane-active");
+    }
 
     get cancelBtn() {
         // CANCEL (form) button in footer bar
@@ -15,6 +22,12 @@ class formBuilderPage {
     get clearSearch() {
         // CLEAR (X) button in the SEARCH (new fields) textbox (left panel)
         return browser.element('.clearSearch .searchIcon');
+    }
+
+    get emptySearchResult() {
+        // the text in the fields panel when the search term returns no results
+        // e.g. 'No fields matched "<searchterm>"
+        return browser.element('.emptySearchResult');
     }
 
     get deleteFieldIcon() {
@@ -42,14 +55,34 @@ class formBuilderPage {
         return browser.element('.fieldTokenDragging');
     }
 
+    get fieldDragging() {
+        // the highlighted field when hovering over a drop target
+        return this.formElementContainer.element('.dragging');
+    }
+
+    get fieldTokenCollapsed() {
+        // the token which appears when dragging a field to another position
+        return browser.element('.fieldTokenCollapsed');
+    }
+
     get fieldTokenTitle() {
-        // the label of the first NEW FIELD token
-        return browser.element('.fieldTokenTitle');
+        // the label of the first NEW or EXISTING field token (left panel)
+        return browser.element('.rc-tabs-tabpane-active .fieldTokenTitle');
     }
 
     get firstField() {
-        // the first field (wait for it after open)
-        return browser.element('.field');
+        // the first FormElementContainer on the form
+        return browser.element('.formElementContainer');
+    }
+
+    get firstNewFieldGroup() {
+        // The FIRST group in the list of NEW FIELDs (left panel)
+        return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
+    }
+
+    get firstFieldToken() {
+        // The FIRST field in the list of NEW or EXISTING fields (left panel)
+        return browser.element(tab_Field);
     }
 
     get formBuilderContainer() {
@@ -57,29 +90,41 @@ class formBuilderPage {
         return browser.element('.formBuilderContainer');
     }
 
-    get listOfElementsItemGroup() {
-        // The FIRST group in the list of NEW FIELDs (left panel)
-        return browser.element('.rc-tabs-tabpane-active .listOfElementsItemGroup');
-    }
-
-    get listOfElementsItem() {
-        // The FIRST field in the list of NEW FIELDs (left panel)
-        return browser.element('.listOfElementsItem');
+    get formElementContainer() {
+        // the whole form builder page (all 3 panels)
+        return this.formBuilderContainer.element('.formElementContainer');
     }
 
     get modalDismiss() {
-        // DON'T SAVE button in the SAVE CHANGES? dlg
+        // The DON'T SAVE button in the SAVE CHANGES dialog
         return browser.element('.modal-dialog .middleButton');
+    }
+
+    get multiChoiceEditor() {
+        // The multiline choice editor in the FIELD PROPERTIES panel
+        return browser.element('.multiChoicePropertyContainer textarea');
+    }
+
+    get qbPanelHeader() {
+        // a wrapper for the FORM TITLE
+        return browser.element('.qbPanelHeader');
+    }
+
+    get requiredCheckbox() {
+        // The MUST BE FILLED IN checkbox
+        return browser.element('//div[@class="checkboxPropertyContainer"]//label[text()="Must be filled in"]/..');
     }
 
     get requiredCheckboxChecked() {
         // The MUST BE FILLED IN checkbox in its CHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:checked');
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.requiredCheckbox.element('input:checked');
     }
 
     get requiredCheckboxNotChecked() {
         // The MUST BE FILLED IN checkbox in its UNCHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.requiredCheckbox.element('input:not(:checked)');
     }
 
     get saveBtn() {
@@ -93,8 +138,8 @@ class formBuilderPage {
     }
 
     get searchInput() {
-        // SEARCH textbox in the NEW FIELDS panel
-        return browser.element('.searchInput');
+        // SEARCH textbox in the FIELDS panel
+        return browser.element('.rc-tabs-tabpane-active .searchInput');
     }
 
     get selectedField() {
@@ -114,22 +159,8 @@ class formBuilderPage {
 
     get tab_Existing() {
         // The EXISTING tab in leftNav
-        // return this.tabbedSideNav.element('div:contains("Existing")'); // invalid selector...?
-        // return this.tabbedSideNav.element('//div[contains(text(), "Existing"]'); // not found...?
-        // return this.tabbedSideNav.element('//div[contains(getAttribute("innerHTML"), "Existing")]'); // invalid xpath...?
         // ask Brandon to add a descriptive class name or id!
-        // return this.tabbedSideNav.element('div:nth-child(3) div'); // clicks on the bar, i.e. nth-child(1)...?
         return browser.element(".tabbedSideNav div div div:nth-child(3) div");
-    }
-
-    get tab_New() {
-        // The NEW FIELDS tab - needs a better locator
-        return browser.element(".tabbedSideNav div div div:nth-child(2) div");
-    }
-
-    get tab_Bar() {
-        // The EXISTING FIELDS tab - needs a better locator
-        return browser.element(".tabbedSideNav div div div:nth-child(1)");
     }
 
     get tab_Active() {
@@ -137,13 +168,14 @@ class formBuilderPage {
         return browser.element(".tabbedSideNav .rc-tabs-tab-active");
     }
 
-    get tab_firstField() {
-        return browser.element(tab_Field);
+    get tab_Bar() {
+        // The EXISTING FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav div div div:nth-child(1)");
     }
 
-    get addAnotherRecordDialogTitle() {
-        // TITLE for add another record dialog
-        return browser.element('.modal-dialog .modal-title');
+    get tab_New() {
+        // The NEW FIELDS tab - needs a better locator
+        return browser.element(".tabbedSideNav div div div:nth-child(2) div");
     }
 
     get title() {
@@ -151,13 +183,48 @@ class formBuilderPage {
         return browser.element('.formContainer .qbPanelHeaderTitleText');
     }
 
+    get tooltip() {
+        // The tooltip which appears when you hover over a NEW or EXISTING field in the left panel
+        return browser.element('.tooltip');
+    }
+
+    get uniqueCheckbox() {
+        // The MUST BE UNIQUE checkbox
+        return browser.element('//div[@class="checkboxPropertyContainer"]//label[text()="Must be unique"]/..');
+    }
+
+    get uniqueCheckboxChecked() {
+        // The MUST BE UNIQUE checkbox in its CHECKED state
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.uniqueCheckbox.element('input:checked');
+    }
+
+    get uniqueCheckboxNotChecked() {
+        // The MUST BE UNIQUE checkbox in its UNCHECKED state
+        // this hack (separate checked/unchecked elements) was the only working solution for EDGE :-(
+        return this.uniqueCheckbox.element('input:not(:checked)');
+    }
+
+    // methods
+
+    addNewField(label) {
+        browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]').click();
+        return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+    }
+
+    addFirstField() {
+        this.firstFieldToken.click();
+        return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+    }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
+        this.cancelBtn.waitForVisible();
         this.cancelBtn.click();
-        while (!formsPO.viewFormContainerEl.isExisting()) {
+        while (this.formBuilderContainer.isExisting()) {
             this.dirtyForm_Dismiss();
         }
-        browser.pause(e2eConsts.shortWaitTimeMs);
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -167,7 +234,7 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
-        try { // modal SAVE CHANGES? dlg
+        try { // modal SAVE CHANGES dlg
             this.modalDismiss.click();
             if (this.modalDismiss.isExisting()) {
                 this.modalDismiss.click();
@@ -175,7 +242,35 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        formsPO.viewFormContainerEl.waitForExist();
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
+    }
+
+    dragNewFieldOntoForm(source, target) {
+        // Clicks on the specified new field token and drags it to the specified target field
+        let sourceLabel = source.getText();
+        source.moveToObject();
+        // wait a bit for the tile to be ready to be dragged
+        this.tooltip.waitForVisible();
+        browser.buttonDown();
+        // drag to target, jiggle & wait
+        target.element('.fieldLabel').moveToObject();
+        target.element('.fieldLabel').moveToObject(5, 5);
+        target.element('.selectedFormElement').waitForExist();
+        // release button
+        browser.buttonUp();
+        this.fieldDragging.waitForExist(null, true);
+        return this.getFieldLabels();
+    }
+
+    getExistingFieldLabels() {
+        // Gets the list of field labels from the EXISTING FIELD panel
+        // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
+        // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
+        // this lets the message include the contents of the unexpectedly present list.
+        return this.firstFieldToken.isExisting() ? this.getNewFieldLabels() : [];
     }
 
     getFieldLocator(index) {
@@ -185,7 +280,7 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        this.firstField.waitForExist();
+        this.firstField.waitForVisible();
         let fields = browser.elements('.field');
         try {
             return fields.value.map(function(field) {
@@ -201,26 +296,33 @@ class formBuilderPage {
         }
     }
 
+    getFieldToken(label) {
+        // Returns the field token (left panel) with the specified label
+        return browser.element('//div[@class="fieldTokenTitle" and text()="' + label + '"]');
+    }
+
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
-        this.tab_firstField.waitForVisible();
+        this.firstFieldToken.waitForVisible();
         let labelEls = browser.elements(tab_Field);
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
         });
     }
 
-    getExistingFieldLabels() {
-        // Gets the list of field labels from the EXISTING FIELD panel
-        // Note: Returning an empty array here when the list DNE to facilitate more meaningful error messaging;
-        // If you expect the list to be empty (i.e. the list DOES NOT exist) but it's not (i.e. the list DOES exist),
-        // this lets the message include the contents of the unexpectedly present list.
-        return this.tab_firstField.isExisting() ? this.getNewFieldLabels() : [];
-    }
-
     getSelectedFieldLabel() {
         // Finds the parent of '.selectedFormElement' & returns its text
         return this.selectedField.element('./..').getText();
+    }
+
+    getRequiredCheckboxState() {
+        // gets checked status of the MUST BE FILLED IN checkbox
+        return this.requiredCheckboxChecked.isVisible();
+    }
+
+    getUniqueCheckboxState() {
+        // gets checked status of the MUST BE FILLED IN checkbox
+        return this.uniqueCheckboxChecked.isVisible();
     }
 
     moveByName(source, target) {
@@ -236,8 +338,11 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
+        topNavPO.modifyThisForm.waitForVisible();
         topNavPO.modifyThisForm.click();
-        this.firstField.waitForExist();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        this.tab_Active.waitForVisible();
+        expect(this.tab_Active.getText()).toBe("New");
         return this;
     }
 
@@ -274,6 +379,9 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -285,7 +393,7 @@ class formBuilderPage {
             this.clearSearch.click();
         }
         // wait for groups to appear or disappear depending on whether we searched or cleared
-        this.listOfElementsItemGroup.waitForVisible(null, (text !== null));
+        this.firstNewFieldGroup.waitForVisible(null, (text !== null));
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getNewFieldLabels();
     }
@@ -300,8 +408,24 @@ class formBuilderPage {
         // MC-2858: Edge: FIELD PROPERTIES doesn't render until second click to select field
         browser.buttonDown();
         browser.buttonUp();
-        this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
+        this.fieldProperty_Name.waitForVisible(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
+    }
+
+    setRequiredCheckboxState(state) {
+        // Clicks on the MUST BE FILLED IN checkbox IF NECESSARY to make the checked state match the specified value
+        if (state !== this.getRequiredCheckboxState()) {
+            this.requiredCheckbox.click();
+        }
+        return this;
+    }
+
+    setUniqueCheckboxState(state) {
+        // Clicks on the MUST BE UNIQUE checkbox IF NECESSARY to make the checked state match the specified value
+        if (state !== this.getUniqueCheckboxState()) {
+            this.uniqueCheckbox.click();
+        }
+        return this;
     }
 
     setViewportSize(size, resizeViewport) {
@@ -333,54 +457,9 @@ class formBuilderPage {
         return this.getFieldLabels();
     }
 
-    addNewFieldToFormByDoubleClicking(fieldToSelect) {
-        //get all field tokens
-        var token = browser.elements('.fieldToken .fieldTokenTitle').value.filter(function(tokenTitle) {
-            return tokenTitle.getAttribute('textContent') === fieldToSelect;
-        });
-
-        if (token !== []) {
-            //scroll to a field.
-            browser.execute("return arguments[0].scrollIntoView(true);", token[0]);
-            //Click on filtered save button
-            return token[0].doubleClick();
-        } else {
-            throw new Error('field with name ' + fieldToSelect + " not found on the new list in form builder");
-        }
-    }
-
-    /**
-     * Verify the Get another record relationship dialog titles, descriptions and functionality
-     * @param expectedTablesList to verify the select table drop down list
-     * @param parentTable table to select
-     * @param childTable table to verify that I am inside this table while creating relationship
-     * @param expectedFieldsList to verify the fields from advanced settings select dropdown
-     */
-    verifyGetAnotherRecordRelationshipDialog(expectedTablesList, parentTable, childTable, expectedFieldsList) {
-        expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-        //Verify title
-        expect(modalDialog.modalDialogTitle).toContain('Get another record');
-        //Verify select tables drop down has all the tables except the one you're in
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
-        let tableDropDownList = modalDialog.allDropDownListOptions;
-        expect(tableDropDownList).toEqual(expectedTablesList);
-        //click again on the arrow to collapse the outer menu
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogTableSelectorDropDownArrow);
-        //Select the table
-        modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogTableSelectorDropDownArrow, parentTable);
-        //Click on advanced settings
-        modalDialog.clickModalDialogAdvancedSettingsToggle();
-        //Click on advanced setting field drop down
-        modalDialog.clickOnDropDownDownArrowToExpand(modalDialog.modalDialogFieldSelectorDropDownArrow);
-        //Verify select drop down has just record id
-        let selectFieldDropDownList = modalDialog.allDropDownListOptions;
-        expect(selectFieldDropDownList).toEqual(expectedFieldsList);
-        //Finally close the dialog
-        modalDialog.modalDialogCloseBtn.click();
-        //Verify the dialog got closed
-        browser.waitForVisible('.modal-dialog .iconUISturdy-close', e2eConsts.longWaitTimeMs, true);
-        //Close the form builder
-        this.cancel();
+    stripAsterisk(label) {
+        // strips the leading '* ' from a field label if necessary
+        return label.replace('* ', '');
     }
 
     KB_cancel() {
@@ -391,7 +470,10 @@ class formBuilderPage {
             'Escape', // defocus field
             'Escape' // close page
         ]);
-        return this.dirtyForm_Dismiss();
+        while (!formsPO.viewFormContainerEl.isExisting()) {
+            this.dirtyForm_Dismiss();
+        }
+        return this;
     }
 
     KB_focusField(index) {
@@ -450,12 +532,17 @@ class formBuilderPage {
         return deletedField;
     }
 
-    KB_save(index) {
+    KB_save() {
         // save form via keyboard
-        //browser.keys(['Command', 's', 'Command']);
-        // cmd above doesn't work on EDGE...
-        // todo: figure out this problem; not reproducible manually
-        this.save();
+        if (browserName === 'MicrosoftEdge') {
+            // COMMAND key w/EDGE works locally but not in sauce...?
+            browser.keys(['Control', 's', 'Control']);
+        } else {
+            browser.keys(['Command', 's', 'Command']);
+        }
+        formsPO.viewFormContainerEl.waitForExist();
+        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
+        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 

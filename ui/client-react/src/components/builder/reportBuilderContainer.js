@@ -10,11 +10,13 @@ import ReportNameEditor from '../reportBuilder/reportNameEditor';
 import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
+import BuilderCustomDragLayer from '../../../../reuse/client/src/components/dragAndDrop/builderCustomDragLayer';
+import DraggableReportHeaderCell from '../dataTable/reportGrid/draggableReportHeaderCell';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode} from '../../actions/reportBuilderActions';
-import {loadDynamicReport} from '../../actions/reportActions';
+import {loadDynamicReport, loadReport} from '../../actions/reportActions';
 import AppQbModal from '../qbModal/appQbModal';
 
 import './reportBuilderContainer.scss';
@@ -22,6 +24,14 @@ import './reportBuilderContainer.scss';
 const RECORD_SHOW_LIMIT = 50;
 
 export class ReportBuilderContainer extends Component {
+
+    /**
+     * Load a report on refresh
+     */
+    componentWillMount() {
+        let {appId, tblId, rptId} = this.props.match.params;
+        this.props.loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, 0, RECORD_SHOW_LIMIT);
+    }
 
     getSaveOrCancelFooter = () => {
         let {appId, tblId, rptId} = this.props.match.params;
@@ -49,7 +59,7 @@ export class ReportBuilderContainer extends Component {
         this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams);
     }
 
-    getReportBuilderContent(columns, rows) {
+    getReportBuilderContent = (columns, rows) => {
         let {appId, tblId, rptId} = this.props.match.params;
         let sortFids = (this.props.reportData && this.props.reportData.data) ? this.props.reportData.data.sortFids : [];
         let loading = columns.length === 0;
@@ -59,7 +69,7 @@ export class ReportBuilderContainer extends Component {
                 numberOfColumns={columns.length}
                 columns={columns}
                 rows={rows}
-                isDraggable={true}
+                headerRenderer={DraggableReportHeaderCell}
                 cellRenderer={ReportCell}
                 menuComponent={ReportColumnHeaderMenu}
                 showRowActionsColumn={false}
@@ -87,6 +97,8 @@ export class ReportBuilderContainer extends Component {
             <div className="reportBuilderContainer">
                 {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
                 <AppQbModal/>
+                <BuilderCustomDragLayer />
+                {this.props.reportData &&
                 <ReportFieldSelectMenu
                     className="reportBuilderFieldSelectMenu"
                     appId={appId}
@@ -112,7 +124,7 @@ export class ReportBuilderContainer extends Component {
                             content={content}
                         />
                     </div>
-                </ReportFieldSelectMenu>
+                </ReportFieldSelectMenu>}
                 {this.getSaveOrCancelFooter()}
             </div>
         );
@@ -154,7 +166,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     exitBuilderMode,
-    loadDynamicReport
+    loadDynamicReport,
+    loadReport
 };
 
 export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(

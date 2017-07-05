@@ -146,7 +146,6 @@ class ReportModelHelper {
                 if (data.group) {
                     data.group = data.group.replace('&amp;', '&');
                 }
-                return data;
             });
         }
         return groupData;

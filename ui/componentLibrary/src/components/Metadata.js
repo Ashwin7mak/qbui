@@ -27,7 +27,7 @@ import QBPanelMetadata from 'component-metadata!../../../client-react/src/compon
 
 import TrowserMetadata from 'component-metadata!../../../client-react/src/components/trowser/trowser.js';
 import QBModalMetadata from 'component-metadata!../../../client-react/src/components/qbModal/qbModal.js';
-import AlertBannerMetadata from 'component-metadata!../../../client-react/src/components/alertBanner/alertBanner.js';
+import AlertBannerMetadata from 'component-metadata!../../../reuse/client/src/components/alertBanner/alertBanner.js';
 import InvisibleBackdropMetadata from 'component-metadata!../../../client-react/src/components/qbModal/invisibleBackdrop.js';
 import PageTitleMetadata from 'component-metadata!../../../client-react/src/components/pageTitle/pageTitle.js';
 import PhoneFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/phoneFieldValueEditor.js';

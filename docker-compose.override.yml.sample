@@ -48,7 +48,31 @@ services:
     image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/experienceengine-db
     ports:
       - "5533:5432"
+  we:
+    build:
+      # Build image from the WorkflowEngine project directory.
+      # This path will have to match where WorkflowEngine is checked out on your laptop
+      context: ../WorkflowEngine
+      dockerfile: Dockerfile
+    depends_on:
+      - we-db
+    environment:
+      - CATALINA_OPTS=-Xms1024M -Xmx2048M -server -XX:+UseParallelGC
+      - JAVA_OPTS=-Dworkflow.coreClient.endpoint=https://core:8443/api/api/v1 -Dworkflow.psql.hostname=we-db -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    links:
+        - core:localhost.core
+    image: quickbase/workflow
+    ports:
+      - "8089:8443"
+    volumes:
+      - /tmp/log/docker/workflow/service:/var/log/qbase
+      - /tmp/log/docker/workflow/tomcat:/usr/local/tomcat/logs
+  we-db:
+    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/workflowengine-db
+    ports:
+      - "5435:5432"
   ui:
     environment:
       - javaHost=https://core:8443
       - eeHost=https://ee:8443
+      - automationHost=https://we:8443

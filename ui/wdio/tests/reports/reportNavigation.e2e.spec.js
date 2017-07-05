@@ -6,6 +6,7 @@
     let reportContentPO = requirePO('reportContent');
     let reportNavPO = requirePO('reportNavigation');
     let reportSortPO = requirePO('reportSortingGrouping');
+    var tableCreatePO = requirePO('tableCreate');
 
     describe('Reports - Navigation tests: ', function() {
         let testApp;
@@ -37,9 +38,20 @@
             });
         });
 
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
+            return e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+        });
+
         it('Verify navigation in multi-page report', function() {
-            // open a multi-page report
-            e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
+
+            //Select table 2
+            tableCreatePO.selectTable('Table 2');
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
 
             // verify nav details on FIRST page
             reportSortPO.sortByRecordID();
@@ -108,8 +120,9 @@
         });
 
         it('Verify lack of navigation in single-page report', function() {
-            // open a single-page report
-            e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            tableCreatePO.selectTable('Table 1');
+            //wait until report rows in table are loaded
+            reportContentPO.waitForReportContent();
 
             // verify navigation components
             let expectedRecordCount = (e2eConsts.MAX_PAGING_SIZE - recOffset).toString() + ' records';

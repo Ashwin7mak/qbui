@@ -61,11 +61,11 @@ TabbedSideNav.propTypes = {
     tabs: PropTypes.arrayOf(PropTypes.shape({
         /**
          * A unique key that identifies the tab */
-        key: PropTypes.oneOf([PropTypes.string, PropTypes.number]).isRequired,
+        key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 
         /**
-         * The text that displays in the tab */
-        title: PropTypes.string.isRequired,
+         * The text that displays in the tab. It can be a string or React element. */
+        title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 
         /**
          * The content of the tab described in html/jsx */

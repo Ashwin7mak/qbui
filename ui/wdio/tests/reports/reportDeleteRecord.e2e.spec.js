@@ -7,7 +7,7 @@
     let reportContentPO = requirePO('reportContent');
     let modalDialog = requirePO('/common/modalDialog');
     let reportNavPO = requirePO('reportNavigation');
-    let tableCreatePO = requirePO('tableCreate');
+    let loadingSpinner = requirePO('/common/loadingSpinner');
 
     describe('Reports - Delete record tests: ', function() {
         var realmName;
@@ -76,6 +76,8 @@
                     });
                     document.getElementsByClassName('modal-content')[0].getElementsByClassName('modal-footer')[0].querySelector('.primaryButton').dispatchEvent(event);
                 });
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForTheAbsenceDeletedRecordOnTheCurrentPage(deletedRecord);
@@ -102,8 +104,7 @@
 
                 // Step 2: Click on delete button from the dialogue box
                 modalDialog.clickOnModalDialogBtn(modalDialog.DONT_DELETE_BTN);
-                //Need this to wait for delete success container to slide away
-                browser.pause(e2eConsts.mediumWaitTimeMs);
+                modalDialog.waitUntilModalDialogSlideAway();
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);

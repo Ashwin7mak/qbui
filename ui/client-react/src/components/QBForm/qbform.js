@@ -8,13 +8,16 @@ import FieldElement from './fieldElement';
 import Locale from '../../locales/locales';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
-import DragAndDropField from '../formBuilder/dragAndDropField';
 import ChildReport from './childReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 import {getParentRelationshipsForSelectedFormElement} from '../../reducers/forms';
+import {getTable} from '../../reducers/app';
 import {removeFieldFromForm} from '../../actions/formActions';
+import {updateFormAnimationState} from '../../actions/animationActions';
+import * as SchemaConsts from "../../constants/schema";
+import FormBuilderStage from '../formBuilder/formBuilderStage';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -22,8 +25,6 @@ import {connect} from 'react-redux';
 
 import './qbform.scss';
 import './tabs.scss';
-
-const DragDropFieldElement = DragAndDropField(FieldElement);
 
 /*
  Custom QuickBase Form component that has 1 property.
@@ -60,7 +61,14 @@ export const QBForm = React.createClass({
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
         hasAnimation: PropTypes.bool,
-        goToParent: React.PropTypes.func, //handles drill down to parent
+
+        /**
+         * By default, the form uses FieldElement to render each field. You can optionally pass in a different renderer. */
+        alternateFieldRenderer: PropTypes.func,
+
+        /** handles drill down to parent */
+        goToParent: React.PropTypes.func,
+
         uniqueId: React.PropTypes.string
     },
 
@@ -114,6 +122,17 @@ export const QBForm = React.createClass({
     },
 
     /**
+     * Retrieve relationship from list of relationships.
+     * @param relationshipId
+     * @returns {{}}
+     */
+    getRelationship(relationshipId) {
+        const relationships = _.get(this, `props.formData.formMeta.relationships`, {});
+        const relationship = _.find(relationships, rel => rel.id === relationshipId);
+        return relationship || {};
+    },
+
+    /**
      * get the form record
      * @param fieldId
      * @returns the record entry from formdata record array with the field ID
@@ -139,14 +158,33 @@ export const QBForm = React.createClass({
             });
 
             // If the fieldRecord.value exists or is a boolean (for checkbox fields), then return the field record
-            // otherwise set the default values if available
-            if (fieldRecord && (fieldRecord.value || typeof fieldRecord.value === "boolean" || fieldRecord.value === 0)) {
+            // otherwise fillin parent for new child or set the default values if available
+            if (_.has(fieldRecord, 'value')) {
                 return fieldRecord;
-            } else if (field.defaultValue && field.defaultValue.coercedValue) {
-                fieldRecord = {};
-                fieldRecord.display = field.defaultValue.displayValue;
-                fieldRecord.value = field.defaultValue.coercedValue.value;
-                return fieldRecord;
+            } else { //no existing value then
+                const queryParams = _.get(this.props, 'location.query', {});
+                //if there is a parent value for this child auto fill it in
+                const parentFid = _.get(queryParams, 'detailKeyFid', undefined);
+                const detailTableId = _.get(queryParams, 'detailTableId', undefined);
+                // fieldId is a numeric and params from url are strings so +parentFid for type equality test
+                if (parentFid && +parentFid === fieldId &&
+                    detailTableId && detailTableId === field.tableId) {
+                    fieldRecord = {};
+                    let value =  _.get(queryParams, 'detailKeyValue', null);
+                    let isTypeNumeric = SchemaConsts.isNumericType(field.datatypeAttributes.type);
+                    //params from url are strings so +value converts to a numeric
+                    if (value !== null && isTypeNumeric) {
+                        value = +value;
+                    }
+                    fieldRecord.value = value;
+                    fieldRecord.display = _.get(queryParams, 'detailKeyDisplay', null);
+                    return fieldRecord;
+                } else if (field.defaultValue && field.defaultValue.coercedValue) {
+                    fieldRecord = {};
+                    fieldRecord.display = field.defaultValue.displayValue;
+                    fieldRecord.value = field.defaultValue.coercedValue.value;
+                    return fieldRecord;
+                }
             }
         }
     },
@@ -251,11 +289,11 @@ export const QBForm = React.createClass({
     },
 
     setAnimationRunning() {
-        return this.props.updateAnimationState(true);
+        return this.props.updateFormAnimationState(true);
     },
 
     setAnimationStopped() {
-        return this.props.updateAnimationState(false);
+        return this.props.updateFormAnimationState(false);
     },
 
     /**
@@ -381,7 +419,7 @@ export const QBForm = React.createClass({
         }
         */
 
-        let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
+        let CurrentFieldElement = this.props.alternateFieldRenderer || FieldElement;
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);
@@ -391,14 +429,7 @@ export const QBForm = React.createClass({
         return (
             <div key={containingElement.id} className="formElementContainer">
                 <CurrentFieldElement
-                    selectedField={this.props.selectedField}
                     tabIndex={tabIndex}
-                    location={location}
-                    orderIndex={FormFieldElement.orderIndex}
-                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
-                    beginDrag={this.props.beginDrag}
-                    handleFormReorder={this.props.handleFormReorder}
-                    containingElement={containingElement}
                     element={FormFieldElement}
                     key={`fieldElement-${containingElement.id}`}
                     idKey={"fe-" + this.props.idKey}
@@ -417,12 +448,17 @@ export const QBForm = React.createClass({
                     tblId={this.props.tblId}
                     appUsers={this.props.appUsers}
                     recId={recId}
-                    isTokenInMenuDragging={this.props.isTokenInMenuDragging}
-                    removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, this.props.app.id, this.props.tblId, relatedField, location);}}
                     goToParent={goToParent}
                     masterTableId={masterTableId}
                     masterAppId={masterAppId}
                     masterFieldId={masterFieldId}
+                    location={location}
+
+                    // Props below required for LinkToFieldValueEditor in builder
+                    // TODO:: Refactor LinkToRecordFieldValueEditor builder functions to custom component
+                    // Also see props added to FieldValueEditor
+                    formId={this.props.formId}
+                    removeFieldFromForm={this.props.removeFieldFromForm}
                 />
             </div>
         );
@@ -433,7 +469,6 @@ export const QBForm = React.createClass({
      * @returns {XML}
      * @param id
      * @param FormTextElement
-     * @param style
      */
     createTextElement(id, FormTextElement) {
         return <div key={id} className="formElementContainer formElement text">{FormTextElement.displayText}</div>;
@@ -444,19 +479,18 @@ export const QBForm = React.createClass({
      * @returns {XML}
      * @param id
      * @param ReferenceElement
-     * @param style
      */
     createChildReportElement(id, ReferenceElement) {
         // Find the relationship object for this element.
         // This element represents a single relationship from the `formMeta.relationships` array.
-        // The `element.relationshipId` is the index offset within the relationship array.
-        const relationship = _.get(this, `props.formData.formMeta.relationships[${ReferenceElement.relationshipId}]`, {});
+        const relationship = this.getRelationship(ReferenceElement.relationshipId);
 
         // Find the foreign key value. This is the value stored in one of the master record's fields
         // the field id is specified as 'masterFieldId' in the relationship object.
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
         const detailKeyValue = _.get(fieldRecord, 'value', null);
+        const detailKeyDisplay = _.get(fieldRecord, 'display', null);
 
         // Find the child table's name.
         const tables = _.get(this, 'props.selectedApp.tables');
@@ -482,6 +516,7 @@ export const QBForm = React.createClass({
                     childTableNoun={childTableNoun}
                     detailKeyFid={_.get(relationship, "detailFieldId")}
                     detailKeyValue={detailKeyValue}
+                    detailKeyDisplay={detailKeyDisplay}
                     relationshipId={ReferenceElement.relationshipId}
                     relationship={relationship}
                     type={ReferenceElement.type}
@@ -492,6 +527,13 @@ export const QBForm = React.createClass({
             </div>
         );
     },
+    /**
+     * Create a form footer with built-in fields
+     */
+    createFormStage() {
+        return this.props.editingForm && <FormBuilderStage table={this.props.table} />;
+    },
+
 
     /**
      * Create a form footer with built-in fields
@@ -606,9 +648,17 @@ export const QBForm = React.createClass({
             );
         }
 
+        let formStage = this.createFormStage();
+        let classes = ["form"];
+        if (this.props.edit) {
+            classes.push("editForm");
+        } else {
+            classes.push("viewForm");
+        }
         return (
             <div className="formContainer">
-                <form className={this.props.edit ? "editForm" : "viewForm"}>
+                {formStage}
+                <form className={classes.join(" ")}>
                     {formContent}
                 </form>
                 <div>{formFooter}</div>
@@ -636,14 +686,14 @@ function buildUserField(id, fieldValue, name) {
 
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || ownProps.uniqueId || CONTEXT.FORM.VIEW);
-    let currentForm = _.get(state, `forms[${formId}]`, {});
+    let appId = ownProps.app ? ownProps.app.id : null;
     return {
         fields: state.fields,
-        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
-        relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : []
+        relationships: formId ? getParentRelationshipsForSelectedFormElement(state, formId) : [],
+        table : getTable(state, appId, ownProps.tblId)
     };
 };
 
 export default connect(
-    mapStateToProps, {removeFieldFromForm}
+    mapStateToProps, {removeFieldFromForm, updateFormAnimationState}
 )(QBForm);

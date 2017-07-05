@@ -3,7 +3,6 @@ import {Route} from 'react-router-dom';
 
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
-import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import {enterBuilderMode, updateReportRedirectRoute} from '../../../src/actions/reportBuilderActions';
@@ -30,15 +29,12 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import {loadApp, loadApps} from '../../actions/appActions';
 
-import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getAppUsers, getAppUnfilteredUsers, getAppOwner} from '../../reducers/app';
-import {getAppRoles} from '../../reducers/appRoles';
+import * as App from '../../reducers/app';
+import {getAppRoles} from '../../reducers/selectedApp';
 
 import {CONTEXT} from '../../actions/context';
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
-import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
+import AppCreationDialog from '../app/appCreationDialog';
 
 import AppUtils from '../../utils/appUtils';
 
@@ -47,6 +43,8 @@ import {updateFormRedirectRoute} from '../../actions/formActions';
 
 import Analytics from '../../../../reuse/client/src/components/analytics/analytics';
 import Config from '../../config/app.config';
+
+import {APPS_ROUTE} from '../../constants/urlConstants';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -105,17 +103,16 @@ export const Nav = React.createClass({
 
         let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/report/${rptId}`;
 
-        this.props.updateReportRedirectRoute(CONTEXT.REPORT.NAV, _.get(this.props, 'location.pathname'));
+        this.props.updateReportRedirectRoute(_.get(this.props, 'location.pathname'));
 
-        this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
+        this.props.enterBuilderMode();
 
         this.props.history.push(link);
     },
 
     getTopGlobalActions() {
         const actions = [];
-        let selectedApp = this.getSelectedApp();
-        let selectedTableId = this.props.selectedTableId;
+        let {selectedApp, selectedTableId} = this.props;
 
         let isAdmin = selectedApp ? AppUtils.hasAdminAccess(selectedApp.accessRights) : false;
 
@@ -182,11 +179,6 @@ export const Nav = React.createClass({
         this.props.hideTrowser();
     },
 
-    getSelectedApp() {
-        const selectedAppId = this.props.selectedAppId;
-        return this.props.getApp(selectedAppId);
-    },
-
     getEditingApp() {
         const appsList = this.props.getApps() || [];
         const selectedAppId = this.props.selectedAppId;
@@ -221,7 +213,7 @@ export const Nav = React.createClass({
      */
     getSelectedTable(tableId) {
         if (tableId) {
-            const app = this.getSelectedApp();
+            const app = this.props.selectedApp;
             if (app) {
                 return _.find(app.tables, (t) => t.id === tableId);
             }
@@ -231,7 +223,7 @@ export const Nav = React.createClass({
 
 
     aReportIsSelected() {
-        let selectedApp = this.getSelectedApp();
+        let selectedApp = this.props.selectedApp;
         let reportData = this.getReportsData();
         return (selectedApp && reportData && reportData.rptId && reportData.data && reportData.data.name);
     },
@@ -281,8 +273,8 @@ export const Nav = React.createClass({
             // load the edit form and in a trowser
             const showTrowser = true;
             const formType = "edit";
-            // maybe a child create check
-            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID] && this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+            // check for either editing a child in a drawer or creating a new child record
+            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID] && this.props.location.query[UrlConsts.DETAIL_REPORTID]) {
                 let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
                 let childTableId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
                 let childReportId = this.props.location.query[UrlConsts.DETAIL_REPORTID];
@@ -334,32 +326,12 @@ export const Nav = React.createClass({
         return getPendEdits(this.props.record);
     },
 
-/*
-    // Commenting out this function to render the top nav items in the center.
-    // These items weren't enabled yet and were simply placeholders. We will need
-    // to put some of them back so, leaving the code here for now.
-    getCenterGlobalActions() {
-        return (
-            <ButtonGroup className="navItem">
-                <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
-                    <Button tabIndex="2" className="disabled">
-                        <Icon icon="search" />
-                    </Button>
-                </Tooltip>
-
-                <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                    <Button tabIndex="3" className="disabled"><Icon icon="star-full" /></Button>
-                </Tooltip>
-            </ButtonGroup>
-        );
-    },
-*/
-
     render() {
         const appsList = this.props.getApps() || [];
-        const isAppsLoading = this.props.isAppsLoading;
+        const {selectedAppId, selectedTableId, selectedApp, isAppLoading, areAppsLoading} = this.props;
 
-        if (appsList.length === 0 && isAppsLoading) {
+
+        if (appsList.length === 0 && areAppsLoading) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
             // therefore must be loaded using the dangerouslySetInnerHTML attribute
@@ -371,8 +343,8 @@ export const Nav = React.createClass({
         if (this.props.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
-        const hasEditQuery = _.get(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`);
-        let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
+        const hasEditQuery = _.has(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`);
+        let editRecordId = _.get(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`, null);
         let editRecordIdForPageTitle = editRecordId;
 
         if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
@@ -383,16 +355,11 @@ export const Nav = React.createClass({
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
 
-        const selectedAppId = this.props.selectedAppId;
-        const selectedApp = this.getSelectedApp();
-        const selectedTableId = this.props.selectedTableId;
-
         let editingAppId = this.props.match.params.appId;
         let editingTblId = this.props.match.params.tblId;
         let editingRecId = editRecordId;
         if (this.props.location.query[UrlConsts.DETAIL_APPID] &&
-            this.props.location.query[UrlConsts.DETAIL_TABLEID] &&
-            this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+            this.props.location.query[UrlConsts.DETAIL_TABLEID]) {
             editingAppId  = this.props.location.query[UrlConsts.DETAIL_APPID];
             editingTblId  = this.props.location.query[UrlConsts.DETAIL_TABLEID];
         }
@@ -448,17 +415,21 @@ export const Nav = React.createClass({
             <LeftNav
                 visible={this.props.shell.leftNavVisible}
                 expanded={this.props.shell.leftNavExpanded}
-                appsListOpen={this.props.shell.appsListOpen}
+                isAppsListOpen={this.props.shell.appsListOpen}
                 apps={appsList}
-                appsLoading={isAppsLoading}
+                areAppsLoading={areAppsLoading}
+                isAppLoading={isAppLoading}
                 selectedAppId={selectedAppId}
+                selectedApp={selectedApp}
                 selectedTableId={selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 onToggleAppsList={this.toggleAppsList}
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
                 onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
-                onNavClick={this.toggleNav}/>
+                onNavClick={this.toggleNav}
+                onAppsRoute={this.props.match.url === APPS_ROUTE}
+            />
 
             <div className="main" >
                 <TopNav // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
@@ -467,8 +438,6 @@ export const Nav = React.createClass({
                 />
                 {this.props.routes &&
                 <div className="mainContent" >
-                    <TempMainErrorMessages apps={appsList} appsLoading={isAppsLoading} selectedAppId={selectedAppId} />
-
                     <Switch>
                         { this.props.routes.map((route, i) => {
                                 //insert the child route passed in by the router
@@ -479,7 +448,7 @@ export const Nav = React.createClass({
                                 key : this.props.match ? this.props.match.url : "",
                                 apps: appsList,
                                 selectedAppId: selectedAppId,
-                                appsLoading: isAppsLoading,
+                                appsLoading: areAppsLoading,
                                 reportData: reportsData,
                                 appUsers: this.props.appUsers,
                                 appUsersUnfiltered: this.props.appUnfilteredUsers,
@@ -505,6 +474,7 @@ export const Nav = React.createClass({
             }
 
             {selectedAppId && <TableCreationDialog app={selectedApp} onTableCreated={this.tableCreated}/>}
+            {<AppCreationDialog />}
 
         </div>);
     },
@@ -549,36 +519,33 @@ export const Nav = React.createClass({
      * @returns {*}
      */
     allowCreateNewTable() {
-        const app = this.getSelectedApp();
+        const app = this.props.selectedApp;
         return app && AppUtils.hasAdminAccess(app.accessRights);
     },
     /**
      * open the create table wizard
      */
     createNewTable() {
-        setTimeout(() => {
-            this.props.showTableCreationDialog();
-        });
-    }
+        this.props.showTableCreationDialog();
+    },
 });
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        getApp: (appId) => getApp(state.app, appId),
-        getApps: () => getApps(state.app),
-        appOwner: getAppOwner(state.app),
-        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId),
-        selectedAppId: getSelectedAppId(state.app),
-        selectedTableId: getSelectedTableId(state.app),
-        appUsers: getAppUsers(state.app),
-        appUnfilteredUsers: getAppUnfilteredUsers(state.app),
-        isAppsLoading: getIsAppsLoading(state.app),
-        forms: state.forms,
-        shell: state.shell,
-        record: state.record,
-        report: state.report
-    };
-};
+const mapStateToProps = state => ({
+    selectedApp: App.getSelectedApp(state),
+    getApps: () => App.getApps(state),
+    selectedAppId: App.getSelectedAppId(state),
+    isAppLoading: App.getIsAppLoading(state),
+    areAppsLoading: App.getAreAppsLoading(state),
+    appOwner: App.getAppOwner(state),
+    appRoles: getAppRoles(state.selectedApp),
+    selectedTableId: App.getSelectedTableId(state),
+    appUsers: App.getAppUsers(state),
+    appUnfilteredUsers: App.getAppUnfilteredUsers(state),
+    forms: state.forms,
+    shell: state.shell,
+    record: state.record,
+    report: state.report
+});
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -596,10 +563,10 @@ const mapDispatchToProps = (dispatch) => {
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
-        enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
+        enterBuilderMode: () => dispatch(enterBuilderMode()),
         loadApps: () => dispatch(loadApps()),
         loadApp: (appId) => dispatch(loadApp(appId)),
-        updateReportRedirectRoute: (context, route) => dispatch(updateReportRedirectRoute(context, route))
+        updateReportRedirectRoute: (route) => dispatch(updateReportRedirectRoute(route))
     };
 };
 

@@ -45,85 +45,47 @@
         });
 
         /**
+         * Test Method - checking for visibility of topNav on App homepage
+         */
+        it('Visibility of topNav on App homepage', function() {
+            //Verify topNav
+            TopNavPO.verifyTopNav(testApp, true, false, false, false);
+        });
+
+        /**
          * Test Method - checking for usability of topNav on Table homepage
          */
-        it('Visibility and usability of topNav on Table homepage', function() {
+        it('Visibility of topNav on Table with tableHomepage set', function() {
 
-            //select table
+            //Select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
-            reportContentPO.waitForLeftNavLoaded();
-            TopNavPO.topNavToggleHamburgerEl.waitForVisible();
+            // wait for the report content to be visible
+            reportContentPO.waitForReportContent();
 
-            //Verify if the global icons are displayed
-            TopNavPO.topNavGlobalActDivEl.waitForVisible();
-            reportContentPO.settingsIcon.waitForVisible();
-
-            //Verify the no.of global action icons
-            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
-
-            //Verify the presence of Feedback and Report issue buttons
-            TopNavPO.feedbackBtn.click();
-            expect(TopNavPO.feedbackMenuButton.isExisting()).toBe(true);
-            expect(TopNavPO.reportFeedBackButton.isExisting()).toBe(true);
-
-            //Verify the Settings option in the gear
-            reportContentPO.clickSettingsIcon();
-            expect(TopNavPO.settingsDropdownHeader.getText()).toEqual("Settings");
-
-            //Verify that Users button displays the correct app name and has sign out button
-            TopNavPO.usersButton.click();
-            expect(TopNavPO.userDropdownAppName.getAttribute('textContent')).toEqual(testApp.name);
-            expect(TopNavPO.signOutButton.isExisting()).toBe(true);
-
-            //Verify the help button is clickable
-            expect(TopNavPO.helpButton.isExisting()).toBe(true);
+            //Verify topNav
+            TopNavPO.verifyTopNav(testApp, false, true, false, false);
         });
 
         /**
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
+
             //Go to reports page directly
-            //select report
-            reportContentPO.selectReport('Table 1', 0);
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            TopNavPO.topNavToggleHamburgerEl.waitForVisible();
-
-            //Verify if the global icons are displayed
-            TopNavPO.topNavGlobalActDivEl.waitForVisible();
-            reportContentPO.settingsIcon.waitForVisible();
-
-            //Verify the no.of global action icons
-            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
+            //Verify topNav
+            TopNavPO.verifyTopNav(testApp, false, false, true, false);
         });
 
-        //TODO: To enable these when topNav is added to User/App homepage MC-2646
         /**
          * Test Method - checking for visibility of topNav on User homepage
          */
-        xit('Visibility of topNav on User homepage', function() {
-            e2ePageBase.navigateTo(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
-            TopNavPO.topNavToggleHamburgerEl.waitForVisible();
-            //Verify if the global icons are displayed
-            TopNavPO.topNavGlobalActDivEl.waitForVisible();
-            reportContentPO.settingsIcon.waitForVisible();
-            //Verify the no.of global action icons
-            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
-        });
+        it('Visibility of topNav on User homepage', function() {
+            e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
 
-        //TODO: To enable these when topNav is added to User/App homepage MC-2646
-        /**
-         * Test Method - checking for visibility of topNav on App homepage
-         */
-        xit('Visibility of topNav on App homepage', function() {
-            e2ePageBase.navigateTo(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
-            TopNavPO.topNavToggleHamburgerEl.waitForVisible();
-            //Verify if the global icons are displayed
-            TopNavPO.topNavGlobalActDivEl.waitForVisible();
-            reportContentPO.settingsIcon.waitForVisible();
-            //Verify the no.of global action icons
-            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
-
+            //Verify topNav
+            TopNavPO.verifyTopNav(testApp, false, false, false, true);
         });
     });
 }());

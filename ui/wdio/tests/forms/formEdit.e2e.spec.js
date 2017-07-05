@@ -42,8 +42,8 @@
          */
         it('Edit a NULL values record via record actions edit pencil In a Grid', function() {
             var origRecordCount;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
-
+            var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
+            var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
             //Step 1 - Go to report without any settings (LIST all report)
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
@@ -57,7 +57,9 @@
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
-
+            fieldTypes2.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
@@ -79,7 +81,7 @@
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
         //TODO MC-1911 needs to be fixed for the below test to pass
-        xit('Edit a record via table actions edit pencil above the table grid', function() {
+        it('Edit a record via table actions edit pencil above the table grid', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 

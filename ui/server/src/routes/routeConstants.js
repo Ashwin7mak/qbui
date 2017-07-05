@@ -53,7 +53,7 @@
             CORE: '/api/api/v1',
             NODE: '/qbui',
             EE: '/ee/v1',
-            GOVERNANCE: '/api/governance/:version',
+            GOVERNANCE: '/governance/api/:version',
             WORKFLOW: {
                 FLOW_MANAGER: '/we/api/v1',
                 AUTOMATION: '/we/workflow'
@@ -102,8 +102,7 @@
 
         REQ_USER                    : context.client.QBUI + '/users/reqUser',
 
-        GOVERNANCE_ACCOUNT_USERS    : context.api.GOVERNANCE + '/:accountId/users',
-        // the account id is an optional parameter
+        GOVERNANCE_ACCOUNT_USERS    : context.api.GOVERNANCE + '/:accountId/users', // the account id is an optional parameter
         GOVERNANCE_CONTEXT          : context.api.GOVERNANCE + '/context'
     };
 
@@ -136,6 +135,7 @@
         PUBLIC_RELATIONSHIPS       : '/apps/:appId/relationships*',
         PUBLIC_ROLES               : '/apps/:appId/roles*',
         PUBLIC_WORKFLOW_FLOW_MGR   : '/apps/:appId/workflow/flows*',
+        PUBLIC_PAGES               : '/apps/:appId/pages*',
         PUBLIC_APPS                : '/apps*',
         PUBLIC_HEALTH              : '/health',
         PUBLIC_OPERATIONS          : '/operations*',
@@ -143,7 +143,7 @@
         PUBLIC_TICKET              : '/ticket*',
         PUBLIC_USERS               : '/users*',
         PUBLIC_WORKFLOW_AUTOMATION_API : '/workflow/apps/:appId/api*',
-        PUBLIC_WORKFLOW_AUTOMATION_INVOKE : '/workflow/apps/:appId/invokes*'
+        PUBLIC_WORKFLOW_AUTOMATION_INVOKE: '/workflow/apps/:appId/invokes*'
     };
 
     // Define list of public 'short-hand' routes and its back-end server api context.
@@ -180,6 +180,7 @@
         {route: publicControllerEndpoints.PUBLIC_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_WORKFLOW_FLOW_MGR, regEx: /^\/apps\/.*\/workflow\/flows(.*)?$/i, context: context.api.WORKFLOW.FLOW_MANAGER},
+        {route: publicControllerEndpoints.PUBLIC_PAGES, regEx: /^\/apps\/.*\/pages(.*)?$/i, context: context.api.EE},
         {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps(.*)?$/i, context: context.api.CORE},                  // conflict with EE
         {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health$/i, context: context.api.CORE},                // conflict with EE, Workflow
         {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: context.api.CORE},        // conflict with EE
@@ -187,7 +188,11 @@
         {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: context.api.CORE},
         {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: context.base.WE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: context.base.WE}
+        {
+            route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE,
+            regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i,
+            context: context.base.WE
+        }
     ];
 
     // The regular expression is used to identify the client routes when determining which

@@ -2,6 +2,7 @@ import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
 import {StandardGrid} from "../../../src/common/grid/standardGrid";
+import {QbCell} from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
@@ -40,6 +41,7 @@ describe('StandardGrid', () => {
                 items={items}
                 id={"accountUsers"}
                 rowKey={"uid"}
+                cellRenderer={QbCell}
             />
         );
         expect(StandardGridShallow).toBeDefined();
@@ -52,6 +54,78 @@ describe('StandardGrid', () => {
 
         expect(StandardGridShallow.find('.qbGrid')).toBePresent();
         expect(StandardGridShallow.find('.noItemsExist')).not.toBePresent();
+    });
+
+    it('should not render the grid header when items are being fetched', () => {
+        let columns = [{
+            property: 'firstName',
+            header: {
+                label: 'First Name'
+            },
+            fieldDef: {
+                id: 1,
+                datatypeAttributes: {
+                    type: FieldConsts.TEXT
+                }
+            }
+        }];
+
+        let StandardGridShallow = shallow(
+            <StandardGrid
+                columns={columns}
+                getFacetFields={()=>{}}
+                doUpdate={AccountUsersActions.doUpdate}
+                items={null}
+                id={"accountUsers"}
+                rowKey={"uid"}
+                cellRenderer={QbCell}
+            />
+        );
+        expect(StandardGridShallow).toBeDefined();
+        expect(StandardGridShallow.length).toBeTruthy();
+
+
+        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
+        expect(StandardGridToolbarComponent).toBeDefined();
+        expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
+        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdate);
+
+    });
+
+    it('should render the grid header when items are done fetching', () => {
+        let columns = [{
+            property: 'firstName',
+            header: {
+                label: 'First Name'
+            },
+            fieldDef: {
+                id: 1,
+                datatypeAttributes: {
+                    type: FieldConsts.TEXT
+                }
+            }
+        }];
+
+        let StandardGridShallow = shallow(
+            <StandardGrid
+                columns={columns}
+                getFacetFields={()=>{}}
+                doUpdate={AccountUsersActions.doUpdate}
+                items={[]}
+                id={"accountUsers"}
+                rowKey={"uid"}
+                cellRenderer={QbCell}
+            />
+        );
+        expect(StandardGridShallow).toBeDefined();
+        expect(StandardGridShallow.length).toBeTruthy();
+        expect(StandardGridShallow.find('.noItemsExist')).toBePresent();
+
+        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
+        expect(StandardGridToolbarComponent).toBeDefined();
+        expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
+        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdate);
+
     });
 
     it('should not render the grid when no items exist', () => {
@@ -78,6 +152,7 @@ describe('StandardGrid', () => {
                 items={items}
                 id={"accountUsers"}
                 rowKey={"uid"}
+                cellRenderer={QbCell}
             />
         );
         expect(StandardGridShallow).toBeDefined();

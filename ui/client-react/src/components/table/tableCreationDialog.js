@@ -1,5 +1,5 @@
 import React from 'react';
-import {PropTypes} from 'react';
+import {PropTypes, Component} from 'react';
 import TableCreationPanel from './tableCreationPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
@@ -12,30 +12,20 @@ import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 
-import './tableCreationDialog.scss';
+import '../../../../reuse/client/src/components/multiStepDialog/creationDialog.scss';
 
-export class TableCreationDialog extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-        // bind to fix context for event handlers
-
-        this.onFinished = this.onFinished.bind(this);
-        this.onCancel = this.onCancel.bind(this);
-    }
-
+export class TableCreationDialog extends Component {
     /**
      * cancel
      */
-    onCancel() {
+    onCancel = () => {
         this.props.hideTableCreationDialog();
-    }
+    };
 
     /**
      * last page has finished
      */
-    onFinished() {
+    onFinished = () => {
 
         const tableInfo = {
             name: this.props.tableInfo.name.value,
@@ -55,7 +45,7 @@ export class TableCreationDialog extends React.Component {
 
                 // navigate to form builder (no page reload)
 
-                this.props.updateFormRedirectRoute(null);
+                this.props.updateFormRedirectRoute(UrlUtils.getTableHomepageLink(this.props.app.id, tblId));
                 AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
@@ -69,7 +59,7 @@ export class TableCreationDialog extends React.Component {
      * check for any validation errors in tableInfo
      * @returns {boolean}
      */
-    isValid() {
+    isValid = () => {
 
         // form can be saved if the state if the fields is valid, regardless of what previous validation error is being shown
 
@@ -79,7 +69,7 @@ export class TableCreationDialog extends React.Component {
     /**
      * get table names for app
      */
-    getExistingTableNames() {
+    getExistingTableNames = () => {
         let appTablesNames = [];
         if (_.has(this.props.app, 'tables')) {
             appTablesNames = this.props.app.tables.map((table) => table.name);
@@ -93,7 +83,7 @@ export class TableCreationDialog extends React.Component {
      */
     render() {
 
-        const classes = ['tableCreationDialog'];
+        const classes = ['tableCreationDialog creationDialog'];
 
         // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
         if (this.props.tableCreation.iconChooserOpen) {
@@ -108,9 +98,8 @@ export class TableCreationDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage("tableCreation.finishedButtonLabel")}
                                  canProceed={this.isValid()}
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle")]}>
-                <div className="tableCreationPanel">
+                <div className="dialogCreationPanel">
                     <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
-                    <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
                     <TableCreationPanel tableInfo={this.props.tableInfo}
                                     iconChooserOpen={this.props.tableCreation.iconChooserOpen}
                                     openIconChooser={this.props.openIconChooser}

@@ -1,0 +1,36 @@
+@import '../../assets/css/qbVariables';
+
+.recordTitleFieldSection {
+    .recordTitleFieldSelect {
+        max-width: 250px;
+        .Select-option:last-of-type {
+            border-top: 1px solid $color-black-400;
+        }
+
+        .selectedOption {
+            padding: 0 8px;
+
+            > * {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .qbIcon {
+                margin-right: 5px;
+            }
+        }
+        .pickerOption {
+            line-height: 100%;
+
+            > * {
+                display: inline-block;
+            }
+        }
+        /* Override the default styles of the react select component */
+        .Select-menu-outer .Select-menu .Select-option .qbIcon {
+            position: inherit;
+            margin-right: 7px;
+            color: $color-black-700;
+        }
+    }
+}

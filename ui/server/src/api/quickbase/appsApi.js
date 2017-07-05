@@ -134,6 +134,35 @@
                 });
             },
 
+            /**
+             * Create endpoint for the app object.
+             *
+             * NOTE: no tables are created in EE.  This is a future requirement but not yet implemented.
+             *
+             * @param req
+             * @returns {Promise}
+             */
+            createApp: function(req) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppsRoute(req.url);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            let resp = JSON.parse(response.body);
+                            resolve(resp);
+                        },
+                        (error) => {
+                            log.error({req: req}, "appsApi.createApp(): Error creating app.");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('appsApi.createApp(): unexpected error creating app.', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
             getApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
@@ -149,6 +178,7 @@
                     Promise.all(appPromises).then(
                         (responses) => {
                             let app = JSON.parse(responses[0].body);
+
                             if (responses.length > 1) {
                                 let tablesWithoutProps = [];
                                 this._mergeTableProps(app, responses[1], tablesWithoutProps);
