@@ -105,6 +105,7 @@ describe('NavItem', () => {
         let icon = component.find(Icon);
 
         expect(li).toHaveClassName("heading");
+        //only one icon will render with no secondaryIcon
         expect(icon.length).toBe(1);
 
     });
@@ -249,6 +250,18 @@ describe('NavItem', () => {
 
             expect(component.find('a')).toBePresent();
             expect(component.find(Icon)).toBePresent();
+        });
+
+        it('will not render an anchor tag and an icon if showSecondary and secondaryIcon are both true', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showSecondary={false}
+                                         secondaryIcon={false}
+                                         showToolTip={false}
+                                         item={mockItem} />);
+
+            expect(component.find('a')).not.toBePresent();
+            //only one icons render when showSecondary && secondaryIcon are false
+            expect(component.find(Icon).length).toBe(1);
         });
 
         it('will render a hover component', () => {
