@@ -241,5 +241,74 @@ describe('NavItem', () => {
 
             expect(component.find('.mockHoverComponent')).not.toBePresent();
         });
+
+        it('will invoke onSelect if link is clicked', () => {
+            component = shallow(<NavItem item={{}}
+                                         isHeading={true}
+                                         secondaryIcon={false}
+                                         onSelect={mockFuncs.onSelect} />);
+
+            instance = component.instance();
+            instance.onClick(mockClickEvent);
+
+            expect(mockFuncs.onSelect).toHaveBeenCalledWith(mockClickEvent);
+        });
+
+        it('will invoke onSelect if the link is touched', () => {
+            let cloneMockClickEvent = _.cloneDeep(mockClickEvent);
+            cloneMockClickEvent.nativeEvent.type = 'touchend';
+
+            component = shallow(<NavItem item={{}}
+                                         isHeading={true}
+                                         secondaryIcon={false}
+                                         onSelect={mockFuncs.onSelect} />);
+
+            instance = component.instance();
+            instance.onClick(cloneMockClickEvent);
+
+            expect(mockFuncs.onSelect).toHaveBeenCalledWith(cloneMockClickEvent);
+        });
+
+        it('will invoke onSelect if space bar is pressed', () => {
+            component = shallow(<NavItem item={{}}
+                                         isHeading={true}
+                                         secondaryIcon={false}
+                                         onSelect={mockFuncs.onSelect} />);
+
+            instance = component.instance();
+            instance.onClick(mockMouseEvent);
+
+            expect(mockFuncs.onSelect).toHaveBeenCalledWith(mockMouseEvent);
+        });
+
+        it('will invoke onSelect if enter is pressed', () => {
+            let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
+            cloneMockMouseEvent.keyCode = 13;
+
+            component = shallow(<NavItem item={{}}
+                                         isHeading={true}
+                                         secondaryIcon={false}
+                                         onSelect={mockFuncs.onSelect} />);
+
+            instance = component.instance();
+            instance.onClick(cloneMockMouseEvent);
+
+            expect(mockFuncs.onSelect).toHaveBeenCalledWith(cloneMockMouseEvent);
+        });
+
+        it('will not invoke onClick if neither space bar or enter is pressed', () => {
+            let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
+            cloneMockMouseEvent.keyCode = 99;
+
+            component = shallow(<NavItem item={{}}
+                                         isHeading={true}
+                                         secondaryIcon={false}
+                                         onSelect={mockFuncs.onSelect} />);
+
+            instance = component.instance();
+            instance.onClick(cloneMockMouseEvent);
+
+            expect(mockFuncs.onSelect).not.toHaveBeenCalled();
+        });
     });
 });

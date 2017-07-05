@@ -45,7 +45,6 @@ let NavItem = React.createClass({
 
     onHeadingClick(event) {
         if (this.props.onClick && A11Utils.isA11yClick(event)) {
-            debugger;
             this.props.onClick(event);
         }
     },
