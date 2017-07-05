@@ -74,7 +74,7 @@ let NavItem = React.createClass({
 
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
-                {this.props.icon && <Icon iconFont={iconFont} icon={icon}/>}
+                <Icon iconFont={iconFont} icon={icon}/>
                 <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&
