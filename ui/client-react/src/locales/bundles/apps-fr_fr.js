@@ -789,6 +789,10 @@ export default {
             recordTitleFieldDefault: "Par défaut à Noun + ID",
             recordName: "Nom de l'enregistrement"
         },
+        emptyTableState: {
+            message: "Il n'y a pas encore de tables dans cette application",
+            createNewTable: "Créer une table"
+        },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
         },

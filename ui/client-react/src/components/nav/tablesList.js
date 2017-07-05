@@ -10,6 +10,8 @@ import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
+import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftnav';
+import _ from 'lodash';
 
 let TablesList = React.createClass({
 
@@ -18,7 +20,10 @@ let TablesList = React.createClass({
         onSelect: React.PropTypes.func,
         showReports: React.PropTypes.func.isRequired,
         expanded: React.PropTypes.bool,
-        onCreateNewTable: React.PropTypes.func
+        onCreateNewTable: React.PropTypes.func,
+        selectedApp: React.PropTypes.shape({
+            tables: React.PropTypes.array
+        })
     },
     getDefaultProps() {
         return {
@@ -84,8 +89,6 @@ let TablesList = React.createClass({
         </div>);
     },
 
-
-
     /**
      * get list of table links for left nav
      * @returns {*}
@@ -108,9 +111,6 @@ let TablesList = React.createClass({
                          open={true}/>;
         });
 
-        if (this.props.onCreateNewTable) {
-            tableItems.push(this.getNewTableItem());
-        }
         return tableItems;
     },
 
@@ -144,10 +144,22 @@ let TablesList = React.createClass({
      */
     getNewTableItem() {
         return <CreateNewItemButton handleOnClick={this.props.onCreateNewTable}
-                                    message="tableCreation.newTablePageTitle"
+                                    message="tableCreation.newTablePageTitle"a
                                     className="newTable"
                                     key="newTableButton"
         />;
+    },
+
+    renderEmptyStateOrButton() {
+        if (_.isEmpty(this.props.tables)) {
+            return <EmptyStateForLeftNav handleOnClick={this.props.onCreateNewTable}
+                                         emptyMessage="emptyTableState.message"
+                                         className="tableList"
+                                         iconMessage="emptyTableState.createNewTable"
+            />;
+        } else if (this.props.onCreateNewTable) {
+            return this.getNewTableItem();
+        }
     },
 
     render() {
@@ -158,7 +170,9 @@ let TablesList = React.createClass({
 
                     <NavItem item={{msg: 'nav.tablesHeading'}}
                              isHeading={true}
-                             onClick={this.onClickTables} open={true} />
+                             onClick={this.onClickTables}
+                             open={true} />
+
                     <li key="tableSearchBox" className={this.state.searching ? "search open" : "search"}>
                         <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"
                                    value={this.state.searchText}
@@ -168,8 +182,9 @@ let TablesList = React.createClass({
                     </li>
                 </ul>
 
-                <ul className="tablesList">
-                    {this.tablesList()}
+                <ul className={"tablesList"}>
+                        {this.tablesList()}
+                        {this.renderEmptyStateOrButton()}
                 </ul>
             </div>
         );

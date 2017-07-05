@@ -790,6 +790,10 @@ export default {
             recordTitleFieldDefault: "Standard auf Noun + ID",
             recordName: "Datensatzname"
         },
+        emptyTableState: {
+            message: 'Es gibt noch keine Tabellen in dieser App',
+            createNewtable: 'Erstellen Sie eine Tabelle'
+        },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
         },

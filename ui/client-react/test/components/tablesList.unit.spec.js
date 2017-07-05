@@ -35,18 +35,9 @@ describe('TablesList', () => {
         TablesListRewireAPI.__ResetDependency__('Link');
     });
 
-    it('renders a new table button', () => {
-        component = shallow(<TablesList getAppTables={mockFunc.getAppTables}
-                                        onCreateNewTable={mockFunc.onCreateNewTable} />);
-
-        expect(component.find(SearchBox).length).toEqual(1);
-        expect(component.find(NavItem).length).toEqual(4);
-        expect(component.find(CreateNewItemButton).length).toEqual(1);
-    });
-
     it('sets searching to false when clicked', () => {
         component = shallow(<TablesList getAppTables={mockFunc.getAppTables}
-                                        onCreateNewTable={mockFunc.onCreateNewTable} />);
+                                        onCreateNewTable={mockFunc.onCreateNewTable}/>);
 
         instance = component.instance();
         component.setState({searching: true});
@@ -57,7 +48,7 @@ describe('TablesList', () => {
 
     it('sets searching to true and searchText to an empty string when clicked', () => {
         component = mount(<TablesList getAppTables={mockFunc.getAppTables}
-                                        onCreateNewTable={mockFunc.onCreateNewTable} />);
+                                      onCreateNewTable={mockFunc.onCreateNewTable}/>);
 
         instance = component.instance();
         component.setState({searching: false});
@@ -69,9 +60,9 @@ describe('TablesList', () => {
 
     it('sets searchText to target', () => {
         component = shallow(<TablesList getAppTables={mockFunc.getAppTables}
-                                        onCreateNewTable={mockFunc.onCreateNewTable} />);
+                                        onCreateNewTable={mockFunc.onCreateNewTable}/>);
 
-        let ev = {target:{value: 'mockSearchValue'}};
+        let ev = {target: {value: 'mockSearchValue'}};
         instance = component.instance();
         component.setState({searching: false});
         instance.onChangeSearch(ev);
@@ -81,12 +72,46 @@ describe('TablesList', () => {
 
     it('sets searchText to an empty string', () => {
         component = shallow(<TablesList getAppTables={mockFunc.getAppTables}
-                                        onCreateNewTable={mockFunc.onCreateNewTable} />);
+                                        onCreateNewTable={mockFunc.onCreateNewTable}/>);
 
         instance = component.instance();
         component.setState({searchText: 'mockSearchValue'});
         instance.onClearSearch();
 
         expect(component.state().searchText).toEqual('');
+    });
+
+    it('renders a new button', () => {
+        component = shallow(<TablesList getAppTables={mockFunc.getAppTables}
+                                        onCreateNewTable={mockFunc.onCreateNewTable}
+                                        tables={['1', '2']}/>);
+
+        expect(component.find(SearchBox).length).toEqual(1);
+        expect(component.find(NavItem).length).toEqual(4);
+        expect(component.find(CreateNewItemButton)).toBePresent();
+        expect(component.find('.emptyState')).not.toBePresent();
+        expect(component.find('.createNewIcon')).not.toBePresent();
+        expect(component.find('.iconMessage')).not.toBePresent();
+    });
+
+    it('renders empty message when there are no tables', () => {
+        component = mount(<TablesList getAppTables={mockFunc.getAppTables}
+                                        onCreateNewTable={mockFunc.onCreateNewTable}
+                                        tables={[]}/>);
+
+        expect(component.find(CreateNewItemButton)).not.toBePresent();
+        expect(component.find('.emptyState')).toBePresent();
+        expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
+    });
+
+    it('renders empty message when tables are undefined', () => {
+        component = mount(<TablesList getAppTables={mockFunc.getAppTables}
+                                      onCreateNewTable={mockFunc.onCreateNewTable}/>);
+
+        expect(component.find(CreateNewItemButton)).not.toBePresent();
+        expect(component.find('.emptyState')).toBePresent();
+        expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
     });
 });
