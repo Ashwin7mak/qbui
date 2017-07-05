@@ -96,8 +96,9 @@ describe('TablesList', () => {
 
     it('renders empty message when there are no tables', () => {
         component = mount(<TablesList getAppTables={mockFunc.getAppTables}
-                                        onCreateNewTable={mockFunc.onCreateNewTable}
-                                        tables={[]}/>);
+                                      onCreateNewTable={mockFunc.onCreateNewTable}
+                                      tables={[]}
+                                      expanded={true}/>);
 
         expect(component.find(CreateNewItemButton)).not.toBePresent();
         expect(component.find('.emptyState')).toBePresent();
@@ -107,7 +108,20 @@ describe('TablesList', () => {
 
     it('renders empty message when tables are undefined', () => {
         component = mount(<TablesList getAppTables={mockFunc.getAppTables}
-                                      onCreateNewTable={mockFunc.onCreateNewTable}/>);
+                                      onCreateNewTable={mockFunc.onCreateNewTable}
+                                      expanded={true}/>);
+
+        expect(component.find(CreateNewItemButton)).not.toBePresent();
+        expect(component.find('.emptyState')).toBePresent();
+        expect(component.find('.createNewIcon')).toBePresent();
+        expect(component.find('.iconMessage')).toBePresent();
+    });
+
+    it('doesn\'t renders empty message when the leftNav is collapsed', () => {
+        component = mount(<TablesList getAppTables={mockFunc.getAppTables}
+                                      onCreateNewTable={mockFunc.onCreateNewTable}
+                                      tables={[]}
+                                      expanded={false}/>);
 
         expect(component.find(CreateNewItemButton)).not.toBePresent();
         expect(component.find('.emptyState')).toBePresent();
