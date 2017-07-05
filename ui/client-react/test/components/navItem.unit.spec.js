@@ -304,7 +304,7 @@ describe('NavItem', () => {
             expect(mockFuncs.onSelect).toHaveBeenCalledWith(cloneMockMouseEvent);
         });
 
-        it('will not invoke onClick if neither space bar or enter is pressed', () => {
+        it('will not invoke onSelect if neither space bar or enter is pressed', () => {
             let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
             cloneMockMouseEvent.keyCode = 99;
 
