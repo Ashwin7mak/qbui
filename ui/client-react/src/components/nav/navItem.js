@@ -67,11 +67,8 @@ let NavItem = React.createClass({
             classes += " selected";
         }
 
-        if (!icon || !iconFont) {
+        if (!icon) {
             icon = 'favicon';
-        }
-
-        if (!iconFont) {
             iconFont = AVAILABLE_ICON_FONTS.DEFAULT;
         }
 
