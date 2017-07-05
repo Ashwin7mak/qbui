@@ -99,8 +99,6 @@
         // the client to use
         client: client,
 
-        sharedSecret: 'NO_DEFAULT',
-
         /**
          * Scripts for Wistia video popover
          * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
