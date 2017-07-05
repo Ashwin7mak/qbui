@@ -79,6 +79,7 @@ export const AppsList = React.createClass({
     },
 
     renderEmptyStateOrNewButton() {
+        // Using expanded to hide the error message for apps when collapsed
         return (_.isEmpty(this.props.apps) && this.props.expanded) ?
             <EmptyStateForLeftNav handleOnClick={this.createNewApp}
                                   emptyMessage="emptyAppState.message"

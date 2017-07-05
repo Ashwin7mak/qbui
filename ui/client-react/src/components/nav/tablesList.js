@@ -10,7 +10,7 @@ import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
-import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftnav';
+import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
 import _ from 'lodash';
 
 let TablesList = React.createClass({
@@ -151,6 +151,7 @@ let TablesList = React.createClass({
     },
 
     renderEmptyStateOrButton() {
+        // Using expanded to hide the error message for tables when collapsed
         if (_.isEmpty(this.props.tables) && this.props.expanded) {
             return <EmptyStateForLeftNav handleOnClick={this.props.onCreateNewTable}
                                          emptyMessage="emptyTableState.message"
