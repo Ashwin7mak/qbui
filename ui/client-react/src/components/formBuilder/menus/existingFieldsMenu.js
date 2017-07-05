@@ -14,21 +14,23 @@ export class ExistingFieldsMenu extends Component {
         return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
     };
 
+
+
     render = () => {
-        let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
+        let {isCollapsed, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
         return (
             <ListOfElements
                 tabIndex={toolPaletteTabIndex}
                 childrenTabIndex={toolPaletteChildrenTabIndex}
                 toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
                 hasKeyBoardFocus={toolPaletteFocus}
-                renderer={DraggableFieldTokenInMenu}
+                headerElementRenderer={this.getHeaderElementRenderer}
+                childElementRenderer={DraggableFieldTokenInMenu}
                 isCollapsed={isCollapsed}
                 animateChildren={true}
-                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'Existing Fields'}] : undefined}
-                isOpen={isOpen}
+                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'This table', collapsible: true, isOpen: true}] : undefined}
                 isFilterable={true}
-                hideTitle={true}
+                hideTitle={false}
                 emptyMessage={this.buildEmptyState()}
             />
         );

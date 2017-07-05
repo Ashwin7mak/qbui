@@ -2,6 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import FlipMove from 'react-flip-move';
 import Locale from 'REUSE/locales/locale';
+import Collapsible from 'react-collapsible';
+import Icon from '../icon/icon';
 
 // IMPORT FROM CLIENT REACT
 import SearchBox from 'APP/components/search/searchBox';
@@ -93,7 +95,7 @@ class ListOfElements extends Component {
         if (childElements) {
             return childElements.map((childElement, index) => {
                 // If the element has a specific renderer, use that. Otherwise, use the default renderer passed in.
-                let ElementRenderer = childElement.alternateRenderer || this.props.renderer;
+                let ElementRenderer = childElement.alternateRenderer || this.props.childElementRenderer;
 
                 return (
                     <li key={childElement.key || index} className="listOfElementsItem">
@@ -108,6 +110,38 @@ class ListOfElements extends Component {
         }
     };
 
+    renderHeaderElement = (element) => {
+        let header;
+        if (this.props.headerElementRenderer) {
+            header = <this.props.headerElementRenderer {...element} />;
+        } else {
+            header = element.title;
+        }
+
+        let classes = ["listOfElementsItemHeader"];
+        if (element.collapsible) {
+            classes.push("collapsibleHeader");
+        }
+        return (
+            <div className={classes.join(" ")}>
+                {element.collapsible && <Icon icon="caret-up" className="headerCollapseIcon"></Icon>}
+                <div>{header}</div>
+            </div>
+        );
+    }
+
+    renderElementGroup = (element, index) => {
+        if (this.props.animateChildren) {
+            return <FlipMove typeName="ul" className="animatedListOfElementsItemList">
+                {this.renderElements(element.children)}
+            </FlipMove>;
+        } else {
+            return <ul className="listOfElementsItemList">
+                {this.renderElements(element.children)}
+            </ul>;
+        }
+    }
+
     /**
      * Takes the SUPPORTED_NEW_FIELD_TYPES constant and maps them to a displayed list of grouped field types
      * @returns {XML}
@@ -120,19 +154,21 @@ class ListOfElements extends Component {
         if (this.props.elements && this.props.elements.length > 0) {
             return this.props.elements.map((element, index) => {
                 if (element.children) {
-                    return (
-                        <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
-                            {!this.props.hideTitle && <h6 className="listOfElementsItemHeader">{element.title}</h6>}
-                            {this.props.animateChildren ?
-                                <FlipMove typeName="ul" className="animatedListOfElementsItemList">
-                                    {this.renderElements(element.children)}
-                                </FlipMove> :
-                                <ul className="listOfElementsItemList">
-                                    {this.renderElements(element.children)}
-                                </ul>
-                            }
-                        </li>
-                    );
+                    if (!this.props.hideTitle && element.title && element.collapsible) {
+                        return (
+                            <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
+                                <Collapsible trigger={this.renderHeaderElement(element)} open={element.isOpen}>
+                                    {this.renderElementGroup(element, index)}
+                                </Collapsible>
+                            </li>);
+                    } else {
+                        return (
+                            <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
+                                {!this.props.hideTitle && this.renderHeaderElement(element)}
+                                {this.renderElementGroup(element, index)}
+                            </li>
+                        );
+                    }
                 }
                 return this.renderElements([element]);
             });
@@ -191,10 +227,6 @@ ListOfElements.propTypes = {
     animateChildren: PropTypes.bool,
 
     /**
-     * Show the list of elements in an open state */
-    isOpen: PropTypes.bool,
-
-    /**
      * Hide the title of a group of elements */
     hideTitle: PropTypes.bool,
 
@@ -203,8 +235,12 @@ ListOfElements.propTypes = {
     isFilterable: PropTypes.bool,
 
     /**
-     * Tokens are being passed in as a renderer to allow this component to be reusable */
-    renderer: PropTypes.func,
+     * Custom renderer for header elements */
+    headerElementRenderer: PropTypes.func,
+
+    /**
+     * Custom renderer for child elements */
+    childElementRenderer: PropTypes.func,
 
     /**
      * For Keyboard Nav: tabIndex for listOfElements */
@@ -234,6 +270,15 @@ ListOfElements.propTypes = {
         /**
          * The text to display for the field type. This property will be used for filtering. It should be localized. */
         title: PropTypes.string.isRequired,
+
+        /**
+         * Works in conjunction with the title prop on the element. If a title is supplied, rendered as a collapsible header to the set of child elements
+         */
+        collapsible: PropTypes.bool,
+
+        /**
+         * Show the list of elements in an open state */
+        isOpen: PropTypes.bool,
 
         /**
          * Optional: Any child elements that should be displayed in a group.
