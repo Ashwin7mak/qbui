@@ -148,9 +148,7 @@ export const generateAutomation = (appId, automation) => {
         return new Promise((resolve, reject) => {
             if (appId) {
                 logger.debug(`AutomationsAction.generateAutomation: generating automation for appId: ${appId}`);
-
                 dispatch(event(null, types.GENERATE_AUTOMATION, {appId: appId, automation: automation}));
-
                 let automationService = new AutomationService();
                 automationService.createAutomation(appId, automation)
                     .then((response) => {
@@ -166,7 +164,7 @@ export const generateAutomation = (appId, automation) => {
                         reject();
                     });
             } else {
-                logger.error(`automationService.saveAutomation: Missing required input parameters.  appId: ${appId}, automationId: ${automationId}`);
+                logger.error(`automationService.saveAutomation: Missing required input parameters.  appId: ${appId}`);
                 NotificationManager.error(Locale.getMessage('automation.saveAutomation.error'), Locale.getMessage('failed'));
                 dispatch(event(null, types.SAVE_AUTOMATION_FAILED, 500));
                 reject();

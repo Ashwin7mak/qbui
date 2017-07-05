@@ -126,32 +126,11 @@ const automation = (
             type:"EMAIL",
             active: true,
             inputs: [
-                {
-                    name: "subject",
-                    type: "TEXT",
-                    defaultValue: null
-                },
-                {
-                    name:"toAddress",
-                    type:"TEXT",
-                    defaultValue: null
-                },
-                {
-                    name:"body",
-                    type:"TEXT",
-                    defaultValue: null,
-                },
-                {
-                    name:"fromAddress",
-                    type:"TEXT",
-                    defaultValue: "notify@quickbaserocks.com",
-                },
-                {
-                    name:"ccAddress",
-                    type:"TEXT",
-                    defaultValue: null,
-                }
-
+                {name: "subject", type: "TEXT", defaultValue: null},
+                {name:"toAddress", type:"TEXT", defaultValue: null},
+                {name:"body", type:"TEXT", defaultValue: null},
+                {name:"fromAddress", type:"TEXT", defaultValue: "notify@quickbaserocks.com"},
+                {name:"ccAddress", type:"TEXT", defaultValue: null,}
             ],
             steps: [
                 {

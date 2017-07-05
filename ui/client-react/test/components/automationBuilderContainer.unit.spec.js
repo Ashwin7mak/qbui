@@ -225,5 +225,13 @@ describe('AutomationBuilderContainer', () => {
             expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
         });
 
+        it('test cancel button click', () => {
+            let saveButton = component.find('.alternativeTrowserFooterButton');
+            saveButton.simulate('click');
+
+            expect(propsWithCreate.generateAutomation).not.toHaveBeenCalled();
+            expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
+        });
+
     });
 });
