@@ -5,14 +5,22 @@ import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/n
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../reuse/client/src/components/icon/icon.js';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import {Link} from 'react-router-dom';
+import _ from 'lodash';
 
 let component;
 let instance;
+let mockHoverComponent = <div className="mockHoverComponent"></div>;
 let secondaryIcon = 'mockSecondaryIcon';
-let mockEvent = {
+
+let mockClickEvent = {
     nativeEvent: {type: 'click'}
 };
-let mockHoverComponent = <div className="mockHoverComponent"></div>;
+
+let mockMouseEvent = {
+    nativeEvent: {type: 'keydown'},
+    keyCode: 32
+};
+
 let mockItem = {
     name: 'mockName'
 };
@@ -93,18 +101,73 @@ describe('NavItem', () => {
 
     });
 
-    it('will invoke onClick if heading is clicked on', () => {
+    it('will invoke onClick if heading is clicked', () => {
         component = shallow(<NavItem item={{}}
                                      isHeading={true}
                                      secondaryIcon={false}
                                      onClick={mockFuncs.onClick} />);
 
         instance = component.instance();
-        spyOn(instance, 'onHeadingClick').and.callThrough();
-        instance.onHeadingClick(mockEvent);
+        instance.onHeadingClick(mockClickEvent);
 
-        expect(instance.onHeadingClick).toHaveBeenCalled();
-        expect(mockFuncs.onClick).toHaveBeenCalledWith(mockEvent);
+        expect(mockFuncs.onClick).toHaveBeenCalledWith(mockClickEvent);
+    });
+
+    it('will invoke onClick if the heading is touched', () => {
+        let cloneMockClickEvent = _.cloneDeep(mockClickEvent);
+        cloneMockClickEvent.nativeEvent.type = 'touchend';
+
+        component = shallow(<NavItem item={{}}
+                                     isHeading={true}
+                                     secondaryIcon={false}
+                                     onClick={mockFuncs.onClick} />);
+
+        instance = component.instance();
+        instance.onHeadingClick(cloneMockClickEvent);
+
+        expect(mockFuncs.onClick).toHaveBeenCalledWith(cloneMockClickEvent);
+    });
+
+    it('will invoke onClick if space bar is pressed', () => {
+        component = shallow(<NavItem item={{}}
+                                     isHeading={true}
+                                     secondaryIcon={false}
+                                     onClick={mockFuncs.onClick} />);
+
+        instance = component.instance();
+        instance.onHeadingClick(mockMouseEvent);
+
+        expect(mockFuncs.onClick).toHaveBeenCalledWith(mockMouseEvent);
+    });
+
+    it('will invoke onClick if enter is pressed', () => {
+        let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
+        cloneMockMouseEvent.keyCode = 13;
+
+        component = shallow(<NavItem item={{}}
+                                     isHeading={true}
+                                     secondaryIcon={false}
+                                     onClick={mockFuncs.onClick} />);
+
+        instance = component.instance();
+        instance.onHeadingClick(cloneMockMouseEvent);
+
+        expect(mockFuncs.onClick).toHaveBeenCalledWith(cloneMockMouseEvent);
+    });
+
+    it('will not invoke onClick if neither space bar or enter is pressed', () => {
+        let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
+        cloneMockMouseEvent.keyCode = 99;
+
+        component = shallow(<NavItem item={{}}
+                                     isHeading={true}
+                                     secondaryIcon={false}
+                                     onClick={mockFuncs.onClick} />);
+
+        instance = component.instance();
+        instance.onHeadingClick(cloneMockMouseEvent);
+
+        expect(mockFuncs.onClick).not.toHaveBeenCalled();
     });
 
     it('will render OverLayTrigger if showToolTip is true and isHeading is false', () => {
