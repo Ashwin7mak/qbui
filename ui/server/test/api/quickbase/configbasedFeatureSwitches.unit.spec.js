@@ -34,7 +34,7 @@ describe("Validate configuration based featureSwitch Api", function() {
             "name": "Feature C",
             "defaultOn": false,
             "description": "description",
-            "RealmsOveride":[
+            "realmsOveride":[
                 {
                     "realmId": "1234567",
                     "overrideStateOn": true
@@ -54,7 +54,7 @@ describe("Validate configuration based featureSwitch Api", function() {
             "name": "Feature A",
             "defaultOn": true,
             "description": "description",
-            "RealmsOveride":[
+            "realmsOveride":[
                 {
                     "realmId": "1234567",
                     "overrideStateOn": false
@@ -76,7 +76,7 @@ describe("Validate configuration based featureSwitch Api", function() {
         {
             "name": "Feature C",
             "defaultOn": true,
-            "RealmsOveride":[
+            "realmsOveride":[
                 {
                     "realmId": "1234567",
                     "overrideStateOn": false
@@ -86,7 +86,7 @@ describe("Validate configuration based featureSwitch Api", function() {
         {
             "name": "Feature E",
             "defaultOn": true,
-            "RealmsOveride":[
+            "realmsOveride":[
                 {
                     "realmId": "1234567",
                     "overrideStateOn": false
