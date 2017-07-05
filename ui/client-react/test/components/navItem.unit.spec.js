@@ -56,6 +56,14 @@ describe('NavItem', () => {
         expect(component.find('.qbIcon .iconUISturdy-favicon')).toBePresent();
     });
 
+    it('will render the icon the user chooses', () => {
+        component = mount(<NavItem item={{}}
+                                   icon="Customer"
+                                   iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} />);
+
+        expect(component.find('.qbIcon .iconTableSturdy-Customer')).toBePresent();
+    });
+
     it('will render a heading if isHeading is true with a secondaryIcon', () => {
         component = shallow(<NavItem item={{}}
                                    isHeading={true}
