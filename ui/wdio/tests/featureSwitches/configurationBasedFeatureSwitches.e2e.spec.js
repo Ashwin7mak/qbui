@@ -20,7 +20,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.recordBase.apiBase.initialize().then(function() {
+            return e2eBase.basicAppSetup(null, 5).then(function() {
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
