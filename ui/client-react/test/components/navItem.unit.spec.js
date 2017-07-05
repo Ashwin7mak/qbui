@@ -101,7 +101,7 @@ describe('NavItem', () => {
         expect(component.find(OverlayTrigger)).toBePresent();
     });
 
-    it('will not render OverLayTrigger if showToolTip is true and isHeading is false', () => {
+    it('will not render OverLayTrigger if showToolTip is false and isHeading is false', () => {
         component = shallow(<NavItem isHeading={false}
                                      showToolTip={false}
                                      item={mockItem} />);
