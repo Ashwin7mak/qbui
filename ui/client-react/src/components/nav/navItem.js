@@ -31,7 +31,9 @@ let NavItem = React.createClass({
         return {
             showSecondary: true,
             isHeading: false,
-            showToolTip: false
+            showToolTip: false,
+            icon: 'favicon',
+            iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
 
@@ -101,10 +103,5 @@ let NavItem = React.createClass({
         }
     }
 });
-
-NavItem.defaultProps = {
-    icon: 'favicon',
-    iconFont: AVAILABLE_ICON_FONTS.DEFAULT
-};
 
 export default NavItem;
