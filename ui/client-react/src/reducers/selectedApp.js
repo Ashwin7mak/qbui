@@ -2,10 +2,19 @@
  * Created by rbeyer on 6/12/17.
  */
 import * as types from '../actions/types';
+import _ from 'lodash';
 
 // Return only the appRoles from selectedApp object, else returns null
 export const getAppRoles = (state) => {
     return state.roles.length > 0 ? state.roles : [];
+};
+
+export const getFilteredAppRoles = (state) => {
+    let role = state.selectedApp.stageSelectedRoleId;
+    if (role === null) {return getAppRoles(state.selectedApp);}
+    return _.filter(getAppRoles(state.selectedApp), function(appRole) {
+        return appRole.id === role;
+    });
 };
 
 const selectedApp = (
@@ -17,6 +26,7 @@ const selectedApp = (
         isLoading: false,
         error: false,
         changeUserRoleDialog: false,
+        stageSelectedRoleId: null,
     },
     action) => {
 
@@ -60,6 +70,12 @@ const selectedApp = (
             changeUserRoleDialog: action.content.isOpen
         };
     }
+
+    case types.STAGE_SELECTED_ROLE_ID:
+        return {
+            ...state,
+            stageSelectedRoleId: action.content.roleId
+        };
 
     default:
         // return existing state by default in redux
