@@ -109,6 +109,9 @@
             modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, role);
         }},
 
+        /**
+         * Helper function to remove user from app
+         */
         removeUserFromApp: {value: function(index, cancel) {
             // Select the checkbox
             ReportTableActionsPO.selectRecordRowCheckbox(index);
@@ -125,6 +128,9 @@
             }
         }},
 
+        /**
+         * Helper function to change user role in app
+         */
         changeUserRoleInApp: {value: function(index, role, cancel) {
             // Select the checkbox
             ReportTableActionsPO.selectRecordRowCheckbox(index);
