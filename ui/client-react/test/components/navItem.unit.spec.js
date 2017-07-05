@@ -9,7 +9,9 @@ import {Link} from 'react-router-dom';
 let component;
 let instance;
 let secondaryIcon = 'mockSecondaryIcon';
-let mockEvent = {};
+let mockEvent = {
+    nativeEvent: {type: 'click'}
+};
 let mockHoverComponent = <div className="mockHoverComponent"></div>;
 let mockItem = {
     name: 'mockName'
@@ -18,7 +20,8 @@ let mockItem = {
 const I18nMessageMock = () => <div>test</div>;
 
 let mockFuncs = {
-    onClick() {}
+    onClick() {},
+    onSelect() {}
 };
 
 const LinkMock = React.createClass({
@@ -33,6 +36,7 @@ describe('NavItem', () => {
         NavItemRewireAPI.__Rewire__('Link', LinkMock);
         NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         spyOn(mockFuncs, 'onClick');
+        spyOn(mockFuncs, 'onSelect');
     });
 
     afterEach(() => {
@@ -89,20 +93,16 @@ describe('NavItem', () => {
 
     });
 
-    xit('will invoke onClick if heading is clicked on', () => {
-        instance = component.instance();
-        spyOn(instance, 'onHeadingClick');
-
+    it('will invoke onClick if heading is clicked on', () => {
         component = shallow(<NavItem item={{}}
-                                   isHeading={true}
-                                   secondaryIcon={false}
-                                   onClick={mockFuncs.onClick} />);
+                                     isHeading={true}
+                                     secondaryIcon={false}
+                                     onClick={mockFuncs.onClick} />);
 
-        let li = component.find('li');
-        let icon = component.find(Icon);
-        icon.simulate('click');
+        instance = component.instance();
+        spyOn(instance, 'onHeadingClick').and.callThrough();
+        instance.onHeadingClick(mockEvent);
 
-        expect(li.length).toBe(1);
         expect(instance.onHeadingClick).toHaveBeenCalled();
         expect(mockFuncs.onClick).toHaveBeenCalledWith(mockEvent);
     });
