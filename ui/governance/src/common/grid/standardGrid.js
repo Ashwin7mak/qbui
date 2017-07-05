@@ -13,6 +13,7 @@ import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
+import QBLoader from "../../../../reuse/client/src/components/bodyMovin/bodyMovin";
 import "./standardGrid.scss";
 
 // Helper function to return additional props to add to a row element
@@ -71,31 +72,35 @@ export class StandardGrid extends Component {
     renderItemsExist = () => {
         return (
             <div className="gridContainer">
-                <Table.Provider
-                    className="qbGrid"
-                    columns={this.getColumns()}
-                    onScroll={this.handleScroll}
-                    components={{
-                        header: {
-                            cell: this.props.headerRenderer
-                        },
-                        body: {
-                            row: QbRow,
-                            cell: this.props.cellRenderer
-                        }
-                    }}
-                >
-                    <Table.Header className="qbHeader"/>
+                {_.isNull(this.props.items) ?
+                    <QBLoader/> :
 
-                    {/*If there is no data at all, render an empty grid, else render this.props.items*/}
-                    <Table.Body
-                        className="qbTbody"
-                        rows={_.isNull(this.props.items) ? [] : this.props.items}
-                        rowKey={this.getUniqueRowKey.bind(this)}
-                        onRow={onRowFn}
-                        ref={this.bodyRef}
-                    />
-                </Table.Provider>
+                    <Table.Provider
+                        className="qbGrid"
+                        columns={this.getColumns()}
+                        onScroll={this.handleScroll}
+                        components={{
+                            header: {
+                                cell: this.props.headerRenderer
+                            },
+                            body: {
+                                row: QbRow,
+                                cell: this.props.cellRenderer
+                            }
+                        }}
+                    >
+                        <Table.Header className="qbHeader"/>
+
+                        {/*If there is no data at all, render an empty grid, else render this.props.items*/}
+                        <Table.Body
+                            className="qbTbody"
+                            rows={_.isNull(this.props.items) ? [] : this.props.items}
+                            rowKey={this.getUniqueRowKey.bind(this)}
+                            onRow={onRowFn}
+                            ref={this.bodyRef}
+                        />
+                    </Table.Provider>
+                }
             </div>
         );
     };
