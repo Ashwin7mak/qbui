@@ -12,7 +12,6 @@
     describe('Configuration based feature switches tests: ', function() {
         let realmName;
         let realmId;
-        let testApp;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -48,7 +47,7 @@
 
             browser.waitForVisible('.mainContent');
             let element = browser.element('h1');
-            //make sure FS heading is visible
+            //make sure FS heading is visible (Enabled in - '/master.featureSwitches.json')
             expect(element.isVisible()).toBe(true);
             //verify the heading text
             expect(element.getText()).toEqual('Feature Switches');
@@ -59,7 +58,7 @@
 
             browser.waitForVisible('.mainContent');
             let element = browser.element('.featureSwitchesLoader .featureSwitches');
-            //make sure FS heading is visible
+            //make sure FS heading that belongs to the actual UI is not visible (Disabled in - '/master.featureSwitches.json')
             expect(element.isVisible()).toBe(false);
         });
 
