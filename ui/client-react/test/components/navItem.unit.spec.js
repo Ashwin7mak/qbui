@@ -50,8 +50,14 @@ describe('NavItem', () => {
         expect(component).toHaveProp('iconFont', AVAILABLE_ICON_FONTS.DEFAULT);
     });
 
+    it('will render a default icon of favicon if no icon is passed in', () => {
+        component = mount(<NavItem item={{}} />);
+
+        expect(component.find('.qbIcon .iconUISturdy-favicon')).toBePresent();
+    });
+
     it('will render a heading if isHeading is true with a secondaryIcon', () => {
-        component = mount(<NavItem item={{}}
+        component = shallow(<NavItem item={{}}
                                    isHeading={true}
                                    secondaryIcon={secondaryIcon} />);
 
@@ -63,7 +69,7 @@ describe('NavItem', () => {
     });
 
     it('will render a heading if isHeading is true WITHOUT a secondaryIcon', () => {
-        component = mount(<NavItem item={{}}
+        component = shallow(<NavItem item={{}}
                                    isHeading={true}
                                    secondaryIcon={false} />);
 
@@ -79,7 +85,7 @@ describe('NavItem', () => {
         instance = component.instance();
         spyOn(instance, 'onHeadingClick');
 
-        component = mount(<NavItem item={{}}
+        component = shallow(<NavItem item={{}}
                                    isHeading={true}
                                    secondaryIcon={false}
                                    onClick={mockFuncs.onClick} />);
@@ -94,7 +100,7 @@ describe('NavItem', () => {
     });
 
     it('will render OverLayTrigger if showToolTip is true and isHeading is false', () => {
-        component = mount(<NavItem isHeading={false}
+        component = shallow(<NavItem isHeading={false}
                                    showToolTip={true}
                                    item={mockItem} />);
 
