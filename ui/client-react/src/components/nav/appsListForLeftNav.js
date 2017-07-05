@@ -27,12 +27,15 @@ export const AppsList = React.createClass({
     onClearSearch() {
         this.setState({searchText:""});
     },
+
     onChangeSearch(ev) {
         this.setState({searchText: ev.target.value});
     },
+
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
+
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
             // Give all apps in the left nav list a default icon of 'favicon'

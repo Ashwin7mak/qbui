@@ -7,7 +7,9 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
 import * as types from '../actions/types';
+import constants from '../../../common/src/constants';
 import * as query from '../constants/query';
+import {getTable} from '../reducers/app';
 
 let logger = new Logger();
 
@@ -78,6 +80,59 @@ export const loadTableHomePage = (context, appId, tblId, offset, rows) => {
                 dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
                 reject();
             }
+        });
+    };
+};
+
+/**
+ * table was succesfully saved
+ */
+export const tableSaved = (tableInfo) => ({
+    type: types.TABLE_SAVED,
+    tableInfo
+});
+
+/**
+ * save in progress
+ */
+export const savingTable = () => ({
+    type: types.SAVING_TABLE
+});
+
+/**
+ * save failed
+ */
+export const savingTableFailed = () => ({
+    type: types.SAVING_TABLE_FAILED
+});
+
+export const updateTable = (appId, tableId, table) => {
+
+    return (dispatch, getState) => {
+        if (!table) {
+            table = getTable(getState(), appId, tableId);
+        }
+
+        return new Promise((resolve, reject) => {
+            dispatch(savingTable());
+            const tableService = new TableService();
+
+            const promise = tableService.updateTable(appId, tableId, table);
+
+            promise.then(response => {
+                dispatch(tableSaved(table));
+                resolve(response);
+            }).catch(error => {
+                dispatch(savingTableFailed(error));
+                if (error.response) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
+                        logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.updateTable:');
+                    } else {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.updateTable:');
+                    }
+                }
+                reject(error);
+            });
         });
     };
 };
