@@ -74,13 +74,6 @@ describe('AutomationBuilderContainer', () => {
             jasmineEnzyme();
         });
 
-        it('test get app id from app in props', () => {
-            component = shallow(<AutomationBuilderContainer {...propsWithAuto}/>);
-            expect(component.instance().getAppId()).toEqual("app1");
-            expect(component.instance().getAutomationId()).toEqual("auto1");
-            expect(component.instance().getAutomationName()).toEqual("Auto_1");
-        });
-
         it('test get app id from app id in matches', () => {
             let localProps = {...props, app: undefined, match:{params:{appId: 'app2', automationId: 'autoOther'}}};
             component = shallow(<AutomationBuilderContainer {...localProps}/>);
