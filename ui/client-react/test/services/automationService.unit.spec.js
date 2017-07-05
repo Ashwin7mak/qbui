@@ -60,7 +60,7 @@ describe('AutomationService functions', () => {
         let auto1 = {name:"Auto_1", active: true, type:"EMAIL"};
         let url = StringUtils.format(automationService.API.GET_AUTOMATIONS, [appId]);
 
-        automationService.createAutomation(appId,auto1);
+        automationService.createAutomation(appId, auto1);
         expect(BaseService.prototype.post).toHaveBeenCalledWith(url, auto1);
-    })
+    });
 });

@@ -68,7 +68,7 @@ describe('Test AutomationActions function success workflow', () => {
         saveAutomation() {
             return Promise.resolve(mockSaveAutomationResponse);
         }
-        createAutomation(){
+        createAutomation() {
             return Promise.resolve(mockGenerateAutomationResponse);
         }
         testAutomation() {
@@ -156,7 +156,7 @@ describe('Test AutomationActions function success workflow', () => {
 
     it('verify generateAutomation action', (done) => {
         const expectedActions = [
-            event(null, types.GENERATE_AUTOMATION, {appId: appId,automation: auto2}),
+            event(null, types.GENERATE_AUTOMATION, {appId: appId, automation: auto2}),
             event(null, types.SAVE_AUTOMATION_SUCCESS, mockGenerateAutomationResponse.data)
         ];
 

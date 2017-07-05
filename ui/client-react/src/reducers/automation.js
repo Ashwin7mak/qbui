@@ -130,7 +130,7 @@ const automation = (
                 {name:"toAddress", type:"TEXT", defaultValue: null},
                 {name:"body", type:"TEXT", defaultValue: null},
                 {name:"fromAddress", type:"TEXT", defaultValue: "notify@quickbaserocks.com"},
-                {name:"ccAddress", type:"TEXT", defaultValue: null,}
+                {name:"ccAddress", type:"TEXT", defaultValue: null}
             ],
             steps: [
                 {
