@@ -38,17 +38,13 @@ let NavItem = React.createClass({
     },
 
     onClick(event) {
-        debugger;
         if (this.props.onSelect && A11Utils.isA11yClick(event)) {
-            debugger;
             this.props.onSelect(event);
         }
     },
 
     onHeadingClick(event) {
-        debugger;
         if (this.props.onClick && A11Utils.isA11yClick(event)) {
-            debugger;
             this.props.onClick(event);
         }
     },
