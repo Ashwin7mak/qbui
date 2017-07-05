@@ -213,6 +213,15 @@ describe('NavItem', () => {
             expect(component.find('.withSecondary')).toBePresent();
         });
 
+        it('will not render a className withSecondary if secondaryIcon is false', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showToolTip={false}
+                                         secondaryIcon={false}
+                                         item={mockItem} />);
+
+            expect(component.find('.withSecondary')).not.toBePresent();
+        });
+
         it('will render a className selected if selected is true', () => {
             component = shallow(<NavItem isHeading={false}
                                          showToolTip={false}
@@ -220,6 +229,15 @@ describe('NavItem', () => {
                                          item={mockItem} />);
 
             expect(component.find('.selected')).toBePresent();
+        });
+
+        it('will not render a className selected if selected is false', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showToolTip={false}
+                                         selected={false}
+                                         item={mockItem} />);
+
+            expect(component.find('.selected')).not.toBePresent();
         });
 
         it('will render an anchor tag and an icon if showSecondary and secondaryIcon are both true', () => {
