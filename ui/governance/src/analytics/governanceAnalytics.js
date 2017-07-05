@@ -7,6 +7,28 @@ import {getPageLoadTime, getGridLoadTime} from "../analytics/performanceTimingRe
 import _ from "lodash";
 
 export class GovernanceAnalytics extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            pageLoaded: false
+        }
+    }
+
+    /**
+     * Determines the conditions specifying an initial page load - if the flag (pageLoaded) is false and pageLoadTime
+     * has been populated with a non-zero value
+     * @returns {boolean|Number}
+     */
+    isFirstPageLoad = () => {
+        return !this.state.pageLoaded && this.props.pageLoadTime && this.props.pageLoadTime > 0;
+    };
+
+    componentDidUpdate() {
+        if (this.isFirstPageLoad()) {
+            this.setState({pageLoaded: true});
+        }
+    }
 
     render() {
         /**
@@ -24,17 +46,19 @@ export class GovernanceAnalytics extends Component {
             paidUsers: this.props.paidUsers,
             deniedUsers: this.props.deniedUsers,
             deactivatedUsers: this.props.deactivatedUsers,
-            totalRealmUsers: this.props.totalRealmUsers,
-            pageLoadTime: this.props.pageLoadTime
+            totalRealmUsers: this.props.totalRealmUsers
         };
 
         /**
          * NOTE: special case - this makes sure that a negative value isn't sent to Evergage, since
-         * usersGridLoadTime gets populated before pageLoadTime is calculated
+         * usersGridLoadTime gets populated before pageLoadTime is calculated, and ensures they are
+         * only sent to evergage for the first page load
          */
-        if (this.props.usersGridLoadTime >= 0) {
+        if (this.isFirstPageLoad()) {
+            propKeyVals.pageLoadTime = this.props.pageLoadTime;
             propKeyVals.usersGridLoadTime = this.props.usersGridLoadTime;
         }
+
 
         return (
             <Analytics dataset={Config.evergageDataset}
@@ -115,7 +139,12 @@ GovernanceAnalytics.propTypes = {
     /**
      * The time at which the users grid finished rendering/re-rendering with data (including after searches)
      */
-    usersGridLoadTime: PropTypes.number
+    usersGridLoadTime: PropTypes.number,
+
+    /**
+     * Flag used to identify if the page has completed an initial load
+     */
+    pageLoaded: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
