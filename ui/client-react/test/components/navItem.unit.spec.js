@@ -94,6 +94,7 @@ describe('NavItem', () => {
         let li = component.find('li');
         let icon = component.find(Icon);
         expect(li).toHaveClassName("heading withSecondary");
+        //two icons will be present since there is a secondaryIcon being passed in
         expect(icon.length).toBe(2);
 
     });
