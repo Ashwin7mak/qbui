@@ -12,7 +12,13 @@ import _ from 'lodash';
 export const AppsList = React.createClass({
 
     propTypes: {
-        apps: React.PropTypes.array.isRequired
+        apps: React.PropTypes.array.isRequired,
+        expanded: React.PropTypes.bool
+    },
+    getDefaultProps() {
+        return {
+            expanded: true
+        };
     },
     getInitialState() {
         return {
