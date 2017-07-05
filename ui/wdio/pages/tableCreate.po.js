@@ -479,12 +479,12 @@
 
             //go to the table settings page for the table
             topNavPO.clickOnTableSettingsLink();
-            let pickerfield = browser.element('.recordTitleFieldSelect');
+            let pickerfield = browser.element('.recordTitleFieldSelect .Select-value');
             //verify the selected value
-            expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
+            expect(pickerfield.getText()).toEqual(defaultSelection);
 
             //check the expected list fields on the record title field picker drop down
-            modalDialog.clickOnDropDownDownArrowToExpand(pickerfield.element('.Select-value-label'));
+            modalDialog.clickOnDropDownDownArrowToExpand(pickerfield);
             //get list of fields from drop down options
             let dropDownListLabels = modalDialog.allDropDownListOptions;
             for (let j = 0; j < dropDownListLabels.length; j++) {
@@ -502,14 +502,14 @@
                 expect(fieldLabels).toContain(expect.arrayContaining(dropDownListLabels));
             });
             //select one and reset
-            modalDialog.selectItemFromModalDialogDropDownList(pickerfield.element('.Select-value-label'), dropDownListLabels[0]);
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
             this.clickOnEditTableResetBtn();
             //make sure the selection goes back to default selection
-            expect(pickerfield.element('.Select-value-label').getText()).toEqual(defaultSelection);
+            expect(pickerfield.getText()).toEqual(defaultSelection);
             //select one and apply to test it was saved
-            modalDialog.selectItemFromModalDialogDropDownList(pickerfield.element('.Select-value-label'), dropDownListLabels[0]);
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
             this.clickOnEditTableApplyBtn();
-            return expect(pickerfield.element('.Select-value-label').getText()).toEqual(dropDownListLabels[0]);
+            return expect(pickerfield.getText()).toEqual(dropDownListLabels[0]);
         }}
 
     });
