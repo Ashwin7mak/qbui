@@ -41,9 +41,14 @@ $topnav-hover-background-color: #40caf8;
                 }
             }
 
-            a.dropdownToggle:hover {
+            a:hover {
                 color: $topnav-hover-background-color;
+
+                span.reHelpButtonHover.qbIcon {
+                    color: inherit;
+                }
             }
+
         }
     }
 }

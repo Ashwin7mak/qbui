@@ -646,6 +646,9 @@ export default {
                 removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
+                stage: {
+                    title: 'Formular für {tableName}'
+                },
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Erstellen Sie ein Textfeld und fügen Sie es dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Erstellen Sie ein Zahlenfeld und fügen Sie es dem Formular hinzu",
@@ -739,7 +742,8 @@ export default {
             appNameHeading: "App Name",
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
             descriptionHeading: "App Beschreibung",
-            appCreationFailed: "App konnte nicht erstellt werden"
+            appCreationFailed: "App konnte nicht erstellt werden",
+            searchPlaceholder: "Such-Symbole suchen..."
         },
         emptyAppState: {
             message: "Du hast noch keine Apps.",
@@ -757,7 +761,7 @@ export default {
             recordNameHeading: "Ein Rekord in der Tabelle heißt",
             descriptionHeading: "Beschreibung",
             iconHeading: "Symbol",
-            suggestedIconsHeading: "Vorgeschlagene Ikonen",
+            searchPlaceholder: "Tabellensymbole suchen ......",
 
             tableNamePlaceholder: "Zum Beispiel, Kunden",
             recordNamePlaceholder: "Zum Beispiel, Kunde",
@@ -776,9 +780,6 @@ export default {
             homePageStillBuilding: "Noch gebaut  ",
             homePageCreateAnother: "Erstellen Sie eine andere Tabelle",
 
-            noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Tabellennamen",
-            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten",
-
             tableReadyTitle: "Dein Tisch ist fertig!",
             tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
             tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen.",
@@ -791,7 +792,9 @@ export default {
             recordName: "Datensatzname"
         },
         iconChooser: {
-            searchPlaceholder: "Tabellensymbole suchen ......"
+            suggestedIconsHeading: "Vorgeschlagene Ikonen",
+            noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Namen",
+            typeForSuggestions: "Geben Sie einen Namen ein, um die vorgeschlagenen Symbole anzuzeigen"
         },
         settings: {
             header: "Einstellungen",

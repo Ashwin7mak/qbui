@@ -94,4 +94,33 @@ describe('AppsListForLeftNav', () => {
         expect(component.find('.createNewIcon')).toBePresent();
         expect(component.find('.iconMessage')).toBePresent();
     });
+
+    it('sets the searchText state to an empty string', () => {
+        component = mount(<AppsList/>);
+
+        component.setState({searchText: 'mockSearchText'});
+        expect(component).toHaveState('searchText', 'mockSearchText');
+
+        instance = component.instance();
+        instance.onClearSearch();
+
+        expect(component).toHaveState('searchText', '');
+    });
+
+    it('changes the searchText state', () => {
+        let ev = {
+            target: {
+                value: 'newMockSearchText'
+            }
+        };
+        component = mount(<AppsList/>);
+
+        component.setState({searching: false});
+
+        instance = component.instance();
+        instance.onClickApps(ev);
+
+        expect(component).toHaveState('searching', true);
+        expect(component).toHaveState('searchText', '');
+    });
 });
