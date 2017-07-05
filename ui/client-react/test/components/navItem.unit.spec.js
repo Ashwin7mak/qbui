@@ -68,6 +68,14 @@ describe('NavItem', () => {
         expect(component.find('.qbIcon .iconUISturdy-favicon')).toBePresent();
     });
 
+    it('will render a default icon of favicon if no iconFont or icon are undefined', () => {
+        component = mount(<NavItem item={{}}
+                                   icon={undefined}
+                                   iconFont={undefined} />);
+
+        expect(component.find('.qbIcon .iconUISturdy-favicon')).toBePresent();
+    });
+
     it('will render the icon the user chooses', () => {
         component = mount(<NavItem item={{}}
                                    icon="Customer"

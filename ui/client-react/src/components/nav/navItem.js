@@ -57,16 +57,27 @@ let NavItem = React.createClass({
 
     getLinkItem(item, label) {
         let classes = "link";
+        let {icon, iconFont} = this.props;
+
         if (this.props.secondaryIcon) {
             classes += " withSecondary";
         }
+
         if (this.props.selected) {
             classes += " selected";
         }
 
+        if (!icon || !iconFont) {
+            icon = 'favicon';
+        }
+
+        if (!iconFont) {
+            iconFont = AVAILABLE_ICON_FONTS.DEFAULT;
+        }
+
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
-                {this.props.icon && <Icon iconFont={this.props.iconFont} icon={this.props.icon}/>}
+                {this.props.icon && <Icon iconFont={iconFont} icon={icon}/>}
                 <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&

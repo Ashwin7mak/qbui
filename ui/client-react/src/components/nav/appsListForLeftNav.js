@@ -5,12 +5,10 @@ import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
 import {connect} from 'react-redux';
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
-import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
 import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 
-import {tableIconNames} from '../../../../reuse/client/src/components/icon/tableIcons';
 import _ from 'lodash';
 
 export const AppsList = React.createClass({
@@ -46,8 +44,8 @@ export const AppsList = React.createClass({
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
                          item={app}
-                         icon={app.icon || 'favicon'}
-                         iconFont={app.icon ? AVAILABLE_ICON_FONTS.TABLE_STURDY : AVAILABLE_ICON_FONTS.DEFAULT}
+                         icon={app.icon}
+                         iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
                          open={true}  />;
@@ -116,19 +114,11 @@ export const AppsList = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
-    let {icon} = AppBuilderSelectors.getAppProperties(state);
-
-    return {
-        appIcon: icon
-    };
-};
-
 const mapDispatchToProps = {
     showAppCreationDialog
 };
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(AppsList);
