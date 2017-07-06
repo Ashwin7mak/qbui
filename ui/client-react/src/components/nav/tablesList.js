@@ -9,7 +9,11 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
+
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
+
+const DEFAULT_TABLE_ICON = 'Spreadsheet';
 
 let TablesList = React.createClass({
 
@@ -97,8 +101,11 @@ let TablesList = React.createClass({
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
+                         icon={table.tableIcon}
+                         defaultIcon={DEFAULT_TABLE_ICON}
+                         defaultIconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                         iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          key={table.id}
-                         tableIcon={true}
                          showSecondary={this.props.expanded}
                          secondaryIcon={"report-menu-3"}
                          secondaryOnSelect={this.props.showReports}
@@ -119,10 +126,16 @@ let TablesList = React.createClass({
             <Link to={link}><I18nMessage message={msg}/></Link>
         </div>);
 
-        return (<NavItem item={{msg: msg, link:link, icon:icon}} selected={selected}
-            hoverComponent={hoverComponent} open={true} onSelect={this.props.onSelect}/>);
+        return (<NavItem item={{msg: msg, link:link}}
+                         icon={icon}
+                         iconFont={AVAILABLE_ICON_FONTS.DEFAULT}
+                         selected={selected}
+                         hoverComponent={hoverComponent}
+                         open={true}
+                         onSelect={this.props.onSelect}/>);
 
     },
+
     getTopLinksItem() {
         const appHomePageSelected = !this.props.selectedTableId &&
             (WindowLocationUtils.getPathname() === `${APP_ROUTE}/${this.props.selectedAppId}`);
