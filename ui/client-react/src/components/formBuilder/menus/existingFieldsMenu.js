@@ -14,8 +14,6 @@ export class ExistingFieldsMenu extends Component {
         return Locale.getMessage('builder.existingEmptyState', {numberOfFields: this.props.numberOfFieldsOnForm, tableName: table.name});
     };
 
-
-
     render = () => {
         let {isCollapsed, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
         return (

@@ -121,7 +121,7 @@ class ListOfElements extends Component {
         if (this.props.headerElementRenderer) {
             header = <this.props.headerElementRenderer {...element} isCollapsed={this.props.isCollapsed}/>;
         } else {
-            header = element.title;
+            header = <div className="elementGroupTitle">{element.title}</div>;
         }
 
         let classes = ["listOfElementsItemHeader"];
@@ -130,11 +130,11 @@ class ListOfElements extends Component {
         }
         return (
             <div className={classes.join(" ")}>
-                {element.collapsible && <Icon icon="caret-up" className="headerCollapseIcon"></Icon>}
-                {!this.props.isCollapsed && <div>{header}</div>}
+                {element.collapsible && <Icon icon="caret-up" className="headerCollapseIcon" />}
+                {!this.props.isCollapsed && header}
             </div>
         );
-    }
+    };
 
     /**
      * Render a list of child elements.
@@ -152,7 +152,7 @@ class ListOfElements extends Component {
                 {this.renderElements(element.children)}
             </ul>;
         }
-    }
+    };
 
     /**
      * Render a set of element groups, each group may have a set of child elements and an optional header.
