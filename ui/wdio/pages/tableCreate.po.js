@@ -11,6 +11,8 @@
     let reportContentPO = requirePO('reportContent');
     let modalDialog = requirePO('/common/modalDialog');
     const tableNameFieldTitle = "Table name";
+    let topNavPO = requirePO('topNav');
+    let notificationContainer = requirePO('/common/notificationContainer');
 
     let tablesPage = Object.create(e2ePageBase, {
         //new table button
@@ -253,6 +255,7 @@
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
             //Need this to trigger a change in the field especially when testing the empty field values in firefox
+            filteredElement.element(filteredElementInputClassName).click();
             filteredElement.element(filteredElementInputClassName).setValue('aaa');
             return filteredElement.element(filteredElementInputClassName).setValue(fieldValue);
         }},
@@ -382,7 +385,8 @@
                 //moveToObject not working in firefox and edge but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
                 if (browserName === 'chrome') {
                     //Hover over to an element and verify the field error
-                    results[0].moveToObject('.dialogFieldInput');
+                    //results[0].moveToObject('.dialogFieldInput');
+                    results[0].element('.dialogFieldInput').click();
                     browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
                     expect(results[0].element('.invalidInput').getAttribute('textContent')).toContain(errorMsg);
                     return results[0].click();
@@ -415,17 +419,6 @@
         }},
 
         /**
-         * Method to click on table settings and properties link under tables gear icon in global actions
-         */
-        clickOnModifyTableSettingsLink : {value: function() {
-            this.verifyTableSettingsDropDown();
-            //Click on table properties and settings link
-            this.modifyTableSettingsLink.waitForVisible();
-            this.modifyTableSettingsLink.click();
-            return browser.element('.dialogFieldInput').waitForVisible();
-        }},
-
-        /**
          * Method to click on 'back to apps ' link
          */
         clickBackToAppsLink : {value: function() {
@@ -443,6 +436,7 @@
             this.editTableApplyBtn.waitForVisible();
             this.editTableApplyBtn.click();
             //Need this for notification container to slide away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
             return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
@@ -454,6 +448,7 @@
             this.editTableResetBtn.waitForVisible();
             this.editTableResetBtn.click();
             //Need this for notification container to slide away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
@@ -473,6 +468,48 @@
          */
         setDeletePromtTextFieldValue: {value: function(fieldValue) {
             return modalDialog.deletePromptTextField.setValue([fieldValue]);
+        }},
+
+        verifyEditTableTitleFieldDropDown : {value: function(app, table, defaultSelection) {
+            //Select table
+            this.selectTable(table.name);
+            //parse tableId from current url
+            let currentURL = browser.getUrl();
+            let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
+
+            //go to the table settings page for the table
+            topNavPO.clickOnTableSettingsLink();
+            let pickerfield = browser.element('.recordTitleFieldSelect .Select-value');
+            //verify the selected value
+            expect(pickerfield.getText()).toEqual(defaultSelection);
+
+            //check the expected list fields on the record title field picker drop down
+            modalDialog.clickOnDropDownDownArrowToExpand(pickerfield);
+            //get list of fields from drop down options
+            let dropDownListLabels = modalDialog.allDropDownListOptions;
+            for (let j = 0; j < dropDownListLabels.length; j++) {
+                if ((dropDownListLabels[j] === ('Default to ' + table.name + ' + ID'))) {
+                    delete dropDownListLabels[j];
+                }
+            }
+
+            //get the fields in the table - all of non built in fields + record id should show up
+            e2eBase.tableService.getTableFields(app.id, tableId).then(function(fieldLabel) {
+                let fieldLabels = [];
+                for (let i = 0; i < fieldLabel.fields.length; i++) {
+                    fieldLabels.push(fieldLabel.fields[i].name);
+                }
+                expect(fieldLabels).toContain(expect.arrayContaining(dropDownListLabels));
+            });
+            //select one and reset
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+            this.clickOnEditTableResetBtn();
+            //make sure the selection goes back to default selection
+            expect(pickerfield.getText()).toEqual(defaultSelection);
+            //select one and apply to test it was saved
+            modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
+            this.clickOnEditTableApplyBtn();
+            return expect(pickerfield.getText()).toEqual(dropDownListLabels[0]);
         }}
 
     });
