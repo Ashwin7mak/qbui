@@ -14,8 +14,8 @@ class notificationContainerWindow {
         browser.waitForExist('.notification-success', e2eConsts.longWaitTimeMs);
     }
 
-    waitForFailureNotification() {
-        browser.waitForExist('.notification-failure', e2eConsts.longWaitTimeMs);
+    waitForErrorNotification() {
+        browser.waitForExist('.notification-error', e2eConsts.longWaitTimeMs);
     }
 }
 

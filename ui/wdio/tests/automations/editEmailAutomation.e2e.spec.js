@@ -257,7 +257,7 @@
             emailAutomationEditView.body.text = newBody;
 
             emailAutomationEditView.saveButton.click();
-            notificationContainer.waitForFailureNotification();
+            notificationContainer.waitForErrorNotification();
 
         });
     });
