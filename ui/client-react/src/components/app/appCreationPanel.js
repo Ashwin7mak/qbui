@@ -26,6 +26,45 @@ export class AppCreationPanel extends Component {
     };
 
     /**
+     * check existing app names for proposed name
+     * @param name
+     * @returns {boolean}
+     */
+    appNameExists = (name) => {
+
+    };
+
+    /**
+     * get validation error property/value
+     * @returns {*}
+     */
+    getValidationError = (property, value) => {
+        let validationError = null;
+
+        const trimmed = typeof value === "string" ? value.trim() : value;
+
+        switch (property) {
+        case 'name': {
+            if (trimmed === '') {
+                validationError = Locale.getMessage('tableCreation.validateTableNameEmpty');
+            } else if (this.appNameExists(trimmed)) {
+                validationError = Locale.getMessage('tableCreation.validateTableNameExists');
+            }
+            break;
+        }
+        case 'tableNoun': {
+            if (trimmed === '') {
+                validationError = Locale.getMessage('tableCreation.validateRecordNameEmpty');
+            }
+            break;
+        }
+        }
+
+        return validationError;
+    };
+
+
+    /**
      * set app icon
      * @param  icon
      */
