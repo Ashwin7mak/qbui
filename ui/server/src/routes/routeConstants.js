@@ -82,6 +82,9 @@
         REPORT_RECORDS_COUNT        : context.client.QBUI + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : context.client.QBUI + '/apps/:appId/tables/:tableId/homePage',
 
+        // This is a temporary endpoint used for phase1 of showing app homepage. Node will return a mock page object.
+        // When EE can return a page object, we will be removing this endpoint and the client will send a request
+        // to be proxied to EE instead.
         PAGE_MOCK                   : context.client.QBUI + '/apps/:appId/page/:pageId',
 
         TABLE_COMPONENTS            : context.client.QBUI + '/apps/:appId/tables/tableComponents',
