@@ -5,22 +5,11 @@ import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/n
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../reuse/client/src/components/icon/icon.js';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import {Link} from 'react-router-dom';
-import _ from 'lodash';
 
 let component;
 let instance;
 let mockHoverComponent = <div className="mockHoverComponent"></div>;
 let secondaryIcon = 'mockSecondaryIcon';
-let mockId = 'mockId';
-
-let mockClickEvent = {
-    nativeEvent: {type: 'click'}
-};
-
-let mockMouseEvent = {
-    nativeEvent: {type: 'keydown'},
-    keyCode: 32
-};
 
 let mockItem = {
     name: 'mockName'
@@ -40,14 +29,20 @@ const LinkMock = React.createClass({
     }
 });
 
+const mockA11Utils = {
+    isA11yClick() {}
+};
+
 describe('NavItem', () => {
     beforeEach(() => {
         jasmineEnzyme();
         NavItemRewireAPI.__Rewire__('Link', LinkMock);
         NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        NavItemRewireAPI.__Rewire__('A11Utils', mockA11Utils);
         spyOn(mockFuncs, 'onClick');
         spyOn(mockFuncs, 'onSelect');
         spyOn(mockFuncs, 'secondaryOnSelect');
+        spyOn(mockA11Utils, 'isA11yClick').and.returnValue(true);
     });
 
     afterEach(() => {
@@ -115,66 +110,9 @@ describe('NavItem', () => {
                                      onClick={mockFuncs.onClick} />);
 
         instance = component.instance();
-        instance.onHeadingClick(mockClickEvent);
+        let heading = component.find('.heading').simulate('click');
 
-        expect(mockFuncs.onClick).toHaveBeenCalledWith(mockClickEvent);
-    });
-
-    it('will invoke onClick if the heading is touched', () => {
-        let cloneMockClickEvent = _.cloneDeep(mockClickEvent);
-        cloneMockClickEvent.nativeEvent.type = 'touchend';
-
-        component = shallow(<NavItem item={{}}
-                                     isHeading={true}
-                                     secondaryIcon={false}
-                                     onClick={mockFuncs.onClick} />);
-
-        instance = component.instance();
-        instance.onHeadingClick(cloneMockClickEvent);
-
-        expect(mockFuncs.onClick).toHaveBeenCalledWith(cloneMockClickEvent);
-    });
-
-    it('will invoke onClick if space bar is pressed', () => {
-        component = shallow(<NavItem item={{}}
-                                     isHeading={true}
-                                     secondaryIcon={false}
-                                     onClick={mockFuncs.onClick} />);
-
-        instance = component.instance();
-        instance.onHeadingClick(mockMouseEvent);
-
-        expect(mockFuncs.onClick).toHaveBeenCalledWith(mockMouseEvent);
-    });
-
-    it('will invoke onClick if enter is pressed', () => {
-        let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
-        cloneMockMouseEvent.keyCode = 13;
-
-        component = shallow(<NavItem item={{}}
-                                     isHeading={true}
-                                     secondaryIcon={false}
-                                     onClick={mockFuncs.onClick} />);
-
-        instance = component.instance();
-        instance.onHeadingClick(cloneMockMouseEvent);
-
-        expect(mockFuncs.onClick).toHaveBeenCalledWith(cloneMockMouseEvent);
-    });
-
-    it('will not invoke onClick if neither space bar or enter is pressed', () => {
-        let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
-        cloneMockMouseEvent.keyCode = 99;
-
-        component = shallow(<NavItem item={{}}
-                                     isHeading={true}
-                                     secondaryIcon={false}
-                                     onClick={mockFuncs.onClick} />);
-
-        instance = component.instance();
-        instance.onHeadingClick(cloneMockMouseEvent);
-
-        expect(mockFuncs.onClick).not.toHaveBeenCalled();
+        expect(mockFuncs.onClick).toHaveBeenCalled();
     });
 
     it('will render OverlayTrigger if showToolTip is true and isHeading is false', () => {
@@ -281,140 +219,26 @@ describe('NavItem', () => {
 
         it('will invoke onSelect if link is clicked', () => {
             component = shallow(<NavItem item={{}}
-                                         isHeading={true}
+                                         isHeading={false}
                                          secondaryIcon={false}
                                          onSelect={mockFuncs.onSelect} />);
 
             instance = component.instance();
-            instance.onClick(mockClickEvent);
+            instance.onClick();
 
-            expect(mockFuncs.onSelect).toHaveBeenCalledWith(mockClickEvent);
+            expect(mockFuncs.onSelect).toHaveBeenCalled();
         });
 
-        it('will invoke onSelect if the link is touched', () => {
-            let cloneMockClickEvent = _.cloneDeep(mockClickEvent);
-            cloneMockClickEvent.nativeEvent.type = 'touchend';
-
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         onSelect={mockFuncs.onSelect} />);
-
-            instance = component.instance();
-            instance.onClick(cloneMockClickEvent);
-
-            expect(mockFuncs.onSelect).toHaveBeenCalledWith(cloneMockClickEvent);
-        });
-
-        it('will invoke onSelect if space bar is pressed', () => {
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         onSelect={mockFuncs.onSelect} />);
-
-            instance = component.instance();
-            instance.onClick(mockMouseEvent);
-
-            expect(mockFuncs.onSelect).toHaveBeenCalledWith(mockMouseEvent);
-        });
-
-        it('will invoke onSelect if enter is pressed', () => {
-            let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
-            cloneMockMouseEvent.keyCode = 13;
-
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         onSelect={mockFuncs.onSelect} />);
-
-            instance = component.instance();
-            instance.onClick(cloneMockMouseEvent);
-
-            expect(mockFuncs.onSelect).toHaveBeenCalledWith(cloneMockMouseEvent);
-        });
-
-        it('will not invoke onSelect if neither space bar or enter is pressed', () => {
-            let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
-            cloneMockMouseEvent.keyCode = 99;
-
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         onSelect={mockFuncs.onSelect} />);
-
-            instance = component.instance();
-            instance.onClick(cloneMockMouseEvent);
-
-            expect(mockFuncs.onSelect).not.toHaveBeenCalled();
-        });
-
-        it('will invoke secondaryOnSelect if link is clicked', () => {
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
+        it('will invoke secondaryOnSelect if anchor is clicked', () => {
+            component = shallow(<NavItem isHeading={false}
+                                         showSecondary={true}
+                                         secondaryIcon={true}
+                                         showToolTip={false}
+                                         item={mockItem}
                                          secondaryOnSelect={mockFuncs.secondaryOnSelect} />);
 
-            instance = component.instance();
-            instance.onSecondaryClick(mockClickEvent, mockId);
-
-            expect(mockFuncs.secondaryOnSelect).toHaveBeenCalledWith(mockId);
-        });
-
-        it('will invoke secondaryOnSelect if the link is touched', () => {
-            let cloneMockClickEvent = _.cloneDeep(mockClickEvent);
-            cloneMockClickEvent.nativeEvent.type = 'touchend';
-
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         secondaryOnSelect={mockFuncs.secondaryOnSelect} />);
-
-            instance = component.instance();
-            instance.onSecondaryClick(cloneMockClickEvent, mockId);
-
-            expect(mockFuncs.secondaryOnSelect).toHaveBeenCalledWith(mockId);
-        });
-
-        it('will invoke secondaryOnSelect if space bar is pressed', () => {
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         secondaryOnSelect={mockFuncs.secondaryOnSelect} />);
-
-            instance = component.instance();
-            instance.onSecondaryClick(mockMouseEvent, mockId);
-
-            expect(mockFuncs.secondaryOnSelect).toHaveBeenCalledWith(mockId);
-        });
-
-        it('will invoke secondaryOnSelect if enter is pressed', () => {
-            let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
-            cloneMockMouseEvent.keyCode = 13;
-
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         secondaryOnSelect={mockFuncs.secondaryOnSelect} />);
-
-            instance = component.instance();
-            instance.onSecondaryClick(cloneMockMouseEvent, mockId);
-
-            expect(mockFuncs.secondaryOnSelect).toHaveBeenCalledWith(mockId);
-        });
-
-        it('will not invoke secondaryOnSelect if neither space bar or enter is pressed', () => {
-            let cloneMockMouseEvent = _.cloneDeep(mockMouseEvent);
-            cloneMockMouseEvent.keyCode = 99;
-
-            component = shallow(<NavItem item={{}}
-                                         isHeading={true}
-                                         secondaryIcon={false}
-                                         secondaryOnSelect={mockFuncs.secondaryOnSelect} />);
-
-            instance = component.instance();
-            instance.onSecondaryClick(cloneMockMouseEvent, mockId);
-
-            expect(mockFuncs.secondaryOnSelect).not.toHaveBeenCalled();
+            component.find('.right').simulate('click');
+            expect(mockFuncs.secondaryOnSelect).toHaveBeenCalled();
         });
     });
 });
