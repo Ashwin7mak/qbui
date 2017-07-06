@@ -22,6 +22,12 @@
         .pickerOption {
             line-height: 100%;
 
+            .optionLabel {
+                max-width: 350px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
             > * {
                 display: inline-block;
             }

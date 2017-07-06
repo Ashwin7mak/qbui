@@ -646,6 +646,7 @@ export default {
                 removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
+                existingFieldsMenuThisTableTitle: 'Dieser Tisch',
                 stage: {
                     title: 'Formular für {tableName}'
                 },
