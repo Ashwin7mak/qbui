@@ -61,10 +61,12 @@ export const createApp = (app) => {
  * It is used to set the properties needed for creating a new app
  * @param property
  * @param value
+ * @param pendingValidationError
  * */
-export const setAppProperty = (property, value) => ({
+export const setAppProperty = (property, value, pendingValidationError) => ({
     type: types.SET_APP_PROPERTY,
     property,
+    pendingValidationError,
     value
 });
 

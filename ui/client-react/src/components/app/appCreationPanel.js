@@ -31,7 +31,7 @@ export class AppCreationPanel extends Component {
      * @returns {boolean}
      */
     appNameExists = (name) => {
-
+        return this.props.apps.some((appName) => appName.name.toLowerCase().trim() === name.toLowerCase().trim());
     };
 
     /**
@@ -40,23 +40,27 @@ export class AppCreationPanel extends Component {
      */
     getValidationError = (property, value) => {
         let validationError = null;
-
         const trimmed = typeof value === "string" ? value.trim() : value;
 
-        switch (property) {
-        case 'name': {
-            if (trimmed === '') {
-                validationError = Locale.getMessage('tableCreation.validateTableNameEmpty');
-            } else if (this.appNameExists(trimmed)) {
-                validationError = Locale.getMessage('tableCreation.validateTableNameExists');
-            }
-            break;
-        }
+        if (trimmed === '') {
+            validationError = Locale.getMessage('tableCreation.validateTableNameEmpty');
+        } else if (this.appNameExists(trimmed)) {
+            validationError = Locale.getMessage('tableCreation.validateTableNameExists');
         }
 
         return validationError;
     };
 
+    /**
+     * set app properties
+     * @param  property
+     * @param  value
+     */
+    setAppProperty = (property, value) => {
+        const pendingValidationError = this.getValidationError(property, value);
+
+        this.props.setAppProperty(property, value, pendingValidationError);
+    };
 
     /**
      * set app icon
@@ -78,7 +82,7 @@ export class AppCreationPanel extends Component {
                                       className="appCreationPanel"
                                       name="name"
                                       value={this.props.appName}
-                                      onChange={this.props.setAppProperty}
+                                      onChange={this.setAppProperty}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
                                       autofocus />
@@ -87,7 +91,7 @@ export class AppCreationPanel extends Component {
                                       className="appCreationPanel"
                                       name="description"
                                       value={this.props.appDescription}
-                                      onChange={ this.props.setAppProperty}
+                                      onChange={ this.setAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3" />
 
@@ -109,9 +113,11 @@ export class AppCreationPanel extends Component {
 
 
 const mapStateToProps = (state) => {
+    console.log('state: ', state);
     let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
 
     return {
+        apps: _.get(state, 'app.apps', []),
         appName: name,
         appDescription: description,
         appIcon: icon,
