@@ -645,6 +645,7 @@ export default {
                 removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
+                existingFieldsMenuThisTableTitle: 'Cette table',
                 stage: {
                     title: 'Formulaire pour {tableName}'
                 },
@@ -762,8 +763,8 @@ export default {
             iconHeading: "Icône",
             searchPlaceholder: "Rechercher des icônes...",
 
-            tableNamePlaceholder: "Par exemple, les clients",
-            recordNamePlaceholder: "Par exemple, client",
+            tableNamePlaceholder: "Par exemple, les clients. Utilisez jusqu'à {numberOfChars} lettres",
+            recordNamePlaceholder: "Par exemple, client. Utilisez jusqu'à {numberOfChars} lettres",
             descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la navigation à gauche",
 
             finishedButtonLabel: "Créer une table",

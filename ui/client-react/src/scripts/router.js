@@ -81,23 +81,23 @@ store.dispatch(FeatureSwitchActions.getStates());
 
 const routes = [
     /***
-     *  Shall be enabled when this epic is worked on :
+     *  These api's are not being used at this time.
      *  https://quickbase.atlassian.net/browse/MC-1189
      */
-    // {
-    //     path: ADMIN_ROUTE,
-    //     component: NavWrapper,
-    //     routes: [
-    //         {
-    //             path: `${ADMIN_ROUTE}/featureSwitches/:id`,
-    //             component: FeatureSwitchOverridesRoute
-    //         },
-    //         {
-    //             path: `${ADMIN_ROUTE}/featureSwitches`,
-    //             component: FeatureSwitchesRoute
-    //         }
-    //     ]
-    // },
+    {
+        path: ADMIN_ROUTE,
+        component: NavWrapper,
+        routes: [
+            {
+                path: `${ADMIN_ROUTE}/featureSwitches/:id`,
+                component: FeatureSwitchOverridesRoute
+            },
+            {
+                path: `${ADMIN_ROUTE}/featureSwitches`,
+                component: FeatureSwitchesRoute
+            }
+        ]
+    },
     {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
         component: NavWrapper,

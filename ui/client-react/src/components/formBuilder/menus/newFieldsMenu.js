@@ -14,7 +14,7 @@ const NewFieldsMenu = (props) => {
             childrenTabIndex={props.toolPaletteChildrenTabIndex}
             toggleChildrenTabIndex={props.toggleToolPaletteChildrenTabIndex}
             hasKeyBoardFocus={props.toolPaletteFocus}
-            renderer={DraggableFieldTokenInMenu}
+            childElementRenderer={DraggableFieldTokenInMenu}
             isCollapsed={props.isCollapsed}
             isOpen={props.isOpen}
             elements={supportedNewFieldTypesWithProperties(omittedFieldGroups)}

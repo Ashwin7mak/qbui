@@ -42,10 +42,14 @@ $select-control-height: 28px;
 
             .Select-option {
                 position: relative;
+                white-space: nowrap;
 
                 .qbIcon {
                     position: absolute;
                     color: $selected-choice-color;
+                }
+                &.is-focused {
+                    background-color: $color-black-200;
                 }
             }
         }
