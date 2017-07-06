@@ -89,24 +89,24 @@ describe('NavItem', () => {
                                      isHeading={true}
                                      secondaryIcon={false} />);
 
-        let li = component.find('li');
+        let heading = component.find('.heading');
         let icon = component.find(Icon);
 
-        expect(li).toHaveClassName("heading");
+        expect(heading).toHaveClassName('.heading');
         //only one icon will render with no secondaryIcon
         expect(icon.length).toBe(1);
 
     });
 
-    it('will invoke onClick if heading is clicked', () => {
+    fit('will invoke onClick if heading is clicked', () => {
         component = shallow(<NavItem item={{}}
                                      isHeading={true}
                                      secondaryIcon={false}
                                      onClick={mockFuncs.onClick} />);
 
         instance = component.instance();
-        instance.onHeadingClick(mockClickEvent);
-
+        // instance.onHeadingClick(mockClickEvent);
+        component.find('.heading').simulate('click');
         expect(mockFuncs.onClick).toHaveBeenCalledWith(mockClickEvent);
     });
 

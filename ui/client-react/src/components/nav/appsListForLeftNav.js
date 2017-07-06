@@ -11,6 +11,8 @@ import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon
 
 import _ from 'lodash';
 
+const DEFAULT_APP_ICON = 'favicon';
+
 export const AppsList = React.createClass({
 
     propTypes: {
@@ -45,7 +47,9 @@ export const AppsList = React.createClass({
                 <NavItem key={app.id}
                          item={app}
                          icon={app.icon}
-                         iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                         defaultIcon={DEFAULT_APP_ICON}
+                         defaultIconFont={AVAILABLE_ICON_FONTS.DEFAULT}
+                         iconFont={app.icon === DEFAULT_APP_ICON || app.icon === undefined ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
                          open={true}  />;

@@ -6,8 +6,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import A11Utils from '../../utils/a11yUtils';
 
-const FAVICON = 'favicon';
-
 let NavItem = React.createClass({
 
     propTypes: {
@@ -19,6 +17,8 @@ let NavItem = React.createClass({
         }),
         icon: React.PropTypes.string,
         iconFont: React.PropTypes.string,
+        defaultIcon: React.PropTypes.string,
+        defaultIconFont: React.PropTypes.string,
         onSelect: React.PropTypes.func,
         isHeading: React.PropTypes.bool,
         showSecondary: React.PropTypes.bool,
@@ -57,7 +57,6 @@ let NavItem = React.createClass({
 
     getLinkItem(item, label) {
         let classes = "link";
-        let {icon, iconFont} = this.props;
 
         if (this.props.secondaryIcon) {
             classes += " withSecondary";
@@ -67,13 +66,9 @@ let NavItem = React.createClass({
             classes += " selected";
         }
 
-        if (icon === FAVICON) {
-            iconFont = AVAILABLE_ICON_FONTS.DEFAULT;
-        }
-
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
-                <Icon iconFont={iconFont} icon={icon}/>
+                <Icon iconFont={this.props.iconFont || this.props.defaultIconFont} icon={this.props.icon || this.props.defaultIcon}/>
                 <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&

@@ -13,6 +13,8 @@ import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon
 
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 
+const DEFAULT_TABLE_ICON = 'Spreadsheet';
+
 let TablesList = React.createClass({
 
     propTypes: {
@@ -100,6 +102,8 @@ let TablesList = React.createClass({
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
                          icon={table.tableIcon}
+                         defaultIcon={DEFAULT_TABLE_ICON}
+                         defaultIconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          key={table.id}
                          showSecondary={this.props.expanded}
