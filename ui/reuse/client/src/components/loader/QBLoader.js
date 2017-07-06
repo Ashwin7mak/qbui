@@ -15,4 +15,3 @@ class QBLoader extends Component {
 }
 
 export default QBLoader;
-
