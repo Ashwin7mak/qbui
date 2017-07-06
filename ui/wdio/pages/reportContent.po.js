@@ -20,6 +20,16 @@
     // let jsdom = require('jsdom');
     // var window = jsdom.jsdom().defaultView;
     let jQuery = require('jquery')(window);
+    let loadingSpinner = requirePO('common/loadingSpinner');
+    const sText = 'testTextValue';
+    const jsdom = require('jsdom');
+    const { JSDOM } = jsdom;
+    const { window } = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+    const { document } = (new JSDOM(`...`)).window;
+    // let jsdom = require('jsdom');
+    // var window = jsdom.jsdom().defaultView;
+    let jQuery = require('jquery')(window);
+    const sNumeric = 1;
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
         recordCheckBoxes: {
