@@ -16,7 +16,6 @@ const testElements = [
     {
         key: 'group1',
         title: 'group1',
-        collapsible: true,
         isOpen: false,
         children: [
             {key: 'element1', title: 'elementA1'},
@@ -64,17 +63,24 @@ describe('ListOfElements', () => {
         expect(headers.at(1)).toHaveText(testElements[1].title);
     });
 
-    it('displays groups of fields, collapsible when specified', () => {
+    it('displays groups of fields, collapsible when areGroupsCollapsible prop is true', () => {
+        component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements} areGroupsCollapsible={true}/>);
+
+        const headers = component.find('.listOfElementsItemHeader');
+        expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for single ungrouped element
+        //make sure headers are rendered as collapsible
+        const collapsibleHeaders = component.find('.headerCollapseIcon');
+        expect(collapsibleHeaders.length).toEqual(headers.length);
+    });
+
+    it('displays groups of fields, non collapsible when areGroupsCollapsible prop is not supplied', () => {
         component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const headers = component.find('.listOfElementsItemHeader');
         expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for single ungrouped element
-        //make sure the number of collapsible headers rendered is same as number of groups that have collapsible set to true (aka 1)
+        //make sure headers are rendered as collapsible
         const collapsibleHeaders = component.find('.headerCollapseIcon');
-        expect(collapsibleHeaders.length).toEqual(1);
-        //make sure the collapse icon is showing up on the right header item
-        const collapsibleItem = headers.at(0).find('.headerCollapseIcon');
-        expect(collapsibleItem.length).toEqual(1);
+        expect(collapsibleHeaders.length).toEqual(0);
     });
 
     it('does not display titles for a group of fields', () => {
@@ -111,9 +117,6 @@ describe('ListOfElements', () => {
         component = mount(<ListOfElements headerElementRenderer={getHeaderElementRenderer} childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
         const headers = component.find('.headerElem');
         expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for the element without children
-
-        const header = headers.at(0).find('.headerElem');
-        expect(header.length).toEqual(1);
     });
 
     describe('filtering elements', () => {

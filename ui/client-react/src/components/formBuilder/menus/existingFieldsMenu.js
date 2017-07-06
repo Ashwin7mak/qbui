@@ -24,8 +24,9 @@ export class ExistingFieldsMenu extends Component {
                 hasKeyBoardFocus={toolPaletteFocus}
                 childElementRenderer={DraggableFieldTokenInMenu}
                 isCollapsed={isCollapsed}
+                areGroupsCollapsible={true}
                 animateChildren={true}
-                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: Locale.getMessage('builder.formBuilder.existingFieldsMenuThisTableTitle'), collapsible: true, isOpen: true}] : undefined}
+                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: Locale.getMessage('builder.formBuilder.existingFieldsMenuThisTableTitle'), isOpen: true}] : undefined}
                 isFilterable={true}
                 hideTitle={false}
                 emptyMessage={this.buildEmptyState()}

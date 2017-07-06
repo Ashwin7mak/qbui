@@ -125,12 +125,12 @@ class ListOfElements extends Component {
         }
 
         let classes = ["listOfElementsItemHeader"];
-        if (element.collapsible) {
+        if (this.props.areGroupsCollapsible) {
             classes.push("collapsibleHeader");
         }
         return (
             <div className={classes.join(" ")}>
-                {element.collapsible && <Icon icon="caret-up" className="headerCollapseIcon" />}
+                {this.props.areGroupsCollapsible && <Icon icon="caret-up" className="headerCollapseIcon" />}
                 {!this.props.isCollapsed && header}
             </div>
         );
@@ -166,10 +166,10 @@ class ListOfElements extends Component {
         if (this.props.elements && this.props.elements.length > 0) {
             return this.props.elements.map((element, index) => {
                 if (element.children) {
-                    if (!this.props.hideTitle && element.title && element.collapsible) {
+                    if (!this.props.hideTitle && this.props.areGroupsCollapsible && element.title) {
                         return (
                             <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
-                                <Collapsible trigger={this.renderHeaderElement(element)} open={element.isOpen}>
+                                <Collapsible trigger={this.renderHeaderElement(element)} open={element.isOpen} transitionTime={200}>
                                     {this.renderElementGroup(element, index)}
                                 </Collapsible>
                             </li>);
@@ -272,6 +272,11 @@ ListOfElements.propTypes = {
     toggleChildrenTabIndex: PropTypes.func,
 
     /**
+     * Works in conjunction with the title prop on the element. If a title is supplied, it is rendered as a collapsible header to the set of child elements
+     */
+    areGroupsCollapsible: PropTypes.bool,
+
+    /**
      * A list of grouped elements to be displayed in the menu. */
     elements: PropTypes.arrayOf(PropTypes.shape({
         /**
@@ -282,11 +287,6 @@ ListOfElements.propTypes = {
         /**
          * The text to display for the field type. This property will be used for filtering. It should be localized. */
         title: PropTypes.string.isRequired,
-
-        /**
-         * Works in conjunction with the title prop on the element. If a title is supplied, rendered as a collapsible header to the set of child elements
-         */
-        collapsible: PropTypes.bool,
 
         /**
          * Show the list of elements in an open state. Works in conjunction with the collapsible prop. */
