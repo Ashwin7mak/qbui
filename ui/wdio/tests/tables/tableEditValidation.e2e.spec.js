@@ -8,12 +8,13 @@
     let reportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
+    let topNavPO = requirePO('topNav');
 
     describe('Tables - Edit table validation tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
-        var existingTableName = 'Table 2';
+        let existingTableName = 'Table 2';
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -21,8 +22,9 @@
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
-            // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
+            var generatedApp = e2eBase.appService.generateAppFromMap(e2eConsts.basicTableMap());
+            // Create the app via the API
+            return e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -91,10 +93,9 @@
 
                 //Select table Table 2
                 tableCreatePO.selectTable('Table 2');
-                reportContentPO.waitForReportContent();
 
                 //Select the table properties of settings of table 1 from global actions gear
-                tableCreatePO.clickOnModifyTableSettingsLink();
+                topNavPO.clickOnTableSettingsLink();
 
                 //Enter table field values
                 testCase.tableFields.forEach(function(tableField) {
@@ -115,6 +116,54 @@
                 //Click on back to apps page link
                 tableCreatePO.clickBackToAppsLink();
 
+            });
+        });
+
+        /**
+         * Data provider for table field validation testCases.
+         */
+        function recordTitleFieldPickerTestCases() {
+            let aTextField = {name:'Text',
+                type:'SCALAR',
+                datatypeAttributes:{
+                    type:'TEXT'
+                }};
+            return [
+                {
+                    message: 'with just built in fields; expect record Id to be the only field on list',
+                    table: {name: "Table for TitlePicker 1"},
+                    expectedDefaultSelection: "Default to Table for TitlePicker 1 + ID",
+                    uiTable: false
+                },
+                {
+                    message: 'with a couple of custom fields; expect record Id + other fields to show on list',
+                    table: {name: "Table for TitlePicker 2", fields: [aTextField, aTextField]},
+                    expectedDefaultSelection: "Default to Table for TitlePicker 2 + ID",
+                    uiTable: false
+                },
+                {
+                    message: 'with record title field; expect record title field selected',
+                    table: {name: "Table for TitlePicker 3"},
+                    expectedDefaultSelection: "Record title",
+                    uiTable: true
+                }
+            ];
+        }
+
+        recordTitleFieldPickerTestCases().forEach(function(testCase) {
+            it('Edit table ' + testCase.message, function() {
+
+                //create the table with the specific fields
+                if (testCase.uiTable) {
+                    e2eBase.tableService.createTableInUI(testApp.id, testCase.table);
+                }                else {
+                    e2eBase.tableService.createTableInCore(testApp.id, testCase.table);
+                }
+
+                //Load app into the Browser
+                browser.url(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+
+                tableCreatePO.verifyEditTableTitleFieldDropDown(testApp, testCase.table, testCase.expectedDefaultSelection);
             });
         });
     });

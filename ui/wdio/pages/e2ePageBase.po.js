@@ -86,7 +86,7 @@
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }
         //wait until you see newTable in left Nav
-        return browser.element('.appHomePageBody .noRowsIcon').waitForVisible();
+        return browser.element('.tablesList .leftNavLabel').waitForVisible();
     };
 
     /**
