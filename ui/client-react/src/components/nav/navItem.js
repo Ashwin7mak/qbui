@@ -6,6 +6,8 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import A11Utils from '../../utils/a11yUtils';
 
+const FAVICON = 'favicon';
+
 let NavItem = React.createClass({
 
     propTypes: {
@@ -67,8 +69,7 @@ let NavItem = React.createClass({
             classes += " selected";
         }
 
-        if (!icon) {
-            icon = 'favicon';
+        if (icon === FAVICON) {
             iconFont = AVAILABLE_ICON_FONTS.DEFAULT;
         }
 
