@@ -1,7 +1,9 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import {FeatureSwitchesRoute} from '../../src/components/featureSwitches/featureSwitchesRoute';
+import {FeatureSwitchesRoute, __RewireAPI__ as FeatureSwitchesRouteRewire} from '../../src/components/featureSwitches/featureSwitchesRoute';
 import {MemoryRouter} from 'react-router-dom';
+import {FeatureCheck as featureCheckNonConnected} from '../../src/components/featureSwitches/featureCheck';
+
 describe('FeatureSwitchesRoute', () => {
     let component;
 
@@ -23,23 +25,38 @@ describe('FeatureSwitchesRoute', () => {
             "overrides":[]
         }
     ];
-
+    const propsfs = {
+        "states" : [
+            {name: 'featureSwitchUITest', status: true},
+            {name: 'featureSwitchUI', status: true}
+        ]
+    };
     const props = {
         switches: sampleSwitches,
         error: null,
+        states: propsfs.states,
         getSwitches: () => {},
         createFeatureSwitch: (name) => Promise.resolve('newId'),
         updateFeatureSwitch: () => Promise.resolve(),
         featureSwitchUpdated: () => {},
         deleteFeatureSwitches: (ids) => Promise.resolve()
     };
+    class mockFeatureCheck extends featureCheckNonConnected {
 
+    }
     beforeEach(() => {
         spyOn(props, 'getSwitches');
         spyOn(props, 'createFeatureSwitch').and.callThrough();
         spyOn(props, 'updateFeatureSwitch').and.callThrough();
         spyOn(props, 'featureSwitchUpdated').and.callThrough();
         spyOn(props, 'deleteFeatureSwitches').and.callThrough();
+        FeatureSwitchesRouteRewire.__Rewire__('FeatureCheck', mockFeatureCheck);
+        mockFeatureCheck.defaultProps = {
+            "states" : propsfs.states,
+            "show": true,
+            "component":'div',
+            "className":''
+        };
     });
 
     afterEach(() => {
@@ -48,6 +65,8 @@ describe('FeatureSwitchesRoute', () => {
         props.updateFeatureSwitch.calls.reset();
         props.featureSwitchUpdated.calls.reset();
         props.deleteFeatureSwitches.calls.reset();
+        FeatureSwitchesRouteRewire.__ResetDependency__('FeatureCheck');
+
     });
 
     it('test render of component ', () => {

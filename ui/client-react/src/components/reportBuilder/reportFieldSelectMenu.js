@@ -101,7 +101,7 @@ export class ReportFieldSelectMenu extends Component {
                     </div>
                     }
                 <ListOfElements
-                    renderer={DraggableTokenInMenu}
+                    childElementRenderer={DraggableTokenInMenu}
                     elements={elements}
                 />
             </div>
