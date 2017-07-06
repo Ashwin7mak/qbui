@@ -132,13 +132,25 @@ describe('NavItem', () => {
     });
 
     describe('getLinkItem', () => {
-        it('will render a link if isHeading is false', () => {
+        it('will render a Link if isHeading is false', () => {
             component = shallow(<NavItem isHeading={false}
                                          showToolTip={false}
                                          secondaryIcon={true}
                                          item={mockItem} />);
 
             expect(component.find(LinkMock)).toBePresent();
+        });
+
+        it('will render Link with the correct onClick function', () => {
+            component = mount(<NavItem isHeading={false}
+                                       showToolTip={false}
+                                       secondaryIcon={true}
+                                       item={mockItem} />);
+
+            instance = component.instance();
+            let link = component.find(LinkMock);
+
+            expect(link).toHaveProp('onClick', instance.onClick);
         });
 
         it('will render a className withSecondary if secondaryIcon is true', () => {
@@ -217,12 +229,12 @@ describe('NavItem', () => {
             expect(component.find('.mockHoverComponent')).not.toBePresent();
         });
 
-        it('will invoke onSelect if link is clicked', () => {
+        it('will invoke onSelect if Link is clicked', () => {
             component = shallow(<NavItem item={{}}
                                          isHeading={false}
                                          secondaryIcon={false}
                                          onSelect={mockFuncs.onSelect} />);
-
+            //cannot click on Link since it is being mocked out, need to invoke function directly
             instance = component.instance();
             instance.onClick();
 
