@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {getTotalPaidUsers, getTotalDeniedUsers, getTotalDeactivatedUsers, getTotalRealmUsers} from "../../src/account/users/AccountUsersReducer";
 import {Analytics} from "../../../reuse/client/src/components/analytics/analytics";
 import Config from '../../../client-react/src/config/app.config';
-import {getPageLoadTime, getGridLoadTime} from "../analytics/performanceTimingReducer";
+import {getPageLoadTime, getGridLoadTime, getGridRefreshTime} from "../analytics/performanceTimingReducer";
 import _ from "lodash";
 
 export class GovernanceAnalytics extends Component {
@@ -58,7 +58,9 @@ export class GovernanceAnalytics extends Component {
             propKeyVals.pageLoadTime = this.props.pageLoadTime;
             propKeyVals.usersGridLoadTime = this.props.usersGridLoadTime;
         }
-
+        else if (this.state.pageLoaded) {
+            propKeyVals.usersGridRefreshTime = this.props.usersGridRefreshTime;
+        }
 
         return (
             <Analytics dataset={Config.evergageDataset}
@@ -142,6 +144,11 @@ GovernanceAnalytics.propTypes = {
     usersGridLoadTime: PropTypes.number,
 
     /**
+     * The time at which the users grid finished rendering/re-rendering with data (including after searches)
+     */
+    usersGridRefreshTime: PropTypes.number,
+
+    /**
      * Flag used to identify if the page has completed an initial load
      */
     pageLoaded: PropTypes.bool
@@ -163,7 +170,8 @@ const mapStateToProps = (state) => {
         deactivatedUsers: getTotalDeactivatedUsers(state),
         totalRealmUsers: getTotalRealmUsers(state),
         pageLoadTime: getPageLoadTime(state),
-        usersGridLoadTime: getGridLoadTime(state)
+        usersGridLoadTime: getGridLoadTime(state),
+        usersGridRefreshTime: getGridRefreshTime(state)
     };
 };
 

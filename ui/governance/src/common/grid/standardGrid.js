@@ -8,7 +8,7 @@ import QbCell from "../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
-import {pageLoadTime} from "../../analytics/performanceTimingActions";
+import {pageLoadTime, gridRefreshTime} from "../../analytics/performanceTimingActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
@@ -59,9 +59,14 @@ export class StandardGrid extends Component {
         this.tableRef = body && body.getRef().parentNode;
     };
 
+    componentWillUpdate = () => {
+        window.performance.mark(this.props.id + 'GridRefreshStart');
+    };
+
     componentDidUpdate = () => {
         if (this.props.items) {
             this.props.pageLoadTime();
+            this.props.gridRefreshTime();
         }
     };
 
@@ -216,6 +221,11 @@ StandardGrid.propTypes = {
     pageLoadTime: PropTypes.func,
 
     /**
+     *  Function that returns the user grid refresh time (as a number)
+     */
+    gridRefreshTime: PropTypes.func,
+
+    /**
      * Header cell to be passed in to make QbGrid more reusable.
      * Use QbHeaderCell for a default non-draggable header.
      * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use). */
@@ -260,7 +270,22 @@ const mapDispatchToProps = (dispatch, props) => ({
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
     },
     pageLoadTime: () => {
-        dispatch(pageLoadTime(_.round((window.performance.now() / 1000), 2)));
+        dispatch(pageLoadTime((window.performance.now())));
+    },
+    gridRefreshTime: () => {
+        window.performance.mark(props.id + 'GridRefreshEnd');
+        window.performance.measure(
+            props.id + 'GridRefreshTime',
+            props.id + 'GridRefreshStart',
+            props.id + 'GridRefreshEnd'
+        );
+
+        let refreshEntries = window.performance.getEntriesByName(props.id + 'GridRefreshTime');
+        let time = 0;
+        if (refreshEntries) {
+            time = refreshEntries[refreshEntries.length - 1].duration;
+        }
+        dispatch(gridRefreshTime(time));
     }
 });
 
