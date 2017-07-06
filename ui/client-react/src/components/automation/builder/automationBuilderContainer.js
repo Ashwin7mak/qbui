@@ -47,7 +47,7 @@ export class AutomationBuilderContainer extends Component {
  //   }
 
     componentDidMount() {
-        if (this.getPath() === "/qbase/builder/app/:appId/automation/create"){
+        if (this.getPath() === "/qbase/builder/app/:appId/automation/create") {
             this.props.createAutomation();
         } else if (this.getAppId() && this.getAutomationId()) {
             this.props.loadAutomation(this.getAppId(), this.getAutomationId());
