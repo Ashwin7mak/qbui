@@ -48,53 +48,99 @@
         });
 
         /**
-         * Test method. Checks to make sure the Table Actions ( Sort By, Records Count and dropdownToggle button) are visible/enabled/clickable.
+         * Test method. Checks to make sure the Table Actions ( Sort By, Records Count and dropdownToggle button) are visible/enabled/touchable.
          */
-        it('Should load the table report actions', function() {
+        xit('Should load the table report actions', function() {
 
             // Wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
             // Assert sort by / group by button is visible and enabled
-            expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBeTruthy();
-            expect(reportContentPO.reportSortGrpBtnSB.isEnabled()).toBeTruthy();
+            expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBe(true);
+            expect(reportContentPO.reportSortGrpBtnSB.isEnabled()).toBe(true);
 
             // Assert records count total
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
 
-            // Assert dropdownToggle actionButton is visible and clickable
-            expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
-            // click on dropdownToggle actionButton
+            // Assert dropdownToggle actionButton is visible and touchable/clickable
+            expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBe(true);
+            // touch on dropdownToggle actionButton
             reportContentPO.clickDropdownToggleActionButtonSB();
 
           //  reportContentPO.waitForReportContentSB();
+            // menu action button - '.dropdown-menu .dropdown-menu-right .menuActionButton'
+            //verify dropdown action menu is visible
+           // expect(browser.element('.dropdown-menu .dropdown-menu-right').isVisible()).toBe(true);
+            //helper
+            reportContentPO.waitForReportContentSB();
         });
 
         /**
-         * verify record count and card expander button is visible/clickable
+         * verify record count and card expander button is visible/touchable
          */
-        xit('Should load the reports page with the appropriate table report and verify  card expander button is clickable', function() {
+        xit('Should load the reports page with the appropriate table report and verify  card expander button is touchable', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
             // Assert records count
             let recordCount = formsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
+            //verify row card is collapsed
+            expect(browser.element('.custom-row-card .expanded').isVisible()).toBe(false);
 
-            // verify card expander button is clickable
+            //touch row card expander button
             reportContentPO.clickCardExpanderButtonSB();
+
+            //verify row card is exapnded
+            expect(browser.element('.custom-row-card .expanded').isVisible()).toBe(true);
+
+            //helper
+            reportContentPO.waitForReportContentSB();
         });
 
         /**
-         * Verifies add new record button is visible and enabled
+         * Verifies add new record button is visible, enabled and touchable
          */
-        xit('verify add record button is visible and enabled', function() {
+        xit('verify add record button is visible, enabled and touchable', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            // Assert 'add new record' button is visible and clickable
-            expect(reportContentPO.addRecordBtnSB.isVisible()).toBeTruthy();
-            expect(reportContentPO.addRecordBtnSB.isEnabled()).toBeTruthy();
+            //touch 'add record' button
+            reportContentPO.clickAddRecordBtnSB();
+        });
+
+        /**
+         * swipe left
+         */
+        xit('swipe left', function() {
+            // wait for the report content to be visible
+            reportContentPO.waitForReportContentSB();
+
+            // swipe left
+            browser.swipeLeft('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up', 100);
+            //iconActionButton edit btn btn-default
+
+            expect(browser.element('.actionsCol .iconActionButton .edit').isVisible()).toBe(true);
+            //.dropdown-menu .menuActionButton
+
+        });
+
+        /**
+         * swipe right
+         */
+        it('swipe right', function() {
+            // wait for the report content to be visible
+            reportContentPO.waitForReportContentSB();
+
+            // swipe left
+          //  browser.swipeRight('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up', 100);
+            //iconActionButton edit btn btn-default
+            var x = browser.getLocation('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up', 'y');
+            browser.swipe('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up',0,0,100);
+
+            expect(browser.element('.actionsCol .iconActionButton .edit').isVisible()).toBe(true);
+            //.dropdown-menu .menuActionButton
+
         });
 
     });

@@ -557,9 +557,22 @@
          */
         clickAddRecordBtnSB: {
             value: function() {
-                browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
+                // Assert 'add new record' button is visible and clickable
+                expect(this.addRecordBtnSB.isVisible()).toBe(true);
+                expect(this.addRecordBtnSB.isEnabled()).toBe(true);
+                //click on the 'add record' button
                 browser.element('.reportToolsAndContentContainer .addNewRecord').click();
-                return  browser.element('.editForm').waitForVisible();
+                //  browser.execute(function () {
+                //     var event = new MouseEvent('touch', {
+                //         'view': window,
+                //         'bubbles': true,
+                //         'cancelable': true,
+                //         'detail': 2
+                //     });
+                //     document.querySelector('.reportToolsAndContentContainer .addNewRecord').dispatchEvent(event);
+                // });
+                //make sure edit form page is visible
+                return  browser.element('.loadedContent .formContainer .editForm').waitForVisible();
             }
         },
         /**
@@ -598,6 +611,16 @@
                 // $(".qbIcon.iconUISturdy-fries").bind( "click", function(e) {
                 //     e.stopPropagation();
                 // });
+                  return browser.element('.qbIcon.iconUISturdy-fries').click();
+                // return browser.execute(function () {
+                //     var event = new MouseEvent('touch', {
+                //         'view': window,
+                //         'bubbles': true,
+                //         'cancelable': true,
+                //         'detail': 2
+                //     });
+                //     document.querySelector('.qbIcon.iconUISturdy-fries').dispatchEvent(event);
+                // });
             }
         },
         /**
@@ -608,6 +631,15 @@
                 expect(this.cardExpanderButtonSB.isVisible()).toBe(true);
                 expect(this.cardExpanderButtonSB.isEnabled()).toBe(true);
                 return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
+               //  return browser.execute(function () {
+               //      var event = new MouseEvent('touch', {
+               //          'view': window,
+               //          'bubbles': true,
+               //          'cancelable': true,
+               //          'detail': 2
+               //      });
+               //      document.querySelector('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').dispatchEvent(event);
+               //  });
             }
         },
 
