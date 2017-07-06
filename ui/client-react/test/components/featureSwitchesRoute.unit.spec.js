@@ -1,7 +1,9 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import {FeatureSwitchesRoute} from '../../src/components/featureSwitches/featureSwitchesRoute';
+import {FeatureSwitchesRoute, __RewireAPI__ as FeatureSwitchesRouteRewire} from '../../src/components/featureSwitches/featureSwitchesRoute';
 import {MemoryRouter} from 'react-router-dom';
+import {FeatureCheck as featureCheckNonConnected} from '../../src/components/featureSwitches/featureCheck';
+
 describe('FeatureSwitchesRoute', () => {
     let component;
 
@@ -23,23 +25,38 @@ describe('FeatureSwitchesRoute', () => {
             "overrides":[]
         }
     ];
-
+    const propsfs = {
+        "states" : [
+            {name: 'featureSwitchUITest', status: true},
+            {name: 'featureSwitchUI', status: true}
+        ]
+    };
     const props = {
         switches: sampleSwitches,
         error: null,
+        states: propsfs.states,
         getSwitches: () => {},
         createFeatureSwitch: (name) => Promise.resolve('newId'),
         updateFeatureSwitch: () => Promise.resolve(),
         featureSwitchUpdated: () => {},
         deleteFeatureSwitches: (ids) => Promise.resolve()
     };
+    class mockFeatureCheck extends featureCheckNonConnected {
 
+    }
     beforeEach(() => {
         spyOn(props, 'getSwitches');
         spyOn(props, 'createFeatureSwitch').and.callThrough();
         spyOn(props, 'updateFeatureSwitch').and.callThrough();
         spyOn(props, 'featureSwitchUpdated').and.callThrough();
         spyOn(props, 'deleteFeatureSwitches').and.callThrough();
+        FeatureSwitchesRouteRewire.__Rewire__('FeatureCheck', mockFeatureCheck);
+        mockFeatureCheck.defaultProps = {
+            "states" : propsfs.states,
+            "show": true,
+            "component":'div',
+            "className":''
+        };
     });
 
     afterEach(() => {
@@ -48,11 +65,13 @@ describe('FeatureSwitchesRoute', () => {
         props.updateFeatureSwitch.calls.reset();
         props.featureSwitchUpdated.calls.reset();
         props.deleteFeatureSwitches.calls.reset();
+        FeatureSwitchesRouteRewire.__ResetDependency__('FeatureCheck');
+
     });
 
     // These tests would be enabled when we have a global service for feature services in place
     // https://quickbase.atlassian.net/browse/MC-1189
-    xit('test render of component ', () => {
+    it('test render of component ', () => {
 
         component = TestUtils.renderIntoDocument(
             /**
@@ -67,7 +86,7 @@ describe('FeatureSwitchesRoute', () => {
 
     });
 
-    xit('test selecting a feature switch ', () => {
+    it('test selecting a feature switch ', () => {
 
         component = TestUtils.renderIntoDocument(
             <MemoryRouter>
@@ -81,7 +100,7 @@ describe('FeatureSwitchesRoute', () => {
 
     });
 
-    xit('test selecting all feature switches ', () => {
+    it('test selecting all feature switches ', () => {
 
         component = TestUtils.renderIntoDocument(
             <MemoryRouter>
@@ -95,7 +114,7 @@ describe('FeatureSwitchesRoute', () => {
 
     });
 
-    xit('test toggling all feature switches ', () => {
+    it('test toggling all feature switches ', () => {
 
         component = TestUtils.renderIntoDocument(
             <MemoryRouter>
@@ -120,7 +139,7 @@ describe('FeatureSwitchesRoute', () => {
         expect(props.updateFeatureSwitch).toHaveBeenCalled();
     });
 
-    xit('test deleting feature switches ', () => {
+    it('test deleting feature switches ', () => {
 
         component = TestUtils.renderIntoDocument(
             <MemoryRouter>
@@ -143,7 +162,7 @@ describe('FeatureSwitchesRoute', () => {
 
     });
 
-    xit('test adding a feature switch ', () => {
+    it('test adding a feature switch ', () => {
 
         component = TestUtils.renderIntoDocument(
             <MemoryRouter>
