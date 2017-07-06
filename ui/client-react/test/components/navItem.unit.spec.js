@@ -64,11 +64,21 @@ describe('NavItem', () => {
     });
 
     it('will render the icon the user chooses', () => {
-        component = mount(<NavItem item={{}}
-                                   icon="Customer"
-                                   iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} />);
+        component = shallow(<NavItem item={{}}
+                                     icon="Customer"
+                                     iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                                     defaultIcon="favicon"
+                                     defaultIconFont={AVAILABLE_ICON_FONTS.DEFAULT}/>);
 
-        expect(component.find('.qbIcon .iconTableSturdy-Customer')).toBePresent();
+        expect(component.find({icon: 'Customer', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY})).toBePresent();
+    });
+
+    it('will render the defaultIcon and defaultIconFont if icon and iconfont are undefined', () => {
+        component = shallow(<NavItem item={{}}
+                                     defaultIcon="favicon"
+                                     defaultIconFont={AVAILABLE_ICON_FONTS.DEFAULT}/>);
+
+        expect(component.find({icon: 'favicon', iconFont: AVAILABLE_ICON_FONTS.DEFAULT})).toBePresent();
     });
 
     it('will render a heading if isHeading is true with a secondaryIcon', () => {
@@ -98,15 +108,15 @@ describe('NavItem', () => {
 
     });
 
-    fit('will invoke onClick if heading is clicked', () => {
+    it('will invoke onClick if heading is clicked', () => {
         component = shallow(<NavItem item={{}}
                                      isHeading={true}
                                      secondaryIcon={false}
                                      onClick={mockFuncs.onClick} />);
 
         instance = component.instance();
-        // instance.onHeadingClick(mockClickEvent);
-        component.find('.heading').simulate('click');
+        instance.onHeadingClick(mockClickEvent);
+
         expect(mockFuncs.onClick).toHaveBeenCalledWith(mockClickEvent);
     });
 
