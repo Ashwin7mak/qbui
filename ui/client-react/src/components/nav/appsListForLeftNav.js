@@ -41,6 +41,9 @@ export const AppsList = React.createClass({
     },
 
     appList() {
+        // app icon has an edge case where the default app icon uses the AVAILABLE_ICON_FONTS.DEFAULT
+        let getFontIcon = app.icon === DEFAULT_APP_ICON || app.icon === undefined ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY;
+
         return this.props.apps && this.props.apps.map((app) => {
             // Give all apps in the left nav list a default icon of 'favicon'
             return this.searchMatches(app.name) &&
@@ -49,7 +52,7 @@ export const AppsList = React.createClass({
                          icon={app.icon}
                          defaultIcon={DEFAULT_APP_ICON}
                          defaultIconFont={AVAILABLE_ICON_FONTS.DEFAULT}
-                         iconFont={app.icon === DEFAULT_APP_ICON || app.icon === undefined ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                         iconFont={getFontIcon}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
                          open={true}  />;
