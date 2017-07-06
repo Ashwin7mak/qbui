@@ -14,6 +14,7 @@ class automationsSettings {
     }
 
     get addButton() {
+        let elementControlWrapper = require('../common/controls/elementControlWrapper.po');
         return new elementControlWrapper('.iconUISturdy-add-new-filled');
     }
 }

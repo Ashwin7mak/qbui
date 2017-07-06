@@ -200,7 +200,7 @@
             expect(emailAutomationEditView.body.text).toBe('');
         });
 
-        it('Automation Edit can be accessed through UI from Automations List.', function() {
+        it('Automation Create can be accessed through UI from Automations List.', function() {
 
             //navigate to single automation view
             e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
@@ -227,8 +227,6 @@
             const newSubject = 'subject';
             const newBody = 'body_';
 
-            let automation = appAutomations[1];
-
             //navigate to single automation view
             e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
 
@@ -250,8 +248,6 @@
             const newToAddress = 'toAddress';
             const newSubject = 'subject';
             const newBody = 'body_';
-
-            let automation = appAutomations[1];
 
             //navigate to single automation view
             e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
