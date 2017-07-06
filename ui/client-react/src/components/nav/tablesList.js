@@ -126,10 +126,16 @@ let TablesList = React.createClass({
             <Link to={link}><I18nMessage message={msg}/></Link>
         </div>);
 
-        return (<NavItem item={{msg: msg, link:link, icon:icon}} selected={selected}
-            hoverComponent={hoverComponent} open={true} onSelect={this.props.onSelect}/>);
+        return (<NavItem item={{msg: msg, link:link}}
+                         icon={icon}
+                         iconFont={AVAILABLE_ICON_FONTS.DEFAULT}
+                         selected={selected}
+                         hoverComponent={hoverComponent}
+                         open={true}
+                         onSelect={this.props.onSelect}/>);
 
     },
+
     getTopLinksItem() {
         const appHomePageSelected = !this.props.selectedTableId &&
             (WindowLocationUtils.getPathname() === `${APP_ROUTE}/${this.props.selectedAppId}`);
