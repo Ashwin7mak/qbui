@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from "react";
 import ReactDOM from "react-dom";
 import bodymovin from "bodymovin";
-import QBLoader from "../../assets/animations/QBLoader.json";
+import "./bodyMovin.scss";
 
 class BodyMovin extends Component {
 
@@ -17,10 +17,9 @@ class BodyMovin extends Component {
                 renderer: 'svg',
                 loop: true,
                 autoplay: true,
-                animationData: QBLoader // the path to the animation json
+                animationData: this.props.animationData // the path to the animation json
             });
     }
-
 
     componentWillUnmount() {
         bodymovin.destroy();
@@ -30,9 +29,13 @@ class BodyMovin extends Component {
 
     render() {
         return (
-            <div className="customAnimation" ref={this.bodyMovinRef} />
+            <div className="bodymovin" ref={this.bodyMovinRef} />
         );
     }
 }
+
+BodyMovin.PropTypes = {
+    animationData: PropTypes.object
+};
 
 export default BodyMovin;

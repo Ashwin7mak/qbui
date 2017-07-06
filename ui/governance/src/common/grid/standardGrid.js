@@ -13,7 +13,7 @@ import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
-import QBLoader from "../../../../reuse/client/src/components/bodyMovin/bodyMovin";
+import QBLoader from "./loader/QBLoader";
 import "./standardGrid.scss";
 
 // Helper function to return additional props to add to a row element
@@ -72,9 +72,6 @@ export class StandardGrid extends Component {
     renderItemsExist = () => {
         return (
             <div className="gridContainer">
-                {_.isNull(this.props.items) ?
-                    <QBLoader/> :
-
                     <Table.Provider
                         className="qbGrid"
                         columns={this.getColumns()}
@@ -100,7 +97,6 @@ export class StandardGrid extends Component {
                             ref={this.bodyRef}
                         />
                     </Table.Provider>
-                }
             </div>
         );
     };
@@ -132,18 +128,22 @@ export class StandardGrid extends Component {
      */
     render() {
         return (
-            <div className="gridWrapper">
-                <StandardGridToolbar id={this.props.id}
-                                     doUpdate={this.props.doUpdate}
-                                     shouldFacet={this.props.shouldFacet}
-                                     shouldSearch={this.props.shouldSearch}
-                                     facetFields={this.props.facetFields}
-                                     itemTypePlural={this.props.itemTypePlural}
-                                     itemTypeSingular={this.props.itemTypeSingular}
-                                     itemsPerPage={this.props.itemsPerPage}
-                />
-                {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
-                {!_.isNull(this.props.items) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
+            <div className="gridLoader">
+            {_.isNull(this.props.items) ? <QBLoader/> :
+                <div className="gridWrapper">
+                    <StandardGridToolbar id={this.props.id}
+                                         doUpdate={this.props.doUpdate}
+                                         shouldFacet={this.props.shouldFacet}
+                                         shouldSearch={this.props.shouldSearch}
+                                         facetFields={this.props.facetFields}
+                                         itemTypePlural={this.props.itemTypePlural}
+                                         itemTypeSingular={this.props.itemTypeSingular}
+                                         itemsPerPage={this.props.itemsPerPage}
+                    />
+                    {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
+                    {!_.isNull(this.props.items) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
+                </div>
+            }
             </div>
         );
     }

@@ -1,15 +1,19 @@
 @import '../../../../reuse/client/src/assets/css/_qbVariables.scss';
 @import '../../../../client-react/src/assets/css/animate.min.css';
 
-.gridWrapper {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    position: relative;
-    height: 100%;
-    min-height: 0;
-    margin-left: 10px;
-    margin-right:10px;
+.gridLoader > .gridWrapper {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        position: relative;
+        height: 100%;
+        min-height: 0;
+        margin-left: 10px;
+        margin-right: 10px;
+}
+
+.gridLoader {
+    margin: auto;
 }
 
 .gridContainer {
