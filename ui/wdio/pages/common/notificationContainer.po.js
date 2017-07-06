@@ -13,6 +13,10 @@ class notificationContainerWindow {
     waitForSuccessNotification() {
         browser.waitForExist('.notification-success', e2eConsts.longWaitTimeMs);
     }
+
+    waitForFailureNotification() {
+        browser.waitForExist('.notification-failure', e2eConsts.longWaitTimeMs);
+    }
 }
 
 module.exports = new notificationContainerWindow();

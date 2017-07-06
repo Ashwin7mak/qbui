@@ -241,5 +241,28 @@
             notificationContainer.waitForSuccessNotification();
 
         });
+
+        it('Automation cant be saved through Create View without a name.', function() {
+            if (browser.desiredCapabilities.browserName === 'safari') {
+                return;
+            }
+
+            const newToAddress = 'toAddress';
+            const newSubject = 'subject';
+            const newBody = 'body_';
+
+            let automation = appAutomations[1];
+
+            //navigate to single automation view
+            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
+
+            emailAutomationEditView.to.text = newToAddress;
+            emailAutomationEditView.subject.text = newSubject;
+            emailAutomationEditView.body.text = newBody;
+
+            emailAutomationEditView.saveButton.click();
+            notificationContainer.waitForFailureNotification();
+
+        });
     });
 }());
