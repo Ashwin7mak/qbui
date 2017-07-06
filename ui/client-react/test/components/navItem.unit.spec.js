@@ -88,8 +88,8 @@ describe('NavItem', () => {
 
     it('will render a heading if isHeading is true with a secondaryIcon', () => {
         component = shallow(<NavItem item={{}}
-                                   isHeading={true}
-                                   secondaryIcon={secondaryIcon} />);
+                                     isHeading={true}
+                                     secondaryIcon={secondaryIcon} />);
 
         let li = component.find('li');
         let icon = component.find(Icon);
@@ -101,8 +101,8 @@ describe('NavItem', () => {
 
     it('will render a heading if isHeading is true WITHOUT a secondaryIcon', () => {
         component = shallow(<NavItem item={{}}
-                                   isHeading={true}
-                                   secondaryIcon={false} />);
+                                     isHeading={true}
+                                     secondaryIcon={false} />);
 
         let li = component.find('li');
         let icon = component.find(Icon);
@@ -184,8 +184,8 @@ describe('NavItem', () => {
 
     it('will render OverLayTrigger if showToolTip is true and isHeading is false', () => {
         component = shallow(<NavItem isHeading={false}
-                                   showToolTip={true}
-                                   item={mockItem} />);
+                                     showToolTip={true}
+                                     item={mockItem} />);
 
         expect(component.find(OverlayTrigger)).toBePresent();
     });
