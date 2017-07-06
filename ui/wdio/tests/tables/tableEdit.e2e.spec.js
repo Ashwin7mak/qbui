@@ -5,10 +5,7 @@
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
     var tableCreatePO = requirePO('tableCreate');
-    var formsPO = requirePO('formsPage');
-    let ReportContentPO = requirePO('reportContent');
-    let modalDialog = requirePO('/common/modalDialog');
-    let RequestAppsPage = requirePO('requestApps');
+    let topNavPO = requirePO('topNav');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
@@ -73,7 +70,7 @@
             tableCreatePO.selectTable(existingTableName);
 
             //Click on edit table settings and properties link of an existing table 'Table 2' under global actions gear
-            tableCreatePO.clickOnModifyTableSettingsLink();
+            topNavPO.clickOnTableSettingsLink();
 
             //Select the new icon from icon chooser
             var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
@@ -93,7 +90,7 @@
             tableCreatePO.selectTable(tableName);
 
             //Click on edit table settings and properties link under global actions gear
-            tableCreatePO.clickOnModifyTableSettingsLink();
+            topNavPO.clickOnTableSettingsLink();
 
             //Verify new edited values
             tableFields.forEach(function(tableField) {
@@ -123,7 +120,7 @@
             tableCreatePO.selectTable('Table 1');
 
             //Click on edit table settings and properties link of an existing table 'Table 1' under global actions gear
-            tableCreatePO.clickOnModifyTableSettingsLink();
+            topNavPO.clickOnTableSettingsLink();
 
             //Get all original field values from table builder
             originalFieldValues = tableCreatePO.getAllTableFieldValues();
@@ -146,7 +143,7 @@
             tableCreatePO.selectTable('Table 1');
 
             //Click on edit table settings and properties link of an existing table 'Table 1' under global actions gear
-            tableCreatePO.clickOnModifyTableSettingsLink();
+            topNavPO.clickOnTableSettingsLink();
 
             //Verify new edited values
             newFieldValues = tableCreatePO.getAllTableFieldValues();
