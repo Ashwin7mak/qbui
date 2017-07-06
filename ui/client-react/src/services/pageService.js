@@ -39,6 +39,7 @@ class PageService extends BaseService {
     /**
      * This is a super temporary function, we will be removing this SOON (really, I swear).
      * @param appId
+     * @param pageId
      */
     getMockPage(appId, pageId) {
         let url = super.constructUrl(`${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/page/{1}`, [appId, pageId]);
