@@ -60,13 +60,39 @@ export class StandardGrid extends Component {
     };
 
     componentWillUpdate = () => {
-        window.performance.mark(this.props.id + 'GridRefreshStart');
+        // null check - window.performance.mark is undefined in safari
+        if (window.performance.mark) {
+            window.performance.mark(this.props.id + 'GridRefreshStart');
+        }
+    };
+
+    /**
+     * Calculates the time from GridRefreshStart for the current grid
+     * @returns {*} Null (if performance.mark not supported), Number in millis if supported
+     */
+    calculateGridRefreshTime = () => {
+        // null check - window.performance.mark is undefined in safari
+        if (window.performance.mark) {
+            window.performance.mark(this.props.id + 'GridRefreshEnd');
+            window.performance.measure(
+                this.props.id + 'GridRefreshTime',
+                this.props.id + 'GridRefreshStart',
+                this.props.id + 'GridRefreshEnd'
+            );
+
+            let refreshEntries = window.performance.getEntriesByName(this.props.id + 'GridRefreshTime');
+            let time = 0;
+            if (refreshEntries) {
+                time = refreshEntries[refreshEntries.length - 1].duration;
+            }
+            this.props.gridRefreshTime(time);
+        }
     };
 
     componentDidUpdate = () => {
         if (this.props.items) {
             this.props.pageLoadTime();
-            this.props.gridRefreshTime();
+            this.calculateGridRefreshTime();
         }
     };
 
@@ -272,19 +298,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     pageLoadTime: () => {
         dispatch(pageLoadTime((window.performance.now())));
     },
-    gridRefreshTime: () => {
-        window.performance.mark(props.id + 'GridRefreshEnd');
-        window.performance.measure(
-            props.id + 'GridRefreshTime',
-            props.id + 'GridRefreshStart',
-            props.id + 'GridRefreshEnd'
-        );
-
-        let refreshEntries = window.performance.getEntriesByName(props.id + 'GridRefreshTime');
-        let time = 0;
-        if (refreshEntries) {
-            time = refreshEntries[refreshEntries.length - 1].duration;
-        }
+    gridRefreshTime: (time) => {
         dispatch(gridRefreshTime(time));
     }
 });

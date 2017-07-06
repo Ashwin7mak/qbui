@@ -84,7 +84,6 @@ describe('StandardGrid', () => {
         expect(StandardGridShallow).toBeDefined();
         expect(StandardGridShallow.length).toBeTruthy();
 
-
         let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
         expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
@@ -163,6 +162,115 @@ describe('StandardGrid', () => {
 
         expect(StandardGridShallow.find('.noItemsExist')).toBePresent();
         expect(StandardGridShallow.find('.qbGrid')).not.toBePresent();
+    });
+
+    describe('grid performance timing', () => {
+        let items = [];
+        let columns = [{
+            property: 'firstName',
+            header: {
+                label: 'First Name'
+            },
+            fieldDef: {
+                id: 1,
+                datatypeAttributes: {
+                    type: FieldConsts.TEXT
+                }
+            }
+        }];
+
+        it('should create a time mark in window.performance.mark for grid updating', () => {
+            let StandardGridShallow = shallow(
+                <StandardGrid
+                    columns={columns}
+                    getFacetFields={() => {
+                    }}
+                    doUpdate={AccountUsersActions.doUpdateUsers}
+                    items={items}
+                    id={"accountUsers"}
+                    rowKey={"uid"}
+                    cellRenderer={QbCell}
+                />);
+
+            let oldMark = window.performance.mark;
+            window.performance.mark = () => {
+            };
+
+            spyOn(window.performance, 'mark');
+
+            StandardGridShallow.setProps({items: ['test']});
+            expect(window.performance.mark).toHaveBeenCalledWith('accountUsersGridRefreshStart');
+
+            window.performance.mark = oldMark;
+        });
+
+        describe('pageLoadTime and gridRefreshTime calls', () => {
+            let pageLoadTime, gridRefreshTime, itemsNew, StandardGridShallow, instance, createShallowStandardGrid;
+
+            beforeEach(() => {
+                pageLoadTime = jasmine.createSpy('pageLoadTime');
+                gridRefreshTime = jasmine.createSpy('gridRefreshTime');
+
+                /**
+                 * Returns a new StandardGrid shallow component using the given items for the items prop
+                 * @param newItems - Array of 'items' (rows)
+                 * @returns {*} a new StandardGrid component
+                 */
+                createShallowStandardGrid = (newItems) => {
+                    return shallow(
+                        <StandardGrid
+                            columns={columns}
+                            getFacetFields={() => {
+                            }}
+                            doUpdate={AccountUsersActions.doUpdateUsers}
+                            items={newItems}
+                            id={"accountUsers"}
+                            rowKey={"uid"}
+                            cellRenderer={QbCell}
+                            pageLoadTime={pageLoadTime}
+                            gridRefreshTime={gridRefreshTime}
+                        />);
+                };
+            });
+
+            it('should call pageLoadTime or gridRefreshTime if there are items', () => {
+                itemsNew = [{
+                    hasAppAccess: false,
+                    id: 99999,
+                    uid: 11111
+                }];
+                StandardGridShallow = createShallowStandardGrid(itemsNew);
+                instance = StandardGridShallow.instance();
+
+                instance.componentDidUpdate();
+
+                expect(pageLoadTime).toHaveBeenCalled();
+                expect(gridRefreshTime).toHaveBeenCalled();
+
+            });
+
+            it('should call pageLoadTime or gridRefreshTime even if items is empty', () => {
+                itemsNew = [];
+                StandardGridShallow = createShallowStandardGrid(itemsNew);
+                instance = StandardGridShallow.instance();
+
+                instance.componentDidUpdate();
+
+                expect(pageLoadTime).toHaveBeenCalled();
+                expect(gridRefreshTime).toHaveBeenCalled();
+            });
+
+            it('should not call pageLoadTime or gridRefreshTime if items is null', () => {
+                itemsNew = null;
+                StandardGridShallow = createShallowStandardGrid(itemsNew);
+                instance = StandardGridShallow.instance();
+
+                instance.componentDidUpdate();
+
+                expect(pageLoadTime).not.toHaveBeenCalled();
+                expect(gridRefreshTime).not.toHaveBeenCalled();
+            });
+        });
     });
 });
 
