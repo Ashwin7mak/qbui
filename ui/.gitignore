@@ -33,6 +33,7 @@ node_modules/
 
 # don't want local configs accidentally checked in
 wdio/config/wdio.conf.js
+wdio/config/wdioSauce.conf.override.js
 wdio/config/wdioMobile.conf.js
 tests.custom.webpack.js
 
