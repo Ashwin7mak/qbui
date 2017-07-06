@@ -41,7 +41,7 @@ Parameters:
     Default: 169.254.170.3:2000
   TracingEnabled:
     Type: String
-    Default: true
+    Default: false
 Mappings:
   # 3381 = pre-prod
   # 1063 = prod
