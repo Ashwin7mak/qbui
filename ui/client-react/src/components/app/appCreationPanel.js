@@ -52,12 +52,6 @@ export class AppCreationPanel extends Component {
             }
             break;
         }
-        case 'tableNoun': {
-            if (trimmed === '') {
-                validationError = Locale.getMessage('tableCreation.validateRecordNameEmpty');
-            }
-            break;
-        }
         }
 
         return validationError;
