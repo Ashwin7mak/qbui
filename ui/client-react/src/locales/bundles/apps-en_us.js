@@ -772,8 +772,8 @@ export default {
             iconHeading: "Icon",
             searchPlaceholder: "Search table icons...",
 
-            tableNamePlaceholder: "For example, Customers",
-            recordNamePlaceholder: "For example, customer",
+            tableNamePlaceholder: "For example, Customers. Use up to {numberOfChars} characters",
+            recordNamePlaceholder: "For example, customer. Use up to {numberOfChars} characters",
             descriptionPlaceholder: "Text to show when hovering over the table name in the left navigation",
 
             finishedButtonLabel: "Create table",
