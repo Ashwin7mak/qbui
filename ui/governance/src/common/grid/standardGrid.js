@@ -127,8 +127,9 @@ export class StandardGrid extends Component {
      * - else... show the noItemsExist UI
      */
     render() {
+        let loadingClass = _.isNull(this.props.items) ? "loading" : null;
         return (
-            <div className="gridLoader">
+            <div className={`gridLoader ${loadingClass}`}>
             {_.isNull(this.props.items) ? <QBLoader/> :
                 <div className="gridWrapper">
                     <StandardGridToolbar id={this.props.id}

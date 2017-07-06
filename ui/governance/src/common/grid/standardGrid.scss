@@ -13,7 +13,19 @@
 }
 
 .gridLoader {
-    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.gridLoader.loading {
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+
+    .bodymovin {
+        margin-top: -($spacing-medium1/2);
+    }
 }
 
 .gridContainer {
