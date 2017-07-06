@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {shallow} from "enzyme";
+import {shallow, mount} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
 import BodyMovin from "../../src/components/bodyMovin/bodyMovin";
 

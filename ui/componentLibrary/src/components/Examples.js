@@ -45,6 +45,7 @@ import PaginationExample from 'raw!../examples/PaginationExample.js';
 // import RowActionsExample from 'raw!../examples/RowActionsExample.js';
 import NotificationManagerExample from 'raw!../examples/NotificationManagerExample.js';
 import StandardGridItemsCountExample from 'raw!../examples/StandardGridItemsCountExample.js';
+import QBLoaderExample from 'raw!../examples/QBLoaderExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -94,6 +95,7 @@ export default {
     // RowActions: RowActionsExample,
     NotificationManager: NotificationManagerExample,
     StandardGridItemsCount: StandardGridItemsCountExample,
+    QBLoader: QBLoaderExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };

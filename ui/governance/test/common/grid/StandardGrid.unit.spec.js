@@ -6,6 +6,7 @@ import {QbCell} from '../../../../client-react/src/components/dataTable/qbGrid/q
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
+import QBLoader from "../../../../reuse/client/src/components/loader/QBLoader";
 
 describe('StandardGrid', () => {
 
@@ -163,6 +164,44 @@ describe('StandardGrid', () => {
 
         expect(StandardGridShallow.find('.noItemsExist')).toBePresent();
         expect(StandardGridShallow.find('.qbGrid')).not.toBePresent();
+    });
+
+    it('shows the loader when items is null', () => {
+        let columns = [{
+            property: 'firstName',
+            header: {
+                label: 'First Name'
+            },
+            fieldDef: {
+                id: 1,
+                datatypeAttributes: {
+                    type: FieldConsts.TEXT
+                }
+            }
+        }];
+
+        let StandardGridShallow = shallow(
+            <StandardGrid
+                columns={columns}
+                getFacetFields={()=>{}}
+                doUpdate={AccountUsersActions.doUpdateUsers}
+                items={null}
+                id={"accountUsers"}
+                rowKey={"uid"}
+                cellRenderer={QbCell}
+            />
+        );
+        expect(StandardGridShallow).toBeDefined();
+        expect(StandardGridShallow.length).toBeTruthy();
+
+        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
+        expect(StandardGridToolbarComponent).not.toBePresent();
+
+        expect(StandardGridShallow.find('.noItemsExist')).not.toBePresent();
+        expect(StandardGridShallow.find('.qbGrid')).not.toBePresent();
+
+        expect(StandardGridShallow.find(QBLoader)).toBePresent();
+        expect(StandardGridShallow.find('.loading')).toBePresent();
     });
 });
 
