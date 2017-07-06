@@ -1,16 +1,34 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import {shallow, mount} from "enzyme";
+import {mount} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import BodyMovin from "../../src/components/bodyMovin/bodyMovin";
+import BodyMovin, {__RewireAPI__ as BodyMovinRewireAPI} from "../../src/components/bodyMovin/bodyMovin";
 
 describe('BodyMovin', () => {
+    let bodyMovinMock;
+
     beforeEach(() => {
         jasmineEnzyme();
+
+        bodyMovinMock = {
+            loadAnimation: jasmine.createSpy('loadAnimation'),
+            destroy: jasmine.createSpy('destroy')
+        };
+
+        BodyMovinRewireAPI.__Rewire__('bodymovin', bodyMovinMock);
     });
 
-    fit('has the correct ref', () => {
-        const wrapper = mount(<BodyMovin />);
-        expect(wrapper.getDOMNode()).to.have.property('ref');
-    })
+    afterEach(() => {
+        BodyMovinRewireAPI.__ResetDependency__('bodymovin');
+    });
+
+    it('mounts to the dom', () => {
+        let component = mount(<BodyMovin />);
+        expect(bodyMovinMock.loadAnimation).toHaveBeenCalled();
+    });
+
+    it('unmounts from dom', () => {
+        let component = mount(<BodyMovin />);
+        component.unmount();
+        expect(bodyMovinMock.destroy).toHaveBeenCalled();
+    });
 });
