@@ -42,28 +42,27 @@ import "./automationBuilderContainer.scss";
 
 export class AutomationBuilderContainer extends Component {
 
-    constructor(props) {
-        super(props);
-    }
+ //   constructor(props) {
+   //     super(props);
+ //   }
 
     componentDidMount() {
-        if (this.getAutomationId() === "create") {
+        if (this.getPath() === "/qbase/builder/app/:appId/automation/create"){
             this.props.createAutomation();
         } else if (this.getAppId() && this.getAutomationId()) {
             this.props.loadAutomation(this.getAppId(), this.getAutomationId());
         }
     }
 
+    getPath() {
+        return this.props.match && this.props.match.path ? this.props.match.path : undefined;
+    }
     getAppId() {
         return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
     }
 
     getAutomationId() {
         return this.props.match && this.props.match.params ? this.props.match.params.automationId : undefined;
-    }
-
-    getAutomationName() {
-        return this.props.automation ? this.props.automation.name : '';
     }
 
     updateName = (value) => {

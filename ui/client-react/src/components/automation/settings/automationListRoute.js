@@ -66,7 +66,7 @@ export class AutomationListRoute extends Component {
 
     createAutomation = () => {
         let appId = this.getAppId();
-        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/create`;
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/${UrlConsts.AUTOMATION.CREATE}`;
         this.props.history.push(link);
     }
 

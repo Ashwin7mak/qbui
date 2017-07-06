@@ -25,7 +25,7 @@ const props = {
     changeAutomationEmailTo: (value) => {},
     changeAutomationEmailSubject: (value) => {},
     changeAutomationEmailBody: (value) => {},
-    automation: undefined
+    automation: undefined,
 };
 
 const propsWithAuto = {
@@ -63,7 +63,8 @@ const propsWithCreate = {
             }
         ]
     },
-    newAutomation: true
+    newAutomation: true,
+    match : {path: "/qbase/builder/app/:appId/automation/create"}
 };
 
 describe('AutomationBuilderContainer', () => {
