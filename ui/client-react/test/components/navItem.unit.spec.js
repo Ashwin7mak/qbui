@@ -182,7 +182,7 @@ describe('NavItem', () => {
         expect(mockFuncs.onClick).not.toHaveBeenCalled();
     });
 
-    it('will render OverLayTrigger if showToolTip is true and isHeading is false', () => {
+    it('will render OverlayTrigger if showToolTip is true and isHeading is false', () => {
         component = shallow(<NavItem isHeading={false}
                                      showToolTip={true}
                                      item={mockItem} />);
@@ -190,7 +190,7 @@ describe('NavItem', () => {
         expect(component.find(OverlayTrigger)).toBePresent();
     });
 
-    it('will not render OverLayTrigger if showToolTip is false and isHeading is false', () => {
+    it('will not render OverlayTrigger if showToolTip is false and isHeading is false', () => {
         component = shallow(<NavItem isHeading={false}
                                      showToolTip={false}
                                      item={mockItem} />);
