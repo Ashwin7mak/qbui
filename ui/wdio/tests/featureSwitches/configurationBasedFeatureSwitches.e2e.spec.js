@@ -12,7 +12,6 @@
     describe('Configuration based feature switches tests: ', function() {
         let realmName;
         let realmId;
-        let testApp;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -21,9 +20,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
-                // Set your global objects to use in the test functions
-                testApp = createdApp;
+            return e2eBase.basicAppSetup(null, 5).then(function() {
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
@@ -50,7 +47,7 @@
 
             browser.waitForVisible('.mainContent');
             let element = browser.element('h1');
-            //make sure FS heading is visible
+            //make sure FS heading is visible (Enabled in - '/master.featureSwitches.json')
             expect(element.isVisible()).toBe(true);
             //verify the heading text
             expect(element.getText()).toEqual('Feature Switches');
@@ -61,7 +58,7 @@
 
             browser.waitForVisible('.mainContent');
             let element = browser.element('.featureSwitchesLoader .featureSwitches');
-            //make sure FS heading is visible
+            //make sure FS heading that belongs to the actual UI is not visible (Disabled in - '/master.featureSwitches.json')
             expect(element.isVisible()).toBe(false);
         });
 

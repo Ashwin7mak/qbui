@@ -22,6 +22,6 @@
   {
     "name": "featureSwitchUITest",
     "defaultOn": true,
-    "description": "This flag is used forFeature switch UI is being used for also testing feature check component. "
+    "description": "This flag is used for testing feature check component on the feature switch admin page"
   }
 ]
