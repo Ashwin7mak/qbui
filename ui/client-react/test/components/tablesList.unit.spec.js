@@ -123,9 +123,9 @@ describe('TablesList', () => {
                                       tables={[]}
                                       expanded={false}/>);
 
-        expect(component.find(CreateNewItemButton)).not.toBePresent();
-        expect(component.find('.emptyState')).toBePresent();
-        expect(component.find('.createNewIcon')).toBePresent();
-        expect(component.find('.iconMessage')).toBePresent();
+        expect(component.find(CreateNewItemButton)).toBePresent();
+        expect(component.find('.emptyState')).not.toBePresent();
+        expect(component.find('.createNewIcon')).not.toBePresent();
+        expect(component.find('.iconMessage')).not.toBePresent();
     });
 });
