@@ -161,7 +161,7 @@
                 }
 
                 //Load app into the Browser
-                e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+                browser.url(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
 
                 tableCreatePO.verifyEditTableTitleFieldDropDown(testApp, testCase.table, testCase.expectedDefaultSelection);
             });
