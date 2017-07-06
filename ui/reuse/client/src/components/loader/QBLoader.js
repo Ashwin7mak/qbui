@@ -12,7 +12,7 @@ class QBLoader extends Component {
             <BodyMovin animationData={QBLoaderJSON} />
         );
     }
-};
+}
 
 export default QBLoader;
 
