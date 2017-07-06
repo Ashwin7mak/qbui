@@ -13,7 +13,7 @@ import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
-import QBLoader from "./loader/QBLoader";
+import QBLoader from "../../../../reuse/client/src/components/loader/QBLoader";
 import "./standardGrid.scss";
 
 // Helper function to return additional props to add to a row element

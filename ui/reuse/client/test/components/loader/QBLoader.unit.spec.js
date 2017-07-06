@@ -1,8 +1,8 @@
 import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import QBLoader from "../../../../src/common/grid/loader/QBLoader";
-import BodyMovin from "../../../../../reuse/client/src/components/bodyMovin/bodyMovin";
+import QBLoader from "../../../src/components/loader/QBLoader";
+import BodyMovin from "../../../src/components/bodyMovin/bodyMovin";
 
 describe('QBLoader', () => {
     beforeEach(() => {

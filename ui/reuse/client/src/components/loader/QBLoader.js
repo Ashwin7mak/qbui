@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import BodyMovin from "../../../../../reuse/client/src/components/bodyMovin/bodyMovin";
-import QBLoaderJSON from "../../../../../reuse/client/src/assets/animations/QBLoader.json";
+import BodyMovin from "../bodyMovin/bodyMovin";
+import QBLoaderJSON from "../../assets/animations/QBLoader.json";
 
 /**
  * A higher order component that composes BodyMovin component and passes the
