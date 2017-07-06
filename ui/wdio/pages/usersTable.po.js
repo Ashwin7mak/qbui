@@ -7,6 +7,7 @@
     // Import the base page object
     let e2ePageBase = requirePO('./e2ePageBase');
     let modalDialog = requirePO('/common/modalDialog');
+    let ReportTableActionsPO = requirePO('reportTableActions');
     let UsersTablePage = Object.create(e2ePageBase, {
 
 
@@ -38,11 +39,11 @@
         // Export users button
         userExportCSV: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-download-cloud');}},
 
-        // Change user role settings
-        userChangeRole : {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-settings');}},
-
         // Remove user button on user report
         userRemoveIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-errorincircle-fill');}},
+
+        // Change user role button on user report
+        userChangeRoleIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-change-user-role');}},
 
         // User action icon elements
         userActionsListUlEl: {get: function() {return browser.element('.reportActionsBlock .actionIcons');}},
@@ -57,7 +58,7 @@
         userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
 
         /**
-         * Function to click on user Remove Icon
+         * Function to click on user remove Icon
          */
         clickUserRemoveIcon: {
             value: function() {
@@ -65,6 +66,18 @@
                 this.userRemoveIcon.waitForVisible();
                 //click on the user remove icon
                 return this.userRemoveIcon.click();
+            }
+        },
+
+        /**
+         * Function to click on change user role icon
+         */
+        clickChangeUserRoleIcon: {
+            value: function() {
+                //wait for user remove icon
+                this.userChangeRoleIcon.waitForVisible();
+                //click on the user remove icon
+                return this.userChangeRoleIcon.click();
             }
         },
 
@@ -87,6 +100,52 @@
             var colHeaders = [];
             for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
             return colHeaders;
+        }},
+
+        /**
+         * Helper function to select role
+         */
+        selectRole: {value: function(role) {
+            modalDialog.selectItemFromModalDialogDropDownList(modalDialog.modalDialogRoleSelectorDropDownArrow, role);
+        }},
+
+        /**
+         * Helper function to remove user from app
+         */
+        removeUserFromApp: {value: function(index, cancel) {
+            // Select the checkbox
+            ReportTableActionsPO.selectRecordRowCheckbox(index);
+            // Click remove icon in actions
+            UsersTablePage.clickUserRemoveIcon();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(modalDialog.modalDialogTitle).toContain("Remove this user?");
+            if (true === cancel) {
+                // Click Cancel
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            } else {
+                // Click remove button
+                modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
+            }
+        }},
+
+        /**
+         * Helper function to change user role in app
+         */
+        changeUserRoleInApp: {value: function(index, role, cancel) {
+            // Select the checkbox
+            ReportTableActionsPO.selectRecordRowCheckbox(index);
+            // Click change role icon in actions
+            UsersTablePage.clickChangeUserRoleIcon();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(modalDialog.modalDialogTitle).toContain('Change the role of');
+            UsersTablePage.selectRole(role);
+            if (true === cancel) {
+                // Click Cancel
+                modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
+            } else {
+                // Click change role button
+                modalDialog.clickOnModalDialogBtn(modalDialog.CHANGE_ROLE_BTN);
+            }
         }},
 
         /**
