@@ -69,8 +69,6 @@ describe('FeatureSwitchesRoute', () => {
 
     });
 
-    // These tests would be enabled when we have a global service for feature services in place
-    // https://quickbase.atlassian.net/browse/MC-1189
     it('test render of component ', () => {
 
         component = TestUtils.renderIntoDocument(
