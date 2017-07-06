@@ -43,7 +43,8 @@ export const AppsList = React.createClass({
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
             //app icon has an edge case where the AVAILABLE_ICON_FONTS.DEFAULT needs to be set here if it is 'favicon' or undefined
-            let getIconFont = app.icon === DEFAULT_APP_ICON || app.icon === undefined ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY;            return this.searchMatches(app.name) &&
+            let getIconFont = app.icon === DEFAULT_APP_ICON || app.icon === undefined ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY;
+                return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
                          item={app}
                          icon={app.icon}
