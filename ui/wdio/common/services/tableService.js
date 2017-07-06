@@ -80,6 +80,59 @@
             initTableProperties: function(appId, tableId, tableNoun) {
                 // Call the initTableProperties function in recordBase
                 return recordBase.initTableProperties(appId, tableId, tableNoun);
+            },
+            /**
+             * Adds a new table to the app specified by appId. This only creates a table in core.
+             * @param appId
+             * @param table -- table object must contain atleast a name
+             * @returns {string}
+             */
+            createTableInCore: function(appId, table) {
+                if (!table.name) {
+                    return "Required field missing: tableName";
+                }
+                let tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(appId, null, false);
+                return recordBase.apiBase.executeRequest(tablesEndpoint, 'POST', table).then(
+                    (response) => {
+                        return JSON.parse(response.body);
+                    }
+                ).catch((ex) => {
+                    log.error('Unexpected exception creating table in core');
+                    return promise.reject(ex);
+                });
+            },
+            /**
+             * Adds a new table using the node end point of tableComponents
+             * This will create a table object in core + set up tableProperties object in EE  + add a couple of fields to the table
+             * @param appId
+             * @param table -- table object must contain atleast a name
+             * @returns {string}
+             */
+            createTableInUI: function(appId, table) {
+                if (!table.name) {
+                    return "Required field missing: tableName";
+                }
+                if (!table.tableNoun) {
+                    table.tableNoun = table.name;
+                }
+                let tablesEndpoint = recordBase.apiBase.resolveTableComponentsEndpoint(appId);
+                return recordBase.apiBase.executeRequest(tablesEndpoint, 'POST', table).then(
+                    (response) => {
+                        return response;
+                    }
+                ).catch((ex) => {
+                    log.error('Unexpected exception creating table in UI');
+                    return promise.reject(ex);
+                });
+            },
+            getTableFields: function(appId, tableId) {
+                let tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(appId, tableId);
+                return recordBase.apiBase.executeRequest(tablesEndpoint, 'GET').then(function(response) {
+                    return JSON.parse(response.body);
+                }).catch((ex) => {
+                    log.error('Unexpected exception getting fields for the table ' + tableId);
+                    return promise.reject(ex);
+                });
             }
         };
         return tableService;
