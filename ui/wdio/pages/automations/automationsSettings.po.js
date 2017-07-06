@@ -12,6 +12,10 @@ class automationsSettings {
         let AutomationsGrid = require('./automationsTableControlWrapper.po');
         return new AutomationsGrid();
     }
+
+    get addButton() {
+        return new elementControlWrapper('.iconUISturdy-add-new-filled');
+    }
 }
 
 module.exports = new automationsSettings();

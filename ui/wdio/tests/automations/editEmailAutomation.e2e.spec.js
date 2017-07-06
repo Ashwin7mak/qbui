@@ -11,6 +11,7 @@
 
 
     describe('Automations - edit automation view', function() {
+
         const toAddress = 'toAddress';
         const fromAddress = 'fromAddress';
         const subject = 'subject';
@@ -162,6 +163,83 @@
             expect(emailAutomationEditView.to.text).toBe(automation.inputs[0].defaultValue);
             expect(emailAutomationEditView.subject.text).toBe(automation.inputs[2].defaultValue);
             expect(emailAutomationEditView.body.text).toBe(automation.inputs[3].defaultValue);
+        });
+    });
+
+    describe('Automations - create automation view', function() {
+
+        let realmName;
+        let realmId;
+        let app;
+        let appAutomations;
+
+        beforeAll(function() {
+            browser.logger.info('beforeAll spec function - Generating test data and logging in');
+            let builderInstance = appBuilder.builder();
+            builderInstance.withName('app_name' + Math.random().toString(36).substring(7));
+            let appToCreate = builderInstance.build();
+
+            return e2eBase.createApp(appToCreate).then(function(createdApp) {
+                app = createdApp;
+                realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+                realmId = e2eBase.recordBase.apiBase.realm.id;
+            }).then(function() {
+                return newStackAuthPO.realmLogin(realmName, realmId);
+            }).catch(function(error) {
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
+            });
+        });
+        it('Automation Create can be accessed through direct url.', function() {
+
+            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
+
+            expect(emailAutomationEditView.name.text).toBe('');
+            expect(emailAutomationEditView.to.text).toBe('');
+            expect(emailAutomationEditView.subject.text).toBe('');
+            expect(emailAutomationEditView.body.text).toBe('');
+        });
+
+        it('Automation Edit can be accessed through UI from Automations List.', function() {
+
+            //navigate to single automation view
+            e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
+
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
+            automationSettings.addButton.click();
+
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+
+            expect(emailAutomationEditView.name.text).toBe('');
+            expect(emailAutomationEditView.to.text).toBe('');
+            expect(emailAutomationEditView.subject.text).toBe('');
+            expect(emailAutomationEditView.body.text).toBe('');
+        });
+
+        it('Automation can be saved through Create View.', function() {
+            if (browser.desiredCapabilities.browserName === 'safari') {
+                return;
+            }
+
+            const newName = 'name';
+            const newToAddress = 'toAddress';
+            const newSubject = 'subject';
+            const newBody = 'body_';
+
+            let automation = appAutomations[1];
+
+            //navigate to single automation view
+            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
+
+            emailAutomationEditView.name.text = newName;
+            emailAutomationEditView.to.text = newToAddress;
+            emailAutomationEditView.subject.text = newSubject;
+            emailAutomationEditView.body.text = newBody;
+
+            emailAutomationEditView.saveButton.click();
+            notificationContainer.waitForSuccessNotification();
+
         });
     });
 }());
