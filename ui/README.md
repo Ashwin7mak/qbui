@@ -199,7 +199,7 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
     *  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enable ESLint and set the following ESLint settings
 
     *  ESLint dialog
-        * ![eslintDialogScreenShot.png](eslintDialogScreenShot.png)
+        * ![eslintDialogScreenShot.png](https://s3.amazonaws.com/qbui-readme-assets/eslintDialogScreenShot.png)
     * Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` to override with comment statements.
     * The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffectkr/popularconvention#javascript
 
@@ -221,10 +221,10 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
              $FILE_PATH$.*:$LINE$.*:$COLUMN$
 
            ```
-           * For Example ![eslintExternalTool](eslintExternalTool.png)
+           * For Example ![eslintExternalTool](https://s3.amazonaws.com/qbui-readme-assets/eslintExternalTool.png)
 
         3. When launching the tool now any eslint errors listed which have file location will be also clickable. Clicking will take you to the error location in the Intellij editor:
-           ![](eslintErrorExample.png)
+           ![eslint error example](https://s3.amazonaws.com/qbui-readme-assets/eslintErrorExample.png)
 
 
 
@@ -335,7 +335,41 @@ For all of the browser capabilities check out:
 and
 [https://www.browserstack.com/automate/capabilities](https://www.browserstack.com/automate/capabilities)
 
+### Running E2E Tests Through SauceLabs
+
+1. Copy and rename the `wdioSauce.conf.override.js.sample` to `wdio.conf.override.js` (remove the `.sample` from the end). For
+many devs this will work as is; however, you can change any values you need to override listed in the `wdioSauce.conf.js` file.
+
+1. By default, `wdioSauce.conf.override.js` only has one test activated. Add or modify tests or directories in the `specs` array in `wdioSauce.conf.override.js`.
+
+1. In IntelliJ, create a new Node configuration (Run -> Edit Configurations)
+    - *Note:* You may need to add the NodeJs IntelliJ plugin if you do not see an option to create a Node configuration.
+    - ![IntelliJ Configuration for E2E Tests on SauceLabs](https://s3.amazonaws.com/qbui-readme-assets/Config_for_E2E_on_SauceLabs.png)
+
+1. You need to click the ellipses (...) next to "Environment Variables" and define the following:
+    - `NODE_ENV` = `e2e`
+    - `SAUCE_JOB_NAME` = `<your initials>Sauce` (or whatever you want)
+    - `ENV_TUNNEL_NAME` = `<your initials>SauceTunnel` (or whatever you want)
+    - `SAUCE_DOMAIN` = `http://localhost:9000` (or the route you access your local server in the browser)
+    - `SAUCE_USERNAME` = Obtain this from another Dev or QA
+    - `SAUCE_KEY` = Obtain this from another DEV or QA. If you are able to login to SauceLabs, you can find the key by clicking the username in the top right of the screen and choosing 'User Settings', then under 'Access Key', choose to show your key and then use the copy button to copy the key to your clipboard.
+    - `BROWSER` = The browser you want to run in SauceLabs. Options are: Chrome, Edge, Firefox, Safari, and more (capitalization is important!). 
+    The browser name is equal to the browser name in the config files. I.e., look for `wdioSauce{BrowserName}.conf.js` in the `wdio/config` folder to see available options.
+
+1. You will need to have any services your tests will use running locally on your machine (e.g., Qbui, Core, EE)
+
+1. Run the tests with the play or debug button in Intellij.
+
+*Bonus 1:* You can login to SauceLabs and watch the tests run live (go to Dashboard -> Automated Tests)
+
+*Bonus 2:* In your IntelliJ configuration, click the "+" button under "Before Launch" and add a task to run `npm run webpack` before the tests
+run to ensure you have the most up to date code running in your E2E test. Warning: This slows down your tests and only needs to be run if there is a code change.
+
+*Bonus 3:* Give your jobs a name so they are more easily identifiable in Sauce Labs. Under `capabilities` in `wdioSauce.config.override.js`, change the `name` key to something more descriptive.
+Can be something like `[initials]ChromeTest`, but you can name it anything you would like.
+
 ## Using Gradle to build distribution node server
+
 Gradle is used to build a production version of the node server and client application.
 
 Output from the Gradle Build and Test task is saved under the /build folder.
