@@ -57,6 +57,9 @@ exports.config = {
             baseTestDir + '/automations/automationsList.e2e.spec.js',
             baseTestDir + '/automations/settingsMenu.e2e.spec.js'
         ],
+        featureSwitches: [
+                    baseTestDir + '/featureSwitches/configurationBasedFeatureSwitches.e2e.spec.js'
+        ],
         forms: [
             baseTestDir + '/forms/formBuilder/non-pairs.e2e.spec.js',
             baseTestDir + '/forms/formBuilder/pairs-keyboard.e2e.spec.js',

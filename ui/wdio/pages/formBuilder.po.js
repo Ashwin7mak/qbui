@@ -1,6 +1,6 @@
 'use strict';
 let topNavPO = requirePO('topNav');
-let reportContentPO = requirePO('reportContent');
+let tableCreatePO = requirePO('tableCreate');
 let formsPO = requirePO('formsPage');
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
@@ -205,6 +205,16 @@ class formBuilderPage {
         return this.uniqueCheckbox.element('input:not(:checked)');
     }
 
+    get toggleStageCaretDown() {
+        //Stage toggle to expand
+        return browser.element('.toggleStage .iconUISturdy-caret-down');
+    }
+
+    get formStageTitleFieldDropDown() {
+        //Stage toggle to expand
+        return browser.element('.formStage .titleField');
+    }
+
     // methods
 
     addNewField(label) {
@@ -279,7 +289,7 @@ class formBuilderPage {
     }
 
     getFieldLabels() {
-         // Gets the list of field labels from the form builder
+        // Gets the list of field labels from the form builder
         this.firstField.waitForVisible();
         let fields = browser.elements('.field');
         try {
@@ -553,5 +563,22 @@ class formBuilderPage {
         this.selectedField.waitForExist();
         return this.getSelectedFieldLabel();
     }
+
+    verifyFormBuilderStageTitleFieldDropDown(expectedDropDownList) {
+        //expand the stage
+        if (this.toggleStageCaretDown.isVisible()) {
+            this.toggleStageCaretDown.click();
+            //wait for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
+        }
+
+        //Click on titleField
+        this.formStageTitleFieldDropDown.click();
+        //get list of fields from drop down options
+        let dropDownListLabels = modalDialog.allDropDownListOptions;
+        //Verify the dropDown list
+        return expect(expectedDropDownList).toEqual(dropDownListLabels);
+    }
+
 }
 module.exports = new formBuilderPage();
