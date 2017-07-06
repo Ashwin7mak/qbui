@@ -577,7 +577,7 @@ class formBuilderPage {
         //get list of fields from drop down options
         let dropDownListLabels = modalDialog.allDropDownListOptions;
         //Verify the dropDown list
-        return expect(expectedDropDownList).toEqual(dropDownListLabels)
+        return expect(expectedDropDownList).toEqual(dropDownListLabels);
     }
 
 }

@@ -59,7 +59,7 @@
             topNavPO.clickOnModifyFormLink();
 
             //Verify the titleField dropDown contents
-            formBuilderPO.verifyFormBuilderStageTitleFieldDropDown(expectedDropDownFields)
+            formBuilderPO.verifyFormBuilderStageTitleFieldDropDown(expectedDropDownFields);
         });
 
         it('Verify titleField drop down for table created via UI', function() {
@@ -68,7 +68,7 @@
                 {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: tableName},
             ];
-            let expectedDropDownFields = ['Record ID#', 'Record title', 'Text', 'Date', 'Default to '+tableName+ ' + ID'];
+            let expectedDropDownFields = ['Record ID#', 'Record title', 'Text', 'Date', 'Default to ' + tableName + ' + ID'];
 
             //Create table via UI
             //Click on new table button
@@ -90,7 +90,7 @@
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
 
             //Verify the titleField dropDown contents on the form stage
-            formBuilderPO.verifyFormBuilderStageTitleFieldDropDown(expectedDropDownFields)
+            formBuilderPO.verifyFormBuilderStageTitleFieldDropDown(expectedDropDownFields);
         });
 
         it('Edit the titleField dropdown value and verify it got saved', function() {
