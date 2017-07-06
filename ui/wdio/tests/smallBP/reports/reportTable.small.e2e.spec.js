@@ -66,12 +66,14 @@
             expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
             // click on dropdownToggle actionButton
             reportContentPO.clickDropdownToggleActionButtonSB();
+
+          //  reportContentPO.waitForReportContentSB();
         });
 
         /**
          * verify record count and card expander button is visible/clickable
          */
-        it('Should load the reports page with the appropriate table report and verify  card expander button is clickable', function() {
+        xit('Should load the reports page with the appropriate table report and verify  card expander button is clickable', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
@@ -86,7 +88,7 @@
         /**
          * Verifies add new record button is visible and enabled
          */
-        it('verify add record button is visible and enabled', function() {
+        xit('verify add record button is visible and enabled', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
