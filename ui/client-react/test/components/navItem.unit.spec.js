@@ -61,21 +61,6 @@ describe('NavItem', () => {
         expect(component).toHaveProp('showSecondary', true);
         expect(component).toHaveProp('isHeading', false);
         expect(component).toHaveProp('showToolTip', false);
-        expect(component).toHaveProp('icon', 'favicon');
-        expect(component).toHaveProp('iconFont', AVAILABLE_ICON_FONTS.DEFAULT);
-    });
-
-    it('will render a default icon of favicon if no icon is passed in', () => {
-        component = mount(<NavItem item={{}} />);
-
-        expect(component.find('.qbIcon .iconUISturdy-favicon')).toBePresent();
-    });
-
-    it('will render a default icon of favicon if icon is undefined', () => {
-        component = mount(<NavItem item={{}}
-                                   icon={undefined} />);
-
-        expect(component.find('.qbIcon .iconUISturdy-favicon')).toBePresent();
     });
 
     it('will render the icon the user chooses', () => {
