@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * This file uses the Page Object pattern to define legacy Login page for test
  */
