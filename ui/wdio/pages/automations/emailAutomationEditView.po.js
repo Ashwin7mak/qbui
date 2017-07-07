@@ -10,7 +10,7 @@ class emailAutomationEditView {
     }
 
     get subject() {
-        return new elementControlWrapper(null, this._getInputFields()[2]);
+        return new elementControlWrapper(null, browser.elements('div.automationSubject > span > input').value);
     }
 
     get body() {
@@ -18,7 +18,7 @@ class emailAutomationEditView {
     }
 
     get name() {
-        return new elementControlWrapper(null, this._getInputFields()[0]);
+        return new elementControlWrapper(null, browser.elements('div.automationName > span > input').value);
     }
 
     get saveButton() {
