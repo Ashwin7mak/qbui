@@ -14,6 +14,7 @@ import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import QBLoader from "../../../../reuse/client/src/components/loader/QBLoader";
+import constants from "../constants/StandardGridConstants";
 import "./standardGrid.scss";
 
 // Helper function to return additional props to add to a row element
@@ -132,7 +133,7 @@ export class StandardGrid extends Component {
         let loadingClass = this.nullItems() ? "loading" : "notLoading";
         return (
             <div className={`standardGrid ${loadingClass}`}>
-            {this.nullItems() ? <QBLoader /> :
+            {this.nullItems() ? <QBLoader className="QbLoader" waitTime={constants.GRID_LOADER_TIMEOUT}/> :
                 <div className="gridWrapper">
                     <StandardGridToolbar id={this.props.id}
                                          doUpdate={this.props.doUpdate}
