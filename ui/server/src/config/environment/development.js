@@ -5,12 +5,12 @@
     'use strict';
 
     //var path = require('path');
-    var dateUtils = require('../../utility/dateUtils');
-    var envConsts = require('./environmentConstants');
-    var routeGroups = require('../../routes/routeGroups');
-    var clientConsts = require('./clientConsts');
+    const dateUtils = require('../../utility/dateUtils');
+    const envConsts = require('./environmentConstants');
+    const routeGroups = require('../../routes/routeGroups');
+    const clientConsts = require('./clientConsts');
 
-    module.exports = {
+    const baseConfig = {
 
         //  Logging configuration
         LOG: {
@@ -71,8 +71,13 @@
          * Note: Feature Switches are overridden based on their names, ensure overrides
          * have same name including spacing.
          */
-        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/local.override.featureSwitches.json.sample'
-        //masterOverrideTurnFeaturesOn:true
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/local.override.featureSwitches.json.sample',
+        //masterOverrideTurnFeaturesOn:true,
 
+        // A shared secret for hitting private APIs on Core. Used for running dataGen and E2E tests locally
+        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This is the dev key. A different key is generated in prod/int
     };
+
+    module.exports = Object.assign({}, baseConfig, process.env);
+
 }());

@@ -1,13 +1,13 @@
 (function() {
     'use strict';
 
-    var dateUtils = require('../../utility/dateUtils');
-    var envConsts = require('./environmentConstants');
-    var routeGroups = require('../../routes/routeGroups');
-    var clientConsts = require('./clientConsts');
-    var client = clientConsts.REACT;
+    const dateUtils = require('../../utility/dateUtils');
+    const envConsts = require('./environmentConstants');
+    const routeGroups = require('../../routes/routeGroups');
+    const clientConsts = require('./clientConsts');
+    const client = clientConsts.REACT;
 
-    var baseVars = {
+    const baseConfig = {
         LOG: {
             name: 'UI',
             level: 'info',
@@ -38,7 +38,8 @@
         client: client,
         wistiaScriptPart1: 'https://fast.wistia.com/embed/medias/zl4za7cf5e.jsonp',
         wistiaScriptPart2: 'https://fast.wistia.com/assets/external/E-v1.js',
+        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This is the dev key. A different key is generated in prod/int
     };
 
-    module.exports = Object.assign({}, baseVars, process.env);
+    module.exports = Object.assign({}, baseConfig, process.env);
 }());
