@@ -66,6 +66,8 @@ export class StandardGrid extends Component {
         }
     };
 
+    nullItems = () => _.isNull(this.props.items);
+
     /**
      * Render the grid when items exist
      */
@@ -127,10 +129,10 @@ export class StandardGrid extends Component {
      * - else... show the noItemsExist UI
      */
     render() {
-        let loadingClass = _.isNull(this.props.items) && _.isEmpty(this.props.items) ? "loading" : null;
+        let loadingClass = this.nullItems() ? "loading" : "notLoading";
         return (
-            <div className={`gridLoader ${loadingClass}`}>
-            {_.isNull(this.props.items) && _.isEmpty(this.props.items) ? <QBLoader/> :
+            <div className={`standardGrid ${loadingClass}`}>
+            {this.nullItems() ? <QBLoader /> :
                 <div className="gridWrapper">
                     <StandardGridToolbar id={this.props.id}
                                          doUpdate={this.props.doUpdate}
@@ -142,7 +144,7 @@ export class StandardGrid extends Component {
                                          itemsPerPage={this.props.itemsPerPage}
                     />
                     {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
-                    {!_.isNull(this.props.items) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
+                    {!(this.nullItems()) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
                 </div>
             }
             </div>

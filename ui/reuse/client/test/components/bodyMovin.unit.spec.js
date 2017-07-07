@@ -5,6 +5,7 @@ import BodyMovin, {__RewireAPI__ as BodyMovinRewireAPI} from "../../src/componen
 
 describe('BodyMovin', () => {
     let bodyMovinMock;
+    let mockAnimationData = { container: "bodyMovinRef", renderer: 'svg', loop: true, autoplay: true, animationData: 'mockAnimationData' };
 
     beforeEach(() => {
         jasmineEnzyme();
@@ -21,12 +22,17 @@ describe('BodyMovin', () => {
         BodyMovinRewireAPI.__ResetDependency__('bodymovin');
     });
 
-    it('mounts to the dom', () => {
-        let component = mount(<BodyMovin />);
-        expect(bodyMovinMock.loadAnimation).toHaveBeenCalled();
+    fit('loads the animation when the component mounts', () => {
+        let component = mount(<BodyMovin animationData="mockAnimationData" />);
+
+        let testComponent = component;
+        debugger;
+
+        expect(bodyMovinMock.loadAnimation).toHaveBeenCalledWith(mockAnimationData);
+        expect(component.getDOMNode()).to.have.property('ref');
     });
 
-    it('unmounts from dom', () => {
+    it('removes the bodymovin animation from the dom', () => {
         let component = mount(<BodyMovin />);
         component.unmount();
         expect(bodyMovinMock.destroy).toHaveBeenCalled();

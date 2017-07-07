@@ -1,7 +1,7 @@
 @import '../../../../reuse/client/src/assets/css/_qbVariables.scss';
 @import '../../../../client-react/src/assets/css/animate.min.css';
 
-.gridWrapper {
+.standardGrid .gridWrapper {
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
@@ -12,19 +12,19 @@
         margin-right: 10px;
 }
 
-.gridLoader {
+.standardGrid {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-.gridLoader.loading {
+.standardGrid.loading {
     align-items: center;
     height: 100%;
     justify-content: center;
 
     .bodymovin {
-        margin-top: -($spacing-medium1/2);
+        margin-top: -($spacing-xx-small);
     }
 }
 
