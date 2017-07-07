@@ -222,7 +222,11 @@
                 //TODO: Handle multiple links to parent(s)
                 // Use the specific form section
                 formSectionEl.waitForVisible();
-                return formSectionEl.element(linkToParentLocatorString).click();
+                formSectionEl.element(linkToParentLocatorString).click();
+                this.slideyRightyEl.waitForVisible();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+                //Need this for stabilize DOM
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 //TODO: Handle multiple links to parent(s)
                 // Try to find something clickable on the form

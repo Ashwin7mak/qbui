@@ -44,10 +44,10 @@ describe('Relationships - Create multiple relationship Tests :', function() {
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
                 //Add records into table 1
-                return e2eBase.recordService.addRecordsToTable(testApp, 0, 10, false, false);
+                return e2eBase.recordService.addRecordsToTable(testApp, 0, 10);
             }).then(function() {
                 //Add records into table 2
-                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10, false, false);
+                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10);
             }).then(function() {
                 //Create a form for each table
                 return e2eBase.formService.createDefaultForms(testApp);
@@ -76,56 +76,36 @@ describe('Relationships - Create multiple relationship Tests :', function() {
 
         beforeAll(function() {
             parentTable = rawValueGenerator.generateStringWithFixLength(5);
-            let tableFields = [
-                {fieldTitle: tableNameFieldTitleText, fieldValue: parentTable},
-                {
-                    fieldTitle: recordNameFieldTitleText,
-                    fieldValue: rawValueGenerator.generateStringWithFixLength(5)
-                },
-                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(5)}
-            ];
-            //Create a new parent table and single record into new table
-            let formBuilderFields = ['Number'];
-            let fieldTypes = ['allTextFields', 'allNumericFields', 'allDateFields'];
+            let aTextField = {name:'Text',
+                type:'SCALAR',
+                datatypeAttributes:{
+                    type:'TEXT'
+                }};
+            let aNumericField = {name:'Numeric',
+                type:'SCALAR',
+                datatypeAttributes:{
+                    type:'NUMERIC'
+                }};
+            let aDateField = {name:'Date',
+                type:'SCALAR',
+                datatypeAttributes:{
+                    type:'DATE'
+                }};
 
-            //go to appId page
-            e2ePageBase.loadAppByIdInBrowser(realmName, testApp.id);
+            //Create table in UI
+            e2eBase.tableService.createTableInUI(testApp.id, {name: parentTable, fields: [aTextField, aNumericField, aDateField]});
 
-            //create table via UI
-            //Click on new table button
-            tableCreatePO.clickCreateNewTable();
+            //Load app into the Browser
+            browser.url(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
 
-            //Enter table field values
-            tableFields.forEach(function(tableField) {
-                //Enter field values
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //Click on finished button and make sure it landed in edit Form container page
-            modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
-            tableCreatePO.waitUntilNotificationContainerGoesAway();
-
-            //Verify the create table dialogue
-            tableCreatePO.verifyNewTableCreateDialogue();
-
-            //Click OK button on create table dialogue
-            modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
-            modalDialog.waitUntilModalDialogSlideAway();
-
-            //Add fields to the form
-            formBuilderFields.forEach(function(formBuilderField) {
-                formBuilderPO.addNewField(formBuilderField);
-            });
-
-            //Click on forms save button
-            formBuilderPO.save();
-            //wait until save success container goes away
-            tableCreatePO.waitUntilNotificationContainerGoesAway();
+            //select the new table
+            tableCreatePO.selectTable(parentTable);
 
             //Click on Add Record Button on the report Stage
             reportContentPO.clickAddRecordBtnOnStage();
 
             //enter form values
+            let fieldTypes = ['allTextFields', 'allNumericFields', 'allDateFields'];
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
