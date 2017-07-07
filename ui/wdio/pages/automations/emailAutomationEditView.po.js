@@ -9,18 +9,16 @@ class emailAutomationEditView {
         return new elementControlWrapper('.emailField');
     }
 
-    get name() {
-        let control = browser.elements('div.fieldValueEditor > span > input').value[0];
-        return new elementControlWrapper(null, control);
-    }
-
     get subject() {
-        let control = browser.elements('div.fieldValueEditor > span > input').value[2];
-        return new elementControlWrapper(null, control);
+        return new elementControlWrapper(null, this._getInputFields()[2]);
     }
 
     get body() {
         return new EmailBodyElementWrapper('.inputDeleteIcon textarea');
+    }
+
+    get name() {
+        return new elementControlWrapper(null, this._getInputFields()[0]);
     }
 
     get saveButton() {
@@ -29,6 +27,10 @@ class emailAutomationEditView {
 
     get cancelButton() {
         return new elementControlWrapper('.alternativeTrowserFooterButton');
+    }
+
+    _getInputFields() {
+        return browser.elements('div.fieldValueEditor > span > input').value;
     }
 }
 
