@@ -398,7 +398,7 @@
             });
 
             if (option !== []) {
-                browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
+                //browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
                 //Click on filtered option
                 option[0].waitForVisible();
                 option[0].click();
