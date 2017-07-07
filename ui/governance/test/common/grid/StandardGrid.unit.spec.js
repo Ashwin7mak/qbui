@@ -225,9 +225,14 @@ describe('StandardGrid', () => {
             it('should return null if the window.performance.mark function does not exist', () => {
                 StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
                     ...WindowPerformanceUtils,
-                    markTime(name) { return false },
-                    measureTimeDiff(name, start, end) { },
-                    getEntriesByName(name) { return [{duration: 20}] }
+                    markTime(name) {
+                        return false;
+                    },
+                    measureTimeDiff(name, start, end) {
+                    },
+                    getEntriesByName(name) {
+                        return [{duration: 20}];
+                    }
                 });
 
                 instance = StandardGridShallow.instance();
@@ -238,9 +243,14 @@ describe('StandardGrid', () => {
             it('should return null if the window.performance.mark function exists, but measure entries DO NOT exist', () => {
                 StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
                     ...WindowPerformanceUtils,
-                    markTime(name) { return true },
-                    measureTimeDiff(name, start, end) { },
-                    getEntriesByName(name) { return [] }
+                    markTime(name) {
+                        return true;
+                    },
+                    measureTimeDiff(name, start, end) {
+                    },
+                    getEntriesByName(name) {
+                        return [];
+                    }
                 });
 
                 instance = StandardGridShallow.instance();
@@ -251,9 +261,14 @@ describe('StandardGrid', () => {
             it('should return a time if the window.performance.mark function exists, and measure entries exist', () => {
                 StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
                     ...WindowPerformanceUtils,
-                    markTime(name) { return true },
-                    measureTimeDiff(name, start, end) { },
-                    getEntriesByName(name) { return [{duration: 20}] }
+                    markTime(name) {
+                        return true;
+                    },
+                    measureTimeDiff(name, start, end) {
+                    },
+                    getEntriesByName(name) {
+                        return [{duration: 20}];
+                    }
                 });
 
                 instance = StandardGridShallow.instance();

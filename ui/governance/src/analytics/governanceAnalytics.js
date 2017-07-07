@@ -12,7 +12,7 @@ export class GovernanceAnalytics extends Component {
 
         this.state = {
             pageLoaded: false
-        }
+        };
     }
 
     /**
@@ -57,8 +57,7 @@ export class GovernanceAnalytics extends Component {
         if (this.isFirstPageLoad()) {
             propKeyVals.pageLoadTime = this.props.pageLoadTime;
             propKeyVals.usersGridLoadTime = this.props.usersGridLoadTime;
-        }
-        else if (this.state.pageLoaded) {
+        } else if (this.state.pageLoaded) {
             propKeyVals.usersGridRefreshTime = this.props.usersGridRefreshTime;
         }
 

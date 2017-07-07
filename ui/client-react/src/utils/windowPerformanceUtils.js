@@ -65,7 +65,7 @@ const WindowPerformanceUtils = {
         let entry = this.getLastEntryByName(name);
         return entry ? entry.duration : null;
     }
-}
+};
 
 export default WindowPerformanceUtils;
 
