@@ -63,10 +63,11 @@ export const createApp = (app) => {
  * @param value
  * @param pendingValidationError
  * */
-export const setAppProperty = (property, value, pendingValidationError) => ({
+export const setAppProperty = (property, value, pendingValidationError, validationError) => ({
     type: types.SET_APP_PROPERTY,
     property,
     pendingValidationError,
+    validationError,
     value
 });
 

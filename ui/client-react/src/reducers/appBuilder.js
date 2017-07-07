@@ -56,7 +56,8 @@ const appBuilder = (
         let appInfo = {};
         appInfo[action.property] = {
             value: action.value,
-            pendingValidationError: action.pendingValidationError
+            pendingValidationError: action.pendingValidationError,
+            validationError: action.validationError
         };
         return {
             ...state,

@@ -63,6 +63,19 @@ export class AppCreationPanel extends Component {
     };
 
     /**
+     * handle loss of focus
+     */
+    onBlurInput = (property, value) => {
+
+        // do validation on loss of focus unless it hasn't been edited
+        // set the validation error and the live validation error for the field (same)
+        console.log('onBLur!');
+        const validationError = this.props.pendingValidationError;
+
+        this.props.setAppProperty(property, value, validationError, validationError);
+    };
+
+    /**
      * set app icon
      * @param  icon
      */
@@ -83,8 +96,11 @@ export class AppCreationPanel extends Component {
                                       name="name"
                                       value={this.props.appName}
                                       onChange={this.setAppProperty}
+                                      onBlur={this.onBlurInput}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
+                                      edited={true}
+                                      validationError={this.props.pendingValidationError}
                                       autofocus />
 
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
@@ -120,7 +136,8 @@ const mapStateToProps = (state) => {
         appName: name,
         appDescription: description,
         appIcon: icon,
-        isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)
+        isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state),
+        pendingValidationError: AppBuilderSelectors.getValidationError(state),
     };
 };
 
