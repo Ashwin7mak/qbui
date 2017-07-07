@@ -32,19 +32,20 @@ For running locally make sure you copy `qbui/ui/server/src/config/environment/lo
 ** Example: ```docker exec -it core_service_1 /bin/ash``` to open an ash shell inside the core container.
 
 ## Run Core, Experience Engine, and Workflow Engine as Dependencies from this Project
-2) [Install and configure the AWS CLI tools](https://github.com/QuickBase/aws#aws-cli-and-configuration)
-3) Login to ECR (EC2 Container Registry - an Amazon service for storing docker images) using 
+1) [Install and configure the AWS CLI tools](https://github.com/QuickBase/aws#aws-cli-and-configuration)
+2) Login to ECR (EC2 Container Registry - an Amazon service for storing docker images) using
 the aws CLI by running the follow command in the terminal: `eval $(aws ecr get-login --no-include-email --registry-ids 717266932182)`.
-4) Navigate to the QBUI repo on your local machine (e.g., ~/Code/qbui)
-1) Create a copy of ```docker-compose.override.yml.sample``` and rename it to ```docker-compose.override.yml``` (remove the .sample at the end).
-1) Run `docker-compose pull` in the terminal to get the latest images from ECR. This could take 40+ minutes the first time. Future pulls should only be a few minutes.
-2) Run ```docker-compose up -d``` in the terminal. It should bring up Core, Oracle, Experience Engine, Workflow Engine, and PostGres in addition to the existing UI service.
-    * **Note:** It sometimes takes Oracle (the database we use for our Core micro-service) a few minutes to boot up the first time. Navigate to `https://localhost:8298/api/swagger-ui.html#!/health-controller/systemCheckUsingGET_1`
-    and click "Try it out". You should get a 200 response back. If not, wait a few minutes and try again. If still no luck, or the page isn't loading, you may need to do some additional troubleshooting.
-3) Once the full stack of Core, Oracle, Experience Engine, Workflow Engine, and PostGres is running, you can additionally 
+3) Navigate to the QBUI repo on your local machine (e.g., ~/Code/qbui)
+4) Create a copy of ```docker-compose.override.yml.sample``` and rename it to ```docker-compose.override.yml``` (remove the .sample at the end).
+5) Run `docker-compose pull core core-db ee ee-db we we-db` in the terminal to get the latest images from ECR. This could take 40+ minutes the first time. Future pulls should take under a minute to update your local cache.
+    * If you run `docker-compose pull` without listing the specific services, the command throws an error because it can't find your local `quickbase/ui-dev` image in ECR.
+6) Run ```docker-compose up -d``` in the terminal. It should bring up Core, Oracle, Experience Engine, Workflow Engine, and PostGres databases in addition to the existing UI service.
+    * **Note:** It sometimes takes Oracle (the database we use for our Core micro-service) a few minutes to boot up the first time. Open `https://localhost:8298/api/api/v1/health/system`
+    in a browser or something like Postman. You should get a 200 response back. If not, wait a few minutes and try again. If still no luck, or the page isn't loading, you may need to do some additional troubleshooting.
+7) Once the full stack of Core, Oracle, Experience Engine, Workflow Engine, and PostGres is running, you can additionally
 run ```docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.datagen.yml up -d``` to populate an app with data. Each additional use of this command will restart the 'datagen' container service and create an additional app.
     * Running ```tail -f /tmp/log/docker/datagen/service/ui-sys.log``` is the easiest way to view progress of a data import task.
-4) ```docker-compose pause``` is the recommended way to shut down this stack and ```docker-compose unpause``` is the recommended way to start it back up if you want to preserve data for Core and Experience Engine.
+8) ```docker-compose pause``` is the recommended way to shut down this stack and ```docker-compose unpause``` is the recommended way to start it back up if you want to preserve data for Core and Experience Engine.
     * You can pause just core-db or ee-db by filtering your command as ```docker-compose pause core-db ee-db```
     * Otherwise, run ```docker-compose down``` to destroy it
     
@@ -61,9 +62,9 @@ other services you want to test out.
 
 To build custom backend images follow the directions above with a few changes:
 1. Create a copy of `docker-compose.override.local.yml.sample` and rename it to `docker-compose-override.local.yml` (remove the .sample)
-2. Check the `context` for each of the services. It should point to the respective repos on your local machine relative to the Qbui directory.
+2. Check the `build context` for each of the services. It should point to the respective repos on your local machine relative to the Qbui directory.
 If you have the Qbui, QuickBase, ExperienceEngine, etc., repos all in the same folder, then you probably don't need to change anything.
-3. Make sure you have built the `war` files for each of the services. It is usually the command `gradle clean build -xTest` within each of those services.
+3. Make sure you have built the `war` files for each of the services. Check the specific repo for info on how to build the `war` file.
 4. Run `docker-compose -f docker-compose.yml -f docker-compose.override.local.yml up --build -d` to bring up the services. That `-f` flag will tell docker-compose
 to use your `.local` file instead of the `docker-compose.override.yml` file.
 

@@ -59,4 +59,3 @@ services:
       - javaHost=https://core:8443
       - eeHost=https://ee:8443
       - automationHost=https://we:8443
-    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/coreui
