@@ -54,14 +54,20 @@ const appBuilder = (
             ...state,
             ...setDefaultSettings
         };
+
     case types.SET_APP_PROPERTY:
         let appInfo = {};
-        appInfo[action.property] = {
-            value: action.value,
-            pendingValidationError: action.pendingValidationError,
-            validationError: action.validationError,
-            isEdited: true
-        };
+
+        if (action.property === 'name') {
+            appInfo[action.property] = {
+                value: action.value,
+                pendingValidationError: action.pendingValidationError,
+                validationError: action.validationError,
+                isEdited: true
+            };
+        } else {
+            appInfo[action.property] = action.value;
+        }
         return {
             ...state,
             ...appInfo
@@ -97,8 +103,8 @@ export const getAppProperties = (state) => {
 
     return {
         name: name.value,
-        icon: icon.value,
-        description: description.value
+        icon,
+        description
     };
 };
 

@@ -57,8 +57,13 @@ export class AppCreationPanel extends Component {
      * @param  value
      */
     setAppProperty = (property, value) => {
-        const pendingValidationError = this.getValidationError(property, value);
-        const validationError = null;
+        let pendingValidationError;
+        let validationError;
+
+        if (property === 'name') {
+            pendingValidationError = this.getValidationError(property, value);
+            validationError = null;
+        }
 
         this.props.setAppProperty(property, value, pendingValidationError, validationError);
     };
@@ -69,7 +74,7 @@ export class AppCreationPanel extends Component {
     onBlurInput = (property, value) => {
 
         // do validation on loss of focus unless it hasn't been edited
-        if (this.props.isEdited) {
+        if (this.props.isEdited && property === 'name') {
             const validationError = this.props.pendingValidationError;
             // set the validation error and the live validation error for the field (same)
             this.props.setAppProperty(property, value, validationError, validationError);
