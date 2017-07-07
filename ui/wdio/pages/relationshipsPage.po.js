@@ -130,11 +130,7 @@
                 browser.waitForVisible('form.editForm');
                 // enter form values
                 fieldTypes.forEach(function(fieldType) {
-                    let parentReferenceFieldValue = null;
-                    if (fieldType === 'allParentRecordFields') {
-                        parentReferenceFieldValue = parentRefVal;
-                    }
-                    formsPagePO.enterFormValues(fieldType, parentReferenceFieldValue);
+                    formsPagePO.enterFormValues(fieldType, parentRefVal);
                 });
 
                 // Click Save on the form

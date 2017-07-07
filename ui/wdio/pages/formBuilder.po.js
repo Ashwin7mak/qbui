@@ -390,8 +390,6 @@ class formBuilderPage {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -551,8 +549,7 @@ class formBuilderPage {
             browser.keys(['Command', 's', 'Command']);
         }
         formsPO.viewFormContainerEl.waitForExist();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         return this;
     }
 

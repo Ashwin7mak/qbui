@@ -96,7 +96,6 @@
          */
         clickFormSaveBtn : {value: function() {
             //Click on form Save button
-            this.editFormSaveBtns.waitForVisible();
             this.clickBtnOnForm('Save');
             return loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }},
@@ -387,22 +386,24 @@
          */
         selectFromList : {value: function(listOption) {
             //wait untill you see 1 option since drop down loads onDemand now
-            browser.waitForVisible('.Select-menu-outer .Select-option');
-            //get all options from the list
-            let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
-                return optionText.getAttribute('textContent').trim().includes(listOption);
-            });
-
-            if (option !== []) {
-                browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
-                //Click on filtered option
-                option[0].waitForVisible();
-                option[0].click();
-                //wait until loading screen disappear
-                return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
-            } else {
-                throw new Error('Option with name ' + listOption + " not found in the list");
-            }
+            browser.element('.Select-menu-outer .Select-option').waitForVisible();
+            browser.element('//*[text()='+listOption+']').waitForVisible();
+            return browser.element('//*[text()='+listOption+']').click();
+            ////get all options from the list
+            //let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
+            //    return optionText.getAttribute('textContent').trim().includes(listOption);
+            //});
+            //
+            //if (option !== []) {
+            //    browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
+            //    //Click on filtered option
+            //    option[0].waitForVisible();
+            //    option[0].click();
+            //    //wait until loading screen disappear
+            //    return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
+            //} else {
+            //    throw new Error('Option with name ' + listOption + " not found in the list");
+            //}
         }},
 
         /**
