@@ -654,6 +654,7 @@ export default {
                 removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
+                existingFieldsMenuThisTableTitle: 'This table',
                 stage: {
                     title: 'Form for {tableName}'
                 },
@@ -772,8 +773,8 @@ export default {
             iconHeading: "Icon",
             searchPlaceholder: "Search table icons...",
 
-            tableNamePlaceholder: "For example, Customers",
-            recordNamePlaceholder: "For example, customer",
+            tableNamePlaceholder: "For example, Customers. Use up to {numberOfChars} characters",
+            recordNamePlaceholder: "For example, customer. Use up to {numberOfChars} characters",
             descriptionPlaceholder: "Text to show when hovering over the table name in the left navigation",
 
             finishedButtonLabel: "Create table",
@@ -799,6 +800,10 @@ export default {
             recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
             recordTitleFieldDefault: "Default to {recordName} + ID",
             recordName: "Record Name"
+        },
+        emptyTableState: {
+            message: "There aren't any tables in this app, yet",
+            createNewTable: "Create a table"
         },
         iconChooser: {
             suggestedIconsHeading: "Suggested icons",

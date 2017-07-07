@@ -11,7 +11,7 @@
     let modalDialog = requirePO('/common/modalDialog');
     let ReportTableActionsPO = requirePO('reportTableActions');
 
-    describe('Users - Remove user(s) tests: ', function() {
+    describe('Users - Change user(s) role tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
@@ -45,49 +45,39 @@
         });
 
         /**
-         * Selects a single user, clicks remove and checks the user count.
+         * Selects a single user, clicks change user role, and selects role
          */
-        it('Should select remove a single user and check for the success message', function() {
-            // Remove user from app
-            UsersTablePage.removeUserFromApp(1, false);
-
-            //TODO: MC-3410 - Need a better way to verify user was removed
-            // Reload the user page
-            // e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
-            // Check that the user was removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // browser.pause(e2eConsts.shortWaitTimeMs);
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+        it('Should select a single user, change role to "Viewer"', function() {
+            // Change user role
+            UsersTablePage.changeUserRoleInApp(1, 'Viewer', false);
         });
 
         /**
-         * Selects a single user, clicks remove, cancels, and checks the user count.
+         * Selects a single user, clicks change user role, and cancels
          */
-        it('Should select remove a single user and cancel ', function() {
-            // Remove user from app and cancel
-            UsersTablePage.removeUserFromApp(1, true);
-
-            //TODO: MC-3410 - Need a better way to verify user was removed
-            // Reload the user page
-            // e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
-            // Check for the user not removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // browser.pause(e2eConsts.shortWaitTimeMs);
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+        it('Should select a single user, change role and cancel', function() {
+            // Change user role
+            UsersTablePage.changeUserRoleInApp(1, 'Viewer', true);
         });
 
         /**
-         * Selects multiple users, clicks remove and checks the user count.
+         * Selects multiple users, clicks change user role, and selects role
          */
-        it('Should select remove a multiple users and check for the success message', function() {
-            // Select mulitple users and click on remove icon
+        it('Should select multiple users, change role to "Viewer"', function() {
+            // Select the checkbox and click on change role icon
             ReportTableActionsPO.selectMultipleRecordRowCheckboxes([1, 2]);
-            UsersTablePage.clickUserRemoveIcon();
+            UsersTablePage.clickChangeUserRoleIcon();
             browser.pause(e2eConsts.shortWaitTimeMs);
 
-            // Click on remove button from the dialogue box
-            expect(modalDialog.modalDialogTitle).toContain("Remove 2 users?");
-            modalDialog.clickOnModalDialogBtn(modalDialog.REMOVE_BTN);
+            // Select user role from the drop down
+            expect(modalDialog.modalDialogTitle).toContain('Change the role of');
+            UsersTablePage.selectRole("Viewer");
+            // Wait for modal to disappear
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            // Click on change role button from the dialogue box
+            modalDialog.clickOnModalDialogBtn(modalDialog.CHANGE_ROLE_BTN);
+
         });
     });
 }());
