@@ -7,7 +7,13 @@ version: '2'
 # Do not add your copy of this sample into Git or other VCS (it is ignored by default).
 services:
   core:
-    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/core
+    build:
+      # OPTIONAL: Remove this build block if you don't want to rebuild Core's container on demand
+      # Build image from the Core project directory.
+      # This path will have to match where Core is checked out on your laptop
+      context: ../QuickBase
+      dockerfile: Dockerfile
+    image: quickbase/ui-core
     depends_on:
       - core-db
     environment:
@@ -20,7 +26,13 @@ services:
     ports:
       - "1622:1521"
   ee:
-    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/experienceengine
+    build:
+      # OPTIONAL: Remove this build block if you don't want to rebuild Experience Engine's container on demand
+      # Build image from the Experience Engine project directory.
+      # This path will have to match where ExperienceEngine is checked out on your laptop
+      context: ../ExperienceEngine
+      dockerfile: Dockerfile
+    image: quickbase/ui-ee
     depends_on:
       - core
       - ee-db
@@ -37,6 +49,11 @@ services:
     ports:
       - "5533:5432"
   we:
+    build:
+      # Build image from the WorkflowEngine project directory.
+      # This path will have to match where WorkflowEngine is checked out on your laptop
+      context: ../WorkflowEngine
+      dockerfile: Dockerfile
     depends_on:
       - we-db
     environment:
@@ -44,7 +61,7 @@ services:
       - JAVA_OPTS=-Dworkflow.coreClient.endpoint=https://core:8443/api/api/v1 -Dworkflow.psql.hostname=we-db -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     links:
         - core:localhost.core
-    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/workflowengine
+    image: quickbase/workflow
     ports:
       - "8089:8443"
     volumes:
@@ -59,4 +76,3 @@ services:
       - javaHost=https://core:8443
       - eeHost=https://ee:8443
       - automationHost=https://we:8443
-    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/coreui
