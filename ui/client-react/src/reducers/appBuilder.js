@@ -77,11 +77,6 @@ const appBuilder = (
             isAppIconChooserOpen: false
         };
 
-    case types.SET_APP_EDITING_PROPERTY:
-        return {
-            ...state,
-            isEdited: false
-        };
     default:
         return state;
     }

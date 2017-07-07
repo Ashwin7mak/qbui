@@ -148,8 +148,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     setAppProperty: AppBuilderActions.setAppProperty,
     openIconChooserForApp: AppBuilderActions.openIconChooserForApp,
-    closeIconChooserForApp: AppBuilderActions.closeIconChooserForApp,
-    setAppEditingProperty: AppBuilderActions.setAppEditingProperty
+    closeIconChooserForApp: AppBuilderActions.closeIconChooserForApp
 };
 
 export default connect(

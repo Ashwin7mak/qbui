@@ -87,7 +87,3 @@ export const openIconChooserForApp = () => ({
 export const closeIconChooserForApp = () => ({
     type: types.CLOSE_ICON_CHOOSER_FOR_APP
 });
-
-export const setAppEditingProperty = () => ({
-    type: types.SET_APP_EDITING_PROPERTY
-});
