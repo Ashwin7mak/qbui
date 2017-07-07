@@ -3,7 +3,6 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import {Link} from 'react-router-dom';
 import {I18nMessage} from '../../utils/i18nMessage';
-import QBicon from '../qbIcon/qbIcon';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import A11Utils from '../../utils/a11yUtils';
 
@@ -14,9 +13,12 @@ let NavItem = React.createClass({
             id: React.PropTypes.any,
             msg: React.PropTypes.string,
             name: React.PropTypes.string,
-            icon: React.PropTypes.string,
             link: React.PropTypes.string
         }),
+        icon: React.PropTypes.string,
+        iconFont: React.PropTypes.string,
+        defaultIcon: React.PropTypes.string,
+        defaultIconFont: React.PropTypes.string,
         onSelect: React.PropTypes.func,
         isHeading: React.PropTypes.bool,
         showSecondary: React.PropTypes.bool,
@@ -40,11 +42,13 @@ let NavItem = React.createClass({
             this.props.onSelect(event);
         }
     },
+
     onHeadingClick(event) {
         if (this.props.onClick && A11Utils.isA11yClick(event)) {
             this.props.onClick(event);
         }
     },
+
     onSecondaryClick(event, id) {
         if (this.props.secondaryOnSelect && A11Utils.isA11yClick(event)) {
             this.props.secondaryOnSelect(id);
@@ -53,29 +57,25 @@ let NavItem = React.createClass({
 
     getLinkItem(item, label) {
         let classes = "link";
+
         if (this.props.secondaryIcon) {
             classes += " withSecondary";
         }
+
         if (this.props.selected) {
             classes += " selected";
         }
 
-        // TODO:: Refactor getting the icon font in MC-3596
-        const iconFont = (item.tableIcon === 'favicon' ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY);
-
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
-                {this.props.tableIcon ?
-                    <Icon iconFont={iconFont} icon={item.tableIcon}/> :
-                    <QBicon icon={item.icon} />
-                    }
+                <Icon iconFont={this.props.iconFont || this.props.defaultIconFont} icon={this.props.icon || this.props.defaultIcon}/>
                 <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&
             <a onClick={(event)=> this.onSecondaryClick(event, item.id)}
                onKeyDown={(event)=> this.onSecondaryClick(event, item.id)}
                className="right">
-                <QBicon icon={this.props.secondaryIcon}/>
+                <Icon icon={this.props.secondaryIcon}/>
             </a> }
             {this.props.hoverComponent}
         </li>);
@@ -90,8 +90,8 @@ let NavItem = React.createClass({
                     onClick={this.onHeadingClick} onKeyDown={this.onHeadingClick}
                     className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
                     <I18nMessage message={item.msg}/>
-                    <QBicon icon="search" className="nav-search"/>
-                    {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}
+                    <Icon icon="search" className="nav-search"/>
+                    {this.props.secondaryIcon && <Icon icon={this.props.secondaryIcon} />}
                 </li>);
         } else {
             let label = item.name;

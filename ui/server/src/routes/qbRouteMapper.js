@@ -90,6 +90,7 @@
                 requestFunctions[routes.APP_COMPONENTS] = getAppComponents;
                 requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
 
+                requestFunctions[routes.PAGE_MOCK] = getMockPage;
                 /***
                  *  CRUD on feature switches unused until this epic is worked on :
                  *  https://quickbase.atlassian.net/browse/MC-1189
@@ -828,6 +829,19 @@
                 }
             );
         });
+    }
+
+    function getMockPage(req, res) {
+        const mockPage = {
+            id: req.params.pageId,
+            appId: req.params.appId,
+            description: 'Sample Description',
+            name: 'My First Sample Page',
+            isDefaultPage: true,
+            type: 'APP_PAGE'
+
+        };
+        res.send(mockPage);
     }
 
     /**

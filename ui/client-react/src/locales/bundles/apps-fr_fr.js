@@ -645,6 +645,7 @@ export default {
                 removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
+                existingFieldsMenuThisTableTitle: 'Cette table',
                 stage: {
                     title: 'Formulaire pour {tableName}'
                 },
@@ -762,8 +763,8 @@ export default {
             iconHeading: "Icône",
             searchPlaceholder: "Rechercher des icônes...",
 
-            tableNamePlaceholder: "Par exemple, les clients",
-            recordNamePlaceholder: "Par exemple, client",
+            tableNamePlaceholder: "Par exemple, les clients. Utilisez jusqu'à {numberOfChars} lettres",
+            recordNamePlaceholder: "Par exemple, client. Utilisez jusqu'à {numberOfChars} lettres",
             descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la navigation à gauche",
 
             finishedButtonLabel: "Créer une table",
@@ -789,6 +790,10 @@ export default {
             recordTitleFieldDescription: "Choisissez le champ qui s'affiche comme titre lorsque vous visualisez ou modifiez un enregistrement. Ce champ doit être rempli.",
             recordTitleFieldDefault: "Par défaut à Noun + ID",
             recordName: "Nom de l'enregistrement"
+        },
+        emptyTableState: {
+            message: "Il n'y a pas encore de tables dans cette application",
+            createNewTable: "Créer une table"
         },
         iconChooser: {
             suggestedIconsHeading: "Icônes suggérées",
