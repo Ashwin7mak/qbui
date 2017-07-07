@@ -131,7 +131,7 @@
         //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com,
 
         // A shared secret for hitting private APIs on Core. Used for running dataGen and E2E tests locally
-        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This is the dev key. A different key is generated in prod/int
+        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This value is not valid outside of internal dev environments
 
     };
 

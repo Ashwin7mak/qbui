@@ -37,7 +37,7 @@
         client: client,
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
-        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This is the dev key. A different key is generated in prod/int
+        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This value is not valid outside of internal dev environments
     };
 
     module.exports = Object.assign({}, baseConfig, process.env);
