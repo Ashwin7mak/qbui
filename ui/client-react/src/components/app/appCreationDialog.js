@@ -85,7 +85,7 @@ AppCreationDialog.propTypes = {
 const mapStateToProps = (state) => {
     let {pendingValidationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(state);
     return {
-        pendingValidationError: pendingValidationError,
+        pendingValidationError,
         appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state),
         app: AppBuilderSelectors.getNewAppInfo(state),
         isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)
