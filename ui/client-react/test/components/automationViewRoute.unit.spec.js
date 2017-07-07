@@ -28,13 +28,6 @@ describe('AutomationViewRoute', () => {
             jasmineEnzyme();
         });
 
-        it('test get app id from app in props', () => {
-            component = shallow(<AutomationViewRoute {...propsWithAuto}/>);
-            expect(component.instance().getAppId()).toEqual("app1");
-            expect(component.instance().getAutomationId()).toEqual("auto1");
-            expect(component.instance().getAutomationName()).toEqual("Auto 1");
-        });
-
         it('test get app id from app id in matches', () => {
             let localProps = {...props, app: undefined, match:{params:{appId: 'app2', automationId: 'autoOther'}}};
             component = shallow(<AutomationViewRoute {...localProps}/>);
