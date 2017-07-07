@@ -91,6 +91,9 @@
             var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
             var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
 
+            //Get the original records count in a report
+            let origRecordCount = formsPO.getRecordsCountInATable();
+
             //Click on 1st record edit pencil
             reportContentPO.clickRecordEditPencilInTableActions(1);
 
@@ -122,9 +125,12 @@
             var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
             var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
 
+            //Get the original records count in a report
+            let origRecordCount = formsPO.getRecordsCountInATable();
+
             //Click on 4th(the records count start from 0) record edit pencil
             //click on the record to open in view form mode
-            reportContentPO.clickOnRecordInReportTable(3);
+            reportContentPO.clickOnRecordInReportTable(0);
             formsPO.viewFormContainerEl.waitForVisible();
             //click on the edit pencil on the view form
             formsPO.clickRecordEditPencilInViewForm(3);
