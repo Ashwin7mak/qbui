@@ -107,7 +107,7 @@ Resources:
             - Name: tracingEnabled
               Value: !Ref TracingEnabled
             - Name: tracingServiceName
-              Value: !Ref ServiceName
+              Value: !Ref AWS::StackName
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
