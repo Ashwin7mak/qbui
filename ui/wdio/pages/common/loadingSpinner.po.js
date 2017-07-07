@@ -11,7 +11,7 @@
                 //wait until loading screen disappear
                 browser.waitForExist('.loading .loader .spinner', e2eConsts.extraLongWaitTimeMs, true);
                 //Need this to stabilize DOM
-                return browser.pause(e2eConsts.shortWaitTimeMs);
+                return browser.pause(e2eConsts.mediumWaitTimeMs);
             }},
 
         /**
