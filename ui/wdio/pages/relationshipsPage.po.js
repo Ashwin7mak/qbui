@@ -348,6 +348,7 @@
 
                 //Verify the embedded child record values
                 // Confirm the values on the child form is the right record
+                browser.pause(e2eConsts.mediumWaitTimeMs);
                 reportContentPO.waitForReportContent();
                 let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
                 expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);
