@@ -75,7 +75,7 @@ Resources:
   DeveloperRepository:
     Type: "AWS::ECR::Repository"
     Properties:
-      RepositoryName: !Sub quickbase/${ServiceName}/developer
+      RepositoryName: !Sub quickbase/${ServiceName}-developer
       RepositoryPolicyText:
         Version: "2012-10-17"
         Statement:
