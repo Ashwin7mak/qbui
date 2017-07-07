@@ -65,13 +65,12 @@ export const createApp = (app) => {
  * @param validationError
  * @param isEdited
  * */
-export const setAppProperty = (property, value, pendingValidationError, validationError, isEdited) => ({
+export const setAppProperty = (property, value, pendingValidationError, validationError) => ({
     type: types.SET_APP_PROPERTY,
     property,
     value,
     pendingValidationError,
-    validationError,
-    isEdited
+    validationError
 });
 
 export const showAppCreationDialog = () => ({
