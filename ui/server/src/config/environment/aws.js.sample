@@ -6,12 +6,12 @@
     'use strict';
 
     //var path = require('path');
-    var dateUtils = require('../../utility/dateUtils');
-    var clientConsts = require('./clientConsts');
+    const dateUtils = require('../../utility/dateUtils');
+    const clientConsts = require('./clientConsts');
 
-    var client = clientConsts.REACT;
+    const client = clientConsts.REACT;
 
-    module.exports = {
+    const baseConfig = {
 
         //  Logging configuration
         LOG: {
@@ -46,6 +46,10 @@
         DOMAIN: '',
 
         // the client to use
-        client
+        client,
+
+        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This value is not valid outside of internal dev environments
     };
+
+    module.exports = Object.assign({}, baseConfig, process.env);
 }());
