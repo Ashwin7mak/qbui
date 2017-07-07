@@ -743,7 +743,9 @@ export default {
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
             descriptionHeading: "Description de l'application",
             appCreationFailed: "Impossible de créer une application",
-            searchPlaceholder: "Rechercher les icônes de l'application..."
+            searchPlaceholder: "Rechercher les icônes de l'application...",
+            validateAppNameExists: "Remplissez une valeur différente. Une autre application utilise déjà ce nom",
+            validateAppNameEmpty: "Remplissez le nom de l'application"
         },
         emptyAppState: {
             message: "Vous n'avez pas encore d'applications.",

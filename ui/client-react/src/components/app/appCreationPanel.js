@@ -43,9 +43,9 @@ export class AppCreationPanel extends Component {
         const trimmed = typeof value === "string" ? value.trim() : value;
 
         if (trimmed === '') {
-            validationError = Locale.getMessage('tableCreation.validateTableNameEmpty');
+            validationError = Locale.getMessage('appCreation.validateAppNameEmpty');
         } else if (this.appNameExists(trimmed)) {
-            validationError = Locale.getMessage('tableCreation.validateTableNameExists');
+            validationError = Locale.getMessage('appCreation.validateAppNameExists');
         }
 
         return validationError;
