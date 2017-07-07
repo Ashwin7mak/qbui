@@ -388,11 +388,11 @@
          */
         selectFromList : {value: function(listOption) {
             //wait untill you see 1 option since drop down loads onDemand now
-            browser.element('.Select-menu .Select-option').waitForVisible();
+            browser.element('.Select-menu-outer .Select-option').waitForVisible();
             //need this as drop down takes some time to load now since onDemand
             browser.pause(e2eConsts.shortWaitTimeMs);
             //get all options from the list
-            let option = browser.element('.Select-menu').elements('.Select-option').value.filter(function(optionText) {
+            let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
                 return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
@@ -403,7 +403,7 @@
                 option[0].click();
                 //wait until loading screen disappear
                 loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-                return browser.waitForVisible('.Select-menu', e2eConsts.shortWaitTimeMs, true);
+                return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
             } else {
                 throw new Error('Option with name ' + listOption + " not found in the list");
             }
