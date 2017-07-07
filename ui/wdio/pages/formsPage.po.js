@@ -387,13 +387,13 @@
          *
          */
         selectFromList : {value: function(listOption) {
+            //wait until you see select outer menu
+            browser.waitForVisible('.Select-menu-outer');
             //wait untill you see 1 option since drop down loads onDemand now
-            browser.element('.Select-menu-outer .Select-option').waitForVisible();
-            //need this as drop down takes some time to load now since onDemand
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.element('.Select-option').waitForVisible();
             //get all options from the list
-            let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
-                return optionText.getAttribute('textContent').trim().includes(listOption);
+            var option = browser.elements('.Select-option').value.filter(function(optionText) {
+                return optionText.getAttribute('textContent').includes(listOption);
             });
 
             if (option !== []) {
