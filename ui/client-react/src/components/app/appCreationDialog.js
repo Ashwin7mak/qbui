@@ -40,11 +40,19 @@ export class AppCreationDialog extends React.Component {
     };
 
     /**
+     * check for any validation errors in app
+     * @returns {boolean}
+     */
+    isValid = () => {
+        // form can be saved if the state of the fields is valid, regardless of what previous validation error is being shown
+        return  !this.props.pendingValidationError;
+    };
+
+    /**
      * render the multi-step modal dialog for creating a app
      * @returns {XML}
      */
     render() {
-
         const classes = ['appCreationDialog creationDialog'];
 
         // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
@@ -54,11 +62,12 @@ export class AppCreationDialog extends React.Component {
 
         return (
             <MultiStepDialog show={this.props.appDialogOpen}
-                                 classes={classes.join(' ')}
-                                 onCancel={this.onCancel}
-                                 onFinished={this.onFinished}
-                                 finishedButtonLabel={Locale.getMessage("appCreation.finishedButtonLabel")}
-                                 titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
+                             classes={classes.join(' ')}
+                             onCancel={this.onCancel}
+                             onFinished={this.onFinished}
+                             canProceed={this.isValid()}
+                             finishedButtonLabel={Locale.getMessage("appCreation.finishedButtonLabel")}
+                             titles={[Locale.getMessage("appCreation.newAppPageTitle")]}>
                 <div className="dialogCreationPanel">
                     <AppCreationPanel />
                 </div>
@@ -75,6 +84,7 @@ AppCreationDialog.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
+        pendingValidationError: AppBuilderSelectors.getValidationError(state),
         appDialogOpen: AppBuilderSelectors.getIsDialogOpenState(state),
         app: AppBuilderSelectors.getNewAppInfo(state),
         isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)

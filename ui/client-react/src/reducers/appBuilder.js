@@ -85,9 +85,11 @@ export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialog
 
 export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
 
+export const getValidationError = (state) => _.get(state.appBuilder.name, 'pendingValidationError', null);
+
 export const getAppProperties = (state) => {
-    let {name, icon, description} =   _.pick(state.appBuilder, APP_PROPS);
-    console.log('name: ', name);
+    let {name, icon, description} =  _.pick(state.appBuilder, APP_PROPS);
+
     return {
         name: name.value,
         icon: icon.value,
