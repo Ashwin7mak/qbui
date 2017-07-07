@@ -120,37 +120,42 @@
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
         it('Edit a record via View Form edit pencil', function() {
-            var actualNumbersArray = ['33.33', '$33.33', '33.33'];
-            var expectedNumbersArray;
-            var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
-            var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
+            //
+            //***** These tests don't run in safari browser as 'scrollIntoView' is not supported by safari.
+            //
+            if (browserName !== 'safari') {
+                var actualNumbersArray = ['33.33', '$33.33', '33.33'];
+                var expectedNumbersArray;
+                var fieldTypes = ['allTextFields', 'allNumericFields', 'allDurationFields', 'allDateFields', 'allTimeFields'];
+                var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
 
-            //Get the original records count in a report
-            let origRecordCount = formsPO.getRecordsCountInATable();
+                //Get the original records count in a report
+                let origRecordCount = formsPO.getRecordsCountInATable();
 
-            //Click on 4th(the records count start from 0) record edit pencil
-            //click on the record to open in view form mode
-            reportContentPO.clickOnRecordInReportTable(0);
-            formsPO.viewFormContainerEl.waitForVisible();
-            //click on the edit pencil on the view form
-            formsPO.clickRecordEditPencilInViewForm(3);
+                //Click on 4th(the records count start from 0) record edit pencil
+                //click on the record to open in view form mode
+                reportContentPO.clickOnRecordInReportTable(0);
+                formsPO.viewFormContainerEl.waitForVisible();
+                //click on the edit pencil on the view form
+                formsPO.clickRecordEditPencilInViewForm(3);
 
-            //Edit values
-            fieldTypes.forEach(function(fieldType) {
-                formsPO.enterFormValues(fieldType);
-            });
-            fieldTypes2.forEach(function(fieldType) {
-                formsPO.enterFormValues(fieldType);
-            });
+                //Edit values
+                fieldTypes.forEach(function (fieldType) {
+                    formsPO.enterFormValues(fieldType);
+                });
+                fieldTypes2.forEach(function (fieldType) {
+                    formsPO.enterFormValues(fieldType);
+                });
 
-            //Click Save on the form
-            formsPO.clickFormSaveBtn();
-            //verify You land in view form since you edited a record from View form after saving
-            formsPO.waitForViewFormsTableLoad();
-            //Verify the we landed in edited record after saving
-            expectedNumbersArray = browser.elements('div.numericField.viewElement').getText();
-            //compare 2 arrays
-            expect(actualNumbersArray).toEqual(expectedNumbersArray);
+                //Click Save on the form
+                formsPO.clickFormSaveBtn();
+                //verify You land in view form since you edited a record from View form after saving
+                formsPO.waitForViewFormsTableLoad();
+                //Verify the we landed in edited record after saving
+                expectedNumbersArray = browser.elements('div.numericField.viewElement').getText();
+                //compare 2 arrays
+                expect(actualNumbersArray).toEqual(expectedNumbersArray);
+            }
         });
 
     });
