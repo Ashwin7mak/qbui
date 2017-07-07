@@ -16,7 +16,7 @@
 
     var client = clientConsts.REACT;
 
-    module.exports = {
+    var baseConfig = {
 
         //  Logging configuration
         LOG: {
@@ -49,14 +49,22 @@
 
         ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
 
+        // Use these settings if running Java Core and EE through Docker-compose in qbui
+        //Java REST endpoint (protocol,server,port)
+        javaHost: 'https://localhost:8298',
+        eeHost: 'https://localhost:8299',
+        automationHost: 'https://localhost:8089',
+
         // Use these settings if running Java Core and EE locally
         //Java REST endpoint (protocol,server,port)
-        javaHost: 'http://localhost:8080',
-        eeHost: 'http://localhost:8081',
+        // javaHost: 'http://localhost:8080',
+        // eeHost: 'http://localhost:8081',
+        // automationHost: 'http://localhost:8089',
 
         // Use these settings if you want to connect your qbui code to the INT1 integration environment
-        //javaHost: 'https://localhost.int1-ecs.newstack.quickbaserocks.com',
-        //eeHost: 'https://t.int1-ecs.newstack.quickbaserocks.com',
+        // javaHost: 'https://localhost.int1-ecs.newstack.quickbaserocks.com',
+        // eeHost: 'https://t.int1-ecs.newstack.quickbaserocks.com',
+        // automationHost: 'https://localhost.int1-ecs.newstack.quickbaserocks.com',
 
         eeHostEnable: true,
 
@@ -104,13 +112,18 @@
          * Note: FeatureSwitches are overridden based on their names, ensure overrides
          * have same name including spacing.
          */
-        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/e2e.override.featureSwitches.json'
-        // masterOverrideTurnFeaturesOn:false
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/e2e.override.featureSwitches.json',
+        // masterOverrideTurnFeaturesOn:false,
 
 
         /**
          * AWS api gateway to lambda functions for feature switches
          */
         //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com,
+
+        // A shared secret for hitting private APIs on Core. Used for running dataGen and E2E tests locally
+        sharedSecret: 'e4d1d39f-3352-474e-83bb-74dda6c4d8d7', // This value is not valid outside of internal dev environments
     };
+
+    module.exports = Object.assign({}, baseConfig, process.env);
 }());
