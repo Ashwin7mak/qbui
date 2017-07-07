@@ -4,27 +4,29 @@
 import React, {PropTypes} from 'react';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import './appSettingsStage.scss';
+import {connect} from 'react-redux';
+import {changeStageSelectedRoleId} from '../../../actions/userActions';
 
-class AppSettingsStage extends React.Component {
 
-    constructor(...args) {
-        super(...args);
-        this.getRoleTotals = this.getRoleTotals.bind(this);
-        this.getAppOwnerSection = this.getAppOwnerSection.bind(this);
-        this.getAppOwnerName = this.getAppOwnerName.bind(this);
-    }
+export class AppSettingsStage extends React.Component {
 
-    getRoleTotals() {
+    getRoleTotals = ()=> {
         let usersRoleCount = [];
         let appUsers = this.props.appUsers || [];
-        this.props.appRoles.forEach(function(role) {
+        this.props.appRoles.forEach((role) => {
             if (appUsers[role.id]) {
+                let numberOfUsers = appUsers[role.id].length;
                 //a local hack while we have no user defined roles, this is so we have pluralized role names
-                let roleTitle = (appUsers[role.id].length > 1 ? role.name + "s" : role.name);
+                let roleTitle = (numberOfUsers > 1 ? role.name + "s" : role.name);
+                let classes = numberOfUsers > 0 ? ["appRolesPod", "selectable"] : ["appRolesPod"];
+                let selected = false;
+                if (this.props.stageSelectedRoleId === role.id) {classes.push('active') ; selected = true;}
                 usersRoleCount.push(
-                    <div className="appRolesPod" key={role.id}>
+                    <div className={classes.join(' ')}
+                         key={role.id}
+                         onClick={()=>this.filterUserByRole(role.id, numberOfUsers, selected)}>
                         <div className="appRolesDivider">
-                            <div className="appRolesPodCount">{`${appUsers[role.id].length}`}</div>
+                            <div className="appRolesPodCount">{numberOfUsers}</div>
                             <div className="appRolesPodName">{roleTitle}</div>
                         </div>
                     </div>
@@ -34,7 +36,7 @@ class AppSettingsStage extends React.Component {
         return usersRoleCount;
     }
 
-    getAppOwnerName() {
+    getAppOwnerName= ()=> {
         if (this.props.appOwner) {
             let appOwner = `${this.props.appOwner.firstName} ${this.props.appOwner.lastName}`;
             if (this.props.appOwner.email) {
@@ -47,7 +49,7 @@ class AppSettingsStage extends React.Component {
         return '';
     }
 
-    getAppOwnerSection() {
+    getAppOwnerSection = ()=> {
         let appOwnerTitle = `, ${Locale.getMessage('app.users.manager')}`;
         let appUsersManagementContent = Locale.getMessage('app.users.content');
         return (
@@ -60,6 +62,13 @@ class AppSettingsStage extends React.Component {
                 </div>
             </div>
         );
+    }
+
+    filterUserByRole = (roleId, numberOfUsers, isActive)=> {
+        if (numberOfUsers === 0) {return;}
+        roleId = isActive ? null : roleId;
+        this.props.changeStageSelectedRoleId(roleId);
+
     }
 
     render() {
@@ -86,4 +95,7 @@ AppSettingsStage.propTypes = {
     appOwner: PropTypes.object.isRequired
 };
 
-export default AppSettingsStage;
+const mapStateToProps = (state) => ({stageSelectedRoleId: state.selectedApp.stageSelectedRoleId});
+const mapDispatchToProps = {changeStageSelectedRoleId};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppSettingsStage);

@@ -9,6 +9,7 @@
     var log = require('../../logger').getLogger();
     let routeHelper = require('../../routes/routeHelper');
     let ob32Utils = require('../../utility/ob32Utils');
+    const URL = require('url');
 
     module.exports = function(config) {
         let requestHelper = require('../../api/quickbase/requestHelper')(config);
@@ -33,14 +34,41 @@
             log.info({req: req, res: res}, message);
         }
 
+        /**
+         * Based on the URL the user wants to redirect and the legacyBaseUrl specified in
+         * the config, to we will return true if the root domains are the same
+         * (e.g., quickbase-dev.com, quickbase.com, etc..) otherwise false
+         * @param redirectUrl The redirect url specified in the query params
+         * @returns {boolean} true if the redirect is to a valid domain else false
+         */
+        function isValidRedirect(redirectUrl) {
+            if (!redirectUrl) {
+                return false;
+            }
+
+            const legacyBaseUrl = requestHelper.getLegacyHostTopTwoDomain();
+            if (legacyBaseUrl === "") {
+                return false;
+            }
+            // Legacy Base URL will be used in a regex so make sure dots are handled as literals
+            // For example, the matching regex would be like /.*\.quickbase\.com/ when legacyBaseUrl is '.quickbase.com'
+            const urlRegex = new RegExp(`.*${legacyBaseUrl.replace(/\./g, '\\.')}`);
+
+            // We will verify that the redirect url is on the same
+            // domain of legacy stack url specified in the config
+            // (e.g., legacyBase is quickbase-dev.com, only redirect on that domain is OK)
+            const redirect = URL.parse(redirectUrl);
+            return redirect && redirect.hostname && urlRegex.test(redirect.hostname);
+        }
+
         return {
             signout: function signout(req, res) {
-                let isFederated = req.cookies && req.cookies[consts.COOKIES.ISFEDERATED];
-                var viewFilePath = 'signout.html';
-                var statusCode = 200;
-                var message = "User is signing out";
-                var hostname = requestHelper.getRequestHost(req, true, false);
-                var nsTicketDomain = "." + CommonUrlUtils.getDomain(hostname);
+                const isFederated = req.cookies && req.cookies[consts.COOKIES.ISFEDERATED];
+                const viewFilePath = 'signout.html';
+                const statusCode = 200;
+                const message = "User is signing out";
+                const hostname = requestHelper.getRequestHost(req, true, false);
+                const nsTicketDomain = "." + CommonUrlUtils.getDomain(hostname);
                 res.cookie(consts.COOKIES.TICKET, "", {domain: hostname, expires: new Date(0)});
                 res.cookie(consts.COOKIES.V2TOV3, "", {domain: hostname, expires: new Date(0)});
                 res.cookie(consts.COOKIES.NSTICKET, "", {domain: nsTicketDomain, expires: new Date(0)});
@@ -52,7 +80,7 @@
                 if (isFederated && req.headers.accept !== consts.APPLICATION_JSON && req.headers.accept !== consts.APPLICATION_XML) {
 
                     // Pull the legacy stack url from configs
-                    let legacyBase = requestHelper.getLegacyHost();
+                    let legacyBase = requestHelper.getLegacyHostTopTwoDomain();
 
                     if (legacyBase && legacyBase.length !== 0) {
 
@@ -107,7 +135,7 @@
                 }
 
                 // Pull the legacy stack url from configs
-                let legacyBase = requestHelper.getLegacyHost();
+                let legacyBase = requestHelper.getLegacyHostTopTwoDomain();
                 if (!legacyBase || legacyBase.length === 0) {
                     let statusCode = 500;
                     return processAuthentication(req, res, "500.html", statusCode, "Legacy stack URL not valid");
@@ -135,9 +163,10 @@
                     });
 
                 // Set the response redirect. If the redirect url does not exist, we will redirect
-                // to the legacy stack's 'My Apps' page
+                // to the legacy stack's 'My Apps' page. If the redirect url is not to a quickbase domain, we will also
+                // redirect to the 'My Apps' page.
                 let redirectUrl = req.query.url;
-                if (!redirectUrl || redirectUrl.length === 0) {
+                if (!isValidRedirect(redirectUrl))  {
                     redirectUrl = requestHelper.getLegacyRealmBase(req) + routeHelper.getMyAppsLegacyStackRoute();
                 }
                 res.redirect(redirectUrl);

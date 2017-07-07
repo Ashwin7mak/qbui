@@ -1,4 +1,4 @@
-// es5 shims for Function.prototype.bind, Object.prototype.keys, etc.
+tests.custom.webpack.js.sample// es5 shims for Function.prototype.bind, Object.prototype.keys, etc.
 //require('core-js/es5');
 
 /*

@@ -7,12 +7,22 @@ import {connect} from 'react-redux';
 import {showAppCreationDialog} from '../../actions/appBuilderActions';
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
 import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
+
 import _ from 'lodash';
+
+const DEFAULT_APP_ICON = 'favicon';
 
 export const AppsList = React.createClass({
 
     propTypes: {
-        apps: React.PropTypes.array.isRequired
+        apps: React.PropTypes.array.isRequired,
+        expanded: React.PropTypes.bool
+    },
+    getDefaultProps() {
+        return {
+            expanded: true
+        };
     },
     getInitialState() {
         return {
@@ -27,21 +37,26 @@ export const AppsList = React.createClass({
     onClearSearch() {
         this.setState({searchText:""});
     },
+
     onChangeSearch(ev) {
         this.setState({searchText: ev.target.value});
     },
+
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
+
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
-            // Give all apps in the left nav list a default icon of 'favicon'
-            // TODO:: Refactor where the icon is obtain from in MC-3596. Patching for the purpose of the current story.
-            let appForNavItem = {icon: 'favicon', tableIcon: 'favicon', ...app};
+            //app icon has an edge case where the AVAILABLE_ICON_FONTS.DEFAULT needs to be set here if it is 'favicon' or undefined
+            let getIconFont = app.icon === DEFAULT_APP_ICON || app.icon === undefined ? AVAILABLE_ICON_FONTS.DEFAULT : AVAILABLE_ICON_FONTS.TABLE_STURDY;
             return this.searchMatches(app.name) &&
                 <NavItem key={app.id}
-                         item={appForNavItem}
-                         tableIcon={true}
+                         item={app}
+                         icon={app.icon}
+                         defaultIcon={DEFAULT_APP_ICON}
+                         defaultIconFont={AVAILABLE_ICON_FONTS.DEFAULT}
+                         iconFont={getIconFont}
                          onSelect={this.props.onSelectApp}
                          selected={app.id === this.props.selectedAppId}
                          open={true}  />;
@@ -76,7 +91,8 @@ export const AppsList = React.createClass({
     },
 
     renderEmptyStateOrNewButton() {
-        return _.isEmpty(this.props.apps) ?
+        // Using expanded to hide the error message for apps when collapsed
+        return (_.isEmpty(this.props.apps) && this.props.expanded) ?
             <EmptyStateForLeftNav handleOnClick={this.createNewApp}
                                   emptyMessage="emptyAppState.message"
                                   className="appsListForLeftNav"
