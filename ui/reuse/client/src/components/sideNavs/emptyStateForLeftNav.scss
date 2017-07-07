@@ -6,7 +6,8 @@
     height: 160px;
     margin-left: 9px;
     margin-right: 6px;
-    padding-top: 16px;
+    margin-top: 6px;
+    padding-top: 11px;
 
     .createNewIcon {
         .addNewIcon {
@@ -27,7 +28,7 @@
             height: 30px;
             font-size: $size-iconfont-small;
             color: $add-user-button;
-            padding-top: 11px;
+            padding-top: 7px;
             margin-left: 11px;
 
             &:hover {

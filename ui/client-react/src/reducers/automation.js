@@ -39,6 +39,7 @@ const automation = (
         return {
             ...state,
             appId: action.content,
+            newAutomation : false
         };
     }
     case types.LOAD_AUTOMATIONS_FAILED: {
@@ -118,6 +119,51 @@ const automation = (
             error: undefined
         };
     }
+
+    case types.CREATE_AUTOMATION: {
+        let newStateAutomation = {
+            name:'',
+            type:"EMAIL",
+            active: true,
+            inputs: [
+                {name: "subject", type: "TEXT", defaultValue: null},
+                {name:"toAddress", type:"TEXT", defaultValue: null},
+                {name:"body", type:"TEXT", defaultValue: null},
+                {name:"fromAddress", type:"TEXT", defaultValue: "notify@quickbaserocks.com"},
+                {name:"ccAddress", type:"TEXT", defaultValue: null}
+            ],
+            steps: [
+                {
+                    type: "ACTION",
+                    actions: [
+                        {
+                            type: "CALL",
+                            functionName: "SEND_EMAIL",
+                            parameterBindings: [
+                                {parentName: "toAddress", "childName": "toAddress"},
+                                {parentName: "fromAddress", "childName": "fromAddress"},
+                                {parentName: "ccAddress", "childName": "ccAddress"},
+                                {parentName: "subject", "childName": "subject"},
+                                {parentName: "body", "childName": "body"}
+                            ],
+                            returnBinding: {"parentName": "response"}
+                        }
+                    ]
+                }
+            ]
+        };
+        return {
+            ...state,
+            automation : newStateAutomation,
+            newAutomation : true
+        };
+    }
+
+    case types.CHANGE_AUTOMATION_NAME: {
+        let newState = _.cloneDeep(state);
+        newState.automation.name = action.content.newName;
+        return newState;
+    }
     case types.CHANGE_AUTOMATION_EMAIL_TO: {
         let newState = _.cloneDeep(state);
         emailAutomationSetTo(newState.automation, action.content.newTo);
@@ -151,4 +197,8 @@ export const testAutomation = (state) => {
 
 export const getAutomation = (state) => {
     return state.automation.automation;
+};
+
+export const getNewAutomation = (state) => {
+    return state.automation.newAutomation;
 };

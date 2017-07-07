@@ -78,6 +78,7 @@ store.dispatch(FeatureSwitchActions.getStates());
  *          routes - an array child routes that occur under within the route (optional)
  *          props - object with any properties to be included when rendering the component (optional)
  **/
+
 const routes = [
     /***
      *  These api's are not being used at this time.
@@ -157,9 +158,14 @@ const routes = [
                 component: ReportBuilderContainer
             },
             {
+                path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/${AUTOMATION.CREATE}`,
+                component: AutomationBuilderContainer,
+                exact: true
+            },
+            {
                 path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId`,
-                component: AutomationBuilderContainer
-            }
+                component: AutomationBuilderContainer,
+            },
         ]
     },
     {
