@@ -84,8 +84,6 @@
             modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
             tableCreatePO.waitUntilNotificationContainerGoesAway();
 
-            //Verify the create table dialogue
-            tableCreatePO.verifyNewTableCreateDialogue();
             //Click OK button on create table dialogue
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
 

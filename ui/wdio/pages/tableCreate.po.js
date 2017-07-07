@@ -509,7 +509,9 @@
             //select one and apply to test it was saved
             modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
             this.clickOnEditTableApplyBtn();
-            return expect(pickerfield.getText()).toEqual(dropDownListLabels[0]);
+            expect(pickerfield.getText()).toEqual(dropDownListLabels[0]);
+            //Click on back to apps page link
+            return this.clickBackToAppsLink();
         }}
 
     });

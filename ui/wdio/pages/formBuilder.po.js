@@ -562,6 +562,7 @@ class formBuilderPage {
     }
 
     verifyFormBuilderStageTitleFieldDropDown(expectedDropDownList) {
+        this.firstField.waitForVisible();
         //expand the stage
         if (this.toggleStageCaretDown.isVisible()) {
             this.toggleStageCaretDown.click();
