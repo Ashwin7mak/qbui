@@ -12,6 +12,7 @@ import {pageLoadTime, gridRefreshTime} from "../../analytics/performanceTimingAc
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
+import WindowPerformanceUtils from "../../../../client-react/src/utils/windowPerformanceUtils";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import "./standardGrid.scss";
 
@@ -41,7 +42,6 @@ export class StandardGrid extends Component {
      * If the sticky column needs to be implemented, check out the code from qbGrid.js in client-react
      */
     handleScroll = () => {
-
         let scrolled = this.tableRef;
         if (scrolled) {
             let currentTopScroll = scrolled.scrollTop;
@@ -60,10 +60,7 @@ export class StandardGrid extends Component {
     };
 
     componentWillUpdate = () => {
-        // null check - window.performance.mark is undefined in safari
-        if (window.performance.mark) {
-            window.performance.mark(this.props.id + 'GridRefreshStart');
-        }
+        WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshStart');
     };
 
     /**
@@ -72,20 +69,12 @@ export class StandardGrid extends Component {
      */
     calculateGridRefreshTime = () => {
         let time = null;
-        // null check - window.performance.mark is undefined in safari
-        if (window.performance.mark) {
-            window.performance.mark(this.props.id + 'GridRefreshEnd');
-            window.performance.measure(
-                this.props.id + 'GridRefreshTime',
-                this.props.id + 'GridRefreshStart',
-                this.props.id + 'GridRefreshEnd'
+        if (WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshEnd')) {
+            let measureName = this.props.id + 'GridRefreshTime';
+            WindowPerformanceUtils.measureTimeDiff(
+                measureName, this.props.id + 'GridRefreshStart', this.props.id + 'GridRefreshEnd'
             );
-
-            let refreshEntries = window.performance.getEntriesByName(this.props.id + 'GridRefreshTime');
-
-            if (refreshEntries.length) {
-                time = refreshEntries[refreshEntries.length - 1].duration;
-            }
+            time = WindowPerformanceUtils.getDurationFromLastEntry(measureName);
         }
         return time;
     };
@@ -300,7 +289,7 @@ const mapDispatchToProps = (dispatch, props) => ({
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
     },
     pageLoadTime: () => {
-        dispatch(pageLoadTime((window.performance.now())));
+        dispatch(pageLoadTime((WindowPerformanceUtils.now())));
     },
     gridRefreshTime: (time) => {
         dispatch(gridRefreshTime(time));

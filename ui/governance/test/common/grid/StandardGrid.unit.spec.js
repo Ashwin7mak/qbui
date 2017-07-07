@@ -6,6 +6,8 @@ import {QbCell} from '../../../../client-react/src/components/dataTable/qbGrid/q
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
+import WindowPerformanceUtils from "../../../../client-react/src/utils/windowPerformanceUtils";
+import {__RewireAPI__ as StandardGridRewireAPI} from "../../../src/common/grid/standardGrid";
 
 describe('StandardGrid', () => {
 
@@ -179,7 +181,7 @@ describe('StandardGrid', () => {
             }
         }];
 
-        it('should create a time mark in window.performance.mark for grid updating', () => {
+        it('should create a time mark in WindowPerformanceUtils for grid updating', () => {
             let StandardGridShallow = shallow(
                 <StandardGrid
                     columns={columns}
@@ -192,31 +194,17 @@ describe('StandardGrid', () => {
                     cellRenderer={QbCell}
                 />);
 
-            let oldMark = window.performance.mark;
-            window.performance.mark = () => {
-            };
-
-            spyOn(window.performance, 'mark');
-
+            spyOn(WindowPerformanceUtils, 'markTime');
             StandardGridShallow.setProps({items: ['test']});
-            expect(window.performance.mark).toHaveBeenCalledWith('accountUsersGridRefreshStart');
 
-            window.performance.mark = oldMark;
+            expect(WindowPerformanceUtils.markTime).toHaveBeenCalledWith('accountUsersGridRefreshStart');
         });
 
         describe('calculateGridRefreshTime', () => {
             let StandardGridShallow,
-                instance,
-                oldMark,
-                oldMeasure,
-                oldGetEntriesByName;
+                instance;
 
             beforeEach(() => {
-                oldMark = window.performance.mark;
-                oldMeasure = window.performance.measure;
-                // oldGetEntriesByName = window.performance.getEntriesByName;
-                // spyOn(window.performance, 'getEntriesByName').and.returnValue({duration: 10});
-
                 StandardGridShallow = shallow(
                     <StandardGrid
                         columns={columns}
@@ -231,33 +219,46 @@ describe('StandardGrid', () => {
             });
 
             afterEach(() => {
-                window.performance.mark = oldMark;
-                window.performance.measure = oldMeasure;
+                StandardGridRewireAPI.__ResetDependency__('WindowPerformanceUtils');
             });
 
-            fit('should return null if the window.performance.mark function does not exist', () => {
-                window.performance.mark = null;
+            it('should return null if the window.performance.mark function does not exist', () => {
+                StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
+                    ...WindowPerformanceUtils,
+                    markTime(name) { return false },
+                    measureTimeDiff(name, start, end) { },
+                    getEntriesByName(name) { return [{duration: 20}] }
+                });
+
                 instance = StandardGridShallow.instance();
 
                 expect(instance.calculateGridRefreshTime()).toBeNull();
             });
 
-            fit('should return null if the window.performance.mark function exists, but measure entries DO NOT exist', () => {
-                window.performance.mark = () => {};
-                window.performance.measure = () => {};
-                spyOn(window.performance, 'getEntriesByName').and.returnValue([]);
+            it('should return null if the window.performance.mark function exists, but measure entries DO NOT exist', () => {
+                StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
+                    ...WindowPerformanceUtils,
+                    markTime(name) { return true },
+                    measureTimeDiff(name, start, end) { },
+                    getEntriesByName(name) { return [] }
+                });
+
                 instance = StandardGridShallow.instance();
 
                 expect(instance.calculateGridRefreshTime()).toBeNull();
             });
 
-            fit('should return a time if the window.performance.mark function exists, and measure entries exist', () => {
-                window.performance.mark = () => {};
-                window.performance.measure = () => {};
-                spyOn(window.performance, 'getEntriesByName').and.returnValue([{duration: 10}]);
+            it('should return a time if the window.performance.mark function exists, and measure entries exist', () => {
+                StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
+                    ...WindowPerformanceUtils,
+                    markTime(name) { return true },
+                    measureTimeDiff(name, start, end) { },
+                    getEntriesByName(name) { return [{duration: 20}] }
+                });
+
                 instance = StandardGridShallow.instance();
 
-                expect(instance.calculateGridRefreshTime()).toEqual(10);
+                expect(instance.calculateGridRefreshTime()).toEqual(20);
             });
         });
 
