@@ -108,7 +108,7 @@ export class AppCreationPanel extends Component {
                                       className="appCreationPanel"
                                       name="description"
                                       value={this.props.appDescription}
-                                      onChange={ this.setAppProperty}
+                                      onChange={ this.props.setAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3" />
 
