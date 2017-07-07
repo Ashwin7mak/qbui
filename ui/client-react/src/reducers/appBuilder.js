@@ -57,7 +57,8 @@ const appBuilder = (
         appInfo[action.property] = {
             value: action.value,
             pendingValidationError: action.pendingValidationError,
-            validationError: action.validationError
+            validationError: action.validationError,
+            isEdited: true
         };
         return {
             ...state,
@@ -75,6 +76,12 @@ const appBuilder = (
             ...state,
             isAppIconChooserOpen: false
         };
+
+    case types.SET_APP_EDITING_PROPERTY:
+        return {
+            ...state,
+            isEdited: false
+        };
     default:
         return state;
     }
@@ -86,7 +93,7 @@ export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialog
 
 export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
 
-export const getValidationError = (state) => _.get(state.appBuilder.name, 'pendingValidationError', null);
+export const getValidationErrorAndIsEdited = (state) => _.pick(state.appBuilder.name, ['pendingValidationError', 'validationError', 'isEdited']);
 
 export const getAppProperties = (state) => {
     let {name, icon, description} =  _.pick(state.appBuilder, APP_PROPS);

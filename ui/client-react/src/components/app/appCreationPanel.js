@@ -58,8 +58,9 @@ export class AppCreationPanel extends Component {
      */
     setAppProperty = (property, value) => {
         const pendingValidationError = this.getValidationError(property, value);
+        const validationError = null;
 
-        this.props.setAppProperty(property, value, pendingValidationError);
+        this.props.setAppProperty(property, value, pendingValidationError, validationError);
     };
 
     /**
@@ -68,11 +69,11 @@ export class AppCreationPanel extends Component {
     onBlurInput = (property, value) => {
 
         // do validation on loss of focus unless it hasn't been edited
-        // set the validation error and the live validation error for the field (same)
-        console.log('onBLur!');
-        const validationError = this.props.pendingValidationError;
-
-        this.props.setAppProperty(property, value, validationError, validationError);
+        if (this.props.isEdited) {
+            const validationError = this.props.pendingValidationError;
+            // set the validation error and the live validation error for the field (same)
+            this.props.setAppProperty(property, value, validationError, validationError);
+        }
     };
 
     /**
@@ -99,8 +100,8 @@ export class AppCreationPanel extends Component {
                                       onBlur={this.onBlurInput}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
-                                      edited={true}
-                                      validationError={this.props.pendingValidationError}
+                                      edited={this.props.isEdited}
+                                      validationError={this.props.validationError}
                                       autofocus />
 
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
@@ -130,6 +131,7 @@ export class AppCreationPanel extends Component {
 
 const mapStateToProps = (state) => {
     let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
+    let {validationError, pendingValidationError, isEdited} = AppBuilderSelectors.getValidationErrorAndIsEdited(state);
 
     return {
         apps: _.get(state, 'app.apps', []),
@@ -137,14 +139,17 @@ const mapStateToProps = (state) => {
         appDescription: description,
         appIcon: icon,
         isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state),
-        pendingValidationError: AppBuilderSelectors.getValidationError(state),
+        pendingValidationError,
+        validationError,
+        isEdited
     };
 };
 
 const mapDispatchToProps = {
     setAppProperty: AppBuilderActions.setAppProperty,
     openIconChooserForApp: AppBuilderActions.openIconChooserForApp,
-    closeIconChooserForApp: AppBuilderActions.closeIconChooserForApp
+    closeIconChooserForApp: AppBuilderActions.closeIconChooserForApp,
+    setAppEditingProperty: AppBuilderActions.setAppEditingProperty
 };
 
 export default connect(

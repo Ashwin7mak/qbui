@@ -62,13 +62,16 @@ export const createApp = (app) => {
  * @param property
  * @param value
  * @param pendingValidationError
+ * @param validationError
+ * @param isEdited
  * */
-export const setAppProperty = (property, value, pendingValidationError, validationError) => ({
+export const setAppProperty = (property, value, pendingValidationError, validationError, isEdited) => ({
     type: types.SET_APP_PROPERTY,
     property,
+    value,
     pendingValidationError,
     validationError,
-    value
+    isEdited
 });
 
 export const showAppCreationDialog = () => ({
@@ -85,4 +88,8 @@ export const openIconChooserForApp = () => ({
 
 export const closeIconChooserForApp = () => ({
     type: types.CLOSE_ICON_CHOOSER_FOR_APP
+});
+
+export const setAppEditingProperty = () => ({
+    type: types.SET_APP_EDITING_PROPERTY
 });
