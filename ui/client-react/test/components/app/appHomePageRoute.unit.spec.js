@@ -33,6 +33,7 @@ describe('AppHomePageRoute', () => {
 
     function PageServiceMock() {
         this.getPage = () => Promise.resolve({data:''});
+        this.getMockPage = () => Promise.resolve({data:''});
     }
 
     beforeEach(() => {
