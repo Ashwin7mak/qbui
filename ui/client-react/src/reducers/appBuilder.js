@@ -3,6 +3,8 @@ import _ from 'lodash';
 
 const defaultAppIcon = 'Customer';
 const APP_PROPS = ['name', 'icon', 'description'];
+const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited'];
+
 const setDefaultSettings = {
     name: '',
     description: '',
@@ -88,7 +90,7 @@ export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialog
 
 export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
 
-export const getValidationErrorAndIsEdited = (state) => _.pick(state.appBuilder.name, ['pendingValidationError', 'validationError', 'isEdited']);
+export const getValidationErrorAndIsEdited = (state) => _.pick(state.appBuilder.name, VALIDATION_ERROR_AND_IS_EDITED);
 
 export const getAppProperties = (state) => {
     let {name, icon, description} =  _.pick(state.appBuilder, APP_PROPS);
