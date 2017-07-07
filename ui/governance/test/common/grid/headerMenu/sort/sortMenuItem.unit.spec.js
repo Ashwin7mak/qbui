@@ -61,14 +61,11 @@ describe('SortMenuItem', () => {
 
             if (_.includes(fConsts.chBox, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.uncheckedToChecked`);
-            }
-            else if (_.includes(fConsts.txt, fConst)) {
+            }            else if (_.includes(fConsts.txt, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.aToZ`);
-            }
-            else if (_.includes(fConsts.time, fConst)) {
+            }            else if (_.includes(fConsts.time, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.oldToNew`);
-            }
-            else {
+            }            else {
                 loc = Locale.getMessage(`report.menu.sort.lowToHigh`);
             }
 
@@ -102,14 +99,11 @@ describe('SortMenuItem', () => {
 
             if (_.includes(fConsts.chBox, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.checkedToUnchecked`);
-            }
-            else if (_.includes(fConsts.txt, fConst)) {
+            }            else if (_.includes(fConsts.txt, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.zToA`);
-            }
-            else if (_.includes(fConsts.time, fConst)) {
+            }            else if (_.includes(fConsts.time, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.newToOld`);
-            }
-            else {
+            }            else {
                 loc = Locale.getMessage(`report.menu.sort.highToLow`);
             }
 
