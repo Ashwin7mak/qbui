@@ -52,11 +52,15 @@ const appBuilder = (
             ...state,
             ...setDefaultSettings
         };
-
     case types.SET_APP_PROPERTY:
+        let appInfo = {};
+        appInfo[action.property] = {
+            value: action.value,
+            pendingValidationError: action.pendingValidationError
+        };
         return {
             ...state,
-            [action.property]: action.value
+            ...appInfo
         };
 
     case types.OPEN_ICON_CHOOSER_FOR_APP:
@@ -81,7 +85,15 @@ export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialog
 
 export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
 
-export const getAppProperties = (state) => _.pick(state.appBuilder, APP_PROPS);
+export const getAppProperties = (state) => {
+    let {name, icon, description} =   _.pick(state.appBuilder, APP_PROPS);
+    console.log('name: ', name);
+    return {
+        name: name.value,
+        icon: icon.value,
+        description: description.value
+    };
+};
 
 export const getNewAppInfo = (state) => {
     let {name, icon, description} = getAppProperties(state);

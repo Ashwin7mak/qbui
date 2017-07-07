@@ -113,7 +113,6 @@ export class AppCreationPanel extends Component {
 
 
 const mapStateToProps = (state) => {
-    console.log('state: ', state);
     let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
 
     return {
