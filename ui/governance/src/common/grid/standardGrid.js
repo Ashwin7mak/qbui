@@ -71,6 +71,7 @@ export class StandardGrid extends Component {
      * @returns {*} Null (if performance.mark not supported), Number in millis if supported
      */
     calculateGridRefreshTime = () => {
+        let time = null;
         // null check - window.performance.mark is undefined in safari
         if (window.performance.mark) {
             window.performance.mark(this.props.id + 'GridRefreshEnd');
@@ -81,18 +82,21 @@ export class StandardGrid extends Component {
             );
 
             let refreshEntries = window.performance.getEntriesByName(this.props.id + 'GridRefreshTime');
-            let time = 0;
-            if (refreshEntries) {
+
+            if (refreshEntries.length) {
                 time = refreshEntries[refreshEntries.length - 1].duration;
             }
-            this.props.gridRefreshTime(time);
         }
+        return time;
     };
 
     componentDidUpdate = () => {
         if (this.props.items) {
             this.props.pageLoadTime();
-            this.calculateGridRefreshTime();
+            let refreshTime = this.calculateGridRefreshTime();
+            if (refreshTime) {
+                this.props.gridRefreshTime(refreshTime);
+            }
         }
     };
 

@@ -204,10 +204,73 @@ describe('StandardGrid', () => {
             window.performance.mark = oldMark;
         });
 
-        describe('pageLoadTime and gridRefreshTime calls', () => {
-            let pageLoadTime, gridRefreshTime, itemsNew, StandardGridShallow, instance, createShallowStandardGrid;
+        describe('calculateGridRefreshTime', () => {
+            let StandardGridShallow,
+                instance,
+                oldMark,
+                oldMeasure,
+                oldGetEntriesByName;
 
             beforeEach(() => {
+                oldMark = window.performance.mark;
+                oldMeasure = window.performance.measure;
+                // oldGetEntriesByName = window.performance.getEntriesByName;
+                // spyOn(window.performance, 'getEntriesByName').and.returnValue({duration: 10});
+
+                StandardGridShallow = shallow(
+                    <StandardGrid
+                        columns={columns}
+                        getFacetFields={() => {
+                        }}
+                        doUpdate={AccountUsersActions.doUpdateUsers}
+                        items={[]}
+                        id={"accountUsers"}
+                        rowKey={"uid"}
+                        cellRenderer={QbCell}
+                    />);
+            });
+
+            afterEach(() => {
+                window.performance.mark = oldMark;
+                window.performance.measure = oldMeasure;
+            });
+
+            fit('should return null if the window.performance.mark function does not exist', () => {
+                window.performance.mark = null;
+                instance = StandardGridShallow.instance();
+
+                expect(instance.calculateGridRefreshTime()).toBeNull();
+            });
+
+            fit('should return null if the window.performance.mark function exists, but measure entries DO NOT exist', () => {
+                window.performance.mark = () => {};
+                window.performance.measure = () => {};
+                spyOn(window.performance, 'getEntriesByName').and.returnValue([]);
+                instance = StandardGridShallow.instance();
+
+                expect(instance.calculateGridRefreshTime()).toBeNull();
+            });
+
+            fit('should return a time if the window.performance.mark function exists, and measure entries exist', () => {
+                window.performance.mark = () => {};
+                window.performance.measure = () => {};
+                spyOn(window.performance, 'getEntriesByName').and.returnValue([{duration: 10}]);
+                instance = StandardGridShallow.instance();
+
+                expect(instance.calculateGridRefreshTime()).toEqual(10);
+            });
+        });
+
+        describe('pageLoadTime and gridRefreshTime calls', () => {
+            let pageLoadTime,
+                gridRefreshTime,
+                itemsNew,
+                StandardGridShallow,
+                instance,
+                createShallowStandardGrid;
+
+            beforeEach(() => {
+                let gridId = 'accountUsers';
                 pageLoadTime = jasmine.createSpy('pageLoadTime');
                 gridRefreshTime = jasmine.createSpy('gridRefreshTime');
 
@@ -224,7 +287,7 @@ describe('StandardGrid', () => {
                             }}
                             doUpdate={AccountUsersActions.doUpdateUsers}
                             items={newItems}
-                            id={"accountUsers"}
+                            id={gridId}
                             rowKey={"uid"}
                             cellRenderer={QbCell}
                             pageLoadTime={pageLoadTime}
@@ -241,18 +304,18 @@ describe('StandardGrid', () => {
                 }];
                 StandardGridShallow = createShallowStandardGrid(itemsNew);
                 instance = StandardGridShallow.instance();
-
+                spyOn(instance, 'calculateGridRefreshTime').and.returnValue(10);
                 instance.componentDidUpdate();
 
                 expect(pageLoadTime).toHaveBeenCalled();
                 expect(gridRefreshTime).toHaveBeenCalled();
-
             });
 
             it('should call pageLoadTime or gridRefreshTime even if items is empty', () => {
                 itemsNew = [];
                 StandardGridShallow = createShallowStandardGrid(itemsNew);
                 instance = StandardGridShallow.instance();
+                spyOn(instance, 'calculateGridRefreshTime').and.returnValue(10);
 
                 instance.componentDidUpdate();
 
@@ -264,6 +327,7 @@ describe('StandardGrid', () => {
                 itemsNew = null;
                 StandardGridShallow = createShallowStandardGrid(itemsNew);
                 instance = StandardGridShallow.instance();
+                spyOn(instance, 'calculateGridRefreshTime').and.returnValue(10);
 
                 instance.componentDidUpdate();
 
