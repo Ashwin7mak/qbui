@@ -78,6 +78,7 @@
          */
         clickBtnOnForm : {value: function(btnName) {
             //get all save buttons on the form
+            browser.element('.saveOrCancelFooter').click();
             var saveButton = this.editFormSaveBtns.value.filter(function(button) {
                 return button.getAttribute('textContent') === btnName;
             });
