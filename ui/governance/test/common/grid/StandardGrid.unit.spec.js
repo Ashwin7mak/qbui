@@ -222,7 +222,7 @@ describe('StandardGrid', () => {
                 StandardGridRewireAPI.__ResetDependency__('WindowPerformanceUtils');
             });
 
-            it('should return null if the window.performance.mark function does not exist', () => {
+            it('should return null if the window performance mark function does not exist', () => {
                 StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
                     ...WindowPerformanceUtils,
                     markTime(name) {
@@ -240,7 +240,7 @@ describe('StandardGrid', () => {
                 expect(instance.calculateGridRefreshTime()).toBeNull();
             });
 
-            it('should return null if the window.performance.mark function exists, but measure entries DO NOT exist', () => {
+            it('should return null if the window performance mark function exists, but measure entries DO NOT exist', () => {
                 StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
                     ...WindowPerformanceUtils,
                     markTime(name) {
@@ -258,7 +258,7 @@ describe('StandardGrid', () => {
                 expect(instance.calculateGridRefreshTime()).toBeNull();
             });
 
-            it('should return a time if the window.performance.mark function exists, and measure entries exist', () => {
+            it('should return a time if the window performance mark function exists, and measure entries exist', () => {
                 StandardGridRewireAPI.__Rewire__('WindowPerformanceUtils', {
                     ...WindowPerformanceUtils,
                     markTime(name) {
