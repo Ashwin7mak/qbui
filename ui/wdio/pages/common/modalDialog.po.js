@@ -16,7 +16,7 @@ class modalDialogWindow {
 
     get modalDialog() {
         // modal dialog
-        return browser.element('.modal-dialog .bodyContainer');
+        return browser.element('.modal-dialog');
     }
 
     get modalDialogCloseBtn() {
@@ -181,7 +181,7 @@ class modalDialogWindow {
      */
     clickOnModalDialogBtn(btnName) {
         this.modalDialog.waitForVisible();
-        this.modalDialog.click();
+
         //get all buttons from modal dialog footer
         let btns = this.modalDialogFooterButtons.value.filter(function(button) {
             return button.getAttribute('textContent').trim().includes(btnName);
