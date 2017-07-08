@@ -126,8 +126,7 @@
             if (browserName !== 'safari') {
                 var actualNumbersArray = ['33.33', '$33.33', '33.33'];
                 var expectedNumbersArray;
-                var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
-                var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
+                var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields'];
 
                 //Get the original records count in a report
                 let origRecordCount = formsPO.getRecordsCountInATable();
@@ -141,9 +140,6 @@
 
                 //Edit values
                 fieldTypes.forEach(function (fieldType) {
-                    formsPO.enterFormValues(fieldType);
-                });
-                fieldTypes2.forEach(function (fieldType) {
                     formsPO.enterFormValues(fieldType);
                 });
 
