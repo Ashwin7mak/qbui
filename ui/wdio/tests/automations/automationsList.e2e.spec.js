@@ -66,7 +66,7 @@
 
         it(' should contain a list of only EMAIL automations for application', function() {
             //navigate to Application Automations Settings page directly with URL
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
+            browser.url(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
 
             //validate table headers
             let actualHeadersText = automationSettings.automationsTable.headersText;
