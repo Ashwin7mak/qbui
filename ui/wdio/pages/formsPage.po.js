@@ -389,7 +389,7 @@
          */
         selectFromList : {value: function(listOption) {
             //wait until you see select outer menu
-            browser.waitForVisible('.Select-menu-outer');
+            browser.element('.Select-menu-outer').waitForVisible();
             //wait untill you see 1 option since drop down loads onDemand now
             browser.element('.Select-option').waitForVisible();
             //get all options from the list
