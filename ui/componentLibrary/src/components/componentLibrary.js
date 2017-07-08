@@ -22,6 +22,7 @@ var ComponentLibraryWrapper = React.createClass({
                         </ul>
                         <h4 className="header">Reuse Library Components</h4>
                         <ul>
+                            <li><Link to="/qbase/components/colorPicker" activeClassName="active">ColorPicker</Link></li>
                             <li><Link to="/qbase/components/icon" activeClassName="active">Icon</Link></li>
                             <li><Link to="/qbase/components/iconChooser" activeClassName="active">IconChooser</Link></li>
                             <li><Link to="/qbase/components/iconInputBox" activeClassName="active">IconInputBox</Link></li>
@@ -30,6 +31,7 @@ var ComponentLibraryWrapper = React.createClass({
                             {/* <li><Link to="/qbase/components/rowActions" activeClassName="active">RowActions</Link></li> */}
                             <li><Link to="/qbase/components/sideMenuBase" activeClassName="active">SideMenuBase</Link></li>
                             <li><Link to="/qbase/components/sideTrowserBase" activeClassName="active">SideTrowserBase</Link></li>
+                            <li><Link to="/qbase/components/simpleInput" activeClassName="active">SimpleInput</Link></li>
                             <li><Link to="/qbase/components/stage" activeClassName="active">Stage</Link></li>
                             <li><Link to="/qbase/components/standardGridItemsCount" activeClassName="active">StandardGridItemsCount</Link></li>
                             <li><Link to="/qbase/components/standardLeftNav" activeClassName="active">StandardLeftNav</Link></li>
@@ -76,7 +78,6 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/qBModal" activeClassName="active">QBModal</Link></li>
                             <li><Link to="/qbase/components/invisibleBackdrop" activeClassName="active">InvisibleBackdrop</Link></li>
                             <li><Link to="/qbase/components/qbGrid" activeClassName="active">QbGrid</Link></li>
-                            <li><Link to="/qbase/components/colorPicker" activeClassName="active">ColorPicker</Link></li>
                         </ul>
                     </nav>
                 </div>
