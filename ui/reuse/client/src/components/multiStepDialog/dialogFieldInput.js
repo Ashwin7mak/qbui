@@ -77,7 +77,7 @@ class DialogFieldInput extends React.Component {
             onChange: (e) => this.props.onChange(this.props.name, e.target.value),
             onFocus: () => this.props.onFocus && this.props.onFocus(this.props.name),
             onBlur: (e) => this.props.onBlur && this.props.onBlur(this.props.name, e.target.value),
-            ref: (input) => {this.input = input;},
+            ref: (input) => this.input = input,
             maxLength: this.props.maxLength
         };
 
