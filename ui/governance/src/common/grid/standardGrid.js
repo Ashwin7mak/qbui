@@ -13,7 +13,7 @@ import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
-import QBLoader from "../../../../reuse/client/src/components/loader/QBLoader";
+import QbLoader from "../../../../reuse/client/src/components/loader/QBLoader";
 import constants from "../constants/StandardGridConstants";
 import "./standardGrid.scss";
 
@@ -66,8 +66,6 @@ export class StandardGrid extends Component {
             this.props.pageLoadTime();
         }
     };
-
-    nullItems = () => _.isNull(this.props.items);
 
     /**
      * Render the grid when items exist
@@ -130,10 +128,14 @@ export class StandardGrid extends Component {
      * - else... show the noItemsExist UI
      */
     render() {
-        let loadingClass = this.nullItems() ? "loading" : "notLoading";
+        let nullItemsArray = _.isNull(this.props.items);
+        let emptyItemsArray = _.isEmpty(this.props.items);
+        let loadingClass = nullItemsArray ? "loading" : "notLoading";
+
         return (
             <div className={`standardGrid ${loadingClass}`}>
-            {this.nullItems() ? <QBLoader className="QbLoader" waitTime={constants.GRID_LOADER_TIMEOUT}/> :
+            {nullItemsArray ?
+                <QbLoader className="QbLoader" waitTime={constants.GRID_LOADER_TIMEOUT}/> :
                 <div className="gridWrapper">
                     <StandardGridToolbar id={this.props.id}
                                          doUpdate={this.props.doUpdate}
@@ -145,7 +147,7 @@ export class StandardGrid extends Component {
                                          itemsPerPage={this.props.itemsPerPage}
                     />
                     {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
-                    {!(this.nullItems()) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
+                    {!(nullItemsArray) && emptyItemsArray ? this.renderNoItemsExist() : this.renderItemsExist()}
                 </div>
             }
             </div>

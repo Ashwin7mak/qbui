@@ -10,7 +10,7 @@ class QbLoader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hidden: "hidden",
+            waiting: true,
         };
         let that = this;
         setTimeout(() => {
@@ -19,12 +19,12 @@ class QbLoader extends Component {
     };
 
     show = () => {
-        this.setState({hidden : ""});
+        this.setState({waiting: false});
     };
 
     render() {
         return (<BodyMovin animationData={QbLoaderAnimationData}
-                           className={`${this.state.hidden} ${this.props.className}`}
+                           className={`${this.state.waiting} ${this.props.className}`}
                 />
         );
     }
