@@ -2,7 +2,7 @@ class ColorPickerExample extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {value: '#000000'};
+        this.state = {value: '#74489d'};
     }
 
     onChange = color => {
