@@ -26,7 +26,7 @@ export const COLOR_TYPES = {
     ALL: 'all'
 };
 
-export const VALID_HEX_VALUE = /^#[0-9a-f]{3}([0-9a-f]{3})?$/i;
+export const VALID_HEX_VALUE = /^#[0-9a-f]{6}$/i;
 export const VALID_HEX_CHARACTERS = /^[#0-9a-f]*$/i;
 
 /**
@@ -127,6 +127,8 @@ class ColorPicker extends Component {
         }
     };
 
+    isValidHexColor = color => VALID_HEX_VALUE.test(color);
+
     /**
      * When the custom color input box is changed, still fire the onChange event and pass up the current color.
      * This also makes sure that there is always a '#' in the input field.
@@ -143,7 +145,7 @@ class ColorPicker extends Component {
         if (formattedValue === '#') {
             this.setState({customColor: null});
 
-        } else if (VALID_HEX_VALUE.test(formattedValue) && !includes(this.props.colors, formattedValue)) {
+        } else if (this.isValidHexColor(value) && !includes(this.props.colors, formattedValue)) {
             this.setState({customColor: formattedValue});
         }
 
@@ -166,12 +168,20 @@ class ColorPicker extends Component {
         return colorList;
     };
 
+    /**
+     * Use the current value if it is valid, otherwise, blank it out with white.
+     * @returns {string}
+     */
+    formatColorValue = () => {
+        return this.isValidHexColor(this.props.value) ? this.props.value : '#fff';
+    };
+
     render() {
         return (
             <div className="colorPicker">
                 {this.props.isPreviewVisible &&
                     <div className="previewContainer">
-                        <div className="preview" style={{backgroundColor: this.props.value, color: this.props.iconColor}}>
+                        <div className="preview" style={{backgroundColor: this.formatColorValue(), color: this.props.iconColor}}>
                             {this.props.icon &&
                                 <Icon
                                     className="colorPickerPreviewIcon"
@@ -184,7 +194,7 @@ class ColorPicker extends Component {
                 }
 
                 <CirclePicker
-                    color={this.props.value}
+                    color={this.formatColorValue()}
                     colors={this.getColorList()}
                     onChangeComplete={this.onChange}
                     width={this.props.width}
