@@ -88,7 +88,7 @@
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
         it('Edit a record via table actions edit pencil above the table grid', function() {
-            var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields'];
+            var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
             var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
 
             //Get the original records count in a report
@@ -126,7 +126,7 @@
             if (browserName !== 'safari') {
                 var actualNumbersArray = ['33.33', '$33.33', '33.33'];
                 var expectedNumbersArray;
-                var fieldTypes = ['allTextFields', 'allNumericFields', 'allDurationFields', 'allDateFields'];
+                var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
                 var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
 
                 //Get the original records count in a report

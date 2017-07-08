@@ -394,7 +394,7 @@
             browser.element('.Select-option').waitForVisible();
             //get all options from the list
             var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.getAttribute('textContent').includes(listOption);
+                return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
             if (option !== []) {
@@ -461,7 +461,7 @@
                 } else if (fieldType === 'allTimeFields') {
                     var timeFields = this.getAllTimeInputFields();
                     for (i = 0; i < timeFields.value.length; i++) {
-                        browser.execute("return arguments[0].scrollIntoView(true);", timeFields.value[i]);
+                        browser.execute("return arguments[0].scrollIntoView(false);", timeFields.value[i]);
                         //Need this to stabilize after scrolling to the element
                         browser.pause(e2eConsts.shortWaitTimeMs);
                         timeFields.value[i].waitForVisible();
