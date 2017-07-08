@@ -73,10 +73,6 @@ class ColorPicker extends Component {
         colors: PropTypes.arrayOf(PropTypes.string),
 
         /**
-         * A hex value that will be used in the preview if no color is currently selected. */
-        defaultValue: PropTypes.string,
-
-        /**
          * The type of color value that should be returned during an onChange.
          * You probably shouldn't change this from the default value of `hex` if using within the qbui project.
          * Additionally, changing this from hex may break the preview. It is best to turn it off if not using hex as the value.
