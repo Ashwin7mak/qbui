@@ -138,8 +138,13 @@ class ColorPicker extends Component {
         let formattedValue = value.replace(/#/g, '');
         formattedValue = `#${formattedValue}`;
 
-        if (VALID_HEX_VALUE.test(value) && !includes(this.props.colors, value)) {
-            this.setState({customColor: value});
+        // When the value is blank, wipe out the custom color.
+        // Otherwise, add valid hex values as a custom color if not in the list of colors.
+        if (formattedValue === '#') {
+            this.setState({customColor: null});
+
+        } else if (VALID_HEX_VALUE.test(formattedValue) && !includes(this.props.colors, formattedValue)) {
+            this.setState({customColor: formattedValue});
         }
 
         if (this.props.onChange) {
