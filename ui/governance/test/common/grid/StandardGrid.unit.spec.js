@@ -43,8 +43,6 @@ describe('StandardGrid', () => {
                                               rowKey={"uid"}
                                               cellRenderer={QbCell}
                                 />);
-        expect(component).toBeDefined();
-        expect(component.length).toBeTruthy();
 
         let StandardGridToolbarComponent = component.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
@@ -65,13 +63,9 @@ describe('StandardGrid', () => {
                                               rowKey={"uid"}
                                               cellRenderer={QbCell}
                                 />);
-        expect(component).toBeDefined();
-        expect(component.length).toBeTruthy();
 
         let StandardGridToolbarComponent = component.find(StandardGridToolBar);
-        expect(StandardGridToolbarComponent).toBeDefined();
-        expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
-        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdate);
+        expect(StandardGridToolbarComponent).not.toBePresent();
     });
 
     it('should render the grid header when items are done fetching', () => {
@@ -84,8 +78,6 @@ describe('StandardGrid', () => {
                                               rowKey={"uid"}
                                               cellRenderer={QbCell}
                                 />);
-        expect(component).toBeDefined();
-        expect(component.length).toBeTruthy();
         expect(component.find('.noItemsExist')).toBePresent();
 
         let StandardGridToolbarComponent = component.find(StandardGridToolBar);
@@ -104,8 +96,6 @@ describe('StandardGrid', () => {
                                               rowKey={"uid"}
                                               cellRenderer={QbCell}
                                 />);
-        expect(component).toBeDefined();
-        expect(component.length).toBeTruthy();
 
         let StandardGridToolbarComponent = component.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
@@ -124,8 +114,6 @@ describe('StandardGrid', () => {
                                               rowKey={"uid"}
                                               cellRenderer={QbCell}
                                 />);
-        expect(component).toBeDefined();
-        expect(component.length).toBeTruthy();
 
         let StandardGridToolbarComponent = component.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).not.toBePresent();
