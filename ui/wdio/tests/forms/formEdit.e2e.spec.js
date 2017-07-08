@@ -126,7 +126,7 @@
             if (browserName !== 'safari') {
                 var actualNumbersArray = ['33.33', '$33.33', '33.33'];
                 var expectedNumbersArray;
-                var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields'];
+                var fieldTypes = ['allNumericFields', 'allDurationFields', 'allPhoneFields'];
 
                 //Get the original records count in a report
                 let origRecordCount = formsPO.getRecordsCountInATable();
