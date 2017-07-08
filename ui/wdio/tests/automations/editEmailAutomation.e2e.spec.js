@@ -80,7 +80,7 @@
         it('Automation Edit can be accessed through direct url.', function() {
             let automation = appAutomations[0];
 
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
 
             expect(emailAutomationEditView.to.text).toBe(automation.inputs[0].defaultValue);
             expect(emailAutomationEditView.subject.text).toBe(automation.inputs[2].defaultValue);
@@ -91,7 +91,7 @@
             let automation = appAutomations[0];
 
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationViewUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAutomationViewUrl(realmName, app.id, automation.id));
 
             automationView.editButton.click();
 
@@ -104,7 +104,7 @@
             let automation = appAutomations[0];
 
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id, automation.id));
 
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
@@ -129,7 +129,7 @@
             let automation = appAutomations[1];
 
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
 
             emailAutomationEditView.to.text = newToAddress;
             emailAutomationEditView.subject.text = newSubject;
@@ -137,7 +137,7 @@
 
             emailAutomationEditView.saveButton.click();
             notificationContainer.waitForSuccessNotification();
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
 
             expect(emailAutomationEditView.to.text).toBe(newToAddress);
             expect(emailAutomationEditView.subject.text).toBe(newSubject);
@@ -151,14 +151,14 @@
             let automation = appAutomations[2];
 
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
 
             emailAutomationEditView.to.text = newToAddress;
             emailAutomationEditView.subject.text = newSubjectAddress;
             emailAutomationEditView.body.text = newBodyAddress;
 
             emailAutomationEditView.cancelButton.click();
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAutomationEditViewUrl(realmName, app.id, automation.id));
 
             expect(emailAutomationEditView.to.text).toBe(automation.inputs[0].defaultValue);
             expect(emailAutomationEditView.subject.text).toBe(automation.inputs[2].defaultValue);
@@ -192,7 +192,7 @@
         });
         it('Automation Create can be accessed through direct url.', function() {
 
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
+            browser.url(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
 
             expect(emailAutomationEditView.name.text).toBe('');
             expect(emailAutomationEditView.to.text).toBe('');
@@ -203,7 +203,7 @@
         it('Automation Create can be accessed through UI from Automations List.', function() {
 
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
+            browser.url(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
 
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
@@ -228,7 +228,7 @@
             const newBody = 'body_';
 
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
+            browser.url(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
 
             emailAutomationEditView.name.text = newName;
             emailAutomationEditView.to.text = newToAddress;
@@ -250,7 +250,7 @@
             const newBody = 'body_';
 
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
+            browser.url(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
 
             emailAutomationEditView.to.text = newToAddress;
             emailAutomationEditView.subject.text = newSubject;
