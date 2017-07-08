@@ -5,8 +5,13 @@
     margin-bottom: $spacing-small;
 
     .label {
+        display: block;
+        margin-left: -5px; // remove label spacing
         margin-bottom: $spacing-tiny;
+        text-align: left;
         color: $field-label-normal-color;
+        max-width: 280px;
+        font-size: $font-size-h5;
     }
 
     .input {

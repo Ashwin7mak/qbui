@@ -82,7 +82,7 @@ class SimpleInput extends Component {
     };
 
     getLabelClasses = () => {
-        const className = this.props;
+        const {className} = this.props;
 
         let classes = ['label'];
 
@@ -94,7 +94,7 @@ class SimpleInput extends Component {
     };
 
     getInputClasses = () => {
-        const className = this.props;
+        const {className} = this.props;
 
         let classes = ['input'];
 
@@ -128,7 +128,7 @@ class SimpleInput extends Component {
         return (
             <div className={this.getClasses()}>
                 <label className={this.getLabelClasses()}>{this.props.isRequired && '* '}{this.props.label}</label>
-                <ErrorWrapper isInvalid={this.props.validationErrorMessage} invalidMessage={this.props.validationErrorMessage}>
+                <ErrorWrapper isInvalid={!!this.props.validationErrorMessage} invalidMessage={this.props.validationErrorMessage}>
                     <input
                         className={this.getInputClasses()}
                         value={this.props.value}
