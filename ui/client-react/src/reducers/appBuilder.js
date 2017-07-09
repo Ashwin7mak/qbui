@@ -7,11 +7,11 @@ const APP_PROPS = ['name', 'icon', 'description'];
 const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited'];
 
 const setDefaultSettings = {
-    description: '',
-    icon: defaultAppIcon,
     isAppIconChooserOpen: false,
     isDialogOpen: false,
     isSavingApp: false,
+    description: '',
+    icon: defaultAppIcon,
     name: {
         value: '',
         pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
