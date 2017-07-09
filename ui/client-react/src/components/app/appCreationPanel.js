@@ -100,7 +100,7 @@ export class AppCreationPanel extends Component {
                     <DialogFieldInput title={Locale.getMessage("appCreation.appNameHeading")}
                                       className="appCreationPanel"
                                       name="name"
-                                      value={this.props.appName}
+                                      value={this.props.appName || ""}
                                       onChange={this.setAppProperty}
                                       onBlur={this.onBlurInput}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
@@ -112,7 +112,7 @@ export class AppCreationPanel extends Component {
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
                                       className="appCreationPanel"
                                       name="description"
-                                      value={this.props.appDescription}
+                                      value={this.props.appDescription || ""}
                                       onChange={ this.props.setAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3" />
