@@ -1,17 +1,21 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import Locale from '../locales/locales';
 
 const defaultAppIcon = 'Customer';
 const APP_PROPS = ['name', 'icon', 'description'];
 const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited'];
 
 const setDefaultSettings = {
-    name: '',
     description: '',
     icon: defaultAppIcon,
     isAppIconChooserOpen: false,
     isDialogOpen: false,
-    isSavingApp: false
+    isSavingApp: false,
+    name: {
+        value: '',
+        pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+    },
 };
 
 const appBuilder = (
