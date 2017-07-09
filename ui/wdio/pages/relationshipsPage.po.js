@@ -326,7 +326,9 @@
             });
 
             //Click Save on the form
-            formsPO.clickFormSaveBtn();
+            formBuilderPO.save();
+            //wait until save success container goes away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
             //Need this as link takes time to show up
             browser.pause(e2eConsts.mediumWaitTimeMs);
 

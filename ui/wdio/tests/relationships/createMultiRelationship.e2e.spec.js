@@ -105,13 +105,15 @@ describe('Relationships - Create multiple relationship Tests :', function() {
             reportContentPO.clickAddRecordBtnOnStage();
 
             //enter form values
-            let fieldTypes = ['allTextFields', 'allNumericFields', 'allDateFields'];
+            let fieldTypes = ['allTextFields'];
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
 
             //Click Save on the form
-            formsPO.clickFormSaveBtn();
+            formBuilderPO.save();
+            //wait until save success container goes away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
