@@ -2,6 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import {CirclePicker} from 'react-color';
 import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
 import SimpleInput from '../simpleInput/simpleInput';
+import IconAndColorPreview from '../iconAndColorPreview/iconAndColorPreview';
+import {isValidHexColor, VALID_HEX_CHARACTERS} from '../../utils/colorValidator';
 import includes from 'lodash/includes';
 
 import './colorPicker.scss';
@@ -26,8 +28,7 @@ export const COLOR_TYPES = {
     ALL: 'all'
 };
 
-export const VALID_HEX_VALUE = /^#[0-9a-f]{6}$/i;
-export const VALID_HEX_CHARACTERS = /^[#0-9a-f]*$/i;
+
 
 /**
  * A color picker for choosing a color (e.g., choosing an app color).
@@ -127,8 +128,6 @@ class ColorPicker extends Component {
         }
     };
 
-    isValidHexColor = color => VALID_HEX_VALUE.test(color);
-
     /**
      * When the custom color input box is changed, still fire the onChange event and pass up the current color.
      * This also makes sure that there is always a '#' in the input field.
@@ -145,7 +144,7 @@ class ColorPicker extends Component {
         if (formattedValue === '#') {
             this.setState({customColor: null});
 
-        } else if (this.isValidHexColor(value) && !includes(this.props.colors, formattedValue)) {
+        } else if (isValidHexColor(value) && !includes(this.props.colors, formattedValue)) {
             this.setState({customColor: formattedValue});
         }
 
@@ -173,24 +172,21 @@ class ColorPicker extends Component {
      * @returns {string}
      */
     formatColorValue = () => {
-        return this.isValidHexColor(this.props.value) ? this.props.value : '#fff';
+        return isValidHexColor(this.props.value) ? this.props.value : '#ffffff';
     };
 
     render() {
+        const {icon, iconColor, iconFont, value} = this.props;
+
         return (
             <div className="colorPicker">
                 {this.props.isPreviewVisible &&
-                    <div className="previewContainer">
-                        <div className="preview" style={{backgroundColor: this.formatColorValue(), color: this.props.iconColor}}>
-                            {this.props.icon &&
-                                <Icon
-                                    className="colorPickerPreviewIcon"
-                                    icon={this.props.icon}
-                                    iconFont={this.props.iconFont}
-                                />
-                            }
-                        </div>
-                    </div>
+                    <IconAndColorPreview
+                        icon={icon}
+                        iconFont={iconFont}
+                        iconColor={iconColor}
+                        backgroundColor={value}
+                    />
                 }
 
                 <CirclePicker
@@ -204,8 +200,8 @@ class ColorPicker extends Component {
 
                 {this.props.hasCustomColor &&
                     <SimpleInput
-                        className="customColorPicker"
-                        value={this.props.value}
+                        className="customColorPickerText"
+                        value={value}
                         onChange={this.onChangeCustomColor}
                         maxLength={7}
                         mask={VALID_HEX_CHARACTERS}
