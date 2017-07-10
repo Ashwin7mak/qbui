@@ -105,7 +105,7 @@ describe('AppCreationPanel', () => {
         expect(instance.appNameExists).toHaveBeenCalledWith(mockAppName);
     });
 
-    it('appNameExists return true if the app name exists', () => {
+    it('appNameExists will return true if the app name exists', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
                                             apps={mockApps}/>);
 
@@ -114,6 +114,17 @@ describe('AppCreationPanel', () => {
         let result = instance.appNameExists(mockAppName);
 
         expect(result).toEqual(true);
+    });
+
+    it('appNameExists will return false if the app name does not exists', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+
+        let result = instance.appNameExists('nonExistingAppName');
+
+        expect(result).toEqual(false);
     });
 
     it('onBlurInput will invoke prop setAppProperty if isEdited is true and property === name', () => {
@@ -129,7 +140,7 @@ describe('AppCreationPanel', () => {
         expect(mockFuncs.setAppProperty).toHaveBeenCalled();
     });
 
-    it('onBlurInput will NOT invoke prop setAppProperty if isEdited is false and property === name', () => {
+    it('onBlurInput will NOT invoke prop setAppProperty if isEdited is false', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
                                             apps={mockApps}
                                             isEdited={false}/>);
@@ -141,7 +152,7 @@ describe('AppCreationPanel', () => {
         expect(mockFuncs.setAppProperty).not.toHaveBeenCalled();
     });
 
-    it('onBlurInput will NOT invoke prop setAppProperty if isEdited is undefined and property === name', () => {
+    it('onBlurInput will NOT invoke prop setAppProperty if isEdited is undefined', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
                                             apps={mockApps} />);
         instance = component.instance();
