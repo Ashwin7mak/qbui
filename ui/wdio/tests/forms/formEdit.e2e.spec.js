@@ -139,7 +139,7 @@
                 formsPO.clickRecordEditPencilInViewForm(3);
 
                 //Edit values
-                fieldTypes.forEach(function (fieldType) {
+                fieldTypes.forEach(function(fieldType) {
                     formsPO.enterFormValues(fieldType);
                 });
 
