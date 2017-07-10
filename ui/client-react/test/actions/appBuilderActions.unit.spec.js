@@ -111,7 +111,14 @@ describe('App Actions event functions', () => {
     });
 
     it('create setAppProperty event', () => {
-        expect(AppBuilderActions.setAppProperty('mockProperty', 'mockValue')).toEqual({type: types.SET_APP_PROPERTY, property: 'mockProperty', value: 'mockValue'});
+        expect(AppBuilderActions.setAppProperty('mockProperty', 'mockValue', 'mockPendingValidationError', 'mockValidationError'))
+            .toEqual({
+                type: types.SET_APP_PROPERTY,
+                property: 'mockProperty',
+                value: 'mockValue',
+                pendingValidationError: 'mockPendingValidationError',
+                validationError: 'mockValidationError'
+            });
     });
 
     it('create openIconChooserForApp event', () => {
