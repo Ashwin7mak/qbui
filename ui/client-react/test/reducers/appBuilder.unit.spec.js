@@ -150,7 +150,7 @@ describe('App Creation Selector', () => {
 
             let {name, icon, description} = AppBuilderSelectors.getAppProperties(cloneMockState);
 
-            expect(name).toEqual(undefined);
+            expect(name).toEqual(null);
             expect(icon).toEqual(undefined);
             expect(description).toEqual(undefined);
         });
