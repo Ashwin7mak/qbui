@@ -112,16 +112,15 @@
         /**
          * swipe left
          */
-        xit('swipe left', function() {
+        it('swipe left', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
             // swipe left
-            browser.swipeLeft('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up', 100);
-            //iconActionButton edit btn btn-default
-
-            expect(browser.element('.actionsCol .iconActionButton .edit').isVisible()).toBe(true);
-            //.dropdown-menu .menuActionButton
+            browser.swipeLeft('.flexRow .card', 100);
+            //verify edit button is visible
+            browser.element('.actionIcons .icon-edit').waitForVisible();
+            expect(browser.element('.actionIcons .icon-edit').isVisible()).toBe(true);
 
         });
 
@@ -132,14 +131,11 @@
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            // swipe left
-          //  browser.swipeRight('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up', 100);
-            //iconActionButton edit btn btn-default
-            var x = browser.getLocation('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up', 'y');
-            browser.swipe('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up',0,0,100);
-
-            expect(browser.element('.actionsCol .iconActionButton .edit').isVisible()).toBe(true);
-            //.dropdown-menu .menuActionButton
+            // swipe right
+            browser.swipeRight('.flexRow .card', 100);
+            //verify edit button is visible
+            browser.element('.actionIcons .icon-edit').waitForVisible();
+            expect(browser.element('.actionIcons .icon-edit').isVisible()).toBe(true);
 
         });
 
