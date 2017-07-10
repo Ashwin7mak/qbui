@@ -234,15 +234,20 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
         dispatch(gridStartTime(_.round((window.performance.now() / 1000), 2)));
 
         return promise.then(response => {
-            _.each(response.data, item => {
+            // TODO: Remove after the July Current Stack Release.
+            // We are standardizing JSON returned by DotNet so we
+            // need to support both formats for the time being
+            let data = response.data.data ? response.data.data : response.data;
+
+            _.each(data, item => {
                 item.id = item.uid;
             });
 
             // inform the redux store of all the users
-            dispatch(receiveAccountUsers(response.data));
+            dispatch(receiveAccountUsers(data));
 
             // set the total items for the grid. keep track of the original list of users before filters
-            dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
+            dispatch(StandardGridActions.setTotalItems(gridID, data.length));
 
             // run through the pipeline and update the grid
             dispatch(doUpdateUsers(gridID, StandardGridState.defaultGridState, itemsPerPage));
