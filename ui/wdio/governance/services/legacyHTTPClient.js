@@ -1,54 +1,66 @@
-/**
- * Legacy HTTP client api call
- */
-
-let request = require('request');
-let promise = require('bluebird');
-let assert = require('assert');
-let url = require('url');
-// var legacyHTTPClient = require(./legacyHTTPClient);
-let jsonBigNum = require('json-bignum');
-let parser = require('xml2json');
-// var config = require('../../server/src/config/environment');
+const request = require('request');
+const promise = require('bluebird');
+const assert = require('assert');
+const url = require('url');
+const log = require('../../../server/src/logger').getLogger();
+const config = require('../../../server/src/config/environment/');
+const userDefVars = require('../config/userDefVars');
+const utils = require('./utils');
 let ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
 let ERROR_ENOTFOUND = 'ENOTFOUND';
+let server = '.currentstack-int.quickbaserocks.com';
 
+/**
+ * Legacy HTTP client: postRequest
+ * @param hostname - reaml name
+ * @param app - app type: main or app
+ * @param action - api method
+ * @param body - request body
+ * @param urlParams - extra paramenters
+ * @param username - username
+ * @param password - password
+ * @param isJSON - is the response in JSON
+ * @returns HTTP response
+ */
 module.exports = {
-     postRequest(path, method, body, urlParameters, numRetries) {
-        let tries = numRetries
-        console.log('===> S1: in legaceHTTPClient, tries = ', tries);
+    postRequest(hostname, app, action, body, urlParams, username, password, isJSON) {
+        let tries = userDefVars.NUM_RETRIES;
+        let reqURL = "";
+        let contTypeValue = 'application/xml';
+        if (isJSON) {
+            contTypeValue = 'application/json';
+        }
+        if (body) {
+            body = utils.constructBody(body);
+        }
+        reqURL = utils.constructURL(hostname, app, action, urlParams, username, password);
         let opts = {
-            url: path,
+            url: reqURL,
             method: 'POST',
             body: body,
-            // headers: {'Content-Type':'text/plain'}
-            headers: {'Content-Type': 'application/xml'}
+            headers: {'Content-Type': contTypeValue}
         };
-        return new promise(function (resolve, reject) {
-            console.log('===> S2: in promise ***');
+        return new promise((resolve, reject) => {
             try {
-                request(opts, function (error, response) {
+                request(opts, (error, response) => {
                     let statusCode = response.statusCode;
-                    console.log('===> S3: in request ***');
-
                     if (error || !(statusCode >= 200 && statusCode < 300)) {
-                        console.log('===> S3-2: in if (error)');
                         // These specific errors were due to an environment issue in Jenkins that we needed to check for and retry
                         if (tries > 1 && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
                             tries--;
                             log.debug('Attempting a retry: ' + JSON.stringify(opts) + ' Tries remaining: ' + tries);
-                            legaceHTTPClient(opts, tries).then(function (res2) {
+                            legaceHTTPClient(opts, tries).then(res2 => {
                                 log.debug('Success following retry/retries');
                                 resolve(res2);
-                            }).catch(function (err2) {
+                            }).catch(err2 => {
                                 log.debug('Failure after retries');
                                 reject(err2);
                             });
                         } else {
                             // We need to handle if we get an error back from the network call (for example a 'ECONNREFUSED 127.0.0.1:8081' error)
                             // Or if we get an API response back but with a non 200 status code
-                            var errorMsg = error ? JSON.stringify(error) : '';
-                            var responseMsg = response ? 'Response statusCode: ' + response.statusCode + ', body: ' + response.body : '';
+                            let errorMsg = error ? JSON.stringify(error) : '';
+                            let responseMsg = response ? 'Response statusCode: ' + response.statusCode + ', body: ' + response.body : '';
 
                             // Nice logging for Node output
                             log.error('Network request failed, no retries left or an unsupported error for retry found ' + JSON.stringify(opts));
@@ -62,17 +74,14 @@ module.exports = {
                             }
                         }
                     } else {
-                        console.log('===>  S3-1: in else (no error and 200OK) ****');
                         resolve(response);
-                        // console.log('*****error:', error);
-                        // console.log('*****statusCode:', statusCode);
-                        // console.log('*****body:', response.body);
                     }
                 });
             } catch (ex) {
+                log.debug(ex);
                 console.log(ex);
             }
         });
     }
 }
-// module.exports = new legaceHTTPClient();
+
