@@ -56,15 +56,15 @@ export class AppCreationPanel extends Component {
      * @param  value
      */
     setAppProperty = (property, value) => {
-        let pendingValidationError;
-        let validationError;
-
+        //only app name needs to be validated
         if (property === 'name') {
-            pendingValidationError = this.getValidationError(property, value);
-            validationError = null;
-        }
+            let pendingValidationError = this.getValidationError(property, value);
+            let validationError = null;
 
-        this.props.setAppProperty(property, value, pendingValidationError, validationError);
+            this.props.setAppProperty(property, value, pendingValidationError, validationError);
+        } else {
+            this.props.setAppProperty(property, value);
+        }
     };
 
     /**
