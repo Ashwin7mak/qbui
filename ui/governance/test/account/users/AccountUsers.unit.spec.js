@@ -53,4 +53,24 @@ describe('AccountUsers', () => {
         expect(grid.props().showAccountColumns).toEqual(true);
         expect(grid.props().showRealmColumns).toEqual(false);
     });
+
+    it("should check if the correct props are being passed into AccountUsersGrid", () => {
+        let props = {
+            ...baseProps,
+            requestUser: {
+                isAccountAdmin: true,
+                isRealmAdmin: false,
+                isCSR: false
+            },
+            requestRealm: {
+                isAccountURL: false
+            }
+        };
+
+        let component = shallow(<AccountUsers {...props} />);
+        let AccountUsersGridTest = component.find(AccountUsersGrid);
+        expect(AccountUsersGridTest).toHaveProp('showAccountColumns', true);
+        expect(AccountUsersGridTest).toHaveProp('showRealmColumns', false);
+        expect(AccountUsersGridTest).toHaveProp('id', 'accountUsers');
+    });
 });
