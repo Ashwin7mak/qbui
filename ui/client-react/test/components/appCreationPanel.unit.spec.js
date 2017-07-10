@@ -2,14 +2,19 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {AppCreationPanel} from '../../src/components/app/appCreationPanel';
-import DialogFieldInput from '../../../reuse/client/src/components/multiStepDialog/dialogFieldInput';
+import Locale from '../../src/locales/locales';
 
 let component;
 let instance;
 
+let mockAppName = 'Mock App Name';
 let mockFuncs = {
     setAppProperty() {}
 };
+
+let mockApps = [
+    {name: mockAppName}
+];
 
 describe('AppCreationPanel', () => {
     beforeEach(() => {
@@ -47,5 +52,78 @@ describe('AppCreationPanel', () => {
         instance.setAppIcon('dragon icon');
 
         expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('icon', 'dragon icon');
+    });
+
+    it('getValidationError will be called with the app property and app name when a user types in the app name input box', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+
+        spyOn(instance, 'setAppProperty').and.callThrough();
+        spyOn(instance, 'getValidationError');
+
+        component.find('input').at(0).simulate('change', {target: {property: 'name', value: 'Mock App Name'}});
+
+        expect(instance.getValidationError).toHaveBeenCalledWith('name', 'Mock App Name');
+    });
+
+    it('getValidationError will return an empty pendingValidationError message if the app name is an empty string', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+
+        let result = instance.getValidationError('name', '');
+
+        expect(result).toEqual(Locale.getMessage('appCreation.validateAppNameEmpty'));
+    });
+
+    it('getValidationError will return an app name exists pendingValidationError message if the app name exists', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+
+        let result = instance.getValidationError('name', mockAppName);
+
+        expect(result).toEqual(Locale.getMessage('appCreation.validateAppNameExists'));
+    });
+
+    it('appNameExists will be called with the app name when a user types in app name input box ', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+
+        spyOn(instance, 'setAppProperty').and.callThrough();
+        spyOn(instance, 'getValidationError').and.callThrough();
+        spyOn(instance, 'appNameExists');
+
+        component.find('input').at(0).simulate('change', {target: {property: 'name', value: mockAppName}});
+
+        expect(instance.appNameExists).toHaveBeenCalledWith(mockAppName);
+    });
+
+    it('appNameExists return true if the app name exists', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+
+        let result = instance.appNameExists(mockAppName);
+
+        expect(result).toEqual(true);
+    });
+
+    it('appNameExists return false if the app name does not exist', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+
+        let result = instance.appNameExists('New App Name');
+
+        expect(result).toEqual(false);
     });
 });

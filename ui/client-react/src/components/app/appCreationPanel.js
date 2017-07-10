@@ -31,7 +31,8 @@ export class AppCreationPanel extends Component {
      * @returns {boolean}
      */
     appNameExists = (name) => {
-        return this.props.apps.some((appName) => appName.name.toLowerCase().trim() === name.toLowerCase().trim());
+        debugger;
+        return this.props.apps.some((app) => app.name.toLowerCase().trim() === name.toLowerCase().trim());
     };
 
     /**
@@ -41,7 +42,6 @@ export class AppCreationPanel extends Component {
     getValidationError = (property, value) => {
         let validationError = null;
         const trimmed = typeof value === "string" ? value.trim() : value;
-
         if (trimmed === '') {
             validationError = Locale.getMessage('appCreation.validateAppNameEmpty');
         } else if (this.appNameExists(trimmed)) {
