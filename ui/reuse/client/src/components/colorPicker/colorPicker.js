@@ -28,6 +28,9 @@ export const COLOR_TYPES = {
     ALL: 'all'
 };
 
+// Used when the currently value is an invalid hex color.
+// Prevents ReactColor (CirclePicker) from blowing up while a custom color is being entered.
+export const FALLBACK_COLOR = '#ffffff';
 
 
 /**
@@ -93,7 +96,7 @@ class ColorPicker extends Component {
     static defaultProps = {
         isPreviewVisible: false,
         colors: DEFAULT_COLOR_LIST,
-        colorType: 'hex',
+        colorType: COLOR_TYPES.DEFAULT,
         iconFont: AVAILABLE_ICON_FONTS.DEFAULT,
         iconColor: '#ffffff',
         width: 210,
@@ -172,7 +175,7 @@ class ColorPicker extends Component {
      * @returns {string}
      */
     formatColorValue = () => {
-        return isValidHexColor(this.props.value) ? this.props.value : '#ffffff';
+        return isValidHexColor(this.props.value) ? this.props.value : FALLBACK_COLOR;
     };
 
     render() {
