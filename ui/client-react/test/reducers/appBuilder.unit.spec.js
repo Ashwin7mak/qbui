@@ -1,13 +1,15 @@
-import reducer from '../../src/reducers/appBuilder';
+import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/appBuilder';
 import * as AppBuilderSelectors from '../../src/reducers/appBuilder';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
+import Locale from '../../src/locales/locales';
+
 let storeState = {};
 
 let mockState = {
     appBuilder: {
         isDialogOpen: true,
-        name: 'Mock App Name',
+        name: {value: 'Mock App Name'},
         description: 'Mock App Name',
         icon: 'Mock Icon'
     }
@@ -19,8 +21,11 @@ describe('Test appBuilder reducer - initial state', () => {
         isDialogOpen: false,
         isAppIconChooserOpen: false,
         icon: 'Customer',
-        name: '',
-        description: ''
+        description: '',
+        name: {
+            value: '',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        }
     };
     it('return default state', () => {
         const state = reducer(undefined, {});
@@ -37,7 +42,10 @@ describe('App Creation', () => {
         const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS});
         expect(state.isSavingApp).toBe(false);
         expect(state.isDialogOpen).toBe(false);
-        expect(state.name).toBe('');
+        expect(state.name).toEqual({
+            value: '',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        });
         expect(state.description).toBe('');
     });
     it('create app failed', () => {
@@ -57,14 +65,27 @@ describe('App Creation Dialog', () => {
         const state = reducer(storeState, {type: types.HIDE_APP_CREATION_DIALOG});
 
         expect(state.isDialogOpen).toBe(false);
-        expect(state.name).toBe('');
+        expect(state.name).toEqual({
+            value: '',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        });
         expect(state.description).toBe('');
     });
 
     it('will set the app name property', () => {
-        const state = reducer(storeState, {type: types.SET_APP_PROPERTY, property: 'name', value: 'mockAppName'});
+        const state = reducer(storeState, {
+            type: types.SET_APP_PROPERTY,
+            property: 'name',
+            value: 'mockAppName',
+            pendingValidationError: 'mockPendingValidationError',
+            validationError: 'validationError'});
 
-        expect(state.name).toBe('mockAppName');
+        expect(state.name).toEqual({
+            value: 'mockAppName',
+            pendingValidationError: 'mockPendingValidationError',
+            validationError: 'validationError',
+            isEdited: true
+        });
     });
 
     describe('OPEN_ICON_CHOOSER_FOR_APP', () => {
@@ -112,7 +133,7 @@ describe('App Creation Selector', () => {
         it('will return app name if there is an app name', () => {
             let {name, icon, description} = AppBuilderSelectors.getAppProperties(mockState);
 
-            expect(name).toEqual(mockState.appBuilder.name);
+            expect(name).toEqual(mockState.appBuilder.name.value);
             expect(icon).toEqual(mockState.appBuilder.icon);
             expect(description).toEqual(mockState.appBuilder.description);
         });
