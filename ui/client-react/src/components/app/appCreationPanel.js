@@ -31,7 +31,6 @@ export class AppCreationPanel extends Component {
      * @returns {boolean}
      */
     appNameExists = (name) => {
-        debugger;
         return this.props.apps.some((app) => app.name.toLowerCase().trim() === name.toLowerCase().trim());
     };
 
@@ -72,7 +71,6 @@ export class AppCreationPanel extends Component {
      * handle loss of focus
      */
     onBlurInput = (property, value) => {
-
         // do validation on loss of focus unless it hasn't been edited
         if (this.props.isEdited && property === 'name') {
             const validationError = this.props.pendingValidationError;

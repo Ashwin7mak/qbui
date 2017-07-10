@@ -66,6 +66,8 @@ describe('AppCreationPanel', () => {
         component.find('input').at(0).simulate('change', {target: {property: 'name', value: 'Mock App Name'}});
 
         expect(instance.getValidationError).toHaveBeenCalledWith('name', 'Mock App Name');
+
+        instance.setAppProperty.calls.reset();
     });
 
     it('getValidationError will return an empty pendingValidationError message if the app name is an empty string', () => {
@@ -103,6 +105,9 @@ describe('AppCreationPanel', () => {
         component.find('input').at(0).simulate('change', {target: {property: 'name', value: mockAppName}});
 
         expect(instance.appNameExists).toHaveBeenCalledWith(mockAppName);
+
+        instance.setAppProperty.calls.reset();
+        instance.getValidationError.calls.reset();
     });
 
     it('appNameExists return true if the app name exists', () => {
@@ -116,14 +121,39 @@ describe('AppCreationPanel', () => {
         expect(result).toEqual(true);
     });
 
-    it('appNameExists return false if the app name does not exist', () => {
+    it('onBlurInput will invoke prop setAppProperty if isEdited is true and property === name', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
-                                            apps={mockApps}/>);
-
+                                            apps={mockApps}
+                                            isEdited={true}/>);
         instance = component.instance();
+        spyOn(instance, 'onBlurInput').and.callThrough();
 
-        let result = instance.appNameExists('New App Name');
+        component.find('input').at(0).simulate('change', {target: {property: 'name', value: mockAppName}});
+        component.find('input').at(0).simulate('blur');
 
-        expect(result).toEqual(false);
+        expect(mockFuncs.setAppProperty).toHaveBeenCalled();
+    });
+
+    it('onBlurInput will NOT invoke prop setAppProperty if isEdited is false and property === name', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}
+                                            isEdited={false}/>);
+        instance = component.instance();
+        spyOn(instance, 'onBlurInput').and.callThrough();
+
+        component.find('input').at(0).simulate('blur');
+
+        expect(mockFuncs.setAppProperty).not.toHaveBeenCalled();
+    });
+
+    it('onBlurInput will NOT invoke prop setAppProperty if isEdited is undefined and property === name', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps} />);
+        instance = component.instance();
+        spyOn(instance, 'onBlurInput').and.callThrough();
+
+        component.find('input').at(0).simulate('blur');
+
+        expect(mockFuncs.setAppProperty).not.toHaveBeenCalled();
     });
 });
