@@ -45,7 +45,7 @@ export class AppCreationDialog extends React.Component {
      */
     isValid = () => {
         // form can be saved if the state of the field is valid
-        return  !this.props.pendingValidationError;
+        return !this.props.pendingValidationError;
     };
 
     /**
