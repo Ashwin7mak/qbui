@@ -67,9 +67,12 @@ export class StandardGrid extends Component {
         }
     };
 
+    /**
+     * Time to wait until the QbLoader is fired
+     */
     timeoutQBLoader = () => {
         setTimeout(() => {
-            return(<QbLoader />);
+            return(<QbLoader className="StandardGridLoader"/>);
         }, constants.GRID_LOADER_TIMEOUT);
     };
 

@@ -104,7 +104,7 @@ describe('StandardGrid', () => {
         expect(component.find('.qbGrid')).not.toBePresent();
     });
 
-    it('shows the loader when items is null', () => {
+    fit('shows the loader when items is null', (done) => {
 
         let component = shallow(<StandardGrid columns={columns}
                                               getFacetFields={()=>{}}
@@ -120,7 +120,7 @@ describe('StandardGrid', () => {
 
         expect(component.find('.noItemsExist')).not.toBePresent();
         expect(component.find('.qbGrid')).not.toBePresent();
-
+        done();
         expect(component.find(QBLoader)).toBePresent();
         expect(component.find('.loading')).toBePresent();
     });
