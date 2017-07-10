@@ -12,7 +12,7 @@ import {pageLoadTime, gridRefreshTime} from "../../analytics/performanceTimingAc
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
-import WindowPerformanceUtils from "../../../../client-react/src/utils/windowPerformanceUtils";
+import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import "./standardGrid.scss";
 

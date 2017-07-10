@@ -3,7 +3,7 @@ import * as types from "../../app/actionTypes";
 import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
 import WindowLocationUtils from "../../../../client-react/src/utils/windowLocationUtils";
-import WindowPerformanceUtils from "../../../../client-react/src/utils/windowPerformanceUtils";
+import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 import Logger from "../../../../client-react/src/utils/logger";
 import LogLevel from "../../../../client-react/src/utils/logLevels";

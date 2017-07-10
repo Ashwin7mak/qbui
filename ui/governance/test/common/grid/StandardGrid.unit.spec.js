@@ -6,7 +6,7 @@ import {QbCell} from '../../../../client-react/src/components/dataTable/qbGrid/q
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
-import WindowPerformanceUtils from "../../../../client-react/src/utils/windowPerformanceUtils";
+import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
 import {__RewireAPI__ as StandardGridRewireAPI} from "../../../src/common/grid/standardGrid";
 
 describe('StandardGrid', () => {
