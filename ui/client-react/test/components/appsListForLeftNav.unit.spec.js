@@ -78,7 +78,8 @@ describe('AppsListForLeftNav', () => {
     });
 
     it('renders empty message when there are no apps', () => {
-        component = mount(<AppsList apps={[]}/>);
+        component = mount(<AppsList apps={[]}
+                                    expanded={true}/>);
 
         expect(component.find(CreateNewItemButton)).not.toBePresent();
         expect(component.find('.emptyState')).toBePresent();
@@ -87,12 +88,22 @@ describe('AppsListForLeftNav', () => {
     });
 
     it('renders empty message when apps are undefined', () => {
-        component = mount(<AppsList/>);
+        component = mount(<AppsList expanded={true}/>);
 
         expect(component.find(CreateNewItemButton)).not.toBePresent();
         expect(component.find('.emptyState')).toBePresent();
         expect(component.find('.createNewIcon')).toBePresent();
         expect(component.find('.iconMessage')).toBePresent();
+    });
+
+    it('doesn\'t renders empty message when the leftNav is collpased', () => {
+        component = mount(<AppsList apps={[]}
+                                    expanded={false}/>);
+
+        expect(component.find(CreateNewItemButton)).toBePresent();
+        expect(component.find('.emptyState')).not.toBePresent();
+        expect(component.find('.createNewIcon')).not.toBePresent();
+        expect(component.find('.iconMessage')).not.toBePresent();
     });
 
     it('sets the searchText state to an empty string', () => {

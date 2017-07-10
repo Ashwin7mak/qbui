@@ -801,6 +801,10 @@ export default {
             recordTitleFieldDefault: "Default to {recordName} + ID",
             recordName: "Record Name"
         },
+        emptyTableState: {
+            message: "There aren't any tables in this app, yet",
+            createNewTable: "Create a table"
+        },
         iconChooser: {
             suggestedIconsHeading: "Suggested icons",
             noSuggestedIcons: "There are no suggested icons for ",
