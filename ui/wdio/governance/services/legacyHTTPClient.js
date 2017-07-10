@@ -17,13 +17,12 @@ let server = '.currentstack-int.quickbaserocks.com';
  * @param action - api method
  * @param body - request body
  * @param urlParams - extra paramenters
- * @param username - username
- * @param password - password
+ * @param userCredentials - JSON object
  * @param isJSON - is the response in JSON
  * @returns HTTP response
  */
 module.exports = {
-    postRequest(hostname, app, action, body, urlParams, username, password, isJSON) {
+    postRequest(hostname, app, action, body, urlParams, userCredentials, isJSON) {
         let tries = userDefVars.NUM_RETRIES;
         let reqURL = "";
         let contTypeValue = 'application/xml';
@@ -33,7 +32,7 @@ module.exports = {
         if (body) {
             body = utils.constructBody(body);
         }
-        reqURL = utils.constructURL(hostname, app, action, urlParams, username, password);
+        reqURL = utils.constructURL(hostname, app, action, urlParams, userCredentials);
         let opts = {
             url: reqURL,
             method: 'POST',
@@ -79,9 +78,8 @@ module.exports = {
                 });
             } catch (ex) {
                 log.debug(ex);
-                console.log(ex);
             }
         });
     }
-}
+};
 

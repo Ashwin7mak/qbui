@@ -13,17 +13,15 @@ module.exports = {
      * @param app - app type: main or app
      * @param action - api method
      * @param urlParams - extra paramenters
-     * @param username - username
-     * @param password - password
+     * @param userCredentials - JSON object
      * @returns string - formatted url
      */
     // TODO: need to get server from config file ***
-    constructURL(hostname, app, action, urlParams, username, password) {
+    constructURL(hostname, app, action, urlParams, userCredentials) {
         // Format URL for http request
-        // console.log('config.legacyBase = ', config.legacyBase);
-        // server = config.legacyBase;
+        // userCredentials = JSON.parse(userCredentials);
         return sysDefVars.HTTPS + hostname + server + sysDefVars.SLASH_DB_SLASH + app + sysDefVars.ACTION + action +
-            sysDefVars.AMP_USERNAME + username + sysDefVars.AMP_PASSWROD + password + sysDefVars.AMP + urlParams;
+            sysDefVars.AMP_USERNAME + userCredentials.Username + sysDefVars.AMP_PASSWROD + userCredentials.Password + sysDefVars.AMP + urlParams;
     },
     /**
      * Construct body by adding qbdapi tags
@@ -54,7 +52,7 @@ module.exports = {
      */
     getJsonQdbapiData(res_body) {
         let res_data = [];
-        try{
+        try {
             res_body = JSON.parse(res_body);
             res_data = res_body.qdbapi;
             return res_data;
@@ -78,5 +76,5 @@ module.exports = {
         let tabIds = browser.getTabIds();
         return browser.switchTab(tabIds[1]);
     }
-}
+};
 
