@@ -1,6 +1,7 @@
 let elementControlWrapper = require('../common/controls/elementControlWrapper.po.js');
 let EmailBodyElementWrapper = require('./emailBodyElementWrapper.po');
 
+
 /**
  * Edit view of single automation
  */
@@ -10,7 +11,7 @@ class emailAutomationEditView {
     }
 
     get subject() {
-        return new elementControlWrapper(null, browser.elements('div.automationSubject > span > input').value);
+        return new elementControlWrapper(null, browser.element('div.automationSubject > span > input'));
     }
 
     get body() {
@@ -18,7 +19,7 @@ class emailAutomationEditView {
     }
 
     get name() {
-        return new elementControlWrapper(null, browser.elements('div.automationName > span > input').value);
+        return new elementControlWrapper(null, browser.element('div.automationName > span > input'));
     }
 
     get saveButton() {
@@ -29,9 +30,6 @@ class emailAutomationEditView {
         return new elementControlWrapper('.alternativeTrowserFooterButton');
     }
 
-    _getInputFields() {
-        return browser.elements('div.fieldValueEditor > span > input').value;
-    }
 }
 
 module.exports = new emailAutomationEditView();
