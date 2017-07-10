@@ -67,6 +67,12 @@ export class StandardGrid extends Component {
         }
     };
 
+    timeoutQBLoader = () => {
+        setTimeout(() => {
+            return(<QbLoader />);
+        }, constants.GRID_LOADER_TIMEOUT);
+    };
+
     /**
      * Render the grid when items exist
      */
@@ -128,14 +134,14 @@ export class StandardGrid extends Component {
      * - else... show the noItemsExist UI
      */
     render() {
-        let nullItemsArray = _.isNull(this.props.items);
-        let emptyItemsArray = _.isEmpty(this.props.items);
-        let loadingClass = nullItemsArray ? "loading" : "notLoading";
+        let isGridNotLoaded = _.isNull(this.props.items); //If the array is null(before API call)
+        let isGridEmpty = _.isEmpty(this.props.items); // If the array is empty (after API call but items are not yet rendered)
+        let loadingClass = isGridNotLoaded ? "loading" : "notLoading";
 
         return (
             <div className={`standardGrid ${loadingClass}`}>
-            {nullItemsArray ?
-                <QbLoader className="QbLoader" waitTime={constants.GRID_LOADER_TIMEOUT}/> :
+            {isGridNotLoaded && isGridEmpty ?
+                this.timeoutQBLoader() :
                 <div className="gridWrapper">
                     <StandardGridToolbar id={this.props.id}
                                          doUpdate={this.props.doUpdate}
@@ -147,7 +153,7 @@ export class StandardGrid extends Component {
                                          itemsPerPage={this.props.itemsPerPage}
                     />
                     {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
-                    {!(nullItemsArray) && emptyItemsArray ? this.renderNoItemsExist() : this.renderItemsExist()}
+                    {!(isGridNotLoaded) && isGridEmpty ? this.renderNoItemsExist() : this.renderItemsExist()}
                 </div>
             }
             </div>
