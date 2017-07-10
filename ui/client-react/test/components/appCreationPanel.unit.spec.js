@@ -24,11 +24,12 @@ describe('AppCreationPanel', () => {
     });
 
     it('will invoke setAppProperty when app name input box is typed into', () => {
-        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}/>);
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={[]}/>);
 
         component.find('input').at(0).simulate('change', {target: {value: 'Mock App Name'}});
 
-        expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('name', 'Mock App Name');
+        expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('name', 'Mock App Name', null, null);
     });
 
     it('will invoke setAppProperty when app description input box is typed into', () => {
