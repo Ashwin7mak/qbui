@@ -40,7 +40,7 @@
          * Test to Edit a particular record from the GRID edit pencil via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        it('Edit a NULL values record via record actions edit pencil In a Grid', function() {
+        xit('Edit a NULL values record via record actions edit pencil In a Grid', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
             var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
