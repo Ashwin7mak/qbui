@@ -420,8 +420,8 @@ module.exports = function(grunt) {
                 singleRun : true
             },
             devunit: {
-                //browsers: ["Chrome"],
-                browsers: ["HeadlessChrome"],
+                browsers: ["Chrome"],
+                //browsers: ["HeadlessChrome"],
                 singleRun : false
             },
             governance: {
