@@ -63,8 +63,8 @@ export class AppHomePageRoute extends Component {
         const pageService = new PageService();
         // this is a call to get a mock page object from the node layer
         const defaultPageId = 0; // TODO: use real default page ID
-        // this will result in a 404 response until EE returns pages to node layer
-        pageService.getPage(this.props.match.params.appId, defaultPageId).then(response => {
+        // change this call to getPage once EE has an endpoint for pages
+        pageService.getMockPage(this.props.match.params.appId, defaultPageId).then(response => {
             const page = response.data;
 
             // uncomment following to see the response from pages endpoint
