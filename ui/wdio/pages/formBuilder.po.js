@@ -5,7 +5,8 @@ let formsPO = requirePO('formsPage');
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
 
-let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
+// let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
+let tab_Field = ".rc-tabs-tabpane-active .firstNewFieldToken";
 
 class formBuilderPage {
 
@@ -265,10 +266,10 @@ class formBuilderPage {
         // wait a bit for the tile to be ready to be dragged
         this.tooltip.waitForVisible();
         browser.buttonDown();
-        // drag to target, jiggle & wait
+        // drag to target, wait & jiggle
         target.element('.fieldLabel').moveToObject();
-        target.element('.fieldLabel').moveToObject(5, 5);
-        target.element('.selectedFormElement').waitForExist();
+        browser.pause(1000);
+        target.moveToObject();
         // release button
         browser.buttonUp();
         this.fieldDragging.waitForExist(null, true);
