@@ -43,7 +43,7 @@ import "./automationBuilderContainer.scss";
 export class AutomationBuilderContainer extends Component {
 
     componentDidMount() {
-        if (this.getPath() === `${UrlConsts.BUILDER_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/${UrlConsts.AUTOMATION.CREATE}`) {
+        if (this.getPath() === `${UrlConsts.BUILDER_ROUTE}/app/:appId/${UrlConsts.AUTOMATION.PATH}/${UrlConsts.AUTOMATION.CREATE}`) {
             this.props.createAutomation();
         } else if (this.getAppId() && this.getAutomationId()) {
             this.props.loadAutomation(this.getAppId(), this.getAutomationId());
@@ -51,7 +51,7 @@ export class AutomationBuilderContainer extends Component {
     }
 
     getPath() {
-        return this.props.match && this.props.match.path ? this.props.match.path : undefined;
+        return _.get(this, 'props.match.path');
     }
     getAppId() {
         return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
@@ -84,8 +84,6 @@ export class AutomationBuilderContainer extends Component {
     onGenerate = () => {
         this.props.generateAutomation(this.getAppId(), this.props.automation);
 
-        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}/${this.getAutomationId()}/${UrlConsts.AUTOMATION.VIEW}`;
-        NavigationUtils.goBackToPreviousLocation(link);
     }
 
     onSave = () => {
