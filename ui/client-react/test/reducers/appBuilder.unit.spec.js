@@ -1,4 +1,4 @@
-import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/appBuilder';
+import reducer from '../../src/reducers/appBuilder';
 import * as AppBuilderSelectors from '../../src/reducers/appBuilder';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
