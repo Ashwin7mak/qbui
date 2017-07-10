@@ -9,9 +9,12 @@ let storeState = {};
 let mockState = {
     appBuilder: {
         isDialogOpen: true,
-        name: {value: 'Mock App Name'},
         description: 'Mock App Name',
-        icon: 'Mock Icon'
+        icon: 'Mock Icon',
+        name: {
+            value: 'Mock App Name',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        }
     }
 };
 
@@ -167,6 +170,50 @@ describe('App Creation Selector', () => {
             let result = AppBuilderSelectors.getNewAppInfo(cloneMockState);
 
             expect(result).toEqual(null);
+        });
+    });
+
+    describe('getValidationErrorAndIsEdited', () => {
+        it('will return a default pendingValidationError', () => {
+            let {pendingValidationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(mockState);
+
+            expect(pendingValidationError).toEqual(Locale.getMessage('appCreation.validateAppNameEmpty'));
+        });
+
+        it('will return a passed in pendingValidationError', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name.pendingValidationError = 'passedInValidationError';
+
+            let {pendingValidationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(pendingValidationError).toEqual('passedInValidationError');
+        });
+
+        it('will return true, if isEdited is true', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name.isEdited = true;
+
+            let {isEdited} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(isEdited).toEqual(true);
+        });
+
+        it('will return a validationError if there is a validationError', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name.validationError = 'mockValidationError';
+
+            let {validationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(validationError).toEqual('mockValidationError');
+        });
+
+        it('will return undefined for both isEdited and validationError', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+
+            let {isEdited, validationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(validationError).toEqual(undefined);
+            expect(isEdited).toEqual(undefined);
         });
     });
 });
