@@ -66,8 +66,6 @@ describe('AppCreationPanel', () => {
         component.find('input').at(0).simulate('change', {target: {property: 'name', value: 'Mock App Name'}});
 
         expect(instance.getValidationError).toHaveBeenCalledWith('name', 'Mock App Name');
-
-        instance.setAppProperty.calls.reset();
     });
 
     it('getValidationError will return an empty pendingValidationError message if the app name is an empty string', () => {
@@ -105,9 +103,6 @@ describe('AppCreationPanel', () => {
         component.find('input').at(0).simulate('change', {target: {property: 'name', value: mockAppName}});
 
         expect(instance.appNameExists).toHaveBeenCalledWith(mockAppName);
-
-        instance.setAppProperty.calls.reset();
-        instance.getValidationError.calls.reset();
     });
 
     it('appNameExists return true if the app name exists', () => {
