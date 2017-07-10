@@ -71,6 +71,19 @@
     };
 
     /**
+     * Helper method that will load feature switches page for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadFSPageInBrowser = function(realmName) {
+        this.navigateTo(e2eBase.getRequestFSPageEndpoint(realmName));
+        //wait until loading screen disappear
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+        //wait until new app button in leftNav is visible
+        return browser.element('.newApp.newItemButton.link').waitForVisible();
+    };
+
+    /**
      * Helper method that will load an particular app by ID for you in your browser by directly hitting a generated URL
      * @param realmName
      * @param appId
@@ -81,13 +94,14 @@
         //wait until loading screen disappear
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         //If tablesList is not visible then again navigate to appId page
-        if (!browser.element('.tablesList .leftNavLabel').isExisting()) {
+        if (!browser.element('.tablesList .leftNavLabel, .tablesList .tableList.emptyState').isExisting()) {
             this.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, appId));
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }
         //wait until you see newTable in left Nav
-        return browser.element('.tablesList .leftNavLabel').waitForVisible();
+        return browser.element('.tablesList .leftNavLabel, .tablesList .tableList.emptyState').waitForVisible();
     };
+
 
     /**
      * Helper method that will load an particular table by ID in an app for you in your browser by directly hitting a generated URL

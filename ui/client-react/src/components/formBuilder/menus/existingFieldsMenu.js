@@ -15,20 +15,20 @@ export class ExistingFieldsMenu extends Component {
     };
 
     render = () => {
-        let {isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
+        let {isCollapsed, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields} = this.props;
         return (
             <ListOfElements
                 tabIndex={toolPaletteTabIndex}
                 childrenTabIndex={toolPaletteChildrenTabIndex}
                 toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
                 hasKeyBoardFocus={toolPaletteFocus}
-                renderer={DraggableFieldTokenInMenu}
+                childElementRenderer={DraggableFieldTokenInMenu}
                 isCollapsed={isCollapsed}
+                areGroupsCollapsible={true}
                 animateChildren={true}
-                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: 'Existing Fields'}] : undefined}
-                isOpen={isOpen}
+                elements={existingFields && existingFields.length > 0 ? [{children: existingFields, key: 'existingFields', title: Locale.getMessage('builder.formBuilder.existingFieldsMenuThisTableTitle'), isOpen: true}] : undefined}
                 isFilterable={true}
-                hideTitle={true}
+                hideTitle={false}
                 emptyMessage={this.buildEmptyState()}
             />
         );

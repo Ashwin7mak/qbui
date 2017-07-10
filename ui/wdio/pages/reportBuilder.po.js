@@ -75,11 +75,17 @@ class reportBuilderPage {
         return '.qbHeaderCell:nth-child(' + index + ')';
     }
 
+    getReportContainer() {
+        // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
+        let reportContainerIsExisting = browser.waitForExist('.reportContainer');
+        return reportContainerIsExisting;
+    }
+
     clickCancel() {
+        this.cancelButton.waitForVisible();
         // Clicks on CANCEL in the report builder and waits for the next page to render
         this.cancelButton.click();
         this.dirtyForm_Dismiss();
-        browser.pause(fiveSeconds);
         return this;
     }
 
@@ -101,40 +107,34 @@ class reportBuilderPage {
     }
 
     clickSave() {
+        this.saveButton.waitForVisible();
         // Clicks on the SAVE button in the report builder and waits for the next page to appear
-        this.saveButton.click();
-        browser.pause(fiveSeconds);
-        return this;
+        return this.saveButton.click();
     }
 
     clickFieldToken() {
-        this.fieldToken.click();
-        browser.pause(fiveSeconds);
-        return this;
+        this.fieldToken.waitForVisible();
+        return this.fieldToken.click();
     }
 
     clickHeaderMenu() {
-        this.headerMenu.click();
-        browser.pause(fiveSeconds);
-        return this;
+        this.headerMenu.waitForVisible();
+        return this.headerMenu.click();
     }
 
     clickHideMenuOption() {
-        this.hideMenuOption.click();
-        browser.pause(fiveSeconds);
-        return this;
+        this.hideMenuOption.waitForVisible();
+        return this.hideMenuOption.click();
     }
 
     clickAddColumnBeforeMenuOption() {
-        this.addColumnBeforeMenuOption.click();
-        browser.pause(fiveSeconds);
-        return this;
+        this.addColumnBeforeMenuOption.waitForVisible();
+        return this.addColumnBeforeMenuOption.click();
     }
 
     clickAddColumnAfterMenuOption() {
-        this.addColumnAfterMenuOption.click();
-        browser.pause(fiveSeconds);
-        return this;
+        this.addColumnAfterMenuOption.waitForVisible();
+        return this.addColumnAfterMenuOption.click();
     }
 
     /**
@@ -143,22 +143,52 @@ class reportBuilderPage {
     enterBuilderMode() {
         // Invokes the report builder from the VIEW REPORT page
         reportContentPO.settingsIcon.waitForVisible();
-        browser.pause(fiveSeconds);
         reportContentPO.settingsIcon.click();
         topNavPO.modifyThisForm.waitForExist(fiveSeconds);
         topNavPO.modifyThisForm.click();
         this.reportBuilderContainer.waitForVisible();
-        browser.pause(fiveSeconds);
         return this;
     }
 
+    addColumnAfterFlow() {
+        this.clickHeaderMenu();
+        this.clickAddColumnAfterMenuOption();
+        this.clickFieldToken();
+        return this;
+    }
+
+    addColumnBeforeFlow() {
+        this.clickHeaderMenu();
+        this.clickAddColumnBeforeMenuOption();
+        this.clickFieldToken();
+        return this;
+    }
+
+    hideColumnFlow() {
+        // open the first headerMenu
+        this.clickHeaderMenu();
+        // click hide option on menu
+        this.clickHideMenuOption();
+        return this;
+    }
+
+    saveAndGetReportContainer() {
+        this.clickSave();
+        this.getReportContainer();
+        return this;
+    }
+
+    dragAndDropFlow(source, target) {
+        // drag 1st column onto 2nd
+        this.getReportLocator(source);
+        this.getReportLocator(target);
+    }
     /**
      * Checks to see if you are in report builder.
      */
     reportBuilderContainerIsExisting() {
         // Returns true if reportBuilderContainer is found on the browser. Else, it returns false
         let reportBuilderContainerIsExisting = browser.isExisting('.reportBuilderContainer');
-        browser.pause(fiveSeconds);
         return reportBuilderContainerIsExisting;
     }
 

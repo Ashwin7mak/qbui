@@ -16,6 +16,7 @@ const testElements = [
     {
         key: 'group1',
         title: 'group1',
+        isOpen: false,
         children: [
             {key: 'element1', title: 'elementA1'},
             {key: 'element2', title: 'element2'}
@@ -54,7 +55,7 @@ describe('ListOfElements', () => {
     });
 
     it('displays groups of fields', () => {
-        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
+        component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const headers = component.find('.listOfElementsItemHeader');
         expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for single ungrouped element
@@ -62,15 +63,35 @@ describe('ListOfElements', () => {
         expect(headers.at(1)).toHaveText(testElements[1].title);
     });
 
+    it('displays groups of fields, collapsible when areGroupsCollapsible prop is true', () => {
+        component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements} areGroupsCollapsible={true}/>);
+
+        const headers = component.find('.listOfElementsItemHeader');
+        expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for single ungrouped element
+        //make sure headers are rendered as collapsible
+        const collapsibleHeaders = component.find('.headerCollapseIcon');
+        expect(collapsibleHeaders.length).toEqual(headers.length);
+    });
+
+    it('displays groups of fields, non collapsible when areGroupsCollapsible prop is not supplied', () => {
+        component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
+
+        const headers = component.find('.listOfElementsItemHeader');
+        expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for single ungrouped element
+        //make sure headers are rendered as collapsible
+        const collapsibleHeaders = component.find('.headerCollapseIcon');
+        expect(collapsibleHeaders.length).toEqual(0);
+    });
+
     it('does not display titles for a group of fields', () => {
-        component = mount(<ListOfElements hideTitle={true} renderer={FieldTokenInMenuMock} elements={testElements}/>);
+        component = mount(<ListOfElements hideTitle={true} childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const headers = component.find('.listOfElementsItemHeader');
         expect(headers.length).toEqual(0); // Subtract one to account for single ungrouped element
     });
 
     it('displays an un-grouped element', () => {
-        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
+        component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const unGroupedElement = component.find('.listOfElementsMainList > .listOfElementsItem');
 
@@ -79,7 +100,7 @@ describe('ListOfElements', () => {
     });
 
     it('displays grouped child elements', () => {
-        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
+        component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const groupedElements = component.find('.listOfElementsItemList .listOfElementsItem');
 
@@ -89,9 +110,18 @@ describe('ListOfElements', () => {
         expect(groupedElements.at(2)).toHaveText(testElements[1].children[0].title);
     });
 
+    it('Uses custom renderer for header when supplied', () => {
+        let getHeaderElementRenderer = (element) => {
+            return <span className="headerElem">{element.title}</span>;
+        };
+        component = mount(<ListOfElements headerElementRenderer={getHeaderElementRenderer} childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
+        const headers = component.find('.headerElem');
+        expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for the element without children
+    });
+
     describe('filtering elements', () => {
         it('filters elements based on the filter text', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
+            component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
 
             component.setState({activeFieldFilter: 'elementa'});
 
@@ -101,7 +131,7 @@ describe('ListOfElements', () => {
         });
 
         it('will animate children if animateChildren is set to true', () => {
-            component = mount(<ListOfElements animateChildren={true} renderer={FieldTokenInMenuMock}
+            component = mount(<ListOfElements animateChildren={true} childElementRenderer={FieldTokenInMenuMock}
                                               elements={testElements}/>);
 
             expect(component.find('.listOfElementsItemList').length).toEqual(0);
@@ -109,7 +139,7 @@ describe('ListOfElements', () => {
         });
 
         it('shows a message if no fields match the filter text', () => {
-            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
+            component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}/>);
 
             component.setState({activeFieldFilter: 'zzz'});
 
@@ -119,7 +149,7 @@ describe('ListOfElements', () => {
 
         describe('Empty state Message', () => {
             it('doesn\'t display an empty message when elements and emptyMessage are not defined', () => {
-                component = mount(<ListOfElements renderer={FieldTokenInMenuMock}/>);
+                component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock}/>);
 
                 expect(component.find('.listOfElementsItem').length).toEqual(0);
                 expect(component.find('.emptyStateMessage')).toBePresent();
@@ -127,7 +157,7 @@ describe('ListOfElements', () => {
             });
 
             it('returns empty message when elements are not defined', () => {
-                component = mount(<ListOfElements renderer={FieldTokenInMenuMock} emptyMessage="MockemptyMessage"/>);
+                component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} emptyMessage="MockemptyMessage"/>);
 
                 expect(component.find('.listOfElementsItem').length).toEqual(0);
                 expect(component.find('.emptyStateMessage')).toBePresent();
@@ -135,7 +165,7 @@ describe('ListOfElements', () => {
             });
 
             it('returns empty message when elements are not present', () => {
-                component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={[]}
+                component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={[]}
                                                   emptyMessage="MockemptyMessage"/>);
 
                 expect(component.find('.listOfElementsItem').length).toEqual(0);
@@ -144,7 +174,7 @@ describe('ListOfElements', () => {
             });
 
             it('doesn\'t return empty message when elements are present', () => {
-                component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}
+                component = mount(<ListOfElements childElementRenderer={FieldTokenInMenuMock} elements={testElements}
                                                   emptyMessage="MockemptyMessage"/>);
 
                 expect(component.find('.listOfElementsItem').length).toEqual(4);
@@ -152,4 +182,5 @@ describe('ListOfElements', () => {
             });
         });
     });
+
 });

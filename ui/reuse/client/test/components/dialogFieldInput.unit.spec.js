@@ -3,6 +3,7 @@ import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import DialogFieldInput from '../../src/components/multiStepDialog/dialogFieldInput';
 import {Simulate} from 'react-addons-test-utils';
+import {MAX_TABLE_NAME_LENGTH} from '../../../../client-react/src/constants/componentConstants';
 
 let component;
 
@@ -68,6 +69,26 @@ describe('DialogFieldInput', () => {
 
         expect(component.find('.dialogField.validationFailed')).not.toBePresent();
 
+    });
+
+    it('maxLength is set properly on input field', () => {
+
+        component = mount(<DialogFieldInput title="Title"
+                                              name="name"
+                                              placeholder="placerHolder"
+                                              value=""
+                                              onChange={mockParentFunctions.updateTable}
+                                              onBlur={mockParentFunctions.onBlurInput}
+                                              required
+                                              hasFocus={true}
+                                              edited={false}
+                                              validationError={null}
+                                              maxLength={MAX_TABLE_NAME_LENGTH}/>);
+
+        let inputFields = component.find("input");
+        let inputField = inputFields.get(0);
+
+        expect(inputField.maxLength).toBe(MAX_TABLE_NAME_LENGTH);
     });
 
     it('invokes callbacks from DialogFieldInput', () => {

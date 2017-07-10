@@ -43,5 +43,10 @@ class AutomationService extends BaseService {
 
 
     }
+
+    createAutomation(appId, automation) {
+        let url = super.constructUrl(this.API.GET_AUTOMATIONS, [appId, automation]);
+        return super.post(url, automation);
+    }
 }
 export default AutomationService;
