@@ -13,23 +13,6 @@
     const sText = 'testTextValue';
     const sNumeric = 1;
 
-    const jsdom = require('jsdom');
-    const {JSDOM} = jsdom;
-    const {window} = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-    const {document} = (new JSDOM(`...`)).window;
-    // let jsdom = require('jsdom');
-    // var window = jsdom.jsdom().defaultView;
-    let jQuery = require('jquery')(window);
-    let loadingSpinner = requirePO('common/loadingSpinner');
-    const sText = 'testTextValue';
-    const jsdom = require('jsdom');
-    const { JSDOM } = jsdom;
-    const { window } = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-    const { document } = (new JSDOM(`...`)).window;
-    // let jsdom = require('jsdom');
-    // var window = jsdom.jsdom().defaultView;
-    let jQuery = require('jquery')(window);
-    const sNumeric = 1;
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
         recordCheckBoxes: {
@@ -593,44 +576,6 @@
                 expect(this.dropdownToggleActionButtonSB.isVisible()).toBe(true);
                 expect(this.dropdownToggleActionButtonSB.isEnabled()).toBe(true);
                 return browser.element('.qbIcon.iconUISturdy-fries').click();
-                expect(this.dropdownToggleActionButtonSB.isVisible()).toBe(true);
-                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBe(true);
-              //  return browser.element('.qbIcon.iconUISturdy-fries').click();
-               //  jQuery('.qbIcon.iconUISturdy-fries').click(function(){
-               //      alert("The paragraph was clicked.");
-               //  });
-                return jQuery('.qbIcon.iconUISturdy-fries').on('click', function() {
-                    console.log('User tapped ');
-                });
-               // return jQuery('.qbIcon.iconUISturdy-fries').trigger('tap');
-                // jQuery(document).ready(function() {
-                //      jQuery('.qbIcon.iconUISturdy-fries').on('tap', function(e) {
-                //          //console.log('User tapped #myElement');
-                //      });
-                // });
-               //  jQuery(function ($) { // First argument is the jQuery object
-               //      // Do stuff to the DOM
-               //      $('.qbIcon.iconUISturdy-fries').on('tap', function(e) {
-               //               console.log('User tapped #myElement');
-               //           });
-               //  });
-          //      browser.execute(jQuery('.qbIcon.iconUISturdy-fries').tap(function(e) { console.log('User tapped #myElement'); }));
-              //   $(browser).ready(function() {
-              //       $(".qbIcon.iconUISturdy-fries").click();
-              //   });
-                // $(".qbIcon.iconUISturdy-fries").bind( "click", function(e) {
-                //     e.stopPropagation();
-                // });
-                  return browser.element('.qbIcon.iconUISturdy-fries').click();
-                // return browser.execute(function () {
-                //     var event = new MouseEvent('touch', {
-                //         'view': window,
-                //         'bubbles': true,
-                //         'cancelable': true,
-                //         'detail': 2
-                //     });
-                //     document.querySelector('.qbIcon.iconUISturdy-fries').dispatchEvent(event);
-                // });
             }
         },
         /**
