@@ -99,15 +99,27 @@
         }
 
         if (browserName !== 'safari') {
+            it('verify add column and click CANCEL', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column
+                reportBuilderPO.clickFieldToken();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length + 1).toEqual(columnsListUpdated.length);
+                // clicks on cancel
+                reportBuilderPO.clickCancel();
+                // column label list must be equal to the initial list without the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
+            });
+
             it('hide a column and verify it is hidden before CANCEL', () => {
                 // store the list of columns before hiding
                 let originalColumns = reportBuilderPO.getHeaderLabels();
                 // store the first column label
                 let toBeHiddenColumnLabel = originalColumns[0];
-                // open the first headerMenu
-                reportBuilderPO.clickHeaderMenu();
-                // click hide option on menu
-                reportBuilderPO.clickHideMenuOption();
+                reportBuilderPO.hideColumnFlow();
                 // store the list of columns after hiding
                 let hiddenColumns = reportBuilderPO.getHeaderLabels();
                 // verify that the hidden columns has one less column that original
@@ -123,35 +135,15 @@
                 // verify that the hidden column is visible after canceling
                 expect(columnsAfterHideAndCancel).toContain(toBeHiddenColumnLabel);
             });
-        }
-
-        if (browserName !== 'safari') {
-            it('verify add column and click CANCEL', function() {
-                // gets the column list before adding a column
-                let columnsListInitial = reportBuilderPO.getHeaderLabels();
-                // adds a column
-                reportBuilderPO.clickFieldToken();
-                // gets the updated column labels after adding the new column
-                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
-                // clicks on cancel
-                reportBuilderPO.clickCancel();
-                // column label list must be equal to the initial list without the added column
-                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
-            });
 
             it('verify add column by add before and CANCEL', function() {
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column by clicking on AddColumnBefore from headerMenu dropdown
-                reportBuilderPO.clickHeaderMenu();
-                reportBuilderPO.clickAddColumnBeforeMenuOption();
-                reportBuilderPO.clickFieldToken();
-
+                reportBuilderPO.addColumnBeforeFlow();
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
                 // clicks on cancel
                 reportBuilderPO.clickCancel();
 
@@ -164,15 +156,12 @@
                 // gets the column list before adding a column
                 let columnsListInitial = reportBuilderPO.getHeaderLabels();
                 // adds a column by clicking on AddColumnAfter from headerMenu dropdown
-                reportBuilderPO.clickHeaderMenu();
-                reportBuilderPO.clickAddColumnAfterMenuOption();
-                reportBuilderPO.clickFieldToken();
+                reportBuilderPO.addColumnAfterFlow();
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
                 // clicks on cancel
                 reportBuilderPO.clickCancel();
-
                 // column label list must be equal to the initial list without the added column
                 let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
                 expect(columnsListInitial.length).toEqual(columnsAfterReopen.length);
@@ -186,16 +175,9 @@
                 let originalColumns = reportBuilderPO.getHeaderLabels();
                 // store the column label to be hidden
                 let toBeHiddenColumnLabel = originalColumns[0];
-                // open the first headerMenu
-                reportBuilderPO.clickHeaderMenu();
-                // click hide option on menu
-                reportBuilderPO.clickHideMenuOption();
-                // open the next headerMenu
-                reportBuilderPO.clickHeaderMenu();
-                // click the add option on menu
-                reportBuilderPO.clickAddColumnBeforeMenuOption();
-                // click the first field token to add it to the table
-                reportBuilderPO.clickFieldToken();
+                reportBuilderPO.hideColumnFlow();
+
+                reportBuilderPO.addColumnBeforeFlow();
                 // store the list of new column labels
                 let newColumnLabels = reportBuilderPO.getHeaderLabels();
                 // store the column label just added to the front
@@ -226,16 +208,9 @@
                 let originalColumns = reportBuilderPO.getHeaderLabels();
                 // store the column label to be hidden
                 let toBeHiddenColumnLabel = originalColumns[0];
-                // open the first headerMenu
-                reportBuilderPO.clickHeaderMenu();
-                // click hide option on menu
-                reportBuilderPO.clickHideMenuOption();
-                // open the next headerMenu
-                reportBuilderPO.clickHeaderMenu();
-                // click the add option on menu
-                reportBuilderPO.clickAddColumnBeforeMenuOption();
-                // click the first field token to add it to the table
-                reportBuilderPO.clickFieldToken();
+                reportBuilderPO.hideColumnFlow();
+
+                reportBuilderPO.addColumnBeforeFlow();
                 // store the list of new column labels
                 let newColumnLabels = reportBuilderPO.getHeaderLabels();
                 // store the column label just added to the front
@@ -256,6 +231,8 @@
                 expect(currentColumns[3]).toEqual(newColumnLabels[2]);
                 // save
                 reportBuilderPO.clickSave();
+
+                reportBuilderPO.getReportContainer();
                 // verify that the table has retained its saved state
                 let columnsAfterSave = reportBuilderPO.getHeaderLabels();
                 // verify that the hidden column is not in the table
@@ -275,62 +252,20 @@
                 reportBuilderPO.clickFieldToken();
                 // gets the updated column labels after adding the new column
                 let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 1);
+                expect(columnsListInitial.length + 1).toEqual(columnsListUpdated.length);
                 // clicks on save
-                reportBuilderPO.clickSave();
+                reportBuilderPO.saveAndGetReportContainer();
                 // column label list must be equal to the initial list with the added column
                 let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
+                expect(columnsListInitial.length + 1).toEqual(columnsAfterReopen.length);
             });
 
-            it('verify add column by add before and SAVE', function() {
-                // gets the column list before adding a column
-                let columnsListInitial = reportBuilderPO.getHeaderLabels();
-                // adds a column by clicking on AddColumnBefore from headerMenu dropdown
-                reportBuilderPO.clickHeaderMenu();
-                reportBuilderPO.clickAddColumnBeforeMenuOption();
-                reportBuilderPO.clickFieldToken();
-
-                // gets the updated column labels after adding the new column
-                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
-                // clicks on save
-                reportBuilderPO.clickSave();
-
-                // column label list must be equal to the initial list with the added column
-                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
-            });
-
-            it('verify add column by add after and SAVE', function() {
-                // gets the column list before adding a column
-                let columnsListInitial = reportBuilderPO.getHeaderLabels();
-                // adds a column by clicking on AddColumnAfter from headerMenu dropdown
-                reportBuilderPO.clickHeaderMenu();
-                reportBuilderPO.clickAddColumnAfterMenuOption();
-                reportBuilderPO.clickFieldToken();
-                // gets the updated column labels after adding the new column
-                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsListUpdated.length - 2);
-                // clicks on save
-                reportBuilderPO.clickSave();
-
-                // column label list must be equal to the initial list without the added column
-                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
-                expect(columnsListInitial.length).toEqual(columnsAfterReopen.length - 1);
-            });
-        }
-
-        if (browserName !== 'safari') {
             it('hide a column and verify it is hidden and SAVED', () => {
                 // store the list of columns before hiding
                 let originalColumns = reportBuilderPO.getHeaderLabels();
                 // store the first column label
                 let toBeHiddenColumnLabel = originalColumns[0];
-                // open the first headerMenu
-                reportBuilderPO.clickHeaderMenu();
-                // click hide option on menu
-                reportBuilderPO.clickHideMenuOption();
+                reportBuilderPO.hideColumnFlow();
                 // store the list of columns after hiding
                 let hiddenColumns = reportBuilderPO.getHeaderLabels();
                 // verify that the hidden columns has one less column that original
@@ -338,11 +273,41 @@
                 // verify that the correct hidden column was removed
                 expect(hiddenColumns).not.toContain(toBeHiddenColumnLabel);
                 // click save
-                reportBuilderPO.clickSave();
+                reportBuilderPO.saveAndGetReportContainer();
                 // store the list of columns after hiding and canceling
                 let columnsAfterHideAndSave = reportBuilderPO.getHeaderLabels();
                 // verify that columns are the same length
                 expect(originalColumns.length).toEqual(columnsAfterHideAndSave.length + 1);
+            });
+
+            it('verify add column by add before and SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnBefore from headerMenu dropdown
+                reportBuilderPO.addColumnBeforeFlow();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
+                // clicks on save
+                reportBuilderPO.saveAndGetReportContainer();
+                // column label list must be equal to the initial list with the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length + 1).toEqual(columnsAfterReopen.length);
+            });
+
+            it('verify add column by add after and SAVE', function() {
+                // gets the column list before adding a column
+                let columnsListInitial = reportBuilderPO.getHeaderLabels();
+                // adds a column by clicking on AddColumnAfter from headerMenu dropdown
+                reportBuilderPO.addColumnAfterFlow();
+                // gets the updated column labels after adding the new column
+                let columnsListUpdated = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length + 2).toEqual(columnsListUpdated.length);
+                // clicks on save
+                reportBuilderPO.saveAndGetReportContainer();
+                // column label list must be equal to the initial list without the added column
+                let columnsAfterReopen = reportBuilderPO.getHeaderLabels();
+                expect(columnsListInitial.length + 1).toEqual(columnsAfterReopen.length);
             });
         }
     });

@@ -27,7 +27,43 @@ describe('Automation reducer functions', () => {
 
         it('returns correct initial state on automation action', () => {
             let resultState = reducer(undefined, {type: types.LOAD_AUTOMATIONS, id: 10, content: 'TEST'});
-            expect(resultState).toEqual({appId: 'TEST', list: null, error: undefined});
+            expect(resultState).toEqual({appId: 'TEST', list: null, error: undefined, newAutomation: false});
+        });
+
+        it('returns correct after adding new automation', () => {
+            let expectedState = {
+                appId: 'TEST', automation: {
+                    name: '', type: "EMAIL", active:true, inputs: [
+                        {name: "subject", type: "TEXT", defaultValue: null},
+                        {name: "toAddress", type: "TEXT", defaultValue: null},
+                        {name: "body", type: "TEXT", defaultValue: null},
+                        {name: "fromAddress", type: "TEXT", defaultValue: 'notify@quickbaserocks.com'},
+                        {name: "ccAddress", type: "TEXT", defaultValue: null}
+                    ],
+                    steps: [
+                        {
+                            type: "ACTION",
+                            actions: [
+                                {
+                                    type: "CALL",
+                                    functionName: "SEND_EMAIL",
+                                    parameterBindings: [
+                                        {parentName: "toAddress", "childName": "toAddress"},
+                                        {parentName: "fromAddress", "childName": "fromAddress"},
+                                        {parentName: "ccAddress", "childName": "ccAddress"},
+                                        {parentName: "subject", "childName": "subject"},
+                                        {parentName: "body", "childName": "body"}
+                                    ],
+                                    returnBinding: {"parentName": "response"}
+                                }
+                            ]
+                        }
+                    ]
+                },
+                newAutomation: true
+            };
+            let resultState = reducer({appId: 'TEST'}, {type: types.CREATE_AUTOMATION, id:10, content: []});
+            expect(resultState).toEqual(expectedState);
         });
     });
 
@@ -72,6 +108,17 @@ describe('Automation reducer functions', () => {
         it('returns correct initial state empty action', () => {
             let resultState = reducer(state, {});
             expect(resultState).toEqual(state);
+        });
+
+        it('returns correct after change name', () => {
+            let resultState = reducer(state, {type: types.CHANGE_AUTOMATION_NAME, id: 10, content: {newName: 'test'}});
+            expect(resultState).toEqual({appId: 'TEST', automation: {id: 'auto1', name: 'test', active: true, type: "EMAIL", inputs: [
+                {name: "toAddress", type: "TEXT", defaultValue: "test@test.com"},
+                {name: "fromAddress", type: "TEXT",  defaultValue: "testing@quickbaserocks.com"},
+                {name: "ccAddress", type: "TEXT",  defaultValue: null},
+                {name: "subject", type: "TEXT", defaultValue: "Test subject"},
+                {name: "body", type: "TEXT",  defaultValue: "Test body"}
+            ]}});
         });
 
         it('returns correct after change to', () => {

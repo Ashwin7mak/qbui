@@ -1,11 +1,13 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ConnectedAppHomePage, {AppHomePageRoute, __RewireAPI__ as AppHomePageRewireAPI}  from '../../../src/components/app/appHomePageRoute';
-import HtmlUtils from '../../../src/utils/htmlUtils';
-import {DEFAULT_PAGE_TITLE} from '../../../src/constants/urlConstants';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+import Promise from 'bluebird';
+
+import ConnectedAppHomePage, {AppHomePageRoute, __RewireAPI__ as AppHomePageRewireAPI}  from '../../../src/components/app/appHomePageRoute';
+import HtmlUtils from '../../../src/utils/htmlUtils';
+import {DEFAULT_PAGE_TITLE} from '../../../src/constants/urlConstants';
 import Locale from '../../../src/locales/locales';
 
 const middlewares = [thunk];
@@ -18,21 +20,33 @@ describe('AppHomePageRoute', () => {
     let component;
 
     const props = {
-        showTopNav: () => {}
+        showTopNav: () => {},
+        match: {
+            params: {
+                appId: 1
+            }
+        }
     };
     const selectedAppId = 2;
     const selectedAppName = 'Adams';
     const selectedApp = {name: selectedAppName};
 
+    function PageServiceMock() {
+        this.getPage = () => Promise.resolve({data:''});
+        this.getMockPage = () => Promise.resolve({data:''});
+    }
+
     beforeEach(() => {
         spyOn(HtmlUtils, 'updatePageTitle');
         AppHomePageRewireAPI.__Rewire__('NotificationManager', NotificationManagerMock);
+        AppHomePageRewireAPI.__Rewire__('PageService', PageServiceMock);
     });
 
     afterEach(() => {
         HtmlUtils.updatePageTitle.calls.reset();
 
-        AppHomePageRewireAPI.__ResetDependency__('NotificationManager', NotificationManagerMock);
+        AppHomePageRewireAPI.__ResetDependency__('NotificationManager');
+        AppHomePageRewireAPI.__ResetDependency__('PageService');
     });
 
     it('test render of component', () => {
@@ -41,13 +55,7 @@ describe('AppHomePageRoute', () => {
     });
 
     it('test render of component with url params', () => {
-
-        let params = {
-            appId:1
-        };
-
-
-        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} match={{params}} app={selectedApp}/>);
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute {...props} app={selectedApp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -62,7 +70,7 @@ describe('AppHomePageRoute', () => {
                 return {params, selectedAppId: 1};
             },
             render() {
-                return <AppHomePageRoute ref="ahp" match={{params: this.state.params}} {...props} app={selectedApp}/>;
+                return <AppHomePageRoute ref="ahp" {...props} match={{params: this.state.params}} app={selectedApp}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());

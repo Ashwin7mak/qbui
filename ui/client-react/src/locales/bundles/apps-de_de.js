@@ -646,6 +646,7 @@ export default {
                 removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
+                existingFieldsMenuThisTableTitle: 'Dieser Tisch',
                 stage: {
                     title: 'Formular für {tableName}'
                 },
@@ -763,8 +764,8 @@ export default {
             iconHeading: "Symbol",
             searchPlaceholder: "Tabellensymbole suchen ......",
 
-            tableNamePlaceholder: "Zum Beispiel, Kunden",
-            recordNamePlaceholder: "Zum Beispiel, Kunde",
+            tableNamePlaceholder: "Zum Beispiel, Kunden. Verwenden Sie bis zu {numberOfChars} Buchstaben",
+            recordNamePlaceholder: "Zum Beispiel, Kunde. Verwenden Sie bis zu {numberOfChars} Buchstaben",
             descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linke navigation",
 
             finishedButtonLabel: "Tabelle",
@@ -790,6 +791,10 @@ export default {
             recordTitleFieldDescription: "Wählen Sie das Feld aus, das als Überschrift angezeigt wird, wenn Sie einen Datensatz anzeigen oder bearbeiten. Dieses Feld muss ausgefüllt werden.",
             recordTitleFieldDefault: "Standard auf Noun + ID",
             recordName: "Datensatzname"
+        },
+        emptyTableState: {
+            message: 'Es gibt noch keine Tabellen in dieser App',
+            createNewtable: 'Erstellen Sie eine Tabelle'
         },
         iconChooser: {
             suggestedIconsHeading: "Vorgeschlagene Ikonen",

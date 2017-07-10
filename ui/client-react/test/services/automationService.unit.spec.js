@@ -54,4 +54,13 @@ describe('AutomationService functions', () => {
         automationService.invokeAutomation(appId, wfId, {});
         expect(BaseService.prototype.post).toHaveBeenCalledWith(url, {}, {});
     });
+
+    it('test createAutomation function', () => {
+        let appId = "testApp";
+        let auto1 = {name:"Auto_1", active: true, type:"EMAIL"};
+        let url = StringUtils.format(automationService.API.GET_AUTOMATIONS, [appId]);
+
+        automationService.createAutomation(appId, auto1);
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, auto1);
+    });
 });

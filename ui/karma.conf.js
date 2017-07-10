@@ -5,7 +5,7 @@ let webpack = require('webpack');
 let nodeModulesPath = path.resolve(__dirname, "node_modules");
 let nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
 let testsFile = "tests.webpack.js";
-let testWithCoverage = true;
+let testWithCoverage = false;
 let profilePath = path.resolve(__dirname, 'build/chromeDebugPath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
 
 if (process.env.KARMA_USE_CUSTOM) {

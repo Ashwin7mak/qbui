@@ -78,25 +78,26 @@ store.dispatch(FeatureSwitchActions.getStates());
  *          routes - an array child routes that occur under within the route (optional)
  *          props - object with any properties to be included when rendering the component (optional)
  **/
+
 const routes = [
     /***
-     *  Shall be enabled when this epic is worked on :
+     *  These api's are not being used at this time.
      *  https://quickbase.atlassian.net/browse/MC-1189
      */
-    // {
-    //     path: ADMIN_ROUTE,
-    //     component: NavWrapper,
-    //     routes: [
-    //         {
-    //             path: `${ADMIN_ROUTE}/featureSwitches/:id`,
-    //             component: FeatureSwitchOverridesRoute
-    //         },
-    //         {
-    //             path: `${ADMIN_ROUTE}/featureSwitches`,
-    //             component: FeatureSwitchesRoute
-    //         }
-    //     ]
-    // },
+    {
+        path: ADMIN_ROUTE,
+        component: NavWrapper,
+        routes: [
+            {
+                path: `${ADMIN_ROUTE}/featureSwitches/:id`,
+                component: FeatureSwitchOverridesRoute
+            },
+            {
+                path: `${ADMIN_ROUTE}/featureSwitches`,
+                component: FeatureSwitchesRoute
+            }
+        ]
+    },
     {
         path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
         component: NavWrapper,
@@ -157,9 +158,14 @@ const routes = [
                 component: ReportBuilderContainer
             },
             {
+                path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/${AUTOMATION.CREATE}`,
+                component: AutomationBuilderContainer,
+                exact: true
+            },
+            {
                 path: `${BUILDER_ROUTE}/app/:appId/${AUTOMATION.PATH}/:automationId`,
-                component: AutomationBuilderContainer
-            }
+                component: AutomationBuilderContainer,
+            },
         ]
     },
     {

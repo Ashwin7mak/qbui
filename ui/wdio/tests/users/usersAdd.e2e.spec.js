@@ -111,6 +111,7 @@
              * Attempts to add a invalid user and cancels
              */
             it('Add new user by invalid user to application and cancel', function() {
+                // Add User with Role to app
                 UsersTablePage.addUserWithRoleToApp(Crap, "None", true);
             });
 
@@ -121,10 +122,9 @@
                 // Click on add a new user button
                 UsersTablePage.newUserBtn.click();
                 expect(modalDialog.modalDialogContainer.isVisible()).toBe(true);
-                var appName = testApp.name;
-                expect(modalDialog.modalDialogTitle).toContain(appName);
+                expect(modalDialog.modalDialogTitle).toContain(testApp.name);
                 // Verify Add new user button disabled
-                expect(browser.isEnabled('.buttons .finishedButton.btn.btn-primary')).toBe(false);
+                expect(modalDialog.modalDialogDisabledBtn.isEnabled()).toBe(false);
                 // Click Cancel
                 modalDialog.clickOnModalDialogBtn(modalDialog.CANCEL_BTN);
             });
