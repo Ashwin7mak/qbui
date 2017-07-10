@@ -793,6 +793,10 @@ export default {
             recordTitleFieldDefault: "Par défaut à Noun + ID",
             recordName: "Nom de l'enregistrement"
         },
+        emptyTableState: {
+            message: "Il n'y a pas encore de tables dans cette application",
+            createNewTable: "Créer une table"
+        },
         iconChooser: {
             suggestedIconsHeading: "Icônes suggérées",
             noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom",

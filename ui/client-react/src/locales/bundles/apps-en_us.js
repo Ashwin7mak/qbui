@@ -283,7 +283,7 @@ export default {
             },
             automationEdit: {
                 stageHeading: "Modify Automation: {automationName}",
-                nameHeader: "Name",
+                nameHeader: " Automation Name",
                 emailSectionHeader: "Send an Email",
                 toHeader: "Notify Whom",
                 subjectHeader: "Subject",
@@ -802,6 +802,10 @@ export default {
             recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
             recordTitleFieldDefault: "Default to {recordName} + ID",
             recordName: "Record Name"
+        },
+        emptyTableState: {
+            message: "There aren't any tables in this app, yet",
+            createNewTable: "Create a table"
         },
         iconChooser: {
             suggestedIconsHeading: "Suggested icons",

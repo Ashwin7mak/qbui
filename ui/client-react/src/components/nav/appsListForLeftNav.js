@@ -16,7 +16,13 @@ const DEFAULT_APP_ICON = 'favicon';
 export const AppsList = React.createClass({
 
     propTypes: {
-        apps: React.PropTypes.array.isRequired
+        apps: React.PropTypes.array.isRequired,
+        expanded: React.PropTypes.bool
+    },
+    getDefaultProps() {
+        return {
+            expanded: true
+        };
     },
     getInitialState() {
         return {
@@ -85,7 +91,8 @@ export const AppsList = React.createClass({
     },
 
     renderEmptyStateOrNewButton() {
-        return _.isEmpty(this.props.apps) ?
+        // Using expanded to hide the error message for apps when collapsed
+        return (_.isEmpty(this.props.apps) && this.props.expanded) ?
             <EmptyStateForLeftNav handleOnClick={this.createNewApp}
                                   emptyMessage="emptyAppState.message"
                                   className="appsListForLeftNav"

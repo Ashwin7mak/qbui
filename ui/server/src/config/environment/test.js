@@ -5,22 +5,22 @@
     'use strict';
 
     //var path = require('path');
-    var dateUtils = require('../../utility/dateUtils');
-    var envConsts = require('./environmentConstants');
-    var routeGroups = require('../../routes/routeGroups');
-    var clientConsts = require('./clientConsts');
-    var random = require('lodash').random;
+    const dateUtils = require('../../utility/dateUtils');
+    const envConsts = require('./environmentConstants');
+    const routeGroups = require('../../routes/routeGroups');
+    const clientConsts = require('./clientConsts');
+    const random = require('lodash').random;
 
-    var client = clientConsts.REACT;
+    const client = clientConsts.REACT;
 
     // we need to determine dynamically what port was opened with route53 shell script in core during jenkins build
     // so we add 8080 + executor number (which is what the shell script does to ensure uniqueness)
-    var javaHost = 'http://quickbase-dev.com';
-    var eeHost = 'http://quickbase-dev.com';
+    let javaHost = 'http://quickbase-dev.com';
+    let eeHost = 'http://quickbase-dev.com';
     // same thing with node so we don't have colliding ports
-    var nodeHostPort = 9000 + random(0, 99);
-    var nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
-    var eeHostEnable = true;
+    let nodeHostPort = 9000 + random(0, 99);
+    let nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
+    let eeHostEnable = true;
     let automationsHost = 'http://quickbase-dev.com';
 
     // For the e2e try job we want to connect to an integration instance of Tomcat. If we set the env var in Jenkins
@@ -39,7 +39,7 @@
         eeHost = javaHost;
     }
 
-    module.exports = {
+    const baseConfig = {
 
         //  Logging configuration
         LOG: {
@@ -113,8 +113,13 @@
          * Note: Feature Switches are overridden based on their names, ensure overrides
          * have same name including spacing.
          */
-        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/ci.override.featureSwitches.json'
-        // masterOverrideTurnFeaturesOn:true
+        // featureSwitchConfigOverride: '../../config/environment/featureSwitch/ci.override.featureSwitches.json',
+        // masterOverrideTurnFeaturesOn:true,
 
+        // A shared secret for hitting private APIs on Core. Used for running dataGen and E2E tests locally.
+        sharedSecret: null, // Key should be generated and set as part of the jenkins job
     };
+
+    module.exports = Object.assign({}, baseConfig, process.env);
+
 }());
