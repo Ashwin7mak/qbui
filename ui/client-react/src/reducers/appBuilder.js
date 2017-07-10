@@ -106,7 +106,7 @@ export const getAppProperties = (state) => {
     let {name, icon, description} =  _.pick(state.appBuilder, APP_PROPS);
 
     return {
-        name: name ? name.value : undefined,
+        name: name ? name.value : null,
         icon,
         description
     };
