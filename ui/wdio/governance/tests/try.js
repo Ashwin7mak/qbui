@@ -6,39 +6,37 @@
     'use strict';
     var request = require('request');
     var promise = require('bluebird');
+    const legacyHTTPClient = require('../services/legacyHTTPClient');
+    const utils = require('../services/utils');
 
     //
     function HTTPClient() {
-        // post req
-        var path = "https://postman-echo.com/post"
-        var method = "post"
-        var body = "post call"
-        var headers = {
-            'Content-Type': 'application/plain'
-        }
+        let res_xml = [];
+        let res = [], res_data = [];
+        //* Set path and make request
+        let hostname = "weirealm";
+        let app = "main";
+        let action = "API_Authenticate";
+        let body = null;
+        let urlParams = "";
+        let username = "weiRealm@gmail.com"; //userDefVars.SUPER_ADMIN_USERNAME; //
+        let password = "Test123!";           //userDefVars.SUPER_ADMIN_PASSWORD; //
+        let isJSON = false;
+        return legacyHTTPClient.postRequest(hostname, app, action, body, urlParams, username, password, isJSON).then(httpResponse => {
+            if (isJSON) {
+                res = httpResponse.body;
+            } else {
+                res_xml = httpResponse.body;
+                console.log("response in XML ==>  ", res_xml)
 
-        // get req
-        // var path = "https://www.cnn.com"
-        // var method = "get"
-        // var body = "get call"
-        // var headers = {
-        //     'Content-Type': 'application/plain'
-        // }
-        let opts = {
-            url: path,
-            method: method,
-            body: body,
-            headers: headers
-        };
-
-        console.log('===> S2: in promise ***');
-        request(opts, function(error, response) {
-            // let statusCode = response && response.statusCode;
-            console.log('===> S3: in request ***');
-
-            console.log('****error:', error); // Print the error if one occurred
-            console.log('****statusCode:', response.statusCode); // Print the response status code if a response was received
-            console.log('******body:', response.body); // Print the HTML for the Google homepage.
+                // convert xml to json
+                res = utils.parseXMLResponseToJSON(httpResponse);
+            }
+            console.log('response in JSON ==> ', res);
+            var res_data = res.qdbapi;
+            console.log("==> res_data action: ", res_data.action);
+        }).catch(function(error) {
+            console.log('Error in httpClient:', error);
         });
     }
 
@@ -47,7 +45,7 @@
             console.log("==> Started...");
 
 
-            // HTTPClient();
+            HTTPClient();
             var parser = require('xml2json');
             var response = '        <?xml version="1.0" ?>          ' +
                 '<qdbapi><action>API_Authenticate</action>' +
@@ -62,6 +60,16 @@
             // var json = parser.toJson(response_xml.trim());
             response = parser.toJson(response.trim());
             console.log("response in JSON -> %s", response);
+            var string = '{"Name":{"firstName":"James", "lastName":"Wang"}}';
+            var ob = JSON.parse(response);
+            var head_ob = ob.qdbapi;
+            console.log("==> FFFFF..", head_ob.action);
+
+
+
+            // var res = response.split(":");
+            // console.log("11111 %s", res[0]);
+            // console.log("11111 %s", res[1]);
 
             // json to xml
             // var xml = parser.toXml(json);
