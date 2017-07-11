@@ -42,7 +42,7 @@ export class AppCreationPanel extends Component {
      */
     validateAppName = (property, value) => {
         let validationError = null;
-        const trimmed = typeof value === "string" ? value.trim() : value;
+        const trimmed = typeof value === "string" ? value.trim() : '';
         if (trimmed === '') {
             validationError = Locale.getMessage('appCreation.validateAppNameEmpty');
         } else if (this.appNameExists(trimmed)) {
