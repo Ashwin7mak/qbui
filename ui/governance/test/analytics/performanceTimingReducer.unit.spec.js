@@ -1,9 +1,10 @@
-import performanceTimingReducer, {getPageLoadTime, getGridLoadTime} from "../../src/analytics/performanceTimingReducer";
+import performanceTimingReducer, {getPageLoadTime, getGridLoadTime, getGridRefreshTime} from "../../src/analytics/performanceTimingReducer";
 import * as types from "../../src/app/actionTypes";
 import _ from "lodash";
 
 let mockPageLoadTime = 1.50;
 let mockGridStartTime = 0.40;
+let mockGridRefreshTime = 1.20;
 
 describe('Performance Timing Reducer', () => {
     beforeEach(() => {
@@ -20,7 +21,8 @@ describe('Performance Timing Reducer', () => {
 
     let initialState = {
         pageLoadTime: 0,
-        gridStartTime: 0
+        gridStartTime: 0,
+        gridRefreshTime: 0
     };
 
     it('returns correct initial state', () => {
@@ -45,6 +47,16 @@ describe('Performance Timing Reducer', () => {
         };
 
         expect(performanceTimingReducer(initialState, gridStartTimeAction)).toEqual({...initialState, gridStartTime: mockGridStartTime});
+    });
+
+    it('gets the grid refresh time', () => {
+
+        let gridRefreshTimeAction = {
+            type: types.GET_GRID_REFRESH_TIME,
+            payload: mockGridRefreshTime
+        };
+
+        expect(performanceTimingReducer(initialState, gridRefreshTimeAction)).toEqual({...initialState, gridRefreshTime: mockGridRefreshTime});
     });
 
     it('gets the page load time from state', () => {
