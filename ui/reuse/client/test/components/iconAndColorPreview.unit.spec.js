@@ -23,6 +23,15 @@ describe('IconAndColorPreview', () => {
         jasmineEnzyme();
     });
 
+    it('shows the hidden state (empty circle with question mark) by default if no props are passed in', () => {
+        component = shallow(<IconAndColorPreview />);
+
+        expect(getPreview()).toHaveStyle('backgroundColor', '#ffffff');
+        expect(getPreviewHiddenIcon()).toBePresent();
+        expect(getPreviewHiddenDiv()).toBePresent();
+        expect(getPreviewIcon()).not.toBePresent();
+    });
+
     it('shows an icon in the preview', () => {
         component = shallow(<IconAndColorPreview {...standardProps} />);
 
