@@ -130,16 +130,13 @@ describe('SimpleInput', () => {
             expect(mockPropFuncs.onBlur).toHaveBeenCalled();
         });
 
-        fit('will limit characters allowed to be typed', () => {
-            component = mount(<SimpleInput maxLength={2}
-                                           onChange={mockPropFuncs.onChange}/>);
+        it('will set a maxLength on the input box', () => {
+            component = mount(<SimpleInput maxLength={2} />);
 
             let input = component.find('.input');
-            input.simulate('change', {target: {value: 'a'}});
-            input.simulate('change', {target: {value: 'b'}});
-            input.simulate('change', {target: {value: 'c'}});
 
-            expect(mockPropFuncs.onChange).toHaveBeenCalledWith('ab');
+            expect(input).toHaveProp('maxLength', 2);
+            expect(input.nodes[0].maxLength).toEqual(2);
         });
     });
 
