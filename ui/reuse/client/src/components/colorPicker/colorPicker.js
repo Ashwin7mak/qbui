@@ -32,15 +32,16 @@ export const COLOR_TYPES = {
 // Prevents ReactColor (CirclePicker) from blowing up while a custom color is being entered.
 export const FALLBACK_COLOR = '#ffffff';
 
-
 /**
  * A color picker for choosing a color (e.g., choosing an app color).
  */
 class ColorPicker extends Component {
     static propTypes = {
         /**
-         * The currently selected hex value color. The component will also accept rgb or hsl objects.
-         * But the current implementation on the UI is hex values. */
+         * The currently selected hex value color. The React-Color component will also accept rgb or hsl objects.
+         * But the current implementation on the UI is hex values.
+         * Using hsl or rgb objects may break some features of this component. Using hsl or rgb is called out here
+         * because it is available as part of ReactColor, but may require this implementation to be extended. */
         value: PropTypes.string,
 
         /**
@@ -73,7 +74,7 @@ class ColorPicker extends Component {
         /**
          * An array of hex values. These will be the color choices used by the component.
          * There is already a recommended default. Only override if needed.
-         * The XD recommendation is to have 9 colors, with one set aside for the custom color. */
+         * The XD recommendation is to have 9 colors, with a 10th space set aside for the custom color. */
         colors: PropTypes.arrayOf(PropTypes.string),
 
         /**
@@ -128,7 +129,6 @@ class ColorPicker extends Component {
     /**
      * When the custom color input box is changed, still fire the onChange event and pass up the current color.
      * This also makes sure that there is always a '#' in the input field.
-     * If a new color is entered, make it the new customColor.
      * @param value
      */
     onChangeCustomColor = value => {

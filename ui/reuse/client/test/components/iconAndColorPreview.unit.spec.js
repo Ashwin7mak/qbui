@@ -93,8 +93,4 @@ describe('IconAndColorPreview', () => {
             });
         });
     });
-
 });
-
-
-
