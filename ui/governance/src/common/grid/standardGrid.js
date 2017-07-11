@@ -29,9 +29,6 @@ export class StandardGrid extends Component {
     constructor(props) {
         super(props);
         this.transforms = this.props.columnTransformsClasses.map((transformClass, index) => new transformClass(this, this.props.columnTransformProps[index]));
-        this.state = {
-            loaderVisible : false
-        };
     }
 
     getColumns = () => {
@@ -92,21 +89,6 @@ export class StandardGrid extends Component {
                 this.props.gridRefreshTime(refreshTime);
             }
         }
-    };
-
-    /**
-     * Time to wait until the QbLoader is fired
-     */
-    timeoutQbLoader = () => {
-        const classNames = ['standardGridLoader'];
-        classNames.push(this.state.loaderVisible ? 'visible' : '');
-
-        if (!this.timeout) {
-            this.timeout = setTimeout(() => {
-                this.setState({loaderVisible: true});
-            }, constants.GRID_LOADER_TIMEOUT);
-        }
-        return <QbLoader className={classNames.join(' ')} />;
     };
 
     /**
@@ -174,7 +156,7 @@ export class StandardGrid extends Component {
         let isGridEmpty = _.isEmpty(this.props.items); // If the array is empty (after API call but items are not yet rendered)
 
         if (isGridNotLoaded) {
-            return this.timeoutQbLoader();
+            return <QbLoader className="standardGridLoader" waitTime={constants.GRID_LOADER_TIMEOUT} />;
         } else {
             return (
                 <div className="gridWrapper">

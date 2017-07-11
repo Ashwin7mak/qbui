@@ -7,11 +7,23 @@ import QbLoaderAnimationData from "../../assets/animations/QbLoaderAnimationData
  * rendering the new QBLoader from a JSON object
  */
 class QbLoader extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            waiting: ""
+        };
+    }
+
+    componentDidMount() {
+        let self = this;
+        setTimeout(() => {
+            self.setState({waiting: "visible"});
+        }, self.props.waitTime);
+    }
 
     render() {
         return (<BodyMovin animationData={QbLoaderAnimationData}
-                           className={this.props.className}
-                />
+                           className={`${this.props.className} ${this.state.waiting}`} />
         );
     }
 }
@@ -20,11 +32,16 @@ QbLoader.propTypes = {
     /**
      * The new className to be passed from parent for custom styling
      */
-    className: PropTypes.string
+    className: PropTypes.string,
+    /**
+     * The time to be delayed after which the loader fires
+     */
+    waitTime: PropTypes.number
 };
 
 QbLoader.defaultProps = {
     className: "",
+    waitTime: 0
 };
 
 export default QbLoader;
