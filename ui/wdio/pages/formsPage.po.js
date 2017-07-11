@@ -34,7 +34,6 @@
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconUISturdy-edit');}},
-
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
         //cancel form button
@@ -79,6 +78,7 @@
          */
         clickBtnOnForm : {value: function(btnName) {
             //get all save buttons on the form
+            browser.element('.saveOrCancelFooter').click();
             var saveButton = this.editFormSaveBtns.value.filter(function(button) {
                 return button.getAttribute('textContent') === btnName;
             });
@@ -97,7 +97,6 @@
          */
         clickFormSaveBtn : {value: function() {
             //Click on form Save button
-            this.editFormSaveBtns.waitForVisible();
             this.clickBtnOnForm('Save');
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until save success container goes away
@@ -352,6 +351,13 @@
         }},
 
         /**
+         * Returns the formElementContainer specified by INDEX
+         */
+        getFieldByIndex: {value: function(index) {
+            return browser.element('.formElementContainer:nth-child(' + index + ')');
+        }},
+
+        /**
          * Method to set input value for a field on the form.
          */
         setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
@@ -369,23 +375,35 @@
         }},
 
         /**
+         * Identifies field specified by INDEX and set its value
+         * assumes that the specified field is a TEXT FIELD
+         * and thus will accept any string as input
+         */
+        setFieldValueByIndex: {value: function(index, value) {
+            this.getFieldByIndex(index).element('.input').setValue(value);
+        }},
+
+        /**
          * Select List option from the List combo
          *
          */
         selectFromList : {value: function(listOption) {
+            //wait until you see select outer menu
+            browser.element('.Select-menu-outer').waitForVisible();
             //wait untill you see 1 option since drop down loads onDemand now
-            browser.waitForVisible('.Select-menu-outer .Select-option');
+            browser.element('.Select-option').waitForVisible();
             //get all options from the list
-            let option = browser.element('.Select-menu-outer').elements('.Select-option').value.filter(function(optionText) {
+            var option = browser.elements('.Select-option').value.filter(function(optionText) {
                 return optionText.getAttribute('textContent').trim().includes(listOption);
             });
 
             if (option !== []) {
-                browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
+                //browser.execute("return arguments[0].scrollIntoView(true);", option[0]);
                 //Click on filtered option
                 option[0].waitForVisible();
                 option[0].click();
                 //wait until loading screen disappear
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
                 return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
             } else {
                 throw new Error('Option with name ' + listOption + " not found in the list");
@@ -443,7 +461,7 @@
                 } else if (fieldType === 'allTimeFields') {
                     var timeFields = this.getAllTimeInputFields();
                     for (i = 0; i < timeFields.value.length; i++) {
-                        browser.execute("return arguments[0].scrollIntoView(true);", timeFields.value[i]);
+                        browser.execute("return arguments[0].scrollIntoView(false);", timeFields.value[i]);
                         //Need this to stabilize after scrolling to the element
                         browser.pause(e2eConsts.shortWaitTimeMs);
                         timeFields.value[i].waitForVisible();

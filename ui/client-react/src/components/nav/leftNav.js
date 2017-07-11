@@ -105,6 +105,7 @@ class LeftNav extends Component {
                                getAppTables={AppUtils.getAppTables}
                                onCreateNewTable={this.props.onCreateNewTable}
                                selectedAppId={this.props.selectedAppId}
+                               tables={_.get(this.props, 'selectedApp.tables', [])}
                                {...this.props} />;
         }
     };

@@ -3,6 +3,7 @@ import * as types from "../../app/actionTypes";
 import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
 import WindowLocationUtils from "../../../../client-react/src/utils/windowLocationUtils";
+import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 import Logger from "../../../../client-react/src/utils/logger";
 import LogLevel from "../../../../client-react/src/utils/logLevels";
@@ -231,18 +232,23 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
         dispatch(fetchingAccountUsers());
 
         // TODO: Refactor the promise to a Higher order promise to start the timer
-        dispatch(gridStartTime(_.round((window.performance.now() / 1000), 2)));
+        dispatch(gridStartTime(WindowPerformanceUtils.now()));
 
         return promise.then(response => {
-            _.each(response.data, item => {
+            // TODO: Remove after the July Current Stack Release.
+            // We are standardizing JSON returned by DotNet so we
+            // need to support both formats for the time being
+            let data = response.data.data ? response.data.data : response.data;
+
+            _.each(data, item => {
                 item.id = item.uid;
             });
 
             // inform the redux store of all the users
-            dispatch(receiveAccountUsers(response.data));
+            dispatch(receiveAccountUsers(data));
 
             // set the total items for the grid. keep track of the original list of users before filters
-            dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
+            dispatch(StandardGridActions.setTotalItems(gridID, data.length));
 
             // run through the pipeline and update the grid
             dispatch(doUpdateUsers(gridID, StandardGridState.defaultGridState, itemsPerPage));

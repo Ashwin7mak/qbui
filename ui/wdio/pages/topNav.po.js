@@ -41,6 +41,11 @@
                 return browser.element('a.modifyForm');
             }
         },
+        modifyTableSettingsLink: {
+            get: function() {
+                return browser.element('a.modifyTableSettings');
+            }
+        },
         //Report issue option in Feedback button
         reportFeedBackButton: {
             get: function() {
@@ -184,6 +189,21 @@
             this.modifyThisForm.click();
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             return browser.element('.formTable .formElement.field').waitForVisible();
+        }},
+
+        /**
+         * Method to click on table settings and properties link under tables gear icon in global actions
+         */
+        clickOnTableSettingsLink : {value: function() {
+            this.clickOnSettingsBtn();
+            //Need this for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            //Click on table properties and settings link
+            //Click on table properties and settings link
+            this.modifyTableSettingsLink.waitForVisible();
+            this.modifyTableSettingsLink.click();
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+            return browser.element('.dialogCreationPanelInfo').waitForVisible();
         }},
 
         /**

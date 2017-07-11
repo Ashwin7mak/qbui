@@ -72,6 +72,28 @@ Resources:
               - ecr:ListImages
               - ecr:DescribeImages
 
+  DeveloperRepository:
+    Type: "AWS::ECR::Repository"
+    Properties:
+      RepositoryName: !Sub quickbase/${ServiceName}-developer
+      RepositoryPolicyText:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal:
+              AWS:
+                - "arn:aws:iam::723670383381:root"
+            Action:
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
   NewRepository:
     Type: AWS::ECR::Repository
     Properties:

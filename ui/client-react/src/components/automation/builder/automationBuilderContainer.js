@@ -8,6 +8,9 @@ import {
     changeAutomationEmailBody,
     changeAutomationEmailSubject,
     changeAutomationEmailTo,
+    changeAutomationName,
+    createAutomation,
+    generateAutomation,
     loadAutomation,
     saveAutomation
 } from "../../../actions/automationActions";
@@ -15,7 +18,8 @@ import {
     emailAutomationGetBody,
     emailAutomationGetSubject,
     emailAutomationGetTo,
-    getAutomation
+    getAutomation,
+    getNewAutomation
 } from "../../../reducers/automation";
 import EmailFieldValueEditor from "../../fields/emailFieldValueEditor";
 import MultiLineTextFieldValueEditor from "../../fields/multiLineTextFieldValueEditor";
@@ -33,45 +37,33 @@ import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations
 import * as UrlConsts from "../../../constants/urlConstants";
 import _ from "lodash";
 
-
 import "./automationBuilderContainer.scss";
 
 
 export class AutomationBuilderContainer extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
-        if (this.getAppId() && this.getAutomationId()) {
+        if (this.getPath() === `${UrlConsts.BUILDER_ROUTE}/app/:appId/${UrlConsts.AUTOMATION.PATH}/${UrlConsts.AUTOMATION.CREATE}`) {
+            this.props.createAutomation();
+        } else if (this.getAppId() && this.getAutomationId()) {
             this.props.loadAutomation(this.getAppId(), this.getAutomationId());
         }
     }
 
+    getPath() {
+        return _.get(this, 'props.match.path');
+    }
     getAppId() {
-        if (this.props.appId) {
-            return this.props.appId;
-        }
-        if (this.props.app) {
-            return this.props.app.id;
-        }
         return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
     }
 
     getAutomationId() {
-        if (this.props.automationId) {
-            return this.props.automationId;
-        }
-        if (this.props.automation) {
-            return this.props.automation.id;
-        }
         return this.props.match && this.props.match.params ? this.props.match.params.automationId : undefined;
     }
 
-    getAutomationName() {
-        return this.props.automation ? this.props.automation.name : '';
-    }
+    updateName = (value) => {
+        this.props.changeAutomationName(value);
+    };
 
     updateTo = (value) => {
         this.props.changeAutomationEmailTo(value);
@@ -88,6 +80,11 @@ export class AutomationBuilderContainer extends Component {
     isEmailInvalid = (emails) => {
         return EmailValidator.validateArrayOfEmails(EmailFormatter.splitEmails(emails)).isInvalid;
     };
+
+    onGenerate = () => {
+        this.props.generateAutomation(this.getAppId(), this.props.automation);
+
+    }
 
     onSave = () => {
         this.props.saveAutomation(this.getAppId(), this.getAutomationId(), this.props.automation);
@@ -106,7 +103,7 @@ export class AutomationBuilderContainer extends Component {
         return (
             <div>
                 <Button bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.onSave} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
+                <Button bsStyle="primary" onClick={this.props.newAutomation ? this.onGenerate : this.onSave} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     }
@@ -118,6 +115,7 @@ export class AutomationBuilderContainer extends Component {
 
     render() {
         let loaded = !(_.isUndefined(this.props.automation));
+        let name = this.props.automation ? this.props.automation.name : '';
         let to = this.props.automation ? emailAutomationGetTo(this.props.automation) : '';
         let subject = this.props.automation ? emailAutomationGetSubject(this.props.automation) : '';
         let body = this.props.automation ? emailAutomationGetBody(this.props.automation) : '';
@@ -126,8 +124,13 @@ export class AutomationBuilderContainer extends Component {
                 <div className="automationEdit formContainer">
                     <div className="automationEdit--container editForm formSection">
                         <div className="sectionColumn">
+                            <div className="formElementContainer">
+                                <div className="formElement field">
+                                    <FieldLabelElement label={Locale.getMessage("automation.automationEdit.nameHeader")} />
+                                    <FieldValueEditor classes="automationName" onChange={this.updateName} value={name} appUsers={[]}/>
+                                </div>
+                            </div>
                             <h3><I18nMessage message="automation.automationEdit.emailSectionHeader"/></h3>
-
                             <div className="formElementContainer">
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.toHeader")} />
@@ -136,7 +139,8 @@ export class AutomationBuilderContainer extends Component {
                                             <EmailFieldValueEditor
                                                 onChange={this.updateTo}
                                                 value={to}
-                                                invalid={this.isEmailInvalid(to)} />
+                                                invalid={this.isEmailInvalid(to)}
+                                                classes="automationToAddress"/>
                                             <div className="clearIcon">
                                                 <div className="tipChildWrapper" aria-describedby="qbtooltip_321">
                                                     <span className="clearIconButton qbIcon iconUISturdy-clear-mini"></span>
@@ -148,12 +152,12 @@ export class AutomationBuilderContainer extends Component {
 
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.subjectHeader")} />
-                                    <FieldValueEditor onChange={this.updateSubject} value={subject} appUsers={[]} />
+                                    <FieldValueEditor classes="automationSubject" onChange={this.updateSubject} value={subject} appUsers={[]} />
                                 </div>
 
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.bodyHeader")} />
-                                    <MultiLineTextFieldValueEditor value={body} onChange={this.updateBody}/>
+                                    <MultiLineTextFieldValueEditor classes="automationBody" value={body} onChange={this.updateBody}/>
                                 </div>
                             </div>
 
@@ -174,20 +178,29 @@ AutomationBuilderContainer.protoTypes = {
     automation: React.PropTypes.object,
     loadAutomation: React.PropTypes.func,
     saveAutomation: React.PropTypes.func,
+    createAutomation: React.PropTypes.func,
+    generateAutomation: React.PropTypes.func,
+    changeAutomationName: React.PropTypes.func,
     changeAutomationEmailTo: React.PropTypes.func,
     changeAutomationEmailSubject: React.PropTypes.func,
-    changeAutomationEmailBody: React.PropTypes.func
+    changeAutomationEmailBody: React.PropTypes.func,
+    newAutomation: React.PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
     return {
-        automation : getAutomation(state)
+        automation : getAutomation(state),
+        newAutomation : getNewAutomation(state)
+
     };
 };
 
 const mapDispatchToProps = {
     loadAutomation,
     saveAutomation,
+    createAutomation,
+    generateAutomation,
+    changeAutomationName,
     changeAutomationEmailTo,
     changeAutomationEmailSubject,
     changeAutomationEmailBody

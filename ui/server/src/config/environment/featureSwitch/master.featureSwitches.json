@@ -3,7 +3,7 @@
     "name": "Feature A",
     "defaultOn": false,
     "description": "description",
-    "RealmsOveride":[
+    "realmsOveride":[
       {
         "realmId": "1234567",
         "overrideStateOn": true
@@ -13,5 +13,15 @@
         "overrideStateOn": true
       }
     ]
+  },
+  {
+    "name": "featureSwitchUI",
+    "defaultOn": false,
+    "description": "Feature switch UI for CRUD on switches will be enabled once we have a global service in place"
+  },
+  {
+    "name": "featureSwitchUITest",
+    "defaultOn": true,
+    "description": "This flag is used for testing feature check component on the feature switch admin page"
   }
 ]

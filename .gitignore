@@ -33,3 +33,4 @@ ui/ui
 # Docker #
 ######################
 docker-compose.override.yml
+docker-compose.override.local.yml

@@ -1,23 +1,38 @@
 import React from 'react';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import IconChooser from 'REUSE/components/iconChooser/iconChooser';
+import IconChooser, {__RewireAPI__ as IconChooserCutsRewireAPI} from 'REUSE/components/iconChooser/iconChooser';
+import {tableIconNames, tableIconsByTag} from 'REUSE/components/icon/tableIcons';
 
 let component;
 
 const mockParentFunctions = {
     onOpen() {},
     onClose() {},
-    onSelect() {}
+    setIconChoice() {},
+    getIcon() {}
 };
 
 let icons = ['a', 'b', 'c', 'd', 'e'];
+let instance;
 
 let fontName = 'someFont';
+
+const mockLocale = {
+    locale: {getMessage() {}}
+};
 
 describe('IconChooser', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        IconChooserCutsRewireAPI.__Rewire__('I18nMessage', ({message}) => <div className="mockMessage">{message}</div>);
+        IconChooserCutsRewireAPI.__Rewire__('Locale', mockLocale.locale);
+        spyOn(mockLocale.locale, 'getMessage').and.returnValue('mockLocale');
+    });
+
+    afterEach(() => {
+        IconChooserCutsRewireAPI.__ResetDependency__('I18nMessage');
+        IconChooserCutsRewireAPI.__ResetDependency__('Locale');
     });
 
     it('renders closed icon chooser', () => {
@@ -25,12 +40,12 @@ describe('IconChooser', () => {
         let selectedIcon = icons[0];
 
         component = mount(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={false}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={icons}
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                       isOpen={false}
+                                       onOpen={mockParentFunctions.onOpen}
+                                       onClose={mockParentFunctions.onClose}
+                                       font={fontName}
+                                       listOfIconsByNames={icons}
+                                       setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.closed")).toBePresent();
         expect(component.find(`.iconChooser.closed .showAllToggle .qbIcon.${fontName}-${selectedIcon}`)).toBePresent();
@@ -41,12 +56,12 @@ describe('IconChooser', () => {
 
         let selectedIcon = icons[1];
         component = mount(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={false}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={icons}
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                       isOpen={false}
+                                       onOpen={mockParentFunctions.onOpen}
+                                       onClose={mockParentFunctions.onClose}
+                                       font={fontName}
+                                       listOfIconsByNames={icons}
+                                       setIconChoice={mockParentFunctions.setIconChoice} />);
 
         let toggle = component.find(".iconChooser.closed .showAllToggle").at(0);
         toggle.simulate('click');
@@ -56,17 +71,17 @@ describe('IconChooser', () => {
     });
 
     it('renders an expanded chooser, selects an icon', () => {
-        spyOn(mockParentFunctions, 'onSelect');
+        spyOn(mockParentFunctions, 'setIconChoice');
         spyOn(mockParentFunctions, 'onClose');
 
         let selectedIcon = icons[0];
         component = mount(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={true}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={icons}
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                         isOpen={true}
+                                         onOpen={mockParentFunctions.onOpen}
+                                         onClose={mockParentFunctions.onClose}
+                                         font={fontName}
+                                         listOfIconsByNames={icons}
+                                         setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.open")).toBePresent();
 
@@ -77,10 +92,10 @@ describe('IconChooser', () => {
         let selectIconIndex = 2;
         renderedIcons.at(selectIconIndex).simulate('click');
 
-        expect(mockParentFunctions.onSelect).toHaveBeenCalledWith(icons[selectIconIndex]);
+        expect(mockParentFunctions.setIconChoice).toHaveBeenCalledWith(icons[selectIconIndex]);
         expect(mockParentFunctions.onClose).toHaveBeenCalled();
 
-        mockParentFunctions.onSelect.calls.reset();
+        mockParentFunctions.setIconChoice.calls.reset();
         mockParentFunctions.onClose.calls.reset();
     });
 
@@ -104,14 +119,14 @@ describe('IconChooser', () => {
 
         let selectedIcon = icons[0];
         component = mount(<IconChooser selectedIcon={selectedIcon}
-                                        isOpen={true}
-                                        onOpen={mockParentFunctions.onOpen}
-                                        onClose={mockParentFunctions.onClose}
-                                        font={fontName}
-                                        icons={iconsForFiltering}
-                                        iconsByTag={iconsByTag}
-                                        classes="myClass"
-                                        onSelect={mockParentFunctions.onSelect} />);
+                                         isOpen={true}
+                                         onOpen={mockParentFunctions.onOpen}
+                                         onClose={mockParentFunctions.onClose}
+                                         font={fontName}
+                                         listOfIconsByNames={iconsForFiltering}
+                                         listOfIconsByTagNames={iconsByTag}
+                                         classes="myClass"
+                                         setIconChoice={mockParentFunctions.setIconChoice} />);
 
         expect(component.find(".iconChooser.open")).toBePresent();
 
@@ -148,6 +163,79 @@ describe('IconChooser', () => {
 
         vehicleIcons.forEach((vehicle) => {
             expect(component.find(`.allIcons .qbIcon.${fontName}-${vehicle}`)).toBePresent();
+        });
+    });
+
+    describe('getSuggestedIcons', () => {
+        it('will render noSuggestedIcons div if name is an empty string', () => {
+            component = mount(<IconChooser name=""
+                                             listOfIconsByNames={[]}
+                                             listOfIconsByTagNames={[]} />);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            instance.getSuggestedIcons();
+
+            expect(component.find('.noSuggestedIcons .iconList')).toBePresent();
+            expect(instance.getIcon).not.toHaveBeenCalled();
+        });
+
+        it('will render noSuggestedIcons div if a user search does not match an icon in the listOfIconsByNames', () => {
+            component = mount(<IconChooser name="mockName"
+                                           listOfIconsByNames={[]}
+                                           listOfIconsByTagNames={[]} />);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            instance.getSuggestedIcons();
+
+            expect(component.find('.noSuggestedIcons .iconList')).toBePresent();
+            expect(instance.getIcon).not.toHaveBeenCalled();
+        });
+
+        it('will invoke getIcon if a user search matches an icon in the listOfIconsByNames', () => {
+            let dragonIcon = 'dragon';
+            component = mount(<IconChooser name={dragonIcon}
+                                           listOfIconsByNames={[dragonIcon]}
+                                           listOfIconsByTagNames={[]}
+                                           typeForSuggestionsText="mockTypeForSuggestionsText"
+                                           noSuggestedIconsText="mockNoSuggestedIconsText"/>);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            instance.getSuggestedIcons();
+
+            expect(component.find('.noSuggestedIcons .iconList')).not.toBePresent();
+            expect(component.find('.iconList')).toBePresent();
+            expect(instance.getIcon).toHaveBeenCalledWith(dragonIcon);
+        });
+
+        it('will invoke selectIconDoNotToggle when the icon is clicked on', () => {
+            let dragonIcon = 'dragon';
+            component = mount(<IconChooser name={dragonIcon}
+                                           listOfIconsByNames={[dragonIcon]}
+                                           listOfIconsByTagNames={[]}
+                                           typeForSuggestionsText="mockTypeForSuggestionsText"
+                                           noSuggestedIconsText="mockNoSuggestedIconsText"/>);
+
+            instance = component.instance();
+            spyOn(instance, 'getIcon');
+            spyOn(instance, 'selectIconDoNotToggle');
+            instance.getSuggestedIcons();
+
+            let iconList = component.find('.iconList button');
+            iconList.simulate('click');
+
+            expect(component.find('.noSuggestedIcons .iconList')).not.toBePresent();
+            expect(instance.selectIconDoNotToggle).toHaveBeenCalledWith(dragonIcon);
+            expect(instance.getIcon).toHaveBeenCalledWith(dragonIcon);
+        });
+
+        it('will have default props for listOfIconsByTagNames and listOfIconsByNames', () => {
+            component = mount(<IconChooser />);
+
+            expect(component).toHaveProp('listOfIconsByTagNames', tableIconsByTag);
+            expect(component).toHaveProp('listOfIconsByNames', tableIconNames);
         });
     });
 });

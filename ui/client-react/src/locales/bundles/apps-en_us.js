@@ -283,7 +283,7 @@ export default {
             },
             automationEdit: {
                 stageHeading: "Modify Automation: {automationName}",
-                nameHeader: "Name",
+                nameHeader: "Automation Name",
                 emailSectionHeader: "Send an Email",
                 toHeader: "Notify Whom",
                 subjectHeader: "Subject",
@@ -654,6 +654,10 @@ export default {
                 removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
+                existingFieldsMenuThisTableTitle: 'This table',
+                stage: {
+                    title: 'Form for {tableName}'
+                },
                 tooltips: {
                     // Tooltip for every single field type because of requirements for a/an and pronouns different for each language
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Create a text field and add it to the form",
@@ -748,7 +752,8 @@ export default {
             appNameHeading: "App name",
             appNamePlaceHolder: "For example, \"Order Tracker\"",
             descriptionHeading: "App description",
-            appCreationFailed: "Unable to create app"
+            appCreationFailed: "Unable to create app",
+            searchPlaceholder: "Search app icons..."
         },
         emptyAppState: {
             message: "You don't have any apps yet.",
@@ -766,10 +771,10 @@ export default {
             recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",
-            suggestedIconsHeading: "Suggested Icons",
+            searchPlaceholder: "Search table icons...",
 
-            tableNamePlaceholder: "For example, Customers",
-            recordNamePlaceholder: "For example, customer",
+            tableNamePlaceholder: "For example, Customers. Use up to {numberOfChars} characters",
+            recordNamePlaceholder: "For example, customer. Use up to {numberOfChars} characters",
             descriptionPlaceholder: "Text to show when hovering over the table name in the left navigation",
 
             finishedButtonLabel: "Create table",
@@ -785,9 +790,6 @@ export default {
             homePageStillBuilding: "Still building?  ",
             homePageCreateAnother: "Create another table",
 
-            noSuggestedIcons: "There are no suggested icons for this table name",
-            typeForSuggestions: "Please type a table name to get suggestions",
-
             tableReadyTitle: "Your table's ready!",
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
             tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
@@ -799,8 +801,14 @@ export default {
             recordTitleFieldDefault: "Default to {recordName} + ID",
             recordName: "Record Name"
         },
+        emptyTableState: {
+            message: "There aren't any tables in this app, yet",
+            createNewTable: "Create a table"
+        },
         iconChooser: {
-            searchPlaceholder: "Search table icons..."
+            suggestedIconsHeading: "Suggested icons",
+            noSuggestedIcons: "There are no suggested icons for ",
+            typeForSuggestions: "Type a name to view suggested icons"
         },
         settings: {
             header: "Settings",

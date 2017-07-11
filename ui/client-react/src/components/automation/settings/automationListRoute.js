@@ -24,7 +24,9 @@ export class AutomationListRoute extends Component {
     }
 
     getPageActions() {
-        const actions = [];
+        const actions = [
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.createAutomation}
+        ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={5}/>);
     }
 
@@ -60,6 +62,12 @@ export class AutomationListRoute extends Component {
             return rows;
         }
         return [];
+    }
+
+    createAutomation = () => {
+        let appId = this.getAppId();
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/${UrlConsts.AUTOMATION.CREATE}`;
+        this.props.history.push(link);
     }
 
     editAutomation = (automationId) => {
