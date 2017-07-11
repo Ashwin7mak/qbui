@@ -36,6 +36,38 @@ describe('ColorValidator', () => {
             });
         });
     });
+
+    describe('formatHexColor', () => {
+        let testCases = [
+            {
+                description: 'passed through a valid hex color',
+                color: '#74489d',
+                expectedResult: '#74489d'
+            },
+            {
+                description: 'removes extra # signs',
+                color: '##74489d',
+                expectedResult: '#74489d'
+            },
+            {
+                description: 'adds a missing # sign',
+                color: '74489d',
+                expectedResult: '#74489d'
+            },
+            {
+                description: 'returns "#" for a non-string value',
+                color: null,
+                expectedResult: '#'
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                expect(ColorValidator.formatHexColor(testCase.color)).toEqual(testCase.expectedResult);
+            });
+        });
+    });
+
 });
 
 
