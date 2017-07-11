@@ -68,4 +68,9 @@ describe('Performance Timing Reducer', () => {
 
         expect(getGridLoadTime({performanceTiming: {pageLoadTime: mockPageLoadTime, gridStartTime: mockGridStartTime}})).toEqual(_.subtract(mockPageLoadTime, mockGridStartTime));
     });
+
+    it('gets the grid refresh time from state', () => {
+
+        expect(getGridRefreshTime({performanceTiming: {gridRefreshTime: mockGridRefreshTime}})).toEqual(mockGridRefreshTime);
+    });
 });

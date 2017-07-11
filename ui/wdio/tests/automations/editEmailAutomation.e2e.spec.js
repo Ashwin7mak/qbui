@@ -171,7 +171,6 @@
         let realmName;
         let realmId;
         let app;
-        let appAutomations;
 
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
@@ -190,6 +189,7 @@
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
+
         it('Automation Create can be accessed through direct url.', function() {
 
             e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
@@ -217,30 +217,7 @@
             expect(emailAutomationEditView.body.text).toBe('');
         });
 
-        it('Automation can be saved through Create View.', function() {
-            if (browser.desiredCapabilities.browserName === 'safari') {
-                return;
-            }
-
-            const newName = 'name';
-            const newToAddress = 'toAddress';
-            const newSubject = 'subject';
-            const newBody = 'body_';
-
-            //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
-
-            emailAutomationEditView.name.text = newName;
-            emailAutomationEditView.to.text = newToAddress;
-            emailAutomationEditView.subject.text = newSubject;
-            emailAutomationEditView.body.text = newBody;
-
-            emailAutomationEditView.saveButton.click();
-            notificationContainer.waitForSuccessNotification();
-
-        });
-
-        it('Automation cant be saved through Create View without a name.', function() {
+        it('Automation can not be saved through Create View without a name.', function() {
             if (browser.desiredCapabilities.browserName === 'safari') {
                 return;
             }
@@ -260,5 +237,81 @@
             notificationContainer.waitForErrorNotification();
 
         });
+
+        it('Automation can be created through Edit View.', function() {
+            if (browser.desiredCapabilities.browserName === 'safari') {
+                return;
+            }
+
+            const newName = 'name_' + Math.random().toString(36).substring(7);
+            const newToAddress = 'toAddress_' + Math.random().toString(36).substring(7);
+            const newSubject = 'subject_' + Math.random().toString(36).substring(7);
+            const newBody = 'body_' + Math.random().toString(36).substring(7);
+
+            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationCreateViewUrl(realmName, app.id));
+
+            emailAutomationEditView.name.text = newName;
+            emailAutomationEditView.to.text = newToAddress;
+            emailAutomationEditView.subject.text = newSubject;
+            emailAutomationEditView.body.text = newBody;
+
+            emailAutomationEditView.saveButton.click();
+            notificationContainer.waitForSuccessNotification();
+
+            //get the list of automations and retrieve the new one
+            let newAutomation;
+            e2eBase.automationsService.getAutomations(app.id).then(automations => {
+                newAutomation = getAutomationByName(newName, automations);
+            });
+            e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
+
+            //validate automation properties
+            expect(newAutomation).toBeTruthy();
+            expect(newAutomation.name).toBe(newName);
+            expect(newAutomation.type).toBe('EMAIL');
+            expect(newAutomation.active).toBe(true);
+
+            //verify that all inputs are as indicated during creation
+            let toAddressParameter = {
+                name: 'toAddress',
+                type: 'TEXT',
+                defaultValue: newToAddress
+            };
+            let fromAddressParameter = {
+                name: 'fromAddress',
+                type: 'TEXT',
+                defaultValue: 'notify@quickbaserocks.com'
+            };
+            let subjectParameter = {
+                name: 'subject',
+                type: 'TEXT',
+                defaultValue: newSubject
+            };
+            let bodyParameter = {
+                name: 'body',
+                type: 'TEXT',
+                defaultValue: newBody
+            };
+            const expectedInputs = [toAddressParameter, fromAddressParameter, subjectParameter, bodyParameter];
+            expect(expectedInputs.every(parameter => isInListOfInputs(parameter, newAutomation.inputs))).toBe(true);
+        });
+
+        function getAutomationByName(automationName, automations) {
+            for (let automation of automations) {
+                if (automation.name === automationName) {
+                    return automation;
+                }
+            }
+            return undefined;
+        }
+
+        function isInListOfInputs(input, inputs) {
+            for (let inputFromList of inputs) {
+                if (input.name === inputFromList.name) {
+                    return input.type === inputFromList.type && input.defaultValue === inputFromList.defaultValue;
+                }
+            }
+            return false;
+        }
     });
 }());
