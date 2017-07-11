@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import NavigationUtils from '../utils/navigationUtils';
 
 import * as types from '../actions/types';
 import {CONTEXT} from '../actions/context';
@@ -11,6 +12,7 @@ import NotificationManager from '../../../reuse/client/src/scripts/notificationM
 import Locale from '../locales/locales';
 
 let logger = new Logger();
+import * as UrlConsts from "../constants/urlConstants";
 
 /**
  * Construct automation store redux store payload
@@ -153,6 +155,9 @@ export const generateAutomation = (appId, automation) => {
                 automationService.createAutomation(appId, automation)
                     .then((response) => {
                         logger.debug('AutomationService saveAutomation success');
+                        let automationId = _.get(response, "data.id", "undefined");
+                        let automationViewUrl = `${UrlConsts.SETTINGS_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/${automationId}/${UrlConsts.AUTOMATION.VIEW}`;
+                        NavigationUtils.goBackToLocationOrTable(appId, UrlConsts.AUTOMATION.PATH, automationViewUrl);
                         NotificationManager.success(Locale.getMessage('automation.saveAutomation.success'), Locale.getMessage('success'));
                         dispatch(event(null, types.SAVE_AUTOMATION_SUCCESS, response.data));
                         resolve();
