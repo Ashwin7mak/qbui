@@ -165,6 +165,8 @@ class modalDialogWindow {
             //Click on filtered option
             option[0].waitForVisible();
             option[0].click();
+            //wait until loading screen disappear
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until select menu outer
             return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
         } else {

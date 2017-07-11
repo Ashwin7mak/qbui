@@ -24,7 +24,7 @@
         shortWaitTimeMs : 5000,
         mediumWaitTimeMs : 15000,
         longWaitTimeMs : 30000,
-        extraLongWaitTimeMs : 150000,
+        extraLongWaitTimeMs : 300000,
 
         userTableFieldNames : ['Name', 'Role', 'Email', 'User name'],
 

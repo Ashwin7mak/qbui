@@ -62,6 +62,29 @@
             formBuilderPO.verifyFormBuilderStageTitleFieldDropDown(expectedDropDownFields);
         });
 
+        it('Edit the titleField dropdown value and verify it got saved', function() {
+            let randomField = _.sample(e2eConsts.reportFieldNames);
+
+            //Select settings -> modify this form
+            topNavPO.clickOnModifyFormLink();
+
+            //Click on titleField dropdown
+            formBuilderPO.formStageTitleFieldDropDown.click();
+
+            //select the random field
+            formsPO.selectFromList(randomField);
+
+            //Click on Save
+            formBuilderPO.save();
+
+            //Verify the field got saved in table
+            //go to the table settings page for the table
+            topNavPO.clickOnTableSettingsLink();
+            //verify the selected value
+            let pickerfield = browser.element('.recordTitleFieldSelect');
+            expect(pickerfield.element('.Select-value-label').getText()).toEqual(randomField);
+        });
+
         it('Verify titleField drop down for table created via UI', function() {
             let tableName = rawValueGenerator.generateStringWithFixLength(5);
             let tableFields = [
@@ -82,41 +105,13 @@
 
             //Click on finished button and make sure it landed in edit Form container page
             modalDialog.clickOnModalDialogBtn(modalDialog.CREATE_TABLE_BTN);
-            tableCreatePO.waitUntilNotificationContainerGoesAway();
+            notificationContainer.waitUntilNotificationContainerGoesAway();
 
-            //Verify the create table dialogue
-            tableCreatePO.verifyNewTableCreateDialogue();
             //Click OK button on create table dialogue
             modalDialog.clickOnModalDialogBtn(modalDialog.TABLE_READY_DLG_OK_BTN);
 
             //Verify the titleField dropDown contents on the form stage
             formBuilderPO.verifyFormBuilderStageTitleFieldDropDown(expectedDropDownFields);
-        });
-
-        it('Edit the titleField dropdown value and verify it got saved', function() {
-            let randomField = _.sample(e2eConsts.reportFieldNames);
-
-            //Select settings -> modify this form
-            topNavPO.clickOnModifyFormLink();
-
-            //Click on titleField dropdown
-            formBuilderPO.formStageTitleFieldDropDown.click();
-
-            //select the random field
-            formsPO.selectFromList(randomField);
-
-            //Click on Save
-            formBuilderPO.save();
-
-            //Verify the field got saved in table
-            //Select table
-            tableCreatePO.selectTable('Table 1');
-
-            //go to the table settings page for the table
-            topNavPO.clickOnTableSettingsLink();
-            //verify the selected value
-            let pickerfield = browser.element('.recordTitleFieldSelect');
-            expect(pickerfield.element('.Select-value-label').getText()).toEqual(randomField);
         });
 
     });

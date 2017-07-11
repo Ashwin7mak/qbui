@@ -47,7 +47,7 @@
 
         it('Automation view can be accessed with direct url.', function() {
             //navigate to single automation view
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAutomationViewUrl(realmName, app.id, automation.id));
+            browser.url(e2eBase.automationsService.getAutomationViewUrl(realmName, app.id, automation.id));
 
             //validate automation name
             expect(automationView.automationName.text).toBe(automation.name);
@@ -62,7 +62,7 @@
             }
 
             //navigate to Application Automations Settings page directly with URL
-            e2ePageBase.navigateTo(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
+            browser.url(e2eBase.automationsService.getAppAutomationsSettingsUrl(realmName, app.id));
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
 
             //click on the automation row to open Automation View
