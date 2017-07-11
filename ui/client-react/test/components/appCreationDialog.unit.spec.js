@@ -60,7 +60,6 @@ describe('AppCreationDialog', () => {
 
         // Remove modal from the dom after every test to reset
         let modalInDom = document.querySelector(qbModalClass);
-        console.log('modalInDom: ', modalInDom);
 
         if (modalInDom) {
             modalInDom.parentNode.removeChild(modalInDom);
