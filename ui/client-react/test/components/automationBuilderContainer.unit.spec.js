@@ -103,9 +103,6 @@ describe('AutomationBuilderContainer', () => {
             component = mount(<AutomationBuilderContainer {...props}/>);
         });
 
-        afterEach(() => {
-        });
-
         it('test render of component with no automation', () => {
             expect(component).toBeDefined();
         });
@@ -121,10 +118,9 @@ describe('AutomationBuilderContainer', () => {
         });
 
         it('test screen is filled in', () => {
-            expect(component.find('.test-id-name-field').find('.textField')).toHaveValue('');
-            expect(component.find('.test-id-to-field')).toHaveValue('');
-            let subject = component.find('.test-id-subject-field');
-            expect(subject.find('.textField')).toHaveValue('');
+            expect(component.find('.automationName').find('.textField')).toHaveValue('');
+            expect(component.find('.automationToAddress')).toHaveValue('');
+            expect(component.find('.automationSubject').find('.textField')).toHaveValue('');
             expect(component.find(MultiLineTextFieldValueEditor)).toHaveValue(null);
         });
     });
@@ -135,14 +131,10 @@ describe('AutomationBuilderContainer', () => {
             component = mount(<AutomationBuilderContainer {...propsWithAuto}/>);
         });
 
-        afterEach(() => {
-        });
-
         it('test screen is filled in', () => {
-            expect(component.find('.test-id-name-field').find('.textField')).toHaveValue("Auto_1");
-            expect(component.find('.test-id-to-field')).toHaveValue("test@test.com");
-            let subject = component.find('.test-id-subject-field');
-            expect(subject.find('.textField')).toHaveValue("Test subject");
+            expect(component.find('.automationName').find('.textField')).toHaveValue("Auto_1");
+            expect(component.find('.automationToAddress')).toHaveValue("test@test.com");
+            expect(component.find('.automationSubject').find('.textField')).toHaveValue("Test subject");
             expect(component.find(MultiLineTextFieldValueEditor)).toHaveValue("Test body");
         });
     });
@@ -155,9 +147,6 @@ describe('AutomationBuilderContainer', () => {
             spyOn(propsWithAuto, 'changeAutomationEmailBody').and.callThrough();
 
             component = mount(<AutomationBuilderContainer {...propsWithAuto}/>);
-        });
-
-        afterEach(() => {
         });
 
         it('test edit to', () => {
@@ -208,15 +197,11 @@ describe('AutomationBuilderContainer', () => {
             component = mount(<AutomationBuilderContainer {...propsWithCreate}/>);
         });
 
-        afterEach(() => {
-        });
-
         it('test save button click', () => {
             let saveButton = component.find('.mainTrowserFooterButton');
             saveButton.simulate('click');
 
             expect(propsWithCreate.generateAutomation).toHaveBeenCalled();
-            expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
         });
 
         it('test cancel button click', () => {

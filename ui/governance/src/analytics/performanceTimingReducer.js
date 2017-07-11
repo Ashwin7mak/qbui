@@ -4,7 +4,8 @@ import { createSelector } from 'reselect';
 
 let initialState = {
     pageLoadTime: 0,
-    gridStartTime: 0
+    gridStartTime: 0,
+    gridRefreshTime: 0
 };
 
 const performanceTimingReducer = (state = initialState, action) => {
@@ -20,6 +21,13 @@ const performanceTimingReducer = (state = initialState, action) => {
         return {
             ...state,
             gridStartTime: action.payload
+        };
+    }
+
+    case types.GET_GRID_REFRESH_TIME: {
+        return {
+            ...state,
+            gridRefreshTime: action.payload
         };
     }
 
@@ -41,6 +49,13 @@ const gridStartTimeSelector = state => state.performanceTiming.gridStartTime;
  * @returns {float} the time the page took to load
  */
 export const getPageLoadTime = state => state.performanceTiming.pageLoadTime;
+
+/**
+ * Selector for the gridRefreshTime (time to render the grid with data)
+ * @param state
+ * @returns {float} the time the grid took to render
+ */
+export const getGridRefreshTime = state => state.performanceTiming.gridRefreshTime;
 
 /**
  * Selector for the gridLoadTime

@@ -169,9 +169,6 @@ describe('Test AutomationActions function success workflow', () => {
                 done();
             },
             (error) => {
-                if (error) {
-                    logger.parseAndLogError(LogLevel.INFO, error, 'automationActions');
-                }
                 expect(false).toBe(true);
                 done();
             });
