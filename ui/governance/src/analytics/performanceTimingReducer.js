@@ -3,7 +3,8 @@ import _ from "lodash";
 
 let initialState = {
     pageLoadTime: 0,
-    gridStartTime: 0
+    gridStartTime: 0,
+    gridRefreshTime: 0
 };
 
 const performanceTimingReducer = (state = initialState, action) => {
@@ -22,6 +23,13 @@ const performanceTimingReducer = (state = initialState, action) => {
         };
     }
 
+    case types.GET_GRID_REFRESH_TIME: {
+        return {
+            ...state,
+            gridRefreshTime: action.payload
+        };
+    }
+
     default:
         return state;
     }
@@ -29,7 +37,9 @@ const performanceTimingReducer = (state = initialState, action) => {
 
 export const getPageLoadTime = state => state.performanceTiming.pageLoadTime;
 
-export const getGridLoadTime = state => _.round(_.subtract(state.performanceTiming.pageLoadTime, state.performanceTiming.gridStartTime), 2);
+export const getGridRefreshTime = state => state.performanceTiming.gridRefreshTime;
+
+export const getGridLoadTime = state => _.subtract(state.performanceTiming.pageLoadTime, state.performanceTiming.gridStartTime);
 
 export default performanceTimingReducer;
 
