@@ -115,18 +115,19 @@
 // one-offs
 
             it('reload page with changes, verify presence of browser alert', function() {
-                // disabled because, for some reason, the alert doesn't appear when run against any browser in SauceLabs.
-
-                // add a new field
-                formBuilderPO.firstFieldToken.click();
-                // wait for selected field visibility (nothing was selected previously)
-                formBuilderPO.selectedField.waitForVisible();
-                // wait a bit because some browsers (e.g chrome) won't generate an alert otherwise...
-                browser.pause(e2eConsts.shortWaitTimeMs);
-                // refresh page AFTER change
-                browser.refresh();
-                // implicit verification: this line will fail if an alert is NOT present
-                browser.alertDismiss();
+                if (browserName !== 'MicrosoftEdge') {
+                // no alert appears on EDGE during automation, not sure why since it does appear manually
+                    // add a new field
+                    formBuilderPO.firstFieldToken.click();
+                    // wait for selected field visibility (nothing was selected previously)
+                    formBuilderPO.selectedField.waitForVisible();
+                    // wait a bit because some browsers (e.g chrome) won't generate an alert otherwise...
+                    browser.pause(e2eConsts.shortWaitTimeMs);
+                    // refresh page AFTER change
+                    browser.refresh();
+                    // implicit verification: this line will fail if an alert is NOT present
+                    browser.alertDismiss();
+                }
             });
 
             it('verify presence of all expected tokens & groups in new fields panel', function() {
@@ -147,22 +148,25 @@
             });
 
             it('save new multichoice option & verify persistence', function() {
-                formBuilderPO.dragNewFieldOntoForm(
-                    formBuilderPO.getFieldToken('Choice list'),
-                    formBuilderPO.firstField);
-                // move cursor to beginning of text in editor & add new option
-                // I tried clicking in the middle to set focus & using various modded keys (e.g. command-up)
-                // to move the cursor but couldn't get those keys to work so clicking in the corner instead
-                let testOption = "test option";
-                formBuilderPO.multiChoiceEditor.moveToObject(0, 0);
-                browser.buttonDown();
-                browser.buttonUp();
-                browser.keys([testOption, 'Enter']);
-                // save, reopen, select first field
-                formBuilderPO.save().open().selectFieldByIndex(1);
-                formBuilderPO.multiChoiceEditor.waitForExist();
-                let options = formBuilderPO.multiChoiceEditor.getText();
-                expect(options.startsWith(testOption)).toBe(true, '\n' + options + '\ndidn\'t start with ' + testOption);
+                if (browserName !== 'MicrosoftEdge') {
+                    // MC-3882: Typing 'quickly' into CHOICES textarea on EDGE moves cursor to bottom of editor
+                    formBuilderPO.dragNewFieldOntoForm(
+                        formBuilderPO.getFieldToken('Choice list'),
+                        formBuilderPO.firstField);
+                    // move cursor to beginning of text in editor & add new option
+                    // I tried clicking in the middle to set focus & using various modded keys (e.g. command-up)
+                    // to move the cursor but couldn't get those keys to work so clicking in the corner instead
+                    let testOption = "test option";
+                    formBuilderPO.multiChoiceEditor.moveToObject(0, 0);
+                    browser.buttonDown();
+                    browser.buttonUp();
+                    browser.keys([testOption, 'Enter']);
+                    // save, reopen, select first field
+                    formBuilderPO.save().open().selectFieldByIndex(1);
+                    formBuilderPO.multiChoiceEditor.waitForExist();
+                    let options = formBuilderPO.multiChoiceEditor.getText();
+                    expect(options.startsWith(testOption)).toBe(true, '\n' + options + '\ndidn\'t start with ' + testOption);
+                }
             });
 
             it('search for fields in the new field picker', function() {
