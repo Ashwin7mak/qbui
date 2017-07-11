@@ -5,8 +5,7 @@ let formsPO = requirePO('formsPage');
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
 
-// let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
-let tab_Field = ".rc-tabs-tabpane-active .firstNewFieldToken";
+let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
 class formBuilderPage {
 

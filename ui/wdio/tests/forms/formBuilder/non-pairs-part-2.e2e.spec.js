@@ -208,7 +208,7 @@
                 expect(formBuilderPO.getFieldLabels()).toEqual(revisedLabels);
             });
 
-            it('cancel & stay via dlg, verify stay & no save', function() {
+            it('cancel & don\'t save via dlg, verify stay & no save', function() {
              // add the first new field item to the form
                 let originalLabels = formBuilderPO.getFieldLabels();
              // add a new field to the form
@@ -229,6 +229,25 @@
                 formBuilderPO.open();
              // verify that the new field was saved
                 expect(formBuilderPO.getFieldLabels()).toEqual(originalLabels);
+            });
+
+            it('cancel & stay via dlg, verify stay', function() {
+                // add the first new field item to the form
+                formBuilderPO.getFieldLabels();
+                // add a new field to the form
+                formBuilderPO.firstFieldToken.click();
+                // click on CANCEL in the modified form
+                formBuilderPO.cancelBtn.click();
+                // click on STAY in the SAVE CHANGES dlg
+                modalDialog.clickOnModalDialogBtn("Stay and keep working");
+                // wait for modal dlg to disappear
+                modalDialog.modalDialog.waitForExist(null, true);
+                // click on CANCEL in the modified form
+                formBuilderPO.cancelBtn.click();
+                // click on STAY AND KEEP WORKING in the SAVE CHANGES dlg
+                modalDialog.clickOnModalDialogBtn("Stay and keep working");
+                // verify that the form builder is still active
+                formBuilderPO.formBuilderContainer.waitForVisible();
             });
 
             it('cancel w/o changes, verify view form & lack of confirmation/browser alert', function() {
