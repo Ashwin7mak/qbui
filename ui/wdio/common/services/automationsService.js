@@ -29,6 +29,11 @@ module.exports = class AutomationsService {
         return automationEditViewUrl;
     }
 
+    getAutomationCreateViewUrl(realmName, appId) {
+        let automationCreateViewUrl = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/builder/app/' + appId + '/automation/create');
+        return automationCreateViewUrl;
+    }
+
     /**
      * Gets the automations for application
      * @param appId application id

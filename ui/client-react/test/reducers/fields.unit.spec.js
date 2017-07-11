@@ -198,4 +198,26 @@ describe('Test fields reducer', () => {
         expect(currentFieldList.tblId).toEqual(tblId);
         expect(currentFieldList.fields).toEqual(expectedFieldsWithRemoval);
     });
+
+    it('sets isRequiredPropForRecordTitleField and required property to passed in value', () => {
+        const newState = [{
+            appId: appId,
+            tblId: tblId,
+            fields: [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}]
+        }];
+        const actionPayload = {
+            type: types.SET_IS_REQD_FOR_RECORD_TITLE,
+            appId: appId,
+            tblId: tblId,
+            fieldId: 10,
+            required: true
+        };
+        const state = reducer(newState, actionPayload, {type: types.SET_IS_REQD_FOR_RECORD_TITLE});
+        const expectedFields = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10, isRequiredForRecordTitleField: true, required: true}];
+        const currentFieldList = tableFieldsObj(state, appId, tblId);
+
+        expect(currentFieldList.appId).toEqual(appId);
+        expect(currentFieldList.tblId).toEqual(tblId);
+        expect(currentFieldList.fields).toEqual(expectedFields);
+    });
 });

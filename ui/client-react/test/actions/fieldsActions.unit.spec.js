@@ -470,4 +470,12 @@ describe('Field Actions failure workflow', () => {
                 type: types.SET_IS_PENDING_EDIT_TO_FALSE});
         });
     });
+
+    describe('setRequiredPropForRecordTitleField', () => {
+        it('creates an action that sets isRequiredPropForRecordTitleField to passed in value', () => {
+            expect(fieldActions.setRequiredPropForRecordTitleField(appId, tblId, field.id, true)).toEqual({
+                appId: appId, tblId: tblId, fieldId: field.id, required: true,
+                type: types.SET_IS_REQD_FOR_RECORD_TITLE});
+        });
+    });
 });

@@ -104,7 +104,7 @@ class Locale {
      * message: should be in ICU message syntax:
      *      i.e: "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n}"
      *
-     * Usage: Locale.getPluralizeMessage('test.testMsg', {value: 2, nameForRecord: 'Customer'});
+     * Usage: Locale.getPluralizedMessage('test.testMsg', {value: 2, nameForRecord: 'Customer'});
      *
      * @param msgPath
      * @param params

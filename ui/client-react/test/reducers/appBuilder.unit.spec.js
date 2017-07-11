@@ -8,14 +8,19 @@ let mockState = {
     appBuilder: {
         isDialogOpen: true,
         name: 'Mock App Name',
-        description: 'Mock App Name'
+        description: 'Mock App Name',
+        icon: 'Mock Icon'
     }
 };
 
 describe('Test appBuilder reducer - initial state', () => {
     const initialState = {
         isSavingApp: false,
-        isDialogOpen: false
+        isDialogOpen: false,
+        isAppIconChooserOpen: false,
+        icon: 'Customer',
+        name: '',
+        description: ''
     };
     it('return default state', () => {
         const state = reducer(undefined, {});
@@ -61,6 +66,22 @@ describe('App Creation Dialog', () => {
 
         expect(state.name).toBe('mockAppName');
     });
+
+    describe('OPEN_ICON_CHOOSER_FOR_APP', () => {
+        it('will set isAppIconChooserOpen to true', () => {
+            const state = reducer(storeState, {type: types.OPEN_ICON_CHOOSER_FOR_APP});
+
+            expect(state.isAppIconChooserOpen).toBe(true);
+        });
+    });
+
+    describe('CLOSE_ICON_CHOOSER_FOR_APP', () => {
+        it('will set isAppIconChooserOpen to true', () => {
+            const state = reducer(storeState, {type: types.CLOSE_ICON_CHOOSER_FOR_APP});
+
+            expect(state.isAppIconChooserOpen).toBe(false);
+        });
+    });
 });
 
 
@@ -87,35 +108,27 @@ describe('App Creation Selector', () => {
         });
     });
 
-    describe('getAppProperty', () => {
+    describe('getAppProperties', () => {
         it('will return app name if there is an app name', () => {
-            let result = AppBuilderSelectors.getAppProperty(mockState, 'name');
+            let {name, icon, description} = AppBuilderSelectors.getAppProperties(mockState);
 
-            expect(result).toEqual(mockState.appBuilder.name);
+            expect(name).toEqual(mockState.appBuilder.name);
+            expect(icon).toEqual(mockState.appBuilder.icon);
+            expect(description).toEqual(mockState.appBuilder.description);
         });
 
-        it('will return an empty string if there is no app name', () => {
+        it('will return app name if there is an app name', () => {
             let cloneMockState = _.cloneDeep(mockState);
-            cloneMockState.appBuilder.name = '';
 
-            let result = AppBuilderSelectors.getAppProperty(cloneMockState, 'name');
+            delete cloneMockState.appBuilder.name;
+            delete cloneMockState.appBuilder.icon;
+            delete cloneMockState.appBuilder.description;
 
-            expect(result).toEqual('');
-        });
+            let {name, icon, description} = AppBuilderSelectors.getAppProperties(cloneMockState);
 
-        it('will return app description if there is an app description', () => {
-            let result = AppBuilderSelectors.getAppProperty(mockState, 'description');
-
-            expect(result).toEqual(mockState.appBuilder.description);
-        });
-
-        it('will return an empty string if there is no app description', () => {
-            let cloneMockState = _.cloneDeep(mockState);
-            cloneMockState.appBuilder.description = '';
-
-            let result = AppBuilderSelectors.getAppProperty(cloneMockState, 'description');
-
-            expect(result).toEqual('');
+            expect(name).toEqual(undefined);
+            expect(icon).toEqual(undefined);
+            expect(description).toEqual(undefined);
         });
     });
 
@@ -123,7 +136,7 @@ describe('App Creation Selector', () => {
         it('will return a new app object if there is an app object', () => {
             let result = AppBuilderSelectors.getNewAppInfo(mockState);
 
-            expect(result).toEqual({name: 'Mock App Name'});
+            expect(result).toEqual({name: 'Mock App Name', icon: 'Mock Icon', description: 'Mock App Name'});
         });
 
         it('will return null if there is no new app object', () => {

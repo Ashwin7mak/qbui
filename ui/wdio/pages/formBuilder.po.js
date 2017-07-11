@@ -1,9 +1,10 @@
 'use strict';
 let topNavPO = requirePO('topNav');
-let reportContentPO = requirePO('reportContent');
+let tableCreatePO = requirePO('tableCreate');
 let formsPO = requirePO('formsPage');
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
+let notificationContainer = requirePO('/common/notificationContainer');
 
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
@@ -55,6 +56,11 @@ class formBuilderPage {
         return browser.element('.fieldTokenDragging');
     }
 
+    get fieldDragging() {
+        // the highlighted field when hovering over a drop target
+        return this.formElementContainer.element('.dragging');
+    }
+
     get fieldTokenCollapsed() {
         // the token which appears when dragging a field to another position
         return browser.element('.fieldTokenCollapsed');
@@ -83,6 +89,11 @@ class formBuilderPage {
     get formBuilderContainer() {
         // the whole form builder page (all 3 panels)
         return browser.element('.formBuilderContainer');
+    }
+
+    get formElementContainer() {
+        // the whole form builder page (all 3 panels)
+        return this.formBuilderContainer.element('.formElementContainer');
     }
 
     get modalDismiss() {
@@ -195,6 +206,16 @@ class formBuilderPage {
         return this.uniqueCheckbox.element('input:not(:checked)');
     }
 
+    get toggleStageCaretDown() {
+        //Stage toggle to expand
+        return browser.element('.toggleStage .iconUISturdy-caret-down');
+    }
+
+    get formStageTitleFieldDropDown() {
+        //Stage toggle to expand
+        return browser.element('.formStage .titleField');
+    }
+
     // methods
 
     addNewField(label) {
@@ -211,11 +232,10 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.waitForVisible();
         this.cancelBtn.click();
-        while (!formsPO.viewFormContainerEl.isExisting()) {
+        while (this.formBuilderContainer.isExisting()) {
             this.dirtyForm_Dismiss();
         }
-        //Need this to wait for leftNav and record to load back again
-        browser.pause(e2eConsts.mediumWaitTimeMs);
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -233,8 +253,7 @@ class formBuilderPage {
         } catch (err) {
             browser.pause(0);
         }
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         formsPO.viewFormContainerEl.waitForExist();
         browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
@@ -247,13 +266,13 @@ class formBuilderPage {
         // wait a bit for the tile to be ready to be dragged
         this.tooltip.waitForVisible();
         browser.buttonDown();
-        // move to target & jiggle
-        target.moveToObject();
-        target.moveToObject(5, 5);
-        target.element('.dropHovering').waitForExist();
+        // drag to target, jiggle & wait
+        target.element('.fieldLabel').moveToObject();
+        target.element('.fieldLabel').moveToObject(5, 5);
+        target.element('.selectedFormElement').waitForExist();
         // release button
         browser.buttonUp();
-        target.element('.notDropHovering').waitForExist();
+        this.fieldDragging.waitForExist(null, true);
         return this.getFieldLabels();
     }
 
@@ -271,7 +290,7 @@ class formBuilderPage {
     }
 
     getFieldLabels() {
-         // Gets the list of field labels from the form builder
+        // Gets the list of field labels from the form builder
         this.firstField.waitForVisible();
         let fields = browser.elements('.field');
         try {
@@ -372,8 +391,8 @@ class formBuilderPage {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        //wait until save success container goes away
+        notificationContainer.waitUntilNotificationContainerGoesAway();
         return this;
     }
 
@@ -533,8 +552,7 @@ class formBuilderPage {
             browser.keys(['Command', 's', 'Command']);
         }
         formsPO.viewFormContainerEl.waitForExist();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -545,5 +563,25 @@ class formBuilderPage {
         this.selectedField.waitForExist();
         return this.getSelectedFieldLabel();
     }
+
+    verifyFormBuilderStageTitleFieldDropDown(expectedDropDownList) {
+        this.firstField.waitForVisible();
+        //expand the stage
+        if (this.toggleStageCaretDown.isVisible()) {
+            this.toggleStageCaretDown.click();
+            //wait for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
+        }
+
+        //Click on titleField
+        this.formStageTitleFieldDropDown.click();
+        //get list of fields from drop down options
+        let dropDownListLabels = modalDialog.allDropDownListOptions;
+        //Verify the dropDown list
+        expect(expectedDropDownList).toEqual(dropDownListLabels);
+        //collapse the dropdown
+        return browser.element('.Select-value-label').click();
+    }
+
 }
 module.exports = new formBuilderPage();

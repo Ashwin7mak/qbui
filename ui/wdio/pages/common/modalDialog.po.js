@@ -12,6 +12,7 @@ class modalDialogWindow {
     get ADD_TO_FORM_BTN() {return  'Add to form';}
     get ADD_USER_BTN() {return  'Add';}
     get NO_THANKS_BTN() {return  'No thanks';}
+    get CHANGE_ROLE_BTN() {return  'Change role';}
 
     get modalDialog() {
         // modal dialog
@@ -33,6 +34,11 @@ class modalDialogWindow {
         // modal dialog copy button
         browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail').waitForVisible();
         return browser.element('.tipChildWrapper .qbIcon.iconUISturdy-mail');
+    }
+
+    get modalDialogDisabledBtn() {
+        // modal dialog footer disabled button
+        return this.modalDialog.elements('.buttons .finishedButton.btn.btn-primary');
     }
 
     get modalDialogContainer() {
@@ -159,6 +165,8 @@ class modalDialogWindow {
             //Click on filtered option
             option[0].waitForVisible();
             option[0].click();
+            //wait until loading screen disappear
+            loadingSpinner.waitUntilLoadingSpinnerGoesAway();
             //wait until select menu outer
             return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
         } else {

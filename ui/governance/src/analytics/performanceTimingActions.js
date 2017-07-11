@@ -9,3 +9,8 @@ export const gridStartTime = (payload) => ({
     type: types.GET_GRID_START_TIME,
     payload
 });
+
+export const gridRefreshTime = (payload) => ({
+    type: types.GET_GRID_REFRESH_TIME,
+    payload
+});

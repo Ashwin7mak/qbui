@@ -84,8 +84,8 @@ const tableProperties = (
         let newTableInfo = {};
         Object.keys(tableInfo).forEach(function(key, index) {
             newTableInfo[key] = {
-                origValue: tableInfo[key].value,
-                value: tableInfo[key].value,
+                origValue: tableInfo[key] ? tableInfo[key].value : null,
+                value: tableInfo[key] ? tableInfo[key].value : null,
                 pendingValidationError: null,
                 validationError: null,
                 edited: null

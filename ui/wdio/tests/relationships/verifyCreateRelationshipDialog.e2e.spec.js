@@ -45,10 +45,10 @@ describe('Relationships - Verify create relationship dialog Tests :', function()
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
                 //Add records into table 1
-                return e2eBase.recordService.addRecordsToTable(testApp, 0, 10, false, false);
+                return e2eBase.recordService.addRecordsToTable(testApp, 0, 10);
             }).then(function() {
                 //Add records into table 2
-                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10, false, false);
+                return e2eBase.recordService.addRecordsToTable(testApp, 1, 10);
             }).then(function() {
                 //Create a form for each table
                 return e2eBase.formService.createDefaultForms(testApp);

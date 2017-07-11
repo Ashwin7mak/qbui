@@ -647,6 +647,10 @@ export default {
                 removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
+                existingFieldsMenuThisTableTitle: 'Cette table',
+                stage: {
+                    title: 'Formulaire pour {tableName}'
+                },
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Créer un champ de texte et l'ajouter au formulaire",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Créer un champ de numéro et l'ajouter au formulaire",
@@ -740,7 +744,8 @@ export default {
             appNameHeading: "Nom de l'application,",
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
             descriptionHeading: "Description de l'application",
-            appCreationFailed: "Impossible de créer une application"
+            appCreationFailed: "Impossible de créer une application",
+            searchPlaceholder: "Rechercher les icônes de l'application..."
         },
         emptyAppState: {
             message: "Vous n'avez pas encore d'applications.",
@@ -758,10 +763,10 @@ export default {
             recordNameHeading: "Un enregistrement dans le tableau est appelé",
             descriptionHeading: "La description",
             iconHeading: "Icône",
-            suggestedIconsHeading: "Icônes suggérées",
+            searchPlaceholder: "Rechercher des icônes...",
 
-            tableNamePlaceholder: "Par exemple, les clients",
-            recordNamePlaceholder: "Par exemple, client",
+            tableNamePlaceholder: "Par exemple, les clients. Utilisez jusqu'à {numberOfChars} lettres",
+            recordNamePlaceholder: "Par exemple, client. Utilisez jusqu'à {numberOfChars} lettres",
             descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la navigation à gauche",
 
             finishedButtonLabel: "Créer une table",
@@ -777,9 +782,6 @@ export default {
             homePageStillBuilding: "Bâtiment fixe?  ",
             homePageCreateAnother: "Créer un autre tableau",
 
-            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table",
-            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions",
-
             tableReadyTitle: "Votre table est prête!",
             tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
             tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs.",
@@ -791,8 +793,14 @@ export default {
             recordTitleFieldDefault: "Par défaut à Noun + ID",
             recordName: "Nom de l'enregistrement"
         },
+        emptyTableState: {
+            message: "Il n'y a pas encore de tables dans cette application",
+            createNewTable: "Créer une table"
+        },
         iconChooser: {
-            searchPlaceholder: "Rechercher des icônes..."
+            suggestedIconsHeading: "Icônes suggérées",
+            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom",
+            typeForSuggestions: "Tapez un nom pour afficher les icônes suggérées"
         },
         settings: {
             header: "Paramètres",
