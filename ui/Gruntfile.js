@@ -596,8 +596,10 @@ module.exports = function(grunt) {
                     './wdio/tests/relationships/relationshipNavToParent.e2e.spec.js',
                     './wdio/tests/reports/reportBuilder.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                    './wdio/tests/forms/formEdit.e2e.spec.js',
 
                     //TODO Will be enabling these as seperate PR MC-3665
+                    './wdio/tests/tables/tableHomePage.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -613,7 +615,6 @@ module.exports = function(grunt) {
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
                         './wdio/tests/forms/formAddValidation.e2e.spec.js',
-                        './wdio/tests/forms/formEdit.e2e.spec.js',
                         './wdio/tests/forms/formEditValidation.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/non-pairs-part-2.e2e.spec.js',
@@ -647,7 +648,6 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableDelete.e2e.spec.js',
                         './wdio/tests/tables/tableEdit.e2e.spec.js',
                         './wdio/tests/tables/tableEditValidation.e2e.spec.js',
-                        './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     users: [
                         './wdio/tests/users/usersTable.e2e.spec.js',
