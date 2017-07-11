@@ -5,6 +5,7 @@ import {DIALOG_FIELD_INPUT_COMPONENT_TYPE} from '../../../../reuse/client/src/co
 import {connect} from 'react-redux';
 import * as AppBuilderActions from '../../actions/appBuilderActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
+import * as App from '../../reducers/app';
 import Locale from '../../locales/locales';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
@@ -138,7 +139,7 @@ const mapStateToProps = (state) => {
     let {validationError, pendingValidationError, isEdited} = AppBuilderSelectors.getValidationErrorAndIsEdited(state);
 
     return {
-        apps: _.get(state, 'app.apps', []),
+        apps: App.getApps(state),
         appName: name,
         appDescription: description,
         appIcon: icon,
