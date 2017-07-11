@@ -5,72 +5,55 @@ const url = require('url');
 const log = require('../../../server/src/logger').getLogger();
 const config = require('../../../server/src/config/environment/');
 const userDefVars = require('../config/userDefVars');
+const sysDefVars = require('../config/sysDefVars');
 const utils = require('./utils');
-let ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
-let ERROR_ENOTFOUND = 'ENOTFOUND';
-let server = '.currentstack-int.quickbaserocks.com';
+const requestUtils = require('../../../server/src/utility/requestUtils');
 
-/**
- * Legacy HTTP client: postRequest
- * @param hostname - reaml name
- * @param app - app type: main or app
- * @param action - api method
- * @param body - request body
- * @param urlParams - extra paramenters
- * @param userCredentials - JSON object
- * @param isJSON - is the response in JSON
- * @returns HTTP response
- */
+
 module.exports = {
-    postRequest(hostname, app, action, body, urlParams, userCredentials, isJSON) {
+    /**
+     * Legacy HTTP client: postRequest
+     * @param hostname - realm/subdomain name
+     * @param app - app type: main or app
+     * @param action - api method
+     * @param body - request body
+     * @param urlParams - extra parameters
+     * @param userCredentials - JSON object
+     * @param isJSON - is the response in JSON
+     * @returns HTTP response
+     */
+    postRequest(hostname = 'www', app = 'app', action = '', body = null, urlParams = '', userCredentials = '', isJSON = false) {
         let tries = userDefVars.NUM_RETRIES;
-        let reqURL = "";
-        let contTypeValue = 'application/xml';
-        if (isJSON) {
-            contTypeValue = 'application/json';
+        if (action === '') {
+            throw ("No action was passed in. Could not continue the postRequest.");
         }
+        let contentType = isJSON ? 'application/json' : 'application/xml';
         if (body) {
             body = utils.constructBody(body);
         }
-        reqURL = utils.constructURL(hostname, app, action, urlParams, userCredentials);
         let opts = {
-            url: reqURL,
+            url: utils.constructURL(hostname, app, action, urlParams, userCredentials),
             method: 'POST',
             body: body,
-            headers: {'Content-Type': contTypeValue}
+            headers: {'Content-Type': contentType}
         };
         return new promise((resolve, reject) => {
             try {
                 request(opts, (error, response) => {
-                    let statusCode = response.statusCode;
-                    if (error || !(statusCode >= 200 && statusCode < 300)) {
+                    if (error || !(requestUtils.wasRequestSuccessful(response.statusCode))) {
                         // These specific errors were due to an environment issue in Jenkins that we needed to check for and retry
-                        if (tries > 1 && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
+                        if (tries > 1 && this.shouldRetry(error)) {
                             tries--;
                             log.debug('Attempting a retry: ' + JSON.stringify(opts) + ' Tries remaining: ' + tries);
-                            legaceHTTPClient(opts, tries).then(res2 => {
+                            legaceHTTPClient(opts, tries).then(response2 => {
                                 log.debug('Success following retry/retries');
-                                resolve(res2);
+                                resolve(response2);
                             }).catch(err2 => {
                                 log.debug('Failure after retries');
                                 reject(err2);
                             });
                         } else {
-                            // We need to handle if we get an error back from the network call (for example a 'ECONNREFUSED 127.0.0.1:8081' error)
-                            // Or if we get an API response back but with a non 200 status code
-                            let errorMsg = error ? JSON.stringify(error) : '';
-                            let responseMsg = response ? 'Response statusCode: ' + response.statusCode + ', body: ' + response.body : '';
-
-                            // Nice logging for Node output
-                            log.error('Network request failed, no retries left or an unsupported error for retry found ' + JSON.stringify(opts));
-                            log.error(`Unknown failure mode. ${errorMsg} ${responseMsg}`);
-
-                            // Return whatever kind of object we get back for the test frameworks to do validation with
-                            if (error) {
-                                return reject(error);
-                            } else {
-                                return reject(response);
-                            }
+                            this.logError(error, response);
                         }
                     } else {
                         resolve(response);
@@ -80,6 +63,37 @@ module.exports = {
                 log.debug(ex);
             }
         });
+    },
+    /**
+     * Check the error code to determine if should retry
+     * @param error
+     * @returns {boolean}
+     */
+    shouldRetry(error) {
+        return error && (error.code === sysDefVars.ERROR_HPE_INVALID_CONSTANT || error.code === sysDefVars.ERROR_ENOTFOUND);
+    },
+    /**
+     * Log pretty error message if retry fails
+     * @param error
+     * @param response
+     * @returns {*}
+     */
+    logError(error, response) {
+        // We need to handle if we get an error back from the network call (for example a 'ECONNREFUSED 127.0.0.1:8081' error)
+        // Or if we get an API response back but with a non 200 status code
+        let errorMsg = error ? JSON.stringify(error) : '';
+        let responseMsg = response ? 'Response statusCode: ' + response.statusCode + ', body: ' + response.body : '';
+
+        // Nice logging for Node output
+        log.error(`Network request failed, no retries left or an unsupported error for retry found ${JSON.stringify(opts)}`);
+        log.error(`Unknown failure mode. ${errorMsg} ${responseMsg}`);
+
+        // Return whatever kind of object we get back for the test frameworks to do validation with
+        if (error) {
+            return reject(error);
+        } else {
+            return reject(response);
+        }
     }
 };
 

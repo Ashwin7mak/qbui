@@ -19,9 +19,8 @@ module.exports = {
     // TODO: need to get server from config file ***
     constructURL(hostname, app, action, urlParams, userCredentials) {
         // Format URL for http request
-        // userCredentials = JSON.parse(userCredentials);
-        return sysDefVars.HTTPS + hostname + server + sysDefVars.SLASH_DB_SLASH + app + sysDefVars.ACTION + action +
-            sysDefVars.AMP_USERNAME + userCredentials.Username + sysDefVars.AMP_PASSWROD + userCredentials.Password + sysDefVars.AMP + urlParams;
+        return (sysDefVars.HTTPS + hostname + server + sysDefVars.SLASH_DB_SLASH + app + sysDefVars.ACTION + action +
+            sysDefVars.AMP_USERNAME + userCredentials.Username + sysDefVars.AMP_PASSWROD + userCredentials.Password + sysDefVars.AMP + urlParams);
     },
     /**
      * Construct body by adding qbdapi tags
@@ -30,7 +29,7 @@ module.exports = {
      */
     constructBody(body) {
         // Add qdbapi around body
-        return (sysDefVars.QDBAPI_OPENTAG + body + sysDefVars.QDBAPI_CLOSETAG);
+        return `sysDefVars.QDBAPI_OPENTAG ${body} sysDefVars.QDBAPI_CLOSETAG`;
     },
     /**
      * Parse http response in xml to json
@@ -39,26 +38,29 @@ module.exports = {
      */
     parseXMLResponseToJSON(httpResponse) {
         // Parse XML response to JSON
-        let res_json = [], res_xml = [];
-        res_xml = httpResponse.body;
-        res_json = parser.toJson(res_xml.trim());
-        // res_json = JSON.stringify(res_json);
-        return (res_json);
+        let resJSON = [], resXML = [];
+        try {
+            resXML = httpResponse.body;
+            resJSON = parser.toJson(resXML.trim());
+            // resJSON = JSON.stringify(resJSON);
+            return (resJSON);
+        } catch (ex) {
+            log.debug(ex);
+            throw ex;
+        }
     },
     /**
      * Return JSON respone qdbapi data
-     * @param res_body
+     * @param responseBody
      * @returns {Array}
      */
-    getJsonQdbapiData(res_body) {
-        let res_data = [];
+    getJSONQdbapiData(responseBody) {
         try {
-            res_body = JSON.parse(res_body);
-            res_data = res_body.qdbapi;
-            return res_data;
+            responseBody = JSON.parse(responseBody);
+            return responseBody.qdbapi;
         } catch (ex) {
             log.debug(ex);
-            console.log(ex);
+            throw ex;
         }
     },
     /**
@@ -68,13 +70,5 @@ module.exports = {
     generateUniqueID() {
         return Date.now();
     },
-    /**
-     * Switch to Gevernance page
-     * @param browser
-     */
-    switchToGovernancePage(browser) {
-        let tabIds = browser.getTabIds();
-        return browser.switchTab(tabIds[1]);
-    }
-};
 
+};
