@@ -4,7 +4,7 @@
     let newStackAuthPO = requirePO('newStackAuth');
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
-    let formBuilderPO =  requirePO('formBuilder');
+    let formBuilderPO = requirePO('formBuilder');
     let topNavPO = requirePO('topNav');
     let formsPO = requirePO('formsPage');
     let modalDialog = requirePO('/common/modalDialog');
