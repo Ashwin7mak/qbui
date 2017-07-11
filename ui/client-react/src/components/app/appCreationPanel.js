@@ -77,7 +77,6 @@ export class AppCreationPanel extends Component {
         if (this.props.isEdited && property === APP_PROPS_CONST.NAME) {
             const validationError = this.props.pendingValidationError;
             // set the validation error and the live validation error for the field (same)
-            // this.props.updateFocus(property);
             this.props.setAppProperty(property, value, validationError, validationError, false);
         }
     };
