@@ -564,7 +564,7 @@
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket      : function(realmId) {
                 if (confTicket) {
-                    return config.resolve({body:confTicket});
+                    return promise.resolve({body:confTicket});
                 } else {
                     return this.executeRequest(this.resolveTicketEndpoint() + realmId, consts.GET, '', DEFAULT_HEADERS);
                 }
