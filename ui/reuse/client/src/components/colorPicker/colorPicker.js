@@ -28,7 +28,7 @@ export const COLOR_TYPES = {
     ALL: 'all'
 };
 
-// Used when the currently value is an invalid hex color.
+// Used when the currently selected value is an invalid hex color.
 // Prevents ReactColor (CirclePicker) from blowing up while a custom color is being entered.
 export const FALLBACK_COLOR = '#ffffff';
 
