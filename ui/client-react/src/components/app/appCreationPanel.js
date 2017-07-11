@@ -8,6 +8,7 @@ import * as AppBuilderSelectors from '../../reducers/appBuilder';
 import Locale from '../../locales/locales';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+import * as APP_PROPS_CONST from './appPropertiesConstants';
 
 //TODO: XD needs to provide us with a list of appIconNames and appIconsByTag, currently none exists
 import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
@@ -57,7 +58,7 @@ export class AppCreationPanel extends Component {
      */
     setAppProperty = (property, value) => {
         //only app name needs to be validated
-        if (property === 'name') {
+        if (property === APP_PROPS_CONST.NAME) {
             let pendingValidationError = this.getValidationError(property, value);
             let validationError = null;
 
@@ -72,7 +73,7 @@ export class AppCreationPanel extends Component {
      */
     onBlurInput = (property, value) => {
         // do validation on loss of focus unless it hasn't been edited
-        if (this.props.isEdited && property === 'name') {
+        if (this.props.isEdited && property === APP_PROPS_CONST.NAME) {
             const validationError = this.props.pendingValidationError;
             // set the validation error and the live validation error for the field (same)
             this.props.setAppProperty(property, value, validationError, validationError);

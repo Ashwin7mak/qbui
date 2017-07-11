@@ -1,9 +1,10 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
 import Locale from '../locales/locales';
+import * as APP_PROPS_CONST from '../../src/components/app/appPropertiesConstants';
 
 const defaultAppIcon = 'Customer';
-const APP_PROPS = ['name', 'icon', 'description'];
+const APP_PROPS = [APP_PROPS_CONST.NAME, APP_PROPS_CONST.ICON, APP_PROPS_CONST.DESCRIPTION];
 const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited'];
 
 const setDefaultSettings = {
@@ -62,7 +63,7 @@ const appBuilder = (
     case types.SET_APP_PROPERTY:
         let appInfo = {};
 
-        if (action.property === 'name') {
+        if (action.property === APP_PROPS_CONST.NAME) {
             appInfo[action.property] = {
                 value: action.value,
                 pendingValidationError: action.pendingValidationError,
