@@ -8,13 +8,14 @@ import QbCell from "../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
-import {pageLoadTime} from "../../analytics/performanceTimingActions";
+import {pageLoadTime, gridRefreshTime} from "../../analytics/performanceTimingActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
-import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
-import QbLoader from "../../../../reuse/client/src/components/loader/QBLoader";
+import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
+import QbLoader from "../../../../reuse/client/src/components/loader/QbLoader";
 import constants from "../constants/StandardGridConstants";
+import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import "./standardGrid.scss";
 
 // Helper function to return additional props to add to a row element
@@ -28,6 +29,9 @@ export class StandardGrid extends Component {
     constructor(props) {
         super(props);
         this.transforms = this.props.columnTransformsClasses.map((transformClass, index) => new transformClass(this, this.props.columnTransformProps[index]));
+        this.state = {
+            loaderVisible : false
+        };
     }
 
     getColumns = () => {
@@ -43,7 +47,6 @@ export class StandardGrid extends Component {
      * If the sticky column needs to be implemented, check out the code from qbGrid.js in client-react
      */
     handleScroll = () => {
-
         let scrolled = this.tableRef;
         if (scrolled) {
             let currentTopScroll = scrolled.scrollTop;
@@ -61,19 +64,49 @@ export class StandardGrid extends Component {
         this.tableRef = body && body.getRef().parentNode;
     };
 
+    componentWillUpdate() {
+        WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshStart');
+    };
+
+    /**
+     * Calculates the time from GridRefreshStart for the current grid
+     * @returns {*} Null (if performance.mark not supported), Number in millis if supported
+     */
+    calculateGridRefreshTime = () => {
+        let time = null;
+        if (WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshEnd')) {
+            let measureName = this.props.id + 'GridRefreshTime';
+            WindowPerformanceUtils.measureTimeDiff(
+                measureName, this.props.id + 'GridRefreshStart', this.props.id + 'GridRefreshEnd'
+            );
+            time = WindowPerformanceUtils.getDurationFromLastEntry(measureName);
+        }
+        return time;
+    };
+
     componentDidUpdate = () => {
         if (this.props.items) {
             this.props.pageLoadTime();
+            let refreshTime = this.calculateGridRefreshTime();
+            if (refreshTime) {
+                this.props.gridRefreshTime(refreshTime);
+            }
         }
     };
 
     /**
      * Time to wait until the QbLoader is fired
      */
-    timeoutQBLoader = () => {
-        setTimeout(() => {
-            return(<QbLoader className="StandardGridLoader"/>);
-        }, constants.GRID_LOADER_TIMEOUT);
+    timeoutQbLoader = () => {
+        const classNames = ['standardGridLoader'];
+        classNames.push(this.state.loaderVisible ? 'visible' : '');
+
+        if (!this.timeout) {
+            this.timeout = setTimeout(() => {
+                this.setState({loaderVisible: true});
+            }, constants.GRID_LOADER_TIMEOUT);
+        }
+        return <QbLoader className={classNames.join(' ')} />;
     };
 
     /**
@@ -82,31 +115,30 @@ export class StandardGrid extends Component {
     renderItemsExist = () => {
         return (
             <div className="gridContainer">
-                    <Table.Provider
-                        className="qbGrid"
-                        columns={this.getColumns()}
-                        onScroll={this.handleScroll}
-                        components={{
-                            header: {
-                                cell: this.props.headerRenderer
-                            },
-                            body: {
-                                row: QbRow,
-                                cell: this.props.cellRenderer
-                            }
-                        }}
-                    >
-                        <Table.Header className="qbHeader"/>
-
-                        {/*If there is no data at all, render an empty grid, else render this.props.items*/}
-                        <Table.Body
-                            className="qbTbody"
-                            rows={_.isNull(this.props.items) ? [] : this.props.items}
-                            rowKey={this.getUniqueRowKey.bind(this)}
-                            onRow={onRowFn}
-                            ref={this.bodyRef}
-                        />
-                    </Table.Provider>
+                <Table.Provider
+                    className="qbGrid"
+                    columns={this.getColumns()}
+                    onScroll={this.handleScroll}
+                    components={{
+                        header: {
+                            cell: this.props.headerRenderer
+                        },
+                        body: {
+                            row: QbRow,
+                            cell: this.props.cellRenderer
+                        }
+                    }}
+                >
+                    <Table.Header className="qbHeader"/>
+                    {/*If there is no data at all, render an empty grid, else render this.props.items*/}
+                    <Table.Body
+                        className="qbTbody"
+                        rows={_.isNull(this.props.items) ? [] : this.props.items}
+                        rowKey={this.getUniqueRowKey.bind(this)}
+                        onRow={onRowFn}
+                        ref={this.bodyRef}
+                    />
+                </Table.Provider>
             </div>
         );
     };
@@ -125,7 +157,8 @@ export class StandardGrid extends Component {
                         `${this.props.noItemsFound}`, {
                             items: this.props.itemTypePlural,
                             item: this.props.itemTypeSingular
-                        })}
+                        })
+                    }
                 </div>
             </div>
         );
@@ -139,28 +172,27 @@ export class StandardGrid extends Component {
     render() {
         let isGridNotLoaded = _.isNull(this.props.items); //If the array is null(before API call)
         let isGridEmpty = _.isEmpty(this.props.items); // If the array is empty (after API call but items are not yet rendered)
-        let loadingClass = isGridNotLoaded ? "loading" : "notLoading";
 
-        return (
-            <div className={`standardGrid ${loadingClass}`}>
-            {isGridNotLoaded && isGridEmpty ?
-                this.timeoutQBLoader() :
+        if (isGridNotLoaded) {
+            return this.timeoutQbLoader();
+        } else {
+            return (
                 <div className="gridWrapper">
-                    <StandardGridToolbar id={this.props.id}
-                                         doUpdate={this.props.doUpdate}
-                                         shouldFacet={this.props.shouldFacet}
-                                         shouldSearch={this.props.shouldSearch}
-                                         facetFields={this.props.facetFields}
-                                         itemTypePlural={this.props.itemTypePlural}
-                                         itemTypeSingular={this.props.itemTypeSingular}
-                                         itemsPerPage={this.props.itemsPerPage}
+                    <StandardGridToolbar
+                        id={this.props.id}
+                        doUpdate={this.props.doUpdate}
+                        shouldFacet={this.props.shouldFacet}
+                        shouldSearch={this.props.shouldSearch}
+                        facetFields={this.props.facetFields}
+                        itemTypePlural={this.props.itemTypePlural}
+                        itemTypeSingular={this.props.itemTypeSingular}
+                        itemsPerPage={this.props.itemsPerPage}
                     />
                     {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
                     {!(isGridNotLoaded) && isGridEmpty ? this.renderNoItemsExist() : this.renderItemsExist()}
                 </div>
-            }
-            </div>
-        );
+            );
+        }
     }
 }
 
@@ -185,7 +217,7 @@ StandardGrid.propTypes = {
     /**
      * The Items to display
      */
-    items: PropTypes.array.isRequired,
+    items: PropTypes.array,
 
     /**
      * Every row needs a unique key. For example, user item has the userID
@@ -236,6 +268,11 @@ StandardGrid.propTypes = {
     pageLoadTime: PropTypes.func,
 
     /**
+     *  Function that returns the user grid refresh time (as a number)
+     */
+    gridRefreshTime: PropTypes.func,
+
+    /**
      * Header cell to be passed in to make QbGrid more reusable.
      * Use QbHeaderCell for a default non-draggable header.
      * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use). */
@@ -280,7 +317,10 @@ const mapDispatchToProps = (dispatch, props) => ({
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
     },
     pageLoadTime: () => {
-        dispatch(pageLoadTime(_.round((window.performance.now() / 1000), 2)));
+        dispatch(pageLoadTime((WindowPerformanceUtils.now())));
+    },
+    gridRefreshTime: (time) => {
+        dispatch(gridRefreshTime(time));
     }
 });
 

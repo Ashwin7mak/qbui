@@ -5,15 +5,15 @@ import ReactPlayground from '../components/ReactPlayground';
 import Examples from '../components/Examples';
 import PropTable from '../components/PropTable';
 
-export default function QBLoaderDoc() {
+export default function QbLoaderDoc() {
     return (
         <div>
-            <div dangerouslySetInnerHTML={{__html: Metadata.QBLoader.descHtml}} />
+            <div dangerouslySetInnerHTML={{__html: Metadata.QbLoader.descHtml}} />
 
-            <ReactPlayground codeText={Examples.QBLoader} />
+            <ReactPlayground codeText={Examples.QbLoader} />
 
             <h2>Props</h2>
-            <PropTable component="QBLoader" metadata={Metadata} />
+            <PropTable component="QbLoader" metadata={Metadata} />
         </div>
     );
 }

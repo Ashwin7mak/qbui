@@ -1,13 +1,13 @@
 // This is a basic example for the React playground
 // Please update to include other properties or states for your component
 
-const basicQBLoaderExample = (
+const basicQbLoaderExample = (
     <div>
         <dt>Default: </dt>
-        <dd>
-            <QBLoader />
+        <dd style={{width: 100}}>
+            <QbLoader />
         </dd>
     </div>
 );
 
-ReactDOM.render(basicQBLoaderExample, mountNode);
+ReactDOM.render(basicQbLoaderExample, mountNode);

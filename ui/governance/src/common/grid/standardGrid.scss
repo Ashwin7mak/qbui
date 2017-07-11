@@ -12,6 +12,17 @@
         margin-right: 10px;
 }
 
+.standardGridLoader {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    visibility: hidden;
+}
+
+.standardGridLoader.visible {
+    visibility: visible;
+}
+
 .standardGrid {
     display: flex;
     flex-direction: column;

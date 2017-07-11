@@ -5,7 +5,7 @@ import BodyMovin, {__RewireAPI__ as BodyMovinRewireAPI} from "../../src/componen
 
 describe('BodyMovin', () => {
     let bodyMovinMock;
-    let mockAnimationData = { container: jasmine.any(Object), renderer: 'svg', loop: true, autoplay: true, animationData: 'mockAnimationData' };
+    let mockAnimationData = {container: jasmine.any(Object), renderer: 'svg', loop: true, autoplay: true, animationData: 'mockAnimationData'};
 
     beforeEach(() => {
         jasmineEnzyme();
