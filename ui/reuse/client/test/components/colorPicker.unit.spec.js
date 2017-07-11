@@ -41,6 +41,17 @@ describe('ColorPicker', () => {
         jasmineEnzyme();
     });
 
+    it('renders a default color picker', () => {
+        component = shallow(<ColorPicker />);
+
+        expect(getIconAndColorPreview()).not.toBePresent();
+        expect(getCustomColorPickerInput()).not.toBePresent();
+        const reactColorPicker = getReactColorPicker();
+        expect(reactColorPicker.props().colors).toEqual(DEFAULT_COLOR_LIST);
+        expect(reactColorPicker).toHaveProp('width', 210);
+        expect(reactColorPicker).toHaveProp('circleSpacing', 10);
+    });
+
     describe('value', () => {
         it('has a value that is the currently selected color', () => {
             component = shallow(<ColorPicker value={validHexColor} />);
