@@ -42,12 +42,8 @@ import "./automationBuilderContainer.scss";
 
 export class AutomationBuilderContainer extends Component {
 
- //   constructor(props) {
-   //     super(props);
- //   }
-
     componentDidMount() {
-        if (this.getPath() === "/qbase/builder/app/:appId/automation/create") {
+        if (this.getPath() === `${UrlConsts.BUILDER_ROUTE}/app/:appId/${UrlConsts.AUTOMATION.PATH}/${UrlConsts.AUTOMATION.CREATE}`) {
             this.props.createAutomation();
         } else if (this.getAppId() && this.getAutomationId()) {
             this.props.loadAutomation(this.getAppId(), this.getAutomationId());
@@ -55,7 +51,7 @@ export class AutomationBuilderContainer extends Component {
     }
 
     getPath() {
-        return this.props.match && this.props.match.path ? this.props.match.path : undefined;
+        return _.get(this, 'props.match.path');
     }
     getAppId() {
         return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
@@ -88,8 +84,6 @@ export class AutomationBuilderContainer extends Component {
     onGenerate = () => {
         this.props.generateAutomation(this.getAppId(), this.props.automation);
 
-        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.getAppId()}/${UrlConsts.AUTOMATION.PATH}/${this.getAutomationId()}/${UrlConsts.AUTOMATION.VIEW}`;
-        NavigationUtils.goBackToPreviousLocation(link);
     }
 
     onSave = () => {
@@ -133,7 +127,7 @@ export class AutomationBuilderContainer extends Component {
                             <div className="formElementContainer">
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.nameHeader")} />
-                                    <FieldValueEditor classes="test-id-name-field" onChange={this.updateName} value={name} appUsers={[]}/>
+                                    <FieldValueEditor classes="automationName" onChange={this.updateName} value={name} appUsers={[]}/>
                                 </div>
                             </div>
                             <h3><I18nMessage message="automation.automationEdit.emailSectionHeader"/></h3>
@@ -146,7 +140,7 @@ export class AutomationBuilderContainer extends Component {
                                                 onChange={this.updateTo}
                                                 value={to}
                                                 invalid={this.isEmailInvalid(to)}
-                                                classes="test-id-to-field"/>
+                                                classes="automationToAddress"/>
                                             <div className="clearIcon">
                                                 <div className="tipChildWrapper" aria-describedby="qbtooltip_321">
                                                     <span className="clearIconButton qbIcon iconUISturdy-clear-mini"></span>
@@ -158,12 +152,12 @@ export class AutomationBuilderContainer extends Component {
 
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.subjectHeader")} />
-                                    <FieldValueEditor classes="test-id-subject-field" onChange={this.updateSubject} value={subject} appUsers={[]} />
+                                    <FieldValueEditor classes="automationSubject" onChange={this.updateSubject} value={subject} appUsers={[]} />
                                 </div>
 
                                 <div className="formElement field">
                                     <FieldLabelElement label={Locale.getMessage("automation.automationEdit.bodyHeader")} />
-                                    <MultiLineTextFieldValueEditor classes="test-id-body-field" value={body} onChange={this.updateBody}/>
+                                    <MultiLineTextFieldValueEditor classes="automationBody" value={body} onChange={this.updateBody}/>
                                 </div>
                             </div>
 
