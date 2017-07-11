@@ -79,7 +79,7 @@ class ColorPicker extends Component {
         /**
          * The type of color value that should be returned during an onChange.
          * You probably shouldn't change this from the default value of `hex` if using within the qbui project.
-         * Additionally, changing this from hex may break the preview. It is best to turn it off if not using hex as the value.
+         * Additionally, changing this from hex may break the preview or custom color. It is best to turn those off if not using hex as the value.
          * Can be 'hex', 'rgb', 'hsl', or 'all'. 'all' returns the default object from React-Color.
          * You can import the COLOR_TYPES to use as constants to change this value. */
         colorType: PropTypes.oneOf(['hex', 'rgb', 'hsl', 'all']), // Listed here as strings so that intellij can pick up on the values
