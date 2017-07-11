@@ -597,6 +597,7 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportBuilder.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     './wdio/tests/forms/formEdit.e2e.spec.js',
+                    './wdio/tests/forms/formBuilder/verifyFormStage.e2e.spec.js',
 
                     //TODO Will be enabling these as seperate PR MC-3665
                     './wdio/tests/tables/tableEdit.e2e.spec.js',
@@ -622,7 +623,6 @@ module.exports = function(grunt) {
                         './wdio/tests/forms/formBuilder/non-pairs-part-2.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
                         './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
-                        './wdio/tests/forms/formBuilder/verifyFormStage.e2e.spec.js',
                     ],
                     global: [
                         './wdio/tests/global/globalLeftNav.e2e.spec.js',
