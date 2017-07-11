@@ -8,6 +8,9 @@ import IconAndColorPreview from '../../src/components/iconAndColorPreview/iconAn
 let component;
 
 const getPreview = () => component.find('.preview');
+const getPreviewIcon = () => component.find(Icon);
+const getPreviewHiddenIcon = () => component.find('.previewHiddenIcon');
+const getPreviewHiddenDiv = () => component.find('.previewHidden');
 
 const testIcon = 'favicon';
 const testColor = '#74489d';
@@ -23,27 +26,27 @@ describe('IconAndColorPreview', () => {
     it('shows an icon in the preview', () => {
         component = shallow(<IconAndColorPreview {...standardProps} />);
 
-        const iconComponent = component.find(Icon);
+        const iconComponent = getPreviewIcon();
         expect(iconComponent).toHaveProp('icon', testIcon);
         expect(iconComponent).toHaveProp('iconFont', AVAILABLE_ICON_FONTS.DEFAULT);
-        expect(component.find('.previewHiddenIcon')).not.toBePresent();
-        expect(component.find('.previewHidden')).not.toBePresent();
+        expect(getPreviewHiddenIcon()).not.toBePresent();
+        expect(getPreviewHiddenDiv()).not.toBePresent();
     });
 
     it('can change the color of the icon', () => {
         component = shallow(<IconAndColorPreview {...standardProps} iconColor={testColor} />);
 
         expect(getPreview()).toHaveStyle('color', testColor);
-        expect(component.find('.previewHiddenIcon')).not.toBePresent();
-        expect(component.find('.previewHidden')).not.toBePresent();
+        expect(getPreviewHiddenIcon()).not.toBePresent();
+        expect(getPreviewHiddenDiv()).not.toBePresent();
     });
 
     it('can change the color of the background', () => {
         component = shallow(<IconAndColorPreview {...standardProps} backgroundColor={testColor} />);
 
         expect(getPreview()).toHaveStyle('backgroundColor', testColor);
-        expect(component.find('.previewHiddenIcon')).not.toBePresent();
-        expect(component.find('.previewHidden')).not.toBePresent();
+        expect(getPreviewHiddenIcon()).not.toBePresent();
+        expect(getPreviewHiddenDiv()).not.toBePresent();
     });
 
     it('displays a question mark inside a white circle when the preview is not visible (invalid values)', () => {
@@ -51,8 +54,8 @@ describe('IconAndColorPreview', () => {
 
         expect(getPreview()).toHaveStyle('backgroundColor', '#ffffff');
         expect(component.find(Icon)).not.toBePresent();
-        expect(component.find('.previewHiddenIcon')).toBePresent();
-        expect(component.find('.previewHiddenIcon')).toHaveText('?');
+        expect(getPreviewHiddenIcon()).toBePresent();
+        expect(getPreviewHiddenIcon()).toHaveText('?');
     });
 
     describe('displays an empty circle with a question mark', () => {
@@ -83,8 +86,8 @@ describe('IconAndColorPreview', () => {
             it(testCase.description, () => {
                 component = shallow(<IconAndColorPreview icon={testCase.icon} backgroundColor={testCase.backgroundColor} />);
 
-                expect(component.find('.previewHidden')).toBePresent();
-                expect(component.find('.previewHiddenIcon')).toBePresent();
+                expect(getPreviewHiddenDiv()).toBePresent();
+                expect(getPreviewHiddenIcon()).toBePresent();
                 expect(getPreview()).toHaveStyle('backgroundColor', '#ffffff');
                 expect(component.find(Icon)).not.toBePresent();
             });
