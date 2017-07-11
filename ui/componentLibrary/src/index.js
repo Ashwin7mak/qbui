@@ -75,6 +75,8 @@ import PaginationDoc from './docs/pagination.js';
 // import RowActionsDoc from './docs/rowActions.js';
 import NotificationManagerDoc from './docs/notificationManager.js';
 import StandardGridItemsCountDoc from './docs/StandardGridItemsCount.js';
+import ColorPickerDoc from './docs/colorPicker.js';
+import SimpleInputDoc from './docs/simpleInput.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -282,6 +284,14 @@ const routes = [
             {
                 path: `${LIB_ROUTE}/standardGridItemsCount`,
                 component: StandardGridItemsCountDoc
+            },
+            {
+                path: `${LIB_ROUTE}/colorPicker`,
+                component: ColorPickerDoc
+            },
+            {
+                path: `${LIB_ROUTE}/simpleInput`,
+                component: SimpleInputDoc
             }
         ]
     }
