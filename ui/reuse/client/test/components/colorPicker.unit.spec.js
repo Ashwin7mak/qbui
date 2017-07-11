@@ -80,7 +80,7 @@ describe('ColorPicker', () => {
 
     describe('onChange', () => {
         /**
-         * There is not a sane way to activate the onChange complete test outside of this third party component;
+         * There is not a sane way to activate the onChangeComplete outside of this third party component;
          * therefore, we make sure the local instance was passed to the third party component and then test
          * the onChange function directly.
          */
@@ -139,12 +139,14 @@ describe('ColorPicker', () => {
                     description: 'adds the custom color to the list of swatches when a valid color is entered into the custom color picker',
                     inputText: colorNotInColorList,
                     expectedColors: [...DEFAULT_COLOR_LIST, colorNotInColorList],
+                    expectedColorValue: colorNotInColorList,
                     expectedInputValue: colorNotInColorList
                 },
                 {
                     description: 'does not add the custom color to the list of swatches if an invalid color is entered into the custom color picker',
                     inputText: invalidHexColor,
                     expectedColors: DEFAULT_COLOR_LIST,
+                    expectedColorValue: FALLBACK_COLOR,
                     expectedInputValue: invalidHexColor
                 },
                 {
@@ -185,6 +187,7 @@ describe('ColorPicker', () => {
                     // For some reason I don't understand, using .toHaveProp modifies the DEFAULT_COLOR_LIST
                     // which breaks subsequent tests. Using .props().colors does not modify DEFAULT_COLOR_LIST so using that for now.
                     expect(getReactColorPicker().props().colors).toEqual(testCase.expectedColors);
+                    expect(getReactColorPicker()).toHaveProp('color', testCase.expectedColorValue);
                     expect(getCustomColorPickerInput()).toHaveProp('value', testCase.expectedInputValue);
                 });
             });
@@ -237,6 +240,3 @@ describe('ColorPicker', () => {
         });
     });
 });
-
-
-
