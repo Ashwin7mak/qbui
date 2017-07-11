@@ -81,13 +81,15 @@ describe('App Creation Dialog', () => {
             property: 'name',
             value: 'mockAppName',
             pendingValidationError: 'mockPendingValidationError',
-            validationError: 'validationError'});
+            validationError: 'validationError',
+            hasFocus: true});
 
         expect(state.name).toEqual({
             value: 'mockAppName',
             pendingValidationError: 'mockPendingValidationError',
             validationError: 'validationError',
-            isEdited: true
+            isEdited: true,
+            hasFocus: true
         });
     });
 

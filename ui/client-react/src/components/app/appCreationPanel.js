@@ -63,7 +63,7 @@ export class AppCreationPanel extends Component {
             let pendingValidationError = this.checkForValidationError(property, value);
             let validationError = null;
 
-            this.props.setAppProperty(property, value, pendingValidationError, validationError);
+            this.props.setAppProperty(property, value, pendingValidationError, validationError, true);
         } else {
             this.props.setAppProperty(property, value);
         }
@@ -77,7 +77,8 @@ export class AppCreationPanel extends Component {
         if (this.props.isEdited && property === APP_PROPS_CONST.NAME) {
             const validationError = this.props.pendingValidationError;
             // set the validation error and the live validation error for the field (same)
-            this.props.setAppProperty(property, value, validationError, validationError);
+            // this.props.updateFocus(property);
+            this.props.setAppProperty(property, value, validationError, validationError, false);
         }
     };
 
@@ -107,6 +108,7 @@ export class AppCreationPanel extends Component {
                                       required
                                       edited={this.props.isEdited}
                                       validationError={this.props.validationError}
+                                      hasFocus={this.props.hasFocus}
                                       autofocus />
 
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
@@ -136,7 +138,7 @@ export class AppCreationPanel extends Component {
 
 const mapStateToProps = (state) => {
     let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
-    let {validationError, pendingValidationError, isEdited} = AppBuilderSelectors.getValidationErrorAndIsEdited(state);
+    let {validationError, pendingValidationError, isEdited, hasFocus} = AppBuilderSelectors.getValidationErrorAndIsEdited(state);
 
     return {
         apps: App.getApps(state),
@@ -146,7 +148,8 @@ const mapStateToProps = (state) => {
         isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state),
         pendingValidationError,
         validationError,
-        isEdited
+        isEdited,
+        hasFocus
     };
 };
 

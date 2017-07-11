@@ -64,12 +64,13 @@ export const createApp = (app) => {
  * @param pendingValidationError
  * @param validationError
  * */
-export const setAppProperty = (property, value, pendingValidationError, validationError) => ({
+export const setAppProperty = (property, value, pendingValidationError, validationError, hasFocus) => ({
     type: types.SET_APP_PROPERTY,
     property,
     value,
     pendingValidationError,
-    validationError
+    validationError,
+    hasFocus
 });
 
 export const showAppCreationDialog = () => ({

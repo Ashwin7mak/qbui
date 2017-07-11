@@ -34,7 +34,7 @@ describe('AppCreationPanel', () => {
 
         component.find('input').at(0).simulate('change', {target: {value: 'Mock App Name'}});
 
-        expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('name', 'Mock App Name', null, null);
+        expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('name', 'Mock App Name', null, null, true);
     });
 
     it('will invoke setAppProperty when app description input box is typed into', () => {

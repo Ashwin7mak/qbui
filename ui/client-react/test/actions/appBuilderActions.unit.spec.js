@@ -111,13 +111,14 @@ describe('App Actions event functions', () => {
     });
 
     it('create setAppProperty event', () => {
-        expect(AppBuilderActions.setAppProperty('mockProperty', 'mockValue', 'mockPendingValidationError', 'mockValidationError'))
+        expect(AppBuilderActions.setAppProperty('mockProperty', 'mockValue', 'mockPendingValidationError', 'mockValidationError', true))
             .toEqual({
                 type: types.SET_APP_PROPERTY,
                 property: 'mockProperty',
                 value: 'mockValue',
                 pendingValidationError: 'mockPendingValidationError',
-                validationError: 'mockValidationError'
+                validationError: 'mockValidationError',
+                hasFocus: true
             });
     });
 

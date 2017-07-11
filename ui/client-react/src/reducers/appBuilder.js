@@ -5,7 +5,7 @@ import * as APP_PROPS_CONST from '../../src/components/app/appPropertiesConstant
 
 const defaultAppIcon = 'Customer';
 const APP_PROPS = [APP_PROPS_CONST.NAME, APP_PROPS_CONST.ICON, APP_PROPS_CONST.DESCRIPTION];
-const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited'];
+const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited', 'hasFocus'];
 
 const setDefaultSettings = {
     isAppIconChooserOpen: false,
@@ -68,7 +68,8 @@ const appBuilder = (
                 value: action.value,
                 pendingValidationError: action.pendingValidationError,
                 validationError: action.validationError,
-                isEdited: true
+                isEdited: true,
+                hasFocus: action.hasFocus
             };
         } else {
             appInfo[action.property] = action.value;
