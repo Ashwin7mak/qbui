@@ -1,9 +1,9 @@
 import React, {PropTypes, Component} from 'react';
 import {CirclePicker} from 'react-color';
-import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
+import {AVAILABLE_ICON_FONTS} from '../icon/icon';
 import SimpleInput from '../simpleInput/simpleInput';
 import IconAndColorPreview from '../iconAndColorPreview/iconAndColorPreview';
-import {isValidHexColor, VALID_HEX_CHARACTERS} from '../../utils/colorValidator';
+import {isValidHexColor, formatHexColor, VALID_HEX_CHARACTERS} from '../../utils/colorValidator';
 import includes from 'lodash/includes';
 
 import './colorPicker.scss';
@@ -103,12 +103,6 @@ class ColorPicker extends Component {
         circleSpacing: 10
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {customColor: ''};
-    }
-
     /**
      * Helper function to return the color as specified by the colorType prop.
      * @param color
@@ -138,20 +132,10 @@ class ColorPicker extends Component {
      * @param value
      */
     onChangeCustomColor = value => {
-        // Strips out any # characters and makes sure it is always added as the first character of the string
-        let formattedValue = value.replace(/#/g, '');
-        formattedValue = `#${formattedValue}`;
-
-        // When the value is blank, wipe out the custom color.
-        // Otherwise, add valid hex values as a custom color if not in the list of colors.
-        if (formattedValue === '#') {
-            this.setState({customColor: null});
-
-        } else if (isValidHexColor(value) && !includes(this.props.colors, formattedValue)) {
-            this.setState({customColor: formattedValue});
-        }
-
         if (this.props.onChange) {
+            // Strips out any # characters and makes sure it is always added as the first character of the string
+            const formattedValue = formatHexColor(value);
+
             return this.props.onChange(formattedValue);
         }
     };
@@ -161,17 +145,25 @@ class ColorPicker extends Component {
      * If there is a custom color, it adds it to the colors array.
      */
     getColorList = () => {
-        let colorList = [...this.props.colors];
+        const {value, colors} = this.props;
+        const formattedValue = formatHexColor(value);
 
-        if (this.state.customColor) {
-            colorList.push(this.state.customColor);
+        // When the value is blank, wipe out the custom color.
+        // Otherwise, add valid hex values as a custom color if not in the list of colors.
+        if (formattedValue === '#') {
+            return colors;
         }
 
-        return colorList;
+        if (isValidHexColor(formattedValue) && !includes(colors, formattedValue)) {
+            return [...colors, formattedValue];
+        }
+
+        return colors;
     };
 
     /**
      * Use the current value if it is valid, otherwise, blank it out with white.
+     * This keeps the CirclePicker from blowing up if the custom color is currently invalid.
      * @returns {string}
      */
     formatColorValue = () => {
@@ -179,7 +171,7 @@ class ColorPicker extends Component {
     };
 
     render() {
-        const {icon, iconColor, iconFont, value} = this.props;
+        const {icon, iconColor, iconFont, value, width, circleSpacing, circleSize} = this.props;
 
         return (
             <div className="colorPicker">
@@ -196,9 +188,9 @@ class ColorPicker extends Component {
                     color={this.formatColorValue()}
                     colors={this.getColorList()}
                     onChangeComplete={this.onChange}
-                    width={this.props.width}
-                    circleSize={this.props.circleSize}
-                    circleSpacing={this.props.circleSpacing}
+                    width={width}
+                    circleSize={circleSize}
+                    circleSpacing={circleSpacing}
                 />
 
                 {this.props.hasCustomColor &&
