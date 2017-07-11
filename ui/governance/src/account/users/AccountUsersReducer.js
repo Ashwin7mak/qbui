@@ -25,7 +25,7 @@ const AccountUsers = combineReducers({
  * Selector to return the users contained in the account
  * @param state
  */
-const usersSelector = state => state.AccountUsers.users;
+export const usersSelector = state => state.AccountUsers.users;
 
 /**
  * Selector to return the isFetching status (intended to be used for the initial API call for users)
