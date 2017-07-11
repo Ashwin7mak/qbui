@@ -599,6 +599,8 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formEdit.e2e.spec.js',
 
                     //TODO Will be enabling these as seperate PR MC-3665
+                    './wdio/tests/tables/tableEdit.e2e.spec.js',
+                    './wdio/tests/tables/tableEditValidation.e2e.spec.js',
                     './wdio/tests/tables/tableHomePage.e2e.spec.js'
                 ],
                 suites: {
@@ -646,8 +648,6 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableCreate.e2e.spec.js',
                         './wdio/tests/tables/tableCreateValidation.e2e.spec.js',
                         './wdio/tests/tables/tableDelete.e2e.spec.js',
-                        './wdio/tests/tables/tableEdit.e2e.spec.js',
-                        './wdio/tests/tables/tableEditValidation.e2e.spec.js',
                     ],
                     users: [
                         './wdio/tests/users/usersTable.e2e.spec.js',
