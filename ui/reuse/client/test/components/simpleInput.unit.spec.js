@@ -4,16 +4,19 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import SimpleInput from '../../src/components/simpleInput/simpleInput';
 
 let component;
+let instance;
 
-const mockFunctions = {
-//
+const mockPropFuncs = {
+    onBlur() {},
+    onChange() {}
 };
-
-// component.find('input').at(0).simulate('change', {target: {value: 'Mock App Name'}});
 
 describe('SimpleInput', () => {
     beforeEach(() => {
         jasmineEnzyme();
+
+        spyOn(mockPropFuncs, 'onBlur');
+        spyOn(mockPropFuncs, 'onChange');
     });
 
     it('will render a SimpleInput component', () => {
@@ -56,53 +59,123 @@ describe('SimpleInput', () => {
         expect(isInvalid).not.toBePresent();
     });
 
-    it('will render a default className for input', () => {
-        component = shallow(<SimpleInput className="mockClassName"/>);
+    describe('input', () => {
+        it('will render a default className for input', () => {
+            component = shallow(<SimpleInput className="mockClassName"/>);
 
-        let input = component.find(".input");
+            let input = component.find(".input");
 
-        expect(input).toBePresent();
+            expect(input).toBePresent();
+        });
+
+        it('will render a passed in className for input', () => {
+            component = shallow(<SimpleInput className="mockClassName"/>);
+
+            let input = component.find(".input .mockClassNameInput");
+
+            expect(input).toBePresent();
+        });
+
+        it('will render a passed in placeHolder and value for input', () => {
+            component = mount(<SimpleInput placeholder="mockPlaceHolder"
+                                           value="mockValue"/>);
+
+            let input = component.find(".input");
+
+            expect(input).toHaveValue('mockValue');
+            expect(input).toHaveProp('placeholder', 'mockPlaceHolder');
+        });
+
+        it('will invoke prop on change and will not mask any characters', () => {
+            component = shallow(<SimpleInput onChange={mockPropFuncs.onChange}/>);
+
+            let input = component.find('.input');
+            input.simulate('change', {target: {value: 'Mock Value'}});
+
+            expect(mockPropFuncs.onChange).toHaveBeenCalledWith('Mock Value');
+        });
+
+        it('will invoke prop on change and will mask characters and only accept an uppercase character', () => {
+            component = shallow(<SimpleInput onChange={mockPropFuncs.onChange}
+                                             mask={/^[A-Z]*$/}/>);
+
+            instance = component.instance();
+            spyOn(instance, 'onChange').and.callThrough();
+
+            let input = component.find('.input');
+
+            input.simulate('change', {target: {value: 'M'}});
+            expect(mockPropFuncs.onChange).toHaveBeenCalledWith('M');
+        });
+
+        it('will invoke prop on change and will mask characters and will not accept a lowercase character', () => {
+            component = shallow(<SimpleInput onChange={mockPropFuncs.onChange}
+                                             mask={/^[A-Z]*$/}/>);
+
+            instance = component.instance();
+            spyOn(instance, 'onChange').and.callThrough();
+
+            let input = component.find('.input');
+
+            input.simulate('change', {target: {value: 'm'}});
+            expect(mockPropFuncs.onChange).not.toHaveBeenCalled();
+        });
+
+        it('will invoke passed in prop onBlur', () => {
+            component = shallow(<SimpleInput onBlur={mockPropFuncs.onBlur}/>);
+
+            let input = component.find('.input');
+            input.simulate('blur');
+
+            expect(mockPropFuncs.onBlur).toHaveBeenCalled();
+        });
+
+        fit('will limit characters allowed to be typed', () => {
+            component = mount(<SimpleInput maxLength={2}
+                                           onChange={mockPropFuncs.onChange}/>);
+
+            let input = component.find('.input');
+            input.simulate('change', {target: {value: 'a'}});
+            input.simulate('change', {target: {value: 'b'}});
+            input.simulate('change', {target: {value: 'c'}});
+
+            expect(mockPropFuncs.onChange).toHaveBeenCalledWith('ab');
+        });
     });
 
-    it('will render a passed in className for input', () => {
-        component = shallow(<SimpleInput className="mockClassName"/>);
+    describe('label', () => {
+        it('will render a default className for label', () => {
+            component = shallow(<SimpleInput className="mockClassName"/>);
 
-        let input = component.find(".input .mockClassNameInput");
+            let label = component.find(".label");
 
-        expect(input).toBePresent();
-    });
+            expect(label).toBePresent();
+        });
 
-    it('will render a default className for label', () => {
-        component = shallow(<SimpleInput className="mockClassName"/>);
+        it('will render a passed in className for label', () => {
+            component = shallow(<SimpleInput className="mockClassName"/>);
 
-        let label = component.find(".label");
+            let label = component.find(".label .mockClassNameLabel");
 
-        expect(label).toBePresent();
-    });
+            expect(label).toBePresent();
+        });
 
-    it('will render a passed in className for label', () => {
-        component = shallow(<SimpleInput className="mockClassName"/>);
+        it('will render a required * with label if it is required', () => {
+            component = shallow(<SimpleInput isRequired={true}
+                                             label="Mock Label"/>);
 
-        let label = component.find(".label .mockClassNameLabel");
+            let label = component.find(".label");
 
-        expect(label).toBePresent();
-    });
+            expect(label).toHaveText('* Mock Label');
+        });
 
-    it('will render a required * with label if it is required', () => {
-        component = shallow(<SimpleInput isRequired={true}
-                                         label="Mock Label"/>);
+        it('will NOT render a required * with label if it is NOT required', () => {
+            component = shallow(<SimpleInput isRequired={false}
+                                             label="Mock Label"/>);
 
-        let label = component.find(".label");
+            let label = component.find(".label");
 
-        expect(label).toHaveText('* Mock Label');
-    });
-
-    it('will NOT render a required * with label if it is NOT required', () => {
-        component = shallow(<SimpleInput isRequired={false}
-                                         label="Mock Label"/>);
-
-        let label = component.find(".label");
-
-        expect(label).toHaveText('Mock Label');
+            expect(label).toHaveText('Mock Label');
+        });
     });
 });
