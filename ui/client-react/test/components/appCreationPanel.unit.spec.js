@@ -68,6 +68,36 @@ describe('AppCreationPanel', () => {
         expect(instance.validateAppName).toHaveBeenCalledWith('name', 'Mock App Name');
     });
 
+    it('validateAppName will return empty validation error message if the value is null', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+        let result = instance.validateAppName('name', null);
+
+        expect(result).toEqual(Locale.getMessage('appCreation.validateAppNameEmpty'));
+    });
+
+    it('validateAppName will return empty validation error message if the value is undefined', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+        let result = instance.validateAppName('name', undefined);
+
+        expect(result).toEqual(Locale.getMessage('appCreation.validateAppNameEmpty'));
+    });
+
+    it('validateAppName will return empty validation error message if the value is true', () => {
+        component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
+                                            apps={mockApps}/>);
+
+        instance = component.instance();
+        let result = instance.validateAppName('name', true);
+
+        expect(result).toEqual(Locale.getMessage('appCreation.validateAppNameEmpty'));
+    });
+
     it('validateAppName will return an empty pendingValidationError message if the app name is an empty string', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
                                             apps={mockApps}/>);
