@@ -119,7 +119,7 @@
          * Test to Edit a particular record from the View Form edit pencil.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        //TODO MC-1912 needs to be fixed for the below test to pass
+            //TODO MC-1912 needs to be fixed for the below test to pass
         xit('Edit a record via View Form edit pencil', function() {
             var actualNumbersArray = ['33.33', '$33.33', '33.33'];
             var expectedNumbersArray;
