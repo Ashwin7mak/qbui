@@ -27,15 +27,11 @@ module.exports = {
         if (action === '') {
             throw ("No action was passed in. Could not continue the postRequest.");
         }
-        let contentType = isJSON ? 'application/json' : 'application/xml';
-        if (body) {
-            body = utils.constructBody(body);
-        }
         let opts = {
             url: utils.constructURL(hostname, app, action, urlParams, userCredentials),
             method: 'POST',
-            body: body,
-            headers: {'Content-Type': contentType}
+            body: body ? utils.constructBody(body) : '',
+            headers: {'Content-Type': isJSON ? 'application/json' : 'application/xml'}
         };
         return new promise((resolve, reject) => {
             try {
