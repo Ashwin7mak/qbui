@@ -47,39 +47,39 @@
         /**
          * Selects a single user, clicks remove and checks the user count.
          */
-        it('Should select remove a single user and check for the success message', function() {
+        it('Should remove a single user and check for the success message', function() {
             // Remove user from app
             UsersTablePage.removeUserFromApp(1, false);
 
-            //TODO: MC-3410 - Need a better way to verify user was removed
             // Reload the user page
-            // e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
+            e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
             // Check that the user was removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // browser.pause(e2eConsts.shortWaitTimeMs);
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
          * Selects a single user, clicks remove, cancels, and checks the user count.
          */
-        it('Should select remove a single user and cancel ', function() {
+        it('Should remove a single user and cancel ', function() {
             // Remove user from app and cancel
             UsersTablePage.removeUserFromApp(1, true);
 
-            //TODO: MC-3410 - Need a better way to verify user was removed
             // Reload the user page
-            // e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
+            e2ePageBase.loadUsersInAnAppInBrowser(realmName, testApp.id);
+
             // Check for the user not removed
-            // ReportTableActionsPO.selectAllRecordsCheckbox();
-            // browser.pause(e2eConsts.shortWaitTimeMs);
-            // expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
          * Selects multiple users, clicks remove and checks the user count.
          */
-        it('Should select remove a multiple users and check for the success message', function() {
+        it('Should remove multiple users and check for the success message', function() {
             // Select mulitple users and click on remove icon
             ReportTableActionsPO.selectMultipleRecordRowCheckboxes([1, 2]);
             UsersTablePage.clickUserRemoveIcon();

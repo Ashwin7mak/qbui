@@ -32,17 +32,44 @@ For running locally make sure you copy `qbui/ui/server/src/config/environment/lo
 ** Example: ```docker exec -it core_service_1 /bin/ash``` to open an ash shell inside the core container.
 
 ## Run Core, Experience Engine, and Workflow Engine as Dependencies from this Project
-1) Rename ```docker-compose.override.yml.sample``` to ```docker-compose.override.yml```. 
-    * By default, the override sample file defines relative paths in the 'build' config for each container service that references the QuickBase and ExperienceEngine repositories.
-    * This is defined as such with a 'build context' so that each image for Core and Experience Engine can be iterated in branches in those repos in parallel with the UI code and then rebuilt and re-launched with ```docker-compose up -d --build```.
-    * Each image is custom named (```quickbase/ui-core``` and ```quickbase/ui-ee```) for the override sample in this repository in order to avoid conflicts with the
-    ```quickbase/core``` and ```quickbase/ee``` imaged that may exist on your machine and to specify that they are 'owned' by the Docker Compose environment defined in this project.
-2) Run ```docker-compose up -d```. It should bring up Core, Oracle, Experience Engine, Workflow Engine, and PostGres in addition to the existing UI service.
-3) Once the full stack of Core, Oracle, Experience Engine, Workflow Engine, and PostGres is running, you can additionally run ```docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.datagen.yml up -d``` to populate an app with data. Each additional use of this command will restart the 'datagen' container service and create an additional app.
+1) [Install and configure the AWS CLI tools](https://github.com/QuickBase/aws#aws-cli-and-configuration)
+2) Login to ECR (EC2 Container Registry - an Amazon service for storing docker images) using
+the aws CLI by running the follow command in the terminal: `eval $(aws ecr get-login --no-include-email --registry-ids 717266932182)`.
+3) Navigate to the QBUI repo on your local machine (e.g., ~/Code/qbui)
+4) Create a copy of ```docker-compose.override.yml.sample``` and rename it to ```docker-compose.override.yml``` (remove the .sample at the end).
+5) Run `docker-compose pull core core-db ee ee-db we we-db` in the terminal to get the latest images from ECR. This could take 40+ minutes the first time. Future pulls should take under a minute to update your local cache.
+    * If you run `docker-compose pull` without listing the specific services, the command throws an error because it can't find your local `quickbase/ui-dev` image in ECR.
+6) Run ```docker-compose up -d``` in the terminal. It should bring up Core, Oracle, Experience Engine, Workflow Engine, and PostGres databases in addition to the existing UI service.
+    * **Note:** It sometimes takes Oracle (the database we use for our Core micro-service) a few minutes to boot up the first time. Open `https://localhost:8298/api/api/v1/health/system`
+    in a browser or something like Postman. You should get a 200 response back. If not, wait a few minutes and try again. If still no luck, or the page isn't loading, you may need to do some additional troubleshooting.
+7) Once the full stack of Core, Oracle, Experience Engine, Workflow Engine, and PostGres is running, you can additionally
+run ```docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.datagen.yml up -d``` to populate an app with data. Each additional use of this command will restart the 'datagen' container service and create an additional app.
     * Running ```tail -f /tmp/log/docker/datagen/service/ui-sys.log``` is the easiest way to view progress of a data import task.
-4) ```docker-compose pause``` is the recommended way to shut down this stack and ```docker-compose unpause``` is the recommended way to start it back up if you want to preserve data for Core and Experience Engine.
+8) ```docker-compose pause``` is the recommended way to shut down this stack and ```docker-compose unpause``` is the recommended way to start it back up if you want to preserve data for Core and Experience Engine.
     * You can pause just core-db or ee-db by filtering your command as ```docker-compose pause core-db ee-db```
     * Otherwise, run ```docker-compose down``` to destroy it
+    
+**Tips:**
+1) It is a good idea to do a `docker-compose pull` at least daily. That way you are working with the latest code for the backend services.
+2) In the QBUI directory, run `docker-compose ps` in the terminal to quickly see which services are up and what ports they are running on. If you find that some services are 
+down or not showing up even after running `docker-compose up`, then go to your "Docker for Mac" preferences, click "Advanced", 
+and increase the "Memory" to between 6 GB and 8GB (minimum 6 GB). Then try `docker-compose up -d` again.
+    
+#### Build backend images using your local code
+
+Sometimes, you might want test the UI against a backend that is not on the master branch or perhaps you've made some changes to those
+other services you want to test out.
+
+To build custom backend images follow the directions above with a few changes:
+1. Create a copy of `docker-compose.override.local.yml.sample` and rename it to `docker-compose-override.local.yml` (remove the .sample)
+2. Check the `build context` for each of the services. It should point to the respective repos on your local machine relative to the Qbui directory.
+If you have the Qbui, QuickBase, ExperienceEngine, etc., repos all in the same folder, then you probably don't need to change anything.
+3. Make sure you have built the `war` files for each of the services. Check the specific repo for info on how to build the `war` file.
+4. Run `docker-compose -f docker-compose.yml -f docker-compose.override.local.yml up --build -d` to bring up the services. That `-f` flag will tell docker-compose
+to use your `.local` file instead of the `docker-compose.override.yml` file.
+
+**Note:** If you switch branches or make code changes in any of those backend services, you will need to rebuild the `war` file and the docker images. 
+
 
 ## Run the Service in Docker Compose from IntelliJ
 ### Prerequisites

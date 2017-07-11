@@ -189,9 +189,9 @@
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify there is also + Icon associated with it
-            this.newTableBtn.element('.iconUISturdy-add-new-stroke').waitForVisible();
+            this.newTableIconBtn.waitForVisible();
             //Click on the new Table Btn
-            this.newTableIconBtn.click();
+            this.newTableBtn.element('.leftNavLabel').click();
             //wait until modal dialog
             return modalDialog.modalDialogContainer.waitForVisible();
         }},
@@ -509,7 +509,9 @@
             //select one and apply to test it was saved
             modalDialog.selectItemFromModalDialogDropDownList(pickerfield, dropDownListLabels[0]);
             this.clickOnEditTableApplyBtn();
-            return expect(pickerfield.getText()).toEqual(dropDownListLabels[0]);
+            expect(pickerfield.getText()).toEqual(dropDownListLabels[0]);
+            //Click on back to apps page link
+            return this.clickBackToAppsLink();
         }}
 
     });
