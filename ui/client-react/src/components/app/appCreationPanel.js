@@ -40,7 +40,7 @@ export class AppCreationPanel extends Component {
      * get validation error property/value
      * @returns {*}
      */
-    getValidationError = (property, value) => {
+    checkForValidationError = (property, value) => {
         let validationError = null;
         const trimmed = typeof value === "string" ? value.trim() : value;
         if (trimmed === '') {
@@ -60,7 +60,7 @@ export class AppCreationPanel extends Component {
     setAppProperty = (property, value) => {
         //only app name needs to be validated
         if (property === APP_PROPS_CONST.NAME) {
-            let pendingValidationError = this.getValidationError(property, value);
+            let pendingValidationError = this.checkForValidationError(property, value);
             let validationError = null;
 
             this.props.setAppProperty(property, value, pendingValidationError, validationError);

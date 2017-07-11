@@ -54,38 +54,38 @@ describe('AppCreationPanel', () => {
         expect(mockFuncs.setAppProperty).toHaveBeenCalledWith('icon', 'dragon icon');
     });
 
-    it('getValidationError will be called with the app property and app name when a user types in the app name input box', () => {
+    it('checkForValidationError will be called with the app property and app name when a user types in the app name input box', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
                                             apps={mockApps}/>);
 
         instance = component.instance();
 
         spyOn(instance, 'setAppProperty').and.callThrough();
-        spyOn(instance, 'getValidationError');
+        spyOn(instance, 'checkForValidationError');
 
         component.find('input').at(0).simulate('change', {target: {property: 'name', value: 'Mock App Name'}});
 
-        expect(instance.getValidationError).toHaveBeenCalledWith('name', 'Mock App Name');
+        expect(instance.checkForValidationError).toHaveBeenCalledWith('name', 'Mock App Name');
     });
 
-    it('getValidationError will return an empty pendingValidationError message if the app name is an empty string', () => {
+    it('checkForValidationError will return an empty pendingValidationError message if the app name is an empty string', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
                                             apps={mockApps}/>);
 
         instance = component.instance();
 
-        let result = instance.getValidationError('name', '');
+        let result = instance.checkForValidationError('name', '');
 
         expect(result).toEqual(Locale.getMessage('appCreation.validateAppNameEmpty'));
     });
 
-    it('getValidationError will return an app name exists pendingValidationError message if the app name exists', () => {
+    it('checkForValidationError will return an app name exists pendingValidationError message if the app name exists', () => {
         component = mount(<AppCreationPanel setAppProperty={mockFuncs.setAppProperty}
                                             apps={mockApps}/>);
 
         instance = component.instance();
 
-        let result = instance.getValidationError('name', mockAppName);
+        let result = instance.checkForValidationError('name', mockAppName);
 
         expect(result).toEqual(Locale.getMessage('appCreation.validateAppNameExists'));
     });
@@ -97,7 +97,7 @@ describe('AppCreationPanel', () => {
         instance = component.instance();
 
         spyOn(instance, 'setAppProperty').and.callThrough();
-        spyOn(instance, 'getValidationError').and.callThrough();
+        spyOn(instance, 'checkForValidationError').and.callThrough();
         spyOn(instance, 'appNameExists');
 
         component.find('input').at(0).simulate('change', {target: {property: 'name', value: mockAppName}});
