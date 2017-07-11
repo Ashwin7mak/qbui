@@ -126,7 +126,7 @@
             expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBe(true);
 
             //Load a report for the table and verify report elements
-            e2ePageBase.navigateTo(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
             ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');

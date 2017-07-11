@@ -75,6 +75,7 @@ describe('Account Users Actions Tests', () => {
             ...(withId ? {id: 20000} : {})
         }];
 
+
     describe('Fetch Actions', () => {
         let mockAccountId = 1, mockGridID = 1, mockItemsPerPage = 10;
         const mockWindowUtils = {
@@ -117,6 +118,39 @@ describe('Account Users Actions Tests', () => {
 
         });
 
+        it('gets dummy users with standard DotNet Response format', (done) => {
+            AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', class {
+                constructor() {
+                }
+
+                getAccountUsers(accountId) {
+                    return Promise.resolve({data: {
+                        errorCode: 200,
+                        errorMessage: "",
+                        data: ACCOUNT_USERS_DATA()
+                    }});
+                }
+            });
+
+            const expectedActions = [
+                {type: types.GET_USERS_FETCHING},
+                {type: types.GET_GRID_START_TIME, payload: jasmine.any(Number)},
+                {type: types.GET_USERS_SUCCESS, users: ACCOUNT_USERS_DATA(true)},
+                {type: gridTypes.SET_TOTAL_ITEMS, gridId: mockGridID, totalItems: ACCOUNT_USERS_DATA().length}
+            ];
+
+            // expect the dummy data when the fetchAccountUsers is called
+            const store = mockStore({});
+            return store.dispatch(AccountUsersActions.fetchAccountUsers(mockAccountId, mockGridID, mockItemsPerPage))
+                .then(() => {
+                    expect(store.getActions(mockAccountId, mockGridID, mockItemsPerPage)).toEqual(expectedActions);
+                }
+                    , error => expect(false).toBe(true))
+                .then(done, done);
+        });
+
+        // TODO: Remove this test after July Current Stack Release in favor of the test above
+        // We are standardizing the Json returned by DotNet
         it('gets dummy users', (done) => {
             const expectedActions = [
                 {type: types.GET_USERS_FETCHING},
