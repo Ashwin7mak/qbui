@@ -1,9 +1,9 @@
 import * as types from "../../app/actionTypes";
 import GetStatus from "../../common/reducer/RequestStatusReducer";
-import { combineReducers } from "redux";
+import {combineReducers} from "redux";
 import _ from "lodash";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect';
 
 const users = (state = [], action) => {
     switch (action.type) {
@@ -43,12 +43,12 @@ export const isFetching = (state) => {
  */
 export const getTotalPaidUsers = createSelector(
     usersSelector,
-    users =>
-        _.sumBy(users, user => (
-            user.hasAppAccess
-            && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user)
-            && !RealmUserAccountFlagConstants.IsDenied(user)
-            && !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0))
+    allUsers =>
+        _.sumBy(allUsers, user => (
+            user.hasAppAccess &&
+            !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) &&
+            !RealmUserAccountFlagConstants.IsDenied(user) &&
+            !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0))
 );
 
 /**
@@ -57,7 +57,7 @@ export const getTotalPaidUsers = createSelector(
  */
 export const getTotalDeniedUsers = createSelector(
     usersSelector,
-    users => _.sumBy(users, user => RealmUserAccountFlagConstants.IsDenied(user) ? 1 : 0)
+    allUsers => _.sumBy(allUsers, user => RealmUserAccountFlagConstants.IsDenied(user) ? 1 : 0)
 );
 
 /**
@@ -66,7 +66,7 @@ export const getTotalDeniedUsers = createSelector(
  */
 export const getTotalDeactivatedUsers = createSelector(
     usersSelector,
-    users => _.sumBy(users, user => RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0)
+    allUsers => _.sumBy(allUsers, user => RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0)
 );
 
 /**
@@ -75,7 +75,7 @@ export const getTotalDeactivatedUsers = createSelector(
  */
 export const getTotalRealmUsers = createSelector(
     usersSelector,
-    users => _.sumBy(users, user => user.realmDirectoryFlags !== 0 ? 1 : 0)
+    allUsers => _.sumBy(allUsers, user => user.realmDirectoryFlags !== 0 ? 1 : 0)
 );
 
 export default AccountUsers;

@@ -158,7 +158,7 @@ describe('Account Users Reducers Tests', () => {
         it('should return an empty array if users information from the state is empty', () => {
             expect(usersSelector({AccountUsers: {...initialState}})).toEqual([]);
         });
-        
+
         it('should return an empty array if users information from the state is empty', () => {
             expect(usersSelector({AccountUsers: {...initialState, users: ACCOUNT_USERS_DATA}})).toEqual(ACCOUNT_USERS_DATA);
         });

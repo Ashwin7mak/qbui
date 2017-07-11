@@ -1,6 +1,6 @@
 import * as types from "../app/actionTypes";
 import _ from "lodash";
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect';
 
 let initialState = {
     pageLoadTime: 0,
