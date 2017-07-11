@@ -2,6 +2,7 @@ import React from 'react';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import SimpleInput from '../../src/components/simpleInput/simpleInput';
+import ErrorWrapper from '../../../../client-react/src/components/fields/errorWrapper';
 
 let component;
 let instance;
@@ -166,6 +167,27 @@ describe('SimpleInput', () => {
             let label = component.find(".label");
 
             expect(label).toHaveText('Mock Label');
+        });
+    });
+
+    describe('errorWrapper', () => {
+        it('will render an errorWrapper with the mockValidationError message', () => {
+            component = mount(<SimpleInput validationErrorMessage="mockValidationError"/>);
+
+            let errorWrapper = component.find("ErrorWrapper");
+
+            expect(errorWrapper).toHaveProp('invalidMessage', 'mockValidationError');
+            expect(errorWrapper).toHaveProp('isInvalid', true);
+        });
+
+        it('will NOT render an errorWrapper with the mockValidationError message', () => {
+            component = mount(<SimpleInput />);
+
+            let errorWrapper = component.find("ErrorWrapper");
+
+            expect(errorWrapper).toHaveProp('invalidMessage', undefined);
+            expect(errorWrapper).toHaveProp('isInvalid', false);
+
         });
     });
 });
