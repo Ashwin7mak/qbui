@@ -1,7 +1,7 @@
 /**
  * Created by rbeyer on 6/13/17.
  */
-import {getAppRoles} from '../../src/reducers/selectedApp';
+import {getAppRoles, getFilteredAppRoles} from '../../src/reducers/selectedApp';
 import reducer from '../../src/reducers/selectedApp';
 import * as types from '../../src/actions/types';
 
@@ -18,11 +18,37 @@ describe('Test selectedApp reducer', () => {
         successDialogOpen: false,
         addedAppUser: [],
         isLoading: false,
+        stageSelectedRoleId: null,
         error: false,
         changeUserRoleDialog: false,
     };
 
     const appRoles = [{"9": {"id": 9, "name": "none", "tableRights": {}, "fieldRights": {}, "description": "", "access": "NONE"}}];
+    const roles =  [
+        {
+            "id": 9,
+            "name": "none",
+            "description": "",
+            "access": "NONE"
+        },
+        {
+            "id": 10,
+            "name": "Viewer",
+            "description": "",
+            "access": "BASIC"
+        },
+        {
+            "id": 11,
+            "name": "Participant",
+            "description": ""
+        },
+        {
+            "id": 12,
+            "name": "Administrator",
+            "description": ""
+        }
+    ];
+    const stageSelectedRoleId = 9;
 
     it('returns correct initial state empty action', () => {
         let resultState = reducer(undefined, {});
@@ -53,6 +79,12 @@ describe('Test selectedApp reducer', () => {
     it('test get appRole', () => {
         const state = reducer(initialState, event(types.LOAD_APP_ROLES_SUCCESS, {roles: appRoles}));
         expect(getAppRoles(state)).toEqual(appRoles);
+    });
+
+    it('test get FilteredAppRoles', () => {
+        const state = reducer(initialState, event(types.LOAD_APP_ROLES_SUCCESS, {roles: appRoles}));
+        state.selectedApp = {stageSelectedRoleId, roles};
+        expect(getFilteredAppRoles(state)).toEqual([roles[0]]);
     });
 
     it('return update state', () => {

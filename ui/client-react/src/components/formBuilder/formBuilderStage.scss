@@ -1,0 +1,65 @@
+@import '../../assets/css/qbVariables';
+
+$table-icon-font-size: $font-size-h3;
+$table-icon-heading-spacer: $spacing-xxx-small;
+
+.formStage {
+    cursor: pointer;
+    .formHeader {
+        .qbIcon {
+            font-size: $table-icon-font-size;
+            margin-right: $table-icon-heading-spacer;
+        }
+        > * {
+            vertical-align: middle;
+        }
+    }
+    .editableStage {
+        margin-left: $table-icon-font-size + $table-icon-heading-spacer + 16px;
+        .titleField {
+            width: 250px;
+            display: table;
+            padding: 5px 0px 5px 11px;
+            border: $stroke-width-thin solid $panel-background-color;
+
+            > * {
+                display: inline-block;
+            }
+            .selectedOption {
+                > * {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+                .qbIcon {
+                    margin-right: 2px;
+                }
+            }
+            .editIcon {
+                color: $iconfont-on-light-normal-color;
+                font-size: 15px;
+                margin-left: 15px;
+            }
+            .Select-arrow-zone {
+                display: none;
+            }
+
+            .Select-arrow-zone {
+                float: right;
+            }
+
+            &:hover {
+                border: $stroke-width-thin solid $panel-border-color;
+                border-radius: $border-radius-base;
+                .editIcon {
+                    display: none;
+                }
+                .Select-arrow-zone {
+                    display: inline-block;
+                }
+            }
+        }
+        .recordTitleFieldDescription {
+            margin-bottom: 10px;
+        }
+    }
+}

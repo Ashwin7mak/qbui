@@ -8,7 +8,7 @@ import MultiLineTextFieldValueEditor from "../../src/components/fields/multiLine
 import EmailFieldValueEditor from "../../src/components/fields/emailFieldValueEditor";
 
 const sampleApp = {id: 'app1', tables: []};
-const sampleAuto1 = {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL", inputs: [
+const sampleAuto1 = {id: 'auto1', name: 'Auto_1', active: true, type: "EMAIL", inputs: [
     {name: "toAddress", type: "TEXT", defaultValue: "test@test.com"},
     {name: "fromAddress", type: "TEXT",  defaultValue: "testing@quickbaserocks.com"},
     {name: "ccAddress", type: "TEXT",  defaultValue: null},
@@ -20,15 +20,51 @@ const props = {
     app: sampleApp,
     loadAutomation: (context, appId) => {},
     saveAutomation: (appId, automationId, automation) => {},
+    createAutomation:() => {},
+    generateAutomation: (appId, automation) => {},
     changeAutomationEmailTo: (value) => {},
     changeAutomationEmailSubject: (value) => {},
     changeAutomationEmailBody: (value) => {},
-    automation: undefined
+    automation: undefined,
 };
 
 const propsWithAuto = {
     ...props,
     automation: sampleAuto1
+};
+
+const propsWithCreate = {
+    ...props,
+    automation: {
+        name: '', type: "EMAIL", active:true, inputs: [
+            {name: "subject", type: "TEXT", defaultValue: null},
+            {name: "toAddress", type: "TEXT", defaultValue: null},
+            {name: "body", type: "TEXT", defaultValue: null},
+            {name: "fromAddress", type: "TEXT", defaultValue: 'notify@quickbaserocks.com'},
+            {name: "ccAddress", type: "TEXT", defaultValue: null}
+        ],
+        steps: [
+            {
+                type: "ACTION",
+                actions: [
+                    {
+                        type: "CALL",
+                        functionName: "SEND_EMAIL",
+                        parameterBindings: [
+                            {parentName: "toAddress", "childName": "toAddress"},
+                            {parentName: "fromAddress", "childName": "fromAddress"},
+                            {parentName: "ccAddress", "childName": "ccAddress"},
+                            {parentName: "subject", "childName": "subject"},
+                            {parentName: "body", "childName": "body"}
+                        ],
+                        returnBinding: {"parentName": "response"}
+                    }
+                ]
+            }
+        ]
+    },
+    newAutomation: true,
+    match : {path: "/qbase/builder/app/:appId/automation/create"}
 };
 
 describe('AutomationBuilderContainer', () => {
@@ -37,13 +73,6 @@ describe('AutomationBuilderContainer', () => {
     describe('AutomationBuilderContainer with different props', () => {
         beforeEach(() => {
             jasmineEnzyme();
-        });
-
-        it('test get app id from app in props', () => {
-            component = shallow(<AutomationBuilderContainer {...propsWithAuto}/>);
-            expect(component.instance().getAppId()).toEqual("app1");
-            expect(component.instance().getAutomationId()).toEqual("auto1");
-            expect(component.instance().getAutomationName()).toEqual("Auto 1");
         });
 
         it('test get app id from app id in matches', () => {
@@ -74,11 +103,25 @@ describe('AutomationBuilderContainer', () => {
             component = mount(<AutomationBuilderContainer {...props}/>);
         });
 
+        it('test render of component with no automation', () => {
+            expect(component).toBeDefined();
+        });
+    });
+
+    describe('AutomationBuilderContainer when creating automation', () => {
+        beforeEach(() => {
+            jasmineEnzyme();
+            component = mount(<AutomationBuilderContainer {...propsWithCreate}/>);
+        });
+
         afterEach(() => {
         });
 
-        it('test render of component with no automation', () => {
-            expect(component).toBeDefined();
+        it('test screen is filled in', () => {
+            expect(component.find('.automationName').find('.textField')).toHaveValue('');
+            expect(component.find('.automationToAddress')).toHaveValue('');
+            expect(component.find('.automationSubject').find('.textField')).toHaveValue('');
+            expect(component.find(MultiLineTextFieldValueEditor)).toHaveValue(null);
         });
     });
 
@@ -88,12 +131,10 @@ describe('AutomationBuilderContainer', () => {
             component = mount(<AutomationBuilderContainer {...propsWithAuto}/>);
         });
 
-        afterEach(() => {
-        });
-
         it('test screen is filled in', () => {
-            expect(component.find(EmailFieldValueEditor)).toHaveValue("test@test.com");
-            expect(component.find(FieldValueEditor)).toHaveValue("Test subject");
+            expect(component.find('.automationName').find('.textField')).toHaveValue("Auto_1");
+            expect(component.find('.automationToAddress')).toHaveValue("test@test.com");
+            expect(component.find('.automationSubject').find('.textField')).toHaveValue("Test subject");
             expect(component.find(MultiLineTextFieldValueEditor)).toHaveValue("Test body");
         });
     });
@@ -106,9 +147,6 @@ describe('AutomationBuilderContainer', () => {
             spyOn(propsWithAuto, 'changeAutomationEmailBody').and.callThrough();
 
             component = mount(<AutomationBuilderContainer {...propsWithAuto}/>);
-        });
-
-        afterEach(() => {
         });
 
         it('test edit to', () => {
@@ -148,5 +186,31 @@ describe('AutomationBuilderContainer', () => {
             expect(propsWithAuto.saveAutomation).not.toHaveBeenCalled();
             expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
         });
+    });
+
+    describe('AutomationBuilderContainer save button with new automation', () => {
+        beforeEach(() => {
+            jasmineEnzyme();
+            spyOn(propsWithCreate, 'generateAutomation').and.callThrough();
+            spyOn(NavigationUtils, 'goBackToPreviousLocation');
+
+            component = mount(<AutomationBuilderContainer {...propsWithCreate}/>);
+        });
+
+        it('test save button click', () => {
+            let saveButton = component.find('.mainTrowserFooterButton');
+            saveButton.simulate('click');
+
+            expect(propsWithCreate.generateAutomation).toHaveBeenCalled();
+        });
+
+        it('test cancel button click', () => {
+            let saveButton = component.find('.alternativeTrowserFooterButton');
+            saveButton.simulate('click');
+
+            expect(propsWithCreate.generateAutomation).not.toHaveBeenCalled();
+            expect(NavigationUtils.goBackToPreviousLocation).toHaveBeenCalled();
+        });
+
     });
 });

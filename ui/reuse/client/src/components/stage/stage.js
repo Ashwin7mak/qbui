@@ -16,7 +16,7 @@ class Stage extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {open: false};
+        this.state = {open: props.isOpenOnMount};
 
         this.toggleStage = this.toggleStage.bind(this);
     }
@@ -26,8 +26,10 @@ class Stage extends Component {
     }
 
     render() {
+        let classes = "layout-stage";
+        classes += this.props.className ? " " + this.props.className : "";
         return (
-            <div className="layout-stage">
+            <div className={classes}>
                 <div className="stageHeader">
                     <div className="stageLeft">
                         {this.props.stageHeadline}
@@ -51,6 +53,10 @@ class Stage extends Component {
     }
 }
 
+Stage.defaultProps = {
+    isOpenOnMount: false
+};
+
 Stage.propTypes = {
     /**
      * Page actions that appear on the right side of the page. It's easiest to pass in a IconActions component, but not required. */
@@ -58,7 +64,12 @@ Stage.propTypes = {
 
     /**
      * The title/headline of the stage. It appears toward the upper-left of the stage. It's easiest to use the StageHeaderComponent, but not required. */
-    stageHeadline: PropTypes.node
+    stageHeadline: PropTypes.node,
+
+    /**
+     * Tells the stage whether it should be open or close by default
+     */
+    isOpenOnMount: PropTypes.bool
 };
 
 export default Stage;

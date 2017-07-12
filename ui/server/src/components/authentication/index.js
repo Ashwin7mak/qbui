@@ -80,7 +80,7 @@
                 if (isFederated && req.headers.accept !== consts.APPLICATION_JSON && req.headers.accept !== consts.APPLICATION_XML) {
 
                     // Pull the legacy stack url from configs
-                    let legacyBase = requestHelper.getLegacyHost();
+                    let legacyBase = requestHelper.getLegacyHostTopTwoDomain();
 
                     if (legacyBase && legacyBase.length !== 0) {
 
@@ -135,7 +135,7 @@
                 }
 
                 // Pull the legacy stack url from configs
-                let legacyBase = requestHelper.getLegacyHost();
+                let legacyBase = requestHelper.getLegacyHostTopTwoDomain();
                 if (!legacyBase || legacyBase.length === 0) {
                     let statusCode = 500;
                     return processAuthentication(req, res, "500.html", statusCode, "Legacy stack URL not valid");

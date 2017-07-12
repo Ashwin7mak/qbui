@@ -77,7 +77,8 @@ class DialogFieldInput extends React.Component {
             onChange: (e) => this.props.onChange(this.props.name, e.target.value),
             onFocus: () => this.props.onFocus && this.props.onFocus(this.props.name),
             onBlur: (e) => this.props.onBlur && this.props.onBlur(this.props.name, e.target.value),
-            ref: (input) => {this.input = input;}
+            ref: (input) => {this.input = input;},
+            maxLength: this.props.maxLength
         };
 
         // create input (either input or textarea bsed on component)
@@ -117,7 +118,8 @@ DialogFieldInput.propTypes = {
     hasFocus: PropTypes.bool,
     onChange: PropTypes.func,
     onFocus: PropTypes.func,
-    onBlur: PropTypes.func
+    onBlur: PropTypes.func,
+    maxLength: PropTypes.number
 };
 
 DialogFieldInput.defaultProps = {

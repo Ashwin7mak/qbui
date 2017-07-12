@@ -1,11 +1,28 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import Locale from '../locales/locales';
+import * as APP_PROPS_CONST from '../../src/components/app/appPropertiesConstants';
+
+const defaultAppIcon = 'Customer';
+const APP_PROPS = [APP_PROPS_CONST.NAME, APP_PROPS_CONST.ICON, APP_PROPS_CONST.DESCRIPTION];
+const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited', 'hasFocus'];
+
+const setDefaultSettings = {
+    isAppIconChooserOpen: false,
+    isDialogOpen: false,
+    isSavingApp: false,
+    description: '',
+    icon: defaultAppIcon,
+    name: {
+        value: '',
+        pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+    },
+};
 
 const appBuilder = (
     //  default states
     state = {
-        isSavingApp: false,
-        isDialogOpen: false
+        ...setDefaultSettings
     },
     action) => {
     // reducer - no mutations!
@@ -20,10 +37,8 @@ const appBuilder = (
     case types.CREATE_APP_SUCCESS:
         return {
             ...state,
+            ...setDefaultSettings,
             isSavingApp: false,
-            isDialogOpen: false,
-            name: '',
-            description: ''
         };
 
     case types.CREATE_APP_FAILED:
@@ -42,16 +57,40 @@ const appBuilder = (
     case types.HIDE_APP_CREATION_DIALOG:
         return {
             ...state,
-            isDialogOpen: false,
-            name: '',
-            description: ''
+            ...setDefaultSettings
         };
 
     case types.SET_APP_PROPERTY:
+        let appInfo = {};
+
+        if (action.property === APP_PROPS_CONST.NAME) {
+            appInfo[action.property] = {
+                value: action.value,
+                pendingValidationError: action.pendingValidationError,
+                validationError: action.validationError,
+                isEdited: true,
+                hasFocus: action.hasFocus
+            };
+        } else {
+            appInfo[action.property] = action.value;
+        }
         return {
             ...state,
-            [action.property]: action.value
+            ...appInfo
         };
+
+    case types.OPEN_ICON_CHOOSER_FOR_APP:
+        return {
+            ...state,
+            isAppIconChooserOpen: true
+        };
+
+    case types.CLOSE_ICON_CHOOSER_FOR_APP:
+        return {
+            ...state,
+            isAppIconChooserOpen: false
+        };
+
     default:
         return state;
     }
@@ -61,16 +100,28 @@ export default appBuilder;
 
 export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialogOpen', false);
 
-export const getAppProperty = (state, property) => _.get(state.appBuilder, property, '');
+export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
+
+export const getValidationErrorAndIsEdited = (state) => _.pick(state.appBuilder.name, VALIDATION_ERROR_AND_IS_EDITED);
+
+export const getAppProperties = (state) => {
+    let {name, icon, description} =  _.pick(state.appBuilder, APP_PROPS);
+
+    return {
+        name: name ? name.value : null,
+        icon,
+        description
+    };
+};
 
 export const getNewAppInfo = (state) => {
-    //TODO: Description will need to be added to the return object, but there is currently no endpoint for it
-    let description =  getAppProperty(state, 'description');
-    let name = getAppProperty(state, 'name');
+    let {name, icon, description} = getAppProperties(state);
 
-    if (name.length > 0) {
+    if (name) {
         return {
-            name
+            name,
+            icon,
+            description
         };
     }
     return null;

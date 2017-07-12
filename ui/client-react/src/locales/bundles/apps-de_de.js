@@ -394,7 +394,9 @@ export default {
                     lowToHigh: "Sortieren der niedrigsten zur höchsten",
                     oldToNew: "Sortieren ältesten Bild",
                     uncheckedToChecked: "Sortieren ungeprüft geprüft",
-                    checkedToUnchecked: "Sortieren markiert zu nicht markiert"
+                    checkedToUnchecked: "Sortieren markiert zu nicht markiert",
+                    yesToNo: "Ja bis nein sortieren",
+                    noToYes: "Sortieren Sie nein zu ja"
                 },
                 group: {
                     aToZ: "Gruppe A bis Z",
@@ -646,6 +648,10 @@ export default {
                 removeRelationshipField: "Link zu einem Datensatz in einer anderen Tabelle löschen",
                 newFieldsMenuTitle: 'Neu',
                 existingFieldsMenuTitle: 'Bestehende',
+                existingFieldsMenuThisTableTitle: 'Dieser Tisch',
+                stage: {
+                    title: 'Formular für {tableName}'
+                },
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Erstellen Sie ein Textfeld und fügen Sie es dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Erstellen Sie ein Zahlenfeld und fügen Sie es dem Formular hinzu",
@@ -739,7 +745,10 @@ export default {
             appNameHeading: "App Name",
             appNamePlaceHolder: "Zum Beispiel, \"bestellen Tracker\"",
             descriptionHeading: "App Beschreibung",
-            appCreationFailed: "App konnte nicht erstellt werden"
+            appCreationFailed: "App konnte nicht erstellt werden",
+            searchPlaceholder: "Such-Symbole suchen...",
+            validateAppNameExists: "Füllen Sie einen anderen Wert aus. Eine andere App verwendet diesen Namen bereits",
+            validateAppNameEmpty: "Füllen Sie den App-Namen aus"
         },
         emptyAppState: {
             message: "Du hast noch keine Apps.",
@@ -757,10 +766,10 @@ export default {
             recordNameHeading: "Ein Rekord in der Tabelle heißt",
             descriptionHeading: "Beschreibung",
             iconHeading: "Symbol",
-            suggestedIconsHeading: "Vorgeschlagene Ikonen",
+            searchPlaceholder: "Tabellensymbole suchen ......",
 
-            tableNamePlaceholder: "Zum Beispiel, Kunden",
-            recordNamePlaceholder: "Zum Beispiel, Kunde",
+            tableNamePlaceholder: "Zum Beispiel, Kunden. Verwenden Sie bis zu {numberOfChars} Buchstaben",
+            recordNamePlaceholder: "Zum Beispiel, Kunde. Verwenden Sie bis zu {numberOfChars} Buchstaben",
             descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linke navigation",
 
             finishedButtonLabel: "Tabelle",
@@ -776,9 +785,6 @@ export default {
             homePageStillBuilding: "Noch gebaut  ",
             homePageCreateAnother: "Erstellen Sie eine andere Tabelle",
 
-            noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Tabellennamen",
-            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten",
-
             tableReadyTitle: "Dein Tisch ist fertig!",
             tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
             tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen.",
@@ -790,8 +796,14 @@ export default {
             recordTitleFieldDefault: "Standard auf Noun + ID",
             recordName: "Datensatzname"
         },
+        emptyTableState: {
+            message: 'Es gibt noch keine Tabellen in dieser App',
+            createNewtable: 'Erstellen Sie eine Tabelle'
+        },
         iconChooser: {
-            searchPlaceholder: "Tabellensymbole suchen ......"
+            suggestedIconsHeading: "Vorgeschlagene Ikonen",
+            noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Namen",
+            typeForSuggestions: "Geben Sie einen Namen ein, um die vorgeschlagenen Symbole anzuzeigen"
         },
         settings: {
             header: "Einstellungen",

@@ -61,11 +61,16 @@ export const createApp = (app) => {
  * It is used to set the properties needed for creating a new app
  * @param property
  * @param value
+ * @param pendingValidationError
+ * @param validationError
  * */
-export const setAppProperty = (property, value) => ({
+export const setAppProperty = (property, value, pendingValidationError, validationError, hasFocus) => ({
     type: types.SET_APP_PROPERTY,
     property,
-    value
+    value,
+    pendingValidationError,
+    validationError,
+    hasFocus
 });
 
 export const showAppCreationDialog = () => ({
@@ -74,4 +79,12 @@ export const showAppCreationDialog = () => ({
 
 export const hideAppCreationDialog = () => ({
     type: types.HIDE_APP_CREATION_DIALOG
+});
+
+export const openIconChooserForApp = () => ({
+    type: types.OPEN_ICON_CHOOSER_FOR_APP
+});
+
+export const closeIconChooserForApp = () => ({
+    type: types.CLOSE_ICON_CHOOSER_FOR_APP
 });
