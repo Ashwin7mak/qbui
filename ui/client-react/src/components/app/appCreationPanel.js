@@ -5,9 +5,11 @@ import {DIALOG_FIELD_INPUT_COMPONENT_TYPE} from '../../../../reuse/client/src/co
 import {connect} from 'react-redux';
 import * as AppBuilderActions from '../../actions/appBuilderActions';
 import * as AppBuilderSelectors from '../../reducers/appBuilder';
+import * as App from '../../reducers/app';
 import Locale from '../../locales/locales';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+import * as APP_PROPS_CONST from './appPropertiesConstants';
 
 //TODO: XD needs to provide us with a list of appIconNames and appIconsByTag, currently none exists
 import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
@@ -23,6 +25,60 @@ export class AppCreationPanel extends Component {
         appDescription: PropTypes.string,
         appIcon: PropTypes.string,
         isAppIconChooserOpen: PropTypes.bool
+    };
+
+    /**
+     * check existing app names for proposed name
+     * @param name
+     * @returns {boolean}
+     */
+    appNameExists = (name) => {
+        return this.props.apps.some((app) => app.name.toLowerCase().trim() === name.toLowerCase().trim());
+    };
+
+    /**
+     * get validation error property/value
+     * @returns {*}
+     */
+    validateAppName = (property, value) => {
+        let validationError = null;
+        const trimmed = typeof value === "string" ? value.trim() : '';
+        if (trimmed === '') {
+            validationError = Locale.getMessage('appCreation.validateAppNameEmpty');
+        } else if (this.appNameExists(trimmed)) {
+            validationError = Locale.getMessage('appCreation.validateAppNameExists');
+        }
+
+        return validationError;
+    };
+
+    /**
+     * set app properties
+     * @param  property
+     * @param  value
+     */
+    setAppProperty = (property, value) => {
+        //only app name needs to be validated
+        if (property === APP_PROPS_CONST.NAME) {
+            let pendingValidationError = this.validateAppName(property, value);
+            let validationError = null;
+
+            this.props.setAppProperty(property, value, pendingValidationError, validationError, true);
+        } else {
+            this.props.setAppProperty(property, value);
+        }
+    };
+
+    /**
+     * handle loss of focus
+     */
+    onBlurInput = (property, value) => {
+        // do validation on loss of focus unless it hasn't been edited
+        if (this.props.isEdited && property === APP_PROPS_CONST.NAME) {
+            const validationError = this.props.pendingValidationError;
+            // set the validation error and the live validation error for the field (same)
+            this.props.setAppProperty(property, value, validationError, validationError, false);
+        }
     };
 
     /**
@@ -44,16 +100,20 @@ export class AppCreationPanel extends Component {
                     <DialogFieldInput title={Locale.getMessage("appCreation.appNameHeading")}
                                       className="appCreationPanel"
                                       name="name"
-                                      value={this.props.appName}
-                                      onChange={this.props.setAppProperty}
+                                      value={this.props.appName || ""}
+                                      onChange={this.setAppProperty}
+                                      onBlur={this.onBlurInput}
                                       placeholder={Locale.getMessage("appCreation.appNamePlaceHolder")}
                                       required
+                                      edited={this.props.isEdited}
+                                      validationError={this.props.validationError}
+                                      hasFocus={this.props.hasFocus}
                                       autofocus />
 
                     <DialogFieldInput title={Locale.getMessage("appCreation.descriptionHeading")}
                                       className="appCreationPanel"
                                       name="description"
-                                      value={this.props.appDescription}
+                                      value={this.props.appDescription || ""}
                                       onChange={ this.props.setAppProperty}
                                       component={DIALOG_FIELD_INPUT_COMPONENT_TYPE.textarea}
                                       rows="3" />
@@ -77,12 +137,18 @@ export class AppCreationPanel extends Component {
 
 const mapStateToProps = (state) => {
     let {name, icon, description} = AppBuilderSelectors.getAppProperties(state);
+    let {validationError, pendingValidationError, isEdited, hasFocus} = AppBuilderSelectors.getValidationErrorAndIsEdited(state);
 
     return {
+        apps: App.getApps(state),
         appName: name,
         appDescription: description,
         appIcon: icon,
-        isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state)
+        isAppIconChooserOpen: AppBuilderSelectors.isAppIconChooserOpen(state),
+        pendingValidationError,
+        validationError,
+        isEdited,
+        hasFocus
     };
 };
 
