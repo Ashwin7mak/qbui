@@ -394,7 +394,9 @@ export default {
                     lowToHigh: "Sortieren der niedrigsten zur höchsten",
                     oldToNew: "Sortieren ältesten Bild",
                     uncheckedToChecked: "Sortieren ungeprüft geprüft",
-                    checkedToUnchecked: "Sortieren markiert zu nicht markiert"
+                    checkedToUnchecked: "Sortieren markiert zu nicht markiert",
+                    yesToNo: "Ja bis nein sortieren",
+                    noToYes: "Sortieren Sie nein zu ja"
                 },
                 group: {
                     aToZ: "Gruppe A bis Z",

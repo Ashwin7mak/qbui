@@ -400,7 +400,9 @@ export default {
                     lowToHigh: "Sort lowest to highest",
                     oldToNew: "Sort oldest to newest",
                     uncheckedToChecked: "Sort unchecked to checked",
-                    checkedToUnchecked: "Sort checked to unchecked"
+                    checkedToUnchecked: "Sort checked to unchecked",
+                    yesToNo: "Sort yes to no",
+                    noToYes: "Sort no to yes"
                 },
                 group: {
                     aToZ: "Group A to Z",

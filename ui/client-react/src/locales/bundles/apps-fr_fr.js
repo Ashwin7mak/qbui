@@ -393,7 +393,9 @@ export default {
                     lowToHigh: "Trier du plus bas au plus élevé",
                     oldToNew: "Trier le plus ancien au plus récent",
                     uncheckedToChecked: "Trier décochée à vérifier",
-                    checkedToUnchecked: "Trier vérifié pour décochée"
+                    checkedToUnchecked: "Trier vérifié pour décochée",
+                    yesToNo: "Trier oui à non",
+                    noToYes: "Trier non à oui"
                 },
                 group: {
                     aToZ: "Groupe A à Z",

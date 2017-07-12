@@ -1,0 +1,41 @@
+@import "../../assets/css/_qbVariables";
+
+.simpleInput {
+    margin-top: $spacing-small;
+    margin-bottom: $spacing-small;
+
+    .label {
+        display: block;
+        margin-left: -5px; // remove label spacing
+        margin-bottom: $spacing-tiny;
+        text-align: left;
+        color: $field-label-normal-color;
+        max-width: 280px;
+        font-size: $font-size-h5;
+    }
+
+    .input {
+        padding: 5px;
+        width: 100%;
+        border: 1px solid $input-text-normal-border-color;
+        border-radius: $radius-base;
+        height: 34px;
+
+        &:focus {
+            @include text-input-focus;
+        }
+    }
+
+    &.isInvalid {
+        .label {
+            color: $error-color;
+        }
+
+        .input, .input:focus {
+            border: solid 1px $input-text-error-border-color;
+            border-color: $input-text-error-border-color !important;
+            border-left-width: 5px;
+            box-shadow: none;
+        }
+    }
+}

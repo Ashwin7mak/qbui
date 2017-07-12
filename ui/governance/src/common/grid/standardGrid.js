@@ -29,6 +29,9 @@ export class StandardGrid extends Component {
     constructor(props) {
         super(props);
         this.transforms = this.props.columnTransformsClasses.map((transformClass, index) => new transformClass(this, this.props.columnTransformProps[index]));
+        this.state = {
+            isGridLoading: false
+        }
     }
 
     getColumns = () => {
@@ -88,6 +91,12 @@ export class StandardGrid extends Component {
             if (refreshTime) {
                 this.props.gridRefreshTime(refreshTime);
             }
+        }
+    };
+
+    isGridLoading = () => {
+        if(!_.isNull(this.props.items)) {
+            this.state({isGridLoading: true})
         }
     };
 
@@ -154,9 +163,10 @@ export class StandardGrid extends Component {
     render() {
         let isGridNotLoaded = _.isNull(this.props.items); //If the array is null(before API call)
         let isGridEmpty = _.isEmpty(this.props.items); // If the array is empty (after API call but items are not yet rendered)
+        let isGridLoading = isGridNotLoaded && isGridEmpty;
 
         if (isGridNotLoaded) {
-            return <QbLoader className="standardGridLoader" waitTime={constants.GRID_LOADER_TIMEOUT} />;
+            return <QbLoader isLoading={isGridLoading} className="standardGridLoader" waitTime={constants.GRID_LOADER_TIMEOUT} />;
         } else {
             return (
                 <div className="gridWrapper">
@@ -170,8 +180,8 @@ export class StandardGrid extends Component {
                         itemTypeSingular={this.props.itemTypeSingular}
                         itemsPerPage={this.props.itemsPerPage}
                     />
-                    {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
-                    {!(isGridNotLoaded) && isGridEmpty ? this.renderNoItemsExist() : this.renderItemsExist()}
+                    {/*If the array is empty(no data), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
+                    {isGridEmpty ? this.renderNoItemsExist() : this.renderItemsExist()}
                 </div>
             );
         }

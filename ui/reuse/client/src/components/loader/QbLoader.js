@@ -15,16 +15,23 @@ class QbLoader extends Component {
     }
 
     componentDidMount() {
-        let self = this;
-        setTimeout(() => {
-            self.setState({waiting: "visible"});
-        }, self.props.waitTime);
+        this.timeout = setTimeout(() => {
+            this.setState({waiting: "visible"});
+        }, this.props.waitTime);
+    }
+
+    componentWillUnmount() {
+        if (this.timeout) {
+            clearTimeout(this.timeout)
+        }
     }
 
     render() {
-        return (<BodyMovin animationData={QbLoaderAnimationData}
-                           className={`${this.props.className} ${this.state.waiting}`} />
-        );
+        if (this.props.isLoading) {
+            return (<BodyMovin animationData={QbLoaderAnimationData}
+                               className={`${this.props.className} ${this.state.waiting}`}/>
+            );
+        } else return null;
     }
 }
 
@@ -36,7 +43,11 @@ QbLoader.propTypes = {
     /**
      * The time to be delayed after which the loader fires
      */
-    waitTime: PropTypes.number
+    waitTime: PropTypes.number,
+    /**
+     *  Boolean to show the loader or not
+     */
+    isLoading: PropTypes.bool
 };
 
 QbLoader.defaultProps = {
