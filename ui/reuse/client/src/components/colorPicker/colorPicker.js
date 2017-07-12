@@ -9,6 +9,7 @@ import includes from 'lodash/includes';
 import './colorPicker.scss';
 
 export const DEFAULT_COLOR_LIST = [
+    // TODO: Replace with colors defined by XD. Currently random colors chosen by dev.
     '#74489d', // default purple
     '#005773',
     '#3e7a00',
@@ -111,7 +112,7 @@ class ColorPicker extends Component {
      * @private
      */
     _getCurrentColor = (color) => {
-        return this.props.colorType === 'all' ? color : color[this.props.colorType];
+        return this.props.colorType === COLOR_TYPES.ALL ? color : color[this.props.colorType];
     };
 
     /**
