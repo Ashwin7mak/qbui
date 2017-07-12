@@ -61,6 +61,8 @@ const Pagination = require('../../../reuse/client/src/components/pagination/pagi
 const NotificationManager = require('../../../reuse/client/src/scripts/notificationManager.js').default;
 const NotificationContainer = require('react-notifications').NotificationContainer;
 const StandardGridItemsCount = require('../../../reuse/client/src/components/itemsCount/StandardGridItemsCount.js').default;
+const ColorPicker = require('../../../reuse/client/src/components/colorPicker/colorPicker.js').default;
+const SimpleInput = require('../../../reuse/client/src/components/simpleInput/simpleInput.js').default;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
