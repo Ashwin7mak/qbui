@@ -66,9 +66,9 @@
             expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBe(true);
             // click on dropdownToggle actionButton
             reportContentPO.clickDropdownToggleActionButtonSB();
-            //verify dropdown action menu is visible
-            browser.element('.dropdown-menu.dropdown-menu-right').waitForVisible();
-            expect(browser.element('.dropdown-menu .dropdown-menu-right').isVisible()).toBe(true);
+            //verify add record button is visible
+            browser.element('.dropdown-menu-right .menuActionButton').waitForVisible();
+            expect(browser.element('.dropdown-menu-right .menuActionButton').isVisible()).toBe(true);
         });
 
         /**
@@ -103,7 +103,7 @@
         });
 
         /**
-         * swipe left
+         * swipe left on a record and verify actionIcons are visible
          */
         it('swipe left on a record', function() {
             // wait for the report content to be visible
@@ -118,7 +118,7 @@
         });
 
         /**
-         * swipe right
+         * swipe right on a record and verify actionIcons are visible
          */
         it('swipe right on a record', function() {
             // wait for the report content to be visible
