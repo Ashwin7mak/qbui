@@ -113,6 +113,27 @@ $edit-icon-font-size: 18px;
             width: 100%;
         }
     }
+
+    .qbHeader {
+        // last column's dropdown should open to the left to ensure the dropdown doesn't get cut off on the right
+        .qbHeaderCell:last-child {
+            .dropdown-menu {
+                right: 0;
+                left: initial;
+            }
+
+            .dropdown-menu:before {
+                right: 9px;
+                left: initial;
+            }
+
+            .dropdown-menu:after {
+                right: 9px;
+                left: initial;
+            }
+        }
+    }
+
     // adjust sizing when no checkbox is present
     &.isMultiSelectDisabled .qbHeaderCell {
         min-width: 30px;
