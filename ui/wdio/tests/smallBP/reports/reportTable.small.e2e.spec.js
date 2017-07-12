@@ -48,9 +48,9 @@
         });
 
         /**
-         * Test method. Checks to make sure the Table Actions ( Sort By, Records Count and dropdownToggle button) are visible/enabled/touchable.
+         * Test method. Checks to make sure the Table Actions ( Sort By, Records Count and dropdownToggle button) are visible/enabled/clickable.
          */
-        xit('Should load the table report actions', function() {
+        it('Should load the table report actions', function() {
 
             // Wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
@@ -62,23 +62,19 @@
             // Assert records count total
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
 
-            // Assert dropdownToggle actionButton is visible and touchable/clickable
+            // Assert dropdownToggle actionButton is visible and clickable
             expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBe(true);
-            // touch on dropdownToggle actionButton
+            // click on dropdownToggle actionButton
             reportContentPO.clickDropdownToggleActionButtonSB();
-
-          //  reportContentPO.waitForReportContentSB();
-            // menu action button - '.dropdown-menu .dropdown-menu-right .menuActionButton'
             //verify dropdown action menu is visible
-           // expect(browser.element('.dropdown-menu .dropdown-menu-right').isVisible()).toBe(true);
-            //helper
-            reportContentPO.waitForReportContentSB();
+            browser.element('.dropdown-menu.dropdown-menu-right').waitForVisible();
+            expect(browser.element('.dropdown-menu .dropdown-menu-right').isVisible()).toBe(true);
         });
 
         /**
-         * verify record count and card expander button is visible/touchable
+         * verify record count and card expander button is visible/clickable
          */
-        xit('Should load the reports page with the appropriate table report and verify  card expander button is touchable', function() {
+        it('Should load the reports page with the appropriate table report and verify  card expander button is clickable', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
@@ -88,31 +84,28 @@
             //verify row card is collapsed
             expect(browser.element('.custom-row-card .expanded').isVisible()).toBe(false);
 
-            //touch row card expander button
+            //click row card expander button
             reportContentPO.clickCardExpanderButtonSB();
 
             //verify row card is exapnded
             expect(browser.element('.custom-row-card .expanded').isVisible()).toBe(true);
-
-            //helper
-            reportContentPO.waitForReportContentSB();
         });
 
         /**
-         * Verifies add new record button is visible, enabled and touchable
+         * Verifies add new record button is visible, enabled and clickable
          */
-        xit('verify add record button is visible, enabled and touchable', function() {
+        it('verify add record button is visible, enabled and clickable', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            //touch 'add record' button
+            //click 'add record' button
             reportContentPO.clickAddRecordBtnSB();
         });
 
         /**
          * swipe left
          */
-        it('swipe left', function() {
+        it('swipe left on a record', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
@@ -127,7 +120,7 @@
         /**
          * swipe right
          */
-        it('swipe right', function() {
+        it('swipe right on a record', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
