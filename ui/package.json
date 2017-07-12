@@ -13,7 +13,7 @@
     "bigdecimal": "0.6.1",
     "bluebird": "2.9.24",
     "body-parser": "~1.5.2",
-    "bodymovin": "^4.8.0",
+    "bodymovin": "^4.9.0",
     "bunyan": "^1.8.5",
     "classnames": "^2.2.5",
     "codemirror": "^5.16.0",
