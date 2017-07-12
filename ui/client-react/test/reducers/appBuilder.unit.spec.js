@@ -2,14 +2,19 @@ import reducer from '../../src/reducers/appBuilder';
 import * as AppBuilderSelectors from '../../src/reducers/appBuilder';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
+import Locale from '../../src/locales/locales';
+
 let storeState = {};
 
 let mockState = {
     appBuilder: {
         isDialogOpen: true,
-        name: 'Mock App Name',
         description: 'Mock App Name',
-        icon: 'Mock Icon'
+        icon: 'Mock Icon',
+        name: {
+            value: 'Mock App Name',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        }
     }
 };
 
@@ -19,8 +24,11 @@ describe('Test appBuilder reducer - initial state', () => {
         isDialogOpen: false,
         isAppIconChooserOpen: false,
         icon: 'Customer',
-        name: '',
-        description: ''
+        description: '',
+        name: {
+            value: '',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        }
     };
     it('return default state', () => {
         const state = reducer(undefined, {});
@@ -37,7 +45,10 @@ describe('App Creation', () => {
         const state = reducer(storeState, {type: types.CREATE_APP_SUCCESS});
         expect(state.isSavingApp).toBe(false);
         expect(state.isDialogOpen).toBe(false);
-        expect(state.name).toBe('');
+        expect(state.name).toEqual({
+            value: '',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        });
         expect(state.description).toBe('');
     });
     it('create app failed', () => {
@@ -57,14 +68,29 @@ describe('App Creation Dialog', () => {
         const state = reducer(storeState, {type: types.HIDE_APP_CREATION_DIALOG});
 
         expect(state.isDialogOpen).toBe(false);
-        expect(state.name).toBe('');
+        expect(state.name).toEqual({
+            value: '',
+            pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+        });
         expect(state.description).toBe('');
     });
 
     it('will set the app name property', () => {
-        const state = reducer(storeState, {type: types.SET_APP_PROPERTY, property: 'name', value: 'mockAppName'});
+        const state = reducer(storeState, {
+            type: types.SET_APP_PROPERTY,
+            property: 'name',
+            value: 'mockAppName',
+            pendingValidationError: 'mockPendingValidationError',
+            validationError: 'validationError',
+            hasFocus: true});
 
-        expect(state.name).toBe('mockAppName');
+        expect(state.name).toEqual({
+            value: 'mockAppName',
+            pendingValidationError: 'mockPendingValidationError',
+            validationError: 'validationError',
+            isEdited: true,
+            hasFocus: true
+        });
     });
 
     describe('OPEN_ICON_CHOOSER_FOR_APP', () => {
@@ -112,7 +138,7 @@ describe('App Creation Selector', () => {
         it('will return app name if there is an app name', () => {
             let {name, icon, description} = AppBuilderSelectors.getAppProperties(mockState);
 
-            expect(name).toEqual(mockState.appBuilder.name);
+            expect(name).toEqual(mockState.appBuilder.name.value);
             expect(icon).toEqual(mockState.appBuilder.icon);
             expect(description).toEqual(mockState.appBuilder.description);
         });
@@ -126,7 +152,7 @@ describe('App Creation Selector', () => {
 
             let {name, icon, description} = AppBuilderSelectors.getAppProperties(cloneMockState);
 
-            expect(name).toEqual(undefined);
+            expect(name).toEqual(null);
             expect(icon).toEqual(undefined);
             expect(description).toEqual(undefined);
         });
@@ -146,6 +172,50 @@ describe('App Creation Selector', () => {
             let result = AppBuilderSelectors.getNewAppInfo(cloneMockState);
 
             expect(result).toEqual(null);
+        });
+    });
+
+    describe('getValidationErrorAndIsEdited', () => {
+        it('will return a default pendingValidationError', () => {
+            let {pendingValidationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(mockState);
+
+            expect(pendingValidationError).toEqual(Locale.getMessage('appCreation.validateAppNameEmpty'));
+        });
+
+        it('will return a passed in pendingValidationError', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name.pendingValidationError = 'passedInValidationError';
+
+            let {pendingValidationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(pendingValidationError).toEqual('passedInValidationError');
+        });
+
+        it('will return true, if isEdited is true', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name.isEdited = true;
+
+            let {isEdited} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(isEdited).toEqual(true);
+        });
+
+        it('will return a validationError if there is a validationError', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+            cloneMockState.appBuilder.name.validationError = 'mockValidationError';
+
+            let {validationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(validationError).toEqual('mockValidationError');
+        });
+
+        it('will return undefined for both isEdited and validationError', () => {
+            let cloneMockState = _.cloneDeep(mockState);
+
+            let {isEdited, validationError} = AppBuilderSelectors.getValidationErrorAndIsEdited(cloneMockState);
+
+            expect(validationError).toEqual(undefined);
+            expect(isEdited).toEqual(undefined);
         });
     });
 });

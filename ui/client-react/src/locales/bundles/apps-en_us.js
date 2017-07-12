@@ -753,7 +753,9 @@ export default {
             appNamePlaceHolder: "For example, \"Order Tracker\"",
             descriptionHeading: "App description",
             appCreationFailed: "Unable to create app",
-            searchPlaceholder: "Search app icons..."
+            searchPlaceholder: "Search app icons...",
+            validateAppNameExists: "Fill in a different value. Another app is already using this name",
+            validateAppNameEmpty: "Fill in the app name"
         },
         emptyAppState: {
             message: "You don't have any apps yet.",
