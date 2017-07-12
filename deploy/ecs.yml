@@ -36,7 +36,12 @@ Parameters:
     Type: String
   Environment:
     Type: String
-
+  XrayDaemonAddress:
+    Type: String
+    Default: 169.254.170.3:2000
+  TracingEnabled:
+    Type: String
+    Default: false
 Mappings:
   # 3381 = pre-prod
   # 1063 = prod
@@ -97,6 +102,12 @@ Resources:
                 - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
             - Name: legacyBase
               Value: !Ref LegacyBase
+            - Name: AWS_XRAY_DAEMON_ADDRESS
+              Value: !Ref XrayDaemonAddress
+            - Name: tracingEnabled
+              Value: !Ref TracingEnabled
+            - Name: tracingServiceName
+              Value: !Ref AWS::StackName
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
