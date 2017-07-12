@@ -60,7 +60,7 @@ describe('SortMenuItem', () => {
             expect(component.find(MenuItem)).toBePresent();
 
             if (_.includes(fConsts.chBox, fConst)) {
-                loc = Locale.getMessage(`report.menu.sort.uncheckedToChecked`);
+                loc = Locale.getMessage(`report.menu.sort.noToYes`);
             }            else if (_.includes(fConsts.txt, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.aToZ`);
             }            else if (_.includes(fConsts.time, fConst)) {
@@ -98,7 +98,7 @@ describe('SortMenuItem', () => {
             expect(component.find(MenuItem)).toBePresent();
 
             if (_.includes(fConsts.chBox, fConst)) {
-                loc = Locale.getMessage(`report.menu.sort.checkedToUnchecked`);
+                loc = Locale.getMessage(`report.menu.sort.yesToNo`);
             }            else if (_.includes(fConsts.txt, fConst)) {
                 loc = Locale.getMessage(`report.menu.sort.zToA`);
             }            else if (_.includes(fConsts.time, fConst)) {
