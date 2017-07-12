@@ -119,17 +119,13 @@ $edit-icon-font-size: 18px;
         .qbHeaderCell:last-child {
             .dropdown-menu {
                 right: 0;
-                left: initial;
-            }
+                left: auto;
 
-            .dropdown-menu:before {
-                right: 9px;
-                left: initial;
-            }
-
-            .dropdown-menu:after {
-                right: 9px;
-                left: initial;
+                &:before,
+                &:after {
+                    right: 9px;
+                    left: auto;
+                }
             }
         }
     }
