@@ -21,7 +21,7 @@
     min-height: 0;
 
     .qbHeader {
-        .qbHeaderCell:last-child {
+        .qbHeaderCell:last-child:not(:only-child) {
             .dropdown-menu {
                 right: 0;
                 left: initial;
