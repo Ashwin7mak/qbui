@@ -130,11 +130,7 @@
                 browser.waitForVisible('form.editForm');
                 // enter form values
                 fieldTypes.forEach(function(fieldType) {
-                    let parentReferenceFieldValue = null;
-                    if (fieldType === 'allParentRecordFields') {
-                        parentReferenceFieldValue = parentRefVal;
-                    }
-                    formsPagePO.enterFormValues(fieldType, parentReferenceFieldValue);
+                    formsPagePO.enterFormValues(fieldType, parentRefVal);
                 });
 
                 // Click Save on the form
@@ -226,7 +222,11 @@
                 //TODO: Handle multiple links to parent(s)
                 // Use the specific form section
                 formSectionEl.waitForVisible();
-                return formSectionEl.element(linkToParentLocatorString).click();
+                formSectionEl.element(linkToParentLocatorString).click();
+                this.slideyRightyEl.waitForVisible();
+                loadingSpinner.waitUntilLoadingSpinnerGoesAway();
+                //Need this for stabilize DOM
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 //TODO: Handle multiple links to parent(s)
                 // Try to find something clickable on the form
@@ -326,7 +326,9 @@
             });
 
             //Click Save on the form
-            formsPO.clickFormSaveBtn();
+            formBuilderPO.save();
+            //wait until save success container goes away
+            notificationContainer.waitUntilNotificationContainerGoesAway();
             //Need this as link takes time to show up
             browser.pause(e2eConsts.mediumWaitTimeMs);
 
@@ -348,6 +350,7 @@
 
                 //Verify the embedded child record values
                 // Confirm the values on the child form is the right record
+                browser.pause(e2eConsts.mediumWaitTimeMs);
                 reportContentPO.waitForReportContent();
                 let embeddedChildRecordValues = reportContentPO.getRecordValues(0, 0);
                 expect(embeddedChildRecordValues[0]).toEqual(expectedChildRecordValues[0]);

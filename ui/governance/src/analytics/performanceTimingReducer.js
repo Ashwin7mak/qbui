@@ -1,5 +1,6 @@
 import * as types from "../app/actionTypes";
 import _ from "lodash";
+import {createSelector} from 'reselect';
 
 let initialState = {
     pageLoadTime: 0,
@@ -35,11 +36,36 @@ const performanceTimingReducer = (state = initialState, action) => {
     }
 };
 
+/**
+ * Selector for the gridStartTime
+ * @param state
+ * @returns {float} the time the grid started loading
+ */
+const gridStartTimeSelector = state => state.performanceTiming.gridStartTime;
+
+/**
+ * Selector for the pageLoadTime
+ * @param state
+ * @returns {float} the time the page took to load
+ */
 export const getPageLoadTime = state => state.performanceTiming.pageLoadTime;
 
+/**
+ * Selector for the gridRefreshTime (time to render the grid with data)
+ * @param state
+ * @returns {float} the time the grid took to render
+ */
 export const getGridRefreshTime = state => state.performanceTiming.gridRefreshTime;
 
-export const getGridLoadTime = state => _.subtract(state.performanceTiming.pageLoadTime, state.performanceTiming.gridStartTime);
+/**
+ * Selector for the gridLoadTime
+ * @returns {integer} the total time it took for the grid to load
+ */
+export const getGridLoadTime = createSelector(
+    getPageLoadTime,
+    gridStartTimeSelector,
+    (pageLoadTime, gridStartTime) =>  _.subtract(pageLoadTime, gridStartTime)
+);
 
 export default performanceTimingReducer;
 

@@ -37,6 +37,14 @@
         });
 
         /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            // Load the List All report on Table 1
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+        });
+
+        /**
          * Test to Edit a particular record from the GRID edit pencil via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
@@ -44,35 +52,34 @@
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
             var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
-            //Step 1 - Go to report without any settings (LIST all report)
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            //Step 2 - Get the original records count in a report
+            //Get the original records count in a report
             origRecordCount = formsPO.getRecordsCountInATable();
 
-            //Step 3 - Click on 5th record (which is NULL values record) edit pencil. Count starts from 0
+            //Click on 5th record (which is NULL values record) edit pencil. Count starts from 0
             reportContentPO.clickRecordEditPencilInRecordActions(4);
 
-            //Step 4 - Edit values
+            //Edit values
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
             fieldTypes2.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
-            //Step 5 - Click Save on the form
+
+            //Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
-            //Step 7 - Verify record got Edited
+            //Verify record got Edited
             var recordValues = reportContentPO.getRecordValues(4);
             formsPO.verifyFieldValuesInReportTable(recordValues);
 
-            // Step 8 - Reload the report after saving row as the row is added at the last page
+            //Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            // Step 9 - Verify the records count not increased
+            //Verify the records count not increased
             expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
         });
 
@@ -80,74 +87,71 @@
          * Test to Edit a particular record from the TABLE edit pencil via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        //TODO MC-1911 needs to be fixed for the below test to pass
         it('Edit a record via table actions edit pencil above the table grid', function() {
-            var origRecordCount;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
+            var fieldTypes = ['allTextFields', 'allNumericFields',  'allDurationFields',  'allDateFields', 'allTimeFields'];
+            var fieldTypes2 = ['allCheckboxFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allUserField'];
 
-            //Step 1 - Go to report without any settings (LIST all report)
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            //Get the original records count in a report
+            let origRecordCount = formsPO.getRecordsCountInATable();
 
-            //Step 2 - Get the original records count in a report
-            origRecordCount = formsPO.getRecordsCountInATable();
-
-            //Step 3 - Click on 1st record edit pencil
+            //Click on 1st record edit pencil
             reportContentPO.clickRecordEditPencilInTableActions(1);
 
-            //Step 4 - Edit values
+            //Edit values
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
+            fieldTypes2.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
 
-            //Step 5 - Click Save on the form
+            //Click Save on the form
             formsPO.clickFormSaveBtn();
             //Verify you land in table view since you edited from table view page
             reportContentPO.waitForReportContent();
 
-            //Step 6 - Verify record got Edited
+            //Verify record got Edited
             var recordValues = reportContentPO.getRecordValues(0);
             formsPO.verifyFieldValuesInReportTable(recordValues);
-
-            // Step 7 - Reload the report after saving row as the row is added at the last page
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
-            // Step 8 - Verify the records count not increased
-            expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
         });
 
         /**
          * Test to Edit a particular record from the View Form edit pencil.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-            //TODO MC-1912 needs to be fixed for the below test to pass
-        xit('Edit a record via View Form edit pencil', function() {
-            var actualNumbersArray = ['33.33', '$33.33', '33.33'];
-            var expectedNumbersArray;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
+        it('Edit a record via View Form edit pencil', function() {
+            //
+            //***** These tests don't run in safari browser as 'scrollIntoView' is not supported by safari.
+            //
+            if (browserName !== 'safari') {
+                var actualNumbersArray = ['33.33', '$33.33', '33.33'];
+                var expectedNumbersArray;
+                var fieldTypes = ['allNumericFields', 'allDurationFields', 'allPhoneFields'];
 
-            //Step 1 - Go to report without any settings (LIST all report)
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                //Get the original records count in a report
+                let origRecordCount = formsPO.getRecordsCountInATable();
 
-            //Step 2 - Click on 4th(the records count start from 0) record edit pencil
-            //click on the record to open in view form mode
-            reportContentPO.clickOnRecordInReportTable(3);
-            formsPO.viewFormContainerEl.waitForVisible();
-            //click on the edit pencil on the view form
-            formsPO.clickRecordEditPencilInViewForm(3);
+                //Click on 4th(the records count start from 0) record edit pencil
+                //click on the record to open in view form mode
+                reportContentPO.clickOnRecordInReportTable(0);
+                formsPO.viewFormContainerEl.waitForVisible();
+                //click on the edit pencil on the view form
+                formsPO.clickRecordEditPencilInViewForm(3);
 
-            //Step 3 - Edit values
-            fieldTypes.forEach(function(fieldType) {
-                formsPO.enterFormValues(fieldType);
-            });
+                //Edit values
+                fieldTypes.forEach(function(fieldType) {
+                    formsPO.enterFormValues(fieldType);
+                });
 
-            //Step 4 - Click Save on the form
-            formsPO.clickFormSaveBtn();
-            //verify You land in view form since you edited a record from View form after saving
-            formsPO.waitForViewFormsTableLoad();
-            //Verify the we landed in edited record after saving
-            expectedNumbersArray = browser.elements('div.numericField.viewElement').getText();
-            //compare 2 arrays
-            expect(actualNumbersArray).toEqual(expectedNumbersArray);
+                //Click Save on the form
+                formsPO.clickFormSaveBtn();
+                //verify You land in view form since you edited a record from View form after saving
+                formsPO.waitForViewFormsTableLoad();
+                //Verify the we landed in edited record after saving
+                expectedNumbersArray = browser.elements('div.numericField.viewElement').getText();
+                //compare 2 arrays
+                expect(actualNumbersArray).toEqual(expectedNumbersArray);
+            }
         });
 
     });
