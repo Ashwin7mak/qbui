@@ -94,13 +94,14 @@
         //wait until loading screen disappear
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         //If tablesList is not visible then again navigate to appId page
-        if (!browser.element('.tablesList .leftNavLabel').isExisting()) {
+        if (!browser.element('.tablesList .leftNavLabel, .tablesList .tableList.emptyState').isExisting()) {
             this.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, appId));
             loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         }
         //wait until you see newTable in left Nav
-        return browser.element('.tablesList .leftNavLabel').waitForVisible();
+        return browser.element('.tablesList .leftNavLabel, .tablesList .tableList.emptyState').waitForVisible();
     };
+
 
     /**
      * Helper method that will load an particular table by ID in an app for you in your browser by directly hitting a generated URL

@@ -1,0 +1,78 @@
+version: '2'
+
+# These overrides can be copied to docker-compose.override.yml to tweak the base Compose environment for your local
+# development needs and to add Experience Engine and Core to your QBUI development environment . There is more information
+# available about overrides at this link: https://docs.docker.com/compose/extends/#multiple-compose-files.
+#
+# Do not add your copy of this sample into Git or other VCS (it is ignored by default).
+services:
+  core:
+    build:
+      # OPTIONAL: Remove this build block if you don't want to rebuild Core's container on demand
+      # Build image from the Core project directory.
+      # This path will have to match where Core is checked out on your laptop
+      context: ../QuickBase
+      dockerfile: Dockerfile
+    image: quickbase/ui-core
+    depends_on:
+      - core-db
+    environment:
+      - CATALINA_OPTS=-Xms1024M -Xmx2048M -server -XX:+UseParallelGC
+      - JAVA_OPTS=-Dserver.port=8443 -Ducp.sql.url=jdbc:oracle:thin:@core-db:1521/quickbase -Ducp.sql.user=cadmin -Ducp.sql.password=oracle -Ducp.sql.masteruser=system -Ducp.sql.masterpw=Quickbase0416 -Dauth.ticket.version.current=8 -Dauth.ticket.version.max=8 -Dauth.ticket.version.min=8 -Dauth.ticket.duration.minutes=7200 -Dauth.ticket.encryption.salt=salt123 -Dauth.ticket.encryption.anothersalt=salt456 -Dauth.ticket.encryption.hashkey=*ad023,.SdfW -Dlegacy.quickbase.endpoint=https://currentstack-int.quickbaserocks.com:443 -Dlegacy.newstack.shared.secret=01234567890123456789012345678901 -Dcorews.sql.annotations.enabled=false -Dspring.profiles.active=default -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    ports:
+      - "8298:8443"
+  core-db:
+    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/core-db:latest
+    ports:
+      - "1622:1521"
+  ee:
+    build:
+      # OPTIONAL: Remove this build block if you don't want to rebuild Experience Engine's container on demand
+      # Build image from the Experience Engine project directory.
+      # This path will have to match where ExperienceEngine is checked out on your laptop
+      context: ../ExperienceEngine
+      dockerfile: Dockerfile
+    image: quickbase/ui-ee
+    depends_on:
+      - core
+      - ee-db
+    environment:
+      - CATALINA_OPTS=-Xms1024M -Xmx2048M -server -XX:+UseParallelGC
+      - JAVA_OPTS=-Dee.coreClient.endpoint=https://core:8443/api/api/v1 -Dee.psql.hostname=ee-db -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    links:
+      # Required to make the DNS resolution work for the subdomain.core mapping
+      - core:localhost.core
+    ports:
+      - "8299:8443"
+  ee-db:
+    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/experienceengine-db
+    ports:
+      - "5533:5432"
+  we:
+    build:
+      # Build image from the WorkflowEngine project directory.
+      # This path will have to match where WorkflowEngine is checked out on your laptop
+      context: ../WorkflowEngine
+      dockerfile: Dockerfile
+    depends_on:
+      - we-db
+    environment:
+      - CATALINA_OPTS=-Xms1024M -Xmx2048M -server -XX:+UseParallelGC
+      - JAVA_OPTS=-Dworkflow.coreClient.endpoint=https://core:8443/api/api/v1 -Dworkflow.psql.hostname=we-db -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    links:
+        - core:localhost.core
+    image: quickbase/workflow
+    ports:
+      - "8089:8443"
+    volumes:
+      - /tmp/log/docker/workflow/service:/var/log/qbase
+      - /tmp/log/docker/workflow/tomcat:/usr/local/tomcat/logs
+  we-db:
+    image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/workflowengine-db
+    ports:
+      - "5435:5432"
+  ui:
+    environment:
+      - javaHost=https://core:8443
+      - eeHost=https://ee:8443
+      - automationHost=https://we:8443

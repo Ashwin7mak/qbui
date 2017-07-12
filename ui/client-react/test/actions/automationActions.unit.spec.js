@@ -32,6 +32,7 @@ function event(ctx, type, content) {
 
 describe('Test AutomationActions function success workflow', () => {
     let auto1 = {id: 'auto1', name: 'Auto 1', active: true, type: "EMAIL"};
+    let auto2 = {name: 'Auto 1', active: true, type: "EMAIL"};
 
     let mockAutomationsResponse = {
         data: [
@@ -45,6 +46,10 @@ describe('Test AutomationActions function success workflow', () => {
 
     let mockSaveAutomationResponse = {
         data: auto1
+    };
+
+    let mockGenerateAutomationResponse = {
+        data: auto2
     };
 
     let mockTestAutomationResponse = {
@@ -63,6 +68,9 @@ describe('Test AutomationActions function success workflow', () => {
         saveAutomation() {
             return Promise.resolve(mockSaveAutomationResponse);
         }
+        createAutomation() {
+            return Promise.resolve(mockGenerateAutomationResponse);
+        }
         testAutomation() {
             return Promise.resolve(mockTestAutomationResponse);
         }
@@ -75,6 +83,7 @@ describe('Test AutomationActions function success workflow', () => {
         spyOn(mockAutomationService.prototype, 'getAutomations').and.callThrough();
         spyOn(mockAutomationService.prototype, 'getAutomation').and.callThrough();
         spyOn(mockAutomationService.prototype, 'saveAutomation').and.callThrough();
+        spyOn(mockAutomationService.prototype, 'createAutomation').and.callThrough();
         spyOn(mockAutomationService.prototype, 'testAutomation').and.callThrough();
         AutomationActionsRewireAPI.__Rewire__('AutomationService', mockAutomationService);
     });
@@ -145,6 +154,26 @@ describe('Test AutomationActions function success workflow', () => {
             });
     });
 
+    it('verify generateAutomation action', (done) => {
+        const expectedActions = [
+            event(null, types.GENERATE_AUTOMATION, {appId: appId, automation: auto2}),
+            event(null, types.SAVE_AUTOMATION_SUCCESS, mockGenerateAutomationResponse.data)
+        ];
+
+        const store = mockAutomationStore({});
+
+        return store.dispatch(automationActions.generateAutomation(appId, auto2)).then(
+            (resp) => {
+                let actions = store.getActions();
+                expect(actions).toEqual(expectedActions);
+                done();
+            },
+            (error) => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+
     it('verify testAutomation action', (done) => {
         const expectedActions = [
             event(automationName, appId, types.TEST_AUTOMATION),
@@ -182,6 +211,10 @@ describe('Test AutomationActions function failure workflow', () => {
         response: 'error'
     };
 
+    let mockGenerateAutomationResponse = {
+        response: 'error'
+    };
+
     let mockTestAutomationResponse = {
         response: 'no content'
     };
@@ -196,6 +229,9 @@ describe('Test AutomationActions function failure workflow', () => {
         saveAutomation() {
             return Promise.resolve(mockSaveAutomationResponse);
         }
+        generateAutomation() {
+            return Promise.resolve(mockGenerateAutomationResponse);
+        }
         testAutomation() {
             return Promise.reject(mockTestAutomationResponse);
         }
@@ -205,6 +241,7 @@ describe('Test AutomationActions function failure workflow', () => {
         spyOn(mockAutomationService.prototype, 'getAutomations').and.callThrough();
         spyOn(mockAutomationService.prototype, 'getAutomation').and.callThrough();
         spyOn(mockAutomationService.prototype, 'saveAutomation').and.callThrough();
+        spyOn(mockAutomationService.prototype, 'generateAutomation').and.callThrough();
         spyOn(mockAutomationService.prototype, 'testAutomation').and.callThrough();
         AutomationActionsRewireAPI.__Rewire__('AutomationService', mockAutomationService);
     });
@@ -292,6 +329,24 @@ describe('Test AutomationActions function failure workflow', () => {
         const store = mockAutomationStore({});
 
         return store.dispatch(automationActions.saveAutomation(appId, null, null)).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
+    });
+
+    it('verify generateAutomation action with error response', (done) => {
+        const expectedActions = [
+            event(null, types.SAVE_AUTOMATION_FAILED, 500)
+        ];
+
+        const store = mockAutomationStore({});
+
+        return store.dispatch(automationActions.saveAutomation(appId, null)).then(
             () => {
                 expect(false).toBe(true);
                 done();

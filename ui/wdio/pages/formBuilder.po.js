@@ -4,6 +4,7 @@ let tableCreatePO = requirePO('tableCreate');
 let formsPO = requirePO('formsPage');
 let modalDialog = requirePO('/common/modalDialog');
 let loadingSpinner = requirePO('/common/loadingSpinner');
+let notificationContainer = requirePO('/common/notificationContainer');
 
 let tab_Field = ".rc-tabs-tabpane-active .listOfElementsItem";
 
@@ -265,10 +266,10 @@ class formBuilderPage {
         // wait a bit for the tile to be ready to be dragged
         this.tooltip.waitForVisible();
         browser.buttonDown();
-        // drag to target, jiggle & wait
+        // drag to target, wait & jiggle
         target.element('.fieldLabel').moveToObject();
-        target.element('.fieldLabel').moveToObject(5, 5);
-        target.element('.selectedFormElement').waitForExist();
+        browser.pause(1000);
+        target.moveToObject();
         // release button
         browser.buttonUp();
         this.fieldDragging.waitForExist(null, true);
@@ -390,8 +391,8 @@ class formBuilderPage {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
         loadingSpinner.waitUntilLoadingSpinnerGoesAway();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        //wait until save success container goes away
+        notificationContainer.waitUntilNotificationContainerGoesAway();
         return this;
     }
 
@@ -551,8 +552,7 @@ class formBuilderPage {
             browser.keys(['Command', 's', 'Command']);
         }
         formsPO.viewFormContainerEl.waitForExist();
-        loadingSpinner.waitUntilLeftNavSpinnerGoesAway();
-        loadingSpinner.waitUntilRecordLoadingSpinnerGoesAway();
+        loadingSpinner.waitUntilLoadingSpinnerGoesAway();
         return this;
     }
 
@@ -565,6 +565,7 @@ class formBuilderPage {
     }
 
     verifyFormBuilderStageTitleFieldDropDown(expectedDropDownList) {
+        this.firstField.waitForVisible();
         //expand the stage
         if (this.toggleStageCaretDown.isVisible()) {
             this.toggleStageCaretDown.click();
@@ -577,7 +578,9 @@ class formBuilderPage {
         //get list of fields from drop down options
         let dropDownListLabels = modalDialog.allDropDownListOptions;
         //Verify the dropDown list
-        return expect(expectedDropDownList).toEqual(dropDownListLabels);
+        expect(expectedDropDownList).toEqual(dropDownListLabels);
+        //collapse the dropdown
+        return browser.element('.Select-value-label').click();
     }
 
 }

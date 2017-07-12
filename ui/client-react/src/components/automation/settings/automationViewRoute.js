@@ -49,22 +49,10 @@ export class AutomationViewRoute extends Component {
     }
 
     getAppId() {
-        if (this.props.appId) {
-            return this.props.appId;
-        }
-        if (this.props.app) {
-            return this.props.app.id;
-        }
         return this.props.match && this.props.match.params ? this.props.match.params.appId : undefined;
     }
 
     getAutomationId() {
-        if (this.props.automationId) {
-            return this.props.automationId;
-        }
-        if (this.props.automation) {
-            return this.props.automation.id;
-        }
         return this.props.match && this.props.match.params ? this.props.match.params.automationId : undefined;
     }
 

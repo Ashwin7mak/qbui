@@ -1,6 +1,6 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import {AppCreationDialog, __RewireAPI__ as AppCreationDialogRewireAPI} from '../../src/components/app/appCreationDialog';
 import {AppCreationPanel} from '../../src/components/app/appCreationPanel';
 import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
@@ -9,6 +9,7 @@ let component;
 let instance;
 let mockRoute = 'mockRoute';
 let appId = 'mockAppId';
+let qbModalClass = '.multiStepModal';
 
 const mockNotificationManager = {
     error() {}
@@ -56,6 +57,13 @@ describe('AppCreationDialog', () => {
 
         mockProps.createAppFailed.calls.reset();
         mockProps.toggleAppsList.calls.reset();
+
+        // Remove modal from the dom after every test to reset
+        let modalInDom = document.querySelector(qbModalClass);
+
+        if (modalInDom) {
+            modalInDom.parentNode.removeChild(modalInDom);
+        }
     });
 
     it('renders an AppCreationDialog', () => {
@@ -110,5 +118,27 @@ describe('AppCreationDialog', () => {
         instance.onFinished();
 
         expect(mockProps.createApp).not.toHaveBeenCalled();
+    });
+
+    it('will pass a false boolean to MultistepDialog if isValid returns true', () => {
+        component = mount(<AppCreationDialog createApp={mockProps.createApp}
+                                             app={null}
+                                             pendingValidationError={'mockPendingValidationError'}
+                                             appDialogOpen={true} />);
+
+        let multiStepDialog = component.find("MultiStepDialog");
+
+        expect(multiStepDialog).toHaveProp('canProceed', false);
+    });
+
+    it('will pass a true boolean to MultistepDialog if isValid returns false', () => {
+        component = mount(<AppCreationDialog createApp={mockProps.createApp}
+                                             app={null}
+                                             pendingValidationError={null}
+                                             appDialogOpen={true} />);
+
+        let multiStepDialog = component.find("MultiStepDialog");
+
+        expect(multiStepDialog).toHaveProp('canProceed', true);
     });
 });

@@ -63,6 +63,31 @@ describe('RequestContextActions', () => {
         }
     };
 
+    it('handles the standard case correctly with standardized JSON returned from DotNet', (done) => {
+        const store = mockStore(defaultState);
+        const accountId = 1;
+
+        spyOn(RequestContextService.prototype, 'getRequestContext').and.returnValue(Promise.resolve({data: {
+            errorCode: 200,
+            errorMessage: "",
+            data: defaultServiceData
+        }}));
+
+        const expectedActions = [
+            {type: types.REQUEST_CONTEXT_FETCHING},
+            {...defaultServiceData, type: types.REQUEST_CONTEXT_SUCCESS}
+        ];
+
+        return store
+            .dispatch(RequestContextActions.fetchRequestContextIfNeeded(accountId))
+            .then(() => {
+                expect(store.getActions()).toEqual(expectedActions);
+                expect(mockWindowUtils.update).not.toHaveBeenCalled();
+            }, error => expect(false).toEqual(true)).then(done, done);
+    });
+
+    // TODO: Remove this test after July Current Stack Release in favor of the test above
+    // We are standardizing the Json returned by DotNet
     it('handles the standard case correctly', (done) => {
         const store = mockStore(defaultState);
         const accountId = 1;

@@ -393,7 +393,9 @@ export default {
                     lowToHigh: "Trier du plus bas au plus élevé",
                     oldToNew: "Trier le plus ancien au plus récent",
                     uncheckedToChecked: "Trier décochée à vérifier",
-                    checkedToUnchecked: "Trier vérifié pour décochée"
+                    checkedToUnchecked: "Trier vérifié pour décochée",
+                    yesToNo: "Trier oui à non",
+                    noToYes: "Trier non à oui"
                 },
                 group: {
                     aToZ: "Groupe A à Z",
@@ -645,6 +647,7 @@ export default {
                 removeRelationshipField: "Supprimer le lien vers un enregistrement dans un autre tableau",
                 newFieldsMenuTitle: 'Nouveau',
                 existingFieldsMenuTitle: 'Existant',
+                existingFieldsMenuThisTableTitle: 'Cette table',
                 stage: {
                     title: 'Formulaire pour {tableName}'
                 },
@@ -742,7 +745,9 @@ export default {
             appNamePlaceHolder: "Par exemple, \"Suivi des commandes\"",
             descriptionHeading: "Description de l'application",
             appCreationFailed: "Impossible de créer une application",
-            searchPlaceholder: "Rechercher les icônes de l'application..."
+            searchPlaceholder: "Rechercher les icônes de l'application...",
+            validateAppNameExists: "Remplissez une valeur différente. Une autre application utilise déjà ce nom",
+            validateAppNameEmpty: "Remplissez le nom de l'application"
         },
         emptyAppState: {
             message: "Vous n'avez pas encore d'applications.",
@@ -762,8 +767,8 @@ export default {
             iconHeading: "Icône",
             searchPlaceholder: "Rechercher des icônes...",
 
-            tableNamePlaceholder: "Par exemple, les clients",
-            recordNamePlaceholder: "Par exemple, client",
+            tableNamePlaceholder: "Par exemple, les clients. Utilisez jusqu'à {numberOfChars} lettres",
+            recordNamePlaceholder: "Par exemple, client. Utilisez jusqu'à {numberOfChars} lettres",
             descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la navigation à gauche",
 
             finishedButtonLabel: "Créer une table",
@@ -789,6 +794,10 @@ export default {
             recordTitleFieldDescription: "Choisissez le champ qui s'affiche comme titre lorsque vous visualisez ou modifiez un enregistrement. Ce champ doit être rempli.",
             recordTitleFieldDefault: "Par défaut à Noun + ID",
             recordName: "Nom de l'enregistrement"
+        },
+        emptyTableState: {
+            message: "Il n'y a pas encore de tables dans cette application",
+            createNewTable: "Créer une table"
         },
         iconChooser: {
             suggestedIconsHeading: "Icônes suggérées",

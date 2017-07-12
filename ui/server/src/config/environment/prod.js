@@ -9,14 +9,14 @@
     // The local.js should not be tracked by git.
 
     //var path = require('path');
-    var dateUtils = require('../../utility/dateUtils');
-    var envConsts = require('./environmentConstants');
-    var routeGroups = require('../../routes/routeGroups');
-    var clientConsts = require('./clientConsts');
+    const dateUtils = require('../../utility/dateUtils');
+    const envConsts = require('./environmentConstants');
+    const routeGroups = require('../../routes/routeGroups');
+    const clientConsts = require('./clientConsts');
 
-    var client = clientConsts.REACT;
+    const client = clientConsts.REACT;
 
-    module.exports = {
+    const baseConfig = {
 
         //  Logging configuration
         LOG: {
@@ -97,7 +97,10 @@
         /**
          * Note: [Caution] Updating masterOverrideTurnFeaturesOn to be set to true will enable all feature switches to be turned on irrespective of overrides
          */
-        // masterOverrideTurnFeaturesOn:false
+        // masterOverrideTurnFeaturesOn:false,
 
+        sharedSecret: null,
     };
+
+    module.exports = Object.assign({}, baseConfig, process.env);
 }());

@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import NavigationUtils from '../utils/navigationUtils';
 
 import * as types from '../actions/types';
 import {CONTEXT} from '../actions/context';
@@ -11,6 +12,7 @@ import NotificationManager from '../../../reuse/client/src/scripts/notificationM
 import Locale from '../locales/locales';
 
 let logger = new Logger();
+import * as UrlConsts from "../constants/urlConstants";
 
 /**
  * Construct automation store redux store payload
@@ -137,6 +139,46 @@ export const saveAutomation = (appId, automationId, automation) => {
     };
 };
 
+/**
+ * Create an automation.
+ *
+ * @param appId - app id
+ * @param automation - the automation to save
+ */
+export const generateAutomation = (appId, automation) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId) {
+                logger.debug(`AutomationsAction.generateAutomation: generating automation for appId: ${appId}`);
+                dispatch(event(null, types.GENERATE_AUTOMATION, {appId: appId, automation: automation}));
+                let automationService = new AutomationService();
+                automationService.createAutomation(appId, automation)
+                    .then((response) => {
+                        logger.debug('AutomationService saveAutomation success');
+                        let automationId = _.get(response, "data.id", "undefined");
+                        let automationViewUrl = `${UrlConsts.SETTINGS_ROUTE}/app/${appId}/${UrlConsts.AUTOMATION.PATH}/${automationId}/${UrlConsts.AUTOMATION.VIEW}`;
+                        NavigationUtils.goBackToLocationOrTable(appId, UrlConsts.AUTOMATION.PATH, automationViewUrl);
+                        NotificationManager.success(Locale.getMessage('automation.saveAutomation.success'), Locale.getMessage('success'));
+                        dispatch(event(null, types.SAVE_AUTOMATION_SUCCESS, response.data));
+                        resolve();
+                    })
+                    .catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'automationService.saveAutomation:');
+                        NotificationManager.error(Locale.getMessage('automation.saveAutomation.error'), Locale.getMessage('failed'));
+                        dispatch(event(null, types.SAVE_AUTOMATION_FAILED, error));
+                        reject();
+                    });
+            } else {
+                logger.error(`automationService.saveAutomation: Missing required input parameters.  appId: ${appId}`);
+                NotificationManager.error(Locale.getMessage('automation.saveAutomation.error'), Locale.getMessage('failed'));
+                dispatch(event(null, types.SAVE_AUTOMATION_FAILED, 500));
+                reject();
+            }
+        });
+    };
+};
+
+
 export const testAutomation = (automationName, appId) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -167,6 +209,14 @@ export const testAutomation = (automationName, appId) => {
     };
 };
 
+export const createAutomation = () => {
+    return (dispatch) => dispatch(event(null, types.CREATE_AUTOMATION, {}));
+};
+
+export const changeAutomationName = (newName) => {
+    return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_NAME, {newName}));
+
+};
 export const changeAutomationEmailTo = (newTo) => {
     return (dispatch) => dispatch(event(null, types.CHANGE_AUTOMATION_EMAIL_TO, {newTo}));
 };

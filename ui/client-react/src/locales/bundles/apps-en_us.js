@@ -283,7 +283,7 @@ export default {
             },
             automationEdit: {
                 stageHeading: "Modify Automation: {automationName}",
-                nameHeader: "Name",
+                nameHeader: "Automation Name",
                 emailSectionHeader: "Send an Email",
                 toHeader: "Notify Whom",
                 subjectHeader: "Subject",
@@ -400,7 +400,9 @@ export default {
                     lowToHigh: "Sort lowest to highest",
                     oldToNew: "Sort oldest to newest",
                     uncheckedToChecked: "Sort unchecked to checked",
-                    checkedToUnchecked: "Sort checked to unchecked"
+                    checkedToUnchecked: "Sort checked to unchecked",
+                    yesToNo: "Sort yes to no",
+                    noToYes: "Sort no to yes"
                 },
                 group: {
                     aToZ: "Group A to Z",
@@ -654,6 +656,7 @@ export default {
                 removeRelationshipField: "Delete link to a record in another table",
                 newFieldsMenuTitle: 'New',
                 existingFieldsMenuTitle: 'Existing',
+                existingFieldsMenuThisTableTitle: 'This table',
                 stage: {
                     title: 'Form for {tableName}'
                 },
@@ -752,7 +755,9 @@ export default {
             appNamePlaceHolder: "For example, \"Order Tracker\"",
             descriptionHeading: "App description",
             appCreationFailed: "Unable to create app",
-            searchPlaceholder: "Search app icons..."
+            searchPlaceholder: "Search app icons...",
+            validateAppNameExists: "Fill in a different value. Another app is already using this name",
+            validateAppNameEmpty: "Fill in the app name"
         },
         emptyAppState: {
             message: "You don't have any apps yet.",
@@ -772,8 +777,8 @@ export default {
             iconHeading: "Icon",
             searchPlaceholder: "Search table icons...",
 
-            tableNamePlaceholder: "For example, Customers",
-            recordNamePlaceholder: "For example, customer",
+            tableNamePlaceholder: "For example, Customers. Use up to {numberOfChars} characters",
+            recordNamePlaceholder: "For example, customer. Use up to {numberOfChars} characters",
             descriptionPlaceholder: "Text to show when hovering over the table name in the left navigation",
 
             finishedButtonLabel: "Create table",
@@ -799,6 +804,10 @@ export default {
             recordTitleFieldDescription: "Choose the field that displays as the heading when you view or edit a record. This field is required to be filled in.",
             recordTitleFieldDefault: "Default to {recordName} + ID",
             recordName: "Record Name"
+        },
+        emptyTableState: {
+            message: "There aren't any tables in this app, yet",
+            createNewTable: "Create a table"
         },
         iconChooser: {
             suggestedIconsHeading: "Suggested icons",

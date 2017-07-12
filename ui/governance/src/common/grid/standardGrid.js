@@ -8,10 +8,11 @@ import QbCell from "../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
 import SortMenuItems from "./headerMenu/sort/sortMenuItems";
 import * as StandardGridActions from "./standardGridActions";
-import {pageLoadTime} from "../../analytics/performanceTimingActions";
+import {pageLoadTime, gridRefreshTime} from "../../analytics/performanceTimingActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
+import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import "./standardGrid.scss";
 
@@ -41,7 +42,6 @@ export class StandardGrid extends Component {
      * If the sticky column needs to be implemented, check out the code from qbGrid.js in client-react
      */
     handleScroll = () => {
-
         let scrolled = this.tableRef;
         if (scrolled) {
             let currentTopScroll = scrolled.scrollTop;
@@ -59,9 +59,33 @@ export class StandardGrid extends Component {
         this.tableRef = body && body.getRef().parentNode;
     };
 
+    componentWillUpdate = () => {
+        WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshStart');
+    };
+
+    /**
+     * Calculates the time from GridRefreshStart for the current grid
+     * @returns {*} Null (if performance.mark not supported), Number in millis if supported
+     */
+    calculateGridRefreshTime = () => {
+        let time = null;
+        if (WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshEnd')) {
+            let measureName = this.props.id + 'GridRefreshTime';
+            WindowPerformanceUtils.measureTimeDiff(
+                measureName, this.props.id + 'GridRefreshStart', this.props.id + 'GridRefreshEnd'
+            );
+            time = WindowPerformanceUtils.getDurationFromLastEntry(measureName);
+        }
+        return time;
+    };
+
     componentDidUpdate = () => {
         if (this.props.items) {
             this.props.pageLoadTime();
+            let refreshTime = this.calculateGridRefreshTime();
+            if (refreshTime) {
+                this.props.gridRefreshTime(refreshTime);
+            }
         }
     };
 
@@ -216,6 +240,11 @@ StandardGrid.propTypes = {
     pageLoadTime: PropTypes.func,
 
     /**
+     *  Function that returns the user grid refresh time (as a number)
+     */
+    gridRefreshTime: PropTypes.func,
+
+    /**
      * Header cell to be passed in to make QbGrid more reusable.
      * Use QbHeaderCell for a default non-draggable header.
      * Use DraggableQbHeaderCell for a draggable header. (Note that you must include DragDropContext to be able to use). */
@@ -260,7 +289,10 @@ const mapDispatchToProps = (dispatch, props) => ({
         dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
     },
     pageLoadTime: () => {
-        dispatch(pageLoadTime(_.round((window.performance.now() / 1000), 2)));
+        dispatch(pageLoadTime((WindowPerformanceUtils.now())));
+    },
+    gridRefreshTime: (time) => {
+        dispatch(gridRefreshTime(time));
     }
 });
 

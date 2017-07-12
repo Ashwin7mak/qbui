@@ -11,7 +11,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs ( (chrome, edge))', function() {
+    describe('Form Builder Tests: non-keyboard tests, pos/neg pairs (chrome, edge)', function() {
         if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             beforeAll(function() {
                 /**

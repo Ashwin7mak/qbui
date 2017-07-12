@@ -27,7 +27,9 @@ const fetchRequestContext = (desiredAccountId) => {
 
         dispatch(fetchingRequestContext());
         return promise
-            .then(response => response.data)
+            .then(response => {
+                return response.data.data ? response.data.data : response.data;
+            })
             .then(context => dispatch(receiveRequestContext(context)))
             .catch(error => {
                 dispatch(failedRequestContext(error));

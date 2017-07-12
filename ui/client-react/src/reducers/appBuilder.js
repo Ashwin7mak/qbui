@@ -1,15 +1,22 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import Locale from '../locales/locales';
+import * as APP_PROPS_CONST from '../../src/components/app/appPropertiesConstants';
 
 const defaultAppIcon = 'Customer';
-const APP_PROPS = ['name', 'icon', 'description'];
+const APP_PROPS = [APP_PROPS_CONST.NAME, APP_PROPS_CONST.ICON, APP_PROPS_CONST.DESCRIPTION];
+const VALIDATION_ERROR_AND_IS_EDITED = ['pendingValidationError', 'validationError', 'isEdited', 'hasFocus'];
+
 const setDefaultSettings = {
-    name: '',
-    description: '',
-    icon: defaultAppIcon,
     isAppIconChooserOpen: false,
     isDialogOpen: false,
-    isSavingApp: false
+    isSavingApp: false,
+    description: '',
+    icon: defaultAppIcon,
+    name: {
+        value: '',
+        pendingValidationError: Locale.getMessage('appCreation.validateAppNameEmpty')
+    },
 };
 
 const appBuilder = (
@@ -54,9 +61,22 @@ const appBuilder = (
         };
 
     case types.SET_APP_PROPERTY:
+        let appInfo = {};
+
+        if (action.property === APP_PROPS_CONST.NAME) {
+            appInfo[action.property] = {
+                value: action.value,
+                pendingValidationError: action.pendingValidationError,
+                validationError: action.validationError,
+                isEdited: true,
+                hasFocus: action.hasFocus
+            };
+        } else {
+            appInfo[action.property] = action.value;
+        }
         return {
             ...state,
-            [action.property]: action.value
+            ...appInfo
         };
 
     case types.OPEN_ICON_CHOOSER_FOR_APP:
@@ -70,6 +90,7 @@ const appBuilder = (
             ...state,
             isAppIconChooserOpen: false
         };
+
     default:
         return state;
     }
@@ -81,7 +102,17 @@ export const getIsDialogOpenState = (state) => _.get(state.appBuilder, 'isDialog
 
 export const isAppIconChooserOpen = (state) => _.get(state.appBuilder, 'isAppIconChooserOpen', false);
 
-export const getAppProperties = (state) => _.pick(state.appBuilder, APP_PROPS);
+export const getValidationErrorAndIsEdited = (state) => _.pick(state.appBuilder.name, VALIDATION_ERROR_AND_IS_EDITED);
+
+export const getAppProperties = (state) => {
+    let {name, icon, description} =  _.pick(state.appBuilder, APP_PROPS);
+
+    return {
+        name: name ? name.value : null,
+        icon,
+        description
+    };
+};
 
 export const getNewAppInfo = (state) => {
     let {name, icon, description} = getAppProperties(state);

@@ -9,7 +9,13 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
+
 import CreateNewItemButton from '../../../../reuse/client/src/components/sideNavs/createNewItemButton';
+import EmptyStateForLeftNav from '../../../../reuse/client/src/components/sideNavs/emptyStateForLeftNav';
+import _ from 'lodash';
+
+const DEFAULT_TABLE_ICON = 'Spreadsheet';
 
 let TablesList = React.createClass({
 
@@ -18,7 +24,8 @@ let TablesList = React.createClass({
         onSelect: React.PropTypes.func,
         showReports: React.PropTypes.func.isRequired,
         expanded: React.PropTypes.bool,
-        onCreateNewTable: React.PropTypes.func
+        onCreateNewTable: React.PropTypes.func,
+        tables: React.PropTypes.array
     },
     getDefaultProps() {
         return {
@@ -84,8 +91,6 @@ let TablesList = React.createClass({
         </div>);
     },
 
-
-
     /**
      * get list of table links for left nav
      * @returns {*}
@@ -97,8 +102,11 @@ let TablesList = React.createClass({
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
+                         icon={table.tableIcon}
+                         defaultIcon={DEFAULT_TABLE_ICON}
+                         defaultIconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                         iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          key={table.id}
-                         tableIcon={true}
                          showSecondary={this.props.expanded}
                          secondaryIcon={"report-menu-3"}
                          secondaryOnSelect={this.props.showReports}
@@ -108,9 +116,6 @@ let TablesList = React.createClass({
                          open={true}/>;
         });
 
-        if (this.props.onCreateNewTable) {
-            tableItems.push(this.getNewTableItem());
-        }
         return tableItems;
     },
 
@@ -119,10 +124,16 @@ let TablesList = React.createClass({
             <Link to={link}><I18nMessage message={msg}/></Link>
         </div>);
 
-        return (<NavItem item={{msg: msg, link:link, icon:icon}} selected={selected}
-            hoverComponent={hoverComponent} open={true} onSelect={this.props.onSelect}/>);
+        return (<NavItem item={{msg: msg, link:link}}
+                         icon={icon}
+                         iconFont={AVAILABLE_ICON_FONTS.DEFAULT}
+                         selected={selected}
+                         hoverComponent={hoverComponent}
+                         open={true}
+                         onSelect={this.props.onSelect}/>);
 
     },
+
     getTopLinksItem() {
         const appHomePageSelected = !this.props.selectedTableId &&
             (WindowLocationUtils.getPathname() === `${APP_ROUTE}/${this.props.selectedAppId}`);
@@ -150,6 +161,19 @@ let TablesList = React.createClass({
         />;
     },
 
+    renderEmptyStateOrButton() {
+        // Using expanded to hide the error message for tables when collapsed
+        if (_.isEmpty(this.props.tables) && this.props.expanded) {
+            return <EmptyStateForLeftNav handleOnClick={this.props.onCreateNewTable}
+                                         emptyMessage="emptyTableState.message"
+                                         className="tableList"
+                                         iconMessage="emptyTableState.createNewTable"
+            />;
+        } else if (this.props.onCreateNewTable) {
+            return this.getNewTableItem();
+        }
+    },
+
     render() {
         return (
             <div className="tablesHeadingAndList">
@@ -158,7 +182,9 @@ let TablesList = React.createClass({
 
                     <NavItem item={{msg: 'nav.tablesHeading'}}
                              isHeading={true}
-                             onClick={this.onClickTables} open={true} />
+                             onClick={this.onClickTables}
+                             open={true} />
+
                     <li key="tableSearchBox" className={this.state.searching ? "search open" : "search"}>
                         <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"
                                    value={this.state.searchText}
@@ -168,8 +194,9 @@ let TablesList = React.createClass({
                     </li>
                 </ul>
 
-                <ul className="tablesList">
-                    {this.tablesList()}
+                <ul className={"tablesList"}>
+                        {this.tablesList()}
+                        {this.renderEmptyStateOrButton()}
                 </ul>
             </div>
         );
