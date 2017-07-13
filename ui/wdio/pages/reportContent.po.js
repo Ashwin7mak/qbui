@@ -12,6 +12,7 @@
     let loadingSpinner = requirePO('/common/loadingSpinner');
     const sText = 'testTextValue';
     const sNumeric = 1;
+
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
         recordCheckBoxes: {
@@ -549,9 +550,12 @@
          */
         clickAddRecordBtnSB: {
             value: function() {
-                browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
+                // Assert 'add new record' button is visible and clickable
+                expect(this.addRecordBtnSB.isVisible()).toBe(true);
+                expect(this.addRecordBtnSB.isEnabled()).toBe(true);
+                //click on the 'add record' button
                 browser.element('.reportToolsAndContentContainer .addNewRecord').click();
-                return  browser.element('.editForm').waitForVisible();
+                return  browser.element('.loadedContent .formContainer .editForm').waitForVisible();
             }
         },
         /**
