@@ -56,16 +56,19 @@
             reportContentPO.waitForReportContentSB();
 
             // Assert sort by / group by button is visible and enabled
-            expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBeTruthy();
-            expect(reportContentPO.reportSortGrpBtnSB.isEnabled()).toBeTruthy();
+            expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBe(true);
+            expect(reportContentPO.reportSortGrpBtnSB.isEnabled()).toBe(true);
 
             // Assert records count total
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
 
             // Assert dropdownToggle actionButton is visible and clickable
-            expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
+            expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBe(true);
             // click on dropdownToggle actionButton
             reportContentPO.clickDropdownToggleActionButtonSB();
+            //verify add record button is visible
+            browser.element('.dropdown-menu-right .menuActionButton').waitForVisible();
+            expect(browser.element('.dropdown-menu-right .menuActionButton').isVisible()).toBe(true);
         });
 
         /**
@@ -78,21 +81,55 @@
             // Assert records count
             let recordCount = formsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
+            //verify row card is collapsed
+            expect(browser.element('.custom-row-card .expanded').isVisible()).toBe(false);
 
-            // verify card expander button is clickable
+            //click row card expander button
             reportContentPO.clickCardExpanderButtonSB();
+
+            //verify row card is exapnded
+            expect(browser.element('.custom-row-card .expanded').isVisible()).toBe(true);
         });
 
         /**
-         * Verifies add new record button is visible and enabled
+         * Verifies add new record button is visible, enabled and clickable
          */
-        it('verify add record button is visible and enabled', function() {
+        it('verify add record button is visible, enabled and clickable', function() {
             // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            // Assert 'add new record' button is visible and clickable
-            expect(reportContentPO.addRecordBtnSB.isVisible()).toBeTruthy();
-            expect(reportContentPO.addRecordBtnSB.isEnabled()).toBeTruthy();
+            //click 'add record' button
+            reportContentPO.clickAddRecordBtnSB();
+        });
+
+        /**
+         * swipe left on a record and verify actionIcons are visible
+         */
+        it('swipe left on a record', function() {
+            // wait for the report content to be visible
+            reportContentPO.waitForReportContentSB();
+
+            // swipe left
+            browser.swipeLeft('.flexRow .card', 100);
+            //verify edit button is visible
+            browser.element('.actionIcons .icon-edit').waitForVisible();
+            expect(browser.element('.actionIcons .icon-edit').isVisible()).toBe(true);
+
+        });
+
+        /**
+         * swipe right on a record and verify actionIcons are visible
+         */
+        it('swipe right on a record', function() {
+            // wait for the report content to be visible
+            reportContentPO.waitForReportContentSB();
+
+            // swipe right
+            browser.swipeRight('.flexRow .card', 100);
+            //verify edit button is visible
+            browser.element('.actionIcons .icon-edit').waitForVisible();
+            expect(browser.element('.actionIcons .icon-edit').isVisible()).toBe(true);
+
         });
 
     });

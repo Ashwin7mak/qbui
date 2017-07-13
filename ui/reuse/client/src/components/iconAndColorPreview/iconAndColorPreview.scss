@@ -1,0 +1,38 @@
+@import "../../assets/css/qbVariables";
+
+.previewContainer {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    margin-bottom: $spacing-x-small;
+
+    .preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        border-radius: 100%;
+        // background-color is set dynamically by the component
+
+        transition: background-color 0.4s, color 0.4s;
+    }
+
+    .previewHidden {
+        border: 5px solid $color-black-200;
+
+        .previewHiddenIcon {
+            font-size: 48px;
+            color: $color-black-250;
+            font-weight: bold;
+        }
+    }
+
+    .colorPickerPreviewIcon {
+        font-size: 45px;
+        // The icon color is set dynamically by the component
+
+        // The icons aren't quite centered. Move them a bit to get them centered in the circle.
+        margin-top: -4px;
+    }
+}
