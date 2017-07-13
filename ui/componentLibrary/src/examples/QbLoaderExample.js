@@ -4,8 +4,8 @@
 const basicQbLoaderExample = (
     <div>
         <dt>Default: </dt>
-        <dd style={{width: 100}}>
-            <QbLoader />
+        <dd>
+            <QbLoader isLoading={true} width={"100px"} height={"100px"}/>
         </dd>
     </div>
 );
