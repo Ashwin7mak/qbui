@@ -165,10 +165,8 @@ export class StandardGrid extends Component {
         let isGridEmpty = _.isEmpty(this.props.items); // If the array is empty (after API call but items are not yet rendered)
         let isGridLoading = isGridNotLoaded && isGridEmpty;
 
-        if (isGridNotLoaded) {
-            return <QbLoader isLoading={isGridLoading} className="standardGridLoader" waitTime={constants.GRID_LOADER_TIMEOUT} />;
-        } else {
-            return (
+        return (
+            <QbLoader isLoading={isGridLoading} className="standardGridLoader" waitTime={constants.GRID_LOADER_TIMEOUT} >
                 <div className="gridWrapper">
                     <StandardGridToolbar
                         id={this.props.id}
@@ -183,10 +181,10 @@ export class StandardGrid extends Component {
                     {/*If the array is empty(no data), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
                     {isGridEmpty ? this.renderNoItemsExist() : this.renderItemsExist()}
                 </div>
+            </QbLoader>
             );
         }
     }
-}
 
 StandardGrid.propTypes = {
 

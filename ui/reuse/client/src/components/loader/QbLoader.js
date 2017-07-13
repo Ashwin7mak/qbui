@@ -10,7 +10,7 @@ class QbLoader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            waiting: ""
+            waiting: "",
         };
     }
 
@@ -31,7 +31,13 @@ class QbLoader extends Component {
             return (<BodyMovin animationData={QbLoaderAnimationData}
                                className={`${this.props.className} ${this.state.waiting}`}/>
             );
-        } else return null;
+        } else {
+            return (
+                <div className="childContainer">
+                    {this.props.children}
+                </div>
+            );
+        };
     }
 }
 

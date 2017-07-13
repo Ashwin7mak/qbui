@@ -26,6 +26,16 @@ describe('QbLoader', () => {
         expect(component.find(BodyMovin)).not.toBePresent();
     });
 
+    it('renders children when isLoading is false', () => {
+        let component = shallow(
+            <QbLoader isLoading={true} >
+                <div className="children"></div>
+                <div className="children"></div>
+            </QbLoader>);
+
+        expect(component.find('.children')).toBePresent();
+    });
+
     it('gets fired after a certain time', (done) => {
 
         let component = mount(<QbLoader isLoading={true} waitTime={1}/>);

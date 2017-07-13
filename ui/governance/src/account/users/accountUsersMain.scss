@@ -10,7 +10,7 @@
     /* TODO: Remove calc and use flexbox to achieve the same functionality as in reports*/
     height: calc(100% - #{$top-nav-height} - 3px);
 
-    > .loadedContent {
+    .accountUsersContainer {
         height: 100%;
         display: flex;
     }
