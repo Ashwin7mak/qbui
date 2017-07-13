@@ -28,8 +28,11 @@ class QbLoader extends Component {
 
     render() {
         if (this.props.isLoading) {
-            return (<BodyMovin animationData={QbLoaderAnimationData}
+            return (
+                <div className="loaderWrapper" style={{width: this.props.width, height: this.props.height}} >
+                    <BodyMovin animationData={QbLoaderAnimationData}
                                className={`${this.props.className} ${this.state.waiting}`}/>
+                </div>
             );
         } else {
             return (
@@ -53,11 +56,18 @@ QbLoader.propTypes = {
     /**
      *  Boolean to show the loader or not
      */
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
+    /**
+     * String to be passed as pixels or percentage to enable styles onLoad
+     */
+    width: PropTypes.string.isRequired,
+    height: PropTypes.string.isRequired
 };
 
 QbLoader.defaultProps = {
     className: "",
+    width: "0",
+    height: "0",
     waitTime: 0
 };
 
