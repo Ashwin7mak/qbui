@@ -1,5 +1,4 @@
 import React, {PropTypes, Component} from 'react';
-import Loader from 'react-loader';
 import FlipMove from 'react-flip-move';
 import SideMenuBase from 'REUSE/components/sideMenuBase/sideMenuBase';
 import SimpleNavItem from 'REUSE/components/simpleNavItem/simpleNavItem';
@@ -64,13 +63,13 @@ class StandardLeftNav extends Component {
 
                 {this.renderPrimaryActions()}
 
-                <Loader loadedClassName="standardLeftNavItems" loaded={!showLoadingIndicator} options={LEFT_NAV_BAR}>
+                <div className="standardLeftNavItems">
                     <FlipMove typeName="ul" className="standardLeftNavItemsList">
                         {navItems.filter(navItem => !navItem.isPrimaryAction).map((navItem, index) => (
                             <li key={index}><SimpleNavItem isCollapsed={isCollapsed} {...navItem} /></li>
                         ))}
                     </FlipMove>
-                </Loader>
+                </div>
 
                 {Breakpoints.isSmallBreakpoint() && globalActions}
 

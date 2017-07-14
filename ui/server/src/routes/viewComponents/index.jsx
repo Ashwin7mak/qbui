@@ -1,22 +1,14 @@
-import React, {PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Html from './html';
-import LoadingScreen from './loadingScreen';
 
-var Index = React.createClass({
-    propTypes: {
-        title         : PropTypes.string,
-        hostBase      : PropTypes.string,
-        bundleFileName: PropTypes.string,
-        vendorFileName: PropTypes.string,
-        jsPath        : PropTypes.string,
-        isClientPerfTrackingEnabled: PropTypes.bool
-    },
+class Index extends Component {
+
     render() {
         return (
             <Html {...this.props}>
                 <div id="content">
                     {/*The content in here will be replaced as soon as React in client-side bundle loads*/}
-                    <LoadingScreen/>
+                    {/*TODO: Edit Loading Screen component with new loader*/}
                 </div>
 
                 <script src={this.props.hostBase + this.props.jsPath + this.props.vendorFileName}></script>
@@ -28,5 +20,15 @@ var Index = React.createClass({
             </Html>
         );
     }
-});
-module.exports = Index;
+}
+
+Index.propTypes = {
+    title : PropTypes.string,
+    hostBase : PropTypes.string,
+    bundleFileName : PropTypes.string,
+    vendorFileName : PropTypes.string,
+    jsPath : PropTypes.string,
+    isClientPerfTrackingEnabled : PropTypes.bool
+};
+
+export default Index;
