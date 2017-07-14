@@ -131,7 +131,7 @@ _______________________
 
 If you want to quickly run the Governance page, you can use a mock server. 
 
-*Remember to comment out the `SSL_KEY` section in your local.js file if you want to run the mock server*
+*Remember that the `SSL_KEY` section in your local.js file should be commented out if you want to run the mock server*
 
 1. Edit your local.js file from "isMockServer : false" to true. This will enable mockServer for your project.
 2. Change `legacyBase: '.quickbase-dev.com'` in your local.js file to `legacyBase: '.ns.quickbase-dev.com:3030'` to point your mockServer to the port 3030.
