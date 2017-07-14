@@ -22,7 +22,7 @@ class QbLoader extends Component {
 
     componentWillUnmount() {
         if (this.timeout) {
-            clearTimeout(this.timeout)
+            clearTimeout(this.timeout);
         }
     }
 
@@ -40,7 +40,7 @@ class QbLoader extends Component {
                     {this.props.children}
                 </div>
             );
-        };
+        }
     }
 }
 

@@ -42,8 +42,8 @@ describe('QbLoader', () => {
 
         expect(component.find('.visible')).not.toBePresent();
         setTimeout(() => {
-           expect(component.find('.visible')).toBePresent();
-           done();
+            expect(component.find('.visible')).toBePresent();
+            done();
         }, 1);
     });
 

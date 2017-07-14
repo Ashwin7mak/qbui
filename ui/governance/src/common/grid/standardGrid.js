@@ -63,7 +63,7 @@ export class StandardGrid extends Component {
 
     componentWillUpdate() {
         WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshStart');
-    };
+    }
 
     /**
      * Calculates the time from GridRefreshStart for the current grid
@@ -177,7 +177,7 @@ export class StandardGrid extends Component {
             </div>
 
         );
-        }
+    }
     }
 
 StandardGrid.propTypes = {
