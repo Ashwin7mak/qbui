@@ -131,10 +131,14 @@ _______________________
 
 If you want to quickly run the Governance page, you can use a mock server. 
 
-1. From the UI server folder, we have a mock.js file that can be run like this: ``node ui/server/src/mockserver/mocker.js -f legacyStack.json``
-2. Then grunt serve `/ui/Gruntfile.js serve`
-3. Then hit an endpoint like http://kunjanenterprise.ns.quickbase-dev.com:9000/qbase/governance/212950/users
-4. If you are running the mock server, run the `NPM watch` command for your changes to the code to be reflected.
+*Remember that the `SSL_KEY` section in your local.js file should be commented out if you want to run the mock server*
+
+1. Edit your local.js file from "isMockServer : false" to true. This will enable mockServer for your project.
+2. Change `legacyBase: '.quickbase-dev.com'` in your local.js file to `legacyBase: '.ns.quickbase-dev.com:3030'` to point your mockServer to the port 3030.
+3. From the UI server folder, we have a mock.js file that can be run like this: ``node ui/server/src/mockserver/mocker.js -f legacyStack.json``
+4. Then grunt serve `/ui/Gruntfile.js serve` or run your node server `node ui/server/src/app.js`.
+5. Then hit an endpoint like http://kunjanenterprise.ns.quickbase-dev.com:9000/qbase/governance/212950/users
+6. If you are running the mock server, run the `NPM watch` command for your changes to the code to be reflected.
 
 The APIs that we are hitting are mocked out in `legacyStack.json`.  Remember that if you add a new user to this JSON, give the user a different UID.
 Remember to restart the mock server if you make changes to the JSON.

@@ -186,6 +186,9 @@ The following run-time environment variable is supported:
 ### Note :
  The Node Server only listen via a specific ip/hostname when running with dev hotloader,
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
+ 
+ ## Governance Page
+ To get the governance page up and running, please follow the *README.md* inside the governance folder.
 
 ## Testing
 cd to <project root>/qbui/ui directory
