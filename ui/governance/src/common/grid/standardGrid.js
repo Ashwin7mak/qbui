@@ -29,9 +29,6 @@ export class StandardGrid extends Component {
     constructor(props) {
         super(props);
         this.transforms = this.props.columnTransformsClasses.map((transformClass, index) => new transformClass(this, this.props.columnTransformProps[index]));
-        this.state = {
-            isGridLoading: false
-        }
     }
 
     getColumns = () => {
@@ -91,12 +88,6 @@ export class StandardGrid extends Component {
             if (refreshTime) {
                 this.props.gridRefreshTime(refreshTime);
             }
-        }
-    };
-
-    isGridLoading = () => {
-        if(!_.isNull(this.props.items)) {
-            this.state({isGridLoading: true})
         }
     };
 
@@ -210,7 +201,7 @@ StandardGrid.propTypes = {
     /**
      * The Items to display
      */
-    items: PropTypes.array,
+    items: PropTypes.array.isRequired,
 
     /**
      * Every row needs a unique key. For example, user item has the userID
