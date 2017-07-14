@@ -74,64 +74,6 @@ describe('StandardGrid', () => {
         );
 
         expect(component.find('.qbHeaderCell')).not.toBePresent();
-
-    });
-
-    it('should render the loader when items are null', () => {
-
-        component = shallow(
-            <StandardGrid
-                columns={columns}
-                getFacetFields={()=>{}}
-                doUpdate={AccountUsersActions.doUpdate}
-                items={null}
-                id={"accountUsers"}
-                rowKey={"uid"}
-                cellRenderer={QbCell}
-            />
-        );
-
-        expect(component.find(QbLoader)).toBePresent();
-    });
-
-    it('should not render the loader when items are empty', () => {
-
-        component = shallow(
-            <StandardGrid
-                columns={columns}
-                getFacetFields={()=>{}}
-                doUpdate={AccountUsersActions.doUpdate}
-                items={[]}
-                id={"accountUsers"}
-                rowKey={"uid"}
-                cellRenderer={QbCell}
-            />
-        );
-
-        expect(component.find(QbLoader)).not.toBePresent();
-    });
-
-    it('should not render the loader when items are present', () => {
-
-        let items = [{
-            hasAppAccess: false,
-            id: 99999,
-            uid: 11111
-        }];
-
-        component = shallow(
-            <StandardGrid
-                columns={columns}
-                getFacetFields={()=>{}}
-                doUpdate={AccountUsersActions.doUpdate}
-                items={items}
-                id={"accountUsers"}
-                rowKey={"uid"}
-                cellRenderer={QbCell}
-            />
-        );
-
-        expect(component.find(QbLoader)).not.toBePresent();
     });
 
     it('should not render the grid when no items exist', () => {

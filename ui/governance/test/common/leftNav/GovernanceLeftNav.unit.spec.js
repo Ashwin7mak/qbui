@@ -18,7 +18,6 @@ describe('<GovernanceLeftNav />', () => {
         fetchData: () => false,
         isNavOpen: false,
         isNavCollapsed: false,
-        isLoading: false,
         accountId: 1,
     };
 
@@ -41,7 +40,6 @@ describe('<GovernanceLeftNav />', () => {
         };
         let component = shallow(<GovernanceLeftNav {...props} />);
         let childComponent = component.find('StandardLeftNav');
-        expect(childComponent.props().showLoadingIndicator).toEqual(props.isLoading);
         expect(childComponent.props().isCollapsed).toEqual(props.isNavCollapsed);
         expect(childComponent.props().isOpen).toEqual(props.isNavOpen);
     });

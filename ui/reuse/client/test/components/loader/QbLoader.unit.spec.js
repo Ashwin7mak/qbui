@@ -28,7 +28,7 @@ describe('QbLoader', () => {
 
     it('renders children when isLoading is false', () => {
         let component = shallow(
-            <QbLoader isLoading={true} >
+            <QbLoader isLoading={false} >
                 <div className="children"></div>
                 <div className="children"></div>
             </QbLoader>);

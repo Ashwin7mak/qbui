@@ -49,13 +49,6 @@ describe('StandardLeftNav', () => {
         expect(component.find('.standardLeftNavBranding')).toBePresent();
     });
 
-    it('displays a loading indicator', () => {
-        component = mount(<StandardLeftNav showLoadingIndicator={true}/>);
-
-        expect(component.find('.loader')).toBePresent();
-        expect(component.find('.standardLeftNavItemsList')).not.toBePresent();
-    });
-
     it('can be displayed in a collapsed state', () => {
         component = mount(<StandardLeftNav isCollapsed={true}/>);
 
