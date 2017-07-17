@@ -32,4 +32,4 @@ Index.propTypes = {
     isClientPerfTrackingEnabled : PropTypes.bool
 };
 
-module.exports = Index;
+export default Index;

@@ -11,7 +11,7 @@ describe('BodyMovin', () => {
         jasmineEnzyme();
 
         bodyMovinMock = {
-            loadAnimation: jasmine.createSpy('loadAnimation'),
+            loadAnimation: jasmine.createSpy('loadAnimation').and.returnValue({destroy() {}}),
             destroy: jasmine.createSpy('destroy')
         };
 
@@ -23,7 +23,7 @@ describe('BodyMovin', () => {
     });
 
     it('loads the animation when the component mounts', () => {
-        let component = mount(<BodyMovin animationData="mockAnimationData" />);
+        let component = mount(<BodyMovin animationData="mockAnimationData" bodyMovinPackage={bodyMovinMock} />);
 
         expect(bodyMovinMock.loadAnimation).toHaveBeenCalledWith(mockAnimationData);
         /**
@@ -33,7 +33,7 @@ describe('BodyMovin', () => {
     });
 
     it('removes the bodymovin animation from the dom', () => {
-        let component = mount(<BodyMovin />);
+        let component = mount(<BodyMovin bodyMovinPackage={bodyMovinMock} />);
         component.unmount();
         expect(bodyMovinMock.destroy).toHaveBeenCalled();
     });
