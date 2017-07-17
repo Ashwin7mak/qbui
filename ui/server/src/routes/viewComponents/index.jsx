@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Html from './html';
+import LoadingScreen from './loadingScreen';
 
 class Index extends Component {
 
@@ -8,7 +9,7 @@ class Index extends Component {
             <Html {...this.props}>
                 <div id="content">
                     {/*The content in here will be replaced as soon as React in client-side bundle loads*/}
-                    {/*TODO: Edit Loading Screen component with new loader*/}
+                    <LoadingScreen/>
                 </div>
 
                 <script src={this.props.hostBase + this.props.jsPath + this.props.vendorFileName}></script>
