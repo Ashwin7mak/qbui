@@ -45,6 +45,7 @@ import PaginationExample from 'raw!../examples/PaginationExample.js';
 // import RowActionsExample from 'raw!../examples/RowActionsExample.js';
 import NotificationManagerExample from 'raw!../examples/NotificationManagerExample.js';
 import StandardGridItemsCountExample from 'raw!../examples/StandardGridItemsCountExample.js';
+import QbLoaderExample from 'raw!../examples/QbLoaderExample.js';
 import ColorPickerExample from 'raw!../examples/ColorPickerExample.js';
 import SimpleInputExample from 'raw!../examples/SimpleInputExample.js';
 // END OF IMPORT STATEMENTS
@@ -96,6 +97,7 @@ export default {
     // RowActions: RowActionsExample,
     NotificationManager: NotificationManagerExample,
     StandardGridItemsCount: StandardGridItemsCountExample,
+    QbLoader: QbLoaderExample,
     ColorPicker: ColorPickerExample,
     SimpleInput: SimpleInputExample,
     // END OF EXPORT

@@ -1,16 +1,9 @@
-import React, {PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Html from './html';
 import LoadingScreen from './loadingScreen';
 
-var Index = React.createClass({
-    propTypes: {
-        title         : PropTypes.string,
-        hostBase      : PropTypes.string,
-        bundleFileName: PropTypes.string,
-        vendorFileName: PropTypes.string,
-        jsPath        : PropTypes.string,
-        isClientPerfTrackingEnabled: PropTypes.bool
-    },
+class Index extends Component {
+
     render() {
         return (
             <Html {...this.props}>
@@ -28,5 +21,15 @@ var Index = React.createClass({
             </Html>
         );
     }
-});
-module.exports = Index;
+}
+
+Index.propTypes = {
+    title : PropTypes.string,
+    hostBase : PropTypes.string,
+    bundleFileName : PropTypes.string,
+    vendorFileName : PropTypes.string,
+    jsPath : PropTypes.string,
+    isClientPerfTrackingEnabled : PropTypes.bool
+};
+
+export default Index;

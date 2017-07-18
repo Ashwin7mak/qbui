@@ -13,6 +13,8 @@ import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 import EmptyImage from 'APP/assets/images/empty box graphic.svg';
 import Locale from "../../../../reuse/client/src/locales/locale";
 import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
+import QbLoader from "../../../../reuse/client/src/components/loader/QbLoader";
+import constants from "../constants/StandardGridConstants";
 import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
 import "./standardGrid.scss";
 
@@ -59,9 +61,9 @@ export class StandardGrid extends Component {
         this.tableRef = body && body.getRef().parentNode;
     };
 
-    componentWillUpdate = () => {
+    componentWillUpdate() {
         WindowPerformanceUtils.markTime(this.props.id + 'GridRefreshStart');
-    };
+    }
 
     /**
      * Calculates the time from GridRefreshStart for the current grid
@@ -110,7 +112,6 @@ export class StandardGrid extends Component {
                     }}
                 >
                     <Table.Header className="qbHeader"/>
-
                     {/*If there is no data at all, render an empty grid, else render this.props.items*/}
                     <Table.Body
                         className="qbTbody"
@@ -138,7 +139,8 @@ export class StandardGrid extends Component {
                         `${this.props.noItemsFound}`, {
                             items: this.props.itemTypePlural,
                             item: this.props.itemTypeSingular
-                        })}
+                        })
+                    }
                 </div>
             </div>
         );
@@ -150,23 +152,33 @@ export class StandardGrid extends Component {
      * - else... show the noItemsExist UI
      */
     render() {
+        let isGridNotLoaded = _.isNull(this.props.items); //If the array is null(before API call)
+        let isGridEmpty = _.isEmpty(this.props.items); // If the array is empty (after API call but items are not yet rendered)
+        let isGridLoading = isGridNotLoaded && isGridEmpty;
+
+        const classNames = "gridWrapper" + (isGridLoading ? " gridLoading" : "");
+
         return (
-            <div className="gridWrapper">
-                <StandardGridToolbar id={this.props.id}
-                                     doUpdate={this.props.doUpdate}
-                                     shouldFacet={this.props.shouldFacet}
-                                     shouldSearch={this.props.shouldSearch}
-                                     facetFields={this.props.facetFields}
-                                     itemTypePlural={this.props.itemTypePlural}
-                                     itemTypeSingular={this.props.itemTypeSingular}
-                                     itemsPerPage={this.props.itemsPerPage}
-                />
-                {/*If the array is empty(no data) and not null(API call is complete), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
-                {!_.isNull(this.props.items) && _.isEmpty(this.props.items) ? this.renderNoItemsExist() : this.renderItemsExist()}
+            <div className={classNames}>
+                <QbLoader isLoading={isGridLoading} width={"100px"} height={"100px"} className="standardGridLoader" waitTime={constants.GRID_LOADER_TIMEOUT} >
+                    <StandardGridToolbar
+                        id={this.props.id}
+                        doUpdate={this.props.doUpdate}
+                        shouldFacet={this.props.shouldFacet}
+                        shouldSearch={this.props.shouldSearch}
+                        facetFields={this.props.facetFields}
+                        itemTypePlural={this.props.itemTypePlural}
+                        itemTypeSingular={this.props.itemTypeSingular}
+                        itemsPerPage={this.props.itemsPerPage}
+                    />
+                    {/*If the array is empty(no data), we render {renderNoItemsExist} or if we have data, render {renderItemsExist}*/}
+                    {isGridEmpty ? this.renderNoItemsExist() : this.renderItemsExist()}
+                </QbLoader>
             </div>
+
         );
     }
-}
+    }
 
 StandardGrid.propTypes = {
 

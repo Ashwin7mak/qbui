@@ -75,6 +75,7 @@ import PaginationDoc from './docs/pagination.js';
 // import RowActionsDoc from './docs/rowActions.js';
 import NotificationManagerDoc from './docs/notificationManager.js';
 import StandardGridItemsCountDoc from './docs/StandardGridItemsCount.js';
+import QbLoaderDoc from './docs/QbLoader.js';
 import ColorPickerDoc from './docs/colorPicker.js';
 import SimpleInputDoc from './docs/simpleInput.js';
 // END OF IMPORT STATEMENTS
@@ -284,6 +285,10 @@ const routes = [
             {
                 path: `${LIB_ROUTE}/standardGridItemsCount`,
                 component: StandardGridItemsCountDoc
+            },
+            {
+                path: `${LIB_ROUTE}/qBLoader`,
+                component: QbLoaderDoc
             },
             {
                 path: `${LIB_ROUTE}/colorPicker`,

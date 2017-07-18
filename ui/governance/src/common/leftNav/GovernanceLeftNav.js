@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import StandardLeftNav from "../../../../reuse/client/src/components/sideNavs/standardLeftNav";
 import GetLeftNavLinks from "./GovernanceLeftNavLinks";
 import * as RequestContextActions from "../requestContext/RequestContextActions";
-import {isFetching, getCurrentUser, getRealm} from "../requestContext/RequestContextReducer";
+import {getCurrentUser, getRealm} from "../requestContext/RequestContextReducer";
 
 export class GovernanceLeftNav extends Component {
     componentDidMount() {
@@ -15,7 +15,6 @@ export class GovernanceLeftNav extends Component {
             <StandardLeftNav
                 isCollapsed={this.props.isNavCollapsed}
                 isOpen={this.props.isNavOpen}
-                showLoadingIndicator={this.props.isLoading}
                 isContextHeaderSmall={true}
                 showContextHeader={true}
                 contextHeaderTitle="Manage Quick Base"
@@ -38,7 +37,6 @@ GovernanceLeftNav.propTypes = {
     fetchData: PropTypes.func.isRequired,
     isNavOpen: PropTypes.bool.isRequired,
     isNavCollapsed: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool,
     accountId: PropTypes.number,
     isRealmAdmin: PropTypes.bool,
     isAccountAdmin: PropTypes.bool,
@@ -53,7 +51,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
     return {
-        isLoading: isFetching(state),
         isAccountAdmin: getCurrentUser(state).isAccountAdmin,
         isRealmAdmin: getCurrentUser(state).isRealmAdmin,
         isAccountURL: getRealm(state).isAccountURL,

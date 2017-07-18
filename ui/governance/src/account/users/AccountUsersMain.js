@@ -42,15 +42,13 @@ export class AccountUsers extends Component {
 
         return (
             <div className="accountUsersMain">
-                <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
-                    <div className="accountUsersContainer">
-                        <AccountUsersStage />
-                        {/* This is the main grid that shows the users */}
-                        <AccountUsersGrid id={this.USERS_GRID_ID}
-                                          showAccountColumns={canSeeAccountColumns}
-                                          showRealmColumns={canSeeRealmColumns}/>
-                    </div>
-                </Loader>
+                <div className="accountUsersContainer">
+                    <AccountUsersStage />
+                    {/* This is the main grid that shows the users */}
+                    <AccountUsersGrid id={this.USERS_GRID_ID}
+                                      showAccountColumns={canSeeAccountColumns}
+                                      showRealmColumns={canSeeRealmColumns}/>
+                </div>
             </div>
         );
     }

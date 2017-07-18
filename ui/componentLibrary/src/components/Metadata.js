@@ -46,6 +46,7 @@ import StandardLeftNavMetadata from 'component-metadata!../../../reuse/client/sr
 import PaginationMetadata from 'component-metadata!../../../reuse/client/src/components/pagination/pagination.js';
 // import RowActionsMetadata from 'component-metadata!../../../reuse/client/src/components/rowActions/rowActions.js';
 import StandardGridItemsCountMetadata from 'component-metadata!../../../reuse/client/src/components/itemsCount/StandardGridItemsCount.js';
+import QbLoaderMetadata from 'component-metadata!../../../reuse/client/src/components/loader/QbLoader.js';
 import ColorPickerMetadata from 'component-metadata!../../../reuse/client/src/components/colorPicker/colorPicker.js';
 import SimpleInputMetadata from 'component-metadata!../../../reuse/client/src/components/simpleInput/simpleInput.js';
 // END OF IMPORT STATEMENTS
@@ -96,6 +97,7 @@ var Metadata = () => {
         StandardLeftNavMetadata,
         PaginationMetadata,
         StandardGridItemsCountMetadata,
+        QbLoaderMetadata,
         ColorPickerMetadata,
         SimpleInputMetadata
         // END OF METADATA MERGE

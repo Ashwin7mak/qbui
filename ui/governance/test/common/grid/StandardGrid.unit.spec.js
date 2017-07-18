@@ -1,13 +1,28 @@
 import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import {StandardGrid} from "../../../src/common/grid/standardGrid";
+import {StandardGrid, __RewireAPI__ as StandardGridRewireAPI} from "../../../src/common/grid/standardGrid";
 import {QbCell} from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import * as AccountUsersActions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import WindowPerformanceUtils from "../../../../reuse/client/src/utils/windowPerformanceUtils";
-import {__RewireAPI__ as StandardGridRewireAPI} from "../../../src/common/grid/standardGrid";
+import QbLoader from "../../../../reuse/client/src/components/loader/QbLoader";
+
+let columns = [{
+    property: 'firstName',
+    header: {
+        label: 'First Name'
+    },
+    fieldDef: {
+        id: 1,
+        datatypeAttributes: {
+            type: FieldConsts.TEXT
+        }
+    }
+}];
+
+let component, instance;
 
 describe('StandardGrid', () => {
 
@@ -16,18 +31,6 @@ describe('StandardGrid', () => {
     });
 
     it('should render the grid', () => {
-        let columns = [{
-            property: 'firstName',
-            header: {
-                label: 'First Name'
-            },
-            fieldDef: {
-                id: 1,
-                datatypeAttributes: {
-                    type: FieldConsts.TEXT
-                }
-            }
-        }];
 
         let items = [{
             hasAppAccess: false,
@@ -35,7 +38,7 @@ describe('StandardGrid', () => {
             uid: 11111
         }];
 
-        let StandardGridShallow = shallow(
+        component = shallow(
             <StandardGrid
                 columns={columns}
                 getFacetFields={()=>{}}
@@ -46,33 +49,19 @@ describe('StandardGrid', () => {
                 cellRenderer={QbCell}
             />
         );
-        expect(StandardGridShallow).toBeDefined();
-        expect(StandardGridShallow.length).toBeTruthy();
 
-        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
+        let StandardGridToolbarComponent = component.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
         expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
         expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdateUsers);
 
-        expect(StandardGridShallow.find('.qbGrid')).toBePresent();
-        expect(StandardGridShallow.find('.noItemsExist')).not.toBePresent();
+        expect(component.find('.qbGrid')).toBePresent();
+        expect(component.find('.noItemsExist')).not.toBePresent();
     });
 
     it('should not render the grid header when items are being fetched', () => {
-        let columns = [{
-            property: 'firstName',
-            header: {
-                label: 'First Name'
-            },
-            fieldDef: {
-                id: 1,
-                datatypeAttributes: {
-                    type: FieldConsts.TEXT
-                }
-            }
-        }];
 
-        let StandardGridShallow = shallow(
+        component = shallow(
             <StandardGrid
                 columns={columns}
                 getFacetFields={()=>{}}
@@ -83,69 +72,15 @@ describe('StandardGrid', () => {
                 cellRenderer={QbCell}
             />
         );
-        expect(StandardGridShallow).toBeDefined();
-        expect(StandardGridShallow.length).toBeTruthy();
 
-        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
-        expect(StandardGridToolbarComponent).toBeDefined();
-        expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
-        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdate);
-
-    });
-
-    it('should render the grid header when items are done fetching', () => {
-        let columns = [{
-            property: 'firstName',
-            header: {
-                label: 'First Name'
-            },
-            fieldDef: {
-                id: 1,
-                datatypeAttributes: {
-                    type: FieldConsts.TEXT
-                }
-            }
-        }];
-
-        let StandardGridShallow = shallow(
-            <StandardGrid
-                columns={columns}
-                getFacetFields={()=>{}}
-                doUpdate={AccountUsersActions.doUpdate}
-                items={[]}
-                id={"accountUsers"}
-                rowKey={"uid"}
-                cellRenderer={QbCell}
-            />
-        );
-        expect(StandardGridShallow).toBeDefined();
-        expect(StandardGridShallow.length).toBeTruthy();
-        expect(StandardGridShallow.find('.noItemsExist')).toBePresent();
-
-        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
-        expect(StandardGridToolbarComponent).toBeDefined();
-        expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
-        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(AccountUsersActions.doUpdate);
-
+        expect(component.find('.qbHeaderCell')).not.toBePresent();
     });
 
     it('should not render the grid when no items exist', () => {
-        let columns = [{
-            property: 'firstName',
-            header: {
-                label: 'First Name'
-            },
-            fieldDef: {
-                id: 1,
-                datatypeAttributes: {
-                    type: FieldConsts.TEXT
-                }
-            }
-        }];
 
         let items = [];
 
-        let StandardGridShallow = shallow(
+        component = shallow(
             <StandardGrid
                 columns={columns}
                 getFacetFields={()=>{}}
@@ -156,33 +91,19 @@ describe('StandardGrid', () => {
                 cellRenderer={QbCell}
             />
         );
-        expect(StandardGridShallow).toBeDefined();
-        expect(StandardGridShallow.length).toBeTruthy();
 
-        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
+        let StandardGridToolbarComponent = component.find(StandardGridToolBar);
         expect(StandardGridToolbarComponent).toBeDefined();
 
-        expect(StandardGridShallow.find('.noItemsExist')).toBePresent();
-        expect(StandardGridShallow.find('.qbGrid')).not.toBePresent();
+        expect(component.find('.noItemsExist')).toBePresent();
+        expect(component.find('.qbGrid')).not.toBePresent();
     });
 
-    describe('grid performance timing', () => {
+    describe('Performance Timing', () => {
         let items = [];
-        let columns = [{
-            property: 'firstName',
-            header: {
-                label: 'First Name'
-            },
-            fieldDef: {
-                id: 1,
-                datatypeAttributes: {
-                    type: FieldConsts.TEXT
-                }
-            }
-        }];
 
         it('should create a time mark in WindowPerformanceUtils for grid updating', () => {
-            let StandardGridShallow = shallow(
+            component = shallow(
                 <StandardGrid
                     columns={columns}
                     getFacetFields={() => {
@@ -195,17 +116,15 @@ describe('StandardGrid', () => {
                 />);
 
             spyOn(WindowPerformanceUtils, 'markTime');
-            StandardGridShallow.setProps({items: ['test']});
+            component.setProps({items: ['test']});
 
             expect(WindowPerformanceUtils.markTime).toHaveBeenCalledWith('accountUsersGridRefreshStart');
         });
 
         describe('calculateGridRefreshTime', () => {
-            let StandardGridShallow,
-                instance;
 
             beforeEach(() => {
-                StandardGridShallow = shallow(
+                component = shallow(
                     <StandardGrid
                         columns={columns}
                         getFacetFields={() => {
@@ -235,7 +154,7 @@ describe('StandardGrid', () => {
                     }
                 });
 
-                instance = StandardGridShallow.instance();
+                instance = component.instance();
 
                 expect(instance.calculateGridRefreshTime()).toBeNull();
             });
@@ -253,7 +172,7 @@ describe('StandardGrid', () => {
                     }
                 });
 
-                instance = StandardGridShallow.instance();
+                instance = component.instance();
 
                 expect(instance.calculateGridRefreshTime()).toBeNull();
             });
@@ -271,7 +190,7 @@ describe('StandardGrid', () => {
                     }
                 });
 
-                instance = StandardGridShallow.instance();
+                instance = component.instance();
 
                 expect(instance.calculateGridRefreshTime()).toEqual(20);
             });
@@ -281,8 +200,6 @@ describe('StandardGrid', () => {
             let pageLoadTime,
                 gridRefreshTime,
                 itemsNew,
-                StandardGridShallow,
-                instance,
                 createShallowStandardGrid;
 
             beforeEach(() => {
@@ -318,8 +235,8 @@ describe('StandardGrid', () => {
                     id: 99999,
                     uid: 11111
                 }];
-                StandardGridShallow = createShallowStandardGrid(itemsNew);
-                instance = StandardGridShallow.instance();
+                component = createShallowStandardGrid(itemsNew);
+                instance = component.instance();
                 spyOn(instance, 'calculateGridRefreshTime').and.returnValue(10);
                 instance.componentDidUpdate();
 
@@ -329,8 +246,8 @@ describe('StandardGrid', () => {
 
             it('should call pageLoadTime or gridRefreshTime even if items is empty', () => {
                 itemsNew = [];
-                StandardGridShallow = createShallowStandardGrid(itemsNew);
-                instance = StandardGridShallow.instance();
+                component = createShallowStandardGrid(itemsNew);
+                instance = component.instance();
                 spyOn(instance, 'calculateGridRefreshTime').and.returnValue(10);
 
                 instance.componentDidUpdate();
@@ -341,8 +258,8 @@ describe('StandardGrid', () => {
 
             it('should not call pageLoadTime or gridRefreshTime if items is null', () => {
                 itemsNew = null;
-                StandardGridShallow = createShallowStandardGrid(itemsNew);
-                instance = StandardGridShallow.instance();
+                component = createShallowStandardGrid(itemsNew);
+                instance = component.instance();
                 spyOn(instance, 'calculateGridRefreshTime').and.returnValue(10);
 
                 instance.componentDidUpdate();
@@ -353,5 +270,3 @@ describe('StandardGrid', () => {
         });
     });
 });
-
-
